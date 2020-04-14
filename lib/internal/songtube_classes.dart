@@ -78,6 +78,7 @@ class Downloader {
       output.add(data);
     }
     await output.close();
+    appdata.getLastFilePath = "$directory/$fileName";
     appdata.isDownloading.add(false);
     print("Downloader: All done");
   }
@@ -107,6 +108,8 @@ class AppStreams {
   StreamController<Duration> audioDuration = new StreamController.broadcast();
   StreamController<String> audioTitle = new StreamController.broadcast();
   StreamController<String> audioArtist = new StreamController.broadcast();
+
+  String getLastFilePath;
 
   void unloadStreams() {
     audioSize.add(null);
