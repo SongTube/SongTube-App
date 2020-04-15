@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:ext_storage/ext_storage.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'native.dart';
 
 Downloader downloader;
@@ -25,11 +26,11 @@ class Converter {
     String _finalPath;
 
     if (path != null) _path = path;
-    if (path == null) _path = await ExternalPath().externalMusic;
+    if (path == null) _path = await appdata.getDefaultDownloadFolder;
     _finalPath = _path + "/" + metadata.title;
     if (type == FFmpegArgs.argsToACC) {
       _argsList = [
-        "-i",
+        "-y", "-i",
         appdata.getLastFilePath,
         "-c:a", "aac",
         "-profile:a", "aac_low",
@@ -50,6 +51,7 @@ class Converter {
 
   // Functions to convert media
   Future<int> convertAudio(List<String> arguments) async {
+    appdata.progressController.add(null);
     print("Converter: Starting audio file convertion...");
     int _result;
     await flutterFFmpeg.executeWithArguments(arguments).then(
@@ -60,6 +62,7 @@ class Converter {
       }
     );
     print("Converter: Done, result: " + _result.toString());
+    appdata.progressController.add(0.0);
     return _result;
   }
 
@@ -91,6 +94,7 @@ class Downloader {
 
   Future<int> getInfo(url) async {
     print("Downloader: Getting link info");
+    appdata.progressController.add(null);
     YoutubeExplode yt = YoutubeExplode();
     String _id = YoutubeExplode.parseVideoId(url); // Returns `OpQFFLBMEPI`
     if (_id == null) {
@@ -110,6 +114,7 @@ class Downloader {
       "Any", "Any");
     id = _id;
     yt.close();
+    appdata.progressController.add(0.0);
     return 1;
   }
 
@@ -119,7 +124,10 @@ class Downloader {
     // Get the video media stream.
     print("Downloader: Getting video info...");
     var mediaStream = await yt.getVideoMediaStream(id);
-    String directory = await ExternalPath().externalMusic;
+    String directory = await appdata.getDefaultDownloadFolder;
+    if (!(await Directory(directory).exists())) {
+      await Directory(directory).create();
+    }
     // Get the last audio track (the one with the highest bitrate).
     var audio = mediaStream.audio.last;
 
@@ -139,7 +147,7 @@ class Downloader {
     // Create the StreamedRequest to track the download status.
 
     // Open the file in appendMode.
-    var output = file.openWrite(mode: FileMode.writeOnlyAppend);
+    var output = file.openWrite(mode: FileMode.write);
 
     // Track the file download status.
     var len = audio.size;
@@ -160,7 +168,6 @@ class Downloader {
     await output.close();
     appdata.getLastFilePath = "$directory/$fileName";
     appdata.getFileName = "$fileName";
-    appdata.getDownloadPath = directory;
     appdata.isDownloading.add(false);
     print("Downloader: All done");
   }
@@ -183,7 +190,7 @@ class ExternalPath {
 }
 
 class AppStreams {
-  StreamController progressController = new StreamController.broadcast();
+  StreamController progressController = new StreamController();
   StreamController<bool> isDownloading = new StreamController.broadcast();
   StreamController<bool> linkReady = new StreamController.broadcast();
   StreamController<int> audioSize = new StreamController.broadcast();
@@ -193,7 +200,11 @@ class AppStreams {
 
   String getFileName;
   String getLastFilePath;
-  String getDownloadPath;
+  Future<String> get getDefaultDownloadFolder async {
+    String path = await ExternalPath().externalStorage;
+    path = path + "/" + "SongTube";
+    return path;
+  }
 
   void unloadStreams() {
     audioSize.add(null);
@@ -202,6 +213,7 @@ class AppStreams {
     audioTitle.add(null);
     linkReady.add(null);
     isDownloading.add(null);
+    progressController.add(0.0);
   }
 
   void dispose() {

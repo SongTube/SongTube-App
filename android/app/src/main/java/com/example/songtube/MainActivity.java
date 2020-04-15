@@ -25,6 +25,10 @@ public class MainActivity extends FlutterActivity {
             if (call.method.equals("getSharedText")) {
               result.success(sharedText);
             }
+            if (call.method.equals("clearSharedText")) {
+              sharedText = null;
+              result.success(0);
+            }
           }
         );
     new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), CONVERTERCHANNEL)

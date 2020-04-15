@@ -16,7 +16,15 @@ class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin<Ho
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     switch (state){
       case AppLifecycleState.resumed:
-        await method.handleIntent();
+        String _url;
+        await method.handleIntent().then((resultText) {
+          _url = resultText;
+        });
+        if (_url == null) return;
+        setState(() { _showLoading = true; } );
+        appdata.unloadStreams();
+        await downloader.getInfo(_url);
+        setState(() { _showLoading = false; } );
         break;
       case AppLifecycleState.inactive:
         break;
@@ -39,8 +47,8 @@ class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin<Ho
     _editingController = TextEditingController();
     _editingStream = StreamController();
     _editingStream.add("");
+    appdata.unloadStreams();
     super.initState();
-    appdata.progressController.add(0.0);
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -125,7 +133,6 @@ class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin<Ho
                             _showLoading = true;
                           });
                           await downloader.getInfo(_editingController.text);
-                          appdata.progressController.add(0.0);
                           setState(() {
                             _showLoading = false;
                           });
