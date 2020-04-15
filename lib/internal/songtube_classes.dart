@@ -92,7 +92,7 @@ class Downloader {
     appdata.isDownloading.add(false);
   }
 
-  Future<int> getInfo(url) async {
+  Future<void> getInfo(url) async {
     print("Downloader: Getting link info");
     appdata.progressController.add(null);
     YoutubeExplode yt = YoutubeExplode();
@@ -116,7 +116,6 @@ class Downloader {
     id = _id;
     yt.close();
     appdata.progressController.add(0.0);
-    return 1;
   }
 
   Future<void> download() async {
