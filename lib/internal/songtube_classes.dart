@@ -97,11 +97,21 @@ class Downloader {
     appdata.progressController.add(null);
     YoutubeExplode yt = YoutubeExplode();
     String _id = YoutubeExplode.parseVideoId(url); // Returns `OpQFFLBMEPI`
+    var mediaStream;
     if (_id == null) {
       print("Downloader: Invalid ID: " + url.toString());
       return 0;
     }
-    var mediaStream = await yt.getVideoMediaStream(_id);
+    try {
+      mediaStream = await yt.getVideoMediaStream(_id).timeout(const Duration(seconds: 60));
+    } on TimeoutException {
+      print("Downloader: getVideoMediaStream Timeout");
+    }
+    if (mediaStream == null) {
+      yt.close();
+      appdata.progressController.add(0.0);
+      return;
+    }
     AudioStreamInfo audio = mediaStream.audio.last;
     appdata.audioTitle.add(mediaStream.videoDetails.title);
     appdata.audioArtist.add(mediaStream.videoDetails.author);
