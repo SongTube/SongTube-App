@@ -209,6 +209,22 @@ class AppStreams {
   StreamController<String> audioTitle = new StreamController.broadcast();
   StreamController<String> audioArtist = new StreamController.broadcast();
 
+  TextEditingController titleController = new TextEditingController();
+  TextEditingController albumController = new TextEditingController();
+  TextEditingController artistController = new TextEditingController();
+  TextEditingController genreController = new TextEditingController();
+  TextEditingController dateController = new TextEditingController();
+  TextEditingController diskController = new TextEditingController();
+  TextEditingController trackController = new TextEditingController();
+
+  FocusNode titleFocusNode = FocusNode();
+  FocusNode albumFocusNode = FocusNode();
+  FocusNode artistFocusNode = FocusNode();
+  FocusNode genreFocusNode = FocusNode();
+  FocusNode dateFocusNode = FocusNode();
+  FocusNode diskFocusNode = FocusNode();
+  FocusNode trackFocusNode = FocusNode();
+
   String getFileName;
   String getLastFilePath;
   Future<String> get getDefaultDownloadFolder async {

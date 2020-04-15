@@ -287,6 +287,219 @@ class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin<Ho
                     }
                   },
                 ),
+                // Metadata TextFields
+                StreamBuilder<Object>(
+                  stream: appdata.linkReady.stream,
+                  builder: (context, snapshot) {
+                    // All Metadata TextFields goes under this
+                    if (snapshot.hasData) {
+                      appdata.titleController.text = downloader.defaultMetaData.title;
+                      appdata.albumController.text = downloader.defaultMetaData.album;
+                      appdata.artistController.text = downloader.defaultMetaData.artist;
+                      appdata.genreController.text = downloader.defaultMetaData.genre;
+                      appdata.dateController.text = downloader.defaultMetaData.date.toString();
+                      appdata.diskController.text = downloader.defaultMetaData.disk;
+                      appdata.trackController.text = downloader.defaultMetaData.track;
+                      return Column(
+                        children: <Widget>[
+                          // Title TextField
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.all(Radius.circular(20)),
+                              child: TextFormField(
+                                focusNode: appdata.titleFocusNode,
+                                controller: appdata.titleController,
+                                decoration: InputDecoration(
+                                  prefixIcon: Icon(Icons.title,
+                                    color: Theme.of(context).iconTheme.color
+                                  ),
+                                  filled: true,
+                                  fillColor: Theme.of(context).inputDecorationTheme.fillColor,
+                                  border: InputBorder.none,
+                                  labelText: "Title",
+                                ),
+                                style: TextStyle(
+                                  color: Theme.of(context).textTheme.body1.color,
+                                ),
+                              ),
+                            ),
+                          ),
+                          // Album & Artist TextField Row
+                          Row(
+                            children: <Widget>[
+                              // Album TextField
+                              Flexible(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                                    child: TextFormField(
+                                      focusNode: appdata.albumFocusNode,
+                                      controller: appdata.albumController,
+                                      decoration: InputDecoration(
+                                        prefixIcon: Icon(Icons.library_music,
+                                          color: Theme.of(context).iconTheme.color
+                                        ),
+                                        filled: true,
+                                        fillColor: Theme.of(context).inputDecorationTheme.fillColor,
+                                        border: InputBorder.none,
+                                        labelText: "Album",
+                                        focusColor: Colors.redAccent,
+                                      ),
+                                      style: TextStyle(
+                                        color: Theme.of(context).textTheme.body1.color,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              // Artist TextField
+                              Flexible(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                                    child: TextFormField(
+                                      focusNode: appdata.artistFocusNode,
+                                      controller: appdata.artistController,
+                                      decoration: InputDecoration(
+                                        prefixIcon: Icon(Icons.person,
+                                          color: Theme.of(context).iconTheme.color
+                                        ),
+                                        filled: true,
+                                        fillColor: Theme.of(context).inputDecorationTheme.fillColor,
+                                        border: InputBorder.none,
+                                        labelText: "Artist",
+                                      ),
+                                      style: TextStyle(
+                                        color: Theme.of(context).textTheme.body1.color,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          // Gender & Date TextField Row
+                          Row(
+                            children: <Widget>[
+                              // Gender TextField
+                              Flexible(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                                    child: TextFormField(
+                                      focusNode: appdata.genreFocusNode,
+                                      controller: appdata.genreController,
+                                      decoration: InputDecoration(
+                                        prefixIcon: Icon(Icons.book,
+                                          color: Theme.of(context).iconTheme.color
+                                        ),
+                                        filled: true,                                                                                                      
+                                        fillColor: Theme.of(context).inputDecorationTheme.fillColor,
+                                        border: InputBorder.none,
+                                        labelText: "Genre",
+                                      ),
+                                      style: TextStyle(
+                                        color: Theme.of(context).textTheme.body1.color,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              // Disk TextField
+                              Flexible(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                                    child: TextFormField(
+                                      focusNode: appdata.dateFocusNode,
+                                      controller: appdata.dateController,
+                                      decoration: InputDecoration(
+                                        prefixIcon: Icon(Icons.date_range,
+                                          color: Theme.of(context).iconTheme.color
+                                        ),
+                                        filled: true,
+                                        fillColor: Theme.of(context).inputDecorationTheme.fillColor,
+                                        border: InputBorder.none,
+                                        labelText: "Album",
+                                        focusColor: Colors.redAccent,
+                                      ),
+                                      style: TextStyle(
+                                        color: Theme.of(context).textTheme.body1.color,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          // Disk & Track TextField Row
+                          Row(
+                            children: <Widget>[
+                              // Disk TextField
+                              Flexible(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                                    child: TextFormField(
+                                      focusNode: appdata.diskFocusNode,
+                                      controller: appdata.diskController,
+                                      decoration: InputDecoration(
+                                        prefixIcon: Icon(Icons.album,
+                                          color: Theme.of(context).iconTheme.color
+                                        ),
+                                        filled: true,                                                                                                      
+                                        fillColor: Theme.of(context).inputDecorationTheme.fillColor,
+                                        border: InputBorder.none,
+                                        labelText: "Genre",
+                                      ),
+                                      style: TextStyle(
+                                        color: Theme.of(context).textTheme.body1.color,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              // Track TextField
+                              Flexible(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                                    child: TextFormField(
+                                      focusNode: appdata.trackFocusNode,
+                                      controller: appdata.trackController,
+                                      decoration: InputDecoration(
+                                        prefixIcon: Icon(Icons.music_note,
+                                          color: Theme.of(context).iconTheme.color
+                                        ),
+                                        filled: true,
+                                        fillColor: Theme.of(context).inputDecorationTheme.fillColor,
+                                        border: InputBorder.none,
+                                        labelText: "Album",
+                                        focusColor: Colors.redAccent,
+                                      ),
+                                      style: TextStyle(
+                                        color: Theme.of(context).textTheme.body1.color,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      );
+                    } else {
+                      return Container();
+                    }
+                  }
+                ),
               ],
             ),
           ],
