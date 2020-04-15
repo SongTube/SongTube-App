@@ -211,16 +211,16 @@ class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin<Ho
                 ),
                 // Youtube Mini-Player
                 StreamBuilder(
-                  stream: appdata.linkReady.stream,
+                  stream: appdata.videoId.stream,
                   builder: (context, snapshot) {
-                    if (snapshot.data == true) {
+                    if (snapshot.hasData) {
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: ClipRRect(
                           borderRadius: BorderRadius.all(Radius.circular(20)),
                           child: YoutubePlayer(
                             controller: YoutubePlayerController(
-                              initialVideoId: downloader.id,
+                              initialVideoId: snapshot.data,
                               flags: YoutubePlayerFlags(
                                 autoPlay: false,
                               ),

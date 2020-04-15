@@ -108,6 +108,7 @@ class Downloader {
     appdata.audioDuration.add(mediaStream.videoDetails.duration);
     appdata.audioSize.add(audio.size);
     appdata.linkReady.add(true);
+    appdata.videoId.add(_id);
     defaultMetaData = MediaMetaData(mediaStream.videoDetails.title, mediaStream.videoDetails.author,
       mediaStream.videoDetails.author, "Any", mediaStream.videoDetails.thumbnailSet.maxResUrl,
       mediaStream.videoDetails.uploadDate.toString(),
@@ -193,6 +194,7 @@ class AppStreams {
   StreamController progressController = new StreamController();
   StreamController<bool> isDownloading = new StreamController.broadcast();
   StreamController<bool> linkReady = new StreamController.broadcast();
+  StreamController<String> videoId = new StreamController.broadcast();
   StreamController<int> audioSize = new StreamController.broadcast();
   StreamController<Duration> audioDuration = new StreamController.broadcast();
   StreamController<String> audioTitle = new StreamController.broadcast();
