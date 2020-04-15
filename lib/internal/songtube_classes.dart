@@ -4,7 +4,6 @@ import 'package:ext_storage/ext_storage.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 import 'native.dart';
-import 'package:image_downloader/image_downloader.dart';
 
 Downloader downloader;
 AppStreams appdata;

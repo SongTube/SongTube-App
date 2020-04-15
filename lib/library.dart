@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:image_downloader/image_downloader.dart';
 import 'tabs/downloadtab.dart';
 import 'tabs/hometab.dart';
 import 'tabs/settingstab.dart';
