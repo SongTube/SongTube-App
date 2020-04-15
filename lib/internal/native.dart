@@ -5,6 +5,7 @@ NativeMethod method;
 
 class NativeMethod {
 
+  static const media = const MethodChannel("registerMedia");
   static const platform = const MethodChannel("sharedTextChannel");
   String _sharedIntent;
 
@@ -20,6 +21,10 @@ class NativeMethod {
       await downloader.getInfo(intent);
       appdata.progressController.add(0.0);
     }
+  }
+
+  void registerFile(String file) async {
+    await media.invokeMethod('registerFile', {"file":file});
   }
 
 }

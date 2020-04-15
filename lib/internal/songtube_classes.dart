@@ -2,12 +2,89 @@ import 'dart:async';
 import 'dart:io';
 import 'package:ext_storage/ext_storage.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
+import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
+import 'native.dart';
+import 'package:image_downloader/image_downloader.dart';
 
 Downloader downloader;
 AppStreams appdata;
+Converter converter;
+
+enum FFmpegArgs { argsToACC }
+
+class Converter {
+  
+  // Declare our FFmpeg instances
+  final FlutterFFmpeg flutterFFmpeg = new FlutterFFmpeg();
+  final FlutterFFprobe flutterFFprobe = new FlutterFFprobe();
+  
+  // Get the data we need before declaring our Argument lists
+  Future<List<String>> getArgumentsList(FFmpegArgs type, MediaMetaData metadata, [String path]) async {
+
+    List<String> _argsList;
+    String _path;
+    String _finalPath;
+
+    if (path != null) _path = path;
+    if (path == null) _path = await ExternalPath().externalMusic;
+    _finalPath = _path + "/" + metadata.title;
+    if (type == FFmpegArgs.argsToACC) {
+      _argsList = [
+        "-i",
+        appdata.getLastFilePath,
+        "-c:a", "aac",
+        "-profile:a", "aac_low",
+        "-metadata", "title=${metadata.title}",
+        "-metadata", "album=${metadata.album}",
+        "-metadata", "artist=${metadata.artist}",
+        "-metadata", "genre=${metadata.genre}",
+        "-metadata", "date=${metadata.date}",
+        "-metadata", "disk=${metadata.disk}",
+        "-metadata", "track=${metadata.track}",
+        "$_finalPath.m4a",
+      ];
+    }
+    print("Full path: " + _argsList.last);
+    return _argsList;
+
+  }
+
+  // Functions to convert media
+  Future<int> convertAudio(List<String> arguments) async {
+    print("Converter: Starting audio file convertion...");
+    int _result;
+    await flutterFFmpeg.executeWithArguments(arguments).then(
+      (value) {
+        File(appdata.getLastFilePath).delete();
+        method.registerFile(arguments.last);
+        _result = value;
+      }
+    );
+    print("Converter: Done, result: " + _result.toString());
+    return _result;
+  }
+
+}
+
+class MediaMetaData {
+
+  String title;
+  String album;
+  String artist;
+  String genre;
+  String coverurl;
+  String date;
+  String disk;
+  String track;
+
+  MediaMetaData(this.title, this.album, this.artist, this.genre,
+    this.coverurl, this.date, this.disk, this.track);
+
+}
 
 class Downloader {
   String id;
+  MediaMetaData defaultMetaData;
 
   Downloader() {
     appdata.isDownloading.add(false);
@@ -28,6 +105,10 @@ class Downloader {
     appdata.audioDuration.add(mediaStream.videoDetails.duration);
     appdata.audioSize.add(audio.size);
     appdata.linkReady.add(true);
+    defaultMetaData = MediaMetaData(mediaStream.videoDetails.title, mediaStream.videoDetails.author,
+      mediaStream.videoDetails.author, "Any", mediaStream.videoDetails.thumbnailSet.maxResUrl,
+      mediaStream.videoDetails.uploadDate.toString(),
+      "Any", "Any");
     id = _id;
     yt.close();
     return 1;
@@ -44,7 +125,7 @@ class Downloader {
     var audio = mediaStream.audio.last;
 
     // Compose the file name removing the unallowed characters in windows.
-    var fileName = '${mediaStream.videoDetails.title}.m4a'
+    var fileName = '${mediaStream.videoDetails.title}'
         .replaceAll('Container.', '')
         .replaceAll(r'\', '')
         .replaceAll('/', '')
@@ -79,6 +160,8 @@ class Downloader {
     }
     await output.close();
     appdata.getLastFilePath = "$directory/$fileName";
+    appdata.getFileName = "$fileName";
+    appdata.getDownloadPath = directory;
     appdata.isDownloading.add(false);
     print("Downloader: All done");
   }
@@ -109,7 +192,9 @@ class AppStreams {
   StreamController<String> audioTitle = new StreamController.broadcast();
   StreamController<String> audioArtist = new StreamController.broadcast();
 
+  String getFileName;
   String getLastFilePath;
+  String getDownloadPath;
 
   void unloadStreams() {
     audioSize.add(null);

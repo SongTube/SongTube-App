@@ -8,10 +8,14 @@ import io.flutter.plugins.GeneratedPluginRegistrant;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
+import android.content.Context;
+import android.net.Uri;
+import java.io.File;
 
 public class MainActivity extends FlutterActivity {
   String sharedText;
   private static final String CHANNEL = "sharedTextChannel";
+  private static final String CONVERTERCHANNEL = "registerMedia";
   @Override
   public void configureFlutterEngine(@NonNull FlutterEngine flutterEngine) {
     GeneratedPluginRegistrant.registerWith(flutterEngine);
@@ -20,6 +24,16 @@ public class MainActivity extends FlutterActivity {
           (call, result) -> {
             if (call.method.equals("getSharedText")) {
               result.success(sharedText);
+            }
+          }
+        );
+    new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), CONVERTERCHANNEL)
+        .setMethodCallHandler(
+          (call, result) -> {
+            if (call.method.equals("registerFile")) {
+              String argument = call.argument("file");
+              File file = new File(argument);
+              sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
             }
           }
         );

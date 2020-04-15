@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_downloader/image_downloader.dart';
 import 'tabs/downloadtab.dart';
 import 'tabs/hometab.dart';
 import 'tabs/settingstab.dart';
@@ -20,6 +21,7 @@ class _LibraryState extends State<Library> {
     appdata = AppStreams();
     downloader = Downloader();
     method = NativeMethod();
+    converter = Converter();
     super.initState();
   }
 
@@ -110,6 +112,11 @@ class _LibraryState extends State<Library> {
                   child: FloatingActionButton(
                     onPressed: () async {
                       await downloader.download();
+                      List<String> list = await converter.getArgumentsList(FFmpegArgs.argsToACC,
+                        downloader.defaultMetaData);
+                      int result = await converter.convertAudio(list);
+                      if (result == 0) print("Library: Audio convertion done successful");
+                      if (result == 1) print("Library: Audio convertion failed");
                     },
                     child: Icon(
                       Icons.file_download,

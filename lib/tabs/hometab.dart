@@ -11,7 +11,7 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin<HomeTab>, WidgetsBindingObserver {
-  
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     switch (state){
