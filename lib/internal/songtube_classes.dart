@@ -224,6 +224,7 @@ class AppStreams {
     audioTitle.add(null);
     linkReady.add(null);
     isDownloading.add(null);
+    videoId.add(null);
     progressController.add(0.0);
   }
 
@@ -235,5 +236,6 @@ class AppStreams {
     audioDuration.close();
     audioTitle.close();
     audioArtist.close();
+    videoId.close();
   }
 }
