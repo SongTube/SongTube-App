@@ -15,6 +15,8 @@ class Library extends StatefulWidget {
 class _LibraryState extends State<Library> with SingleTickerProviderStateMixin {
 
   TabController _tabController;
+  static final List<String> _appBarTitleArr = [ "SongTube", "SongTube", "App Settings" ];
+  String _appBarTitle = _appBarTitleArr[0];
 
   @override
   void initState() {
@@ -31,6 +33,12 @@ class _LibraryState extends State<Library> with SingleTickerProviderStateMixin {
   void dispose() {
     super.dispose();
     _tabController.dispose();
+  }
+
+  _onTabTapped(int index) {
+    setState(() {
+      _appBarTitle = _appBarTitleArr[index];
+    });
   }
 
   Future<void> showAlertDialog(BuildContext context, bool permanent) async {
@@ -89,7 +97,7 @@ class _LibraryState extends State<Library> with SingleTickerProviderStateMixin {
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            "SongTube",
+            _appBarTitle,
             style: TextStyle(color: Theme.of(context).textTheme.body1.color),
           ),
           elevation: 0,
@@ -97,6 +105,7 @@ class _LibraryState extends State<Library> with SingleTickerProviderStateMixin {
           centerTitle: true,
         ),
         body: TabBarView(
+          physics: NeverScrollableScrollPhysics(),
           controller: _tabController,
           children: [
             HomeTab(),
@@ -131,23 +140,59 @@ class _LibraryState extends State<Library> with SingleTickerProviderStateMixin {
                 return Container();
               }
             }),
-        bottomNavigationBar: TabBar(
-          controller: _tabController,
-            tabs: [
-              Tab(
-                icon: Icon(Icons.home), key: PageStorageKey("hometab")
-              ),
-              Tab(
-                icon: Icon(Icons.cloud_download)
-              ),
-              Tab(
-                icon: Icon(Icons.settings)
-              ),
-            ],
-            unselectedLabelColor: Theme.of(context).iconTheme.color,
-            labelColor: Colors.redAccent,
-            indicatorColor: Colors.transparent,
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.only(
+            left: 8,
+            right: 8,
+            bottom: 6
           ),
+          child: Container(
+            color: Theme.of(context).canvasColor,
+            child: TabBar(
+              indicator: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+                color: Theme.of(context).tabBarTheme.labelColor,
+              ),
+              controller: _tabController,
+                tabs: [
+                  Tab(
+                    icon: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(Icons.home),
+                        if (_tabController.index == 0)
+                        Text("  Home", style: TextStyle(color: Theme.of(context).textTheme.body1.color))
+                      ], key: PageStorageKey("hometab")
+                    )
+                  ),
+                  Tab(
+                    icon: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(Icons.cloud_download),
+                        if (_tabController.index == 1)
+                        Text("  Downloads", style: TextStyle(color: Theme.of(context).textTheme.body1.color))
+                      ]
+                    )
+                  ),
+                  Tab(
+                    icon: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(Icons.settings),
+                        if (_tabController.index == 2)
+                        Text("  Settings", style: TextStyle(color: Theme.of(context).textTheme.body1.color))
+                      ]
+                    )
+                  ),
+                ],
+                labelPadding: EdgeInsets.symmetric(horizontal: 1.0),
+                unselectedLabelColor: Theme.of(context).iconTheme.color,
+                labelColor: Colors.redAccent,
+                onTap: _onTabTapped,
+              ),
+          ),
+        ),
     );
   }
 }
