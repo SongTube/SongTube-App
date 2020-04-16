@@ -12,7 +12,9 @@ class Library extends StatefulWidget {
   _LibraryState createState() => _LibraryState();
 }
 
-class _LibraryState extends State<Library> {
+class _LibraryState extends State<Library> with SingleTickerProviderStateMixin {
+
+  TabController _tabController;
 
   @override
   void initState() {
@@ -21,7 +23,14 @@ class _LibraryState extends State<Library> {
     downloader = Downloader();
     method = NativeMethod();
     converter = Converter();
+    _tabController = new TabController(vsync: this, length: 3);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _tabController.dispose();
   }
 
   Future<void> showAlertDialog(BuildContext context, bool permanent) async {
@@ -77,31 +86,25 @@ class _LibraryState extends State<Library> {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      child: new Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: Text(
             "SongTube",
             style: TextStyle(color: Theme.of(context).textTheme.body1.color),
           ),
-          bottom: TabBar(
-            tabs: [
-              Tab(icon: Icon(Icons.home), key: PageStorageKey("hometab")),
-              Tab(icon: Icon(Icons.cloud_download)),
-              Tab(icon: Icon(Icons.settings)),
-            ],
-            unselectedLabelColor: Theme.of(context).iconTheme.color,
-            labelColor: Colors.redAccent,
-            indicatorColor: Colors.redAccent,
-          ),
-          elevation: 1,
+          elevation: 0,
+          backgroundColor: Theme.of(context).canvasColor,
+          centerTitle: true,
         ),
-        body: TabBarView(children: [
-          HomeTab(),
-          DownloadTab(),
-          SettingsTab(),
-        ]),
+        body: TabBarView(
+          controller: _tabController,
+          children: [
+            HomeTab(),
+            DownloadTab(),
+            SettingsTab(),
+          ]
+        ),
+        backgroundColor: Theme.of(context).canvasColor,
         floatingActionButton: StreamBuilder<Object>(
             stream: appdata.linkReady.stream,
             builder: (context, snapshot) {
@@ -128,7 +131,23 @@ class _LibraryState extends State<Library> {
                 return Container();
               }
             }),
-      ),
+        bottomNavigationBar: TabBar(
+          controller: _tabController,
+            tabs: [
+              Tab(
+                icon: Icon(Icons.home), key: PageStorageKey("hometab")
+              ),
+              Tab(
+                icon: Icon(Icons.cloud_download)
+              ),
+              Tab(
+                icon: Icon(Icons.settings)
+              ),
+            ],
+            unselectedLabelColor: Theme.of(context).iconTheme.color,
+            labelColor: Colors.redAccent,
+            indicatorColor: Colors.transparent,
+          ),
     );
   }
 }
