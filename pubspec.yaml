@@ -36,6 +36,7 @@ dependencies:
   permission_handler: ^5.0.0+hotfix.3
   youtube_player_flutter: ^6.1.0+4
   flutter_ffmpeg: ^0.2.10
+  circular_check_box: ^1.0.1
   
 dev_dependencies:
   flutter_test:
