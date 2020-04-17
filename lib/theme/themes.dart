@@ -24,6 +24,7 @@ class AppTheme {
       tabBarTheme: TabBarTheme(
         labelColor: Colors.grey[200],
       ),
+      brightness: Brightness.dark
     );
   }
 
@@ -48,6 +49,7 @@ class AppTheme {
       tabBarTheme: TabBarTheme(
         labelColor: Colors.black12
       ),
+      brightness: Brightness.light
     );
   }
 
@@ -78,6 +80,7 @@ class AppTheme {
       tabBarTheme: TabBarTheme(
         labelColor: Color.fromARGB(255, 20, 20, 20),
       ),
+      brightness: Brightness.light
     );
   }
 }

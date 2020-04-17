@@ -27,6 +27,7 @@ class _LibraryState extends State<Library> with TickerProviderStateMixin {
     converter = Converter();
     _tabController = new TabController(vsync: this, length: 3);
     super.initState();
+    WidgetsBinding.instance.renderView.automaticSystemUiAdjustment=false;
   }
 
   @override
@@ -94,6 +95,14 @@ class _LibraryState extends State<Library> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Theme.of(context).brightness,
+        systemNavigationBarColor: Theme.of(context).canvasColor,
+        systemNavigationBarIconBrightness: Theme.of(context).brightness,
+      ),
+    );
     return Scaffold(
         appBar: AppBar(
           title: Text(
