@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:ext_storage/ext_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'native.dart';
 
 Downloader downloader;
