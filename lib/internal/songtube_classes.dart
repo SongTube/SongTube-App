@@ -11,6 +11,7 @@ AppStreams appdata;
 Converter converter;
 
 enum FFmpegArgs { argsToACC }
+enum CurrentAction { downloading, loading, converting, none }
 
 class Converter {
   
@@ -52,6 +53,7 @@ class Converter {
   // Functions to convert media
   Future<int> convertAudio(List<String> arguments) async {
     appdata.progressController.add(null);
+    appdata.currentAction.add(CurrentAction.converting);
     print("Converter: Starting audio file convertion...");
     int _result;
     await flutterFFmpeg.executeWithArguments(arguments).then(
@@ -63,6 +65,7 @@ class Converter {
     );
     print("Converter: Done, result: " + _result.toString());
     appdata.progressController.add(0.0);
+    appdata.currentAction.add(CurrentAction.none);
     return _result;
   }
 
@@ -95,6 +98,7 @@ class Downloader {
   Future<void> getInfo(url) async {
     print("Downloader: Getting link info");
     appdata.progressController.add(null);
+    appdata.currentAction.add(CurrentAction.loading);
     YoutubeExplode yt = YoutubeExplode();
     String _id = YoutubeExplode.parseVideoId(url); // Returns `OpQFFLBMEPI`
     var mediaStream;
@@ -105,6 +109,7 @@ class Downloader {
     try {
       mediaStream = await yt.getVideoMediaStream(_id).timeout(const Duration(seconds: 60));
     } on TimeoutException {
+      appdata.currentAction.add(CurrentAction.none);
       print("Downloader: getVideoMediaStream Timeout");
     }
     if (mediaStream == null) {
@@ -126,11 +131,13 @@ class Downloader {
     id = _id;
     yt.close();
     appdata.progressController.add(0.0);
+    appdata.currentAction.add(CurrentAction.none);
   }
 
   Future<void> download() async {
     YoutubeExplode yt = YoutubeExplode();
     appdata.isDownloading.add(true);
+    appdata.currentAction.add(CurrentAction.downloading);
     // Get the video media stream.
     print("Downloader: Getting video info...");
     var mediaStream = await yt.getVideoMediaStream(id);
@@ -179,6 +186,7 @@ class Downloader {
     appdata.getLastFilePath = "$directory/$fileName";
     appdata.getFileName = "$fileName";
     appdata.isDownloading.add(false);
+    appdata.currentAction.add(CurrentAction.none);
     print("Downloader: All done");
   }
 }
@@ -208,6 +216,7 @@ class AppStreams {
   StreamController<Duration> audioDuration = new StreamController.broadcast();
   StreamController<String> audioTitle = new StreamController.broadcast();
   StreamController<String> audioArtist = new StreamController.broadcast();
+  StreamController<CurrentAction> currentAction = new StreamController.broadcast();
 
   TextEditingController titleController = new TextEditingController();
   TextEditingController albumController = new TextEditingController();
@@ -242,6 +251,7 @@ class AppStreams {
     isDownloading.add(null);
     videoId.add(null);
     progressController.add(0.0);
+    currentAction.add(CurrentAction.none);
   }
 
   void dispose() {
@@ -253,5 +263,6 @@ class AppStreams {
     audioTitle.close();
     audioArtist.close();
     videoId.close();
+    currentAction.close();
   }
 }
