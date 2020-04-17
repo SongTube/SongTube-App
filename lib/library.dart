@@ -161,20 +161,15 @@ class _LibraryState extends State<Library> with TickerProviderStateMixin {
           backgroundColor: Theme.of(context).canvasColor,
           centerTitle: true,
         )
-        : null,
-        body: Padding(
-          padding: EdgeInsets.only(
-            top: appData.appBarEnabled == false ? kToolbarHeight*0.5 : 0
-          ),
-          child: TabBarView(
-            controller: _tabController,
-            children: [
-              HomeTab(),
-              NavigateTab(),
-              DownloadTab(),
-              SettingsTab(),
-            ]
-          ),
+        : PreferredSize(child: Container(), preferredSize: Size(kToolbarHeight*0.5, 0)),
+        body: TabBarView(
+          controller: _tabController,
+          children: [
+            HomeTab(),
+            NavigateTab(),
+            DownloadTab(),
+            SettingsTab(),
+          ]
         ),
         backgroundColor: Theme.of(context).canvasColor,
         floatingActionButton: StreamBuilder<Object>(
