@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 // Internal methods
-import 'preferences.dart';
+import '../internal/preferences.dart';
 
 class AppDataProvider extends ChangeNotifier {
   Preferences preferences;
