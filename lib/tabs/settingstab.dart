@@ -127,7 +127,7 @@ class _SettingsTabState extends State<SettingsTab> {
             // ---------------
 
             // ------------------
-            // Converter Settings
+            // App UI Settings
             // ------------------
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -157,7 +157,7 @@ class _SettingsTabState extends State<SettingsTab> {
                             bottom: 4
                           ),
                           child: Text(
-                            "Converter",
+                            "App Design",
                             style: TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.w600
@@ -169,18 +169,18 @@ class _SettingsTabState extends State<SettingsTab> {
                     Divider(indent: 8, endIndent: 8),
                     ListTile(
                       title: Text(
-                        "Format to Convert Audio",
+                        "SongTube AppBar",
                         style: TextStyle(
                           color: Theme.of(context).textTheme.body1.color,
                           fontWeight: FontWeight.w500
                         ),
                       ),
-                      subtitle: Text("Select a format for audio download", style: TextStyle(fontSize: 12),),
+                      subtitle: Text("Show/Hide this application AppBar", style: TextStyle(fontSize: 12),),
                       trailing: CircularCheckBox(
                         activeColor: Colors.redAccent,
-                        value: appData.systemThemeEnabled,
+                        value: appData.appBarEnabled,
                         onChanged: (bool newValue) {
-                          appData.systemThemeEnabled = newValue;
+                          appData.appBarEnabled = newValue;
                         },
                       ),
                     ),
