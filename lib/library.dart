@@ -1,7 +1,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:songtube/theme/theme_provider.dart';
 import 'tabs/downloadtab.dart';
+import 'tabs/navigatetab.dart';
 import 'tabs/hometab.dart';
 import 'tabs/settingstab.dart';
 import 'internal/songtube_classes.dart';
@@ -16,7 +19,7 @@ class Library extends StatefulWidget {
 class _LibraryState extends State<Library> with TickerProviderStateMixin {
 
   TabController _tabController;
-  static final List<String> _appBarTitleArr = [ "SongTube", "SongTube", "App Settings" ];
+  static final List<String> _appBarTitleArr = [ "DownTube", "DownTube", "DownTube", "App Settings" ];
   String _appBarTitle = _appBarTitleArr[0];
 
   @override
@@ -26,7 +29,10 @@ class _LibraryState extends State<Library> with TickerProviderStateMixin {
     downloader = Downloader();
     method = NativeMethod();
     converter = Converter();
-    _tabController = new TabController(vsync: this, length: 3);
+    _tabController = new TabController(vsync: this, length: 4);
+    _tabController.addListener(() {
+      _onTabTapped(_tabController.index);
+    });
     super.initState();
     WidgetsBinding.instance.renderView.automaticSystemUiAdjustment=false;
   }
@@ -46,7 +52,12 @@ class _LibraryState extends State<Library> with TickerProviderStateMixin {
   Future<void> showAlertDialog(BuildContext context, bool permanent) async {
     // set up the button
     Widget okButton = FlatButton(
-      child: Text("OK"),
+      child: Text(
+        "OK",
+        style: TextStyle(
+          color: Colors.redAccent
+        ),
+      ),
       onPressed: () {
         Navigator.pop(context);
       },
@@ -54,12 +65,27 @@ class _LibraryState extends State<Library> with TickerProviderStateMixin {
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("SongTube"),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      title: Text("DownTube",
+        style: TextStyle(
+          color: Theme.of(context).textTheme.body1.color
+        ),
+      ),
       content: permanent == false
           ? Text(
-              "This application needs external storage permission to convert or download from YouTube or other sites")
+            "This application needs external storage permission to convert or download from YouTube or other sites",
+            style: TextStyle(
+              color: Theme.of(context).textTheme.body1.color
+            ),
+          )
           : Text(
-              "External storage permission is permanently denied, please go to settings and enable it manually for this app to work..."),
+            "External storage permission is permanently denied, please go to settings and enable it manually for this app to work...",
+            style: TextStyle(
+              color: Theme.of(context).textTheme.body1.color
+            ),
+          ),
       actions: [
         okButton,
       ],
@@ -96,10 +122,15 @@ class _LibraryState extends State<Library> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    AppDataProvider appData = Provider.of<AppDataProvider>(context);
+    Brightness _systemBrightness = Theme.of(context).brightness;
+    Brightness _statusBarBrightness = _systemBrightness == Brightness.light
+        ? Brightness.dark
+        : Brightness.light;
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Theme.of(context).brightness,
+        statusBarIconBrightness: _statusBarBrightness,
         systemNavigationBarColor: Theme.of(context).canvasColor,
         systemNavigationBarIconBrightness: Theme.of(context).brightness,
       ),
@@ -119,15 +150,16 @@ class _LibraryState extends State<Library> with TickerProviderStateMixin {
         body: Padding(
           padding: EdgeInsets.only(
             top: appData.appBarEnabled == false ? kToolbarHeight*0.5 : 0
-        ),
-        body: TabBarView(
-          physics: NeverScrollableScrollPhysics(),
-          controller: _tabController,
-          children: [
-            HomeTab(),
-            DownloadTab(),
-            SettingsTab(),
-          ]
+          ),
+          child: TabBarView(
+            controller: _tabController,
+            children: [
+              HomeTab(),
+              NavigateTab(),
+              DownloadTab(),
+              SettingsTab(),
+            ]
+          ),
         ),
         backgroundColor: Theme.of(context).canvasColor,
         floatingActionButton: StreamBuilder<Object>(
@@ -180,7 +212,7 @@ class _LibraryState extends State<Library> with TickerProviderStateMixin {
                           curve: Curves.easeInOutBack,
                           vsync: this,
                           child: Text(_tabController.index == 0
-                            ? "  Home" : "",
+                            ? " Home" : "",
                             style: TextStyle(color: Theme.of(context).textTheme.body1.color),
                             overflow: TextOverflow.fade,
                             softWrap: true,
@@ -193,13 +225,32 @@ class _LibraryState extends State<Library> with TickerProviderStateMixin {
                     icon: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Icon(Icons.cloud_download),
+                        Icon(Icons.web),
                         AnimatedSize(
                           duration: const Duration(milliseconds: 400),
                           curve: Curves.easeInOutBack,
                           vsync: this,
                           child: Text(_tabController.index == 1
-                            ? "  Downloads" : "",
+                            ? " Navigate" : "",
+                            style: TextStyle(color: Theme.of(context).textTheme.body1.color),
+                            overflow: TextOverflow.fade,
+                            softWrap: true,
+                          )
+                        )
+                      ]
+                    )
+                  ),
+                  Tab(
+                    icon: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(Icons.cloud_download),
+                        AnimatedSize(
+                          duration: const Duration(milliseconds: 400),
+                          curve: Curves.easeInOutBack,
+                          vsync: this,
+                          child: Text(_tabController.index == 2
+                            ? " Download" : "",
                             style: TextStyle(color: Theme.of(context).textTheme.body1.color),
                             overflow: TextOverflow.fade,
                             softWrap: true,
@@ -217,8 +268,8 @@ class _LibraryState extends State<Library> with TickerProviderStateMixin {
                           duration: const Duration(milliseconds: 400),
                           curve: Curves.easeInOutBack,
                           vsync: this,
-                          child: Text(_tabController.index == 2
-                            ? "  Settings" : "",
+                          child: Text(_tabController.index == 3
+                            ? " Settings" : "",
                             style: TextStyle(color: Theme.of(context).textTheme.body1.color),
                             overflow: TextOverflow.fade,
                             softWrap: true,
@@ -231,7 +282,6 @@ class _LibraryState extends State<Library> with TickerProviderStateMixin {
                 labelPadding: EdgeInsets.symmetric(horizontal: 1.0),
                 unselectedLabelColor: Theme.of(context).iconTheme.color,
                 labelColor: Colors.redAccent,
-                onTap: _onTabTapped,
               ),
           ),
         ),
