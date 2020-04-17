@@ -154,7 +154,6 @@ class _LibraryState extends State<Library> with TickerProviderStateMixin {
           padding: const EdgeInsets.only(
             left: 8,
             right: 8,
-            bottom: 6
           ),
           child: Container(
             color: Theme.of(context).canvasColor,
