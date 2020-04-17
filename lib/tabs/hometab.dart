@@ -228,7 +228,7 @@ class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin<Ho
                                 ),
                               ),
                             )
-                            : null,
+                            : Container(),
                           );
                         }
                       ),
@@ -253,7 +253,7 @@ class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin<Ho
                                     ),
                                   ),
                                 )
-                                : null,
+                                : Container(),
                               );
                             },
                           ),
@@ -277,7 +277,7 @@ class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin<Ho
                                     ),
                                   ),
                                 )
-                                : null,
+                                : Container(),
                               );
                             },
                           )
@@ -302,7 +302,7 @@ class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin<Ho
                                 textAlign: TextAlign.center,
                               ),
                             )
-                            : null,
+                            : Container(),
                           );
                         },
                       ),
@@ -322,7 +322,7 @@ class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin<Ho
                                 ),
                               ),
                             )
-                            : null,
+                            : Container(),
                           );
                         },
                       ),
@@ -574,7 +574,7 @@ class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin<Ho
                                 ),
                               ],
                             )
-                            : null,
+                            : Container(),
                           );
                         }
                       ),
