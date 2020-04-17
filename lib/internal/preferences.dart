@@ -10,6 +10,7 @@ String accentKey = "accent_color";
 String systemThemeKey = "use_system_theme";
 String darkThemeKey = "use_dark_theme";
 String blackThemeKey = "use_black_theme";
+String enableAppBar = "enable_app_bar";
 
 class Preferences {
   SharedPreferences prefs;
@@ -55,6 +56,14 @@ class Preferences {
 
   void saveDarkThemeEnabled(bool value){
     prefs.setBool(darkThemeKey, value);
+  }
+
+  bool getEnableAppBar() {
+    return prefs.getBool(enableAppBar) ?? true;
+  }
+
+  void saveEnableAppBar(bool value) {
+    prefs.setBool(enableAppBar, value);
   }
 
   bool getBlackThemeEnabled() {

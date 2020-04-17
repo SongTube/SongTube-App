@@ -105,7 +105,8 @@ class _LibraryState extends State<Library> with TickerProviderStateMixin {
       ),
     );
     return Scaffold(
-        appBar: AppBar(
+        appBar: appData.appBarEnabled == true
+        ? AppBar(
           title: Text(
             _appBarTitle,
             style: TextStyle(color: Theme.of(context).textTheme.body1.color),
@@ -113,6 +114,11 @@ class _LibraryState extends State<Library> with TickerProviderStateMixin {
           elevation: 0,
           backgroundColor: Theme.of(context).canvasColor,
           centerTitle: true,
+        )
+        : null,
+        body: Padding(
+          padding: EdgeInsets.only(
+            top: appData.appBarEnabled == false ? kToolbarHeight*0.5 : 0
         ),
         body: TabBarView(
           physics: NeverScrollableScrollPhysics(),

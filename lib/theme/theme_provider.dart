@@ -12,7 +12,7 @@ class AppDataProvider extends ChangeNotifier {
 
   void initProvider() async {
     preferences = await Preferences().init();
-    loadSavedData();
+    await loadSavedData();
   }
 
   Color _accentColor = Colors.redAccent;
@@ -20,12 +20,14 @@ class AppDataProvider extends ChangeNotifier {
   bool _systemThemeEnabled = false;
   bool _darkThemeEnabled = false;
   bool _blackThemeEnabled = false;
+  bool _appBarEnabled = true;
 
   Color get accentColor => _accentColor;
   bool get systemThemeAvailable => _systemThemeAvailable;
   bool get systemThemeEnabled => _systemThemeEnabled;
   bool get darkThemeEnabled => _darkThemeEnabled;
   bool get blackThemeEnabled => _blackThemeEnabled;
+  bool get appBarEnabled => _appBarEnabled;
 
   set systemThemeAvailable(bool value){
     _systemThemeAvailable = value;
@@ -60,10 +62,17 @@ class AppDataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  set appBarEnabled(bool value) {
+    _appBarEnabled = value;
+    preferences.saveEnableAppBar(value);
+    notifyListeners();
+  }
+
   Future<void> loadSavedData() async {
     systemThemeAvailable = await preferences.isSystemThemeAvailable();
     accentColor = preferences.getAccentColor();
     darkThemeEnabled = preferences.getDarkThemeEnabled();
     blackThemeEnabled = preferences.getBlackThemeEnabled();
+    appBarEnabled = preferences.getEnableAppBar();
   }
 }
