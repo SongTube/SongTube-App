@@ -15,7 +15,15 @@ class AppTheme {
         ),
       ),
       scaffoldBackgroundColor: Color.fromARGB(255, 247, 247, 247),
-      cardColor: Color.fromARGB(255, 255, 255, 255)
+      cardColor: Color.fromARGB(255, 255, 255, 255),
+      inputDecorationTheme: InputDecorationTheme(
+        labelStyle: TextStyle(
+          color: Colors.redAccent,
+        ),
+      ),
+      tabBarTheme: TabBarTheme(
+        labelColor: Colors.grey[200],
+      ),
     );
   }
 
@@ -32,11 +40,20 @@ class AppTheme {
       ),
       toggleableActiveColor: accent,
       cardColor: Color.fromARGB(255, 60, 60, 60),
+      inputDecorationTheme: InputDecorationTheme(
+        labelStyle: TextStyle(
+          color: Colors.redAccent,
+        ),
+      ),
+      tabBarTheme: TabBarTheme(
+        labelColor: Colors.black12
+      ),
     );
   }
 
   static ThemeData black(Color accent) {
     return ThemeData.dark().copyWith(
+      canvasColor: Colors.black,
       accentColor: accent,
       iconTheme: IconThemeData(
         color: Colors.white
@@ -46,11 +63,21 @@ class AppTheme {
           color: Colors.white
         ),
       ),
+
       toggleableActiveColor: accent,
       scaffoldBackgroundColor: Colors.black,
       cardColor: Color.fromARGB(255, 20, 20, 20),
       primaryColor: Colors.black,
       primaryColorLight: Colors.black,
+      inputDecorationTheme: InputDecorationTheme(
+        fillColor: Colors.black26,
+        labelStyle: TextStyle(
+          color: Colors.redAccent,
+        ),
+      ),
+      tabBarTheme: TabBarTheme(
+        labelColor: Color.fromARGB(255, 20, 20, 20),
+      ),
     );
   }
 }
