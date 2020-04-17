@@ -100,6 +100,21 @@ class _LibraryState extends State<Library> with TickerProviderStateMixin {
     );
   }
 
+  void _showToast(BuildContext context, String message) {
+    final scaffold = Scaffold.of(context);
+    scaffold.showSnackBar(
+      SnackBar(
+        backgroundColor: Theme.of(context).canvasColor,
+        duration: Duration(seconds: 1),
+        content: Text(message, style: TextStyle(color: Theme.of(context).textTheme.body1.color),),
+        action: SnackBarAction(
+          label: 'OK', onPressed: scaffold.hideCurrentSnackBar,
+          textColor: Colors.redAccent,
+        ),
+      ),
+    );
+  }
+
   checkPermissions() async {
     final status = await Permission.storage.status;
     if (status.isUndetermined) {
@@ -163,13 +178,21 @@ class _LibraryState extends State<Library> with TickerProviderStateMixin {
         ),
         backgroundColor: Theme.of(context).canvasColor,
         floatingActionButton: StreamBuilder<Object>(
-            stream: appdata.linkReady.stream,
-            builder: (context, snapshot) {
-              if (snapshot.data == true) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 8, right: 8),
+          stream: appdata.linkReady.stream,
+          builder: (context, snapshot) {
+            return AnimatedOpacity(
+              opacity: _tabController.index == 0 ? 1.0 : 0.0,
+              duration: Duration(milliseconds: 600),
+              curve: Curves.decelerate,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 8, right: 8),
+                child: AnimatedOpacity(
+                  opacity: snapshot.data == true ? 1.0 : 0.0,
+                  duration: Duration(milliseconds: 600),
+                  curve: Curves.decelerate,
                   child: FloatingActionButton(
                     onPressed: () async {
+                      _showToast(context, "Downloading...");
                       await downloader.download();
                       List<String> list = await converter.getArgumentsList(FFmpegArgs.argsToACC,
                         downloader.defaultMetaData);
@@ -183,11 +206,11 @@ class _LibraryState extends State<Library> with TickerProviderStateMixin {
                     ),
                     backgroundColor: Colors.redAccent,
                   ),
-                );
-              } else {
-                return Container();
-              }
-            }),
+                )
+              ),
+            );
+          }
+        ),
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.only(
             left: 8,
