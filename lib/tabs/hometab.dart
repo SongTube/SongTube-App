@@ -263,7 +263,7 @@ class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin<Ho
                             builder: (context, snapshot) {
                               double size;
                               if (snapshot.hasData) {
-                                size = double.parse(((snapshot.data / 1024) / 1024).toStringAsFixed(3));
+                                size = double.parse(((snapshot.data / 1024) / 1024).toStringAsFixed(1));
                               }
                               return AnimatedSwitcher(
                                 duration: const Duration(milliseconds: 200),
@@ -271,7 +271,7 @@ class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin<Ho
                                 ? Padding(
                                   padding: const EdgeInsets.only(right: 20),
                                   child: Text(
-                                    size.toString() + " KB",
+                                    "Audio: " + size.toString() + "MB",
                                     style: TextStyle(
                                       fontSize: 12,
                                     ),
