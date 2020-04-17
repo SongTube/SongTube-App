@@ -12,8 +12,8 @@ class Main extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ ChangeNotifierProvider<AppDataProvider>.value(
-        value: AppDataProvider(),
+      providers: [ ChangeNotifierProvider<AppDataProvider>(
+        create: (context) => AppDataProvider(),
       ) ],
       child: Builder( builder: (context) {
         appData = Provider.of<AppDataProvider>(context);
