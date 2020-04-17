@@ -12,7 +12,7 @@ class Library extends StatefulWidget {
   _LibraryState createState() => _LibraryState();
 }
 
-class _LibraryState extends State<Library> with SingleTickerProviderStateMixin {
+class _LibraryState extends State<Library> with TickerProviderStateMixin {
 
   TabController _tabController;
   static final List<String> _appBarTitleArr = [ "SongTube", "SongTube", "App Settings" ];
@@ -160,8 +160,17 @@ class _LibraryState extends State<Library> with SingleTickerProviderStateMixin {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Icon(Icons.home),
-                        if (_tabController.index == 0)
-                        Text("  Home", style: TextStyle(color: Theme.of(context).textTheme.body1.color))
+                        AnimatedSize(
+                          duration: const Duration(milliseconds: 400),
+                          curve: Curves.easeInOutBack,
+                          vsync: this,
+                          child: Text(_tabController.index == 0
+                            ? "  Home" : "",
+                            style: TextStyle(color: Theme.of(context).textTheme.body1.color),
+                            overflow: TextOverflow.fade,
+                            softWrap: true,
+                          )
+                        )
                       ], key: PageStorageKey("hometab")
                     )
                   ),
@@ -170,8 +179,17 @@ class _LibraryState extends State<Library> with SingleTickerProviderStateMixin {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Icon(Icons.cloud_download),
-                        if (_tabController.index == 1)
-                        Text("  Downloads", style: TextStyle(color: Theme.of(context).textTheme.body1.color))
+                        AnimatedSize(
+                          duration: const Duration(milliseconds: 400),
+                          curve: Curves.easeInOutBack,
+                          vsync: this,
+                          child: Text(_tabController.index == 1
+                            ? "  Downloads" : "",
+                            style: TextStyle(color: Theme.of(context).textTheme.body1.color),
+                            overflow: TextOverflow.fade,
+                            softWrap: true,
+                          )
+                        )
                       ]
                     )
                   ),
@@ -180,8 +198,17 @@ class _LibraryState extends State<Library> with SingleTickerProviderStateMixin {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Icon(Icons.settings),
-                        if (_tabController.index == 2)
-                        Text("  Settings", style: TextStyle(color: Theme.of(context).textTheme.body1.color))
+                        AnimatedSize(
+                          duration: const Duration(milliseconds: 400),
+                          curve: Curves.easeInOutBack,
+                          vsync: this,
+                          child: Text(_tabController.index == 2
+                            ? "  Settings" : "",
+                            style: TextStyle(color: Theme.of(context).textTheme.body1.color),
+                            overflow: TextOverflow.fade,
+                            softWrap: true,
+                          )
+                        )
                       ]
                     )
                   ),
