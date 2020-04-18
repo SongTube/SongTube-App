@@ -90,9 +90,30 @@ class MediaMetaData {
 class Downloader {
   String id;
   MediaMetaData defaultMetaData;
+  List<VideoStreamInfo> videoStreams;
+  AudioStreamInfo audio;
+
 
   Downloader() {
     appdata.isDownloading.add(false);
+  }
+
+  _extractVideoStreams(MediaStreamInfoSet list) {
+    List<VideoStreamInfo> videoList = [];
+    list.video.sort((a, b) => int.parse(
+      a.videoQualityLabel.replaceAll("p", "")).compareTo(int.parse(
+      b.videoQualityLabel.replaceAll("p", ""))));
+    int _size = list.video.length;
+    for (int i = 0; i <= _size; i++){
+      if (_size-1 == i) {
+        videoList.add(list.video[i]);
+        break;
+      }
+      if (list.video[i].videoQualityLabel != list.video[i+1].videoQualityLabel) {
+        videoList.add(list.video[i]);
+      }
+    }
+    return videoList;
   }
 
   Future<void> getInfo(url) async {
@@ -117,7 +138,8 @@ class Downloader {
       appdata.progressController.add(0.0);
       return;
     }
-    AudioStreamInfo audio = mediaStream.audio.last;
+    videoStreams = _extractVideoStreams(mediaStream);
+    audio = mediaStream.audio.last;
     appdata.audioTitle.add(mediaStream.videoDetails.title);
     appdata.audioArtist.add(mediaStream.videoDetails.author);
     appdata.audioDuration.add(mediaStream.videoDetails.duration);
