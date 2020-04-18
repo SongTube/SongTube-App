@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/theme/theme_provider.dart';
+import 'package:unicorndial/unicorndial.dart';
 import 'tabs/downloadtab.dart';
 import 'tabs/navigatetab.dart';
 import 'tabs/hometab.dart';
@@ -135,6 +136,43 @@ class _LibraryState extends State<Library> with TickerProviderStateMixin {
     }
   }
 
+  Widget _profileOption({IconData iconData, Function onPressed}) {
+    return UnicornButton(
+        currentButton: FloatingActionButton(
+      backgroundColor: Colors.redAccent,
+      mini: true,
+      child: Icon(iconData),
+      onPressed: onPressed,
+    ));
+  }
+
+  List<UnicornButton> _getProfileMenu(BuildContext context) {
+    List<UnicornButton> children = [];
+    children.add(
+      _profileOption(
+        iconData: Icons.music_note,
+        onPressed:() async {
+          _showToast(context, "Downloading audio...");
+          await downloader.download();
+          List<String> list = await converter.getArgumentsList(FFmpegArgs.argsToACC,
+            downloader.defaultMetaData);
+          int result = await converter.convertAudio(list);
+          if (result == 0) print("Library: Audio convertion done successful");
+          if (result == 1) print("Library: Audio convertion failed");
+        }
+      )
+    );
+    children.add(
+      _profileOption(
+        iconData: Icons.videocam,
+        onPressed: (){
+          print(downloader.videoStreams);
+        }
+      )
+    );
+    return children;
+  }
+
   @override
   Widget build(BuildContext context) {
     AppDataProvider appData = Provider.of<AppDataProvider>(context);
@@ -177,29 +215,20 @@ class _LibraryState extends State<Library> with TickerProviderStateMixin {
           builder: (context, snapshot) {
             return AnimatedOpacity(
               opacity: _tabController.index == 0 ? 1.0 : 0.0,
-              duration: Duration(milliseconds: 600),
+              duration: Duration(milliseconds: 200),
               curve: Curves.decelerate,
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 8, right: 8),
                 child: AnimatedOpacity(
                   opacity: snapshot.data == true ? 1.0 : 0.0,
-                  duration: Duration(milliseconds: 600),
+                  duration: Duration(milliseconds: 200),
                   curve: Curves.decelerate,
-                  child: FloatingActionButton(
-                    onPressed: () async {
-                      _showToast(context, "Downloading...");
-                      await downloader.download();
-                      List<String> list = await converter.getArgumentsList(FFmpegArgs.argsToACC,
-                        downloader.defaultMetaData);
-                      int result = await converter.convertAudio(list);
-                      if (result == 0) print("Library: Audio convertion done successful");
-                      if (result == 1) print("Library: Audio convertion failed");
-                    },
-                    child: Icon(
-                      Icons.file_download,
-                      color: Colors.white,
-                    ),
-                    backgroundColor: Colors.redAccent,
+                  child: UnicornDialer(
+                    orientation: UnicornOrientation.VERTICAL,
+                    parentButton: Icon(Icons.file_download),
+                    childButtons: _getProfileMenu(context),
+                    parentButtonBackground: Colors.redAccent,
+                    hasBackground: false,
                   ),
                 )
               ),
