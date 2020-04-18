@@ -84,6 +84,7 @@ packages:
       name: device_info
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "0.4.2+4"
   dio:
     dependency: "direct main"
@@ -106,6 +107,9 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.3"
+=======
+    version: "0.4.2+1"
+>>>>>>> 63c4d8d... Initial automatic theming implementation
   flutter:
     dependency: "direct main"
     description: flutter
@@ -128,6 +132,7 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+<<<<<<< HEAD
   html:
     dependency: transitive
     description:
@@ -149,6 +154,8 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.4"
+=======
+>>>>>>> 63c4d8d... Initial automatic theming implementation
   image:
     dependency: transitive
     description:
@@ -178,6 +185,16 @@ packages:
     source: hosted
     version: "1.1.8"
   nested:
+<<<<<<< HEAD
+=======
+    dependency: transitive
+    description:
+      name: nested
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.4"
+  path:
+>>>>>>> 63c4d8d... Initial automatic theming implementation
     dependency: transitive
     description:
       name: nested
@@ -240,6 +257,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.4.0"
+<<<<<<< HEAD
   platform:
     dependency: transitive
     description:
@@ -254,27 +272,41 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
+=======
+>>>>>>> 63c4d8d... Initial automatic theming implementation
   provider:
     dependency: "direct main"
     description:
       name: provider
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "4.1.2"
+=======
+    version: "4.0.5"
+>>>>>>> 63c4d8d... Initial automatic theming implementation
   quiver:
     dependency: transitive
     description:
       name: quiver
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "2.1.3"
+=======
+    version: "2.0.5"
+>>>>>>> 63c4d8d... Initial automatic theming implementation
   shared_preferences:
     dependency: "direct main"
     description:
       name: shared_preferences
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "0.5.7+3"
+=======
+    version: "0.5.6+3"
+>>>>>>> 63c4d8d... Initial automatic theming implementation
   shared_preferences_macos:
     dependency: transitive
     description:
@@ -416,6 +448,11 @@ packages:
     source: hosted
     version: "6.1.0+7"
 sdks:
+<<<<<<< HEAD
   dart: ">=2.7.0 <3.0.0"
   flutter: ">=1.16.0 <2.0.0"
   shared_preferences: ">=0.5.7+3 <2.0.0"
+=======
+  dart: ">=2.4.0 <3.0.0"
+  flutter: ">=1.12.13+hotfix.5 <2.0.0"
+>>>>>>> 63c4d8d... Initial automatic theming implementation

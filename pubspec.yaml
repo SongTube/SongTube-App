@@ -24,6 +24,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
+<<<<<<< HEAD
   dio: any
   path_provider: any
   shared_preferences: ^0.5.7+3
@@ -40,6 +41,11 @@ dependencies:
   circular_check_box: ^1.0.1
   path: any
   url_launcher: ^5.4.7
+=======
+  shared_preferences: ^0.5.6+3
+  device_info: ^0.4.2+1
+  provider: ^4.0.5
+>>>>>>> 63c4d8d... Initial automatic theming implementation
 
 dev_dependencies:
   flutter_test:
