@@ -11,6 +11,8 @@ String systemThemeKey = "use_system_theme";
 String darkThemeKey = "use_dark_theme";
 String blackThemeKey = "use_black_theme";
 String enableAppBar = "enable_app_bar";
+String enableAudioConvertion= "enable_audio_convertion";
+String enableVideoConvertion= "enable_video_convertion";
 
 class Preferences {
   SharedPreferences prefs;
@@ -73,4 +75,21 @@ class Preferences {
   void saveBlackThemeEnabled(bool value) {
     prefs.setBool(blackThemeKey, value);
   }
+
+  bool getEnableAudioConvertion() {
+    return prefs.getBool(enableAudioConvertion) ?? true;
+  }
+
+  void saveEnableAudioConvertion(bool value) {
+    prefs.setBool(enableAudioConvertion, value);
+  }
+
+  bool getEnableVideoConvertion() {
+    return prefs.getBool(enableVideoConvertion) ?? false;
+  }
+
+  void saveEnableVideoConvertion(bool value) {
+    prefs.setBool(enableVideoConvertion, value);
+  }
+
 }

@@ -11,7 +11,7 @@ description: A new Flutter project.
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 0.1.0+0
+version: 0.8.0+1
 
 environment:
   sdk: ">=2.2.2 <3.0.0"
@@ -34,10 +34,13 @@ dependencies:
       url: git://github.com/hahai96/youtube_explode_dart.git
   ext_storage: ^1.0.3
   permission_handler: ^5.0.0+hotfix.3
-  youtube_player_flutter: ^6.1.0+4
+  youtube_player_flutter: ^6.1.0+7
   flutter_ffmpeg: ^0.2.10
   circular_check_box: ^1.0.1
-  
+  unicorndial: any
+  path: any
+  flutter_boom_menu: ^1.0.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

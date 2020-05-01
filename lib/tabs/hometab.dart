@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../internal/songtube_classes.dart';
 import '../internal/native.dart';
+import '../internal/downloader.dart';
 
 class HomeTab extends StatefulWidget {
   @override
@@ -17,18 +18,15 @@ class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin<Ho
     switch (state){
       case AppLifecycleState.resumed:
         String _url;
-        await method.handleIntent().then((resultText) {
+        await NativeMethod.handleIntent().then((resultText) {
           _url = resultText;
         });
         if (_url == null) return;
         appdata.unloadStreams();
-        await downloader.getInfo(_url);
+        await Downloader.getInfo(_url);
+        setState(() => appdata.linkReady = true);
         break;
-      case AppLifecycleState.inactive:
-        break;
-      case AppLifecycleState.paused:
-        break;
-      case AppLifecycleState.detached:
+      default:
         break;
     }
   }
@@ -37,13 +35,12 @@ class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin<Ho
   bool get wantKeepAlive => true;
 
   TextEditingController _editingController;
-  StreamController _editingStream;
+  MediaMetaData metadata;
+  YoutubePlayerController _playerController;
 
   @override
   void initState() {
     _editingController = TextEditingController();
-    _editingStream = StreamController();
-    _editingStream.add("");
     appdata.unloadStreams();
     super.initState();
     WidgetsBinding.instance.addObserver(this);
@@ -53,11 +50,16 @@ class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin<Ho
   void dispose(){
     this.dispose();
     appdata.dispose();
+    _playerController.dispose();
+  }
+
+  void _unloadData() {
+    appdata.linkReady = false;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return new Column(
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.only(
@@ -68,6 +70,7 @@ class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin<Ho
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
+            elevation: 0,
             child: Column(
               children: <Widget>[
                 // SeachBar & ClipBoardPaste Icon & Seach Icon
@@ -83,11 +86,8 @@ class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin<Ho
                         ),
                         child: ClipRRect(
                           borderRadius: BorderRadius.all(Radius.circular(20)),
-                          child: StreamBuilder<Object>(
-                            stream: _editingStream.stream,
-                            builder: (context, snapshot) {
-                              // Seach Bar
-                              return TextFormField(
+                          child: TextFormField(
+                                focusNode: appdata.urlFocusNode,
                                 controller: _editingController,
                                 decoration: InputDecoration(
                                   contentPadding: EdgeInsets.only(top: 15),
@@ -98,24 +98,29 @@ class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin<Ho
                                   fillColor: Theme.of(context).inputDecorationTheme.fillColor,
                                   border: InputBorder.none,
                                   hintText: "URL",
-                                  suffixIcon: snapshot.data == ""
-                                  ? null
-                                  : IconButton(
+                                  suffixIcon: AnimatedOpacity (
+                                    duration: Duration(milliseconds: 200),
+                                    opacity: _editingController.text == "" ? 0.0 : 1.0,
+                                    child: IconButton(
                                       icon: Icon(Icons.clear,
                                       color: Theme.of(context).iconTheme.color),
                                       onPressed: () {
-                                        _editingController.text = "";
+                                        Future.delayed(
+                                          Duration(milliseconds: 50),
+                                          ).then((_) {
+                                            setState(() => _editingController.clear());
+                                          },
+                                        );
                                       }
                                     )
+                                  ),
                                 ),
-                                onChanged: (value) {
-                                  _editingStream.add(value);
+                                onChanged: (String actualText) {
+                                  setState(() => _editingController.text);
                                 },
                                 style: TextStyle(
                                   color: Theme.of(context).textTheme.body1.color,
                                 ),
-                              );
-                            }
                           ),
                         ),
                       ),
@@ -130,8 +135,7 @@ class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin<Ho
                         icon: Icon(Icons.content_paste),
                         onPressed: () async {
                           ClipboardData data = await Clipboard.getData('text/plain');
-                          _editingController.text = data.text;
-                          _editingStream.add(" ");
+                          setState(() => _editingController.text = data.text);
                         },
                       ),
                     ),
@@ -145,9 +149,29 @@ class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin<Ho
                       child: IconButton(
                         icon: Icon(Icons.search),
                         onPressed: () async {
-                          FocusScope.of(context).requestFocus(FocusNode());
+                          setState(() => _unloadData());
+                          FocusScope.of(context).unfocus();
                           appdata.unloadStreams();
-                          await downloader.getInfo(_editingController.text);
+                          MediaMetaData result = await Downloader.getInfo(_editingController.text);
+                          if (result == null) return;
+                          metadata = result;
+                          appdata.titleController.text = metadata.title;
+                          appdata.albumController.text = metadata.album;
+                          appdata.artistController.text = metadata.artist;
+                          appdata.genreController.text = metadata.genre;
+                          appdata.dateController.text = metadata.date;
+                          appdata.diskController.text = metadata.disk;
+                          appdata.trackController.text = metadata.track;
+                          appdata.coverUrl = metadata.coverurl;
+                          appdata.showFAB.add(true);
+                          _playerController = new YoutubePlayerController(
+                            initialVideoId: appdata.videoId,
+                            flags: YoutubePlayerFlags(
+                              autoPlay: false,
+                            ),
+                          );
+                          _playerController.load(appdata.videoId);
+                          setState(() => appdata.linkReady = true);
                         },
                       ),
                     ),
@@ -193,6 +217,7 @@ class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin<Ho
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
+              elevation: 0,
               child: ListView(
                 key: PageStorageKey("hometab"),
                 physics: BouncingScrollPhysics(),
@@ -201,23 +226,15 @@ class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin<Ho
                   Column(
                     children: <Widget>[
                       // Youtube Mini-Player
-                      StreamBuilder(
-                        stream: appdata.videoId.stream,
-                        builder: (context, snapshot) {
-                          return AnimatedSwitcher(
+                      AnimatedSwitcher(
                             duration: const Duration(milliseconds: 200),
-                            child: snapshot.hasData 
+                            child: appdata.linkReady == true
                             ? Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.all(Radius.circular(20)),
-                                child: YoutubePlayer(
-                                  controller: YoutubePlayerController(
-                                    initialVideoId: snapshot.data,
-                                    flags: YoutubePlayerFlags(
-                                      autoPlay: false,
-                                    ),
-                                  ),
+                                child: new YoutubePlayer(
+                                  controller: _playerController,
                                   progressColors: ProgressBarColors(
                                     playedColor: Colors.red,
                                     bufferedColor: Colors.white70,
@@ -229,71 +246,52 @@ class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin<Ho
                               ),
                             )
                             : Container(),
-                          );
-                        }
                       ),
                       // Video Duration & Weight
                       Row(
                         children: <Widget> [
-                          StreamBuilder(
-                            stream: appdata.audioDuration.stream,
-                            builder: (context, snapshot) {
-                              return AnimatedSwitcher(
+                          AnimatedSwitcher(
                                 duration: const Duration(milliseconds: 200),
-                                child: snapshot.hasData 
+                                child: appdata.linkReady == true
                                 ? Padding(
                                   padding: const EdgeInsets.only(left: 20),
                                   child: Text(
-                                    snapshot.data.inMinutes.remainder(60).toString().padLeft(2, '0')
+                                    appdata.audioDuration.inMinutes.remainder(60).toString().padLeft(2, '0')
                                     + " min "
-                                    + snapshot.data.inSeconds.remainder(60).toString().padLeft(2, '0')
+                                    + appdata.audioDuration.inSeconds.remainder(60).toString().padLeft(2, '0')
                                     + " sec",
                                     style: TextStyle(
                                       fontSize: 12,
                                     ),
                                   ),
                                 )
-                                : Container(),
-                              );
-                            },
+                                : Container(),                          
                           ),
                           Spacer(),
-                          StreamBuilder(
-                            stream: appdata.audioSize.stream,
-                            builder: (context, snapshot) {
-                              double size;
-                              if (snapshot.hasData) {
-                                size = double.parse(((snapshot.data / 1024) / 1024).toStringAsFixed(1));
-                              }
-                              return AnimatedSwitcher(
+                          AnimatedSwitcher(
                                 duration: const Duration(milliseconds: 200),
-                                child: snapshot.hasData 
+                                child: appdata.linkReady == true
                                 ? Padding(
                                   padding: const EdgeInsets.only(right: 20),
                                   child: Text(
-                                    "Audio: " + size.toString() + "MB",
+                                    "Audio: " + appdata.audioSize.toString() + "MB",
                                     style: TextStyle(
                                       fontSize: 12,
                                     ),
                                   ),
                                 )
                                 : Container(),
-                              );
-                            },
                           )
                         ]
                       ),
                       // Video Title
-                      StreamBuilder(
-                        stream: appdata.audioTitle.stream,
-                        builder: (context, snapshot) {
-                          return AnimatedSwitcher(
+                      AnimatedSwitcher(
                             duration: const Duration(milliseconds: 200),
-                            child: snapshot.hasData 
+                            child: appdata.linkReady == true
                             ? Padding(
                               padding: const EdgeInsets.only(top: 8.0, left: 8, right: 8),
                               child: Text(
-                                snapshot.data.toString(),
+                                appdata.audioTitle.toString(),
                                 style: TextStyle(
                                   fontSize: 20,
                                 ),
@@ -303,280 +301,257 @@ class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin<Ho
                               ),
                             )
                             : Container(),
-                          );
-                        },
                       ),
                       // Video Author
-                      StreamBuilder(
-                        stream: appdata.audioArtist.stream,
-                        builder: (context, snapshot) {
-                          return AnimatedSwitcher(
+                      AnimatedSwitcher(
                             duration: const Duration(milliseconds: 200),
-                            child: snapshot.hasData 
+                            child: appdata.linkReady == true 
                             ? Padding(
                               padding: const EdgeInsets.only(top: 5.0, bottom: 8, left: 8, right: 8),
                               child: Text(
-                                snapshot.data.toString(),
+                                appdata.audioArtist.toString(),
                                 style: TextStyle(
                                   color: Theme.of(context).textTheme.body2.color,
                                 ),
                               ),
                             )
                             : Container(),
-                          );
-                        },
                       ),
                       // Metadata TextFields
-                      StreamBuilder<Object>(
-                        stream: appdata.linkReady.stream,
-                        builder: (context, snapshot) {
-                          // All Metadata TextFields goes under this
-                          if (snapshot.hasData) {
-                            appdata.titleController.text = downloader.defaultMetaData.title;
-                            appdata.albumController.text = downloader.defaultMetaData.album;
-                            appdata.artistController.text = downloader.defaultMetaData.artist;
-                            appdata.genreController.text = downloader.defaultMetaData.genre;
-                            appdata.dateController.text = downloader.defaultMetaData.date.toString();
-                            appdata.diskController.text = downloader.defaultMetaData.disk;
-                            appdata.trackController.text = downloader.defaultMetaData.track;
-                          }
-                          return AnimatedSwitcher(
-                            duration: const Duration(milliseconds: 200),
-                            child: snapshot.hasData
-                            ? Column(
+                      AnimatedOpacity(
+                        duration: Duration(milliseconds: 200),
+                        opacity: appdata.linkReady == true ? 1.0 : 0.0,
+                        child: Column(
+                          children: <Widget>[
+                            // Title TextField
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                top: 8,
+                                left: 12,
+                                right: 12,
+                                bottom: 8
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.all(Radius.circular(20)),
+                                child: TextFormField(
+                                  focusNode: appdata.titleFocusNode,
+                                  controller: appdata.titleController,
+                                  decoration: InputDecoration(
+                                    prefixIcon: Icon(Icons.title,
+                                      color: Theme.of(context).iconTheme.color
+                                    ),
+                                    filled: true,
+                                    fillColor: Theme.of(context).inputDecorationTheme.fillColor,
+                                    border: InputBorder.none,
+                                    labelText: "Title",
+                                  ),
+                                  style: TextStyle(
+                                    color: Theme.of(context).textTheme.body1.color,
+                                    fontSize: 14
+                                  ),
+                                ),
+                              ),
+                            ),
+                            // Album & Artist TextField Row
+                            Row(
                               children: <Widget>[
-                                // Title TextField
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                    top: 8,
-                                    left: 12,
-                                    right: 12,
-                                    bottom: 8
+                                // Album TextField
+                                Flexible(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 12,
+                                      right: 4,
+                                      bottom: 8
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                                      child: TextFormField(
+                                        focusNode: appdata.albumFocusNode,
+                                        controller: appdata.albumController,
+                                        decoration: InputDecoration(
+                                          prefixIcon: Icon(Icons.library_music,
+                                            color: Theme.of(context).iconTheme.color
+                                          ),
+                                          filled: true,
+                                          fillColor: Theme.of(context).inputDecorationTheme.fillColor,
+                                          border: InputBorder.none,
+                                          labelText: "Album",
+                                          focusColor: Colors.redAccent,
+                                        ),
+                                        style: TextStyle(
+                                          color: Theme.of(context).textTheme.body1.color,
+                                          fontSize: 14
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                                    child: TextFormField(
-                                      focusNode: appdata.titleFocusNode,
-                                      controller: appdata.titleController,
-                                      decoration: InputDecoration(
-                                        prefixIcon: Icon(Icons.title,
-                                          color: Theme.of(context).iconTheme.color
+                                ),
+                                // Artist TextField
+                                Flexible(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 4,
+                                      right: 12,
+                                      bottom: 8
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                                      child: TextFormField(
+                                        focusNode: appdata.artistFocusNode,
+                                        controller: appdata.artistController,
+                                        decoration: InputDecoration(
+                                          prefixIcon: Icon(Icons.person,
+                                            color: Theme.of(context).iconTheme.color
+                                          ),
+                                          filled: true,
+                                          fillColor: Theme.of(context).inputDecorationTheme.fillColor,
+                                          border: InputBorder.none,
+                                          labelText: "Artist",
                                         ),
-                                        filled: true,
-                                        fillColor: Theme.of(context).inputDecorationTheme.fillColor,
-                                        border: InputBorder.none,
-                                        labelText: "Title",
-                                      ),
-                                      style: TextStyle(
-                                        color: Theme.of(context).textTheme.body1.color,
-                                        fontSize: 14
+                                        style: TextStyle(
+                                          color: Theme.of(context).textTheme.body1.color,
+                                          fontSize: 14
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                // Album & Artist TextField Row
-                                Row(
-                                  children: <Widget>[
-                                    // Album TextField
-                                    Flexible(
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                          left: 12,
-                                          right: 4,
-                                          bottom: 8
-                                        ),
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                                          child: TextFormField(
-                                            focusNode: appdata.albumFocusNode,
-                                            controller: appdata.albumController,
-                                            decoration: InputDecoration(
-                                              prefixIcon: Icon(Icons.library_music,
-                                                color: Theme.of(context).iconTheme.color
-                                              ),
-                                              filled: true,
-                                              fillColor: Theme.of(context).inputDecorationTheme.fillColor,
-                                              border: InputBorder.none,
-                                              labelText: "Album",
-                                              focusColor: Colors.redAccent,
-                                            ),
-                                            style: TextStyle(
-                                              color: Theme.of(context).textTheme.body1.color,
-                                              fontSize: 14
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    // Artist TextField
-                                    Flexible(
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                          left: 4,
-                                          right: 12,
-                                          bottom: 8
-                                        ),
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                                          child: TextFormField(
-                                            focusNode: appdata.artistFocusNode,
-                                            controller: appdata.artistController,
-                                            decoration: InputDecoration(
-                                              prefixIcon: Icon(Icons.person,
-                                                color: Theme.of(context).iconTheme.color
-                                              ),
-                                              filled: true,
-                                              fillColor: Theme.of(context).inputDecorationTheme.fillColor,
-                                              border: InputBorder.none,
-                                              labelText: "Artist",
-                                            ),
-                                            style: TextStyle(
-                                              color: Theme.of(context).textTheme.body1.color,
-                                              fontSize: 14
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                // Gender & Date TextField Row
-                                Row(
-                                  children: <Widget>[
-                                    // Gender TextField
-                                    Flexible(
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                          left: 12,
-                                          right: 4,
-                                          bottom: 8
-                                        ),
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                                          child: TextFormField(
-                                            focusNode: appdata.genreFocusNode,
-                                            controller: appdata.genreController,
-                                            decoration: InputDecoration(
-                                              prefixIcon: Icon(Icons.book,
-                                                color: Theme.of(context).iconTheme.color
-                                              ),
-                                              filled: true,                                                                                                      
-                                              fillColor: Theme.of(context).inputDecorationTheme.fillColor,
-                                              border: InputBorder.none,
-                                              labelText: "Genre",
-                                            ),
-                                            style: TextStyle(
-                                              color: Theme.of(context).textTheme.body1.color,
-                                              fontSize: 14
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    // Date TextField
-                                    Flexible(
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                          left: 4,
-                                          right: 12,
-                                          bottom: 8
-                                        ),
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                                          child: TextFormField(
-                                            focusNode: appdata.dateFocusNode,
-                                            controller: appdata.dateController,
-                                            decoration: InputDecoration(
-                                              prefixIcon: Icon(Icons.date_range,
-                                                color: Theme.of(context).iconTheme.color
-                                              ),
-                                              filled: true,
-                                              fillColor: Theme.of(context).inputDecorationTheme.fillColor,
-                                              border: InputBorder.none,
-                                              labelText: "Date",
-                                              focusColor: Colors.redAccent,
-                                            ),
-                                            style: TextStyle(
-                                              color: Theme.of(context).textTheme.body1.color,
-                                              fontSize: 14
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                // Disk & Track TextField Row
-                                Row(
-                                  children: <Widget>[
-                                    // Disk TextField
-                                    Flexible(
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                          left: 12,
-                                          right: 4,
-                                          bottom: 12
-                                        ),
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                                          child: TextFormField(
-                                            focusNode: appdata.diskFocusNode,
-                                            controller: appdata.diskController,
-                                            decoration: InputDecoration(
-                                              prefixIcon: Icon(Icons.album,
-                                                color: Theme.of(context).iconTheme.color
-                                              ),
-                                              filled: true,                                                                                                      
-                                              fillColor: Theme.of(context).inputDecorationTheme.fillColor,
-                                              border: InputBorder.none,
-                                              labelText: "Disk",
-                                            ),
-                                            style: TextStyle(
-                                              color: Theme.of(context).textTheme.body1.color,
-                                              fontSize: 14
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    // Track TextField
-                                    Flexible(
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                          left: 4,
-                                          right: 12,
-                                          bottom: 12
-                                        ),
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                                          child: TextFormField(
-                                            focusNode: appdata.trackFocusNode,
-                                            controller: appdata.trackController,
-                                            decoration: InputDecoration(
-                                              prefixIcon: Icon(Icons.music_note,
-                                                color: Theme.of(context).iconTheme.color
-                                              ),
-                                              filled: true,
-                                              fillColor: Theme.of(context).inputDecorationTheme.fillColor,
-                                              border: InputBorder.none,
-                                              labelText: "Track",
-                                              focusColor: Colors.redAccent,
-                                            ),
-                                            style: TextStyle(
-                                              color: Theme.of(context).textTheme.body1.color,
-                                              fontSize: 14
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
                                 ),
                               ],
-                            )
-                            : Container(),
-                          );
-                        }
+                            ),
+                            // Gender & Date TextField Row
+                            Row(
+                              children: <Widget>[
+                                // Gender TextField
+                                Flexible(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 12,
+                                      right: 4,
+                                      bottom: 8
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                                      child: TextFormField(
+                                        focusNode: appdata.genreFocusNode,
+                                        controller: appdata.genreController,
+                                        decoration: InputDecoration(
+                                          prefixIcon: Icon(Icons.book,
+                                            color: Theme.of(context).iconTheme.color
+                                          ),
+                                          filled: true,                                                                                                      
+                                          fillColor: Theme.of(context).inputDecorationTheme.fillColor,
+                                          border: InputBorder.none,
+                                          labelText: "Genre",
+                                        ),
+                                        style: TextStyle(
+                                          color: Theme.of(context).textTheme.body1.color,
+                                          fontSize: 14
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                // Date TextField
+                                Flexible(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 4,
+                                      right: 12,
+                                      bottom: 8
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                                      child: TextFormField(
+                                        focusNode: appdata.dateFocusNode,
+                                        controller: appdata.dateController,
+                                        decoration: InputDecoration(
+                                          prefixIcon: Icon(Icons.date_range,
+                                            color: Theme.of(context).iconTheme.color
+                                          ),
+                                          filled: true,
+                                          fillColor: Theme.of(context).inputDecorationTheme.fillColor,
+                                          border: InputBorder.none,
+                                          labelText: "Date",
+                                          focusColor: Colors.redAccent,
+                                        ),
+                                        style: TextStyle(
+                                          color: Theme.of(context).textTheme.body1.color,
+                                          fontSize: 14
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            // Disk & Track TextField Row
+                            Row(
+                              children: <Widget>[
+                                // Disk TextField
+                                Flexible(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 12,
+                                      right: 4,
+                                      bottom: 12
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                                      child: TextFormField(
+                                        focusNode: appdata.diskFocusNode,
+                                        controller: appdata.diskController,
+                                        decoration: InputDecoration(
+                                          prefixIcon: Icon(Icons.album,
+                                            color: Theme.of(context).iconTheme.color
+                                          ),
+                                          filled: true,                                                                                                      
+                                          fillColor: Theme.of(context).inputDecorationTheme.fillColor,
+                                          border: InputBorder.none,
+                                          labelText: "Disk",
+                                        ),
+                                        style: TextStyle(
+                                          color: Theme.of(context).textTheme.body1.color,
+                                          fontSize: 14
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                // Track TextField
+                                Flexible(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 4,
+                                      right: 12,
+                                      bottom: 12
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                                      child: TextFormField(
+                                        focusNode: appdata.trackFocusNode,
+                                        controller: appdata.trackController,
+                                        decoration: InputDecoration(
+                                          prefixIcon: Icon(Icons.music_note,
+                                            color: Theme.of(context).iconTheme.color
+                                          ),
+                                          filled: true,
+                                          fillColor: Theme.of(context).inputDecorationTheme.fillColor,
+                                          border: InputBorder.none,
+                                          labelText: "Track",
+                                          focusColor: Colors.redAccent,
+                                        ),
+                                        style: TextStyle(
+                                          color: Theme.of(context).textTheme.body1.color,
+                                          fontSize: 14
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        )
                       ),
                     ],
                   ),

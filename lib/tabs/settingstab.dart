@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../theme/theme_provider.dart';
+import '../provider/app_provider.dart';
 import 'package:circular_check_box/circular_check_box.dart';
 
 class SettingsTab extends StatefulWidget {
@@ -18,178 +18,268 @@ class _SettingsTabState extends State<SettingsTab> {
         right: 8,
         bottom: 4
       ),
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: ListView(
-          children: <Widget>[
-            // ---------------
-            // Themes Settings
-            // ---------------
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                color: Theme.of(context).cardColor,
-                elevation: 3,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            top: 12,
-                            left: 16,
-                            bottom: 4
-                          ),
-                          child: Icon(Icons.color_lens, color: Theme.of(context).iconTheme.color),
+      child: ListView(
+        physics: BouncingScrollPhysics(),
+        children: <Widget>[
+          // ---------------
+          // Themes Settings
+          // ---------------
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              color: Theme.of(context).cardColor,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 12,
+                          left: 16,
+                          bottom: 4
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            top: 12,
-                            left: 8,
-                            bottom: 4
-                          ),
-                          child: Text(
-                            "Theme",
-                            style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.w600
-                            ),
+                        child: Icon(Icons.color_lens, color: Theme.of(context).iconTheme.color),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 12,
+                          left: 8,
+                          bottom: 4
+                        ),
+                        child: Text(
+                          "Theme",
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w600
                           ),
                         ),
-                      ],
-                    ),
-                    Divider(indent: 8, endIndent: 8),
-                    ListTile(
-                      title: Text(
-                        "Use System Theme",
-                        style: TextStyle(
-                          color: Theme.of(context).textTheme.body1.color,
-                          fontWeight: FontWeight.w500
-                        ),
                       ),
-                      subtitle: Text("Enable/Disable automatic theme", style: TextStyle(fontSize: 12),),
-                      trailing: CircularCheckBox(
-                        activeColor: Colors.redAccent,
-                        value: appData.systemThemeEnabled,
-                        onChanged: (bool newValue) {
-                          appData.systemThemeEnabled = newValue;
-                        },
+                    ],
+                  ),
+                  Divider(indent: 8, endIndent: 8),
+                  ListTile(
+                    onTap: () => appData.systemThemeEnabled = !appData.systemThemeEnabled,
+                    title: Text(
+                      "Use System Theme",
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.body1.color,
+                        fontWeight: FontWeight.w500
                       ),
                     ),
-                    if (appData.systemThemeEnabled == false)
-                    ListTile(
-                      title: Text(
-                        "Enable Dark Theme",
-                        style: TextStyle(
-                          color: Theme.of(context).textTheme.body1.color,
-                          fontWeight: FontWeight.w500
-                        ),
-                      ),
-                      subtitle: Text("Use dark theme by default", style: TextStyle(fontSize: 12),),
-                      trailing: CircularCheckBox(
-                        activeColor: Colors.redAccent,
-                        value: appData.darkThemeEnabled,
-                        onChanged: (bool newValue) {
-                          appData.darkThemeEnabled = newValue;
-                        },
+                    subtitle: Text("Enable/Disable automatic theme", style: TextStyle(fontSize: 12),),
+                    trailing: CircularCheckBox(
+                      activeColor: Colors.redAccent,
+                      value: appData.systemThemeEnabled,
+                      onChanged: (bool newValue) {
+                        appData.systemThemeEnabled = newValue;
+                        appData.darkThemeEnabled = false;
+                        appData.blackThemeEnabled = false;
+                      },
+                    ),
+                  ),
+                  if (appData.systemThemeEnabled == false)
+                  ListTile(
+                    onTap: () => appData.darkThemeEnabled = !appData.darkThemeEnabled,
+                    title: Text(
+                      "Enable Dark Theme",
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.body1.color,
+                        fontWeight: FontWeight.w500
                       ),
                     ),
-                    if (appData.systemThemeEnabled == false)
-                    ListTile(
-                      title: Text(
-                        "Enable Black Theme",
-                        style: TextStyle(
-                          color: Theme.of(context).textTheme.body1.color,
-                          fontWeight: FontWeight.w500
-                        ),
-                      ),
-                      subtitle: Text("Pure black theme", style: TextStyle(fontSize: 12),),
-                      trailing: CircularCheckBox(
-                        activeColor: Colors.redAccent,
-                        value: appData.blackThemeEnabled,
-                        onChanged: (bool newValue) {
-                          appData.blackThemeEnabled = newValue;
-                        },
+                    subtitle: Text("Use dark theme by default", style: TextStyle(fontSize: 12),),
+                    trailing: CircularCheckBox(
+                      activeColor: Colors.redAccent,
+                      value: appData.darkThemeEnabled,
+                      onChanged: (bool newValue) {
+                        appData.darkThemeEnabled = newValue;
+                      },
+                    ),
+                  ),
+                  if (appData.darkThemeEnabled == true)
+                  ListTile(
+                    onTap: () => appData.blackThemeEnabled = !appData.blackThemeEnabled,
+                    enabled: appData.darkThemeEnabled == true ? true : false,
+                    title: Text(
+                      "Enable Black Theme",
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.body1.color,
+                        fontWeight: FontWeight.w500
                       ),
                     ),
-                  ],
-                ),
+                    subtitle: Text("Pure black theme", style: TextStyle(fontSize: 12),),
+                    trailing: CircularCheckBox(
+                      activeColor: Colors.redAccent,
+                      value: appData.blackThemeEnabled,
+                      onChanged: (bool newValue) {
+                        appData.blackThemeEnabled = newValue;
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
-            // ---------------
-            // Themes Settings
-            // ---------------
+          ),
+          // ---------------
+          // Themes Settings
+          // ---------------
 
-            // ------------------
-            // App UI Settings
-            // ------------------
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                color: Theme.of(context).cardColor,
-                elevation: 3,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            top: 12,
-                            left: 16,
-                            bottom: 4
-                          ),
-                          child: Icon(Icons.transform, color: Theme.of(context).iconTheme.color),
+          // ------------------
+          // App UI Settings
+          // ------------------
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              color: Theme.of(context).cardColor,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 12,
+                          left: 16,
+                          bottom: 4
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            top: 12,
-                            left: 8,
-                            bottom: 4
-                          ),
-                          child: Text(
-                            "App Design",
-                            style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.w600
-                            ),
-                          ),
+                        child: Icon(Icons.transform, color: Theme.of(context).iconTheme.color),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 12,
+                          left: 8,
+                          bottom: 4
                         ),
-                      ],
-                    ),
-                    Divider(indent: 8, endIndent: 8),
-                    ListTile(
-                      title: Text(
-                        "SongTube AppBar",
-                        style: TextStyle(
-                          color: Theme.of(context).textTheme.body1.color,
-                          fontWeight: FontWeight.w500
+                        child: Text(
+                          "App Design",
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w600
+                          ),
                         ),
                       ),
-                      subtitle: Text("Show/Hide this application AppBar", style: TextStyle(fontSize: 12),),
-                      trailing: CircularCheckBox(
-                        activeColor: Colors.redAccent,
-                        value: appData.appBarEnabled,
-                        onChanged: (bool newValue) {
-                          appData.appBarEnabled = newValue;
-                        },
+                    ],
+                  ),
+                  Divider(indent: 8, endIndent: 8),
+                  ListTile(
+                    title: Text(
+                      "SongTube AppBar",
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.body1.color,
+                        fontWeight: FontWeight.w500
                       ),
                     ),
-                  ],
-                ),
+                    subtitle: Text("Show/Hide this application AppBar", style: TextStyle(fontSize: 12),),
+                    trailing: CircularCheckBox(
+                      activeColor: Colors.redAccent,
+                      value: appData.appBarEnabled,
+                      onChanged: (bool newValue) {
+                        appData.appBarEnabled = newValue;
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+          // ------------------
+          // App UI Settings
+          // ------------------
+
+          // ------------------
+          // Converter Settings
+          // ------------------
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              color: Theme.of(context).cardColor,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 12,
+                          left: 16,
+                          bottom: 4
+                        ),
+                        child: Icon(Icons.gradient, color: Theme.of(context).iconTheme.color),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 12,
+                          left: 8,
+                          bottom: 4
+                        ),
+                        child: Text(
+                          "Converter",
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w600
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Divider(indent: 8, endIndent: 8),
+                  Divider(color: Colors.transparent),
+                  ListTile(
+                    title: Text(
+                      "Convert Audio",
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.body1.color,
+                        fontWeight: FontWeight.w500
+                      ),
+                    ),
+                    subtitle: Text("Enable/Disable audio convertion, default audio format is .opus",
+                      style: TextStyle(fontSize: 12)
+                    ),
+                    trailing: CircularCheckBox(
+                      activeColor: Colors.redAccent,
+                      value: appData.enableAudioConvertion,
+                      onChanged: (bool newValue) {
+                        appData.enableAudioConvertion = newValue;
+                      },
+                    ),
+                  ),
+                  Divider(color: Colors.transparent),
+                  /*ListTile(
+                    title: Text(
+                      "Convert Video",
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.body1.color,
+                        fontWeight: FontWeight.w500
+                      ),
+                    ),
+                    subtitle: Text("Enable/Disable video convertion, default video format is .webm - Warning: VIDEO CONVERTION IS BROKEN",
+                      style: TextStyle(fontSize: 12)
+                    ),
+                    trailing: CircularCheckBox(
+                      activeColor: Colors.redAccent,
+                      value: appData.enableVideoConvertion,
+                      onChanged: (bool newValue) {
+                        appData.enableVideoConvertion = newValue;
+                      },
+                    ),
+                  ),
+                  Divider(color: Colors.transparent),
+                  */
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

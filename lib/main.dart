@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'theme/themes.dart';
+import 'provider/themes.dart';
 import 'package:provider/provider.dart';
-import 'theme/theme_provider.dart';
+import 'provider/app_provider.dart';
 import 'library.dart';
 
 void main() => runApp(Main());
@@ -12,9 +12,11 @@ class Main extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ ChangeNotifierProvider<AppDataProvider>(
-        create: (context) => AppDataProvider(),
-      ) ],
+      providers: [
+        ChangeNotifierProvider<AppDataProvider>(
+          create: (context) => AppDataProvider(),
+        ),
+      ],
       child: Builder( builder: (context) {
         appData = Provider.of<AppDataProvider>(context);
         ThemeData customTheme;

@@ -21,6 +21,8 @@ class AppDataProvider extends ChangeNotifier {
   bool _darkThemeEnabled = false;
   bool _blackThemeEnabled = false;
   bool _appBarEnabled = true;
+  bool _enableAudioConvertion = true;
+  bool _enableVideoConvertion = false;
 
   Color get accentColor => _accentColor;
   bool get systemThemeAvailable => _systemThemeAvailable;
@@ -28,6 +30,8 @@ class AppDataProvider extends ChangeNotifier {
   bool get darkThemeEnabled => _darkThemeEnabled;
   bool get blackThemeEnabled => _blackThemeEnabled;
   bool get appBarEnabled => _appBarEnabled;
+  bool get enableAudioConvertion => _enableAudioConvertion;
+  bool get enableVideoConvertion => _enableVideoConvertion;
 
   set systemThemeAvailable(bool value){
     _systemThemeAvailable = value;
@@ -65,6 +69,18 @@ class AppDataProvider extends ChangeNotifier {
   set appBarEnabled(bool value) {
     _appBarEnabled = value;
     preferences.saveEnableAppBar(value);
+    notifyListeners();
+  }
+
+  set enableAudioConvertion(bool value) {
+    _enableAudioConvertion = value;
+    preferences.saveEnableAudioConvertion(value);
+    notifyListeners();
+  }
+
+  set enableVideoConvertion(bool value) {
+    _enableVideoConvertion = value;
+    preferences.saveEnableVideoConvertion(value);
     notifyListeners();
   }
 
