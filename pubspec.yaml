@@ -11,7 +11,7 @@ description: A new Flutter project.
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 0.8.0+1
+version: 1.0.0+1
 
 environment:
   sdk: ">=2.2.2 <3.0.0"
@@ -37,14 +37,12 @@ dependencies:
   youtube_player_flutter: ^6.1.0+7
   flutter_ffmpeg: ^0.2.10
   circular_check_box: ^1.0.1
-  unicorndial: any
   path: any
-  flutter_boom_menu: ^1.0.2
+  url_launcher: ^5.4.7
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -58,8 +56,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #  - images/a_dot_burr.jpeg
+  assets:
+    - assets/images/ic_launcher.png
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

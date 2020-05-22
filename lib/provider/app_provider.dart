@@ -1,18 +1,16 @@
+// Flutter
 import 'package:flutter/material.dart';
 
-// Internal methods
-import '../internal/preferences.dart';
+// Internal
+import 'package:songtube/internal/preferences.dart';
 
 class AppDataProvider extends ChangeNotifier {
   Preferences preferences;
 
-  AppDataProvider() {
-    initProvider();
-  }
-
-  void initProvider() async {
+  Future<void> initProvider() async {
     preferences = await Preferences().init();
     await loadSavedData();
+    _libraryScaffoldKey = new GlobalKey<ScaffoldState>();
   }
 
   Color _accentColor = Colors.redAccent;
@@ -23,6 +21,9 @@ class AppDataProvider extends ChangeNotifier {
   bool _appBarEnabled = true;
   bool _enableAudioConvertion = true;
   bool _enableVideoConvertion = false;
+  // Library
+  GlobalKey<ScaffoldState> _libraryScaffoldKey;
+  int _screenIndex = 0;
 
   Color get accentColor => _accentColor;
   bool get systemThemeAvailable => _systemThemeAvailable;
@@ -32,6 +33,9 @@ class AppDataProvider extends ChangeNotifier {
   bool get appBarEnabled => _appBarEnabled;
   bool get enableAudioConvertion => _enableAudioConvertion;
   bool get enableVideoConvertion => _enableVideoConvertion;
+  // Library
+  GlobalKey<ScaffoldState> get libraryScaffoldKey => _libraryScaffoldKey;
+  int get screenIndex => _screenIndex;
 
   set systemThemeAvailable(bool value){
     _systemThemeAvailable = value;
@@ -66,12 +70,6 @@ class AppDataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  set appBarEnabled(bool value) {
-    _appBarEnabled = value;
-    preferences.saveEnableAppBar(value);
-    notifyListeners();
-  }
-
   set enableAudioConvertion(bool value) {
     _enableAudioConvertion = value;
     preferences.saveEnableAudioConvertion(value);
@@ -89,6 +87,11 @@ class AppDataProvider extends ChangeNotifier {
     accentColor = preferences.getAccentColor();
     darkThemeEnabled = preferences.getDarkThemeEnabled();
     blackThemeEnabled = preferences.getBlackThemeEnabled();
-    appBarEnabled = preferences.getEnableAppBar();
+  }
+
+  // Library
+  set screenIndex(int newValue) {
+    _screenIndex = newValue;
+    notifyListeners();
   }
 }

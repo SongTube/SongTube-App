@@ -1,9 +1,15 @@
+// Dart
 import 'dart:ui';
-import 'package:flutter/material.dart';
-import '../internal/songtube_classes.dart';
 
-// Each tab AppBar Text
-final List<String> appBarTitleArr = [ "DownTube", "DownTube", "App Settings" ];
+// Flutter
+import 'package:flutter/material.dart';
+
+// Internal
+import 'package:songtube/provider/app_provider.dart';
+
+// Packages
+import 'package:provider/provider.dart';
+import 'package:songtube/provider/media_provider.dart';
 
 // Show toast with specified message/duration
 void showToast(BuildContext context, String message, Duration duration) {
@@ -17,6 +23,7 @@ void showToast(BuildContext context, String message, Duration duration) {
 // Show alertDialog for permissions
 Future<void> showCustomDialog(BuildContext context) async {
   // set up the button
+  MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
   Widget okButton = FlatButton(
     child: Text(
       "OK",
@@ -25,11 +32,10 @@ Future<void> showCustomDialog(BuildContext context) async {
       ),
     ),
     onPressed: () {
-      downloadList.forEach((object){
-        if (!object.dataProgress.isClosed) object.dataProgress.close();
+      mediaProvider.downloadInfoSetList.forEach((object){
+        if (!object.downloader.dataProgress.isClosed) object.downloader.dataProgress.close();
       });
-      downloadList = [];
-      downloadListController.add([]);
+      mediaProvider.downloadInfoSetList = [];
       Navigator.pop(context);
     },
   );

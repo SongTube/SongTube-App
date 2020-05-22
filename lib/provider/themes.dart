@@ -1,3 +1,4 @@
+// Flutter
 import 'package:flutter/material.dart';
 
 class AppTheme {
@@ -20,10 +21,12 @@ class AppTheme {
         labelStyle: TextStyle(
           color: Colors.redAccent,
         ),
+        fillColor: Colors.grey[100]
       ),
       tabBarTheme: TabBarTheme(
-        labelColor: Colors.grey[200],
+        labelColor: Colors.grey[100],
       ),
+      textSelectionHandleColor: Colors.redAccent,
     );
   }
 
@@ -48,6 +51,7 @@ class AppTheme {
       tabBarTheme: TabBarTheme(
         labelColor: Colors.black12
       ),
+      textSelectionHandleColor: Colors.redAccent,
     );
   }
 
@@ -78,6 +82,7 @@ class AppTheme {
       tabBarTheme: TabBarTheme(
         labelColor: Color.fromARGB(255, 20, 20, 20),
       ),
+      textSelectionHandleColor: Colors.redAccent,
     );
   }
 }

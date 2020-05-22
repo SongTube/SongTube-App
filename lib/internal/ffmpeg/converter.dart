@@ -1,6 +1,13 @@
+// Dart
 import 'dart:io';
+
+// Internal
+import 'package:ext_storage/ext_storage.dart';
+import 'package:songtube/internal/models/metadata.dart';
+
+// Packages
 import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
-import 'package:songtube/internal/songtube_classes.dart';
+import 'package:songtube/ui/snackbar.dart';
 
 // Type of actions for FFmpegArgs and Converter
 enum FFmpegArgs { argsToACC, argsToMP4, argsToOGG }
@@ -21,7 +28,7 @@ class Converter {
   }
 
   void _getTempFolder() async {
-    _tempFolder = await ExternalPath().externalStorage;
+    _tempFolder = await ExtStorage.getExternalStorageDirectory();
     _tempFolder = _tempFolder + "/" + "tmp";
     if (!(await Directory(_tempFolder).exists())) {
       await Directory(_tempFolder).create();
@@ -64,6 +71,7 @@ class Converter {
         ];
         return _argsList;
       }
+      appSnack.unrecognizedEncoding(saveFormat);
     }
     // Convert video to Specified format by FFmpegArgs
     if (downType == ActionType.convertVideo) {
@@ -109,8 +117,6 @@ class Converter {
 
   // Functions to convert media
   Future<int> convert(List<String> arguments, ActionType downType) async {
-    appdata.progressController.add(null);
-    appdata.currentAction.add(CurrentAction.converting);
     if (downType == ActionType.convertAudio) lastConvertedAudio = arguments.last;
     if (downType == ActionType.convertVideo) lastConvertedVideo = arguments.last;
     if (downType == ActionType.encodeAudioToVideo) lastConvertedVideo = arguments.last;
@@ -121,8 +127,6 @@ class Converter {
         _result = value;
       }
     );
-    appdata.progressController.add(0.0);
-    appdata.currentAction.add(CurrentAction.none);
     return _result;
   }
 

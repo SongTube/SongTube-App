@@ -1,74 +1,57 @@
+// Dart
 import 'dart:async';
 import 'dart:io';
-import 'dart:ui';
+
+// Flutter
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:songtube/internal/converter.dart';
+
+// Internal
+import 'package:songtube/internal/native.dart';
+import 'package:songtube/internal/youtube/infoparser.dart';
 import 'package:songtube/provider/app_provider.dart';
-import 'package:youtube_explode_dart/youtube_explode_dart.dart' as youtube;
-import 'internal/downloader.dart';
-import 'tabs/downloadtab.dart';
-import 'tabs/hometab.dart';
-import 'tabs/settingstab.dart';
-import 'internal/songtube_classes.dart';
+import 'package:songtube/provider/media_provider.dart';
+import 'package:songtube/screens/donate.dart';
+import 'package:songtube/screens/downloads.dart';
+import 'package:songtube/screens/home.dart';
+import 'package:songtube/screens/navigate.dart';
+import 'package:songtube/screens/settings.dart';
+
+// Packages
 import 'package:permission_handler/permission_handler.dart';
-import 'internal/action_handlers.dart';
-import 'ui/ui_elements.dart';
+
+// UI
+import 'package:songtube/ui/drawer_layout.dart';
+import 'package:songtube/ui/reusable/drawer_item.dart';
+import 'package:songtube/ui/snackbar.dart';
+import 'package:songtube/ui/ui_elements.dart';
 
 class Library extends StatefulWidget {
   @override
   _LibraryState createState() => _LibraryState();
 }
 
-class _LibraryState extends State<Library> with TickerProviderStateMixin {
+class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerProviderStateMixin {
 
-  TabController _tabController;
-  String _appBarTitle = appBarTitleArr[0];
-  StreamController<int> _tabstream;
+  // Constants
+  static const String _appName = "SongTube";
+  static const String _navigateTitle = "youtube.com";
+  static const String _navigateSelectedUrl = "https://youtube.com";
+
+  // Local Variables
+  DateTime currentBackPressTime;
+  List<String> _appBarTitle = [_appName, "Downloads", _navigateTitle, "Settings", "Donate"];
+  int _appBarTitleIndex = 0;
 
   @override
   void initState() {
     checkPermissions();
-    appdata = AppData();
-    _tabstream = new StreamController();
-    _tabstream.add(0);
-    _tabController = new TabController(initialIndex: 0, vsync: this, length: 3);
-    _tabController.animation.addListener((){
-      int value = _tabController.animation.value.round();
-      if (value != _tabController.index) {
-        _tabstream.add(value);
-        if (value != 0) {
-          appdata.showFAB.add(false);
-        } else {
-          appdata.showFAB.add(true);
-        }
-      }
-    });
     super.initState();
     WidgetsBinding.instance.renderView.automaticSystemUiAdjustment=false;
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _tabController.dispose();
-    _tabstream.close();
-  }
-
-  void addToDownloadList(DownloadInfoSet newItem) {
-    downloadList.add(newItem);
-    List<DownloadInfoSet> tmpList = [];
-    tmpList.add(downloadList.last);
-    downloadList.forEach((item){
-      if (item == newItem) return;
-      tmpList.add(item);
-    });
-    downloadList = tmpList;
-    downloadListController.add(downloadList);
-    print(downloadList);
-  }
-
+  // App external storage permission check
   checkPermissions() async {
     final status = await Permission.storage.status;
     if (status.isUndetermined) {
@@ -89,153 +72,39 @@ class _LibraryState extends State<Library> with TickerProviderStateMixin {
     }
   }
 
-  Widget _videoQualityWidget(BuildContext context) {
-    Downloader downloader = new Downloader();
-    Converter converter = new Converter();
-    youtube.AudioStreamInfo audio = appdata.audio;
-    List<youtube.VideoStreamInfo> videoList = downloader.extractVideoStreams(appdata.mediaStream);
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
-    AnimationController controller;
-    Animation<double> scaleAnimation;
-    controller = AnimationController(vsync: this, duration: Duration(milliseconds: 400));
-    scaleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(controller);
-    controller.addListener(() => setState(() {}));
-    controller.forward();
-    return Center(
-      child: Material(
-        color: Colors.transparent,
-        child: FadeTransition(
-          opacity: scaleAnimation,
-          child: Container(
-            height: height*0.5,
-            width: width*0.7,
-            child: Container(
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      height: height*0.1,
-                      width: width*0.4,
-                      color: Colors.transparent,
-                      child: Center(
-                        child: Text(
-                          "Video Quality",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 22,
-                            color: Colors.white
-                          ),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: Theme.of(context).canvasColor.withOpacity(0.9),
-                        ),
-                        child: ListView.builder(
-                          physics: BouncingScrollPhysics(),
-                          itemCount: videoList.length,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: ListTile(
-                                title: Row(
-                                  children: <Widget>[
-                                    if (videoList[index].videoQualityLabel == "144p")
-                                    Text("SD   - ", style: TextStyle(fontWeight: FontWeight.w600, color: Theme.of(context).textTheme.body1.color)),
-                                    if (videoList[index].videoQualityLabel == "240p")
-                                    Text("SD   - ", style: TextStyle(fontWeight: FontWeight.w600, color: Theme.of(context).textTheme.body1.color)),
-                                    if (videoList[index].videoQualityLabel == "360p")
-                                    Text("SD   - ", style: TextStyle(fontWeight: FontWeight.w600, color: Theme.of(context).textTheme.body1.color)),
-                                    if (videoList[index].videoQualityLabel == "480p")
-                                    Text("SD   - ", style: TextStyle(fontWeight: FontWeight.w600, color: Theme.of(context).textTheme.body1.color)),
-                                    if (videoList[index].videoQualityLabel == "720p")
-                                    Text("HD   - ", style: TextStyle(fontWeight: FontWeight.w600, color: Theme.of(context).textTheme.body1.color)),
-                                    if (videoList[index].videoQualityLabel == "1080p")
-                                    Text("FHD - ", style: TextStyle(fontWeight: FontWeight.w600, color: Theme.of(context).textTheme.body1.color)),
-                                    if (videoList[index].videoQualityLabel == "1440p")
-                                    Text("2K   - ", style: TextStyle(fontWeight: FontWeight.w600, color: Theme.of(context).textTheme.body1.color)),
-                                    if (videoList[index].videoQualityLabel == "2160p")
-                                    Text("4K   - ", style: TextStyle(fontWeight: FontWeight.w600, color: Theme.of(context).textTheme.body1.color)),
-                                    if (videoList[index].videoQualityLabel == "4320p")
-                                    Text("8K   - ", style: TextStyle(fontWeight: FontWeight.w600, color: Theme.of(context).textTheme.body1.color)),
-                                    Text(videoList[index].videoQualityLabel, style: TextStyle(color: Theme.of(context).textTheme.body1.color)),
-                                    Text(" " + videoList[index].framerate.toString() + "fps", style: TextStyle(color: Theme.of(context).textTheme.body1.color)),
-                                    Spacer(),
-                                    Text(
-                                      ((videoList[index].size/1024)/1024).toStringAsFixed(1) + "MB",
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 12,
-                                         color: Theme.of(context).textTheme.body1.color
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                onTap: () async {
-                                  Navigator.of(context).pop();
-                                  showToast(context, "Downloading Video...", Duration(seconds: 4));
-                                  StreamController<double> downloadProgress = new StreamController.broadcast();
-                                  StreamController<double> dataProgress = new StreamController.broadcast();
-                                  StreamController<String> currentAction = new StreamController.broadcast();
-                                  MediaMetaData _metadata = MediaMetaData(
-                                    appdata.titleController.text,
-                                    appdata.albumController.text,
-                                    appdata.artistController.text,
-                                    appdata.genreController.text,
-                                    appdata.coverUrl,
-                                    appdata.dateController.text,
-                                    appdata.diskController.text,
-                                    appdata.trackController.text
-                                  );
-                                  DownloadInfoSet _infoset = new DownloadInfoSet(
-                                    downloadProgress,
-                                    dataProgress,
-                                    currentAction,
-                                    DownloadType.video,
-                                    audio,
-                                    videoList,
-                                    appdata.mediaStream,
-                                    appdata.videoId,
-                                    _metadata,
-                                  );
-                                  addToDownloadList(_infoset);
-                                  _tabController.animateTo(1, duration: Duration(milliseconds: 200), curve: Curves.easeInBack);
-                                  appdata.showFAB.add(false);
-                                  await ActionHandler().handleVideoDownload(
-                                  Provider.of<AppDataProvider>(context, listen: false),
-                                    downloader,
-                                    converter,
-                                    _infoset,
-                                    index
-                                  );
-                                  downloadProgress.close();
-                                  currentAction.close();
-                                  dataProgress.close();
-                                },
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    if (state == AppLifecycleState.resumed) {
+      String _url; String _id;
+      await NativeMethod.handleIntent().then((resultText) => _url = resultText);
+      if (_url == null) return;
+      _id = YoutubeInfo.getLinkID(_url);
+      if (_id == null) return;
+    }
+  }
+
+  Future<bool> handlePop(AppDataProvider provider) async {
+    if (provider.screenIndex != 0) {
+      setState(() {
+        _appBarTitleIndex = 0;
+        provider.screenIndex = 0;
+      });
+      return false;
+    } else {
+      DateTime now = DateTime.now();
+      if (currentBackPressTime == null || 
+          now.difference(currentBackPressTime) > Duration(seconds: 2)) {
+        currentBackPressTime = now;
+        appSnack.pressAgainExit();
+        return Future.value(false);
+      }
+      return Future.value(true);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    AppDataProvider appData = Provider.of<AppDataProvider>(context);
+    Brightness _themeBrightness = Theme.of(context).brightness;
     Brightness _systemBrightness = Theme.of(context).brightness;
     Brightness _statusBarBrightness = _systemBrightness == Brightness.light
         ? Brightness.dark
@@ -243,383 +112,154 @@ class _LibraryState extends State<Library> with TickerProviderStateMixin {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
+        statusBarBrightness: _statusBarBrightness,
         statusBarIconBrightness: _statusBarBrightness,
-        systemNavigationBarColor: Theme.of(context).canvasColor,
-        systemNavigationBarIconBrightness: Theme.of(context).brightness,
+        systemNavigationBarColor: Theme.of(context).scaffoldBackgroundColor,
+        systemNavigationBarIconBrightness: _themeBrightness,
       ),
     );
+    AppDataProvider appData = Provider.of<AppDataProvider>(context);
+    appSnack = new AppSnack(scaffoldKey: appData.libraryScaffoldKey, context: context);
     return Scaffold(
-        appBar: appData.appBarEnabled == true
-        ? AppBar(
-          title: Text(
-            _appBarTitle,
-            style: TextStyle(color: Theme.of(context).textTheme.body1.color),
-          ),
-          elevation: 0,
-          backgroundColor: Theme.of(context).canvasColor,
-          centerTitle: true,
-        )
-        : PreferredSize(child: Container(), preferredSize: Size(kToolbarHeight*0.5, 0)),
-        body: TabBarView(
-          controller: _tabController,
-          physics: BouncingScrollPhysics(),
-          children: [
-            HomeTab(),
-            DownloadTab(),
-            SettingsTab(),
-          ]
-        ),
+      key: appData.libraryScaffoldKey,
+      appBar: AppBar(
+        title: Text(_appBarTitle[_appBarTitleIndex], style: TextStyle(color: Theme.of(context).textTheme.body1.color)),
+        elevation: 0,
         backgroundColor: Theme.of(context).canvasColor,
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.only(bottom: 8, right: 8),
-          child: StreamBuilder<Object>(
-            stream: appdata.showFAB.stream,
-            builder: (context, snapshot) {
-              return AnimatedOpacity(
-                opacity: snapshot.data == true ? 1.0 : 0.0,
-                duration: Duration(milliseconds: 200),
-                curve: Curves.decelerate,
-                child: FloatingActionButton(
-                  child: Icon(Icons.file_download),
-                  backgroundColor: Colors.redAccent,
-                  foregroundColor: Colors.white,
-                  onPressed: () async {
-                    await showDialog(
-                      context: context,
-                      builder: (context) {
-                        AnimationController controller;
-                        Animation<double> scaleAnimation;
-                        controller = AnimationController(vsync: this, duration: Duration(milliseconds: 400));
-                        scaleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(controller);
-                        controller.addListener(() => setState(() {}));
-                        controller.forward();
-                        double height = MediaQuery.of(context).size.height;
-                        double width = MediaQuery.of(context).size.width;
-                        appdata.unloadFocus();
-                        return Center(
-                          child: Material(
-                            color: Colors.transparent,
-                            child: FadeTransition(
-                              opacity: scaleAnimation,
-                              child: Container(
-                                child: BackdropFilter(
-                                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                                child: Container(
-                                height: height*0.5,
-                                width: width*0.7,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                                  children: <Widget>[
-                                    // Download title
-                                    Container(
-                                      height: height*0.1,
-                                      width: width*0.2,
-                                      color: Colors.transparent,
-                                      child: Center(
-                                        child: Text(
-                                          "Download",
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 22,
-                                            color: Colors.white
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    // Download Audio
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(20),
-                                      child: InkWell(
-                                        onTap: () async {
-                                          showToast(context, "Downloading Audio...", Duration(seconds: 4));
-                                          Downloader downloader = new Downloader();
-                                          Converter converter = new Converter();
-                                          youtube.AudioStreamInfo audio = appdata.audio;
-                                          List<youtube.VideoStreamInfo> videoList;
-                                          StreamController<double> downloadProgress = new StreamController.broadcast();
-                                          StreamController<double> dataProgress = new StreamController.broadcast();
-                                          StreamController<String> currentAction = new StreamController.broadcast();
-                                          MediaMetaData _metadata = MediaMetaData(
-                                            appdata.titleController.text,
-                                            appdata.albumController.text,
-                                            appdata.artistController.text,
-                                            appdata.genreController.text,
-                                            appdata.coverUrl,
-                                            appdata.dateController.text,
-                                            appdata.diskController.text,
-                                            appdata.trackController.text
-                                          );
-                                          DownloadInfoSet _infoset = new DownloadInfoSet(
-                                            downloadProgress,
-                                            dataProgress,
-                                            currentAction,
-                                            DownloadType.audio,
-                                            audio,
-                                            videoList,
-                                            appdata.mediaStream,
-                                            appdata.videoId,
-                                            _metadata,
-                                          );
-                                          addToDownloadList(_infoset);
-                                          Navigator.pop(context);
-                                          _tabController.animateTo(1, duration: Duration(milliseconds: 200), curve: Curves.easeInBack);
-                                          await ActionHandler().handleAudioDownload(
-                                            Provider.of<AppDataProvider>(context, listen: false),
-                                            downloader,
-                                            converter,
-                                            _infoset,
-                                          );
-                                          downloadProgress.close();
-                                          currentAction.close();
-                                          dataProgress.close();
-                                        },
-                                        child: Container(
-                                          height: height*0.13,
-                                          decoration: BoxDecoration(
-                                            color: Theme.of(context).cardColor.withOpacity(0.85),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.black.withOpacity(0.4),
-                                                blurRadius: 10.0,
-                                                spreadRadius: 0.1,
-                                                offset: Offset(
-                                                  1.0,
-                                                  5.0,
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                          child: Row(
-                                            children: <Widget>[
-                                              Padding(
-                                                padding: EdgeInsets.only(left: 16, right: 16),
-                                                child: Icon(Icons.music_note, size: 30)
-                                              ),
-                                              Expanded(
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: <Widget>[
-                                                    Text(
-                                                      "Song",
-                                                      style: TextStyle(
-                                                        fontSize: 20,
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding: EdgeInsets.only(top: 8.0),
-                                                      child: Text(
-                                                        "Download Song from video at maximum Quality",
-                                                        maxLines: 2,
-                                                        overflow: TextOverflow.clip,
-                                                        softWrap: true,
-                                                        style: TextStyle(
-                                                          fontSize: 14,
-                                                        ),
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                              )
-                                            ],
-                                          )
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: height*0.02,
-                                    ),
-                                    // Download Video
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(20),
-                                      child: InkWell(
-                                        onTap: () async {
-                                          await showDialog(
-                                            context: context,
-                                            builder: (context) => _videoQualityWidget(context)
-                                          );
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: Container(
-                                          height: height*0.13,
-                                          decoration: BoxDecoration(
-                                            color: Theme.of(context).cardColor.withOpacity(0.85),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.black.withOpacity(0.4),
-                                                blurRadius: 10.0,
-                                                spreadRadius: 0.1,
-                                                offset: Offset(
-                                                  1.0,
-                                                  5.0,
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                          child: Row(
-                                            children: <Widget>[
-                                              Padding(
-                                                padding: EdgeInsets.only(left: 16, right: 16),
-                                                child: Icon(Icons.videocam, size: 30)
-                                              ),
-                                              Expanded(
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: <Widget>[
-                                                    Text(
-                                                      "Video",
-                                                      style: TextStyle(
-                                                        fontSize: 20,
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding: EdgeInsets.only(top: 8.0),
-                                                      child: Text(
-                                                        "Select Quality to download Video",
-                                                        maxLines: 2,
-                                                        overflow: TextOverflow.clip,
-                                                        softWrap: true,
-                                                        style: TextStyle(
-                                                          fontSize: 14,
-                                                        ),
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                              )
-                                            ],
-                                          )
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                            ),
-                          ),
-                              ),
-                        ),
-                      ),
-                    );
-                  },
-                );
-              }
-              )
-              );
-            }
+        centerTitle: true,
+        iconTheme: new IconThemeData(color: Theme.of(context).iconTheme.color),
+      ),
+      resizeToAvoidBottomPadding: true,
+      body: WillPopScope(
+        onWillPop: () => handlePop(appData),
+        child: ChangeNotifierProvider(
+          create: (context) => MediaProvider(),
+          child: Stack(
+            children: <Widget>[
+              IgnorePointer(
+                ignoring: appData.screenIndex == 0 ? false : true,
+                child: AnimatedOpacity(
+                  duration: Duration(milliseconds: 300),
+                  opacity: appData.screenIndex == 0 ? 1.0 : 0.0,
+                  child: HomeScreen()
+                )
+              ),
+              IgnorePointer(
+                ignoring: appData.screenIndex == 1 ? false : true,
+                child: AnimatedOpacity(
+                  duration: Duration(milliseconds: 300),
+                  opacity: appData.screenIndex == 1 ? 1.0 : 0.0,
+                  child: DownloadTab()
+                )
+              ),
+              IgnorePointer(
+                ignoring: appData.screenIndex == 2 ? false : true,
+                child: AnimatedOpacity(
+                  duration: Duration(milliseconds: 300),
+                  opacity: appData.screenIndex == 2 ? 1.0 : 0.0,
+                  child: appData.screenIndex == 2 ? Navigate(_navigateSelectedUrl) : Container(),
+                )
+              ),
+              IgnorePointer(
+                ignoring: appData.screenIndex == 3 ? false : true,
+                child: AnimatedOpacity(
+                  duration: Duration(milliseconds: 300),
+                  opacity: appData.screenIndex == 3 ? 1.0 : 0.0,
+                  child: SettingsTab(),
+                )
+              ),
+              IgnorePointer(
+                ignoring: appData.screenIndex == 4 ? false : true,
+                child: AnimatedOpacity(
+                  duration: Duration(milliseconds: 300),
+                  opacity: appData.screenIndex == 4 ? 1.0 : 0.0,
+                  child: DonateScreen()
+                )
+              ),
+            ],
           ),
         ),
-        bottomNavigationBar: Padding(
-          padding: const EdgeInsets.only(
-            left: 12,
-            right: 12,
+      ),
+      drawerEdgeDragWidth: appData.screenIndex != 2 ? MediaQuery.of(context).size.width : 0,
+      drawer: DrawerLayout(
+        headerColor: Theme.of(context).tabBarTheme.labelColor,
+        title: Text("SongTube", style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700)),
+        children: <Widget>[
+          DrawerItem(
+            title: Text("Home", style: TextStyle(color: Theme.of(context).textTheme.body1.color)),
+            backgroundColor: Theme.of(context).tabBarTheme.labelColor,
+            leadingIcon: Icons.home,
+            leadingIconColor: Colors.blueAccent,
+            onTap: () {
+              Navigator.pop(context);
+              setState(() {
+                _appBarTitleIndex = 0;
+                appData.screenIndex = 0;
+              });
+            },
           ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            child: StreamBuilder<Object>(
-              stream: _tabstream.stream,
-              builder: (context, snapshot) {
-                if (snapshot.hasData){
-                return Theme(
-                  data: ThemeData(
-                    canvasColor: Theme.of(context).cardColor
-                  ),
-                  child: BottomNavigationBar(
-                    elevation: 0,
-                    backgroundColor: Theme.of(context).cardColor,
-                    unselectedItemColor: Theme.of(context).iconTheme.color,
-                    showSelectedLabels: false,
-                    fixedColor: Colors.red,
-                    showUnselectedLabels: false,
-                    currentIndex: snapshot.data,
-                    onTap: (int _index) {
-                      setState(() {
-                        _tabController.index = _index;
-                        _tabstream.add(_index);
-                        if (_index != 0) {
-                          appdata.showFAB.add(false);
-                        } else {
-                          appdata.showFAB.add(true);
-                        }
-                      });
-                    },
-                    items: [
-                      BottomNavigationBarItem(
-                        icon: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget> [
-                            Icon(Icons.home),
-                            AnimatedSize(
-                              duration: Duration(milliseconds: 200),
-                              vsync: this,
-                              curve: Curves.easeInBack,
-                              child: snapshot.data == 0
-                              ? Text(
-                                "  Home",
-                                style: TextStyle(
-                                color: Theme.of(context).textTheme.body1.color
-                                ),
-                              )
-                              : Container()
-                            ),
-                          ]
-                        ),
-                        title: Text("")
-                      ),
-                      BottomNavigationBarItem(
-                        icon: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget> [
-                            Icon(Icons.cloud_download),
-                            AnimatedSize(
-                              duration: Duration(milliseconds: 200),
-                              vsync: this,
-                              curve: Curves.easeInBack,
-                              child: snapshot.data == 1
-                              ? Text(
-                                "  Downloads",
-                                style: TextStyle(
-                                color: Theme.of(context).textTheme.body1.color
-                                ),
-                              )
-                              : Container()
-                            ),
-                          ]
-                        ),
-                        title: Text("")
-                      ),
-                      BottomNavigationBarItem(
-                        icon: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget> [
-                            Icon(Icons.settings),
-                            AnimatedSize(
-                              duration: Duration(milliseconds: 200),
-                              vsync: this,
-                              curve: Curves.easeInBack,
-                              child: snapshot.data == 2
-                              ? Text(
-                                "  Settings",
-                                style: TextStyle(
-                                color: Theme.of(context).textTheme.body1.color
-                                ),
-                              )
-                              : Container()
-                            ),
-                          ]
-                        ),
-                        title: Text("")
-                      ),
-                    ]
-                    ),
-                );
-                } else {
-                  return Container();
-                }
-              }
-            ),
+          SizedBox(height: 14),
+          DrawerItem(
+            title: Text("Downloads", style: TextStyle(color: Theme.of(context).textTheme.body1.color)),
+            backgroundColor: Theme.of(context).tabBarTheme.labelColor,
+            leadingIcon: Icons.file_download,
+            leadingIconColor: Colors.greenAccent,
+            onTap: () {
+              Navigator.pop(context);
+              setState(() {
+                _appBarTitleIndex = 1;
+                appData.screenIndex = 1;
+              });
+            },
+          ),
+          SizedBox(height: 14),
+          DrawerItem(
+            title: Text("Youtube", style: TextStyle(color: Theme.of(context).textTheme.body1.color)),
+            backgroundColor: Theme.of(context).tabBarTheme.labelColor,
+            leadingIcon: Icons.play_arrow,
+            leadingIconColor: Colors.redAccent,
+            onTap: () async {
+              Navigator.pop(context);
+              setState(() {
+                _appBarTitleIndex = 2;
+                appData.screenIndex = 2;
+              });
+            },
+          ),
+        ],
+        leftBottomIcon: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).tabBarTheme.labelColor,
+            borderRadius: BorderRadius.circular(30)
+          ),
+          child: IconButton(
+            icon: Icon(Icons.favorite, color: Colors.redAccent),
+            onPressed: () {
+              Navigator.pop(context);
+              setState(() {
+                _appBarTitleIndex = 4;
+                appData.screenIndex = 4;
+              });
+            },
           ),
         ),
+        rightBottomIcon: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).tabBarTheme.labelColor,
+            borderRadius: BorderRadius.circular(30)
+          ),
+          child: IconButton(
+            icon: Icon(Icons.settings, color: Colors.grey),
+            onPressed: () {
+              Navigator.pop(context);
+              setState(() {
+                _appBarTitleIndex = 3;
+                appData.screenIndex = 3;
+              });
+            },
+          ),
+        ),
+      ),
     );
   }
 }

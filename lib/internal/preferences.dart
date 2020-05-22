@@ -1,8 +1,12 @@
+// Dart
 import 'dart:async';
 import 'dart:io';
 
-import 'package:device_info/device_info.dart';
+// Flutter
 import 'package:flutter/material.dart';
+
+// Packages
+import 'package:device_info/device_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // Key identifiers for variables saved in SharedPreferences.
@@ -10,7 +14,6 @@ String accentKey = "accent_color";
 String systemThemeKey = "use_system_theme";
 String darkThemeKey = "use_dark_theme";
 String blackThemeKey = "use_black_theme";
-String enableAppBar = "enable_app_bar";
 String enableAudioConvertion= "enable_audio_convertion";
 String enableVideoConvertion= "enable_video_convertion";
 
@@ -58,14 +61,6 @@ class Preferences {
 
   void saveDarkThemeEnabled(bool value){
     prefs.setBool(darkThemeKey, value);
-  }
-
-  bool getEnableAppBar() {
-    return prefs.getBool(enableAppBar) ?? true;
-  }
-
-  void saveEnableAppBar(bool value) {
-    prefs.setBool(enableAppBar, value);
   }
 
   bool getBlackThemeEnabled() {

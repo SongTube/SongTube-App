@@ -1,21 +1,37 @@
+// Flutter
 import 'package:flutter/material.dart';
-import 'provider/themes.dart';
-import 'package:provider/provider.dart';
-import 'provider/app_provider.dart';
-import 'library.dart';
 
-void main() => runApp(Main());
+// Internal
+import 'package:songtube/internal/focusnodes.dart';
+import 'package:songtube/internal/textcontrollers.dart';
+import 'package:songtube/provider/themes.dart';
+import 'package:songtube/provider/app_provider.dart';
+import 'package:songtube/library.dart';
+
+// Packages
+import 'package:provider/provider.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized(); 
+  AppDataProvider provider = AppDataProvider();
+  await provider.initProvider();
+  runApp(Main(provider));
+}
 
 AppDataProvider appData;
 
 class Main extends StatelessWidget {
+
+  final AppDataProvider provider;
+  Main(this.provider);
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<AppDataProvider>(
-          create: (context) => AppDataProvider(),
-        ),
+        ChangeNotifierProvider.value(value: provider),
+        Provider<FocusNodes>(create: (context) => FocusNodes()),
+        Provider<TextControllers>(create: (context) => TextControllers()),
       ],
       child: Builder( builder: (context) {
         appData = Provider.of<AppDataProvider>(context);
