@@ -25,9 +25,9 @@ dependencies:
   cupertino_icons: ^0.1.2
   dio: any
   path_provider: any
-  shared_preferences: any
-  provider: any
-  device_info: any
+  shared_preferences: ^0.5.7+3
+  provider: ^4.1.2
+  device_info: ^0.4.2+4
   http: any
   youtube_explode_dart:
     git:
