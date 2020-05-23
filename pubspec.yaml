@@ -15,6 +15,7 @@ version: 1.0.1+2
 
 environment:
   sdk: ">=2.2.2 <3.0.0"
+  shared_preferences: '>=0.5.7+3 <2.0.0'
 
 dependencies:
   flutter:
