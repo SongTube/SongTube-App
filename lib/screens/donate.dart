@@ -12,15 +12,6 @@ class _DonateScreenState extends State<DonateScreen> {
   // Local Variables
   bool _showThanks = false;
 
-  Widget openWebView(cont) {
-    return Expanded(
-      child: WebView(
-        initialUrl: "https://paypal.me/artixo",
-        javascriptMode: JavascriptMode.unrestricted,
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -82,12 +73,7 @@ class _DonateScreenState extends State<DonateScreen> {
                         onTap: () async {
                           setState(() => _showThanks = true);
                           await Future.delayed(Duration(milliseconds: 1800), () {
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return openWebView(context);
-                              }
-                            );
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => PaypalPage()));
                           });
                           await Future.delayed(Duration(milliseconds: 300), () {
                             setState(() => _showThanks = false);
@@ -109,6 +95,28 @@ class _DonateScreenState extends State<DonateScreen> {
                   ),
                 ],
               ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class PaypalPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("paypal.me"),
+        centerTitle: true,
+      ),
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            child: WebView(
+              initialUrl: "https://paypal.me/artixo",
+              javascriptMode: JavascriptMode.unrestricted,
             ),
           ),
         ],
