@@ -20,10 +20,7 @@ String enableVideoConvertion= "enable_video_convertion";
 class Preferences {
   SharedPreferences prefs;
 
-  Future<Preferences> init() async {
-    prefs = await SharedPreferences.getInstance();
-    return this;
-  }
+  Future<void> init() async => prefs = await SharedPreferences.getInstance();
 
   Future<bool> isSystemThemeAvailable() async {
     String version;

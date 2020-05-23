@@ -8,7 +8,8 @@ class AppDataProvider extends ChangeNotifier {
   Preferences preferences;
 
   Future<void> initProvider() async {
-    preferences = await Preferences().init();
+    preferences = new Preferences();
+    await preferences.init();
     await loadSavedData();
     _libraryScaffoldKey = new GlobalKey<ScaffoldState>();
   }

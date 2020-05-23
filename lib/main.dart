@@ -14,8 +14,10 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); 
   AppDataProvider provider = AppDataProvider();
-  await provider.initProvider();
-  runApp(Main(provider));
+  provider.initProvider();
+  await Future.delayed(Duration(seconds: 1), () {
+    runApp(Main(provider));
+  });
 }
 
 AppDataProvider appData;
