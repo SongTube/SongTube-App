@@ -98,6 +98,7 @@ class _SearchBarState extends State<SearchBar> {
                         ClipboardData data = await Clipboard.getData('text/plain');
                         if (data == null) return;
                         setState(() => widget.controller.text = data.text);
+                        FocusScope.of(context).unfocus();
                       },
                     ),
                   ),
