@@ -31,16 +31,12 @@ class DownloadTile extends StatelessWidget {
               children: <Widget> [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(15.0),
-                  child: Container(
-                    height: 100,
+                  child: Image.network(
+                    metadata.coverurl,
+                    height: 90,
                     width: 160,
-                    child: Image.network(
-                      metadata.coverurl,
-                      height: 100,
-                      width: 160,
-                      fit: BoxFit.fill,
-                      filterQuality: FilterQuality.high,
-                    ),
+                    fit: BoxFit.fitWidth,
+                    filterQuality: FilterQuality.high,
                   ),
                 ),
                 Expanded(
