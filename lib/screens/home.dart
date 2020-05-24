@@ -202,7 +202,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                 controller: YoutubePlayerController(
                                   initialVideoId: _videoId,
                                   flags: YoutubePlayerFlags(
-                                    autoPlay: false,
+                                    autoPlay: true,
                                   ),
                                 ),
                                 progressColors: ProgressBarColors(
