@@ -24,7 +24,7 @@ class CustomDownloadMenu extends StatelessWidget {
               children: <Widget> [
                 Text("Download", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
                 Spacer(),
-                Container(
+                /*Container(
                   decoration: BoxDecoration(
                     color: Colors.redAccent,
                     borderRadius: BorderRadius.circular(30)
@@ -41,7 +41,7 @@ class CustomDownloadMenu extends StatelessWidget {
                       SizedBox(width: 16)
                     ],
                   ),
-                ),
+                ),*/
                 IconButton(
                   icon: Icon(Icons.clear),
                   onPressed: () {
