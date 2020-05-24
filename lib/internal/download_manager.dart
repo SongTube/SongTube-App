@@ -75,9 +75,7 @@ class DownloadManager {
         // original name and removing "tmp" folder
         await File(infoset.converter.lastConvertedAudio).rename(_downloadPath + "/" + infoset.metadata.title + ".m4a");
         NativeMethod.registerFile(_downloadPath + "/" + infoset.metadata.title + ".m4a");
-        infoset.downloader.progressBar.close();
-        infoset.currentAction.close();
-        infoset.downloader.dataProgress.close();
+        closeDownload(0);
         return 0;
         // ----------------------------
       } else {
@@ -106,6 +104,7 @@ class DownloadManager {
         // original name and removing "tmp" folder
         await File(infoset.downloader.lastAudioDownloaded).rename(_downloadPath + "/" + infoset.metadata.title + _audioFormat);
         NativeMethod.registerFile(_downloadPath + "/" + infoset.metadata.title + _audioFormat); // notice me senpai
+        closeDownload(0);
         return 0;
       }
     }
@@ -218,13 +217,27 @@ class DownloadManager {
         // original name and removing "tmp" folder
         await File(infoset.converter.lastConvertedVideo).rename(_downloadPath + "/" + infoset.metadata.title + ".webm");
         NativeMethod.registerFile(_downloadPath + "/" + infoset.metadata.title + ".webm");
-        infoset.downloader.progressBar.close();
-        infoset.currentAction.close();
-        infoset.downloader.dataProgress.close();
+        closeDownload(0);
         return 0;
         // ----------------------------
       }
     }
     return null;
+  }
+
+  // Clean up after download
+  void closeDownload(int result) {
+    if (result == 1) {
+      // Download failed
+
+
+    } else if (result == 0) {
+      // Download finished
+      infoset.downloader.progressBar.add(1.0);
+      infoset.currentAction.add("Done");
+      infoset.downloader.progressBar.close();
+      infoset.currentAction.close();
+      infoset.downloader.dataProgress.close();
+    }
   }
 }
