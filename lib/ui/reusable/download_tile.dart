@@ -72,10 +72,12 @@ class DownloadTile extends StatelessWidget {
                               icon: Icon(Icons.play_arrow, size: 18),
                               onPressed: onTilePlay,
                             ),
-                            IconButton(
-                              icon: Icon(Icons.clear, size: 18),
-                              onPressed: onDownloadCancel
-                            )
+                            onDownloadCancel != null
+                            ? IconButton(
+                                icon: Icon(Icons.clear, size: 18),
+                                onPressed: onDownloadCancel
+                              )
+                            : Container()
                           ],
                         ),
                       ]
