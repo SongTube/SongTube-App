@@ -80,6 +80,46 @@ class _DownloadTabState extends State<DownloadTab> {
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.clear_all),
+        backgroundColor: Colors.redAccent,
+        foregroundColor: Colors.white,
+        onPressed: () {
+          if (mediaProvider.downloadInfoSetList.any((element) => element.downloader.downloadFinished == false)) {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: Text("Warning"),
+                  content: Text("There are still downloads in progress, are you sure you wanna clear the downloads list?"),
+                  actions: <Widget>[
+                    FlatButton(
+                      child: Text("OK"),
+                      onPressed: () {
+                        mediaProvider.downloadInfoSetList.forEach((element) {
+                          if (element.downloader.downloadFinished == false)
+                            element.downloader.downloadFinished = true;
+                        });
+                        mediaProvider.downloadInfoSetList = [];
+                        Navigator.pop(context);
+                      }
+                    ),
+                    FlatButton(
+                      child: Text("Cancel"),
+                      onPressed: () => Navigator.pop(context),
+                    )
+                  ],
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ), 
+                );
+              },
+            );
+          } else {
+            mediaProvider.downloadInfoSetList = [];
+          }
+        }
+      ),
     );
   }
 }
