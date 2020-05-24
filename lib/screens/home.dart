@@ -232,7 +232,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                         });
                                       },
                                       child: Center(
-                                        child: Icon(Icons.play_arrow, size: 90)
+                                        child: Icon(Icons.play_arrow, size: 90, color: Colors.white),
                                       ),
                                     )
                                   ],
