@@ -590,11 +590,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
               );
               mediaProvider.addItemToDownloadList(infoset);
               appData.screenIndex = 1;
-              int _result = await _manager.handleDownload();
-              if (_result == 1) {
-                appSnack.internalError();
-              }
-              currentAction.close();
+              _manager.handleDownload();
             }
           ),
         ),
