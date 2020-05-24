@@ -26,6 +26,7 @@ import 'package:songtube/ui/snackbar.dart';
 // Packages
 import 'package:youtube_explode_dart/youtube_explode_dart.dart' as youtube;
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 StreamController<String> videoUrl = new StreamController.broadcast();
 
@@ -219,9 +220,9 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                   fit: StackFit.expand,
                                   children: <Widget>[
                                     FadeInImage(
-                                      fadeInDuration: Duration(milliseconds: 500),
+                                      fadeInDuration: Duration(milliseconds: 300),
                                       image: NetworkImage(_mediaStream.videoDetails.thumbnailSet.highResUrl),
-                                      placeholder: AssetImage('assets/images/ic_launcher.png'),
+                                      placeholder: MemoryImage(kTransparentImage),
                                       fit: BoxFit.fitWidth,
                                     ),
                                     GestureDetector(
