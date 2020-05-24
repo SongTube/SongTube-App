@@ -15,13 +15,13 @@ import 'package:songtube/internal/native.dart';
 import 'package:songtube/internal/ffmpeg/converter.dart';
 import 'package:songtube/internal/models/enums.dart';
 
-class ManageDownload {
+class DownloadManager {
 
   final DownloadInfoSet infoset;
   final DownloadType downloadType;
   final bool enableConvertion;
 
-  ManageDownload({
+  DownloadManager({
     @required this.downloadType,
     @required this.enableConvertion,
     @required this.infoset,

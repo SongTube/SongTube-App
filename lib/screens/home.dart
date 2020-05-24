@@ -583,7 +583,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                 metadata: metadata,
                 videoIndex: videoIndex
               );
-              ManageDownload _manager = new ManageDownload(
+              DownloadManager _manager = new DownloadManager(
                 downloadType: downloadType,
                 enableConvertion: enableConvertion,
                 infoset: infoset
