@@ -42,7 +42,6 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
   // Local Variables
   DateTime currentBackPressTime;
   List<String> _appBarTitle = [_appName, "Downloads", _navigateTitle, "Settings", "Donate"];
-  int _appBarTitleIndex = 0;
 
   @override
   void initState() {
@@ -86,7 +85,6 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
   Future<bool> handlePop(AppDataProvider provider) async {
     if (provider.screenIndex != 0) {
       setState(() {
-        _appBarTitleIndex = 0;
         provider.screenIndex = 0;
       });
       return false;
@@ -123,7 +121,7 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
     return Scaffold(
       key: appData.libraryScaffoldKey,
       appBar: AppBar(
-        title: Text(_appBarTitle[_appBarTitleIndex], style: TextStyle(color: Theme.of(context).textTheme.body1.color)),
+        title: Text(_appBarTitle[appData.screenIndex], style: TextStyle(color: Theme.of(context).textTheme.body1.color)),
         elevation: 0,
         backgroundColor: Theme.of(context).canvasColor,
         centerTitle: true,
@@ -193,7 +191,6 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
             onTap: () {
               Navigator.pop(context);
               setState(() {
-                _appBarTitleIndex = 0;
                 appData.screenIndex = 0;
               });
             },
@@ -207,7 +204,6 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
             onTap: () {
               Navigator.pop(context);
               setState(() {
-                _appBarTitleIndex = 1;
                 appData.screenIndex = 1;
               });
             },
@@ -221,7 +217,6 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
             onTap: () async {
               Navigator.pop(context);
               setState(() {
-                _appBarTitleIndex = 2;
                 appData.screenIndex = 2;
               });
             },
@@ -237,7 +232,6 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
             onPressed: () {
               Navigator.pop(context);
               setState(() {
-                _appBarTitleIndex = 4;
                 appData.screenIndex = 4;
               });
             },
@@ -253,7 +247,6 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
             onPressed: () {
               Navigator.pop(context);
               setState(() {
-                _appBarTitleIndex = 3;
                 appData.screenIndex = 3;
               });
             },
