@@ -6,7 +6,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart';
-import 'package:songtube/internal/action_handlers.dart';
+import 'package:songtube/internal/download_manager.dart';
 
 // Internal
 import 'package:songtube/internal/focusnodes.dart';
