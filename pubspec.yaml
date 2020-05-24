@@ -40,6 +40,7 @@ dependencies:
   circular_check_box: ^1.0.1
   path: any
   url_launcher: ^5.4.7
+  transparent_image: ^1.0.0
 
 dev_dependencies:
   flutter_test:
