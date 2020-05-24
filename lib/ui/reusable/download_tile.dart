@@ -6,14 +6,14 @@ class DownloadTile extends StatelessWidget {
   final Stream<double> progressBar;
   final Stream<String> currentAction;
   final MediaMetaData metadata;
-  final Function onTileRemove;
+  final Function onDownloadCancel;
   final Function onTilePlay;
   DownloadTile({
     @required this.dataProgress,
     @required this.progressBar,
     @required this.currentAction,
     @required this.metadata,
-    this.onTileRemove,
+    this.onDownloadCancel,
     this.onTilePlay
   });
   @override
@@ -78,7 +78,7 @@ class DownloadTile extends StatelessWidget {
                             ),
                             IconButton(
                               icon: Icon(Icons.clear, size: 18),
-                              onPressed: onTileRemove
+                              onPressed: onDownloadCancel
                             )
                           ],
                         ),
