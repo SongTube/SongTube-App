@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/internal/models/downloadinfoset.dart';
 
 // Internal
 import 'package:songtube/provider/media_provider.dart';
@@ -58,16 +59,18 @@ class _DownloadTabState extends State<DownloadTab> {
                 physics: BouncingScrollPhysics(),
                 itemCount: mediaProvider.downloadInfoSetList.length,
                 itemBuilder: (context, index) {
+                  DownloadInfoSet infoset = mediaProvider.downloadInfoSetList[index];
                   return Padding(
                     padding: EdgeInsets.only(left: 8, right: 8, top: 4),
                     child: DownloadTile(
-                      dataProgress: mediaProvider.downloadInfoSetList[index].downloader.dataProgress.stream,
-                      progressBar: mediaProvider.downloadInfoSetList[index].downloader.progressBar.stream,
-                      currentAction: mediaProvider.downloadInfoSetList[index].currentAction.stream,
-                      metadata: mediaProvider.downloadInfoSetList[index].metadata,
-                      onDownloadCancel: () {
-                        mediaProvider.downloadInfoSetList[index].downloader.cancelDownload = true;
-                      }
+                      dataProgress: infoset.downloader.dataProgress.stream,
+                      progressBar: infoset.downloader.progressBar.stream,
+                      currentAction: infoset.currentAction.stream,
+                      metadata: infoset.metadata,
+                      onDownloadCancel: infoset.downloader.cancelDownload == false
+                      ? () {
+                        setState(() => infoset.downloader.cancelDownload = true);
+                      } : null,
                     ),
                   );
                 },
