@@ -17,6 +17,7 @@ class Downloader {
 
   // Variables
   double fileSize = 0;
+  bool cancelDownload = false;
 
   // Last Audio/Video successfully downloaded
   String lastAudioDownloaded;
@@ -76,25 +77,20 @@ class Downloader {
     var _oldProgress = -1;
     var _len = streamToDownload.size;
     fileSize = fileSize + double.parse((streamToDownload.size * 0.000001).toStringAsFixed(2));
+    DateTime currentTime;
+    DateTime now;
 
     // Start stream download, also update internal public
     // StreamController for external access
-    DateTime currentTime;
-    DateTime now;
     await for (var data in streamToDownload.downloadStream()) {
+      if (cancelDownload == true) { _output.close(); return null; }
       _count += data.length;
-      if (!dataProgress.isClosed) {
-        now = DateTime.now();
-        if (currentTime == null || 
-          now.difference(currentTime) > Duration(milliseconds: 500)) {
-          dataProgress.add((_count * 0.000001).toStringAsFixed(2));
-          print("Downloading: " + _count.toString());
-          currentTime = now;
-        }
-      }
-      if (dataProgress.isClosed) {
-        _output.close();
-        return null;
+      now = DateTime.now();
+      if (currentTime == null || 
+        now.difference(currentTime) > Duration(milliseconds: 500)) {
+        dataProgress.add((_count * 0.000001).toStringAsFixed(2));
+        print("Downloading: " + _count.toString());
+        currentTime = now;
       }
       var progress = ((_count / _len) * 100).round();
       if (progress != _oldProgress) {

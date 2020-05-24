@@ -65,6 +65,9 @@ class _DownloadTabState extends State<DownloadTab> {
                       progressBar: mediaProvider.downloadInfoSetList[index].downloader.progressBar.stream,
                       currentAction: mediaProvider.downloadInfoSetList[index].currentAction.stream,
                       metadata: mediaProvider.downloadInfoSetList[index].metadata,
+                      onDownloadCancel: () {
+                        mediaProvider.downloadInfoSetList[index].downloader.cancelDownload = true;
+                      }
                     ),
                   );
                 },
