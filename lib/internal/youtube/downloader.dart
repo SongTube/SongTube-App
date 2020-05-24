@@ -17,7 +17,7 @@ class Downloader {
 
   // Variables
   double fileSize = 0;
-  bool cancelDownload = false;
+  bool downloadFinished = false;
 
   // Last Audio/Video successfully downloaded
   String lastAudioDownloaded;
@@ -83,7 +83,7 @@ class Downloader {
     // Start stream download, also update internal public
     // StreamController for external access
     await for (var data in streamToDownload.downloadStream()) {
-      if (cancelDownload == true) { _output.close(); return null; }
+      if (downloadFinished == true) { _output.close(); return null; }
       _count += data.length;
       now = DateTime.now();
       if (currentTime == null || 
@@ -99,6 +99,7 @@ class Downloader {
       }
       _output.add(data);
     }
+    downloadFinished = true;
     await _output.close();
     type == DownloadType.video
       ? lastVideoDownloaded = "$_directory/$_fileName"

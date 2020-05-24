@@ -67,9 +67,9 @@ class _DownloadTabState extends State<DownloadTab> {
                       progressBar: infoset.downloader.progressBar.stream,
                       currentAction: infoset.currentAction.stream,
                       metadata: infoset.metadata,
-                      onDownloadCancel: infoset.downloader.cancelDownload == false
+                      onDownloadCancel: infoset.downloader.downloadFinished == false
                       ? () {
-                        setState(() => infoset.downloader.cancelDownload = true);
+                        setState(() => infoset.downloader.downloadFinished = true);
                       } : null,
                     ),
                   );
