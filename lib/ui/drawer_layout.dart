@@ -42,17 +42,9 @@ class DrawerLayout extends StatelessWidget{
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 14, bottom: 14),
-              child: Divider(indent: 16, endIndent: 16),
-            ),
-            MediaQuery.removePadding(
-              removeTop: true,
-              context: context,
-              child: Expanded(
-                child: ListView(
-                  children: children
-                ),
+            Expanded(
+              child: ListView(
+                children: children
               ),
             ),
             Divider(indent: 16, endIndent: 16),
