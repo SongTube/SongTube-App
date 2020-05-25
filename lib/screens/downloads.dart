@@ -90,11 +90,17 @@ class _DownloadTabState extends State<DownloadTab> {
               context: context,
               builder: (context) {
                 return AlertDialog(
-                  title: Text("Warning"),
-                  content: Text("There are still downloads in progress, are you sure you wanna clear the downloads list?"),
+                  title: Text("Warning", style: TextStyle(
+                    color: Theme.of(context).textTheme.body1.color
+                  )),
+                  content: Text("There are still downloads in progress, are you sure you wanna clear the downloads list?", style: TextStyle(
+                    color: Theme.of(context).textTheme.body1.color
+                  )),
                   actions: <Widget>[
                     FlatButton(
-                      child: Text("OK"),
+                      child: Text("OK", style: TextStyle(
+                        color: Theme.of(context).textTheme.body1.color
+                      )),
                       onPressed: () {
                         mediaProvider.downloadInfoSetList.forEach((element) {
                           if (element.downloader.downloadFinished == false)
@@ -105,7 +111,9 @@ class _DownloadTabState extends State<DownloadTab> {
                       }
                     ),
                     FlatButton(
-                      child: Text("Cancel"),
+                      child: Text("Cancel", style: TextStyle(
+                        color: Theme.of(context).textTheme.body1.color
+                      )),
                       onPressed: () => Navigator.pop(context),
                     )
                   ],
