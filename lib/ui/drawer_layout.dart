@@ -51,11 +51,10 @@ class DrawerLayout extends StatelessWidget{
             Padding(
               padding: EdgeInsets.only(left: 14, bottom: 14, right: 14, top: 7),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   leftBottomIcon == null ? Container() : leftBottomIcon,
-                  Spacer(),
                   middleBottomIcon == null ? Container() : middleBottomIcon,
-                  Spacer(),
                   rightBottomIcon == null ? Container() : rightBottomIcon
                 ],
               ),
