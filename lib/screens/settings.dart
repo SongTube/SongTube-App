@@ -92,7 +92,7 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                     AnimatedSize(
                       vsync: this,
                       curve: Curves.easeInOutBack,
-                      duration: Duration(milliseconds: 300),
+                      duration: Duration(milliseconds: 500),
                       child: appData.systemThemeEnabled == false
                       ? ListTile(
                           onTap: () => appData.darkThemeEnabled = !appData.darkThemeEnabled,
