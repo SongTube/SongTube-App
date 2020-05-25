@@ -109,6 +109,10 @@ class CustomDownloadMenu extends StatelessWidget {
                             Downloader.extractVideoStreams(mediaStream)[index].videoResolution.toString() + " " +
                             Downloader.extractVideoStreams(mediaStream)[index].framerate.toString() + "fps "
                           ),
+                          Downloader.extractVideoStreams(mediaStream)[index].videoQualityLabel.contains(new RegExp(r'HDR'))
+                          ? Text(
+                            "HDR ", style: TextStyle(fontWeight: FontWeight.w600, color: Colors.redAccent),
+                          ) : Container(),
                           Text(
                             (((Downloader.extractVideoStreams(mediaStream)[index].size)/1024)/1024).toStringAsFixed(2) +
                             "MB", style: TextStyle(fontSize: 12),
