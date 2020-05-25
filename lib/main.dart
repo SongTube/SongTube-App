@@ -11,27 +11,30 @@ import 'package:songtube/library.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); 
-  AppDataProvider appData = AppDataProvider();
-  appData.initProvider();
+  AppDataProvider provider = AppDataProvider();
+  provider.initProvider();
   await Future.delayed(Duration(seconds: 1), () {
-    runApp(Main(appData));
+    runApp(Main(provider));
   });
 }
 
+AppDataProvider appData;
+
 class Main extends StatelessWidget {
 
-  final AppDataProvider appData;
-  Main(this.appData);
+  final AppDataProvider provider;
+  Main(this.provider);
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider.value(value: appData),
+        ChangeNotifierProvider.value(value: provider),
         Provider<FocusNodes>(create: (context) => FocusNodes()),
         Provider<TextControllers>(create: (context) => TextControllers()),
       ],
       child: Builder( builder: (context) {
+        appData = Provider.of<AppDataProvider>(context);
         ThemeData customTheme;
         ThemeData darkTheme;
 
