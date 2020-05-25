@@ -5,6 +5,7 @@ import 'dart:ui';
 // Flutter
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 // Internal
 import 'package:songtube/internal/focusnodes.dart';
