@@ -26,6 +26,10 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
         ),
         child: ListView(
           physics: BouncingScrollPhysics(),
+          controller: ScrollController(
+            initialScrollOffset: 20.0,
+            keepScrollOffset: true
+          ),
           children: <Widget>[
             // ---------------
             // Themes Settings
