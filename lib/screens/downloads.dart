@@ -1,5 +1,6 @@
 // Flutter
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 // Internal
 import 'package:songtube/provider/media_provider.dart';
@@ -9,7 +10,6 @@ import 'package:songtube/internal/models/enums.dart';
 
 // Packages
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 // UI
 import 'package:songtube/ui/reusable/download_tile.dart';
@@ -29,41 +29,48 @@ class _DownloadTabState extends State<DownloadTab> {
     return Scaffold(
       body: Column(
         children: <Widget>[
-          AnimatedOpacity(
-            duration: Duration(milliseconds: 400),
-            opacity: mediaProvider.downloadInfoSetList.length == 0 ? 1.0 : 0.0,
-            child: mediaProvider.downloadInfoSetList.length == 0
-            ? Container(
-              padding: EdgeInsets.only(top: 8),
-              height: kToolbarHeight*1.1,
-              child: Card(
-                color: Theme.of(context).inputDecorationTheme.fillColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(Icons.file_download),
-                        Text(
-                        "    No downloads!  ",
+          if (mediaProvider.downloadInfoSetList.isEmpty)
+          Expanded(
+            child: Center(
+              child: AnimatedOpacity(
+                duration: Duration(milliseconds: 400),
+                opacity: mediaProvider.downloadInfoSetList.isEmpty ? 1.0 : 0.0,
+                child: Container(
+                  padding: EdgeInsets.all(8),
+                  width: MediaQuery.of(context).size.width*0.6,
+                  child: Card(
+                    color: Theme.of(context).inputDecorationTheme.fillColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(40.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(MdiIcons.cloudDownload, size: 100, color: Colors.redAccent),
+                          Text(
+                            "No downloads yet!",
+                            style: TextStyle(fontWeight: FontWeight.w700),
+                          ),
+                          SizedBox(height: 4),
+                          Text("All your downloads will be shown here", textAlign: TextAlign.center)
+                        ],
                       ),
-                    ],
+                    )
                   ),
                 )
               ),
-            )
-            : Container(),
+            ),
           ),
+          if (mediaProvider.downloadInfoSetList.isNotEmpty)
           Expanded(
             child: AnimatedOpacity(
               duration: Duration(milliseconds: 200),
-              opacity: mediaProvider.downloadInfoSetList.length > 0 ? 1.0 : 0.0,
-              child: mediaProvider.downloadInfoSetList.length > 0 
-              ? ListView.builder(
+              opacity: mediaProvider.downloadInfoSetList.isNotEmpty ? 1.0 : 0.0,
+              child: ListView.builder(
                 controller: scrollController,
                 physics: BouncingScrollPhysics(),
                 itemCount: mediaProvider.downloadInfoSetList.length,
@@ -89,7 +96,6 @@ class _DownloadTabState extends State<DownloadTab> {
                   );
                 },
               )
-              : Container(),
             ),
           ),
         ],
