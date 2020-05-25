@@ -15,6 +15,7 @@ import 'package:songtube/internal/models/enums.dart';
 import 'package:songtube/internal/models/metadata.dart';
 import 'package:songtube/internal/native.dart';
 import 'package:songtube/internal/textcontrollers.dart';
+import 'package:songtube/internal/youtube/downloader.dart';
 import 'package:songtube/internal/youtube/infoparser.dart';
 import 'package:songtube/provider/app_provider.dart';
 import 'package:songtube/provider/media_provider.dart';
@@ -634,6 +635,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
             foregroundColor: Colors.white,
             onPressed: () async {
               _focusNodes.unfocusAll();
+              List<youtube.VideoStreamInfo> videoList = Downloader.extractVideoStreams(_mediaStream);
               List<String> response = await showModalBottomSheet(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
@@ -641,7 +643,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                 context: context,
                 builder: (context) {
                   return CustomDownloadMenu(
-                    mediaStream: _mediaStream,
+                    videoList: videoList
                   );
                 }
               );

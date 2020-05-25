@@ -1,16 +1,13 @@
 // Flutter
 import 'package:flutter/material.dart';
 
-// Internal
-import 'package:songtube/internal/youtube/downloader.dart';
-
 // Packages
 import 'package:youtube_explode_dart/youtube_explode_dart.dart' as youtube;
 
 class CustomDownloadMenu extends StatelessWidget {
-  final youtube.MediaStreamInfoSet mediaStream;
+  final List<youtube.VideoStreamInfo> videoList;
   CustomDownloadMenu({
-    @required this.mediaStream,
+    @required this.videoList,
   });
   @override
   Widget build(BuildContext context) {
@@ -93,9 +90,9 @@ class CustomDownloadMenu extends StatelessWidget {
                   ),
                 ),
                 ListView.builder(
-                  physics: ScrollPhysics(),
+                  physics: BouncingScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: Downloader.extractVideoStreams(mediaStream).length,
+                  itemCount: videoList.length,
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: EdgeInsets.only(top: 16, bottom: 16, left: 32),
@@ -106,15 +103,15 @@ class CustomDownloadMenu extends StatelessWidget {
                             style: TextStyle(color: Theme.of(context).textTheme.body1.color, fontSize: 17, fontWeight: FontWeight.w700),
                           ),
                           Text(
-                            Downloader.extractVideoStreams(mediaStream)[index].videoResolution.toString() + " " +
-                            Downloader.extractVideoStreams(mediaStream)[index].framerate.toString() + "fps "
+                            videoList[index].videoResolution.toString() + " " +
+                            videoList[index].framerate.toString() + "fps "
                           ),
-                          Downloader.extractVideoStreams(mediaStream)[index].videoQualityLabel.contains(new RegExp(r'HDR'))
+                          videoList[index].videoQualityLabel.contains(new RegExp(r'HDR'))
                           ? Text(
                             "HDR ", style: TextStyle(fontWeight: FontWeight.w600, color: Colors.redAccent),
                           ) : Container(),
                           Text(
-                            (((Downloader.extractVideoStreams(mediaStream)[index].size)/1024)/1024).toStringAsFixed(2) +
+                            (((videoList[index].size)/1024)/1024).toStringAsFixed(2) +
                             "MB", style: TextStyle(fontSize: 12),
                           ),
                           Spacer(),
