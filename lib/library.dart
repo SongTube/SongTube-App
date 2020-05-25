@@ -5,13 +5,13 @@ import 'dart:io';
 // Flutter
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 
 // Internal
 import 'package:songtube/internal/native.dart';
 import 'package:songtube/internal/youtube/infoparser.dart';
 import 'package:songtube/provider/app_provider.dart';
 import 'package:songtube/provider/media_provider.dart';
+import 'package:songtube/provider/player_provider.dart';
 import 'package:songtube/screens/donate.dart';
 import 'package:songtube/screens/downloads.dart';
 import 'package:songtube/screens/home.dart';
@@ -22,12 +22,14 @@ import 'package:songtube/screens/settings.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:provider/provider.dart';
 
 // UI
 import 'package:songtube/ui/drawer_layout.dart';
 import 'package:songtube/ui/reusable/drawer_item.dart';
 import 'package:songtube/ui/snackbar.dart';
 import 'package:songtube/ui/ui_elements.dart';
+import 'package:songtube/ui/player_widget.dart';
 
 class Library extends StatefulWidget {
   @override
@@ -119,6 +121,7 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
       ),
     );
     AppDataProvider appData = Provider.of<AppDataProvider>(context);
+    Player audioPlayer = Provider.of<Player>(context);
     appSnack = new AppSnack(scaffoldKey: appData.libraryScaffoldKey, context: context);
     return Scaffold(
       key: appData.libraryScaffoldKey,
@@ -128,6 +131,21 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
         backgroundColor: Theme.of(context).canvasColor,
         centerTitle: true,
         iconTheme: new IconThemeData(color: Theme.of(context).iconTheme.color),
+        actions: <Widget>[
+          AnimatedOpacity(
+            opacity: audioPlayer.playerState == PlayerState.playing || audioPlayer.playerState == PlayerState.paused ? 1.0 : 0.0,
+            duration: Duration(milliseconds: 300),
+            child: PlayerWidget(
+              playerState: audioPlayer.playerState,
+              onPlayPauseTap: () {
+                if (audioPlayer.playerState == PlayerState.paused) audioPlayer.play();
+                if (audioPlayer.playerState == PlayerState.playing) audioPlayer.pause();
+              },
+              onPlayPauseLongPress: () => audioPlayer.stop(),
+            ),
+          ),
+          SizedBox(width: 12)
+        ],
       ),
       resizeToAvoidBottomPadding: true,
       body: WillPopScope(

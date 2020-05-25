@@ -1,9 +1,17 @@
+// Flutter
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:songtube/internal/models/downloadinfoset.dart';
 
 // Internal
 import 'package:songtube/provider/media_provider.dart';
+import 'package:songtube/provider/player_provider.dart';
+import 'package:songtube/internal/models/downloadinfoset.dart';
+import 'package:songtube/internal/models/enums.dart';
+
+// Packages
+import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+// UI
 import 'package:songtube/ui/reusable/download_tile.dart';
 
 class DownloadTab extends StatefulWidget {
@@ -17,6 +25,7 @@ class _DownloadTabState extends State<DownloadTab> {
   @override
   Widget build(BuildContext context) {
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context, listen: true);
+    Player audioPlayer = Provider.of<Player>(context);
     return Scaffold(
       body: Column(
         children: <Widget>[
@@ -71,6 +80,11 @@ class _DownloadTabState extends State<DownloadTab> {
                       ? () {
                         setState(() => infoset.downloader.downloadFinished = true);
                       } : null,
+                      onTilePlay: () {
+                        if (infoset.downloadPath != null && infoset.downloadType == DownloadType.audio) {
+                          audioPlayer.play(infoset.downloadPath);
+                        }
+                      }
                     ),
                   );
                 },

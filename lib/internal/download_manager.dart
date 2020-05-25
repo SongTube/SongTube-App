@@ -18,11 +18,9 @@ import 'package:songtube/internal/models/enums.dart';
 class DownloadManager {
 
   final DownloadInfoSet infoset;
-  final DownloadType downloadType;
   final bool enableConvertion;
 
   DownloadManager({
-    @required this.downloadType,
     @required this.enableConvertion,
     @required this.infoset,
   });
@@ -32,7 +30,7 @@ class DownloadManager {
     // -------
     // Audio
     // -------
-    if (downloadType == DownloadType.audio) {
+    if (infoset.downloadType == DownloadType.audio) {
       if (enableConvertion == true) {
         // ----------------------------
         // Audio-Only Download
@@ -75,6 +73,7 @@ class DownloadManager {
         // original name and removing "tmp" folder
         await File(infoset.converter.lastConvertedAudio).rename(_downloadPath + "/" + infoset.metadata.title + ".m4a");
         NativeMethod.registerFile(_downloadPath + "/" + infoset.metadata.title + ".m4a");
+        infoset.downloadPath = _downloadPath + "/" + infoset.metadata.title + ".m4a";
         closeDownload(0);
         return 0;
         // ----------------------------
@@ -104,6 +103,7 @@ class DownloadManager {
         // original name and removing "tmp" folder
         await File(infoset.downloader.lastAudioDownloaded).rename(_downloadPath + "/" + infoset.metadata.title + _audioFormat);
         NativeMethod.registerFile(_downloadPath + "/" + infoset.metadata.title + _audioFormat); // notice me senpai
+        infoset.downloadPath = _downloadPath + "/" + infoset.metadata.title + _audioFormat;
         closeDownload(0);
         return 0;
       }
@@ -111,7 +111,7 @@ class DownloadManager {
     // -------
     // Audio
     // -------
-    if (downloadType == DownloadType.video) {
+    if (infoset.downloadType == DownloadType.video) {
       if (enableConvertion == true) {
         // ----------------------------
         // Video Download
@@ -157,6 +157,7 @@ class DownloadManager {
           DownloadType.video,
           infoset.videoIndex
         ); if (_result == null) return 1;
+        infoset.downloader.downloadFinished = false;
         infoset.downloader.fileSize = infoset.downloader.fileSize + _result;
         infoset.currentAction.add("Downloading Audio...");
         // Audio
@@ -217,6 +218,7 @@ class DownloadManager {
         // original name and removing "tmp" folder
         await File(infoset.converter.lastConvertedVideo).rename(_downloadPath + "/" + infoset.metadata.title + ".webm");
         NativeMethod.registerFile(_downloadPath + "/" + infoset.metadata.title + ".webm");
+        infoset.downloadPath = _downloadPath + "/" + infoset.metadata.title + ".webm";
         closeDownload(0);
         return 0;
         // ----------------------------

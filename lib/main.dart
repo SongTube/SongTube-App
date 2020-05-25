@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 // Internal
 import 'package:songtube/internal/focusnodes.dart';
 import 'package:songtube/internal/textcontrollers.dart';
+import 'package:songtube/provider/player_provider.dart';
 import 'package:songtube/ui/themes.dart';
 import 'package:songtube/provider/app_provider.dart';
 import 'package:songtube/library.dart';
@@ -32,6 +33,7 @@ class Main extends StatelessWidget {
         ChangeNotifierProvider.value(value: provider),
         Provider<FocusNodes>(create: (context) => FocusNodes()),
         Provider<TextControllers>(create: (context) => TextControllers()),
+        ChangeNotifierProvider<Player>(create: (context) => Player()),
       ],
       child: Builder( builder: (context) {
         appData = Provider.of<AppDataProvider>(context);

@@ -3,6 +3,7 @@ import 'dart:async';
 
 // Flutter
 import 'package:flutter/foundation.dart';
+import 'package:songtube/internal/models/enums.dart';
 
 // Internal Models
 import 'package:songtube/internal/models/metadata.dart';
@@ -25,11 +26,14 @@ class DownloadInfoSet {
 
   // Variables
   int videoIndex;
+  String downloadPath;
+  DownloadType downloadType;
 
   DownloadInfoSet({
     @required this.currentAction,
     @required this.mediaStream,
     @required this.metadata,
+    @required this.downloadType,
     this.videoIndex
   }) {
     downloader = new Downloader();

@@ -4,9 +4,7 @@ import 'dart:ui';
 
 // Flutter
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart';
-import 'package:songtube/internal/download_manager.dart';
 
 // Internal
 import 'package:songtube/internal/focusnodes.dart';
@@ -22,11 +20,13 @@ import 'package:songtube/provider/media_provider.dart';
 import 'package:songtube/ui/bottom_download_menu.dart';
 import 'package:songtube/ui/searchbar.dart';
 import 'package:songtube/ui/snackbar.dart';
+import 'package:songtube/internal/download_manager.dart';
 
 // Packages
 import 'package:youtube_explode_dart/youtube_explode_dart.dart' as youtube;
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:provider/provider.dart';
 
 StreamController<String> videoUrl = new StreamController.broadcast();
 
@@ -582,10 +582,10 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                 currentAction: currentAction,
                 mediaStream: _mediaStream,
                 metadata: metadata,
+                downloadType: downloadType,
                 videoIndex: videoIndex
               );
               DownloadManager _manager = new DownloadManager(
-                downloadType: downloadType,
                 enableConvertion: enableConvertion,
                 infoset: infoset
               );
