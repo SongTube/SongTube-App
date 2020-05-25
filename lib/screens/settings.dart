@@ -13,7 +13,7 @@ class SettingsTab extends StatefulWidget {
   _SettingsTabState createState() => _SettingsTabState();
 }
 
-class _SettingsTabState extends State<SettingsTab> {
+class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     AppDataProvider appData = Provider.of<AppDataProvider>(context);
@@ -85,24 +85,30 @@ class _SettingsTabState extends State<SettingsTab> {
                         },
                       ),
                     ),
-                    if (appData.systemThemeEnabled == false)
-                    ListTile(
-                      onTap: () => appData.darkThemeEnabled = !appData.darkThemeEnabled,
-                      title: Text(
-                        "Enable Dark Theme",
-                        style: TextStyle(
-                          color: Theme.of(context).textTheme.body1.color,
-                          fontWeight: FontWeight.w500
-                        ),
-                      ),
-                      subtitle: Text("Use dark theme by default", style: TextStyle(fontSize: 12),),
-                      trailing: CircularCheckBox(
-                        activeColor: Colors.redAccent,
-                        value: appData.darkThemeEnabled,
-                        onChanged: (bool newValue) {
-                          appData.darkThemeEnabled = newValue;
-                        },
-                      ),
+                    AnimatedSize(
+                      vsync: this,
+                      curve: Curves.easeInOutBack,
+                      duration: Duration(milliseconds: 300),
+                      child: appData.systemThemeEnabled == false
+                      ? ListTile(
+                          onTap: () => appData.darkThemeEnabled = !appData.darkThemeEnabled,
+                          title: Text(
+                            "Enable Dark Theme",
+                            style: TextStyle(
+                              color: Theme.of(context).textTheme.body1.color,
+                              fontWeight: FontWeight.w500
+                            ),
+                          ),
+                          subtitle: Text("Use dark theme by default", style: TextStyle(fontSize: 12),),
+                          trailing: CircularCheckBox(
+                            activeColor: Colors.redAccent,
+                            value: appData.darkThemeEnabled,
+                            onChanged: (bool newValue) {
+                              appData.darkThemeEnabled = newValue;
+                            },
+                          ),
+                        )
+                      : Container()
                     ),
                     ListTile(
                       onTap: () => appData.blackThemeEnabled = !appData.blackThemeEnabled,
