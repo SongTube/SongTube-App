@@ -51,6 +51,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
   bool _linkReady;
   bool _showFAB;
   bool _openPlayer;
+  bool _showTooltip = false;
 
   // Controllers
   FocusNodes _focusNodes;
@@ -71,6 +72,9 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
     WidgetsBinding.instance.addObserver(
       new LifecycleEventHandler(resumeCallBack: () => handleIntent())
     );
+    Future.delayed((Duration(milliseconds: 200)), () {
+      setState(() => _showTooltip = true);
+    });
   }
 
   Future<void> handleIntent() async {
@@ -83,6 +87,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
       _linkReady = false;
       _showFAB = false;
       _moveSearchProgress = true;
+      _showTooltip = false;
     });
     youtube.MediaStreamInfoSet result = await YoutubeInfo.getVideoInfo(_id);
     if (result == null) {
@@ -109,6 +114,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
       _showFAB = false;
       _moveSearchProgress = true;
       _openPlayer = false;
+      _showTooltip = false;
     });
     if (context != null) FocusScope.of(context).unfocus();
     appSnack.gettingLinkInfo();
@@ -172,6 +178,92 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
             textfieldColor: Theme.of(context).inputDecorationTheme.fillColor,
             onSearchPressed: () => getVideoInfo(context),
           ),
+          _linkReady == false
+          ? Expanded(
+            child: IgnorePointer(
+                ignoring: _showTooltip == true ? false : true,
+                child: AnimatedOpacity(
+                  opacity: _showTooltip == true ? 1.0 : 0.0,
+                  duration: (Duration(milliseconds: 200)),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        width: MediaQuery.of(context).size.width*0.5,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            AnimatedOpacity(
+                              opacity: _showTooltip == true ? 1.0 : 0.0,
+                              duration: (Duration(milliseconds: 300)),
+                              child: Icon(
+                                MdiIcons.rocketLaunchOutline,
+                                size: 150,
+                                color: Colors.redAccent
+                              ),
+                            ),
+                            SizedBox(height: 4),
+                            AnimatedOpacity(
+                              opacity: _showTooltip == true ? 1.0 : 0.0,
+                              duration: (Duration(milliseconds: 400)),
+                              child: Text(
+                                "Nothing here yet!",
+                                style: TextStyle(
+                                  color: Theme.of(context).textTheme.body1.color,
+                                  fontWeight: FontWeight.w600
+                                )
+                              ),
+                            ),
+                            SizedBox(height: 4),
+                            AnimatedOpacity(
+                              opacity: _showTooltip == true ? 1.0 : 0.0,
+                              duration: (Duration(milliseconds: 500)),
+                              child: Text(
+                                "Paste a link into the app or search for videos on Youtube!",
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            InkWell(
+                              onTap: () {
+                                appData.screenIndex = 2;
+                              },
+                              child: AnimatedOpacity(
+                                opacity: _showTooltip == true ? 1.0 : 0.0,
+                                duration: (Duration(milliseconds: 600)),
+                                child: Container(
+                                  padding: EdgeInsets.all(16),
+                                  decoration: BoxDecoration(
+                                    color: Colors.redAccent,
+                                    borderRadius: BorderRadius.circular(20)
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: <Widget>[
+                                      Icon(MdiIcons.youtube, color: Colors.white),
+                                      Text(
+                                        "Explore Youtube",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.white
+                                        )
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 50)
+                    ],
+                  ),
+                )
+              ),
+          )
+          : Container(),
           _mediaStream != null
           ? Expanded(
             child: AnimatedOpacity(
