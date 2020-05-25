@@ -26,8 +26,12 @@ class Downloader {
   static List<VideoStreamInfo> extractVideoStreams(MediaStreamInfoSet list) {
     List<VideoStreamInfo> videoList = [];
     list.video.sort((a, b) => int.parse(
-      a.videoQualityLabel.replaceAll("p", "")).compareTo(int.parse(
-      b.videoQualityLabel.replaceAll("p", ""))));
+      a.videoQualityLabel.replaceAll(new RegExp(r'p60 HDR'), "")
+      .replaceAll(new RegExp(r'p'), "")
+      .replaceAll(new RegExp(r'p60'), "")).compareTo(int.parse(
+      b.videoQualityLabel.replaceAll(new RegExp(r'p60 HDR'), "")
+      .replaceAll(new RegExp(r'p'), "")
+      .replaceAll(new RegExp(r'p60'), ""))));
     int _size = list.video.length;
     for (int i = 0; i <= _size; i++){
       if (_size-1 == i) {
