@@ -237,6 +237,47 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
             },
           ),
         ),
+        middleBottomIcon: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).tabBarTheme.labelColor,
+            borderRadius: BorderRadius.circular(30)
+          ),
+          child: IconButton(
+            icon: Icon(MdiIcons.telegram, color: Colors.blue),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ), 
+                    title: Row(
+                      children: <Widget>[
+                        Icon(MdiIcons.telegram, color: Colors.blue),
+                        Text("   Telegram", style: TextStyle(
+                          color: Theme.of(context).textTheme.body1.color
+                        )),
+                      ],
+                    ),
+                    content: Text("Join our Telegram Channel and Group! You'll get the latest app updates and you can request features and report bugs" , style: TextStyle(
+                      color: Theme.of(context).textTheme.body1.color
+                    )),
+                    actions: <Widget>[
+                      FlatButton(
+                        child: Text("Join"),
+                        onPressed: () async {
+                          Navigator.pop(context);
+                          await launch("https://t.me/songtubechannel");
+                        }
+                      )
+                    ],
+                  );
+                }
+              );
+            },
+          ),
+        ),
         rightBottomIcon: Container(
           decoration: BoxDecoration(
             color: Theme.of(context).tabBarTheme.labelColor,

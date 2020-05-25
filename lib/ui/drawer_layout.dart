@@ -8,12 +8,14 @@ class DrawerLayout extends StatelessWidget{
   final List<Widget> children;
   final Widget leftBottomIcon;
   final Widget rightBottomIcon;
+  final Widget middleBottomIcon;
   DrawerLayout({
     @required this.headerColor,
     this.title,
     @required this.children,
     this.leftBottomIcon,
-    this.rightBottomIcon
+    this.rightBottomIcon,
+    this.middleBottomIcon
   });
 
   Widget build(BuildContext context) {
@@ -59,6 +61,8 @@ class DrawerLayout extends StatelessWidget{
               child: Row(
                 children: <Widget>[
                   leftBottomIcon == null ? Container() : leftBottomIcon,
+                  Spacer(),
+                  middleBottomIcon == null ? Container() : middleBottomIcon,
                   Spacer(),
                   rightBottomIcon == null ? Container() : rightBottomIcon
                 ],
