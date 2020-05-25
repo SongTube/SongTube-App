@@ -24,7 +24,7 @@ class AppTheme {
         fillColor: Colors.grey[100]
       ),
       tabBarTheme: TabBarTheme(
-        labelColor: Colors.grey[100],
+        labelColor: Colors.grey[200],
       ),
       textSelectionHandleColor: Colors.redAccent,
     );
