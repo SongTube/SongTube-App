@@ -264,6 +264,21 @@ class _SettingsTabState extends State<SettingsTab> {
                 ),
               ),
             ),
+            Theme(
+              data: ThemeData(
+                textTheme: TextTheme(
+                  body1: Theme.of(context).textTheme.body1,
+                )
+              ),
+              child: Center(
+                child: Column(
+                  children: <Widget>[
+                    Text("SongTube: build 1.0.3+4"),
+                    Text("By: Artx <artx4dev@gmail.com>")
+                  ],
+                )
+              ),
+            )
           ],
         ),
       ),
