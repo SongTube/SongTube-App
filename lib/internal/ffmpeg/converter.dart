@@ -91,6 +91,7 @@ class Converter {
           "-y", "-i",
           "$filePath",
           "-c:a", "aac",
+          "-b:a", "128k",
           "-metadata", "title=${metadata.title}",
           "-metadata", "album=${metadata.album}",
           "-metadata", "artist=${metadata.artist}",
