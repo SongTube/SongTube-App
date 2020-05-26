@@ -92,13 +92,6 @@ class Converter {
           "$filePath",
           "-c:a", "aac",
           "-b:a", "128k",
-          "-metadata", "title=${metadata.title}",
-          "-metadata", "album=${metadata.album}",
-          "-metadata", "artist=${metadata.artist}",
-          "-metadata", "genre=${metadata.genre}",
-          "-metadata", "date=${metadata.date}",
-          "-metadata", "disk=${metadata.disk}",
-          "-metadata", "track=${metadata.track}",
           "$savePath.m4a",
         ];
         return _argsList;
