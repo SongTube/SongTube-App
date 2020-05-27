@@ -58,7 +58,7 @@ class DownloadManager {
 
         // Obtain the argument list to Convert our audio file to user Specified
         _args = await infoset.converter.getArgumentsList(
-          FFmpegArgs.argsToACC,            // Convert to .ogg
+          infoset.convertFormat,           // Convert to specified format
           infoset.metadata,                // Use default/custom MetaData
           ActionType.convertAudio,         // Specify the convertion type
           infoset.downloader.lastAudioDownloaded,  // Path to the Audio
@@ -70,10 +70,16 @@ class DownloadManager {
         infoset.currentAction.add("Converting...");
         _result = await infoset.converter.convert(_args, ActionType.convertAudio);
 
+        // Get format extension
+        String format;
+        if (infoset.convertFormat == FFmpegArgs.argsToACC) format = ".m4a";
+        if (infoset.convertFormat == FFmpegArgs.argsToOGGVorbis) format = ".ogg";
+        if (infoset.convertFormat == FFmpegArgs.argsToMP3) format = ".mp3";
+
         // Move the audio file to the download folder
         // and write all Metadata
         infoset.currentAction.add("Setting Tags & Artwork...");
-        String renamedFilePath = _downloadPath + "/" + infoset.metadata.title + ".m4a";
+        String renamedFilePath = _downloadPath + "/" + infoset.metadata.title + format;
         await File(infoset.converter.lastConvertedAudio).rename(renamedFilePath);
         await writeAllMetadata(renamedFilePath);
 

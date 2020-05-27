@@ -25,6 +25,8 @@ class AppDataProvider extends ChangeNotifier {
   // Library
   GlobalKey<ScaffoldState> _libraryScaffoldKey;
   int _screenIndex = 0;
+  // Converting audio format
+  String _audioConvertFormat = "AAC";
 
   Color get accentColor => _accentColor;
   bool get systemThemeAvailable => _systemThemeAvailable;
@@ -37,6 +39,8 @@ class AppDataProvider extends ChangeNotifier {
   // Library
   GlobalKey<ScaffoldState> get libraryScaffoldKey => _libraryScaffoldKey;
   int get screenIndex => _screenIndex;
+  // Converting audio format
+  String get audioConvertFormat => _audioConvertFormat;
 
   set systemThemeAvailable(bool value){
     _systemThemeAvailable = value;
@@ -88,11 +92,19 @@ class AppDataProvider extends ChangeNotifier {
     accentColor = preferences.getAccentColor();
     darkThemeEnabled = preferences.getDarkThemeEnabled();
     blackThemeEnabled = preferences.getBlackThemeEnabled();
+    audioConvertFormat = preferences.getAudioConvertingFormat();
   }
 
   // Library
   set screenIndex(int newValue) {
     _screenIndex = newValue;
+    notifyListeners();
+  }
+
+  // Converting audio format
+  set audioConvertFormat(String format) {
+    _audioConvertFormat = format;
+    preferences.saveAudioConvertingFormat(format);
     notifyListeners();
   }
 }

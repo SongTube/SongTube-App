@@ -28,12 +28,14 @@ class DownloadInfoSet {
   int videoIndex;
   String downloadPath;
   DownloadType downloadType;
+  FFmpegArgs convertFormat;
 
   DownloadInfoSet({
     @required this.currentAction,
     @required this.mediaStream,
     @required this.metadata,
     @required this.downloadType,
+    @required this.convertFormat,
     this.videoIndex
   }) {
     downloader = new Downloader();

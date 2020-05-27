@@ -16,6 +16,7 @@ String darkThemeKey = "use_dark_theme";
 String blackThemeKey = "use_black_theme";
 String enableAudioConvertion= "enable_audio_convertion";
 String enableVideoConvertion= "enable_video_convertion";
+String audioConvertingFormat = "audio_converting_format";
 
 class Preferences {
   SharedPreferences prefs;
@@ -82,6 +83,14 @@ class Preferences {
 
   void saveEnableVideoConvertion(bool value) {
     prefs.setBool(enableVideoConvertion, value);
+  }
+
+  void saveAudioConvertingFormat(String format) {
+    prefs.setString(audioConvertingFormat, format);
+  }
+
+  String getAudioConvertingFormat() {
+    return prefs.getString(audioConvertingFormat) ?? "AAC";
   }
 
 }

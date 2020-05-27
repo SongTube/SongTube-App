@@ -249,6 +249,52 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                       ),
                     ),
                     Divider(color: Colors.transparent),
+                    ListTile(
+                      title: Text(
+                        "Audio Convertion Format",
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.body1.color,
+                          fontWeight: FontWeight.w500
+                        ),
+                      ),
+                      subtitle: Text("Audio will be converted to this selected format",
+                        style: TextStyle(fontSize: 12)
+                      ),
+                      trailing: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          items: [
+                            DropdownMenuItem<String>(
+                              child: Text('AAC (.m4a)', style: TextStyle(
+                                color: Theme.of(context).textTheme.body1.color,
+                                fontWeight: FontWeight.w500
+                              )),
+                              value: 'AAC',
+                            ),
+                            DropdownMenuItem<String>(
+                              child: Text('OGG (.ogg)', style: TextStyle(
+                                color: Theme.of(context).textTheme.body1.color,
+                                fontWeight: FontWeight.w500
+                              )),
+                              value: 'OGG Vorbis',
+                            ),
+                            DropdownMenuItem<String>(
+                              child: Text('MP3 (.mp3)', style: TextStyle(
+                                color: Theme.of(context).textTheme.body1.color,
+                                fontWeight: FontWeight.w500
+                              )),
+                              value: 'MP3',
+                            ),
+                          ],
+                          onChanged: (String value) {
+                            appData.audioConvertFormat = value;
+                          },
+                          value: appData.audioConvertFormat,
+                          elevation: 1,
+                          dropdownColor: Theme.of(context).cardColor,
+                        ),
+                      ),
+                    ),
+                    Divider(color: Colors.transparent),
                     /*ListTile(
                       title: Text(
                         "Convert Video",

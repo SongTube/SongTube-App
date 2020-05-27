@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:songtube/internal/ffmpeg/converter.dart';
 
 // Internal
 import 'package:songtube/internal/focusnodes.dart';
@@ -670,6 +671,10 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                 _textControllers.trackController.text,
               );
               DownloadType downloadType;
+              FFmpegArgs convertFormat;
+              if (appData.audioConvertFormat == "AAC") convertFormat = FFmpegArgs.argsToACC;
+              if (appData.audioConvertFormat == "OGG Vorbis") convertFormat = FFmpegArgs.argsToOGGVorbis;
+              if (appData.audioConvertFormat == "MP3") convertFormat = FFmpegArgs.argsToMP3;
               int videoIndex;
               bool enableConvertion;
               switch (response[0]) {
@@ -689,6 +694,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                 mediaStream: _mediaStream,
                 metadata: metadata,
                 downloadType: downloadType,
+                convertFormat: convertFormat,
                 videoIndex: videoIndex
               );
               DownloadManager _manager = new DownloadManager(
