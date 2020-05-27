@@ -103,7 +103,7 @@ class DownloadManager {
 
         // Use the appropiate codec extension based on the info from _audioFormat
         if (_audioFormat == "aac") _audioFormat = ".m4a";
-        if (_audioFormat == "opus") _audioFormat = ".opus";
+        if (_audioFormat == "opus") _audioFormat = ".ogg";
 
         // Finish up by renaming the final Audio it's
         // original name and removing "tmp" folder

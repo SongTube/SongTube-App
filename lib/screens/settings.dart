@@ -237,7 +237,7 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                           fontWeight: FontWeight.w500
                         ),
                       ),
-                      subtitle: Text("Enable/Disable audio convertion, default audio format is .opus",
+                      subtitle: Text("Enable/Disable audio convertion, default audio format is .ogg",
                         style: TextStyle(fontSize: 12)
                       ),
                       trailing: CircularCheckBox(
