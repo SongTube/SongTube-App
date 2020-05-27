@@ -148,7 +148,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
       _mediaStream.videoDetails.author, "Any",
       _mediaStream.videoDetails.thumbnailSet.mediumResUrl,
       _mediaStream.videoDetails.uploadDate.toString(),
-      "Any", "Any"
+      "1", "1"
     );
     _textControllers.titleController.text = _metadata.title;
     _textControllers.albumController.text = _metadata.album;
