@@ -14,6 +14,7 @@ import 'package:songtube/internal/models/downloadinfoset.dart';
 import 'package:songtube/internal/native.dart';
 import 'package:songtube/internal/ffmpeg/converter.dart';
 import 'package:songtube/internal/models/enums.dart';
+import 'package:songtube/internal/tags_manager.dart';
 
 class DownloadManager {
 
@@ -69,11 +70,16 @@ class DownloadManager {
         infoset.currentAction.add("Converting...");
         _result = await infoset.converter.convert(_args, ActionType.convertAudio);
 
-        // Finish up by renaming the final Audio it's
-        // original name and removing "tmp" folder
-        await File(infoset.converter.lastConvertedAudio).rename(_downloadPath + "/" + infoset.metadata.title + ".m4a");
-        NativeMethod.registerFile(_downloadPath + "/" + infoset.metadata.title + ".m4a");
-        infoset.downloadPath = _downloadPath + "/" + infoset.metadata.title + ".m4a";
+        // Move the audio file to the download folder
+        // and write all Metadata
+        infoset.currentAction.add("Setting Tags & Artwork...");
+        String renamedFilePath = _downloadPath + "/" + infoset.metadata.title + ".m4a";
+        await File(infoset.converter.lastConvertedAudio).rename(renamedFilePath);
+        await writeAllMetadata(renamedFilePath);
+
+        // Finish up
+        NativeMethod.registerFile(renamedFilePath);
+        infoset.downloadPath = renamedFilePath;
         closeDownload(0);
         return 0;
         // ----------------------------
@@ -241,5 +247,23 @@ class DownloadManager {
       infoset.currentAction.close();
       infoset.downloader.dataProgress.close();
     }
+  }
+
+  // Write Tags & Artwork
+  Future<void> writeAllMetadata(filePath) async {
+    await TagsManager.writeAllTags(
+      songPath: filePath,
+      title: infoset.metadata.title,
+      album: infoset.metadata.album,
+      artist: infoset.metadata.artist,
+      genre: infoset.metadata.genre,
+      year: infoset.metadata.date,
+      disc: infoset.metadata.disk,
+      track: infoset.metadata.track
+    );
+    await TagsManager.writeArtwork(
+      songPath: filePath,
+      artworkUrl: infoset.mediaStream.videoDetails.thumbnailSet.maxResUrl
+    );
   }
 }
