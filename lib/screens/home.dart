@@ -5,6 +5,7 @@ import 'dart:ui';
 // Flutter
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 // Internal
@@ -552,6 +553,10 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                     // Disk TextField
                                     Flexible(
                                       child: TextFormField(
+                                        keyboardType: TextInputType.number,
+                                        inputFormatters: <TextInputFormatter> [
+                                          WhitelistingTextInputFormatter.digitsOnly
+                                        ],
                                         cursorColor: Colors.redAccent,
                                         focusNode: _focusNodes.diskFocusNode,
                                         controller: _textControllers.diskController,
@@ -580,6 +585,10 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                     // Track TextField
                                     Flexible(
                                       child: TextFormField(
+                                        keyboardType: TextInputType.number,
+                                        inputFormatters: <TextInputFormatter> [
+                                          WhitelistingTextInputFormatter.digitsOnly
+                                        ],
                                         cursorColor: Colors.redAccent,
                                         focusNode: _focusNodes.trackFocusNode,
                                         controller: _textControllers.trackController,
