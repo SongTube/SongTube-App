@@ -144,12 +144,13 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
   }
 
   void updateInfo() {
+    DateTime date = DateTime.now();
+    String currentDate = "${date.year}/${date.month}/${date.day}";
     _metadata = MediaMetaData(
       _mediaStream.videoDetails.title, "Youtube",
       _mediaStream.videoDetails.author, "Any",
       _mediaStream.videoDetails.thumbnailSet.mediumResUrl,
-      _mediaStream.videoDetails.uploadDate.toString(),
-      "1", "1"
+      currentDate, "1", "1"
     );
     _textControllers.titleController.text = _metadata.title;
     _textControllers.albumController.text = _metadata.album;
