@@ -664,7 +664,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
               switch (response[0]) {
                 case "Audio":
                   downloadType = DownloadType.audio;
-                  enableConvertion = true;
+                  enableConvertion = appData.enableAudioConvertion;
                   break;
                 case "Video":
                   downloadType = DownloadType.video;
