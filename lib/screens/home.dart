@@ -519,6 +519,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                     // Date TextField
                                     Flexible(
                                       child: TextFormField(
+                                        keyboardType: TextInputType.datetime,
                                         cursorColor: Colors.redAccent,
                                         focusNode: _focusNodes.dateFocusNode,
                                         controller: _textControllers.dateController,
