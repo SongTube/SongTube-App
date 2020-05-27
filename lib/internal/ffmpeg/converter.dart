@@ -10,7 +10,7 @@ import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 import 'package:songtube/ui/snackbar.dart';
 
 // Type of actions for FFmpegArgs and Converter
-enum FFmpegArgs { argsToACC, argsToMP4, argsToOGG }
+enum FFmpegArgs { argsToACC, argsToMP4, argsToOGG, argsToOGGVorbis, argsToMP3 }
 enum ActionType { convertAudio, convertVideo, encodeAudioToVideo }
 
 class Converter {
@@ -101,6 +101,22 @@ class Converter {
           "-y", "-i", "$filePath", "-c:a", "libopus",
           "-b:a", "128k", "-vbr", "on", "-compression_level", "10",
           "$savePath.ogg"
+        ];
+        return _argsList;
+      }
+      if (type == FFmpegArgs.argsToOGGVorbis) {
+        _argsList = [
+          "-y", "-i", "$filePath",
+          "-c:a", "libvorbis", "-b:a", "128k",
+          "$savePath.ogg"
+        ];
+        return _argsList;
+      }
+      if (type == FFmpegArgs.argsToMP3) {
+        _argsList = [
+          "-y", "-i", "$filePath",
+          "-c:a", "libmp3lame", "-b:a", "128k",
+          "$savePath.mp3"
         ];
         return _argsList;
       }
