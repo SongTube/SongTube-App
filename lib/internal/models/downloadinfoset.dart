@@ -36,6 +36,7 @@ class DownloadInfoSet {
     @required this.metadata,
     @required this.downloadType,
     @required this.convertFormat,
+    @required this.downloadPath,
     this.videoIndex
   }) {
     downloader = new Downloader();

@@ -48,7 +48,7 @@ class Downloader {
   Future<int> downloadStream(MediaStreamInfoSet mediaStream, DownloadType type, [int videoIndex]) async { 
 
     // Check path to save Video
-    String _directory = await ExtStorage.getExternalStorageDirectory() + "/" + "SongTube";
+    String _directory = await ExtStorage.getExternalStorageDirectory() + "/SongTube";
     if (!(await Directory(_directory).exists())) await Directory(_directory).create();
     _directory = _directory + "/tmp";
     if (!(await Directory(_directory).exists())) await Directory(_directory).create();

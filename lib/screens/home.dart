@@ -677,15 +677,18 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
               if (appData.audioConvertFormat == "MP3") convertFormat = FFmpegArgs.argsToMP3;
               int videoIndex;
               bool enableConvertion;
+              String downloadPath;
               switch (response[0]) {
                 case "Audio":
                   downloadType = DownloadType.audio;
                   enableConvertion = appData.enableAudioConvertion;
+                  downloadPath = appData.audioDownloadPath;
                   break;
                 case "Video":
                   downloadType = DownloadType.video;
                   videoIndex = int.parse(response[1]);
                   enableConvertion = false;
+                  downloadPath = appData.videoDownloadPath;
                   break;
               }
               StreamController<String> currentAction = new StreamController.broadcast();
@@ -694,6 +697,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                 mediaStream: _mediaStream,
                 metadata: metadata,
                 downloadType: downloadType,
+                downloadPath: downloadPath,
                 convertFormat: convertFormat,
                 videoIndex: videoIndex
               );

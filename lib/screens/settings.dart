@@ -1,4 +1,5 @@
 // Flutter
+import 'package:ext_storage/ext_storage.dart';
 import 'package:flutter/material.dart';
 
 // Internal
@@ -7,6 +8,7 @@ import 'package:songtube/provider/app_provider.dart';
 // Packages
 import 'package:provider/provider.dart';
 import 'package:circular_check_box/circular_check_box.dart';
+import 'package:songtube/ui/reusable/directory_picker.dart';
 
 class SettingsTab extends StatefulWidget {
   @override
@@ -143,7 +145,7 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
             // ------------------
             // App UI Settings
             // ------------------
-            /*Padding(
+            Padding(
               padding: const EdgeInsets.all(8.0),
               child: Card(
                 shape: RoundedRectangleBorder(
@@ -161,7 +163,7 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                             left: 16,
                             bottom: 4
                           ),
-                          child: Icon(Icons.transform, color: Theme.of(context).iconTheme.color),
+                          child: Icon(Icons.file_download, color: Theme.of(context).iconTheme.color),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(
@@ -170,7 +172,7 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                             bottom: 4
                           ),
                           child: Text(
-                            "App Design",
+                            "Downloads",
                             style: TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.w600
@@ -180,10 +182,90 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                       ],
                     ),
                     Divider(indent: 8, endIndent: 8),
+                    ListTile(
+                      title: Text(
+                        "Audio Download Path",
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.body1.color,
+                          fontWeight: FontWeight.w500
+                        ),
+                      ),
+                      subtitle: Text("Select a folder to download all your Audio files",
+                        style: TextStyle(fontSize: 12)
+                      ),
+                      trailing: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          color: Colors.redAccent
+                        ),
+                        child: IconButton(
+                          icon: Icon(Icons.folder, color: Colors.white),
+                          onPressed: () async {
+                            String dir = await ExtStorage.getExternalStorageDirectory();
+                            String path = await showDialog(
+                              context: context,
+                              builder: (context) {
+                                return Dialog(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
+                                  child: DirectoryExplorer(
+                                    rootPath: dir,
+                                    title: "Select a Folder",
+                                    itemPrefix: Icon(Icons.folder),
+                                  ),
+                                );
+                              }
+                            );
+                            appData.audioDownloadPath = path;
+                          }
+                        )
+                      )
+                    ),
+                    ListTile(
+                      title: Text(
+                        "Video Download Path",
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.body1.color,
+                          fontWeight: FontWeight.w500
+                        ),
+                      ),
+                      subtitle: Text("Select a folder to download all your Video files",
+                        style: TextStyle(fontSize: 12)
+                      ),
+                      trailing: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          color: Colors.redAccent
+                        ),
+                        child: IconButton(
+                          icon: Icon(Icons.folder, color: Colors.white),
+                          onPressed: () async {
+                            String dir = await ExtStorage.getExternalStorageDirectory();
+                            String path = await showDialog(
+                              context: context,
+                              builder: (context) {
+                                return Dialog(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
+                                  child: DirectoryExplorer(
+                                    rootPath: dir,
+                                    title: "Select a Folder",
+                                    itemPrefix: Icon(Icons.folder),
+                                  ),
+                                );
+                              }
+                            );
+                            appData.videoDownloadPath = path;
+                          }
+                        )
+                      )
+                    ),
                   ],
                 ),
               ),
-            ),*/
+            ),
             // ------------------
             // App UI Settings
             // ------------------
@@ -237,7 +319,7 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                           fontWeight: FontWeight.w500
                         ),
                       ),
-                      subtitle: Text("Enable/Disable audio convertion, default audio format is .ogg",
+                      subtitle: Text("Enable/Disable audio conversion, default audio format is .ogg",
                         style: TextStyle(fontSize: 12)
                       ),
                       trailing: CircularCheckBox(
@@ -251,7 +333,7 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                     Divider(color: Colors.transparent),
                     ListTile(
                       title: Text(
-                        "Audio Convertion Format",
+                        "Audio Conversion Format",
                         style: TextStyle(
                           color: Theme.of(context).textTheme.body1.color,
                           fontWeight: FontWeight.w500

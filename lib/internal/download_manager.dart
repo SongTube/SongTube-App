@@ -27,7 +27,7 @@ class DownloadManager {
   });
 
   Future<int> handleDownload() async {
-    String _downloadPath = await ExtStorage.getExternalStorageDirectory() + "/" + "SongTube";
+    String tmpPath = await ExtStorage.getExternalStorageDirectory() + "/SongTube/tmp";
     // -------
     // Audio
     // -------
@@ -47,14 +47,14 @@ class DownloadManager {
         try {
           _result = await infoset.downloader.downloadStream(
             infoset.mediaStream,
-            DownloadType.audio
+            DownloadType.audio,
           );
         } on Exception catch (_) {
           print(_.toString());
         } if (_result == null) return 1;
+
         // Build the Path for the Audio to be stored
-        _audioSavePath = _downloadPath;
-        _audioSavePath = _audioSavePath + "/" + basename(infoset.downloader.lastAudioDownloaded);
+        _audioSavePath = infoset.downloadPath + "/" + basename(infoset.downloader.lastAudioDownloaded);
 
         // Obtain the argument list to Convert our audio file to user Specified
         _args = await infoset.converter.getArgumentsList(
@@ -79,7 +79,7 @@ class DownloadManager {
         // Move the audio file to the download folder
         // and write all Metadata
         infoset.currentAction.add("Setting Tags & Artwork...");
-        String renamedFilePath = _downloadPath + "/" + infoset.metadata.title + format;
+        String renamedFilePath = infoset.downloadPath + "/" + infoset.metadata.title + format;
         await File(infoset.converter.lastConvertedAudio).rename(renamedFilePath);
         await writeAllMetadata(renamedFilePath);
 
@@ -101,7 +101,7 @@ class DownloadManager {
         // Download raw Audio file
         _result = await infoset.downloader.downloadStream(
           infoset.mediaStream,
-          DownloadType.audio
+          DownloadType.audio,
         ); if (_result == null) return 1;
 
         // Get information about our downloaded Media
@@ -113,9 +113,10 @@ class DownloadManager {
 
         // Finish up by renaming the final Audio it's
         // original name and removing "tmp" folder
-        await File(infoset.downloader.lastAudioDownloaded).rename(_downloadPath + "/" + infoset.metadata.title + _audioFormat);
-        NativeMethod.registerFile(_downloadPath + "/" + infoset.metadata.title + _audioFormat); // notice me senpai
-        infoset.downloadPath = _downloadPath + "/" + infoset.metadata.title + _audioFormat;
+        String downloadPath = infoset.downloadPath + "/" + infoset.metadata.title + _audioFormat;
+        await File(infoset.downloader.lastAudioDownloaded).rename(downloadPath);
+        NativeMethod.registerFile(downloadPath); // notice me senpai
+        infoset.downloadPath = downloadPath;
         closeDownload(0);
         return 0;
       }
@@ -135,10 +136,10 @@ class DownloadManager {
         int _result;
         _result = await infoset.downloader.downloadStream(
           infoset.mediaStream,
-          DownloadType.audio
+          DownloadType.audio,
         );
         if (_result == null) return 1;
-        String _savePath = _downloadPath;
+        String _savePath;
         List<String> _args = await infoset.converter.getArgumentsList(FFmpegArgs.argsToACC,
           infoset.metadata, ActionType.convertAudio, infoset.downloader.lastAudioDownloaded,
           _savePath + "/" + basename(infoset.downloader.lastAudioDownloaded));
@@ -175,7 +176,7 @@ class DownloadManager {
         // Audio
         _result = await infoset.downloader.downloadStream(
           infoset.mediaStream,
-          DownloadType.audio
+          DownloadType.audio,
         ); if (_result == null) return 1;
         infoset.downloader.fileSize = infoset.downloader.fileSize + _result;
 
@@ -183,10 +184,8 @@ class DownloadManager {
         _videoFormat = await infoset.converter.getMediaFormat(infoset.downloader.lastVideoDownloaded);
 
         // Build the Path for the Audio and final Video to be stored
-        _videoSavePath = _downloadPath;
-        _videoSavePath = _videoSavePath + "/" + basename(infoset.downloader.lastVideoDownloaded);
-        _audioSavePath = _downloadPath;
-        _audioSavePath = _audioSavePath + "/tmp/" + basename(infoset.downloader.lastAudioDownloaded);
+        _videoSavePath = infoset.downloadPath + "/" + basename(infoset.downloader.lastVideoDownloaded);
+        _audioSavePath = tmpPath + basename(infoset.downloader.lastAudioDownloaded);
 
         // Audio for the video
         _audioPath = infoset.downloader.lastAudioDownloaded;
@@ -228,9 +227,10 @@ class DownloadManager {
 
         // Finish up by renaming the final Video it's
         // original name and removing "tmp" folder
-        await File(infoset.converter.lastConvertedVideo).rename(_downloadPath + "/" + infoset.metadata.title + ".webm");
-        NativeMethod.registerFile(_downloadPath + "/" + infoset.metadata.title + ".webm");
-        infoset.downloadPath = _downloadPath + "/" + infoset.metadata.title + ".webm";
+        String downloadPath = infoset.downloadPath + "/" + infoset.metadata.title + ".webm";
+        await File(infoset.converter.lastConvertedVideo).rename(downloadPath);
+        NativeMethod.registerFile(downloadPath);
+        infoset.downloadPath = downloadPath;
         closeDownload(0);
         return 0;
         // ----------------------------

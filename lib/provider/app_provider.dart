@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 // Internal
 import 'package:songtube/internal/preferences.dart';
 
+// Packages
+import 'package:ext_storage/ext_storage.dart';
+
 class AppDataProvider extends ChangeNotifier {
   Preferences preferences;
 
@@ -11,6 +14,10 @@ class AppDataProvider extends ChangeNotifier {
     preferences = new Preferences();
     await preferences.init();
     await loadSavedData();
+    if (_audioDownloadPath == null)
+      _audioDownloadPath = await ExtStorage.getExternalStorageDirectory() + "/SongTube";
+    if (_videoDownloadPath == null)
+      _videoDownloadPath = await ExtStorage.getExternalStorageDirectory() + "/SongTube";
     _libraryScaffoldKey = new GlobalKey<ScaffoldState>();
   }
 
@@ -27,6 +34,9 @@ class AppDataProvider extends ChangeNotifier {
   int _screenIndex = 0;
   // Converting audio format
   String _audioConvertFormat = "AAC";
+  // Download paths
+  String _audioDownloadPath;
+  String _videoDownloadPath;
 
   Color get accentColor => _accentColor;
   bool get systemThemeAvailable => _systemThemeAvailable;
@@ -41,6 +51,9 @@ class AppDataProvider extends ChangeNotifier {
   int get screenIndex => _screenIndex;
   // Converting audio format
   String get audioConvertFormat => _audioConvertFormat;
+  // Download paths
+  String get audioDownloadPath => _audioDownloadPath;
+  String get videoDownloadPath => _videoDownloadPath;
 
   set systemThemeAvailable(bool value){
     _systemThemeAvailable = value;
@@ -93,6 +106,8 @@ class AppDataProvider extends ChangeNotifier {
     darkThemeEnabled = preferences.getDarkThemeEnabled();
     blackThemeEnabled = preferences.getBlackThemeEnabled();
     audioConvertFormat = preferences.getAudioConvertingFormat();
+    audioDownloadPath = preferences.getAudioDownloadPath();
+    videoDownloadPath = preferences.getVideoDownloadPath();
   }
 
   // Library
@@ -107,4 +122,17 @@ class AppDataProvider extends ChangeNotifier {
     preferences.saveAudioConvertingFormat(format);
     notifyListeners();
   }
+
+  // Download paths
+  set audioDownloadPath(String path) {
+    _audioDownloadPath = path;
+    preferences.saveAudioDownloadPath(path);
+    notifyListeners();
+  }
+  set videoDownloadPath(String path) {
+    _videoDownloadPath = path;
+    preferences.saveVideoDownloadPath(path);
+    notifyListeners();
+  }
+
 }
