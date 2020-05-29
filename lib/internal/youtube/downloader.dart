@@ -59,18 +59,18 @@ class Downloader {
       : mediaStream.audio.last;
 
     // Compose the file name removing the unallowed characters in windows.
-    String _fileName = type == DownloadType.video 
-    ? mediaStream.videoDetails.title.toString() + "-video"
-    : mediaStream.videoDetails.title.toString() + "-audio"
-      .replaceAll('Container.', '')
-      .replaceAll(r'\', '')
-      .replaceAll('/', '')
-      .replaceAll('*', '')
-      .replaceAll('?', '')
-      .replaceAll('"', '')
-      .replaceAll('<', '')
-      .replaceAll('>', '')
-      .replaceAll('|', '');
+    String _fileName;
+    if (type == DownloadType.video) _fileName = mediaStream.videoDetails.title.toString() + "-video";
+    if (type == DownloadType.audio) _fileName = mediaStream.videoDetails.title.toString() + "-audio";
+    _fileName = _fileName.replaceAll('Container.', '')
+        .replaceAll(r'\', '')
+        .replaceAll('/', '')
+        .replaceAll('*', '')
+        .replaceAll('?', '')
+        .replaceAll('"', '')
+        .replaceAll('<', '')
+        .replaceAll('>', '')
+        .replaceAll('|', '');
     File _filePath = File("$_directory/$_fileName");
 
     // Open the file in write.
