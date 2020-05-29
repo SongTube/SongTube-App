@@ -42,7 +42,7 @@ class _YoutubeWebviewState extends State<YoutubeWebview> with AutomaticKeepAlive
 
   void initCheckLoop() async {
     while (loop == true) {      
-      await Future.delayed(Duration(milliseconds: 500), () async {
+      await Future.delayed(Duration(milliseconds: 1500), () async {
         String testUrl = await _webViewController.currentUrl();
         if (testUrl != _currentUrl) {
           setState(() => _currentUrl = testUrl);
