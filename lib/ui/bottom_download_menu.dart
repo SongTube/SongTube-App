@@ -23,29 +23,29 @@ class CustomDownloadMenu extends StatelessWidget {
               children: <Widget> [
                 Text("Download", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
                 Spacer(),
-                Container(
-                  padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Colors.redAccent,
-                    borderRadius: BorderRadius.circular(30)
-                  ),
-                  child: Row(
-                    children: <Widget>[
-                      SizedBox(width: 4),
-                      GestureDetector(
-                        onTap: onSettingsPressed,
-                        child: Icon(Icons.settings, color: Colors.white)
-                      ),
-                      SizedBox(width: 4),
-                      Text(
-                        "Settings",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white
+                GestureDetector(
+                  onTap: onSettingsPressed,
+                  child: Container(
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.redAccent,
+                      borderRadius: BorderRadius.circular(30)
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        SizedBox(width: 4),
+                        Icon(Icons.settings, color: Colors.white),
+                        SizedBox(width: 4),
+                        Text(
+                          "Settings",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white
+                          ),
                         ),
-                      ),
-                      SizedBox(width: 4)
-                    ],
+                        SizedBox(width: 4)
+                      ],
+                    ),
                   ),
                 ),
                 IconButton(
