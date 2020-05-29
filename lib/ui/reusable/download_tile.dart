@@ -91,10 +91,13 @@ class DownloadTile extends StatelessWidget {
               child: StreamBuilder<double>(
                 stream: progressBar,
                 builder: (context, snapshot) {
-                  return LinearProgressIndicator(
-                    value: snapshot.data,
-                    backgroundColor: Theme.of(context).cardColor,
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.redAccent),
+                  return ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: LinearProgressIndicator(
+                      value: snapshot.data,
+                      backgroundColor: Theme.of(context).cardColor,
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.redAccent),
+                    ),
                   );
                 }
               ),
