@@ -21,6 +21,7 @@ import 'package:songtube/internal/youtube/downloader.dart';
 import 'package:songtube/internal/youtube/infoparser.dart';
 import 'package:songtube/provider/app_provider.dart';
 import 'package:songtube/provider/media_provider.dart';
+import 'package:songtube/screens/settings.dart';
 import 'package:songtube/ui/bottom_download_menu.dart';
 import 'package:songtube/ui/searchbar.dart';
 import 'package:songtube/ui/snackbar.dart';
@@ -661,7 +662,21 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                   return CustomDownloadMenu(
                     videoList: videoList,
                     onSettingsPressed: () {
-
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return Dialog(
+                            backgroundColor: Theme.of(context).canvasColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SettingsTab(),
+                            )
+                          );
+                        }
+                      );
                     },
                   );
                 }
