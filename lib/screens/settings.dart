@@ -1,5 +1,7 @@
+// Dart
+import 'dart:io';
+
 // Flutter
-import 'package:ext_storage/ext_storage.dart';
 import 'package:flutter/material.dart';
 
 // Internal
@@ -8,6 +10,10 @@ import 'package:songtube/provider/app_provider.dart';
 // Packages
 import 'package:provider/provider.dart';
 import 'package:circular_check_box/circular_check_box.dart';
+import 'package:ext_storage/ext_storage.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+
+// UI
 import 'package:songtube/ui/reusable/alertdialog.dart';
 import 'package:songtube/ui/reusable/directory_picker.dart';
 
@@ -265,6 +271,85 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                             appData.videoDownloadPath = path;
                           }
                         )
+                      )
+                    ),
+                    Divider(color: Colors.transparent),
+                    ListTile(
+                      title: Text(
+                        "Clear Temporal Folder",
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.body1.color,
+                          fontWeight: FontWeight.w500
+                        ),
+                      ),
+                      subtitle: Text("Clear SongTube temporal folder, recommended to do once in a while",
+                        style: TextStyle(fontSize: 12)
+                      ),
+                      trailing: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          color: Colors.redAccent
+                        ),
+                        child: IconButton(
+                          icon: Icon(MdiIcons.trashCan, color: Colors.white),
+                          onPressed: () async {
+                            double totalSize = 0;
+                            String tmpPath = await ExtStorage.getExternalStorageDirectory() + "/SongTube/tmp";
+                            if (!await Directory(tmpPath).exists()) {
+                              await showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return CustomAlert(
+                                    leadingIcon: Icon(MdiIcons.trashCan),
+                                    title: "Cleaning",
+                                    content: "Temporal folder is empty!",
+                                    actions: <Widget>[
+                                      FlatButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text("OK"),
+                                      ),
+                                    ],
+                                  );
+                                }
+                              );
+                              return;
+                            }
+                            List<FileSystemEntity> listFiles = Directory(tmpPath).listSync();
+                            listFiles.forEach((element) {
+                              if (element is File) {
+                                totalSize += element.statSync().size;
+                              }
+                            });
+                            totalSize = totalSize * 0.000001;
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return CustomAlert(
+                                  leadingIcon: Icon(MdiIcons.trashCan),
+                                  title: "Cleaning",
+                                  content: "You're about to clear: " + totalSize.toStringAsFixed(2) + "MB",
+                                  actions: <Widget>[
+                                    FlatButton(
+                                      onPressed: () async {
+                                        await Directory(tmpPath).delete(recursive: true);
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text("OK"),
+                                    ),
+                                    FlatButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text("Cancel"),
+                                    )
+                                  ],
+                                );
+                              }
+                            );
+                          },
+                        ), 
                       )
                     ),
                     Divider(color: Colors.transparent),
