@@ -182,6 +182,7 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                       ],
                     ),
                     Divider(indent: 8, endIndent: 8),
+                    Divider(color: Colors.transparent),
                     ListTile(
                       title: Text(
                         "Audio Download Path",
@@ -222,6 +223,7 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                         )
                       )
                     ),
+                    Divider(color: Colors.transparent),
                     ListTile(
                       title: Text(
                         "Video Download Path",
@@ -262,6 +264,7 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                         )
                       )
                     ),
+                    Divider(color: Colors.transparent),
                   ],
                 ),
               ),
