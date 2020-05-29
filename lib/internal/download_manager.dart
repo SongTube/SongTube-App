@@ -86,6 +86,7 @@ class DownloadManager {
         // Finish up
         NativeMethod.registerFile(renamedFilePath);
         infoset.downloadPath = renamedFilePath;
+        infoset.downloadFinished = true;
         closeDownload(0);
         return 0;
         // ----------------------------
@@ -117,6 +118,7 @@ class DownloadManager {
         await File(infoset.downloader.lastAudioDownloaded).rename(downloadPath);
         NativeMethod.registerFile(downloadPath); // notice me senpai
         infoset.downloadPath = downloadPath;
+        infoset.downloadFinished = true;
         closeDownload(0);
         return 0;
       }
@@ -231,6 +233,7 @@ class DownloadManager {
         await File(infoset.converter.lastConvertedVideo).rename(downloadPath);
         NativeMethod.registerFile(downloadPath);
         infoset.downloadPath = downloadPath;
+        infoset.downloadFinished = true;
         closeDownload(0);
         return 0;
         // ----------------------------

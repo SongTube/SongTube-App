@@ -29,6 +29,7 @@ class DownloadInfoSet {
   String downloadPath;
   DownloadType downloadType;
   FFmpegArgs convertFormat;
+  bool downloadFinished = false;
 
   DownloadInfoSet({
     @required this.currentAction,

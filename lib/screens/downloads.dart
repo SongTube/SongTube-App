@@ -87,10 +87,10 @@ class _DownloadTabState extends State<DownloadTab> {
                         setState(() => infoset.downloader.downloadFinished = true);
                       } : null,
                       onTilePlay: () {
-                        if (infoset.downloadPath != null && infoset.downloadType == DownloadType.audio) {
+                        if (infoset.downloadFinished && infoset.downloadType == DownloadType.audio) {
                           audioPlayer.play(infoset.downloadPath);
                         }
-                        if (infoset.downloadPath != null && infoset.downloadType == DownloadType.video) {
+                        if (infoset.downloadFinished && infoset.downloadType == DownloadType.video) {
                           NativeMethod.openVideo(infoset.downloadPath);
                         }
                       }
