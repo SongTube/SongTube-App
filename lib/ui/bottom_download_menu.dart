@@ -30,10 +30,20 @@ class CustomDownloadMenu extends StatelessWidget {
                   ),
                   child: Row(
                     children: <Widget>[
-                      IconButton(
-                        icon: Icon(Icons.settings, color: Colors.white),
-                        onPressed: onSettingsPressed,
+                      SizedBox(width: 4),
+                      GestureDetector(
+                        onTap: onSettingsPressed,
+                        child: Icon(Icons.settings, color: Colors.white)
                       ),
+                      SizedBox(width: 4),
+                      Text(
+                        "Settings",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white
+                        ),
+                      ),
+                      SizedBox(width: 4)
                     ],
                   ),
                 ),
