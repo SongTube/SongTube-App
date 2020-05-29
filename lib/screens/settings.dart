@@ -8,6 +8,7 @@ import 'package:songtube/provider/app_provider.dart';
 // Packages
 import 'package:provider/provider.dart';
 import 'package:circular_check_box/circular_check_box.dart';
+import 'package:songtube/ui/reusable/alertdialog.dart';
 import 'package:songtube/ui/reusable/directory_picker.dart';
 
 class SettingsTab extends StatefulWidget {
@@ -397,7 +398,25 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                       trailing: CircularCheckBox(
                         activeColor: Colors.redAccent,
                         value: appData.enableAudioConvertion,
-                        onChanged: (bool newValue) {
+                        onChanged: (bool newValue) async {
+                          if (newValue == false) {
+                            await showDialog(
+                              context: context,
+                              builder: (context) {
+                                return CustomAlert(
+                                  leadingIcon: Icon(Icons.warning),
+                                  title: "Warning",
+                                  content: "Disabling audio conversion will disable Tags & Artwork writting",
+                                  actions: <Widget>[
+                                    FlatButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      child: Text("OK"),
+                                    )
+                                  ],
+                                );
+                              }
+                            );
+                          }
                           appData.enableAudioConvertion = newValue;
                         },
                       ),
@@ -439,7 +458,25 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                               value: 'MP3',
                             ),
                           ],
-                          onChanged: (String value) {
+                          onChanged: (String value) async {
+                            if (value == "OGG Vorbis") {
+                              await showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return CustomAlert(
+                                    leadingIcon: Icon(Icons.warning),
+                                    title: "Warning",
+                                    content: "OGG doesn't support Artwork writting yet!",
+                                    actions: <Widget>[
+                                      FlatButton(
+                                        onPressed: () => Navigator.pop(context),
+                                        child: Text("OK"),
+                                      )
+                                    ],
+                                  );
+                                }
+                              );
+                            }
                             appData.audioConvertFormat = value;
                           },
                           value: appData.audioConvertFormat,
