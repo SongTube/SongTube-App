@@ -7,6 +7,7 @@ import 'package:songtube/provider/media_provider.dart';
 import 'package:songtube/provider/player_provider.dart';
 import 'package:songtube/internal/models/downloadinfoset.dart';
 import 'package:songtube/internal/models/enums.dart';
+import 'package:songtube/internal/native.dart';
 
 // Packages
 import 'package:provider/provider.dart';
@@ -88,6 +89,9 @@ class _DownloadTabState extends State<DownloadTab> {
                       onTilePlay: () {
                         if (infoset.downloadPath != null && infoset.downloadType == DownloadType.audio) {
                           audioPlayer.play(infoset.downloadPath);
+                        }
+                        if (infoset.downloadPath != null && infoset.downloadType == DownloadType.video) {
+                          NativeMethod.openVideo(infoset.downloadPath);
                         }
                       }
                     ),

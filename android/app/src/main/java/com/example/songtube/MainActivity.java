@@ -28,6 +28,7 @@ public class MainActivity extends FlutterActivity {
   private static final String CHANNEL = "sharedTextChannel";
   private static final String CONVERTER_CHANNEL = "registerMedia";
   private static final String TAGS_CHANNEL = "tagsChannel";
+  private static final String INTENT_CHANNEL = "intentChannel";
   @Override
   public void configureFlutterEngine(@NonNull FlutterEngine flutterEngine) {
     GeneratedPluginRegistrant.registerWith(flutterEngine);
@@ -53,6 +54,18 @@ public class MainActivity extends FlutterActivity {
             }
           }
         );
+    new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), INTENT_CHANNEL)
+            .setMethodCallHandler(
+                    (call, result) -> {
+                        if (call.method.equals("openVideo")) {
+                            String videoPath = call.argument("videoPath");
+                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(videoPath));
+                            intent.setDataAndType(Uri.parse(videoPath), "video/*");
+                            startActivity(intent);
+                            result.success(0);
+                        }
+                    }
+            );
     new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), TAGS_CHANNEL)
             .setMethodCallHandler(
                     (call, result) -> {
