@@ -69,8 +69,8 @@ class CustomDownloadMenu extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(left: 22),
                   child: ListTile(
-                    leading: Icon(Icons.music_note),
-                    title: Text("Audio", style: TextStyle(color: Theme.of(context).textTheme.body1.color)),
+                    leading: Icon(Icons.music_note, color: Colors.redAccent),
+                    title: Text("Audio", style: TextStyle(color: Theme.of(context).textTheme.body1.color, fontWeight: FontWeight.w600)),
                     subtitle: Text("Download the audio from this video at maximum quality"),
                     trailing: Container(
                       decoration: BoxDecoration(
@@ -79,7 +79,7 @@ class CustomDownloadMenu extends StatelessWidget {
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
-                        child: Text("Download", style: TextStyle(color: Colors.white)),
+                        child: Text("Download", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
                       ),
                     ),
                     onTap: () => Navigator.pop(context, ["Audio", "null"]),
@@ -92,8 +92,8 @@ class CustomDownloadMenu extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(left: 22, right: MediaQuery.of(context).size.width*0.2),
                   child: ListTile(
-                    leading: Icon(Icons.videocam),
-                    title: Text("Video", style: TextStyle(color: Theme.of(context).textTheme.body1.color)),
+                    leading: Icon(Icons.videocam, color: Colors.redAccent),
+                    title: Text("Video", style: TextStyle(color: Theme.of(context).textTheme.body1.color, fontWeight: FontWeight.w600)),
                     subtitle: Text("Download video at selected quality bellow"),
                     onTap: () {},
                   ),
