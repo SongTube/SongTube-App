@@ -155,7 +155,7 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
         elevation: 0,
         backgroundColor: appData.screenIndex == 2
           ? Colors.redAccent
-          : Theme.of(context).canvasColor,
+          : Colors.transparent,
         centerTitle: true,
         leading: appData.screenIndex == 2
           ? Container()
