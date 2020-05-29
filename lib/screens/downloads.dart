@@ -41,7 +41,6 @@ class _DownloadTabState extends State<DownloadTab> {
                   width: MediaQuery.of(context).size.width*0.6,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-                    color: Theme.of(context).cardColor
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(40.0),
@@ -56,7 +55,8 @@ class _DownloadTabState extends State<DownloadTab> {
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ),
                         SizedBox(height: 4),
-                        Text("All your downloads will be shown here", textAlign: TextAlign.center)
+                        Text("All your downloads will be shown here", textAlign: TextAlign.center),
+                        SizedBox(height: 50),
                       ],
                     ),
                   ),
