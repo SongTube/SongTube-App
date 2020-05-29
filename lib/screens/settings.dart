@@ -212,6 +212,7 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                                     borderRadius: BorderRadius.circular(20.0),
                                   ),
                                   child: DirectoryExplorer(
+                                    backgroundColor: Theme.of(context).canvasColor,
                                     rootPath: dir,
                                     title: "Select a Folder",
                                     itemPrefix: Icon(Icons.folder),
@@ -253,6 +254,7 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                                     borderRadius: BorderRadius.circular(20.0),
                                   ),
                                   child: DirectoryExplorer(
+                                    backgroundColor: Theme.of(context).canvasColor,
                                     rootPath: dir,
                                     title: "Select a Folder",
                                     itemPrefix: Icon(Icons.folder),
