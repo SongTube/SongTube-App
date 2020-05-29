@@ -41,7 +41,7 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
 
   // Constants
   static const String _appName = "SongTube";
-  static const String _navigateTitle = "youtube.com";
+  static const String _navigateTitle = "Youtube";
   static const String _navigateSelectedUrl = "https://youtube.com";
 
   // Local Variables
@@ -107,6 +107,7 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
 
   @override
   Widget build(BuildContext context) {
+    AppDataProvider appData = Provider.of<AppDataProvider>(context);
     Brightness _themeBrightness = Theme.of(context).brightness;
     Brightness _systemBrightness = Theme.of(context).brightness;
     Brightness _statusBarBrightness = _systemBrightness == Brightness.light
@@ -116,21 +117,49 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
       SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         statusBarBrightness: _statusBarBrightness,
-        statusBarIconBrightness: _statusBarBrightness,
-        systemNavigationBarColor: Theme.of(context).scaffoldBackgroundColor,
-        systemNavigationBarIconBrightness: _themeBrightness,
+        statusBarIconBrightness: appData.screenIndex == 2 ? Brightness.light : _statusBarBrightness,
+        systemNavigationBarColor: appData.screenIndex == 2 ? Colors.redAccent : Theme.of(context).scaffoldBackgroundColor,
+        systemNavigationBarIconBrightness: _themeBrightness
       ),
     );
-    AppDataProvider appData = Provider.of<AppDataProvider>(context);
     Player audioPlayer = Provider.of<Player>(context);
     appSnack = new AppSnack(scaffoldKey: appData.libraryScaffoldKey, context: context);
     return Scaffold(
       key: appData.libraryScaffoldKey,
       appBar: AppBar(
-        title: Text(_appBarTitle[appData.screenIndex], style: TextStyle(color: Theme.of(context).textTheme.body1.color)),
+        title: appData.screenIndex == 2
+          ? Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Icon(MdiIcons.youtube, color: Colors.white),
+                SizedBox(width: 4),
+                Text(
+                  _appBarTitle[appData.screenIndex],
+                  style: TextStyle(
+                    color: appData.screenIndex == 2
+                    ? Colors.white
+                    : Theme.of(context).textTheme.body1.color
+                  )
+                )
+              ],
+            )
+          : Text(
+              _appBarTitle[appData.screenIndex],
+              style: TextStyle(
+                color: appData.screenIndex == 2
+                ? Colors.white
+                : Theme.of(context).textTheme.body1.color
+              )
+            ),
         elevation: 0,
-        backgroundColor: Theme.of(context).canvasColor,
+        backgroundColor: appData.screenIndex == 2
+          ? Colors.redAccent
+          : Theme.of(context).canvasColor,
         centerTitle: true,
+        leading: appData.screenIndex == 2
+          ? Container()
+          : null,
         iconTheme: new IconThemeData(color: Theme.of(context).iconTheme.color),
         actions: <Widget>[
           AnimatedOpacity(
@@ -176,7 +205,7 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
                 child: AnimatedOpacity(
                   duration: Duration(milliseconds: 300),
                   opacity: appData.screenIndex == 2 ? 1.0 : 0.0,
-                  child: appData.screenIndex == 2 ? Navigate(_navigateSelectedUrl) : Container(),
+                  child: appData.screenIndex == 2 ? Navigate() : Container(),
                 )
               ),
               IgnorePointer(

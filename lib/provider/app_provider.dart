@@ -37,6 +37,8 @@ class AppDataProvider extends ChangeNotifier {
   // Download paths
   String _audioDownloadPath;
   String _videoDownloadPath;
+  // Use Youtube Webview
+  bool _useYoutubeWebview = false;
 
   Color get accentColor => _accentColor;
   bool get systemThemeAvailable => _systemThemeAvailable;
@@ -54,6 +56,8 @@ class AppDataProvider extends ChangeNotifier {
   // Download paths
   String get audioDownloadPath => _audioDownloadPath;
   String get videoDownloadPath => _videoDownloadPath;
+  // Use Youtube Webview
+  bool get useYoutubeWebview => _useYoutubeWebview;
 
   set systemThemeAvailable(bool value){
     _systemThemeAvailable = value;
@@ -108,6 +112,7 @@ class AppDataProvider extends ChangeNotifier {
     audioConvertFormat = preferences.getAudioConvertingFormat();
     audioDownloadPath = preferences.getAudioDownloadPath();
     videoDownloadPath = preferences.getVideoDownloadPath();
+    useYoutubeWebview = true;
   }
 
   // Library
@@ -132,6 +137,13 @@ class AppDataProvider extends ChangeNotifier {
   set videoDownloadPath(String path) {
     _videoDownloadPath = path;
     preferences.saveVideoDownloadPath(path);
+    notifyListeners();
+  }
+
+  // Use Youtube Webview
+  set useYoutubeWebview(bool value) {
+    _useYoutubeWebview = value;
+    preferences.saveUseYoutubeWebview(value);
     notifyListeners();
   }
 

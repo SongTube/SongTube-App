@@ -271,6 +271,75 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
             // ------------------
 
             // ------------------
+            // Screens Settings
+            // ------------------
+            /*Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                color: Theme.of(context).cardColor,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            top: 12,
+                            left: 16,
+                            bottom: 4
+                          ),
+                          child: Icon(Icons.file_download, color: Theme.of(context).iconTheme.color),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            top: 12,
+                            left: 8,
+                            bottom: 4
+                          ),
+                          child: Text(
+                            "Downloads",
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.w600
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Divider(indent: 8, endIndent: 8),
+                    Divider(color: Colors.transparent),
+                    ListTile(
+                      title: Text(
+                        "Use Webview for Youtube",
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.body1.color,
+                          fontWeight: FontWeight.w500
+                        ),
+                      ),
+                      subtitle: Text("Youtube Screen will be replaced with a \"youtube.com\" WebView",
+                        style: TextStyle(fontSize: 12)
+                      ),
+                      trailing: CircularCheckBox(
+                        activeColor: Colors.redAccent,
+                        value: appData.useYoutubeWebview,
+                        onChanged: (bool newValue) {
+                          appData.useYoutubeWebview = newValue;
+                        },
+                      ),
+                    ),
+                    Divider(color: Colors.transparent),
+                  ],
+                ),
+              ),
+            ),*/
+            // ------------------
+            // Screens Settings
+            // ------------------
+
+            // ------------------
             // Converter Settings
             // ------------------
             Padding(

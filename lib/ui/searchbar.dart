@@ -11,6 +11,9 @@ class SearchBar extends StatefulWidget {
   final Function onTextChanged;
   final Function onSearchPressed;
   final double indicatorValue;
+  final bool enablePasteButton;
+  final String hintText;
+  final Icon prefixIcon;
   SearchBar({
     this.padding = const EdgeInsets.only(left: 8, right: 8, bottom: 8),
     @required this.containerColor,
@@ -18,8 +21,11 @@ class SearchBar extends StatefulWidget {
     @required this.controller,
     @required this.focusNode,
     this.onTextChanged,
+    this.enablePasteButton: true,
     @required this.onSearchPressed,
-    this.indicatorValue
+    this.indicatorValue,
+    @required this.hintText,
+    this.prefixIcon
   });
   @override
   _SearchBarState createState() => _SearchBarState();
@@ -53,10 +59,10 @@ class _SearchBarState extends State<SearchBar> {
                       focusNode: widget.focusNode,
                       controller: widget.controller,
                       decoration: InputDecoration(
-                        contentPadding: EdgeInsets.only(top: 15),
-                        prefixIcon: Icon(Icons.https,
-                          color: Theme.of(context).iconTheme.color
-                        ),
+                        contentPadding: widget.prefixIcon != null
+                          ? EdgeInsets.only(top: 15)
+                          : EdgeInsets.only(top: 15, left: 8),
+                        prefixIcon: widget.prefixIcon != null ? widget.prefixIcon : null,
                         filled: true,
                         fillColor: widget.textfieldColor,
                         border: OutlineInputBorder(
@@ -66,7 +72,7 @@ class _SearchBarState extends State<SearchBar> {
                             style: BorderStyle.none,
                           ),
                         ),
-                        hintText: "URL",
+                        hintText: widget.hintText,
                         suffixIcon: AnimatedOpacity (
                           duration: Duration(milliseconds: 200),
                           opacity: widget.controller.text == "" ? 0.0 : 1.0,
@@ -91,17 +97,19 @@ class _SearchBarState extends State<SearchBar> {
                     ),
                   ),
                   // ClipBoard Paste Button
-                  Center(
-                    child: IconButton(
-                      icon: Icon(Icons.content_paste),
-                      onPressed: () async {
-                        ClipboardData data = await Clipboard.getData('text/plain');
-                        if (data == null) return;
-                        setState(() => widget.controller.text = data.text);
-                        FocusScope.of(context).unfocus();
-                      },
-                    ),
-                  ),
+                  widget.enablePasteButton
+                    ? Center(
+                      child: IconButton(
+                        icon: Icon(Icons.content_paste),
+                        onPressed: () async {
+                          ClipboardData data = await Clipboard.getData('text/plain');
+                          if (data == null) return;
+                          setState(() => widget.controller.text = data.text);
+                          FocusScope.of(context).unfocus();
+                        },
+                      ),
+                    )
+                    : Container(),
                   // Start Searching Button
                   Center(
                     child: IconButton(

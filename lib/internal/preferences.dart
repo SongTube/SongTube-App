@@ -19,6 +19,7 @@ String enableVideoConvertion= "enable_video_convertion";
 String audioConvertingFormat = "audio_converting_format";
 String audioDownloadPath = "audio_download_path";
 String videoDownloadPath = "video_download_path";
+String useYoutubeWebview = "use_youtube_webview";
 
 class Preferences {
   SharedPreferences prefs;
@@ -109,6 +110,14 @@ class Preferences {
 
   void saveVideoDownloadPath(String path) {
     prefs.setString(videoDownloadPath, path);
+  }
+
+  bool getUseYoutubeWebview() {
+    return prefs.getBool(useYoutubeWebview) ?? false;
+  }
+
+  void saveUseYoutubeWebview(bool value) {
+    prefs.setBool(useYoutubeWebview, value);
   }
 
 }

@@ -175,6 +175,10 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
       body: Column(
         children: <Widget>[
           SearchBar(
+            prefixIcon: Icon(Icons.https,
+              color: Theme.of(context).iconTheme.color
+            ),
+            hintText: "URL",
             indicatorValue: _moveSearchProgress == true ? null : 0.0,
             focusNode: _focusNodes.urlFocusNode,
             controller: _textControllers.urlController,
