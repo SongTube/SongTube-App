@@ -659,7 +659,10 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                 context: context,
                 builder: (context) {
                   return CustomDownloadMenu(
-                    videoList: videoList
+                    videoList: videoList,
+                    onSettingsPressed: () {
+
+                    },
                   );
                 }
               );

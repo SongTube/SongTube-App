@@ -6,8 +6,10 @@ import 'package:youtube_explode_dart/youtube_explode_dart.dart' as youtube;
 
 class CustomDownloadMenu extends StatelessWidget {
   final List<youtube.VideoStreamInfo> videoList;
+  final Function onSettingsPressed;
   CustomDownloadMenu({
     @required this.videoList,
+    @required this.onSettingsPressed
   });
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,7 @@ class CustomDownloadMenu extends StatelessWidget {
               children: <Widget> [
                 Text("Download", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
                 Spacer(),
-                /*Container(
+                Container(
                   decoration: BoxDecoration(
                     color: Colors.redAccent,
                     borderRadius: BorderRadius.circular(30)
@@ -29,16 +31,12 @@ class CustomDownloadMenu extends StatelessWidget {
                   child: Row(
                     children: <Widget>[
                       IconButton(
-                        icon: Icon(Icons.folder, color: Colors.white),
-                        onPressed: () {
-                          // TODO: SHOW DIALOG TO CHANGE DOWNLOAD FOLDER
-                        },
+                        icon: Icon(Icons.settings, color: Colors.white),
+                        onPressed: onSettingsPressed,
                       ),
-                      Text("Default folder", style: TextStyle(color: Colors.white)),
-                      SizedBox(width: 16)
                     ],
                   ),
-                ),*/
+                ),
                 IconButton(
                   icon: Icon(Icons.clear),
                   onPressed: () {
