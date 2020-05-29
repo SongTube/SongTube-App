@@ -683,7 +683,16 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
               );
               if (response == null) return;
               MediaMetaData metadata = new MediaMetaData(
-                _textControllers.titleController.text,
+                _textControllers.titleController.text
+                  .replaceAll('Container.', '')
+                  .replaceAll(r'\', '')
+                  .replaceAll('/', '')
+                  .replaceAll('*', '')
+                  .replaceAll('?', '')
+                  .replaceAll('"', '')
+                  .replaceAll('<', '')
+                  .replaceAll('>', '')
+                  .replaceAll('|', ''),
                 _textControllers.albumController.text,
                 _textControllers.artistController.text,
                 _textControllers.genreController.text,
