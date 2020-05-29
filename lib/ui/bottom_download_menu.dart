@@ -18,12 +18,13 @@ class CustomDownloadMenu extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(left: 22, right: 8, top: 16),
+            padding: const EdgeInsets.only(left: 22, right: 8, top: 12),
             child: Row(
               children: <Widget> [
                 Text("Download", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
                 Spacer(),
                 Container(
+                  padding: EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     color: Colors.redAccent,
                     borderRadius: BorderRadius.circular(30)
@@ -57,7 +58,7 @@ class CustomDownloadMenu extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 16),
+            padding: EdgeInsets.only(top: 12),
             child: SizedBox(height: 1, child: Divider(indent: 16, endIndent: 16)),
           ),
           Expanded(
