@@ -11,6 +11,7 @@ import 'package:songtube/provider/app_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:ext_storage/ext_storage.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // UI
 import 'package:songtube/ui/reusable/alertdialog.dart';
@@ -597,18 +598,83 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                 ),
               ),
             ),
-            Theme(
-              data: ThemeData(
-                textTheme: TextTheme(
-                  body1: Theme.of(context).textTheme.body1,
-                )
-              ),
+            GestureDetector(
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AboutDialog(
+                      applicationIcon: Image.asset('assets/images/ic_launcher.png', width: 50, height: 50),
+                      applicationName: "SongTube",
+                      applicationVersion: "2.0.0+0",
+                      children: <Widget>[
+                        GestureDetector(
+                          onTap: () => launch("https://github.com/SongTube"),
+                          child: Container(
+                            padding: EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Theme.of(context).cardColor
+                            ),
+                            child: Row(
+                              children: <Widget>[
+                                Icon(MdiIcons.github),
+                                SizedBox(width: 10),
+                                Text("GitHub Page", style: TextStyle(
+                                  color: Theme.of(context).textTheme.bodyText1.color,
+                                ))
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        GestureDetector(
+                          onTap: () => launch("https://t.me/songtubechannel"),
+                          child: Container(
+                            padding: EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Theme.of(context).cardColor
+                            ),
+                            child: Row(
+                              children: <Widget>[
+                                Icon(MdiIcons.telegram),
+                                SizedBox(width: 10),
+                                Text("Telegram Channel", style: TextStyle(
+                                  color: Theme.of(context).textTheme.bodyText1.color,
+                                ))
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    );
+                  }
+                );
+              },
               child: Center(
-                child: Column(
-                  children: <Widget>[
-                    Text("SongTube: build 1.6.5+5"),
-                    Text("By: Artx <artx4dev@gmail.com>")
-                  ],
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).cardColor,
+                    borderRadius: BorderRadius.circular(20)
+                  ),
+                  height: kToolbarHeight,
+                  width: MediaQuery.of(context).size.width*0.5,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      SizedBox(width: 4),
+                      Icon(MdiIcons.informationOutline, color: Colors.redAccent),
+                      SizedBox(width: 4),
+                      Text("About SongTube",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600
+                        ),
+                      ),
+                      SizedBox(width: 4),
+                    ],
+                  ),
                 )
               ),
             )
