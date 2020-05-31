@@ -25,21 +25,24 @@ class DrawerLayout extends StatelessWidget{
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: headerColor
-              ),
-              child: Column(
-                children: <Widget>[
-                  SizedBox(height: kTextTabBarHeight*1.3),
-                  Image.asset('assets/images/ic_launcher.png', width: 130, height: 130),
-                  title == null
-                    ? Container()
-                    : title,
-                  SizedBox(height: kTextTabBarHeight*1.3),
-                ],
+            Padding(
+              padding: const EdgeInsets.only(top: 30, left: 15, right: 15),
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(40),
+                  color: headerColor
+                ),
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(height: kTextTabBarHeight*1.3),
+                    Image.asset('assets/images/ic_launcher.png', width: 130, height: 130),
+                    title == null
+                      ? Container()
+                      : title,
+                    SizedBox(height: kTextTabBarHeight*1.3),
+                  ],
+                ),
               ),
             ),
             Expanded(

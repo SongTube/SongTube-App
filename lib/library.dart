@@ -233,10 +233,11 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
         title: Text("SongTube", style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700)),
         children: <Widget>[
           DrawerItem(
-            title: Text("Home", style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color)),
+            title: Text("Home", style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color,
+             fontSize: 16, fontWeight: FontWeight.w600)),
             backgroundColor: Theme.of(context).tabBarTheme.labelColor,
-            leadingIcon: Icons.home,
-            leadingIconColor: Colors.blueAccent,
+            leadingIcon: MdiIcons.home,
+            leadingIconColor: Colors.blue,
             onTap: () {
               Navigator.pop(context);
               setState(() {
@@ -246,10 +247,11 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
           ),
           SizedBox(height: 14),
           DrawerItem(
-            title: Text("Downloads", style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color)),
+            title: Text("Downloads", style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color,
+             fontSize: 16, fontWeight: FontWeight.w600)),
             backgroundColor: Theme.of(context).tabBarTheme.labelColor,
-            leadingIcon: Icons.file_download,
-            leadingIconColor: Colors.greenAccent,
+            leadingIcon: MdiIcons.download,
+            leadingIconColor: Colors.green,
             onTap: () {
               Navigator.pop(context);
               setState(() {
@@ -259,10 +261,11 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
           ),
           SizedBox(height: 14),
           DrawerItem(
-            title: Text("Youtube", style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color)),
+            title: Text("Youtube", style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color,
+             fontSize: 16, fontWeight: FontWeight.w600)),
             backgroundColor: Theme.of(context).tabBarTheme.labelColor,
-            leadingIcon: Icons.play_arrow,
-            leadingIconColor: Colors.redAccent,
+            leadingIcon: MdiIcons.play,
+            leadingIconColor: Colors.red,
             onTap: () async {
               Navigator.pop(context);
               setState(() {

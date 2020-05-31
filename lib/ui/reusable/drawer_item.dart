@@ -13,7 +13,7 @@ class DrawerItem extends StatelessWidget{
 
   DrawerItem({
     this.padding = const EdgeInsets.only(left: 14, right: 14),
-    this.borderRadius = const BorderRadius.all(Radius.circular(20)),
+    this.borderRadius = const BorderRadius.all(Radius.circular(30)),
     @required this.backgroundColor,
     @required this.leadingIcon,
     @required this.leadingIconColor,
@@ -25,16 +25,21 @@ class DrawerItem extends StatelessWidget{
   Widget build(BuildContext context) {
     return Padding(
       padding: padding,
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: borderRadius,
-          color: backgroundColor
-        ),
-        child: ListTile(
-          leading: Icon(leadingIcon, color: leadingIconColor),
-          title: title,
-          onTap: onTap
-        ),
+      child: Row(
+        children: <Widget>[
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: borderRadius,
+              color: backgroundColor
+            ),
+            child: IconButton(
+              icon: Icon(leadingIcon, color: leadingIconColor),
+              onPressed: () {},
+            ),
+          ),
+          SizedBox(width: 16),
+          title
+        ],
       ),
     );
   }
