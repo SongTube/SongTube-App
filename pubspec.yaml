@@ -32,7 +32,8 @@ dependencies:
   http: any
   youtube_explode_dart:
     git:
-      url: git://github.com/hahai96/youtube_explode_dart.git
+      url: git://github.com/SongTube/youtube_explode_dart.git
+      ref: master
   ext_storage: ^1.0.3
   permission_handler: ^5.0.0+hotfix.3
   youtube_player_flutter: ^6.1.0+7
