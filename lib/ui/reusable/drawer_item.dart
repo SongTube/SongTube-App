@@ -23,23 +23,26 @@ class DrawerItem extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: padding,
-      child: Row(
-        children: <Widget>[
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: borderRadius,
-              color: backgroundColor
+    return GestureDetector(
+      onTap: onTap,
+      child: Padding(
+        padding: padding,
+        child: Row(
+          children: <Widget>[
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: borderRadius,
+                color: backgroundColor
+              ),
+              child: IconButton(
+                icon: Icon(leadingIcon, color: leadingIconColor),
+                onPressed: onTap,
+              ),
             ),
-            child: IconButton(
-              icon: Icon(leadingIcon, color: leadingIconColor),
-              onPressed: () {},
-            ),
-          ),
-          SizedBox(width: 16),
-          title
-        ],
+            SizedBox(width: 16),
+            title
+          ],
+        ),
       ),
     );
   }
