@@ -11,11 +11,11 @@ import 'package:songtube/provider/app_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:ext_storage/ext_storage.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // UI
 import 'package:songtube/ui/reusable/alertdialog.dart';
 import 'package:songtube/ui/reusable/directory_picker.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class SettingsTab extends StatefulWidget {
   @override
