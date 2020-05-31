@@ -607,7 +607,7 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
               child: Center(
                 child: Column(
                   children: <Widget>[
-                    Text("SongTube: build 1.6.0+2"),
+                    Text("SongTube: build 1.6.5+5"),
                     Text("By: Artx <artx4dev@gmail.com>")
                   ],
                 )
