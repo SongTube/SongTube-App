@@ -70,7 +70,7 @@ class CustomDownloadMenu extends StatelessWidget {
                   padding: EdgeInsets.only(left: 22),
                   child: ListTile(
                     leading: Icon(Icons.music_note, color: Colors.redAccent),
-                    title: Text("Audio", style: TextStyle(color: Theme.of(context).textTheme.body1.color, fontWeight: FontWeight.w600)),
+                    title: Text("Audio", style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color, fontWeight: FontWeight.w600)),
                     subtitle: Text("Download the audio from this video at maximum quality"),
                     trailing: Container(
                       decoration: BoxDecoration(
@@ -93,7 +93,7 @@ class CustomDownloadMenu extends StatelessWidget {
                   padding: EdgeInsets.only(left: 22, right: MediaQuery.of(context).size.width*0.2),
                   child: ListTile(
                     leading: Icon(Icons.videocam, color: Colors.redAccent),
-                    title: Text("Video", style: TextStyle(color: Theme.of(context).textTheme.body1.color, fontWeight: FontWeight.w600)),
+                    title: Text("Video", style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color, fontWeight: FontWeight.w600)),
                     subtitle: Text("Download video at selected quality bellow"),
                     onTap: () {},
                   ),
@@ -109,7 +109,7 @@ class CustomDownloadMenu extends StatelessWidget {
                         children: <Widget>[
                           Text(
                             "Quality: ",
-                            style: TextStyle(color: Theme.of(context).textTheme.body1.color, fontSize: 17, fontWeight: FontWeight.w700),
+                            style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color, fontSize: 17, fontWeight: FontWeight.w700),
                           ),
                           Text(
                             videoList[index].videoResolution.toString() + " " +

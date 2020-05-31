@@ -219,7 +219,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                               child: Text(
                                 "Nothing here yet!",
                                 style: TextStyle(
-                                  color: Theme.of(context).textTheme.body1.color,
+                                  color: Theme.of(context).textTheme.bodyText1.color,
                                   fontWeight: FontWeight.w600
                                 )
                               ),
@@ -376,7 +376,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                               _metadata.title.toString(),
                               style: TextStyle(
                                 fontSize: 20,
-                                color: Theme.of(context).textTheme.body1.color
+                                color: Theme.of(context).textTheme.bodyText1.color
                               ),
                               overflow: TextOverflow.fade,
                               softWrap: true,
@@ -389,7 +389,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                             child: Text(
                               _metadata.artist.toString(),
                               style: TextStyle(
-                                color: Theme.of(context).textTheme.body1.color
+                                color: Theme.of(context).textTheme.bodyText1.color
                               ),
                             ),
                           ),
@@ -425,7 +425,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                     labelText: "Title",
                                   ),
                                   style: TextStyle(
-                                    color: Theme.of(context).textTheme.body1.color,
+                                    color: Theme.of(context).textTheme.bodyText1.color,
                                     fontSize: 14
                                   ),
                                 ),
@@ -456,7 +456,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                           focusColor: Colors.redAccent,
                                         ),
                                         style: TextStyle(
-                                          color: Theme.of(context).textTheme.body1.color,
+                                          color: Theme.of(context).textTheme.bodyText1.color,
                                           fontSize: 14
                                         ),
                                       ),
@@ -484,7 +484,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                           labelText: "Artist",
                                         ),
                                         style: TextStyle(
-                                          color: Theme.of(context).textTheme.body1.color,
+                                          color: Theme.of(context).textTheme.bodyText1.color,
                                           fontSize: 14
                                         ),
                                       ),
@@ -517,7 +517,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                           labelText: "Genre",
                                         ),
                                         style: TextStyle(
-                                          color: Theme.of(context).textTheme.body1.color,
+                                          color: Theme.of(context).textTheme.bodyText1.color,
                                           fontSize: 14
                                         ),
                                       ),
@@ -547,7 +547,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                           focusColor: Colors.redAccent,
                                         ),
                                         style: TextStyle(
-                                          color: Theme.of(context).textTheme.body1.color,
+                                          color: Theme.of(context).textTheme.bodyText1.color,
                                           fontSize: 14
                                         ),
                                       ),
@@ -584,7 +584,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                           labelText: "Disk",
                                         ),
                                         style: TextStyle(
-                                          color: Theme.of(context).textTheme.body1.color,
+                                          color: Theme.of(context).textTheme.bodyText1.color,
                                           fontSize: 14
                                         ),
                                       ),
@@ -617,7 +617,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                           focusColor: Colors.redAccent,
                                         ),
                                         style: TextStyle(
-                                          color: Theme.of(context).textTheme.body1.color,
+                                          color: Theme.of(context).textTheme.bodyText1.color,
                                           fontSize: 14
                                         ),
                                       ),

@@ -92,7 +92,7 @@ class _SearchBarState extends State<SearchBar> {
                       ),
                       onChanged: widget.onTextChanged,
                       style: TextStyle(
-                        color: Theme.of(context).textTheme.body1.color,
+                        color: Theme.of(context).textTheme.bodyText1.color,
                       ),
                     ),
                   ),

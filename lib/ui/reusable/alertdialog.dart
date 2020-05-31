@@ -23,12 +23,12 @@ class CustomAlert extends StatelessWidget {
           leadingIcon,
           SizedBox(width: 6),
           Text(title, style: TextStyle(
-            color: Theme.of(context).textTheme.body1.color
+            color: Theme.of(context).textTheme.bodyText1.color
           )),
         ],
       ),
       content: Text(content, style: TextStyle(
-        color: Theme.of(context).textTheme.body1.color
+        color: Theme.of(context).textTheme.bodyText1.color
       )),
       actions: actions
     );

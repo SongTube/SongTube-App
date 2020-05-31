@@ -1,9 +1,5 @@
-// Dart
-import 'dart:async';
-
 // Flutter
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/provider/app_provider.dart';
 import 'package:songtube/ui/searchbar.dart';

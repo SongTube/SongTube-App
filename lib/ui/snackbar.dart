@@ -111,13 +111,13 @@ class AppSnack {
                 title,
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
-                  color: Theme.of(context).textTheme.body1.color
+                  color: Theme.of(context).textTheme.bodyText1.color
                 )
               ),
               Text(
                 message,
                 style: TextStyle(
-                  color: Theme.of(context).textTheme.body1.color
+                  color: Theme.of(context).textTheme.bodyText1.color
                 )
               ),
               SizedBox(height: 4),
@@ -158,13 +158,13 @@ class AppSnack {
                 'Error',
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
-                  color: Theme.of(context).textTheme.body1.color
+                  color: Theme.of(context).textTheme.bodyText1.color
                 )
               ),
               Text(
                 'Check your Internet Connection',
                 style: TextStyle(
-                  color: Theme.of(context).textTheme.body1.color
+                  color: Theme.of(context).textTheme.bodyText1.color
                 )
               ),
               SizedBox(height: 4),

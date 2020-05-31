@@ -11,11 +11,11 @@ import 'package:songtube/provider/app_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:ext_storage/ext_storage.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 // UI
 import 'package:songtube/ui/reusable/alertdialog.dart';
 import 'package:songtube/ui/reusable/directory_picker.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsTab extends StatefulWidget {
   @override
@@ -85,7 +85,7 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                       title: Text(
                         "Use System Theme",
                         style: TextStyle(
-                          color: Theme.of(context).textTheme.body1.color,
+                          color: Theme.of(context).textTheme.bodyText1.color,
                           fontWeight: FontWeight.w500
                         ),
                       ),
@@ -108,7 +108,7 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                           title: Text(
                             "Enable Dark Theme",
                             style: TextStyle(
-                              color: Theme.of(context).textTheme.body1.color,
+                              color: Theme.of(context).textTheme.bodyText1.color,
                               fontWeight: FontWeight.w500
                             ),
                           ),
@@ -128,7 +128,7 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                       title: Text(
                         "Enable Black Theme",
                         style: TextStyle(
-                          color: Theme.of(context).textTheme.body1.color,
+                          color: Theme.of(context).textTheme.bodyText1.color,
                           fontWeight: FontWeight.w500
                         ),
                       ),
@@ -194,7 +194,7 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                       title: Text(
                         "Audio Download Path",
                         style: TextStyle(
-                          color: Theme.of(context).textTheme.body1.color,
+                          color: Theme.of(context).textTheme.bodyText1.color,
                           fontWeight: FontWeight.w500
                         ),
                       ),
@@ -236,7 +236,7 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                       title: Text(
                         "Video Download Path",
                         style: TextStyle(
-                          color: Theme.of(context).textTheme.body1.color,
+                          color: Theme.of(context).textTheme.bodyText1.color,
                           fontWeight: FontWeight.w500
                         ),
                       ),
@@ -278,7 +278,7 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                       title: Text(
                         "Clear Temporal Folder",
                         style: TextStyle(
-                          color: Theme.of(context).textTheme.body1.color,
+                          color: Theme.of(context).textTheme.bodyText1.color,
                           fontWeight: FontWeight.w500
                         ),
                       ),
@@ -406,7 +406,7 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                       title: Text(
                         "Use Webview for Youtube",
                         style: TextStyle(
-                          color: Theme.of(context).textTheme.body1.color,
+                          color: Theme.of(context).textTheme.bodyText1.color,
                           fontWeight: FontWeight.w500
                         ),
                       ),
@@ -475,7 +475,7 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                       title: Text(
                         "Convert Audio",
                         style: TextStyle(
-                          color: Theme.of(context).textTheme.body1.color,
+                          color: Theme.of(context).textTheme.bodyText1.color,
                           fontWeight: FontWeight.w500
                         ),
                       ),
@@ -513,7 +513,7 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                       title: Text(
                         "Audio Conversion Format",
                         style: TextStyle(
-                          color: Theme.of(context).textTheme.body1.color,
+                          color: Theme.of(context).textTheme.bodyText1.color,
                           fontWeight: FontWeight.w500
                         ),
                       ),
@@ -525,21 +525,21 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                           items: [
                             DropdownMenuItem<String>(
                               child: Text('AAC (.m4a)', style: TextStyle(
-                                color: Theme.of(context).textTheme.body1.color,
+                                color: Theme.of(context).textTheme.bodyText1.color,
                                 fontWeight: FontWeight.w500
                               )),
                               value: 'AAC',
                             ),
                             DropdownMenuItem<String>(
                               child: Text('OGG (.ogg)', style: TextStyle(
-                                color: Theme.of(context).textTheme.body1.color,
+                                color: Theme.of(context).textTheme.bodyText1.color,
                                 fontWeight: FontWeight.w500
                               )),
                               value: 'OGG Vorbis',
                             ),
                             DropdownMenuItem<String>(
                               child: Text('MP3 (.mp3)', style: TextStyle(
-                                color: Theme.of(context).textTheme.body1.color,
+                                color: Theme.of(context).textTheme.bodyText1.color,
                                 fontWeight: FontWeight.w500
                               )),
                               value: 'MP3',
@@ -577,7 +577,7 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                       title: Text(
                         "Convert Video",
                         style: TextStyle(
-                          color: Theme.of(context).textTheme.body1.color,
+                          color: Theme.of(context).textTheme.bodyText1.color,
                           fontWeight: FontWeight.w500
                         ),
                       ),

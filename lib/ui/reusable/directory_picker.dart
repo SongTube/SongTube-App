@@ -112,7 +112,7 @@ class _DirectoryExplorerState extends State<DirectoryExplorer> with TickerProvid
                     title: Text(
                       basename(list[index].path),
                       style: TextStyle(
-                        color: Theme.of(context).textTheme.body1.color,
+                        color: Theme.of(context).textTheme.bodyText1.color,
                         fontSize: 14
                       ),
                       maxLines: 1,

@@ -4,9 +4,6 @@ import 'dart:ui';
 // Flutter
 import 'package:flutter/material.dart';
 
-// Internal
-import 'package:songtube/provider/app_provider.dart';
-
 // Packages
 import 'package:provider/provider.dart';
 import 'package:songtube/provider/media_provider.dart';
@@ -16,7 +13,7 @@ void showToast(BuildContext context, String message, Duration duration) {
     SnackBar(
       backgroundColor: Theme.of(context).canvasColor,
       duration: duration,
-      content: Text(message, style: TextStyle(color: Theme.of(context).textTheme.body1.color),),
+      content: Text(message, style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color)),
   );
 }
 
@@ -59,13 +56,13 @@ Future<void> showCustomDialog(BuildContext context) async {
     backgroundColor: Theme.of(context).canvasColor,
     title: Text("DownTube",
       style: TextStyle(
-        color: Theme.of(context).textTheme.body1.color
+        color: Theme.of(context).textTheme.bodyText1.color
       ),
     ),
     content: Text(
       "Are you sure you want to cancel all downloads?",
       style: TextStyle(
-        color: Theme.of(context).textTheme.body1.color
+        color: Theme.of(context).textTheme.bodyText1.color
       ),
     ),
     actions: [
@@ -105,20 +102,20 @@ Future<void> showAlertDialog(BuildContext context, bool permanent) async {
     ),
     title: Text("DownTube",
       style: TextStyle(
-        color: Theme.of(context).textTheme.body1.color
+        color: Theme.of(context).textTheme.bodyText1.color
       ),
     ),
     content: permanent == false
         ? Text(
           "This application needs external storage permission to convert or download from YouTube or other sites",
           style: TextStyle(
-            color: Theme.of(context).textTheme.body1.color
+            color: Theme.of(context).textTheme.bodyText1.color
           ),
         )
         : Text(
           "External storage permission is permanently denied, please go to settings and enable it manually for this app to work...",
           style: TextStyle(
-            color: Theme.of(context).textTheme.body1.color
+            color: Theme.of(context).textTheme.bodyText1.color
           ),
         ),
     actions: [

@@ -113,15 +113,15 @@ class _DownloadTabState extends State<DownloadTab> {
               builder: (context) {
                 return AlertDialog(
                   title: Text("Warning", style: TextStyle(
-                    color: Theme.of(context).textTheme.body1.color
+                    color: Theme.of(context).textTheme.bodyText1.color
                   )),
                   content: Text("There are still downloads in progress, are you sure you wanna clear the downloads list?", style: TextStyle(
-                    color: Theme.of(context).textTheme.body1.color
+                    color: Theme.of(context).textTheme.bodyText1.color
                   )),
                   actions: <Widget>[
                     FlatButton(
                       child: Text("OK", style: TextStyle(
-                        color: Theme.of(context).textTheme.body1.color
+                        color: Theme.of(context).textTheme.bodyText1.color
                       )),
                       onPressed: () {
                         mediaProvider.downloadInfoSetList.forEach((element) {
@@ -134,7 +134,7 @@ class _DownloadTabState extends State<DownloadTab> {
                     ),
                     FlatButton(
                       child: Text("Cancel", style: TextStyle(
-                        color: Theme.of(context).textTheme.body1.color
+                        color: Theme.of(context).textTheme.bodyText1.color
                       )),
                       onPressed: () => Navigator.pop(context),
                     )

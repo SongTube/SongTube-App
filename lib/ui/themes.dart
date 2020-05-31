@@ -11,8 +11,17 @@ class AppTheme {
         color: Colors.grey[700]
       ),
       textTheme: TextTheme(
-        body1: TextStyle(
-          color: Colors.black87
+        headline5: TextStyle(
+          color: Colors.black
+        ),
+        bodyText1: TextStyle(
+          color: Colors.black
+        ),
+        bodyText2: TextStyle(
+          color: Colors.black
+        ),
+        caption: TextStyle(
+          color: Colors.black
         ),
       ),
       scaffoldBackgroundColor: Color.fromARGB(255, 247, 247, 247),
@@ -37,7 +46,16 @@ class AppTheme {
         color: Colors.white
       ),
       textTheme: TextTheme(
-        body1: TextStyle(
+        headline5: TextStyle(
+          color: Colors.white
+        ),
+        bodyText1: TextStyle(
+          color: Colors.white
+        ),
+        bodyText2: TextStyle(
+          color: Colors.white
+        ),
+        caption: TextStyle(
           color: Colors.white
         ),
       ),
@@ -63,7 +81,16 @@ class AppTheme {
         color: Colors.white
       ),
       textTheme: TextTheme(
-        body1: TextStyle(
+        headline5: TextStyle(
+          color: Colors.white
+        ),
+        bodyText1: TextStyle(
+          color: Colors.white
+        ),
+        bodyText2: TextStyle(
+          color: Colors.white
+        ),
+        caption: TextStyle(
           color: Colors.white
         ),
       ),

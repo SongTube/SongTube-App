@@ -42,7 +42,6 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
   // Constants
   static const String _appName = "SongTube";
   static const String _navigateTitle = "Youtube";
-  static const String _navigateSelectedUrl = "https://youtube.com";
 
   // Local Variables
   DateTime currentBackPressTime;
@@ -139,7 +138,7 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
                   style: TextStyle(
                     color: appData.screenIndex == 2
                     ? Colors.white
-                    : Theme.of(context).textTheme.body1.color
+                    : Theme.of(context).textTheme.bodyText1.color
                   )
                 )
               ],
@@ -149,7 +148,7 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
               style: TextStyle(
                 color: appData.screenIndex == 2
                 ? Colors.white
-                : Theme.of(context).textTheme.body1.color
+                : Theme.of(context).textTheme.bodyText1.color
               )
             ),
         elevation: 0,
@@ -234,7 +233,7 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
         title: Text("SongTube", style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700)),
         children: <Widget>[
           DrawerItem(
-            title: Text("Home", style: TextStyle(color: Theme.of(context).textTheme.body1.color)),
+            title: Text("Home", style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color)),
             backgroundColor: Theme.of(context).tabBarTheme.labelColor,
             leadingIcon: Icons.home,
             leadingIconColor: Colors.blueAccent,
@@ -247,7 +246,7 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
           ),
           SizedBox(height: 14),
           DrawerItem(
-            title: Text("Downloads", style: TextStyle(color: Theme.of(context).textTheme.body1.color)),
+            title: Text("Downloads", style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color)),
             backgroundColor: Theme.of(context).tabBarTheme.labelColor,
             leadingIcon: Icons.file_download,
             leadingIconColor: Colors.greenAccent,
@@ -260,7 +259,7 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
           ),
           SizedBox(height: 14),
           DrawerItem(
-            title: Text("Youtube", style: TextStyle(color: Theme.of(context).textTheme.body1.color)),
+            title: Text("Youtube", style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color)),
             backgroundColor: Theme.of(context).tabBarTheme.labelColor,
             leadingIcon: Icons.play_arrow,
             leadingIconColor: Colors.redAccent,
