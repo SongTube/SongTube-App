@@ -9,7 +9,6 @@ import 'package:songtube/provider/app_provider.dart';
 
 // Packages
 import 'package:provider/provider.dart';
-import 'package:circular_check_box/circular_check_box.dart';
 import 'package:ext_storage/ext_storage.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -90,7 +89,7 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                         ),
                       ),
                       subtitle: Text("Enable/Disable automatic theme", style: TextStyle(fontSize: 12),),
-                      trailing: CircularCheckBox(
+                      trailing: Checkbox(
                         activeColor: Colors.redAccent,
                         value: appData.systemThemeEnabled,
                         onChanged: (bool newValue) {
@@ -113,7 +112,7 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                             ),
                           ),
                           subtitle: Text("Use dark theme by default", style: TextStyle(fontSize: 12),),
-                          trailing: CircularCheckBox(
+                          trailing: Checkbox(
                             activeColor: Colors.redAccent,
                             value: appData.darkThemeEnabled,
                             onChanged: (bool newValue) {
@@ -133,7 +132,7 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                         ),
                       ),
                       subtitle: Text("Pure black theme", style: TextStyle(fontSize: 12),),
-                      trailing: CircularCheckBox(
+                      trailing: Checkbox(
                         activeColor: Colors.redAccent,
                         value: appData.blackThemeEnabled,
                         onChanged: (bool newValue) {
@@ -482,7 +481,7 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                       subtitle: Text("Enable/Disable audio conversion, default audio format is .ogg",
                         style: TextStyle(fontSize: 12)
                       ),
-                      trailing: CircularCheckBox(
+                      trailing: Checkbox(
                         activeColor: Colors.redAccent,
                         value: appData.enableAudioConvertion,
                         onChanged: (bool newValue) async {
