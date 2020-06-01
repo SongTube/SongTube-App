@@ -25,7 +25,8 @@ class DrawerItem extends StatelessWidget{
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Padding(
+      child: Container(
+        color: Theme.of(context).canvasColor,
         padding: padding,
         child: Row(
           children: <Widget>[
@@ -40,7 +41,7 @@ class DrawerItem extends StatelessWidget{
               ),
             ),
             SizedBox(width: 16),
-            title
+            Container(child: title)
           ],
         ),
       ),

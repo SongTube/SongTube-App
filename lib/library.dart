@@ -238,6 +238,7 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
             backgroundColor: Theme.of(context).tabBarTheme.labelColor,
             leadingIcon: MdiIcons.home,
             leadingIconColor: Colors.blue,
+            padding: EdgeInsets.only(left: 20),
             onTap: () {
               Navigator.pop(context);
               setState(() {
@@ -252,6 +253,7 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
             backgroundColor: Theme.of(context).tabBarTheme.labelColor,
             leadingIcon: MdiIcons.download,
             leadingIconColor: Colors.green,
+            padding: EdgeInsets.only(left: 20),
             onTap: () {
               Navigator.pop(context);
               setState(() {
@@ -266,6 +268,7 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
             backgroundColor: Theme.of(context).tabBarTheme.labelColor,
             leadingIcon: MdiIcons.play,
             leadingIconColor: Colors.red,
+            padding: EdgeInsets.only(left: 20),
             onTap: () async {
               Navigator.pop(context);
               setState(() {
