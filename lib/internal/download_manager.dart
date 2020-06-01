@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 // Packages
 import 'package:ext_storage/ext_storage.dart';
 import 'package:path/path.dart';
+import 'package:songtube/internal/database/infoset_database.dart';
+import 'package:songtube/internal/database/models/downloaded_file.dart';
 
 // Internal
 import 'package:songtube/internal/models/downloadinfoset.dart';
@@ -51,7 +53,7 @@ class DownloadManager {
           );
         } on Exception catch (_) {
           print(_.toString());
-        } if (_result == null) return 1;
+        } if (_result == null) {closeDownload(1); return 1;}
 
         // Build the Path for the Audio to be stored
         _audioSavePath = infoset.downloadPath + "/" + basename(infoset.downloader.lastAudioDownloaded);
@@ -103,7 +105,7 @@ class DownloadManager {
         _result = await infoset.downloader.downloadStream(
           infoset.mediaStream,
           DownloadType.audio,
-        ); if (_result == null) return 1;
+        ); if (_result == null) {closeDownload(1); return 1;}
 
         // Get information about our downloaded Media
         _audioFormat = await infoset.converter.getMediaFormat(infoset.downloader.lastAudioDownloaded);
@@ -171,7 +173,7 @@ class DownloadManager {
           infoset.mediaStream,
           DownloadType.video,
           infoset.videoIndex
-        ); if (_result == null) return 1;
+        ); if (_result == null) {closeDownload(1); return 1;}
         infoset.downloader.downloadFinished = false;
         infoset.downloader.fileSize = infoset.downloader.fileSize + _result;
         infoset.currentAction.add("Downloading Audio...");
@@ -179,7 +181,7 @@ class DownloadManager {
         _result = await infoset.downloader.downloadStream(
           infoset.mediaStream,
           DownloadType.audio,
-        ); if (_result == null) return 1;
+        ); if (_result == null) {closeDownload(1); return 1;}
         infoset.downloader.fileSize = infoset.downloader.fileSize + _result;
 
         // Get information about our downloaded Media
@@ -243,13 +245,27 @@ class DownloadManager {
   }
 
   // Clean up after download
-  void closeDownload(int result) {
+  void closeDownload(int result) async {
     if (result == 1) {
       // Download failed
-
-
+      infoset.downloader.progressBar.add(0.0);
+      infoset.currentAction.add("Cancelled");
+      infoset.downloader.progressBar.close();
+      infoset.currentAction.close();
+      infoset.downloader.dataProgress.close();
     } else if (result == 0) {
       // Download finished
+      final dbHelper = DatabaseService.instance;
+      await dbHelper.insertDownload(new DownloadedFile.toDatabase(
+        title: infoset.metadata.title,
+        author: infoset.metadata.artist,
+        downloadType: infoset.downloadType == DownloadType.audio
+          ? "Audio"
+          : "Video",
+        fileSize: infoset.downloader.fileSize.toString(),
+        coverUrl: infoset.metadata.coverurl,
+        path: infoset.downloadPath
+      ));
       infoset.downloader.progressBar.add(1.0);
       infoset.currentAction.add("Done");
       infoset.downloader.progressBar.close();

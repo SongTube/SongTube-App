@@ -738,6 +738,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
               );
               mediaProvider.addItemToDownloadList(infoset);
               appData.screenIndex = 1;
+              mediaProvider.downloadsTabIndex = 0;
               _manager.handleDownload();
             }
           ),

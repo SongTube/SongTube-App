@@ -1,27 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:songtube/internal/models/metadata.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class DownloadTile extends StatelessWidget {
   final Stream<String> dataProgress;
   final Stream<double> progressBar;
   final Stream<String> currentAction;
-  final MediaMetaData metadata;
+  final String title;
+  final String author;
+  final String coverUrl;
   final Function onDownloadCancel;
-  final Function onTilePlay;
   DownloadTile({
     @required this.dataProgress,
     @required this.progressBar,
     @required this.currentAction,
-    @required this.metadata,
+    @required this.title,
+    @required this.author,
+    @required this.coverUrl,
     this.onDownloadCancel,
-    this.onTilePlay
   });
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Theme.of(context).inputDecorationTheme.fillColor,
-      shape: RoundedRectangleBorder(
+    return Container(
+      decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
+        color: Theme.of(context).cardColor
       ),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -31,12 +34,12 @@ class DownloadTile extends StatelessWidget {
               children: <Widget> [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(15.0),
-                  child: Image.network(
-                    metadata.coverurl,
+                  child: FadeInImage(
+                    image: NetworkImage(coverUrl),
+                    placeholder: MemoryImage(kTransparentImage),
                     height: 90,
                     width: 160,
                     fit: BoxFit.fitWidth,
-                    filterQuality: FilterQuality.high,
                   ),
                 ),
                 Expanded(
@@ -47,7 +50,7 @@ class DownloadTile extends StatelessWidget {
                         Align(
                           alignment: Alignment.topLeft,
                           child: Text(
-                            metadata.title.toString(),
+                            title.toString(),
                             overflow: TextOverflow.clip,
                             maxLines: 2,
                             softWrap: true,
@@ -56,7 +59,7 @@ class DownloadTile extends StatelessWidget {
                         Align(
                           alignment: Alignment.topLeft,
                           child: Text(
-                            metadata.artist.toString(),
+                            author.toString(),
                             overflow: TextOverflow.clip,
                             maxLines: 1,
                             softWrap: true,
@@ -65,20 +68,19 @@ class DownloadTile extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            IconButton(
-                              icon: Icon(Icons.play_arrow, size: 18),
-                              onPressed: onTilePlay,
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: Container(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: <Widget>[
+                                IconButton(
+                                  icon: Icon(Icons.clear, size: 18),
+                                  onPressed: onDownloadCancel
+                                )
+                              ],
                             ),
-                            onDownloadCancel != null
-                            ? IconButton(
-                                icon: Icon(Icons.clear, size: 18),
-                                onPressed: onDownloadCancel
-                              )
-                            : Container()
-                          ],
+                          ),
                         ),
                       ]
                     ),
@@ -143,6 +145,94 @@ class DownloadTile extends StatelessWidget {
             ),
           ]
         ),
+      ),
+    );
+  }
+}
+
+class DownloadTileWithoutStream extends StatelessWidget {
+  final String title;
+  final String author;
+  final String coverUrl;
+  final Function onTilePlay;
+  final Function onTileRemove;
+  DownloadTileWithoutStream({
+    @required this.title,
+    @required this.author,
+    @required this.coverUrl,
+    this.onTilePlay,
+    this.onTileRemove
+  });
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: Theme.of(context).cardColor
+      ),
+      child: Column(
+        children: <Widget> [
+          Row(
+            children: <Widget> [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(15.0),
+                child: FadeInImage(
+                  image: NetworkImage(coverUrl),
+                  placeholder: MemoryImage(kTransparentImage),
+                  height: 90,
+                  width: 160,
+                  fit: BoxFit.fitWidth,
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Column(
+                    children: <Widget> [
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          title.toString(),
+                          overflow: TextOverflow.clip,
+                          maxLines: 2,
+                          softWrap: true,
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          author.toString(),
+                          overflow: TextOverflow.clip,
+                          maxLines: 1,
+                          softWrap: true,
+                          style: TextStyle(
+                            color: Colors.grey[500]
+                          ),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            IconButton(
+                              icon: Icon(Icons.play_arrow, size: 18),
+                              onPressed: onTilePlay,
+                            ),
+                            IconButton(
+                              icon: Icon(Icons.clear, size: 18),
+                              onPressed: onTileRemove,
+                            )
+                          ],
+                        ),
+                      ),
+                    ]
+                  ),
+                ),
+              ),
+            ]
+          ),
+        ]
       ),
     );
   }

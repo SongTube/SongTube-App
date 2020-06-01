@@ -1,19 +1,13 @@
 // Flutter
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 // Internal
 import 'package:songtube/provider/media_provider.dart';
-import 'package:songtube/provider/player_provider.dart';
-import 'package:songtube/internal/models/downloadinfoset.dart';
-import 'package:songtube/internal/models/enums.dart';
-import 'package:songtube/internal/native.dart';
 
 // Packages
 import 'package:provider/provider.dart';
-
-// UI
-import 'package:songtube/ui/reusable/download_tile.dart';
+import 'package:songtube/screens/downloadsPages/completed_page.dart';
+import 'package:songtube/screens/downloadsPages/downloading_page.dart';
 
 class DownloadTab extends StatefulWidget {
   _DownloadTabState createState() => _DownloadTabState();
@@ -21,134 +15,145 @@ class DownloadTab extends StatefulWidget {
 
 class _DownloadTabState extends State<DownloadTab> {
 
-  ScrollController scrollController = new ScrollController();
+  void listener(MediaProvider provider) {
+    provider.downloadInfoSetList.forEach((element) {
+      element.currentAction.stream.listen((event) {
+        if (event == "Done") {
+          provider.getDatabase();
+        }
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context, listen: true);
-    Player audioPlayer = Provider.of<Player>(context);
+    listener(mediaProvider);
     return Scaffold(
       body: Column(
         children: <Widget>[
-          if (mediaProvider.downloadInfoSetList.isEmpty)
-          Expanded(
-            child: Center(
-              child: AnimatedOpacity(
-                duration: Duration(milliseconds: 400),
-                opacity: mediaProvider.downloadInfoSetList.isEmpty ? 1.0 : 0.0,
-                child: Container(
-                  padding: EdgeInsets.all(8),
-                  width: MediaQuery.of(context).size.width*0.6,
+          // Download and Completed Page Buttoms
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              // Ongoing Downloads page
+              GestureDetector(
+                onTap: () {setState(() => mediaProvider.downloadsTabIndex = 0);},
+                child: AnimatedContainer(
+                  duration: Duration(milliseconds: 200),
+                  margin: EdgeInsets.only(top: 4),
+                  padding: EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
+                    color: mediaProvider.downloadsTabIndex == 0
+                      ? Theme.of(context).cardColor
+                      : Theme.of(context).canvasColor
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(40.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Icon(MdiIcons.cloudDownload, size: 100, color: Colors.redAccent),
-                        Text(
-                          "No downloads yet!",
-                          style: TextStyle(fontWeight: FontWeight.w700),
-                        ),
-                        SizedBox(height: 4),
-                        Text("All your downloads will be shown here", textAlign: TextAlign.center),
-                        SizedBox(height: 50),
-                      ],
-                    ),
+                  child: Text("Ongoing", textAlign: TextAlign.center),
+                ),
+              ),
+              // Padding
+              SizedBox(width: 16),
+              // Completed page
+              GestureDetector(
+                onTap: () {setState(() => mediaProvider.downloadsTabIndex = 1);},
+                child: AnimatedContainer(
+                  duration: Duration(milliseconds: 200),
+                  margin: EdgeInsets.only(top: 4),
+                  padding: EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: mediaProvider.downloadsTabIndex == 1
+                      ? Theme.of(context).cardColor
+                      : Theme.of(context).canvasColor
+                  ),
+                  child: Text("Completed", textAlign: TextAlign.center),
+                ),
+              )
+            ],
+          ),
+          // Padding
+          SizedBox(height: 4),
+          // Download and Completed Pages Content
+          Expanded(
+            child: Stack(
+              alignment: Alignment.center,
+              children: <Widget>[
+                // Ongoing Downloads Page
+                IgnorePointer(
+                  ignoring: mediaProvider.downloadsTabIndex == 0 ? false : true,
+                  child: AnimatedOpacity(
+                    duration: Duration(milliseconds: 200),
+                    opacity: mediaProvider.downloadsTabIndex == 0 ? 1.0 : 0.0,
+                    child: DownloadingPage(),
+                  ),
+                ),
+                // Completed Downloads Page
+                IgnorePointer(
+                  ignoring: mediaProvider.downloadsTabIndex == 1 ? false : true,
+                  child: AnimatedOpacity(
+                    duration: Duration(milliseconds: 200),
+                    opacity: mediaProvider.downloadsTabIndex == 1 ? 1.0 : 0.0,
+                    child: CompletedPage(),
                   ),
                 )
-              ),
+              ],
             ),
-          ),
-          if (mediaProvider.downloadInfoSetList.isNotEmpty)
-          Expanded(
-            child: AnimatedOpacity(
-              duration: Duration(milliseconds: 200),
-              opacity: mediaProvider.downloadInfoSetList.isNotEmpty ? 1.0 : 0.0,
-              child: ListView.builder(
-                controller: scrollController,
-                physics: BouncingScrollPhysics(),
-                itemCount: mediaProvider.downloadInfoSetList.length,
-                itemBuilder: (context, index) {
-                  DownloadInfoSet infoset = mediaProvider.downloadInfoSetList[index];
-                  return Padding(
-                    padding: EdgeInsets.only(left: 8, right: 8, top: 4),
-                    child: DownloadTile(
-                      dataProgress: infoset.downloader.dataProgress.stream,
-                      progressBar: infoset.downloader.progressBar.stream,
-                      currentAction: infoset.currentAction.stream,
-                      metadata: infoset.metadata,
-                      onDownloadCancel: infoset.downloader.downloadFinished == false
-                      ? () {
-                        setState(() => infoset.downloader.downloadFinished = true);
-                      } : null,
-                      onTilePlay: () {
-                        if (infoset.downloadFinished && infoset.downloadType == DownloadType.audio) {
-                          audioPlayer.play(infoset.downloadPath);
-                        }
-                        if (infoset.downloadFinished && infoset.downloadType == DownloadType.video) {
-                          NativeMethod.openVideo(infoset.downloadPath);
-                        }
-                      }
-                    ),
-                  );
-                },
-              )
-            ),
-          ),
+          )
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.clear_all),
-        backgroundColor: Colors.redAccent,
-        foregroundColor: Colors.white,
-        onPressed: () {
-          if (mediaProvider.downloadInfoSetList.any((element) => element.downloader.downloadFinished == false)) {
-            showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: Text("Warning", style: TextStyle(
-                    color: Theme.of(context).textTheme.bodyText1.color
-                  )),
-                  content: Text("There are still downloads in progress, are you sure you wanna clear the downloads list?", style: TextStyle(
-                    color: Theme.of(context).textTheme.bodyText1.color
-                  )),
-                  actions: <Widget>[
-                    FlatButton(
-                      child: Text("OK", style: TextStyle(
+      floatingActionButton: AnimatedSwitcher(
+        duration: Duration(milliseconds: 300),
+        child: mediaProvider.downloadsTabIndex == 0
+          ? FloatingActionButton(
+            child: Icon(Icons.clear_all),
+            backgroundColor: Colors.redAccent,
+            foregroundColor: Colors.white,
+            onPressed: () {
+              if (mediaProvider.downloadInfoSetList.any((element) => element.downloader.downloadFinished == false)) {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Text("Warning", style: TextStyle(
                         color: Theme.of(context).textTheme.bodyText1.color
                       )),
-                      onPressed: () {
-                        mediaProvider.downloadInfoSetList.forEach((element) {
-                          if (element.downloader.downloadFinished == false)
-                            element.downloader.downloadFinished = true;
-                        });
-                        mediaProvider.downloadInfoSetList = [];
-                        Navigator.pop(context);
-                      }
-                    ),
-                    FlatButton(
-                      child: Text("Cancel", style: TextStyle(
+                      content: Text("There are still downloads in progress, are you sure you wanna clear the downloads list?", style: TextStyle(
                         color: Theme.of(context).textTheme.bodyText1.color
                       )),
-                      onPressed: () => Navigator.pop(context),
-                    )
-                  ],
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ), 
+                      actions: <Widget>[
+                        FlatButton(
+                          child: Text("OK", style: TextStyle(
+                            color: Theme.of(context).textTheme.bodyText1.color
+                          )),
+                          onPressed: () {
+                            mediaProvider.downloadInfoSetList.forEach((element) {
+                              if (element.downloader.downloadFinished == false)
+                                element.downloader.downloadFinished = true;
+                            });
+                            mediaProvider.downloadInfoSetList = [];
+                            Navigator.pop(context);
+                          }
+                        ),
+                        FlatButton(
+                          child: Text("Cancel", style: TextStyle(
+                            color: Theme.of(context).textTheme.bodyText1.color
+                          )),
+                          onPressed: () => Navigator.pop(context),
+                        )
+                      ],
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ), 
+                    );
+                  },
                 );
-              },
-            );
-          } else {
-            mediaProvider.downloadInfoSetList = [];
-          }
-        }
+              } else {
+                mediaProvider.downloadInfoSetList = [];
+              }
+            }
+          )
+        : Container()
       ),
     );
   }
