@@ -171,6 +171,13 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
                 if (audioPlayer.playerState == PlayerState.playing) audioPlayer.pause();
               },
               onPlayPauseLongPress: () => audioPlayer.stop(),
+              showPlayPause: audioPlayer.showMediaPlayer ? false : true,
+              leadingIcon: Icon(audioPlayer.showMediaPlayer ? Icons.expand_less : Icons.expand_more),
+              leadingAction: () {
+                setState(() {
+                  audioPlayer.showMediaPlayer = !audioPlayer.showMediaPlayer;
+                });
+              },
             ),
           ),
           SizedBox(width: 12)
@@ -223,6 +230,12 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
                   child: DonateScreen()
                 )
               ),
+              AnimatedSwitcher(
+                duration: Duration(milliseconds: 150),
+                child: audioPlayer.showMediaPlayer
+                  ? FullPlayerWidget()
+                  : Container()
+              )
             ],
           ),
         ),

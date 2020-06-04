@@ -37,7 +37,8 @@ class _CompletedPageState extends State<CompletedPage> with TickerProviderStateM
                     coverUrl: download.coverUrl,
                     onTilePlay: () {
                       if (download.downloadType == "Audio") {
-                        audioPlayer.play(download.path);
+                        audioPlayer.queue = mediaProvider.downloadedFileList;
+                        audioPlayer.play(index);
                       }
                       if (download.downloadType == "Video") {
                         NativeMethod.openVideo(download.path);

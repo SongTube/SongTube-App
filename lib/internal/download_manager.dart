@@ -276,19 +276,23 @@ class DownloadManager {
 
   // Write Tags & Artwork
   Future<void> writeAllMetadata(filePath) async {
-    await TagsManager.writeAllTags(
-      songPath: filePath,
-      title: infoset.metadata.title,
-      album: infoset.metadata.album,
-      artist: infoset.metadata.artist,
-      genre: infoset.metadata.genre,
-      year: infoset.metadata.date,
-      disc: infoset.metadata.disk,
-      track: infoset.metadata.track
-    );
-    await TagsManager.writeArtwork(
-      songPath: filePath,
-      artworkUrl: infoset.mediaStream.videoDetails.thumbnailSet.maxResUrl
-    );
+    try {
+      await TagsManager.writeAllTags(
+        songPath: filePath,
+        title: infoset.metadata.title,
+        album: infoset.metadata.album,
+        artist: infoset.metadata.artist,
+        genre: infoset.metadata.genre,
+        year: infoset.metadata.date,
+        disc: infoset.metadata.disk,
+        track: infoset.metadata.track
+      );
+      await TagsManager.writeArtwork(
+        songPath: filePath,
+        artworkUrl: infoset.mediaStream.videoDetails.thumbnailSet.maxResUrl
+      );
+    } on Exception catch (e) {
+      print(e);
+    }
   }
 }

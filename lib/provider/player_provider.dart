@@ -3,43 +3,65 @@ import 'package:flutter/material.dart';
 
 // Packages
 import 'package:audioplayers/audioplayers.dart';
+import 'package:songtube/internal/database/models/downloaded_file.dart';
 
 enum PlayerState { playing, stopped, paused }
 class Player extends ChangeNotifier {
 
-  AudioPlayer audioPlayer;
+  final AudioPlayer audioPlayer = AudioPlayer();
   String currentSong;
   PlayerState _playerState;
-
+  List<DownloadedFile> queue;
+  int queueIndex;
+  bool _showMediaPlayer = false;
+  
   Player() {
-    audioPlayer = AudioPlayer();
     _playerState = PlayerState.stopped;
-    audioPlayer.onPlayerCompletion.listen((event) {
-      playerState = PlayerState.stopped;
+    listener();
+  }
+
+  listener() {
+    audioPlayer.onPlayerCompletion.listen((event){
+      print("AudioPlayer: Song ended");
+      onComplete();
     });
   }
+
+  bool get showMediaPlayer => _showMediaPlayer;
+
+  set showMediaPlayer(bool value) {
+    _showMediaPlayer = value;
+    notifyListeners();
+  }
+
+  Stream get position => audioPlayer.onAudioPositionChanged;
+  Stream get duration => audioPlayer.onDurationChanged;
 
   PlayerState get playerState => _playerState;
   set playerState(PlayerState value) {
     _playerState = value;
     notifyListeners();
   }
+  
+  void onComplete() {
+    playerState = PlayerState.stopped;
+    showMediaPlayer = false;
+    notifyListeners();
+  }
 
-  void play([String songPath]) async {
+  void play([int index]) async {
     int result;
-    if (songPath == null) {
+    if (index == null) {
       if (currentSong == null) return;
       result = await audioPlayer.play(currentSong,
         isLocal: true, respectAudioFocus: true);
     } else {
-      currentSong = songPath;
-      result = await audioPlayer.play(songPath,
+      currentSong = queue[index].path;
+      result = await audioPlayer.play(currentSong,
         isLocal: true, respectAudioFocus: true);
+      queueIndex = index;
     }
-
-    if (result == 1) {
-      playerState = PlayerState.playing;
-    }
+    if (result == 1) playerState = PlayerState.playing;
   }
 
   void pause() {
@@ -51,6 +73,10 @@ class Player extends ChangeNotifier {
     audioPlayer.stop();
     currentSong = null;
     playerState = PlayerState.stopped;
+    showMediaPlayer = false;
+    notifyListeners();
   }
+
+  void seek(Duration position) => audioPlayer.seek(position);
 
 }
