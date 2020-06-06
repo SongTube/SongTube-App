@@ -108,7 +108,7 @@ class _FullPlayerWidgetState extends State<FullPlayerWidget> {
               height: 200,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                color: Theme.of(context).cardColor.withOpacity(0.3),
+                color: Theme.of(context).cardColor,
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.5),
@@ -170,7 +170,7 @@ class _FullPlayerWidgetState extends State<FullPlayerWidget> {
                                           Icon(Icons.arrow_back_ios, color: Colors.white),
                                         ],
                                       ),
-                                      onPressed: () {},
+                                      onPressed: () => playerProvider.playPrevious(),
                                     ),
                                     // Padding
                                     SizedBox(width: 30),
@@ -207,7 +207,7 @@ class _FullPlayerWidgetState extends State<FullPlayerWidget> {
                                           Icon(Icons.arrow_forward_ios, color: Colors.white),
                                         ],
                                       ),
-                                      onPressed: () {},
+                                      onPressed: () => playerProvider.playNext(),
                                     )
                                   ],
                                 ),
@@ -262,7 +262,7 @@ class _FullPlayerWidgetState extends State<FullPlayerWidget> {
                                 // Artist
                                 Text(
                                   playerProvider.queue[playerProvider.queueIndex].author,
-                                  style: TextStyle(color: Colors.grey[500])
+                                  style: TextStyle(color: Colors.grey[300])
                                 )
                               ],
                             ),

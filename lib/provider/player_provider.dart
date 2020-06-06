@@ -43,13 +43,16 @@ class Player extends ChangeNotifier {
     notifyListeners();
   }
   
-  void onComplete() {
-    playerState = PlayerState.stopped;
-    showMediaPlayer = false;
+  void onComplete() async {
+    int result = await playNext();
+    if (result == null) {
+      playerState = PlayerState.stopped;
+      showMediaPlayer = false;
+    }
     notifyListeners();
   }
 
-  void play([int index]) async {
+  Future<void> play([int index]) async {
     int result;
     if (index == null) {
       if (currentSong == null) return;
@@ -75,6 +78,24 @@ class Player extends ChangeNotifier {
     playerState = PlayerState.stopped;
     showMediaPlayer = false;
     notifyListeners();
+  }
+
+  Future<int> playPrevious() async {
+    if (queue[queueIndex] != queue.first) {
+      await play(queueIndex-1);
+      notifyListeners();
+      return 0;
+    }
+    return null;
+  }
+
+  Future<int> playNext() async {
+    if (queue[queueIndex] != queue.last) {
+      await play(queueIndex+1);
+      notifyListeners();
+      return 0;
+    }
+    return null;
   }
 
   void seek(Duration position) => audioPlayer.seek(position);
