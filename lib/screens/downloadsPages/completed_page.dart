@@ -5,7 +5,7 @@ import 'package:songtube/internal/database/models/downloaded_file.dart';
 import 'package:songtube/internal/native.dart';
 import 'package:songtube/provider/media_provider.dart';
 import 'package:songtube/provider/player_provider.dart';
-import 'package:songtube/ui/no_downloads_completed.dart';
+import 'package:songtube/ui/downloads_screen/no_downloads_completed.dart';
 import 'package:songtube/ui/reusable/download_tile.dart';
 
 class CompletedPage extends StatefulWidget {

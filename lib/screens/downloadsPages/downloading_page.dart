@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/models/downloadinfoset.dart';
 import 'package:songtube/provider/media_provider.dart';
-import 'package:songtube/ui/no_downloads.dart';
+import 'package:songtube/ui/downloads_screen/no_downloads.dart';
 import 'package:songtube/ui/reusable/download_tile.dart';
 
 class DownloadingPage extends StatefulWidget {

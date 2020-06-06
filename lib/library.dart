@@ -30,7 +30,7 @@ import 'package:songtube/ui/drawer_layout.dart';
 import 'package:songtube/ui/reusable/drawer_item.dart';
 import 'package:songtube/ui/snackbar.dart';
 import 'package:songtube/ui/ui_elements.dart';
-import 'package:songtube/ui/player_widget.dart';
+import 'package:songtube/ui/downloads_screen/player_widget.dart';
 
 class Library extends StatefulWidget {
   @override
