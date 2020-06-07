@@ -1,11 +1,15 @@
 // Flutter
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+
+// Internal
 import 'package:songtube/provider/app_provider.dart';
-import 'package:songtube/ui/searchbar.dart';
+
+// Packages
+import 'package:provider/provider.dart';
 
 // UI
 import 'package:songtube/ui/yt_webview.dart';
+import 'package:songtube/ui/reusable/searchbar.dart';
 
 class Navigate extends StatefulWidget {
   @override

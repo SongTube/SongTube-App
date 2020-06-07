@@ -1,7 +1,14 @@
+// Flutter
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+
+// Internal
 import 'package:songtube/internal/models/downloadinfoset.dart';
-import 'package:songtube/provider/media_provider.dart';
+import 'package:songtube/provider/downloads_manager.dart';
+
+// Packages
+import 'package:provider/provider.dart';
+
+// UI
 import 'package:songtube/ui/downloads_screen/no_downloads.dart';
 import 'package:songtube/ui/reusable/download_tile.dart';
 
@@ -14,15 +21,15 @@ class _DownloadingPageState extends State<DownloadingPage> {
 
   @override
   Widget build(BuildContext context) {
-    MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
+    ManagerProvider manager = Provider.of<ManagerProvider>(context);
     return AnimatedSwitcher(
       duration: Duration(milliseconds: 200),
-      child: mediaProvider.downloadInfoSetList.isNotEmpty 
+      child: manager.downloadInfoSetList.isNotEmpty 
         ? ListView.builder(
             physics: BouncingScrollPhysics(),
-            itemCount: mediaProvider.downloadInfoSetList.length,
+            itemCount: manager.downloadInfoSetList.length,
             itemBuilder: (context, index) {
-              DownloadInfoSet infoset = mediaProvider.downloadInfoSetList[index];
+              DownloadInfoSet infoset = manager.downloadInfoSetList[index];
               return Padding(
                 padding: EdgeInsets.only(left: 8, right: 8, top: 8),
                 child: DownloadTile(

@@ -19,6 +19,7 @@ class DrawerLayout extends StatelessWidget{
   });
 
   Widget build(BuildContext context) {
+    FocusScope.of(context).requestFocus(new FocusNode());
     return ClipRRect(
       borderRadius: BorderRadius.only(topRight: Radius.circular(20)),
       child: Drawer(

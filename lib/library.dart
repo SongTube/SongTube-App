@@ -10,7 +10,6 @@ import 'package:flutter/services.dart';
 import 'package:songtube/internal/native.dart';
 import 'package:songtube/internal/youtube/infoparser.dart';
 import 'package:songtube/provider/app_provider.dart';
-import 'package:songtube/provider/media_provider.dart';
 import 'package:songtube/provider/player_provider.dart';
 import 'package:songtube/screens/donate.dart';
 import 'package:songtube/screens/downloads.dart';
@@ -123,71 +122,72 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
     );
     Player audioPlayer = Provider.of<Player>(context);
     appSnack = new AppSnack(scaffoldKey: appData.libraryScaffoldKey, context: context);
-    return Scaffold(
-      key: appData.libraryScaffoldKey,
-      appBar: AppBar(
-        title: appData.screenIndex == 2
-          ? Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Icon(MdiIcons.youtube, color: Colors.white),
-                SizedBox(width: 4),
-                Text(
-                  _appBarTitle[appData.screenIndex],
-                  style: TextStyle(
-                    color: appData.screenIndex == 2
-                    ? Colors.white
-                    : Theme.of(context).textTheme.bodyText1.color
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
+      child: Scaffold(
+        key: appData.libraryScaffoldKey,
+        appBar: AppBar(
+          title: appData.screenIndex == 2
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Icon(MdiIcons.youtube, color: Colors.white),
+                  SizedBox(width: 4),
+                  Text(
+                    _appBarTitle[appData.screenIndex],
+                    style: TextStyle(
+                      color: appData.screenIndex == 2
+                      ? Colors.white
+                      : Theme.of(context).textTheme.bodyText1.color
+                    )
                   )
-                )
-              ],
-            )
-          : Text(
-              _appBarTitle[appData.screenIndex],
-              style: TextStyle(
-                color: appData.screenIndex == 2
-                ? Colors.white
-                : Theme.of(context).textTheme.bodyText1.color
+                ],
               )
+            : Text(
+                _appBarTitle[appData.screenIndex],
+                style: TextStyle(
+                  color: appData.screenIndex == 2
+                  ? Colors.white
+                  : Theme.of(context).textTheme.bodyText1.color
+                )
+              ),
+          elevation: 0,
+          backgroundColor: appData.screenIndex == 2
+            ? Colors.redAccent
+            : Colors.transparent,
+          centerTitle: true,
+          leading: appData.screenIndex == 2
+            ? Container()
+            : null,
+          iconTheme: new IconThemeData(color: Theme.of(context).iconTheme.color),
+          actions: <Widget>[
+            AnimatedOpacity(
+              opacity: audioPlayer.playerState == PlayerState.playing || audioPlayer.playerState == PlayerState.paused ? 1.0 : 0.0,
+              duration: Duration(milliseconds: 300),
+              child: PlayerWidget(
+                playerState: audioPlayer.playerState,
+                onPlayPauseTap: () {
+                  if (audioPlayer.playerState == PlayerState.paused) audioPlayer.play();
+                  if (audioPlayer.playerState == PlayerState.playing) audioPlayer.pause();
+                },
+                onPlayPauseLongPress: () => audioPlayer.stop(),
+                showPlayPause: audioPlayer.showMediaPlayer ? false : true,
+                leadingIcon: Icon(audioPlayer.showMediaPlayer ? Icons.expand_less : Icons.expand_more),
+                leadingAction: () {
+                  FocusScope.of(context).requestFocus(new FocusNode());
+                  setState(() {
+                    audioPlayer.showMediaPlayer = !audioPlayer.showMediaPlayer;
+                  });
+                },
+              ),
             ),
-        elevation: 0,
-        backgroundColor: appData.screenIndex == 2
-          ? Colors.redAccent
-          : Colors.transparent,
-        centerTitle: true,
-        leading: appData.screenIndex == 2
-          ? Container()
-          : null,
-        iconTheme: new IconThemeData(color: Theme.of(context).iconTheme.color),
-        actions: <Widget>[
-          AnimatedOpacity(
-            opacity: audioPlayer.playerState == PlayerState.playing || audioPlayer.playerState == PlayerState.paused ? 1.0 : 0.0,
-            duration: Duration(milliseconds: 300),
-            child: PlayerWidget(
-              playerState: audioPlayer.playerState,
-              onPlayPauseTap: () {
-                if (audioPlayer.playerState == PlayerState.paused) audioPlayer.play();
-                if (audioPlayer.playerState == PlayerState.playing) audioPlayer.pause();
-              },
-              onPlayPauseLongPress: () => audioPlayer.stop(),
-              showPlayPause: audioPlayer.showMediaPlayer ? false : true,
-              leadingIcon: Icon(audioPlayer.showMediaPlayer ? Icons.expand_less : Icons.expand_more),
-              leadingAction: () {
-                setState(() {
-                  audioPlayer.showMediaPlayer = !audioPlayer.showMediaPlayer;
-                });
-              },
-            ),
-          ),
-          SizedBox(width: 12)
-        ],
-      ),
-      resizeToAvoidBottomPadding: true,
-      body: WillPopScope(
-        onWillPop: () => handlePop(appData),
-        child: ChangeNotifierProvider(
-          create: (context) => MediaProvider(),
+            SizedBox(width: 12)
+          ],
+        ),
+        resizeToAvoidBottomPadding: true,
+        body: WillPopScope(
+          onWillPop: () => handlePop(appData),
           child: Stack(
             children: <Widget>[
               IgnorePointer(
@@ -239,115 +239,115 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
             ],
           ),
         ),
-      ),
-      drawerEdgeDragWidth: appData.screenIndex != 2 ? MediaQuery.of(context).size.width : 0,
-      drawer: DrawerLayout(
-        headerColor: Theme.of(context).tabBarTheme.labelColor,
-        title: Text("SongTube", style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700)),
-        children: <Widget>[
-          DrawerItem(
-            title: Text("Home", style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color,
-             fontSize: 16, fontWeight: FontWeight.w600)),
-            backgroundColor: Theme.of(context).tabBarTheme.labelColor,
-            leadingIcon: MdiIcons.home,
-            leadingIconColor: Colors.blue,
-            padding: EdgeInsets.only(left: 20),
-            onTap: () {
-              Navigator.pop(context);
-              setState(() {
-                appData.screenIndex = 0;
-              });
-            },
+        drawerEdgeDragWidth: appData.screenIndex != 2 ? MediaQuery.of(context).size.width : 0,
+        drawer: DrawerLayout(
+          headerColor: Theme.of(context).tabBarTheme.labelColor,
+          title: Text("SongTube", style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700)),
+          children: <Widget>[
+            DrawerItem(
+              title: Text("Home", style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color,
+               fontSize: 16, fontWeight: FontWeight.w600)),
+              backgroundColor: Theme.of(context).tabBarTheme.labelColor,
+              leadingIcon: MdiIcons.home,
+              leadingIconColor: Colors.blue,
+              padding: EdgeInsets.only(left: 20),
+              onTap: () {
+                Navigator.pop(context);
+                setState(() {
+                  appData.screenIndex = 0;
+                });
+              },
+            ),
+            SizedBox(height: 14),
+            DrawerItem(
+              title: Text("Downloads", style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color,
+               fontSize: 16, fontWeight: FontWeight.w600)),
+              backgroundColor: Theme.of(context).tabBarTheme.labelColor,
+              leadingIcon: MdiIcons.download,
+              leadingIconColor: Colors.green,
+              padding: EdgeInsets.only(left: 20),
+              onTap: () {
+                Navigator.pop(context);
+                setState(() {
+                  appData.screenIndex = 1;
+                });
+              },
+            ),
+            SizedBox(height: 14),
+            DrawerItem(
+              title: Text("Youtube", style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color,
+               fontSize: 16, fontWeight: FontWeight.w600)),
+              backgroundColor: Theme.of(context).tabBarTheme.labelColor,
+              leadingIcon: MdiIcons.play,
+              leadingIconColor: Colors.red,
+              padding: EdgeInsets.only(left: 20),
+              onTap: () async {
+                Navigator.pop(context);
+                setState(() {
+                  appData.screenIndex = 2;
+                });
+              },
+            ),
+          ],
+          leftBottomIcon: Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).tabBarTheme.labelColor,
+              borderRadius: BorderRadius.circular(30)
+            ),
+            child: IconButton(
+              icon: Icon(Icons.favorite, color: Colors.redAccent),
+              onPressed: () {
+                Navigator.pop(context);
+                setState(() {
+                  appData.screenIndex = 4;
+                });
+              },
+            ),
           ),
-          SizedBox(height: 14),
-          DrawerItem(
-            title: Text("Downloads", style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color,
-             fontSize: 16, fontWeight: FontWeight.w600)),
-            backgroundColor: Theme.of(context).tabBarTheme.labelColor,
-            leadingIcon: MdiIcons.download,
-            leadingIconColor: Colors.green,
-            padding: EdgeInsets.only(left: 20),
-            onTap: () {
-              Navigator.pop(context);
-              setState(() {
-                appData.screenIndex = 1;
-              });
-            },
+          middleBottomIcon: Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).tabBarTheme.labelColor,
+              borderRadius: BorderRadius.circular(30)
+            ),
+            child: IconButton(
+              icon: Icon(MdiIcons.telegram, color: Colors.blue),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return CustomAlert(
+                      leadingIcon: Icon(MdiIcons.telegram, color: Colors.blue),
+                      title: "Telegram",
+                      content: "Join our Telegram Channel and Group! You'll get the latest app updates and you can request features and report bugs",
+                      actions: <Widget>[
+                        FlatButton(
+                          child: Text("Join"),
+                          onPressed: () async {
+                            Navigator.pop(context);
+                            await launch("https://t.me/songtubechannel");
+                          }
+                        )
+                      ],
+                    );
+                  }
+                );
+              },
+            ),
           ),
-          SizedBox(height: 14),
-          DrawerItem(
-            title: Text("Youtube", style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color,
-             fontSize: 16, fontWeight: FontWeight.w600)),
-            backgroundColor: Theme.of(context).tabBarTheme.labelColor,
-            leadingIcon: MdiIcons.play,
-            leadingIconColor: Colors.red,
-            padding: EdgeInsets.only(left: 20),
-            onTap: () async {
-              Navigator.pop(context);
-              setState(() {
-                appData.screenIndex = 2;
-              });
-            },
-          ),
-        ],
-        leftBottomIcon: Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).tabBarTheme.labelColor,
-            borderRadius: BorderRadius.circular(30)
-          ),
-          child: IconButton(
-            icon: Icon(Icons.favorite, color: Colors.redAccent),
-            onPressed: () {
-              Navigator.pop(context);
-              setState(() {
-                appData.screenIndex = 4;
-              });
-            },
-          ),
-        ),
-        middleBottomIcon: Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).tabBarTheme.labelColor,
-            borderRadius: BorderRadius.circular(30)
-          ),
-          child: IconButton(
-            icon: Icon(MdiIcons.telegram, color: Colors.blue),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return CustomAlert(
-                    leadingIcon: Icon(MdiIcons.telegram, color: Colors.blue),
-                    title: "Telegram",
-                    content: "Join our Telegram Channel and Group! You'll get the latest app updates and you can request features and report bugs",
-                    actions: <Widget>[
-                      FlatButton(
-                        child: Text("Join"),
-                        onPressed: () async {
-                          Navigator.pop(context);
-                          await launch("https://t.me/songtubechannel");
-                        }
-                      )
-                    ],
-                  );
-                }
-              );
-            },
-          ),
-        ),
-        rightBottomIcon: Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).tabBarTheme.labelColor,
-            borderRadius: BorderRadius.circular(30)
-          ),
-          child: IconButton(
-            icon: Icon(Icons.settings, color: Colors.grey),
-            onPressed: () {
-              Navigator.pop(context);
-              setState(() {
-                appData.screenIndex = 3;
-              });
-            },
+          rightBottomIcon: Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).tabBarTheme.labelColor,
+              borderRadius: BorderRadius.circular(30)
+            ),
+            child: IconButton(
+              icon: Icon(Icons.settings, color: Colors.grey),
+              onPressed: () {
+                Navigator.pop(context);
+                setState(() {
+                  appData.screenIndex = 3;
+                });
+              },
+            ),
           ),
         ),
       ),

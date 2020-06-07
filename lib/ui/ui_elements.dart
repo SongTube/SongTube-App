@@ -3,10 +3,10 @@ import 'dart:ui';
 
 // Flutter
 import 'package:flutter/material.dart';
+import 'package:songtube/provider/downloads_manager.dart';
 
 // Packages
 import 'package:provider/provider.dart';
-import 'package:songtube/provider/media_provider.dart';
 
 // Show toast with specified message/duration
 void showToast(BuildContext context, String message, Duration duration) {
@@ -20,7 +20,7 @@ void showToast(BuildContext context, String message, Duration duration) {
 // Show alertDialog for permissions
 Future<void> showCustomDialog(BuildContext context) async {
   // set up the button
-  MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
+  ManagerProvider manager = Provider.of<ManagerProvider>(context);
   Widget okButton = FlatButton(
     child: Text(
       "OK",
@@ -29,10 +29,10 @@ Future<void> showCustomDialog(BuildContext context) async {
       ),
     ),
     onPressed: () {
-      mediaProvider.downloadInfoSetList.forEach((object){
+      manager.downloadInfoSetList.forEach((object){
         if (!object.downloader.dataProgress.isClosed) object.downloader.dataProgress.close();
       });
-      mediaProvider.downloadInfoSetList = [];
+      manager.downloadInfoSetList = [];
       Navigator.pop(context);
     },
   );
