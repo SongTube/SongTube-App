@@ -32,14 +32,14 @@ class ManagerProvider extends ChangeNotifier {
     showLoadingBar           = false;
     mediaStreamReady         = false;
     showFloatingActionButtom = false;
-    urlController    = new TextEditingController(); urlNode    = new FocusNode();
-    titleController  = new TextEditingController(); titleNode  = new FocusNode();
-    albumController  = new TextEditingController(); albumNode  = new FocusNode();
-    artistController = new TextEditingController(); artistNode = new FocusNode();
-    genreController  = new TextEditingController(); genreNode  = new FocusNode();
-    dateController   = new TextEditingController(); dateNode   = new FocusNode();
-    discController   = new TextEditingController(); discNode   = new FocusNode();
-    trackController  = new TextEditingController(); trackNode  = new FocusNode();
+    urlController    = new TextEditingController();
+    titleController  = new TextEditingController();
+    albumController  = new TextEditingController();
+    artistController = new TextEditingController();
+    genreController  = new TextEditingController();
+    dateController   = new TextEditingController();
+    discController   = new TextEditingController();
+    trackController  = new TextEditingController();
     getDatabase();
   }
 
@@ -72,17 +72,17 @@ class ManagerProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // ------------------------------
-  // TextControllers and FocusNodes
+  // ---------------
+  // TextControllers
   //
-  TextEditingController urlController;    FocusNode urlNode;
-  TextEditingController titleController;  FocusNode titleNode;
-  TextEditingController albumController;  FocusNode albumNode;
-  TextEditingController artistController; FocusNode artistNode;
-  TextEditingController genreController;  FocusNode genreNode;
-  TextEditingController dateController;   FocusNode dateNode;
-  TextEditingController discController;   FocusNode discNode;
-  TextEditingController trackController;  FocusNode trackNode;
+  TextEditingController urlController;
+  TextEditingController titleController;
+  TextEditingController albumController;
+  TextEditingController artistController;
+  TextEditingController genreController;
+  TextEditingController dateController;
+  TextEditingController discController;
+  TextEditingController trackController;
   //
   // Update TextControllers Information
   //  
@@ -122,6 +122,9 @@ class ManagerProvider extends ChangeNotifier {
         showLoadingBar           = false;
         showFloatingActionButtom = true;
         mediaStreamReady         = true;
+        break;
+      default:
+        print("ManagerProvider: invalid option");
         break;
     }
     notifyListeners();

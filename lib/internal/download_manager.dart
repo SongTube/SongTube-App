@@ -126,120 +126,100 @@ class DownloadManager {
       }
     }
     // -------
-    // Audio
+    // Video
     // -------
     if (infoset.downloadType == DownloadType.video) {
-      if (enableConvertion == true) {
-        // ----------------------------
-        // Video Download
-        // With Video convertion
-        // ----------------------------
-        //
-        // Declare our Variables
-        // TODO: FIX THIS
-        int _result;
-        _result = await infoset.downloader.downloadStream(
-          infoset.mediaStream,
-          DownloadType.audio,
-        );
-        if (_result == null) return 1;
-        String _savePath;
-        List<String> _args = await infoset.converter.getArgumentsList(FFmpegArgs.argsToACC,
-          infoset.metadata, ActionType.convertAudio, infoset.downloader.lastAudioDownloaded,
-          _savePath + "/" + basename(infoset.downloader.lastAudioDownloaded));
-        if (_args == null) return 1;
-        _result = await infoset.converter.convert(_args, ActionType.convertAudio);
-        _result = await infoset.downloader.downloadStream(
-          infoset.mediaStream,
-          DownloadType.video,
-          infoset.videoIndex
-        ); if (_result == null) return 1;
-        return 0;
-      } else {
-        // ----------------------------
-        // Video Download
-        // No video convertion
-        // ----------------------------
-        //
-        // Declare our Variables
-        int _result; String _videoFormat;
-        List<String> _args; String _audioSavePath;
-        String _videoSavePath; String _audioPath;
+      // ----------------------------
+      // Video Download
+      // No video convertion
+      // ----------------------------
+      //
+      // Declare our Variables
+      int _result; String _videoFormat;
+      List<String> _args; String _audioSavePath;
+      String _videoSavePath; String _audioPath;
 
-        // Download raw Video and Audio separately
-        infoset.currentAction.add("Downloading Video...");
-        // Video
-        _result = await infoset.downloader.downloadStream(
-          infoset.mediaStream,
-          DownloadType.video,
-          infoset.videoIndex
-        ); if (_result == null) {closeDownload(1); return 1;}
-        infoset.downloader.downloadFinished = false;
-        infoset.downloader.fileSize = infoset.downloader.fileSize + _result;
-        infoset.currentAction.add("Downloading Audio...");
-        // Audio
-        _result = await infoset.downloader.downloadStream(
-          infoset.mediaStream,
-          DownloadType.audio,
-        ); if (_result == null) {closeDownload(1); return 1;}
-        infoset.downloader.fileSize = infoset.downloader.fileSize + _result;
+      // Download raw Video and Audio separately
+      infoset.currentAction.add("Downloading Video...");
+      // Video
+      _result = await infoset.downloader.downloadStream(
+        infoset.mediaStream,
+        DownloadType.video,
+        infoset.videoIndex
+      ); if (_result == null) {closeDownload(1); return 1;}
+      infoset.downloader.downloadFinished = false;
+      infoset.downloader.fileSize = infoset.downloader.fileSize + _result;
+      infoset.currentAction.add("Downloading Audio...");
+      // Audio
+      _result = await infoset.downloader.downloadStream(
+        infoset.mediaStream,
+        DownloadType.audio,
+      ); if (_result == null) {closeDownload(1); return 1;}
+      infoset.downloader.fileSize = infoset.downloader.fileSize + _result;
 
-        // Get information about our downloaded Media
-        _videoFormat = await infoset.converter.getMediaFormat(infoset.downloader.lastVideoDownloaded);
+      // Get information about our downloaded Media
+      _videoFormat = await infoset.converter.getMediaFormat(infoset.downloader.lastVideoDownloaded);
 
-        // Build the Path for the Audio and final Video to be stored
-        _videoSavePath = infoset.downloadPath + "/" + basename(infoset.downloader.lastVideoDownloaded);
-        _audioSavePath = tmpPath + basename(infoset.downloader.lastAudioDownloaded);
+      // Build the Path for the Audio and final Video to be stored
+      _videoSavePath = infoset.downloadPath + "/" + basename(infoset.downloader.lastVideoDownloaded);
+      _audioSavePath = tmpPath + basename(infoset.downloader.lastAudioDownloaded);
 
-        // Audio for the video
-        _audioPath = infoset.downloader.lastAudioDownloaded;
+      // Audio for the video
+      _audioPath = infoset.downloader.lastAudioDownloaded;
 
-        // Obtain the argument list to Convert our audio file to .ogg if needed
-        if (_videoFormat == "matroska,webm") {
-          _args = await infoset.converter.getArgumentsList(
-            FFmpegArgs.argsToOGG,                    // Convert to .ogg
-            infoset.metadata,                        // Use default/custom MetaData
-            ActionType.convertAudio,                 // Specifiy the convertion type
-            infoset.downloader.lastAudioDownloaded,  // Path to the audio to be converted
-            _audioSavePath                           // Path to be saved converted audio
-          ); if (_args == null) return 1;            // Exit if something went wrong
-
-          // Start audio convertion using the obtained argument list for FFmpeg use
-          infoset.downloader.progressBar.add(null);
-          infoset.currentAction.add("Converting audio...");
-          _result = await infoset.converter.convert(_args, ActionType.convertAudio);
-          _audioPath = infoset.converter.lastConvertedAudio;
-        }
-
-        // Obtain the argument list to paste our
-        // converted Audio to the downloaded Video
+      // Obtain the argument list to Convert our audio file to .ogg if needed
+      if (_videoFormat == "matroska,webm") {
         _args = await infoset.converter.getArgumentsList(
-          FFmpegArgs.argsToMP4,                    // Handle Video
+          FFmpegArgs.argsToOGG,                    // Convert to .ogg
           infoset.metadata,                        // Use default/custom MetaData
-          ActionType.encodeAudioToVideo,           // Specify the convertion type
-          infoset.downloader.lastVideoDownloaded,  // Path to the Video
-          _videoSavePath,                          // Path to be saved final Video
-          _videoFormat,                            // Video Format (Typically .webm)
-          _audioPath                               // Audio to be encrusted to the video
-        ); if (_args == null) return 1;
-
-        // Patch our final video with the previously converted audio using
-        // the obtained argument list for FFmpeg use
-        infoset.downloader.progressBar.add(null);
-        infoset.currentAction.add("Patching Audio...");
-        _result = await infoset.converter.convert(_args, ActionType.encodeAudioToVideo);
-
-        // Finish up by renaming the final Video it's
-        // original name and removing "tmp" folder
-        String downloadPath = infoset.downloadPath + "/" + infoset.metadata.title + ".webm";
-        await File(infoset.converter.lastConvertedVideo).rename(downloadPath);
-        NativeMethod.registerFile(downloadPath);
-        infoset.downloadPath = downloadPath;
-        infoset.downloadFinished = true;
-        closeDownload(0);
-        return 0;
-        // ----------------------------
+          ActionType.convertAudio,                 // Specifiy the convertion type
+          infoset.downloader.lastAudioDownloaded,  // Path to the audio to be converted
+          _audioSavePath                           // Path to be saved converted audio
+        ); if (_args == null) return 1;            // Exit if something went wrong
       }
+      if (_videoFormat == "mov,mp4,m4a,3gp,3g2,mj2") {
+        _args = await infoset.converter.getArgumentsList(
+          FFmpegArgs.argsToACC,
+          infoset.metadata,
+          ActionType.convertAudio,
+          infoset.downloader.lastAudioDownloaded,
+          _audioSavePath
+        ); if (_args == null) return 1;
+      }
+      // Start audio convertion using the obtained argument list for FFmpeg use
+      infoset.downloader.progressBar.add(null);
+      infoset.currentAction.add("Converting audio...");
+      _result = await infoset.converter.convert(_args, ActionType.convertAudio);
+      _audioPath = infoset.converter.lastConvertedAudio;
+
+      // Obtain the argument list to paste our
+      // converted Audio to the downloaded Video
+      _args = await infoset.converter.getArgumentsList(
+        FFmpegArgs.argsToMP4,                    // Handle Video
+        infoset.metadata,                        // Use default/custom MetaData
+        ActionType.encodeAudioToVideo,           // Specify the convertion type
+        infoset.downloader.lastVideoDownloaded,  // Path to the Video
+        _videoSavePath,                          // Path to be saved final Video
+        _videoFormat,                            // Video Format (Typically .webm)
+        _audioPath                               // Audio to be encrusted to the video
+      ); if (_args == null) return 1;
+
+      // Patch our final video with the previously converted audio using
+      // the obtained argument list for FFmpeg use
+      infoset.downloader.progressBar.add(null);
+      infoset.currentAction.add("Patching Audio...");
+      _result = await infoset.converter.convert(_args, ActionType.encodeAudioToVideo);
+
+      // Finish up by renaming the final Video it's
+      // original name and removing "tmp" folder
+      String downloadPath = infoset.downloadPath + "/" + infoset.metadata.title + ".webm";
+      await File(infoset.converter.lastConvertedVideo).rename(downloadPath);
+      NativeMethod.registerFile(downloadPath);
+      infoset.downloadPath = downloadPath;
+      infoset.downloadFinished = true;
+      closeDownload(0);
+      return 0;
+      // ----------------------------
     }
     return null;
   }

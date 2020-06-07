@@ -7,7 +7,6 @@ class SearchBar extends StatefulWidget {
   final Color containerColor;
   final Color textfieldColor;
   final TextEditingController controller;
-  final FocusNode focusNode;
   final Function onTextChanged;
   final Function onSearchPressed;
   final double indicatorValue;
@@ -19,7 +18,6 @@ class SearchBar extends StatefulWidget {
     @required this.containerColor,
     @required this.textfieldColor,
     @required this.controller,
-    @required this.focusNode,
     this.onTextChanged,
     this.enablePasteButton: true,
     @required this.onSearchPressed,
@@ -56,7 +54,6 @@ class _SearchBarState extends State<SearchBar> {
                   Expanded(
                     child: TextFormField(
                       cursorColor: Colors.redAccent,
-                      focusNode: widget.focusNode,
                       controller: widget.controller,
                       decoration: InputDecoration(
                         contentPadding: widget.prefixIcon != null

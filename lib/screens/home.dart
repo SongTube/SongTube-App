@@ -61,7 +61,6 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
               ),
               hintText: "URL",
               indicatorValue: manager.showLoadingBar == true ? null : 0.0,
-              focusNode: manager.urlNode,
               controller: manager.urlController,
               containerColor: Theme.of(context).cardColor,
               textfieldColor: Theme.of(context).inputDecorationTheme.fillColor,
@@ -213,7 +212,6 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                 children: <Widget>[
                                   // Title TextField
                                   TextFieldTile(
-                                    focusNode: manager.titleNode,
                                     textController: manager.titleController,
                                     inputType: TextInputType.text,
                                     labelText: "Title",
@@ -226,7 +224,6 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                       // Album TextField
                                       Expanded(
                                         child: TextFieldTile(
-                                          focusNode: manager.albumNode,
                                           textController: manager.albumController,
                                           inputType: TextInputType.text,
                                           labelText: "Album",
@@ -237,7 +234,6 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                       // Artist TextField
                                       Expanded(
                                         child: TextFieldTile(
-                                          focusNode: manager.artistNode,
                                           textController: manager.artistController,
                                           inputType: TextInputType.text,
                                           labelText: "Artist",
@@ -253,7 +249,6 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                       // Gender TextField
                                       Expanded(
                                         child: TextFieldTile(
-                                          focusNode: manager.genreNode,
                                           textController: manager.genreController,
                                           inputType: TextInputType.text,
                                           labelText: "Genre",
@@ -264,7 +259,6 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                       // Date TextField
                                       Expanded(
                                         child: TextFieldTile(
-                                          focusNode: manager.dateNode,
                                           textController: manager.dateController,
                                           inputType: TextInputType.datetime,
                                           labelText: "Date",
@@ -280,7 +274,6 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                       // Disk TextField
                                       Expanded(
                                         child: TextFieldTile(
-                                          focusNode: manager.discNode,
                                           textController: manager.discController,
                                           inputType: TextInputType.number,
                                           labelText: "Disc",
@@ -291,7 +284,6 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                       // Track TextField
                                       Expanded(
                                         child: TextFieldTile(
-                                          focusNode: manager.trackNode,
                                           textController: manager.trackController,
                                           inputType: TextInputType.number,
                                           labelText: "Track",

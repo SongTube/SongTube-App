@@ -20,7 +20,6 @@ class _NavigateState extends State<Navigate> with AutomaticKeepAliveClientMixin,
 
   // Controllers
   TextEditingController searchTextController;
-  FocusNode searchFocusNode;
 
   // Variables
   bool showSearchBar;
@@ -31,7 +30,6 @@ class _NavigateState extends State<Navigate> with AutomaticKeepAliveClientMixin,
 
   void initState() {
     searchTextController = new TextEditingController();
-    searchFocusNode = new FocusNode();
     showSearchBar = true;
     super.initState();
   }
@@ -58,7 +56,6 @@ class _NavigateState extends State<Navigate> with AutomaticKeepAliveClientMixin,
               ? SearchBar(
                   hintText: "Search Youtube...",
                   indicatorValue: 0.0,
-                  focusNode: searchFocusNode,
                   controller: searchTextController,
                   containerColor: Colors.white,
                   textfieldColor: Colors.grey[200],

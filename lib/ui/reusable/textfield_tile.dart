@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 
 class TextFieldTile extends StatelessWidget {
-  final FocusNode focusNode;
   final TextEditingController textController;
   final String labelText;
   final IconData icon;
   final TextInputType inputType;
   TextFieldTile({
-    @required this.focusNode,
     @required this.textController,
     @required this.labelText,
     @required this.icon,
@@ -18,7 +16,6 @@ class TextFieldTile extends StatelessWidget {
     return TextField(
       keyboardType: inputType,
       cursorColor: Colors.redAccent,
-      focusNode: focusNode,
       controller: textController,
       decoration: InputDecoration(
         prefixIcon: Icon(icon,
