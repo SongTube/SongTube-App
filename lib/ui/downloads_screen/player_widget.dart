@@ -186,8 +186,8 @@ class _FullPlayerWidgetState extends State<FullPlayerWidget> {
                                           borderRadius: BorderRadius.circular(40)
                                         ),
                                         child: playerProvider.playerState == PlayerState.paused
-                                          ? Icon(Icons.play_arrow, size: 50)
-                                          : Icon(Icons.pause, size: 50)
+                                          ? Icon(Icons.play_arrow, size: 50, color: Colors.white)
+                                          : Icon(Icons.pause, size: 50, color: Colors.white),
                                       ),
                                     ),
                                     // Padding
@@ -253,7 +253,11 @@ class _FullPlayerWidgetState extends State<FullPlayerWidget> {
                                   padding: const EdgeInsets.only(left: 8, right: 8),
                                   child: Text(
                                     playerProvider.queue[playerProvider.queueIndex].title,
-                                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white,
+                                    ),
                                     textAlign: TextAlign.center,
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
