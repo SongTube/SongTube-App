@@ -91,7 +91,7 @@ class Converter {
           "-y", "-i",
           "$filePath",
           "-c:a", "aac",
-          "-b:a", "128k",
+          "-b:a", "256k",
           "$savePath.m4a",
         ];
         return _argsList;
@@ -99,7 +99,7 @@ class Converter {
       if (type == FFmpegArgs.argsToOGG) {
         _argsList = [
           "-y", "-i", "$filePath", "-c:a", "libopus",
-          "-b:a", "128k", "-vbr", "on", "-compression_level", "10",
+          "-b:a", "256k", "-vbr", "on", "-compression_level", "10",
           "$savePath.ogg"
         ];
         return _argsList;
@@ -107,7 +107,7 @@ class Converter {
       if (type == FFmpegArgs.argsToOGGVorbis) {
         _argsList = [
           "-y", "-i", "$filePath",
-          "-c:a", "libvorbis", "-b:a", "128k",
+          "-c:a", "libvorbis", "-b:a", "256k",
           "$savePath.ogg"
         ];
         return _argsList;
@@ -115,7 +115,7 @@ class Converter {
       if (type == FFmpegArgs.argsToMP3) {
         _argsList = [
           "-y", "-i", "$filePath",
-          "-c:a", "libmp3lame", "-b:a", "128k",
+          "-c:a", "libmp3lame", "-b:a", "256k",
           "$savePath.mp3"
         ];
         return _argsList;
