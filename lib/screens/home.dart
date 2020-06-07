@@ -137,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                                       ),
                                       GestureDetector(
                                         onTap: () {
-                                          manager.openWebviewPlayer = true;
+                                          setState(() => manager.openWebviewPlayer = true);
                                         },
                                         child: Center(
                                           child: Icon(Icons.play_arrow, size: 90, color: Colors.white),
