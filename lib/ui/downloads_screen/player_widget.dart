@@ -56,7 +56,7 @@ class _PlayerWidgetState extends State<PlayerWidget> with TickerProviderStateMix
         SizedBox(width: 10),
         // Play/Pause song
         AnimatedSize(
-          duration: Duration(milliseconds: 300),
+          duration: Duration(milliseconds: 150),
           vsync: this,
           child: widget.showPlayPause
           ? Container(
