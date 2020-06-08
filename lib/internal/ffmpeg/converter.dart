@@ -48,14 +48,14 @@ class Converter {
 
   // Get the data we need before declaring our Argument lists
   Future<List<String>> getArgumentsList({
-    FFmpegArgs type, ActionType downType, String filePath,
+    FFmpegArgs type, ActionType actionType, String filePath,
     String savePath, String saveFormat, String audioPath, List audioModifiers
   }) async {
 
     List<String> _argsList;
 
     // Encode audio to Video, requires the audioPath to be provided
-    if (downType == ActionType.encodeAudioToVideo && audioPath != null) {
+    if (actionType == ActionType.encodeAudioToVideo && audioPath != null) {
       if (saveFormat == "matroska,webm") {
         _argsList = [
           "-y", "-i", "$filePath", "-i", "$audioPath",
@@ -74,19 +74,9 @@ class Converter {
       }
       appSnack.unrecognizedEncoding(saveFormat);
     }
-    // Convert video to Specified format by FFmpegArgs
-    if (downType == ActionType.convertVideo) {
-      if (type == FFmpegArgs.argsToMP4) {
-        _argsList = [
-          "-y", "-i", "$filePath",
-          "-q:v", "1", "$savePath.mp4"
-        ];
-        return _argsList;
-      }
-    }
 
     // Convert audio to Specified format by FFmpegArgs
-    if (downType == ActionType.convertAudio) {
+    if (actionType == ActionType.convertAudio) {
       if (type == FFmpegArgs.argsToACC) {
         _argsList = [
           "-y", "-i",
