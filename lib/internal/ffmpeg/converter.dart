@@ -3,7 +3,6 @@ import 'dart:io';
 
 // Internal
 import 'package:ext_storage/ext_storage.dart';
-import 'package:songtube/internal/models/metadata.dart';
 
 // Packages
 import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
@@ -48,8 +47,10 @@ class Converter {
   }
 
   // Get the data we need before declaring our Argument lists
-  Future<List<String>> getArgumentsList(FFmpegArgs type, MediaMetaData metadata,
-    ActionType downType, String filePath, String savePath, [String saveFormat, String audioPath]) async {
+  Future<List<String>> getArgumentsList({
+    FFmpegArgs type, ActionType downType, String filePath,
+    String savePath, String saveFormat, String audioPath, List audioModifiers
+  }) async {
 
     List<String> _argsList;
 
@@ -92,6 +93,7 @@ class Converter {
           "$filePath",
           "-c:a", "aac",
           "-b:a", "256k",
+          "-af", "volume=${audioModifiers[0]}, bass=g=${audioModifiers[1]}, treble=g=${audioModifiers[2]}",
           "$savePath.m4a",
         ];
         return _argsList;
@@ -108,6 +110,7 @@ class Converter {
         _argsList = [
           "-y", "-i", "$filePath",
           "-c:a", "libvorbis", "-b:a", "256k",
+          "-af", "volume=${audioModifiers[0]}, bass=g=${audioModifiers[1]}, treble=g=${audioModifiers[2]}",
           "$savePath.ogg"
         ];
         return _argsList;
@@ -116,6 +119,7 @@ class Converter {
         _argsList = [
           "-y", "-i", "$filePath",
           "-c:a", "libmp3lame", "-b:a", "256k",
+          "-af", "volume=${audioModifiers[0]}, bass=g=${audioModifiers[1]}, treble=g=${audioModifiers[2]}",
           "$savePath.mp3"
         ];
         return _argsList;

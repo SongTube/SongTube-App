@@ -226,7 +226,8 @@ class ManagerProvider extends ChangeNotifier {
       downloadType: downloadType,
       downloadPath: downloadPath,
       convertFormat: convertFormat,
-      videoIndex: videoIndex
+      videoIndex: videoIndex,
+      audioModifiers: [double.parse(data[2]), int.parse(data[3]), int.parse(data[4])]
     );
     DownloadManager _manager = new DownloadManager(
       enableConvertion: enableConvertion,

@@ -30,6 +30,7 @@ class DownloadInfoSet {
   DownloadType downloadType;
   FFmpegArgs convertFormat;
   bool downloadFinished = false;
+  List audioModifiers;
 
   DownloadInfoSet({
     @required this.currentAction,
@@ -38,6 +39,7 @@ class DownloadInfoSet {
     @required this.downloadType,
     @required this.convertFormat,
     @required this.downloadPath,
+    @required this.audioModifiers,
     this.videoIndex
   }) {
     downloader = new Downloader();

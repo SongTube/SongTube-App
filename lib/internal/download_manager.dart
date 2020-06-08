@@ -60,11 +60,11 @@ class DownloadManager {
 
         // Obtain the argument list to Convert our audio file to user Specified
         _args = await infoset.converter.getArgumentsList(
-          infoset.convertFormat,           // Convert to specified format
-          infoset.metadata,                // Use default/custom MetaData
-          ActionType.convertAudio,         // Specify the convertion type
-          infoset.downloader.lastAudioDownloaded,  // Path to the Audio
-          _audioSavePath                   // Path to save the final Audio
+          type: infoset.convertFormat,                      // Convert to specified format
+          downType: ActionType.convertAudio,                // Specify the convertion type
+          filePath: infoset.downloader.lastAudioDownloaded, // Path to the Audio
+          savePath: _audioSavePath,                         // Path to save the final Audio
+          audioModifiers: infoset.audioModifiers            // Audio Volume/Bass/Treble Modifiers
         ); if (_args == null) return 1;
 
         // Start audio convertion using the obtained argument list for FFmpeg use
@@ -170,20 +170,20 @@ class DownloadManager {
       // Obtain the argument list to Convert our audio file to .ogg if needed
       if (_videoFormat == "matroska,webm") {
         _args = await infoset.converter.getArgumentsList(
-          FFmpegArgs.argsToOGG,                    // Convert to .ogg
-          infoset.metadata,                        // Use default/custom MetaData
-          ActionType.convertAudio,                 // Specifiy the convertion type
-          infoset.downloader.lastAudioDownloaded,  // Path to the audio to be converted
-          _audioSavePath                           // Path to be saved converted audio
-        ); if (_args == null) return 1;            // Exit if something went wrong
+          type: FFmpegArgs.argsToOGG,                       // Convert to .ogg
+          downType: ActionType.convertAudio,                // Specifiy the convertion type
+          filePath: infoset.downloader.lastAudioDownloaded, // Path to the audio to be converted
+          savePath: _audioSavePath,                         // Path to be saved converted audio
+          audioModifiers: infoset.audioModifiers            // Audio Volume/Bass/Treble Modifiers
+        ); if (_args == null) return 1;                     // Exit if something went wrong
       }
       if (_videoFormat == "mov,mp4,m4a,3gp,3g2,mj2") {
         _args = await infoset.converter.getArgumentsList(
-          FFmpegArgs.argsToACC,
-          infoset.metadata,
-          ActionType.convertAudio,
-          infoset.downloader.lastAudioDownloaded,
-          _audioSavePath
+          type: FFmpegArgs.argsToACC,
+          downType: ActionType.convertAudio,
+          filePath: infoset.downloader.lastAudioDownloaded,
+          savePath: _audioSavePath,
+          audioModifiers: infoset.audioModifiers            // Audio Volume/Bass/Treble Modifiers
         ); if (_args == null) return 1;
       }
       // Start audio convertion using the obtained argument list for FFmpeg use
@@ -195,13 +195,12 @@ class DownloadManager {
       // Obtain the argument list to paste our
       // converted Audio to the downloaded Video
       _args = await infoset.converter.getArgumentsList(
-        FFmpegArgs.argsToMP4,                    // Handle Video
-        infoset.metadata,                        // Use default/custom MetaData
-        ActionType.encodeAudioToVideo,           // Specify the convertion type
-        infoset.downloader.lastVideoDownloaded,  // Path to the Video
-        _videoSavePath,                          // Path to be saved final Video
-        _videoFormat,                            // Video Format (Typically .webm)
-        _audioPath                               // Audio to be encrusted to the video
+        type: FFmpegArgs.argsToMP4,                       // Handle Video
+        downType: ActionType.encodeAudioToVideo,          // Specify the convertion type
+        filePath: infoset.downloader.lastVideoDownloaded, // Path to the Video
+        savePath: _videoSavePath,                         // Path to be saved final Video
+        saveFormat: _videoFormat,                         // Video Format (Typically .webm)
+        audioPath: _audioPath                             // Audio to be encrusted to the video
       ); if (_args == null) return 1;
 
       // Patch our final video with the previously converted audio using
