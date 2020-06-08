@@ -47,6 +47,7 @@ dependencies:
       url: git://github.com/magodo/audioplayers.git
       ref: audio_focus
   sqflite: ^1.3.0
+  flutter_xlider: ^3.4.0
 
 dev_dependencies:
   flutter_test:
