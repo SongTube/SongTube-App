@@ -573,27 +573,6 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                       ),
                     ),
                     Divider(color: Colors.transparent),
-                    /*ListTile(
-                      title: Text(
-                        "Convert Video",
-                        style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyText1.color,
-                          fontWeight: FontWeight.w500
-                        ),
-                      ),
-                      subtitle: Text("Enable/Disable video convertion, default video format is .webm - Warning: VIDEO CONVERTION IS BROKEN",
-                        style: TextStyle(fontSize: 12)
-                      ),
-                      trailing: CircularCheckBox(
-                        activeColor: Colors.redAccent,
-                        value: appData.enableVideoConvertion,
-                        onChanged: (bool newValue) {
-                          appData.enableVideoConvertion = newValue;
-                        },
-                      ),
-                    ),
-                    Divider(color: Colors.transparent),
-                    */
                   ],
                 ),
               ),

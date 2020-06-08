@@ -61,7 +61,7 @@ class DownloadManager {
         // Obtain the argument list to Convert our audio file to user Specified
         _args = await infoset.converter.getArgumentsList(
           type: infoset.convertFormat,                      // Convert to specified format
-          downType: ActionType.convertAudio,                // Specify the convertion type
+          actionType: ActionType.convertAudio,              // Specify the convertion type
           filePath: infoset.downloader.lastAudioDownloaded, // Path to the Audio
           savePath: _audioSavePath,                         // Path to save the final Audio
           audioModifiers: infoset.audioModifiers            // Audio Volume/Bass/Treble Modifiers
@@ -171,7 +171,7 @@ class DownloadManager {
       if (_videoFormat == "matroska,webm") {
         _args = await infoset.converter.getArgumentsList(
           type: FFmpegArgs.argsToOGG,                       // Convert to .ogg
-          downType: ActionType.convertAudio,                // Specifiy the convertion type
+          actionType: ActionType.convertAudio,              // Specifiy the convertion type
           filePath: infoset.downloader.lastAudioDownloaded, // Path to the audio to be converted
           savePath: _audioSavePath,                         // Path to be saved converted audio
           audioModifiers: infoset.audioModifiers            // Audio Volume/Bass/Treble Modifiers
@@ -180,7 +180,7 @@ class DownloadManager {
       if (_videoFormat == "mov,mp4,m4a,3gp,3g2,mj2") {
         _args = await infoset.converter.getArgumentsList(
           type: FFmpegArgs.argsToACC,
-          downType: ActionType.convertAudio,
+          actionType: ActionType.convertAudio,
           filePath: infoset.downloader.lastAudioDownloaded,
           savePath: _audioSavePath,
           audioModifiers: infoset.audioModifiers            // Audio Volume/Bass/Treble Modifiers
@@ -196,7 +196,7 @@ class DownloadManager {
       // converted Audio to the downloaded Video
       _args = await infoset.converter.getArgumentsList(
         type: FFmpegArgs.argsToMP4,                       // Handle Video
-        downType: ActionType.encodeAudioToVideo,          // Specify the convertion type
+        actionType: ActionType.encodeAudioToVideo,        // Specify the convertion type
         filePath: infoset.downloader.lastVideoDownloaded, // Path to the Video
         savePath: _videoSavePath,                         // Path to be saved final Video
         saveFormat: _videoFormat,                         // Video Format (Typically .webm)
