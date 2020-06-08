@@ -138,14 +138,14 @@ class AppSnack {
 
   // Show SnackBar with Icon and Title
   static Widget withIconTitle(BuildContext context,
-    Icon icon, String title) {
+    IconData icon, String title) {
 
     return SnackBar(
       content: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Icon(
-            Icons.error,
+            icon,
             color: Theme.of(context).iconTheme.color,
           ),
           SizedBox(width: 8),
@@ -155,15 +155,9 @@ class AppSnack {
             children: <Widget>[
               SizedBox(height: 4),
               Text(
-                'Error',
+                title,
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
-                  color: Theme.of(context).textTheme.bodyText1.color
-                )
-              ),
-              Text(
-                'Check your Internet Connection',
-                style: TextStyle(
                   color: Theme.of(context).textTheme.bodyText1.color
                 )
               ),
