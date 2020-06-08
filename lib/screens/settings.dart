@@ -712,7 +712,7 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                     return AboutDialog(
                       applicationIcon: Image.asset('assets/images/ic_launcher.png', width: 50, height: 50),
                       applicationName: "SongTube",
-                      applicationVersion: "2.0.0+0",
+                      applicationVersion: "pre-2.0.0+0",
                       children: <Widget>[
                         GestureDetector(
                           onTap: () => launch("https://github.com/SongTube"),
