@@ -3,6 +3,8 @@ import 'dart:io';
 
 // Flutter
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 
 // Internal
 import 'package:songtube/provider/app_provider.dart';
@@ -11,6 +13,8 @@ import 'package:songtube/provider/app_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:ext_storage/ext_storage.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:songtube/provider/downloads_manager.dart';
+import 'package:songtube/ui/snackbar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // UI
@@ -26,6 +30,7 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
     AppDataProvider appData = Provider.of<AppDataProvider>(context);
+    ManagerProvider manager = Provider.of<ManagerProvider>(context);
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.only(
@@ -189,7 +194,6 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                       ],
                     ),
                     Divider(indent: 8, endIndent: 8),
-                    Divider(color: Colors.transparent),
                     ListTile(
                       title: Text(
                         "Audio Download Path",
@@ -577,6 +581,129 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                 ),
               ),
             ),
+            // ------------------
+            // Converter Settings
+            // ------------------
+
+            // ------------------
+            // Backup Options
+            // ------------------
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                color: Theme.of(context).cardColor,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            top: 12,
+                            left: 16,
+                            bottom: 4
+                          ),
+                          child: Icon(Icons.backup, color: Theme.of(context).iconTheme.color),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            top: 12,
+                            left: 8,
+                            bottom: 4
+                          ),
+                          child: Text(
+                            "Backup",
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.w600
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Divider(indent: 8, endIndent: 8),
+                    ListTile(
+                      title: Text(
+                        "Backup Library",
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyText1.color,
+                          fontWeight: FontWeight.w500
+                        ),
+                      ),
+                      subtitle: Text("Do a Backup of all your downloaded media Library",
+                        style: TextStyle(fontSize: 12)
+                      ),
+                      trailing: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          color: Colors.redAccent
+                        ),
+                        child: IconButton(
+                          icon: Icon(Icons.backup, color: Colors.white),
+                          onPressed: () async {
+                            Directory documentsDirectory = await getApplicationDocumentsDirectory();
+                            String backupPath = await ExtStorage.getExternalStorageDirectory() + "/SongTube/Backup/";
+                            if (!await Directory(backupPath).exists()) await Directory(backupPath).create();
+                            String path = join(documentsDirectory.path, 'downloadDatabase.db');
+                            if (!await File(path).exists()) {
+                              final snackbar = AppSnack.withIconTitle(context, Icons.warning, "Your Library is Empty");
+                              appData.libraryScaffoldKey.currentState.showSnackBar(snackbar);
+                              return;
+                            }
+                            await File(path).copy(backupPath + 'downloadDatabase.db');
+                            final snackbar = AppSnack.withIconTitle(context, Icons.backup, "Backup Completed");
+                            appData.libraryScaffoldKey.currentState.showSnackBar(snackbar);
+                          }
+                        )
+                      )
+                    ),
+                    Divider(color: Colors.transparent),
+                    ListTile(
+                      title: Text(
+                        "Restore Library",
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyText1.color,
+                          fontWeight: FontWeight.w500
+                        ),
+                      ),
+                      subtitle: Text("Restore a Backup of all your downloaded media Library",
+                        style: TextStyle(fontSize: 12)
+                      ),
+                      trailing: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          color: Colors.redAccent
+                        ),
+                        child: IconButton(
+                          icon: Icon(Icons.restore, color: Colors.white),
+                          onPressed: () async {
+                            Directory documentsDirectory = await getApplicationDocumentsDirectory();
+                            String backupPath = await ExtStorage.getExternalStorageDirectory() + "/SongTube/Backup/";
+                            String path = join(documentsDirectory.path, 'downloadDatabase.db');
+                            if (!await File(backupPath + 'downloadDatabase.db').exists()) {
+                              final snackbar = AppSnack.withIconTitle(context, Icons.warning, "You have no Backup");
+                              appData.libraryScaffoldKey.currentState.showSnackBar(snackbar);
+                              return;
+                            }
+                            await File(backupPath + 'downloadDatabase.db').copy(path);
+                            final snackbar = AppSnack.withIconTitle(context, Icons.restore, "Restore Completed");
+                            appData.libraryScaffoldKey.currentState.showSnackBar(snackbar);
+                            manager.getDatabase();
+                          }
+                        )
+                      )
+                    ),
+                    Divider(color: Colors.transparent),
+                  ],
+                ),
+              ),
+            ),
+            // ------------------
+            // Backup Options
+            // ------------------
             GestureDetector(
               onTap: () {
                 showDialog(
