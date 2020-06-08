@@ -51,9 +51,8 @@ class DownloadTile extends StatelessWidget {
                           alignment: Alignment.topLeft,
                           child: Text(
                             title.toString(),
-                            overflow: TextOverflow.clip,
-                            maxLines: 2,
-                            softWrap: true,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
                           ),
                         ),
                         Align(
@@ -195,8 +194,8 @@ class DownloadTileWithoutStream extends StatelessWidget {
                           alignment: Alignment.topLeft,
                           child: Text(
                             title.toString(),
-                            overflow: TextOverflow.clip,
-                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
                             softWrap: true,
                           ),
                         ),
