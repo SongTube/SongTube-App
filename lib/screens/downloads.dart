@@ -102,10 +102,12 @@ class _DownloadTabState extends State<DownloadTab> {
           )
         ],
       ),
-      floatingActionButton: AnimatedSwitcher(
-        duration: Duration(milliseconds: 300),
-        child: manager.downloadsTabIndex == 0
-          ? FloatingActionButton(
+      floatingActionButton: IgnorePointer(
+        ignoring: manager.downloadsTabIndex == 0 ? false : true,
+        child: AnimatedOpacity(
+          opacity: manager.downloadsTabIndex == 0 ? 1.0 : 0.0,
+          duration: Duration(milliseconds: 150),
+          child: FloatingActionButton(
             child: Icon(Icons.clear_all),
             backgroundColor: Colors.redAccent,
             foregroundColor: Colors.white,
@@ -153,7 +155,7 @@ class _DownloadTabState extends State<DownloadTab> {
               }
             }
           )
-        : Container()
+        ),
       ),
     );
   }
