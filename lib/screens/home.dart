@@ -80,9 +80,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                   )
                 ),
             )
-            : Container(),
-            manager.mediaStream != null
-            ? Expanded(
+            : Expanded(
               child: AnimatedOpacity(
                 duration: Duration(milliseconds: 300),
                 opacity: manager.mediaStreamReady == true ? 1.0 : 0.0,
@@ -306,7 +304,6 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                 ),
               ),
             )
-          : Container(),
         ],
         ),
         floatingActionButton: IgnorePointer(
