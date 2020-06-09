@@ -196,7 +196,8 @@ class _YoutubeWebviewState extends State<YoutubeWebview> with AutomaticKeepAlive
               return;
             }
             appData.screenIndex = 0;
-            videoUrl.add(_url);
+            manager.urlController.text = _url;
+            manager.getMediaStreamInfo(_id);
           },
         ),
       ),
