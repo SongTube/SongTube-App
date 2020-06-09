@@ -116,7 +116,7 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
         statusBarColor: Colors.transparent,
         statusBarBrightness: _statusBarBrightness,
         statusBarIconBrightness: appData.screenIndex == 2 ? Brightness.light : _statusBarBrightness,
-        systemNavigationBarColor: appData.screenIndex == 2 ? Colors.redAccent : Theme.of(context).scaffoldBackgroundColor,
+        systemNavigationBarColor: Theme.of(context).scaffoldBackgroundColor,
         systemNavigationBarIconBrightness: _themeBrightness
       ),
     );
