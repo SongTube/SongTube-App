@@ -15,7 +15,6 @@ import 'package:ext_storage/ext_storage.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:songtube/provider/downloads_manager.dart';
 import 'package:songtube/ui/snackbar.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 // UI
 import 'package:songtube/ui/reusable/alertdialog.dart';
@@ -32,6 +31,19 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
     AppDataProvider appData = Provider.of<AppDataProvider>(context);
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: Text(
+          "Settings",
+          style: TextStyle(
+            color: Theme.of(context).textTheme.bodyText1.color
+          ),
+        ),
+        iconTheme: IconThemeData(
+          color: Theme.of(context).iconTheme.color
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.only(
           left: 8,
@@ -39,22 +51,33 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
           bottom: 4
         ),
         child: ListView(
+          padding: EdgeInsets.zero,
           physics: BouncingScrollPhysics(),
           controller: ScrollController(
             initialScrollOffset: 20.0,
             keepScrollOffset: true
           ),
           children: <Widget>[
+            // Padding
+            SizedBox(height: 16),
             // ---------------
             // Themes Settings
             // ---------------
             Padding(
               padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
-              child: Card(
-                shape: RoundedRectangleBorder(
+              child: Container(
+                decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
+                  color: Theme.of(context).cardColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12.withOpacity(0.05),
+                      offset: Offset(0, 3), //(x,y)
+                      blurRadius: 6.0,
+                      spreadRadius: 0.01 
+                    )
+                  ]
                 ),
-                color: Theme.of(context).cardColor,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -159,11 +182,19 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
             // ------------------
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Card(
-                shape: RoundedRectangleBorder(
+              child: Container(
+                decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
+                  color: Theme.of(context).cardColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12.withOpacity(0.05),
+                      offset: Offset(0, 3), //(x,y)
+                      blurRadius: 6.0,
+                      spreadRadius: 0.01 
+                    )
+                  ]
                 ),
-                color: Theme.of(context).cardColor,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -439,11 +470,19 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
             // ------------------
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Card(
-                shape: RoundedRectangleBorder(
+              child: Container(
+                decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
+                  color: Theme.of(context).cardColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12.withOpacity(0.05),
+                      offset: Offset(0, 3), //(x,y)
+                      blurRadius: 6.0,
+                      spreadRadius: 0.01 
+                    )
+                  ]
                 ),
-                color: Theme.of(context).cardColor,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -590,11 +629,19 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
             // ------------------
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Card(
-                shape: RoundedRectangleBorder(
+              child: Container(
+                decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
+                  color: Theme.of(context).cardColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12.withOpacity(0.05),
+                      offset: Offset(0, 3), //(x,y)
+                      blurRadius: 6.0,
+                      spreadRadius: 0.01 
+                    )
+                  ]
                 ),
-                color: Theme.of(context).cardColor,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -704,86 +751,6 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
             // ------------------
             // Backup Options
             // ------------------
-            GestureDetector(
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AboutDialog(
-                      applicationIcon: Image.asset('assets/images/ic_launcher.png', width: 50, height: 50),
-                      applicationName: "SongTube",
-                      applicationVersion: "pre-2.0.0+0",
-                      children: <Widget>[
-                        GestureDetector(
-                          onTap: () => launch("https://github.com/SongTube"),
-                          child: Container(
-                            padding: EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: Theme.of(context).cardColor
-                            ),
-                            child: Row(
-                              children: <Widget>[
-                                Icon(MdiIcons.github),
-                                SizedBox(width: 10),
-                                Text("GitHub Page", style: TextStyle(
-                                  color: Theme.of(context).textTheme.bodyText1.color,
-                                ))
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 8),
-                        GestureDetector(
-                          onTap: () => launch("https://t.me/songtubechannel"),
-                          child: Container(
-                            padding: EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: Theme.of(context).cardColor
-                            ),
-                            child: Row(
-                              children: <Widget>[
-                                Icon(MdiIcons.telegram),
-                                SizedBox(width: 10),
-                                Text("Telegram Channel", style: TextStyle(
-                                  color: Theme.of(context).textTheme.bodyText1.color,
-                                ))
-                              ],
-                            ),
-                          ),
-                        )
-                      ],
-                    );
-                  }
-                );
-              },
-              child: Center(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).cardColor,
-                    borderRadius: BorderRadius.circular(20)
-                  ),
-                  height: kToolbarHeight,
-                  width: MediaQuery.of(context).size.width*0.5,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      SizedBox(width: 4),
-                      Icon(MdiIcons.informationOutline, color: Colors.redAccent),
-                      SizedBox(width: 4),
-                      Text("About SongTube",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600
-                        ),
-                      ),
-                      SizedBox(width: 4),
-                    ],
-                  ),
-                )
-              ),
-            )
           ],
         ),
       ),

@@ -9,6 +9,9 @@ import 'package:songtube/ui/themes.dart';
 import 'package:songtube/provider/app_provider.dart';
 import 'package:songtube/library.dart';
 
+// Packages
+import 'package:audio_service/audio_service.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); 
   AppDataProvider provider = AppDataProvider();
@@ -54,7 +57,7 @@ class Main extends StatelessWidget {
           darkTheme: appData.systemThemeEnabled
                      ? darkTheme
                      : customTheme,
-          home: Library(),
+          home: AudioServiceWidget(child: Library()),
         );
       }, ),
     );

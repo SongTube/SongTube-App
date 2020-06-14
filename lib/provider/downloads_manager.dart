@@ -27,11 +27,15 @@ class ManagerProvider extends ChangeNotifier {
   // ----------------
   //
   ManagerProvider() {
-    showEmptyScreenWidget    = false;
+    // Variables
+    showEmptyScreenWidget    = true;
     openWebviewPlayer        = false;
     showLoadingBar           = false;
     mediaStreamReady         = false;
     showFloatingActionButtom = false;
+    showAppBar               = true;
+    showDownloadTabsStatus   = false;
+    // Controllers
     urlController    = new TextEditingController();
     titleController  = new TextEditingController();
     albumController  = new TextEditingController();
@@ -40,6 +44,9 @@ class ManagerProvider extends ChangeNotifier {
     dateController   = new TextEditingController();
     discController   = new TextEditingController();
     trackController  = new TextEditingController();
+    // Streams
+    showDownloadsTabs = new StreamController<bool>.broadcast();
+    showDownloadsTabs.add(true);
     getDatabase();
   }
 
@@ -53,10 +60,13 @@ class ManagerProvider extends ChangeNotifier {
   bool showLoadingBar;
   bool mediaStreamReady;
   bool showFloatingActionButtom;
+  bool _showAppBar;
   // Downloads Screen
   List<DownloadInfoSet> _downloadInfoSetList = [];
   List<DownloadedFile> _downloadedFileList = [];
   int _downloadsTabIndex = 0;
+  StreamController<bool> showDownloadsTabs;
+  bool showDownloadTabsStatus;
 
   // -----------------------------
   // App Global MediaStreamInfoSet
@@ -151,6 +161,10 @@ class ManagerProvider extends ChangeNotifier {
   String getIdFromLink() {
     return YoutubeInfo.getLinkID(urlController.text);
   }
+  // Get Channel Link
+  Future<String> getChannelLink() async {
+    return await YoutubeInfo.getChannelLink(urlController.text);
+  }
   // Get Video MediaStreamInfo from Id
   Future<int> getMediaStreamInfo(String id) async {
     loadHome(1);
@@ -160,6 +174,7 @@ class ManagerProvider extends ChangeNotifier {
         onTimeout: () {
           print("Timeout");
           loadHome(1);
+          showLoadingBar = false;
           return null;
         }
       );
@@ -262,6 +277,15 @@ class ManagerProvider extends ChangeNotifier {
   }
   set downloadsTabIndex(int value) {
     _downloadsTabIndex = value;
+    if (value == 0) {
+      showDownloadsTabs.add(false);
+      showDownloadTabsStatus = false;
+    }
+    notifyListeners();
+  }
+  bool get showAppBar => _showAppBar;
+  set showAppBar(bool value) {
+    _showAppBar = value;
     notifyListeners();
   }
 }

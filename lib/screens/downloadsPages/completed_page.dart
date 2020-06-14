@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/database/infoset_database.dart';
 import 'package:songtube/internal/database/models/downloaded_file.dart';
@@ -14,10 +15,25 @@ class CompletedPage extends StatefulWidget {
 }
 
 class _CompletedPageState extends State<CompletedPage> with TickerProviderStateMixin {
+
+  ScrollController scrollController = new ScrollController();
+
   @override
   Widget build(BuildContext context) {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
     Player audioPlayer = Provider.of<Player>(context);
+    scrollController.addListener(() {
+      if (scrollController.position.userScrollDirection == ScrollDirection.forward
+        && manager.showDownloadTabsStatus == true) {
+          manager.showDownloadsTabs.add(false);
+          manager.showDownloadTabsStatus = false;
+      }
+      if (scrollController.position.userScrollDirection == ScrollDirection.reverse
+        && manager.showDownloadTabsStatus == false) {
+        manager.showDownloadsTabs.add(true);
+        manager.showDownloadTabsStatus = true;
+      }
+    });
     return AnimatedSwitcher(
       duration: Duration(milliseconds: 300),
       child: manager.downloadedFileList.isNotEmpty
@@ -25,12 +41,13 @@ class _CompletedPageState extends State<CompletedPage> with TickerProviderStateM
           vsync: this,
           duration: Duration(milliseconds: 300),
           child: ListView.builder(
+            controller: scrollController,
             physics: BouncingScrollPhysics(),
               itemCount: manager.downloadedFileList.length,
               itemBuilder: (context, index) {
                 DownloadedFile download = manager.downloadedFileList[index];
                 return Padding(
-                  padding: EdgeInsets.only(left: 8, right: 8, top: 8),
+                  padding: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
                   child: DownloadTileWithoutStream(
                     title: download.title,
                     author: download.author,

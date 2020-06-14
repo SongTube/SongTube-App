@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:songtube/internal/models/metadata.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class DownloadTile extends StatelessWidget {
@@ -24,7 +23,15 @@ class DownloadTile extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: Theme.of(context).cardColor
+        color: Theme.of(context).cardColor,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12.withOpacity(0.05),
+            offset: Offset(0, 3), //(x,y)
+            blurRadius: 6.0,
+            spreadRadius: 0.01 
+          )
+        ]
       ),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -167,7 +174,15 @@ class DownloadTileWithoutStream extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: Theme.of(context).cardColor
+        color: Theme.of(context).cardColor,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12.withOpacity(0.05),
+            offset: Offset(0, 3), //(x,y)
+            blurRadius: 6.0,
+            spreadRadius: 0.01 
+          )
+        ]
       ),
       child: Padding(
         padding: const EdgeInsets.all(8.0),

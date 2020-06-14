@@ -1,5 +1,6 @@
 // Flutter
 import 'package:flutter/material.dart';
+import 'package:package_info/package_info.dart';
 
 // Internal
 import 'package:songtube/internal/preferences.dart';
@@ -19,7 +20,19 @@ class AppDataProvider extends ChangeNotifier {
     if (_videoDownloadPath == null)
       _videoDownloadPath = await ExtStorage.getExternalStorageDirectory() + "/SongTube";
     _libraryScaffoldKey = new GlobalKey<ScaffoldState>();
+    PackageInfo.fromPlatform().then((value) {
+      appName = value.appName;
+      packageName = value.packageName;
+      appVersion = value.version;
+      buildNumber = value.buildNumber;
+    });
   }
+
+  // Platform Info
+  String appName;
+  String packageName;
+  String appVersion;
+  String buildNumber;
 
   Color _accentColor = Colors.redAccent;
   bool _systemThemeAvailable = false;

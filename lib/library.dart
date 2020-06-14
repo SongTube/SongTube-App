@@ -11,22 +11,18 @@ import 'package:songtube/internal/native.dart';
 import 'package:songtube/internal/youtube/infoparser.dart';
 import 'package:songtube/provider/app_provider.dart';
 import 'package:songtube/provider/player_provider.dart';
-import 'package:songtube/screens/donate.dart';
 import 'package:songtube/screens/downloads.dart';
 import 'package:songtube/screens/home.dart';
+import 'package:songtube/screens/more.dart';
 import 'package:songtube/screens/navigate.dart';
-import 'package:songtube/screens/settings.dart';
 
 // Packages
 import 'package:permission_handler/permission_handler.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:songtube/ui/reusable/alertdialog.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:provider/provider.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 
 // UI
-import 'package:songtube/ui/drawer_layout.dart';
-import 'package:songtube/ui/reusable/drawer_item.dart';
 import 'package:songtube/ui/snackbar.dart';
 import 'package:songtube/ui/ui_elements.dart';
 import 'package:songtube/ui/downloads_screen/player_widget.dart';
@@ -38,13 +34,9 @@ class Library extends StatefulWidget {
 
 class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerProviderStateMixin {
 
-  // Constants
-  static const String _appName = "SongTube";
-  static const String _navigateTitle = "Youtube";
-
   // Local Variables
   DateTime currentBackPressTime;
-  List<String> _appBarTitle = [_appName, "Downloads", _navigateTitle, "Settings", "Donate"];
+  List<String> appBarTitle = ["SongTube", "Downloads", "Youtube", "More"];
 
   @override
   void initState() {
@@ -115,8 +107,8 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
       SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         statusBarBrightness: _statusBarBrightness,
-        statusBarIconBrightness: appData.screenIndex == 2 ? Brightness.light : _statusBarBrightness,
-        systemNavigationBarColor: Theme.of(context).scaffoldBackgroundColor,
+        statusBarIconBrightness: _statusBarBrightness,
+        systemNavigationBarColor: Theme.of(context).cardColor,
         systemNavigationBarIconBrightness: _themeBrightness
       ),
     );
@@ -126,64 +118,73 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
       onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
       child: Scaffold(
         key: appData.libraryScaffoldKey,
-        appBar: AppBar(
-          title: appData.screenIndex == 2
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Icon(MdiIcons.youtube, color: Colors.white),
-                  SizedBox(width: 4),
-                  Text(
-                    _appBarTitle[appData.screenIndex],
-                    style: TextStyle(
-                      color: appData.screenIndex == 2
-                      ? Colors.white
-                      : Theme.of(context).textTheme.bodyText1.color
-                    )
-                  )
+        appBar: appData.screenIndex != 2 
+        ? PreferredSize(
+          preferredSize: Size(
+            double.infinity,
+            kToolbarHeight
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12,
+                  offset: Offset(0.0, -2), //(x,y)
+                  blurRadius: 10.0,
+                  spreadRadius: 0.6
+                ),
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
+              child: AppBar(
+                elevation: 0,
+                backgroundColor: Theme.of(context).cardColor,
+                title: Text(
+                  appBarTitle[appData.screenIndex],
+                  style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.8),
+                    fontWeight: FontWeight.w600
+                  ),
+                ),
+                centerTitle: true,
+                actions: <Widget>[
+                  AnimatedOpacity(
+                    opacity: audioPlayer.playerState == PlayerState.playing || audioPlayer.playerState == PlayerState.paused ? 1.0 : 0.0,
+                    duration: Duration(milliseconds: 300),
+                    child: PlayerWidget(
+                      playerState: audioPlayer.playerState,
+                      onPlayPauseTap: () {
+                        if (audioPlayer.playerState == PlayerState.paused) audioPlayer.play();
+                        if (audioPlayer.playerState == PlayerState.playing) audioPlayer.pause();
+                      },
+                      onPlayPauseLongPress: () => audioPlayer.stop(),
+                      showPlayPause: audioPlayer.showMediaPlayer ? false : true,
+                      leadingIcon: Icon(
+                        audioPlayer.showMediaPlayer ? Icons.expand_less : Icons.expand_more,
+                        color: Theme.of(context).iconTheme.color,
+                      ),
+                      leadingAction: () {
+                        FocusScope.of(context).requestFocus(new FocusNode());
+                        setState(() {
+                          audioPlayer.showMediaPlayer = !audioPlayer.showMediaPlayer;
+                        });
+                      },
+                    ),
+                  ),
+                  SizedBox(width: 12)
                 ],
-              )
-            : Text(
-                _appBarTitle[appData.screenIndex],
-                style: TextStyle(
-                  color: appData.screenIndex == 2
-                  ? Colors.white
-                  : Theme.of(context).textTheme.bodyText1.color
-                )
-              ),
-          elevation: 0,
-          backgroundColor: appData.screenIndex == 2
-            ? Colors.redAccent
-            : Colors.transparent,
-          centerTitle: true,
-          leading: appData.screenIndex == 2
-            ? Container()
-            : null,
-          iconTheme: new IconThemeData(color: Theme.of(context).iconTheme.color),
-          actions: <Widget>[
-            AnimatedOpacity(
-              opacity: audioPlayer.playerState == PlayerState.playing || audioPlayer.playerState == PlayerState.paused ? 1.0 : 0.0,
-              duration: Duration(milliseconds: 300),
-              child: PlayerWidget(
-                playerState: audioPlayer.playerState,
-                onPlayPauseTap: () {
-                  if (audioPlayer.playerState == PlayerState.paused) audioPlayer.play();
-                  if (audioPlayer.playerState == PlayerState.playing) audioPlayer.pause();
-                },
-                onPlayPauseLongPress: () => audioPlayer.stop(),
-                showPlayPause: audioPlayer.showMediaPlayer ? false : true,
-                leadingIcon: Icon(audioPlayer.showMediaPlayer ? Icons.expand_less : Icons.expand_more),
-                leadingAction: () {
-                  FocusScope.of(context).requestFocus(new FocusNode());
-                  setState(() {
-                    audioPlayer.showMediaPlayer = !audioPlayer.showMediaPlayer;
-                  });
-                },
               ),
             ),
-            SizedBox(width: 12)
-          ],
+          ),
+        )
+        : PreferredSize(
+          preferredSize: Size(
+            double.infinity,
+            kToolbarHeight*0.1
+          ),
+          child: Container(),
         ),
         resizeToAvoidBottomPadding: true,
         body: WillPopScope(
@@ -219,136 +220,63 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
                 child: AnimatedOpacity(
                   duration: Duration(milliseconds: 300),
                   opacity: appData.screenIndex == 3 ? 1.0 : 0.0,
-                  child: SettingsTab(),
-                )
-              ),
-              IgnorePointer(
-                ignoring: appData.screenIndex == 4 ? false : true,
-                child: AnimatedOpacity(
-                  duration: Duration(milliseconds: 300),
-                  opacity: appData.screenIndex == 4 ? 1.0 : 0.0,
-                  child: DonateScreen()
+                  child: MoreScreen(),
                 )
               ),
               AnimatedSwitcher(
                 duration: Duration(milliseconds: 150),
                 child: audioPlayer.showMediaPlayer
-                  ? FullPlayerWidget()
+                  ? Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FullPlayerWidget(),
+                  )
                   : Container()
               )
             ],
           ),
         ),
-        drawerEdgeDragWidth: appData.screenIndex != 2 ? MediaQuery.of(context).size.width : 0,
-        drawer: DrawerLayout(
-          headerColor: Theme.of(context).tabBarTheme.labelColor,
-          title: Text("SongTube", style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700)),
-          children: <Widget>[
-            DrawerItem(
-              title: Text("Home", style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color,
-               fontSize: 16, fontWeight: FontWeight.w600)),
-              backgroundColor: Theme.of(context).tabBarTheme.labelColor,
-              leadingIcon: MdiIcons.home,
-              leadingIconColor: Colors.blue,
-              padding: EdgeInsets.only(left: 20),
-              onTap: () {
-                Navigator.pop(context);
-                setState(() {
-                  appData.screenIndex = 0;
-                });
-              },
+        bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: Theme.of(context).cardColor,
+          currentIndex: appData.screenIndex,
+          elevation: appData.screenIndex == 0 ? 0 : 8,
+          selectedFontSize: 14,
+          selectedItemColor: Colors.redAccent,
+          unselectedItemColor: Theme.of(context).iconTheme.color,
+          type: BottomNavigationBarType.fixed,
+          onTap: (int index) {
+            if (audioPlayer.showMediaPlayer == true) audioPlayer.showMediaPlayer = false;
+            appData.screenIndex = index;
+          },
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(EvaIcons.homeOutline),
+              title: Text("Home", style: TextStyle(
+                fontFamily: "Varela",
+                fontWeight: FontWeight.w600
+              )),
             ),
-            SizedBox(height: 14),
-            DrawerItem(
-              title: Text("Downloads", style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color,
-               fontSize: 16, fontWeight: FontWeight.w600)),
-              backgroundColor: Theme.of(context).tabBarTheme.labelColor,
-              leadingIcon: MdiIcons.download,
-              leadingIconColor: Colors.green,
-              padding: EdgeInsets.only(left: 20),
-              onTap: () {
-                Navigator.pop(context);
-                setState(() {
-                  appData.screenIndex = 1;
-                });
-              },
+            BottomNavigationBarItem(
+              icon: Icon(EvaIcons.cloudDownloadOutline),
+              title: Text("Downloads", style: TextStyle(
+                fontFamily: "Varela",
+                fontWeight: FontWeight.w600
+              )),
             ),
-            SizedBox(height: 14),
-            DrawerItem(
-              title: Text("Youtube", style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color,
-               fontSize: 16, fontWeight: FontWeight.w600)),
-              backgroundColor: Theme.of(context).tabBarTheme.labelColor,
-              leadingIcon: MdiIcons.play,
-              leadingIconColor: Colors.red,
-              padding: EdgeInsets.only(left: 20),
-              onTap: () async {
-                Navigator.pop(context);
-                setState(() {
-                  appData.screenIndex = 2;
-                });
-              },
+            BottomNavigationBarItem(
+              icon: Icon(EvaIcons.browserOutline),
+              title: Text("YouTube", style: TextStyle(
+                fontFamily: "Varela",
+                fontWeight: FontWeight.w600
+              )),
             ),
+            BottomNavigationBarItem(
+              icon: Icon(MdiIcons.dotsHorizontal),
+              title: Text("More", style: TextStyle(
+                fontFamily: "Varela",
+                fontWeight: FontWeight.w600
+              )),
+            )
           ],
-          leftBottomIcon: Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).tabBarTheme.labelColor,
-              borderRadius: BorderRadius.circular(30)
-            ),
-            child: IconButton(
-              icon: Icon(Icons.favorite, color: Colors.redAccent),
-              onPressed: () {
-                Navigator.pop(context);
-                setState(() {
-                  appData.screenIndex = 4;
-                });
-              },
-            ),
-          ),
-          middleBottomIcon: Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).tabBarTheme.labelColor,
-              borderRadius: BorderRadius.circular(30)
-            ),
-            child: IconButton(
-              icon: Icon(MdiIcons.telegram, color: Colors.blue),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return CustomAlert(
-                      leadingIcon: Icon(MdiIcons.telegram, color: Colors.blue),
-                      title: "Telegram",
-                      content: "Join our Telegram Channel and Group! You'll get the latest app updates and you can request features and report bugs",
-                      actions: <Widget>[
-                        FlatButton(
-                          child: Text("Join"),
-                          onPressed: () async {
-                            Navigator.pop(context);
-                            await launch("https://t.me/songtubechannel");
-                          }
-                        )
-                      ],
-                    );
-                  }
-                );
-              },
-            ),
-          ),
-          rightBottomIcon: Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).tabBarTheme.labelColor,
-              borderRadius: BorderRadius.circular(30)
-            ),
-            child: IconButton(
-              icon: Icon(Icons.settings, color: Colors.grey),
-              onPressed: () {
-                Navigator.pop(context);
-                setState(() {
-                  appData.screenIndex = 3;
-                });
-              },
-            ),
-          ),
         ),
       ),
     );

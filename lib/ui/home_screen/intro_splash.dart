@@ -1,3 +1,4 @@
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +23,7 @@ class IntroSplash extends StatelessWidget {
                 opacity: manager.showEmptyScreenWidget == true ? 1.0 : 0.0,
                 duration: (Duration(milliseconds: 300)),
                 child: Icon(
-                  MdiIcons.rocketLaunchOutline,
+                  EvaIcons.activityOutline,
                   size: 150,
                   color: Colors.redAccent
                 ),
@@ -32,10 +33,11 @@ class IntroSplash extends StatelessWidget {
                 opacity: manager.showEmptyScreenWidget == true ? 1.0 : 0.0,
                 duration: (Duration(milliseconds: 400)),
                 child: Text(
-                  "Nothing here yet!",
+                  "Nothing here yet",
                   style: TextStyle(
                     color: Theme.of(context).textTheme.bodyText1.color,
-                    fontWeight: FontWeight.w600
+                    fontWeight: FontWeight.w600,
+                    fontFamily: "Montserrat"
                   )
                 ),
               ),
@@ -46,6 +48,9 @@ class IntroSplash extends StatelessWidget {
                 child: Text(
                   "Paste a link into the app or search for videos on Youtube!",
                   textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: "Varela"
+                  ),
                 ),
               ),
               SizedBox(height: 8),
@@ -70,7 +75,8 @@ class IntroSplash extends StatelessWidget {
                           "Explore Youtube",
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
-                            color: Colors.white
+                            color: Colors.white,
+                            fontFamily: "Varela"
                           )
                         ),
                       ],
@@ -81,7 +87,7 @@ class IntroSplash extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(height: 50)
+        SizedBox(height: 25)
       ],
     );
   }

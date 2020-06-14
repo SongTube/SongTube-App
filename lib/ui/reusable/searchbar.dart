@@ -1,4 +1,5 @@
 // Flutter
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -35,17 +36,38 @@ class _SearchBarState extends State<SearchBar> {
     return Padding(
     padding: widget.padding,
     child: Container(
-      padding: const EdgeInsets.only(top: 8, left: 8, right: 8),
+      padding: const EdgeInsets.only(bottom: 8),
       height: kToolbarHeight*1.1,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: widget.containerColor
+        borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+        color: widget.containerColor,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            offset: Offset(0.0, 1.5), //(x,y)
+            blurRadius: 5.0,
+            spreadRadius: 1.1
+          ),
+        ],
       ),
       child: Column(
         children: <Widget>[
+          // Search indicator Bar
+          ClipRRect(
+            borderRadius: BorderRadius.circular(50),
+            child: SizedBox(
+              height: 2,
+              width: MediaQuery.of(context).size.width*0.9,
+              child: LinearProgressIndicator(
+                value: widget.indicatorValue,
+                backgroundColor: Theme.of(context).canvasColor,
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.redAccent),
+              ),
+            ),
+          ),
           Expanded(
             child: Padding(
-              padding: EdgeInsets.only(bottom: 3),
+              padding: EdgeInsets.only(top: 6, left: 8, right: 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -110,7 +132,7 @@ class _SearchBarState extends State<SearchBar> {
                   // Start Searching Button
                   Center(
                     child: IconButton(
-                      icon: Icon(Icons.search),
+                      icon: Icon(EvaIcons.searchOutline),
                       onPressed: widget.onSearchPressed,
                     ),
                   ),
@@ -118,25 +140,6 @@ class _SearchBarState extends State<SearchBar> {
               ),
             ),
           ),
-          // Search indicator Bar
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 20,
-              right: 20,
-              bottom: 3
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(50)),
-                child: SizedBox(
-                  height: 2,
-                  child: LinearProgressIndicator(
-                    value: widget.indicatorValue,
-                    backgroundColor: Theme.of(context).cardColor,
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.redAccent),
-                  ),
-                ),
-              ),
-            ),
           ],
         )
       ),

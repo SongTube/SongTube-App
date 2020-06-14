@@ -13,7 +13,7 @@ class DownloadTab extends StatefulWidget {
   _DownloadTabState createState() => _DownloadTabState();
 }
 
-class _DownloadTabState extends State<DownloadTab> {
+class _DownloadTabState extends State<DownloadTab> with TickerProviderStateMixin {
 
   void listener(ManagerProvider provider) {
     provider.downloadInfoSetList.forEach((element) {
@@ -32,48 +32,6 @@ class _DownloadTabState extends State<DownloadTab> {
     return Scaffold(
       body: Column(
         children: <Widget>[
-          // Download and Completed Page Buttoms
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              // Ongoing Downloads page
-              GestureDetector(
-                onTap: () {setState(() => manager.downloadsTabIndex = 0);},
-                child: AnimatedContainer(
-                  duration: Duration(milliseconds: 200),
-                  margin: EdgeInsets.only(top: 4),
-                  padding: EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: manager.downloadsTabIndex == 0
-                      ? Theme.of(context).cardColor
-                      : Theme.of(context).canvasColor
-                  ),
-                  child: Text("Ongoing", textAlign: TextAlign.center),
-                ),
-              ),
-              // Padding
-              SizedBox(width: 16),
-              // Completed page
-              GestureDetector(
-                onTap: () {setState(() => manager.downloadsTabIndex = 1);},
-                child: AnimatedContainer(
-                  duration: Duration(milliseconds: 200),
-                  margin: EdgeInsets.only(top: 4),
-                  padding: EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: manager.downloadsTabIndex == 1
-                      ? Theme.of(context).cardColor
-                      : Theme.of(context).canvasColor
-                  ),
-                  child: Text("Completed", textAlign: TextAlign.center),
-                ),
-              )
-            ],
-          ),
-          // Padding
-          SizedBox(height: 4),
           // Download and Completed Pages Content
           Expanded(
             child: Stack(
@@ -96,66 +54,103 @@ class _DownloadTabState extends State<DownloadTab> {
                     opacity: manager.downloadsTabIndex == 1 ? 1.0 : 0.0,
                     child: CompletedPage(),
                   ),
-                )
+                ),
+                // Download and Completed Page Buttoms
+                StreamBuilder<Object>(
+                  stream: manager.showDownloadsTabs.stream,
+                  builder: (context, snapshot) {
+                    return AnimatedOpacity(
+                      opacity: snapshot.data == true ? 0.0 : 1.0,
+                      duration: Duration(milliseconds: 200),
+                      child: IgnorePointer(
+                        ignoring: snapshot.data == true ? true : false,
+                        child: Container(
+                          padding: EdgeInsets.only(bottom: 16, right: 16),
+                          alignment: Alignment.bottomRight,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              // Ongoing Downloads page
+                              GestureDetector(
+                                onTap: () {setState(() => manager.downloadsTabIndex = 0);},
+                                child: AnimatedContainer(
+                                  duration: Duration(milliseconds: 200),
+                                  margin: EdgeInsets.only(top: 4),
+                                  padding: EdgeInsets.all(16),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: manager.downloadsTabIndex == 0
+                                      ? Colors.redAccent
+                                      : Theme.of(context).canvasColor,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black12,
+                                        offset: Offset(3.5, 3.5), //(x,y)
+                                        blurRadius: 5.0,
+                                        spreadRadius: 2.1 
+                                      )
+                                    ]
+                                  ),
+                                  child: Text(
+                                    "Ongoing",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontFamily: "Varela",
+                                      fontWeight: FontWeight.w600,
+                                      color: manager.downloadsTabIndex == 0
+                                        ? Colors.white
+                                        : Theme.of(context).iconTheme.color
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              // Padding
+                              SizedBox(width: 16),
+                              // Completed page
+                              GestureDetector(
+                                onTap: () {setState(() => manager.downloadsTabIndex = 1);},
+                                child: AnimatedContainer(
+                                  duration: Duration(milliseconds: 200),
+                                  margin: EdgeInsets.only(top: 4),
+                                  padding: EdgeInsets.all(16),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: manager.downloadsTabIndex == 1
+                                      ? Colors.redAccent
+                                      : Theme.of(context).canvasColor,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black12,
+                                        offset: Offset(3.5, 3.5), //(x,y)
+                                        blurRadius: 5.0,
+                                        spreadRadius: 2.1 
+                                      )
+                                    ]
+                                  ),
+                                  child: Text(
+                                    "Completed",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontFamily: "Varela",
+                                      fontWeight: FontWeight.w600,
+                                      color: manager.downloadsTabIndex == 1
+                                        ? Colors.white
+                                        : Theme.of(context).iconTheme.color
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      )
+                    );
+                  }
+                ),
               ],
             ),
-          )
+          ),
         ],
-      ),
-      floatingActionButton: IgnorePointer(
-        ignoring: manager.downloadsTabIndex == 0 ? false : true,
-        child: AnimatedOpacity(
-          opacity: manager.downloadsTabIndex == 0 ? 1.0 : 0.0,
-          duration: Duration(milliseconds: 150),
-          child: FloatingActionButton(
-            child: Icon(Icons.clear_all),
-            backgroundColor: Colors.redAccent,
-            foregroundColor: Colors.white,
-            onPressed: () {
-              if (manager.downloadInfoSetList.any((element) => element.downloader.downloadFinished == false)) {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: Text("Warning", style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyText1.color
-                      )),
-                      content: Text("There are still downloads in progress, are you sure you wanna clear the downloads list?", style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyText1.color
-                      )),
-                      actions: <Widget>[
-                        FlatButton(
-                          child: Text("OK", style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1.color
-                          )),
-                          onPressed: () {
-                            manager.downloadInfoSetList.forEach((element) {
-                              if (element.downloader.downloadFinished == false)
-                                element.downloader.downloadFinished = true;
-                            });
-                            manager.downloadInfoSetList = [];
-                            Navigator.pop(context);
-                          }
-                        ),
-                        FlatButton(
-                          child: Text("Cancel", style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1.color
-                          )),
-                          onPressed: () => Navigator.pop(context),
-                        )
-                      ],
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ), 
-                    );
-                  },
-                );
-              } else {
-                manager.downloadInfoSetList = [];
-              }
-            }
-          )
-        ),
       ),
     );
   }

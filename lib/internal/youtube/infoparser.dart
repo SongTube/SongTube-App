@@ -1,4 +1,3 @@
-// UI
 import 'package:songtube/ui/snackbar.dart';
 
 // Packages
@@ -32,6 +31,17 @@ class YoutubeInfo {
 
     // Return metadata and mediaStream
     return mediaStream;
+  }
+
+  static Future<String> getChannelLink(String url) async {
+
+    // Youtube Explode
+    YoutubeExplode yt = YoutubeExplode();
+
+    // Get channel ID
+    String channelId = await yt.getChannelIdFromVideo(YoutubeExplode.parseVideoId(url));
+    
+    return "https://youtube.com/channel/" + channelId;
   }
 
 }

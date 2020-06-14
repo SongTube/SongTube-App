@@ -1,7 +1,6 @@
 // Flutter
 import 'dart:ui';
 
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -60,11 +59,19 @@ class _PlayerWidgetState extends State<PlayerWidget> with TickerProviderStateMix
           vsync: this,
           child: widget.showPlayPause
           ? Container(
-            width: 40,
-            height: 40,
+            width: 46,
+            height: 46,
             decoration: BoxDecoration(
               color: Colors.redAccent,
-              borderRadius: BorderRadius.circular(30)
+              borderRadius: BorderRadius.circular(30),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12.withOpacity(0.1),
+                  offset: Offset(0, 3), //(x,y)
+                  blurRadius: 6.0,
+                  spreadRadius: 0.05 
+                )
+              ]
             ),
             child: IconButton(
               icon: widget.playerState == PlayerState.playing
@@ -89,198 +96,209 @@ class _FullPlayerWidgetState extends State<FullPlayerWidget> {
   @override
   Widget build(BuildContext context) {
     Player playerProvider = Provider.of<Player>(context);
-    return Padding(
-      padding: const EdgeInsets.only(right: 8.0),
-      child: Stack(
-        children: <Widget>[
-          GestureDetector(
-            onTap: () => playerProvider.showMediaPlayer = false,
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              color: Colors.transparent
-            ),
+    return Stack(
+      children: <Widget>[
+        GestureDetector(
+          onTap: () => playerProvider.showMediaPlayer = false,
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            color: Colors.transparent
           ),
-          Align(
-            alignment: Alignment.topRight,
-            child: Container(
-              width: 300,
-              height: 200,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: Theme.of(context).cardColor,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.5),
-                    spreadRadius: 2,
-                    blurRadius: 7,
-                    offset: Offset(0, 0), // changes position of shadow
-                  ),
-                ],
+        ),
+        Container(
+          width: double.infinity,
+          height: MediaQuery.of(context).size.height - kToolbarHeight*1.5 - kBottomNavigationBarHeight,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: Theme.of(context).cardColor,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                offset: Offset(0.0, 0.0), //(x,y)
+                blurRadius: 10.0,
+                spreadRadius: 5.0
               ),
-              child: Center(
-                child: Stack(
-                  children: <Widget>[
-                    Container(
-                      width: 300,
-                      height: 200,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: FadeInImage(
-                          fadeOutDuration: Duration(milliseconds: 300),
-                          fadeInDuration: Duration(milliseconds: 300),
-                          placeholder: MemoryImage(kTransparentImage),
-                          image: NetworkImage(playerProvider.queue[playerProvider.queueIndex].coverUrl),
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      width: 300,
-                      height: 200,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.transparent,
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
-                          child: Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
+            ],
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                height: 320,
+                width: 320,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12.withOpacity(0.2),
+                      offset: Offset(0, 3), //(x,y)
+                      blurRadius: 6.0,
+                      spreadRadius: 1.0 
+                    )
+                  ]
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: FadeInImage(
+                    fadeOutDuration: Duration(milliseconds: 300),
+                    fadeInDuration: Duration(milliseconds: 300),
+                    placeholder: MemoryImage(kTransparentImage),
+                    image: NetworkImage(playerProvider.queue[playerProvider.queueIndex].coverUrl),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              StreamBuilder(
+                stream: playerProvider.audioPlayer.onDurationChanged,
+                builder: (context, snapshot) {
+                  Duration audioDuration = snapshot.data;
+                  return StreamBuilder<Object>(
+                    stream: playerProvider.audioPlayer.onAudioPositionChanged,
+                    builder: (context, snapshot) {
+                      Duration data = snapshot.data;
+                      double currentPosition;
+                      data != null
+                        ? currentPosition = data.inMilliseconds / audioDuration.inMilliseconds
+                        : currentPosition = 0;
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(left: 16, right: 16),
+                             child: SliderTheme(
+                              data: SliderTheme.of(context).copyWith(
+                                thumbShape: RoundSliderThumbShape(enabledThumbRadius: 0),
+                                overlayShape: RoundSliderOverlayShape(overlayRadius: 10),
+                                valueIndicatorTextStyle: TextStyle(
+                                  color: Colors.redAccent,
+                                ),
+                              ),
+                              child: Slider(
+                                activeColor: Colors.redAccent,
+                                inactiveColor: Colors.black12.withOpacity(0.2),
+                                value: currentPosition,
+                                onChanged: (value) async {
+                                  Duration _position = Duration(
+                                    milliseconds: (value * await playerProvider.audioPlayer.getDuration()).round());
+                                  playerProvider.audioPlayer.seek(_position);
+                                },
+                              ),
+                            ),
+                          ),
+                          if (data != null || audioDuration != null)
+                          Padding(
+                            padding: EdgeInsets.only(left: 24, right: 24),
+                            child: Row(
                               children: <Widget>[
-                                // Music Controls
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    // Previous button
-                                    IconButton(
-                                      icon: Stack(
-                                        children: <Widget>[
-                                          Positioned(
-                                            left: 1.0,
-                                            top: 2.0,
-                                            child: Icon(
-                                              Icons.arrow_back_ios,
-                                              color: Colors.grey[800].withOpacity(0.5)
-                                            ),
-                                          ),
-                                          Icon(Icons.arrow_back_ios, color: Colors.white),
-                                        ],
-                                      ),
-                                      onPressed: () => playerProvider.playPrevious(),
-                                    ),
-                                    // Padding
-                                    SizedBox(width: 30),
-                                    // Play/Pause button
-                                    GestureDetector(
-                                      onTap: playerProvider.playerState == PlayerState.paused
-                                        ? () => playerProvider.play()
-                                        : () => playerProvider.pause(),
-                                      child: Container(
-                                        padding: EdgeInsets.all(4),
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey[800].withOpacity(0.5),
-                                          borderRadius: BorderRadius.circular(40)
-                                        ),
-                                        child: playerProvider.playerState == PlayerState.paused
-                                          ? Icon(Icons.play_arrow, size: 50, color: Colors.white)
-                                          : Icon(Icons.pause, size: 50, color: Colors.white),
-                                      ),
-                                    ),
-                                    // Padding
-                                    SizedBox(width: 30),
-                                    // Next button
-                                    IconButton(
-                                      icon: Stack(
-                                        children: <Widget>[
-                                          Positioned(
-                                            left: 1.0,
-                                            top: 2.0,
-                                            child: Icon(
-                                              Icons.arrow_forward_ios,
-                                              color: Colors.grey[800].withOpacity(0.5)
-                                            ),
-                                          ),
-                                          Icon(Icons.arrow_forward_ios, color: Colors.white),
-                                        ],
-                                      ),
-                                      onPressed: () => playerProvider.playNext(),
-                                    )
-                                  ],
-                                ),
-                                // Slider
-                                StreamBuilder(
-                                  stream: playerProvider.audioPlayer.onDurationChanged,
-                                  builder: (context, snapshot) {
-                                    Duration audioDuration = snapshot.data;
-                                    return StreamBuilder<Object>(
-                                      stream: playerProvider.audioPlayer.onAudioPositionChanged,
-                                      builder: (context, snapshot) {
-                                        Duration data = snapshot.data;
-                                        double currentPosition;
-                                        data != null
-                                          ? currentPosition = data.inMilliseconds / audioDuration.inMilliseconds
-                                          : currentPosition = 0;
-                                        return SliderTheme(
-                                          data: SliderTheme.of(context).copyWith(
-                                            thumbShape: RoundSliderThumbShape(enabledThumbRadius: 0),
-                                            overlayColor: Theme.of(context).accentColor.withOpacity(0.25),
-                                            overlayShape: RoundSliderOverlayShape(overlayRadius: 10),
-                                            valueIndicatorTextStyle: TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                          child: Slider(
-                                            activeColor: Colors.white,
-                                            inactiveColor: Theme.of(context).canvasColor.withOpacity(0.4),
-                                            value: currentPosition,
-                                            onChanged: (value) async {
-                                              Duration _position = Duration(
-                                                milliseconds: (value * await playerProvider.audioPlayer.getDuration()).round());
-                                              playerProvider.audioPlayer.seek(_position);
-                                            },
-                                          ),
-                                        );
-                                      }
-                                    );
-                                  }
-                                ),
-                                // Title
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 8, right: 8),
-                                  child: Text(
-                                    playerProvider.queue[playerProvider.queueIndex].title,
-                                    style: TextStyle(
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.white,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
+                                Text(
+                                  "${data.inMinutes}:${(data.inSeconds.remainder(60).toString().padLeft(2, '0'))}",
+                                  style: TextStyle(
+                                    fontFamily: "Varela",
+                                    fontSize: 12,
                                   ),
                                 ),
-                                // Artist
+                                Spacer(),
                                 Text(
-                                  playerProvider.queue[playerProvider.queueIndex].author,
-                                  style: TextStyle(color: Colors.grey[300])
+                                  "${audioDuration.inMinutes}:${(audioDuration.inSeconds.remainder(60).toString().padLeft(2, '0'))}",
+                                  style: TextStyle(
+                                    fontFamily: "Varela",
+                                    fontSize: 12,
+                                  ),
                                 )
                               ],
                             ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                          )
+                        ],
+                      );
+                    }
+                  );
+                }
               ),
-            ),
-          ),
-        ],
-      ),
+              Column(
+                children: <Widget>[
+                  // Title
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8, right: 8),
+                    child: Text(
+                      playerProvider.queue[playerProvider.queueIndex].title,
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: "Varela",
+                        color: Theme.of(context).textTheme.bodyText1.color,
+                      ),
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  SizedBox(height: 4),
+                  // Artist
+                  Text(
+                    playerProvider.queue[playerProvider.queueIndex].author,
+                    style: TextStyle(color: Theme.of(context).iconTheme.color, fontFamily: "Varela")
+                  ),
+                ],
+              ),
+              // Music Controls
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  // Previous button
+                  IconButton(
+                    icon: Icon(Icons.arrow_back_ios, color: Theme.of(context).iconTheme.color),
+                    onPressed: () => playerProvider.playPrevious(),
+                  ),
+                  // Padding
+                  SizedBox(width: 30),
+                  // Play/Pause button
+                  GestureDetector(
+                    onTap: playerProvider.playerState == PlayerState.paused
+                      ? () => playerProvider.play()
+                      : () => playerProvider.pause(),
+                    child: Container(
+                      padding: EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        color: Colors.redAccent,
+                        borderRadius: BorderRadius.circular(40),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black12.withOpacity(0.2),
+                              offset: Offset(0, 3), //(x,y)
+                              blurRadius: 6.0,
+                              spreadRadius: 1.0 
+                            )
+                          ]
+                      ),
+                      child: playerProvider.playerState == PlayerState.paused
+                        ? Icon(Icons.play_arrow, size: 50, color: Colors.white)
+                        : Icon(Icons.pause, size: 50, color: Colors.white),
+                    ),
+                  ),
+                  // Padding
+                  SizedBox(width: 30),
+                  // Next button
+                  IconButton(
+                    icon: Icon(Icons.arrow_forward_ios, color: Theme.of(context).iconTheme.color),
+                    onPressed: () => playerProvider.playNext(),
+                  )
+                ],
+              ),
+              Container(
+                alignment: Alignment.centerRight,
+                padding: EdgeInsets.only(right: 12),
+                child: IconButton(
+                  icon: Icon(Icons.clear),
+                  onPressed: () => playerProvider.showMediaPlayer = false,
+                ),
+              )
+            ],
+          )
+        ),
+      ],
     );
   }
 }

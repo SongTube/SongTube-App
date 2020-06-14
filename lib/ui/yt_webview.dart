@@ -1,6 +1,3 @@
-// Dart
-import 'dart:async';
-
 // Flutter
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,12 +7,10 @@ import 'package:songtube/provider/downloads_manager.dart';
 
 // Packages
 import 'package:youtube_explode_dart/youtube_explode_dart.dart' as youtube;
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 // UI
 import 'package:songtube/ui/snackbar.dart';
-import 'package:songtube/screens/home.dart';
 
 class YoutubeWebview extends StatefulWidget {
   @override
@@ -27,11 +22,8 @@ class _YoutubeWebviewState extends State<YoutubeWebview> with AutomaticKeepAlive
   @override
   bool get wantKeepAlive => true;
 
-  final Completer<WebViewController> _controller = Completer<WebViewController>();
-
   GlobalKey<ScaffoldState> scaffoldState;
   InAppWebViewController webController;
-  bool _showLoading;
   String _currentUrl;
   double progress = 0;
 

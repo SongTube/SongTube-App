@@ -1,9 +1,9 @@
 // Flutter
 import 'dart:async';
 
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_xlider/flutter_xlider.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 // Packages
 import 'package:youtube_explode_dart/youtube_explode_dart.dart' as youtube;
@@ -30,7 +30,7 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
   double volumeModifier = 1;
   int bassGain = 0;
   int trebleGain = 0;
-  double menuSize = 270;
+  double menuSize = 160;
   int subMenu;
 
   // Menu Border Colors
@@ -80,33 +80,42 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
             padding: const EdgeInsets.only(left: 22, right: 8, top: 12),
             child: Row(
               children: <Widget> [
-                Text("Download", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+                Container(
+                  padding: EdgeInsets.only(top: 8, left: 8),
+                  child: Text("Download", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700))
+                  ),
                 Spacer(),
                 // Settings quick access
-                GestureDetector(
-                  onTap: widget.onSettingsPressed,
-                  child: Container(
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Colors.redAccent,
-                      borderRadius: BorderRadius.circular(30)
-                    ),
-                    child: Row(
-                      children: <Widget>[
-                        SizedBox(width: 4),
-                        Icon(Icons.settings, color: Colors.white),
-                        SizedBox(width: 4),
-                        Text(
-                          "Settings",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white
-                          ),
+                AnimatedSwitcher(
+                  duration: Duration(milliseconds: 100),
+                  child: subMenu == 1 || subMenu == 0
+                  ? GestureDetector(
+                      onTap: widget.onSettingsPressed,
+                      child: Container(
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: Colors.redAccent,
+                          borderRadius: BorderRadius.circular(30)
                         ),
-                        SizedBox(width: 4)
-                      ],
-                    ),
-                  ),
+                        child: Row(
+                          children: <Widget>[
+                            SizedBox(width: 4),
+                            Icon(EvaIcons.settingsOutline, color: Colors.white),
+                            SizedBox(width: 4),
+                            Text(
+                              "Settings",
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                                fontFamily: "Varela"
+                              ),
+                            ),
+                            SizedBox(width: 4)
+                          ],
+                        ),
+                      ),
+                    )
+                  : Container()
                 ),
                 // ------------------------------
                 // Downloads Menu Back Button
@@ -115,11 +124,11 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
                   vsync: this,
                   child: subMenu == 1 || subMenu == 0 
                     ? IconButton(
-                      icon: Icon(Icons.arrow_back),
+                      icon: Icon(EvaIcons.arrowBackOutline),
                       onPressed: () {
                         setState(() {
                           subMenu = 2;
-                          menuSize = 270;
+                          menuSize = 160;
                         });
                         Future.delayed(Duration(milliseconds: 60), () {
                           setState(() => subMenu = null);
@@ -134,146 +143,154 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
           ),
           Padding(
             padding: EdgeInsets.only(top: 12),
-            child: SizedBox(height: 1, child: Divider(indent: 16, endIndent: 16)),
+            child: SizedBox(height: 1),
           ),
           // Downloads Menu
           Expanded(
-            child: IntrinsicHeight(
-              child: Stack(
-                children: <Widget>[
-                  AnimatedSwitcher(
-                    duration: Duration(milliseconds: 80),
-                    child: subMenu == null
-                    ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              animateAudioTabBorderColor();
-                              setState(() {
-                                menuSize = MediaQuery.of(context).size.height*0.55;
-                                subMenu = 2;
-                              });
-                              Future.delayed(Duration(milliseconds: 60), () {
-                                setState(() => subMenu = 0);
-                              });
-                            },
-                            child: AnimatedContainer(
-                              margin: EdgeInsets.all(8),
-                              padding: EdgeInsets.all(8),
-                              duration: Duration(milliseconds: 60),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: Theme.of(context).cardColor,
-                                border: Border.all(color: audioTabBorderColor, width: 2)
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget> [
-                                  Icon(MdiIcons.musicBox, size: 100),
-                                  Container(
-                                    padding: EdgeInsets.all(12),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Colors.redAccent
-                                    ),
-                                    child: Text(
-                                      "Audio",
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w700,
-                                        color: Colors.white
-                                      )
+            child: Stack(
+              children: <Widget>[
+                AnimatedSwitcher(
+                  duration: Duration(milliseconds: 80),
+                  child: subMenu == null
+                  ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            animateAudioTabBorderColor();
+                            setState(() {
+                              menuSize = MediaQuery.of(context).size.height*0.55;
+                              subMenu = 2;
+                            });
+                            Future.delayed(Duration(milliseconds: 60), () {
+                              setState(() => subMenu = 0);
+                            });
+                          },
+                          child: AnimatedContainer(
+                            margin: EdgeInsets.all(8),
+                            padding: EdgeInsets.all(8),
+                            duration: Duration(milliseconds: 60),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Theme.of(context).cardColor,
+                              border: Border.all(color: audioTabBorderColor, width: 2)
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget> [
+                                Container(
+                                  height: 70,
+                                  width: 70,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(50),
+                                    color: Colors.redAccent
+                                  ),
+                                  child: Icon(EvaIcons.musicOutline, size: 55, color: Colors.white),
+                                ),
+                                Container(
+                                  padding: EdgeInsets.all(16),
+                                  child: Text(
+                                    "Audio",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w700,
+                                      color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.9),
+                                      fontFamily: "Varela"
                                     )
                                   )
-                                ]
-                              ),
+                                )
+                              ]
                             ),
                           ),
                         ),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              animateVideoTabBorderColor();
-                              setState(() {
-                                menuSize = MediaQuery.of(context).size.height*0.55;
-                                subMenu = 2;
-                              });
-                              Future.delayed(Duration(milliseconds: 60), () {
-                                setState(() => subMenu = 1);
-                              });
-                            },
-                            child: AnimatedContainer(
-                              margin: EdgeInsets.all(8),
-                              padding: EdgeInsets.all(8),
-                              duration: Duration(milliseconds: 60),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: Theme.of(context).cardColor,
-                                border: Border.all(color: videoTabBorderColor, width: 2)
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget> [
-                                  Icon(MdiIcons.movie, size: 100),
-                                  Container(
-                                    padding: EdgeInsets.all(12),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: Colors.redAccent
-                                    ),
-                                    child: Text(
-                                      "Video",
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w700,
-                                        color: Colors.white
-                                      )
+                      ),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            animateVideoTabBorderColor();
+                            setState(() {
+                              menuSize = MediaQuery.of(context).size.height*0.55;
+                              subMenu = 2;
+                            });
+                            Future.delayed(Duration(milliseconds: 60), () {
+                              setState(() => subMenu = 1);
+                            });
+                          },
+                          child: AnimatedContainer(
+                            margin: EdgeInsets.all(8),
+                            padding: EdgeInsets.all(8),
+                            duration: Duration(milliseconds: 60),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Theme.of(context).cardColor,
+                              border: Border.all(color: videoTabBorderColor, width: 2)
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget> [
+                                Container(
+                                  height: 70,
+                                  width: 70,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(50),
+                                    color: Colors.redAccent
+                                  ),
+                                  child: Icon(EvaIcons.videoOutline, size: 55, color: Colors.white),
+                                ),
+                                Container(
+                                  padding: EdgeInsets.all(16),
+                                  child: Text(
+                                    "Video",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w700,
+                                      color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.9),
+                                      fontFamily: "Varela"
                                     )
                                   )
-                                ]
-                              ),
+                                )
+                              ]
                             ),
                           ),
-                        )
-                      ],
-                    )
-                    : Container(),
-                  ),
-                  StreamBuilder<Object>(
-                    stream: volumeStream.stream,
-                    builder: (context, snapshot) {
-                      double vol = snapshot.data;
-                      return StreamBuilder<Object>(
-                        stream: bassGainStream.stream,
-                        builder: (context, snapshot) {
-                          int bass = snapshot.data;
-                          return StreamBuilder<Object>(
-                            stream: trebleGainStream.stream,
-                            builder: (context, snapshot) {
-                              int treble = snapshot.data;
-                              return AnimatedSwitcher(
-                                duration: Duration(milliseconds: 60),
-                                child: subMenu == 0 
-                                ? audioSection(context, vol, bass, treble)
-                                : Container()
-                              );
-                            }
-                          );
-                        }
-                      );
-                    }
-                  ),
-                  AnimatedSwitcher(
-                    duration: Duration(milliseconds: 60),
-                    child: subMenu == 1
-                    ? videoSection(context)
-                    : Container()
-                  ),
-                ],
-              ),
+                        ),
+                      )
+                    ],
+                  )
+                  : Container(),
+                ),
+                StreamBuilder<Object>(
+                  stream: volumeStream.stream,
+                  builder: (context, snapshot) {
+                    double vol = snapshot.data;
+                    return StreamBuilder<Object>(
+                      stream: bassGainStream.stream,
+                      builder: (context, snapshot) {
+                        int bass = snapshot.data;
+                        return StreamBuilder<Object>(
+                          stream: trebleGainStream.stream,
+                          builder: (context, snapshot) {
+                            int treble = snapshot.data;
+                            return AnimatedSwitcher(
+                              duration: Duration(milliseconds: 60),
+                              child: subMenu == 0 
+                              ? audioSection(context, vol, bass, treble)
+                              : Container()
+                            );
+                          }
+                        );
+                      }
+                    );
+                  }
+                ),
+                AnimatedSwitcher(
+                  duration: Duration(milliseconds: 60),
+                  child: subMenu == 1
+                  ? videoSection(context)
+                  : Container()
+                ),
+              ],
             ),
           ),
           // ------------------------------
@@ -288,7 +305,10 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
       children: <Widget>[
         SizedBox(height: 8),
         ListTile(
-          leading: Icon(Icons.music_note, color: Colors.redAccent),
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: Icon(EvaIcons.musicOutline, color: Colors.redAccent),
+          ),
           title: Text(
             "Audio",
             style: TextStyle(
@@ -304,7 +324,7 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
             ),
             child: Padding(
               padding: const EdgeInsets.all(10.0),
-              child: Text("Download", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
+              child: Text("Download", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontFamily: "Varela")),
             ),
           ),
           onTap: () => Navigator.pop(context, [
@@ -341,7 +361,7 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
         SizedBox(
           height: 60,
           child: FlutterSlider(
-            values: [100, 400],
+            values: [volumeModifier*100, 400],
             min: 0,
             max: 400,
             onDragging: (value, currentValue, upperValue) {
@@ -406,7 +426,7 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
         SizedBox(
           height: 60,
           child: FlutterSlider(
-            values: [0, 20],
+            values: [bassGain.toDouble(), 20],
             min: -20,
             max: 20,
             onDragging: (value, currentValue, upperValue) {
@@ -469,7 +489,7 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
         SizedBox(
           height: 60,
           child: FlutterSlider(
-            values: [0, 20],
+            values: [trebleGain.toDouble(), 20],
             min: -20,
             max: 20,
             onDragging: (value, currentValue, upperValue) {
@@ -518,7 +538,7 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
         Padding(
           padding: EdgeInsets.only(left: 22, right: MediaQuery.of(context).size.width*0.2),
           child: ListTile(
-            leading: Icon(Icons.videocam, color: Colors.redAccent),
+            leading: Icon(EvaIcons.videoOutline, color: Colors.redAccent),
             title: Text("Video", style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color, fontWeight: FontWeight.w600)),
             subtitle: Text("Download video at selected quality bellow"),
             onTap: () {},
@@ -530,43 +550,59 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
           itemCount: widget.videoList.length,
           itemBuilder: (context, index) {
             return Padding(
-              padding: EdgeInsets.only(top: 16, bottom: 16, left: 32),
-              child: Row(
-                children: <Widget>[
-                  Text(
-                    "Quality: ",
-                    style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color, fontSize: 17, fontWeight: FontWeight.w700),
-                  ),
-                  Text(
-                    widget.videoList[index].videoResolution.toString() + " " +
-                    widget.videoList[index].framerate.toString() + "fps "
-                  ),
-                  widget.videoList[index].videoQualityLabel.contains(new RegExp(r'HDR'))
-                  ? Text(
-                    "HDR ", style: TextStyle(fontWeight: FontWeight.w600, color: Colors.redAccent),
-                  ) : Container(),
-                  Text(
-                    (((widget.videoList[index].size)/1024)/1024).toStringAsFixed(2) +
-                    "MB", style: TextStyle(fontSize: 12),
-                  ),
-                  Spacer(),
-                  GestureDetector(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.redAccent,
-                        borderRadius: BorderRadius.circular(30)
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(6.0),
-                        child: Icon(Icons.file_download, color: Colors.white),
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                padding: EdgeInsets.only(top: 16, bottom: 16, left: 32),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Theme.of(context).cardColor
+                ),
+                child: Row(
+                  children: <Widget>[
+                    Text(
+                      "Quality: ",
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyText1.color,
+                        fontSize: 17,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
-                    onTap: () {
-                      Navigator.pop(context, ["Video", index.toString()]);
-                    },
-                  ),
-                  SizedBox(width: 18)
-                ],
+                    Text(
+                      widget.videoList[index].videoResolution.toString() + " " +
+                      widget.videoList[index].framerate.toString() + "fps ",
+                      style: TextStyle(fontFamily: "Varela"),
+                    ),
+                    widget.videoList[index].videoQualityLabel.contains(new RegExp(r'HDR'))
+                    ? Text(
+                      "HDR ", style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: Colors.redAccent,
+                        fontFamily: "Varela"
+                      ),
+                    ) : Container(),
+                    Text(
+                      (((widget.videoList[index].size)/1024)/1024).toStringAsFixed(2) +
+                      "MB", style: TextStyle(fontSize: 12, fontFamily: "Varela"),
+                    ),
+                    Spacer(),
+                    GestureDetector(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.redAccent,
+                          borderRadius: BorderRadius.circular(30)
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(6.0),
+                          child: Icon(EvaIcons.downloadOutline, color: Colors.white),
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.pop(context, ["Video", index.toString(), "1.0", "0", "0"]);
+                      },
+                    ),
+                    SizedBox(width: 18)
+                  ],
+                ),
               ),
             );
           },
