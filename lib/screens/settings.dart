@@ -694,13 +694,13 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                             Directory documentsDirectory = await getApplicationDocumentsDirectory();
                             String backupPath = await ExtStorage.getExternalStorageDirectory() + "/SongTube/Backup/";
                             if (!await Directory(backupPath).exists()) await Directory(backupPath).create();
-                            String path = join(documentsDirectory.path, 'downloadDatabase.db');
+                            String path = join(documentsDirectory.path, 'MediaItems.db');
                             if (!await File(path).exists()) {
                               final snackbar = AppSnack.withIconTitle(context, Icons.warning, "Your Library is Empty");
                               appData.libraryScaffoldKey.currentState.showSnackBar(snackbar);
                               return;
                             }
-                            await File(path).copy(backupPath + 'downloadDatabase.db');
+                            await File(path).copy(backupPath + 'MediaItems.db');
                             final snackbar = AppSnack.withIconTitle(context, Icons.backup, "Backup Completed");
                             appData.libraryScaffoldKey.currentState.showSnackBar(snackbar);
                           }
