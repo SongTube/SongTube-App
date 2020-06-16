@@ -1,13 +1,15 @@
 // Flutter
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
+
+// Internal
 import 'package:songtube/provider/app_provider.dart';
 import 'package:songtube/provider/downloads_manager.dart';
 
 // Packages
 import 'package:youtube_explode_dart/youtube_explode_dart.dart' as youtube;
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:provider/provider.dart';
 
 // UI
 import 'package:songtube/ui/snackbar.dart';
@@ -23,9 +25,8 @@ class _YoutubeWebviewState extends State<YoutubeWebview> with AutomaticKeepAlive
   bool get wantKeepAlive => true;
 
   GlobalKey<ScaffoldState> scaffoldState;
-  InAppWebViewController webController;
+  WebViewController webController;
   String _currentUrl;
-  double progress = 0;
 
   @override
   void initState() {
@@ -45,25 +46,12 @@ class _YoutubeWebviewState extends State<YoutubeWebview> with AutomaticKeepAlive
         key: scaffoldState,
         body: Column(
           children: <Widget>[
-            SizedBox(
-              height: 2,
-              width: MediaQuery.of(context).size.width,
-              child:LinearProgressIndicator(
-                value: progress,
-                backgroundColor: Colors.white,
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.redAccent),
-              )
-            ),
             Expanded(
-              child: InAppWebView(
+              child: WebView(
+                javascriptMode: JavascriptMode.unrestricted,
                 initialUrl: _currentUrl,
-                onWebViewCreated: (InAppWebViewController controller) {
+                onWebViewCreated: (WebViewController controller) {
                   webController = controller;
-                },
-                onProgressChanged: (InAppWebViewController controller, int value) {
-                  setState(() {
-                    progress = value / 100;
-                  });
                 },
               )
             ),
@@ -89,7 +77,7 @@ class _YoutubeWebviewState extends State<YoutubeWebview> with AutomaticKeepAlive
                       bool result = await webController.canGoForward();
                       if (result == true) {
                         webController.goForward();
-                        String url = await webController.getUrl();
+                        String url = await webController.currentUrl();
                         setState(() => _currentUrl = url);
                       }
                     }
@@ -103,7 +91,7 @@ class _YoutubeWebviewState extends State<YoutubeWebview> with AutomaticKeepAlive
                   Expanded(
                     child: GestureDetector(
                       onLongPress: () async {
-                        Clipboard.setData(new ClipboardData(text: await webController.getUrl()));
+                        Clipboard.setData(new ClipboardData(text: await webController.currentUrl()));
                         final snackBar = AppSnack.withEverything(
                           context,
                           Icons.content_copy,
@@ -144,7 +132,7 @@ class _YoutubeWebviewState extends State<YoutubeWebview> with AutomaticKeepAlive
             onPressed: () async {
               String _url;
               try {
-                _url = await webController.getUrl();
+                _url = await webController.currentUrl();
               } catch (_) {
                 scaffoldState.currentState.showSnackBar(
                   AppSnack.withEverything(
