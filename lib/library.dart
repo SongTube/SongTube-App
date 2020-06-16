@@ -245,8 +245,11 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
           unselectedItemColor: Theme.of(context).iconTheme.color,
           type: BottomNavigationBarType.fixed,
           onTap: (int index) {
-            if (manager.showMediaPlayer == true) manager.showMediaPlayer = false;
-            appData.screenIndex = index;
+            if (manager.showMediaPlayer == true) {
+              manager.showMediaPlayer = false;
+              Future.delayed(Duration(milliseconds: 150), () => appData.screenIndex = index);
+            } else {
+              appData.screenIndex = index;
           },
           items: [
             BottomNavigationBarItem(
