@@ -361,9 +361,9 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
         SizedBox(
           height: 60,
           child: FlutterSlider(
-            values: [volumeModifier*100, 400],
+            values: [volumeModifier*100, 200],
             min: 0,
-            max: 400,
+            max: 200,
             onDragging: (value, currentValue, upperValue) {
               double value = (currentValue/100);
               value = double.parse(value.toStringAsFixed(2));
@@ -373,7 +373,7 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
             step: FlutterSliderStep(
               isPercentRange: true,
               rangeList: [
-                FlutterSliderRangeStep(from: 0, to: 400, step: 10),
+                FlutterSliderRangeStep(from: 0, to: 200, step: 5),
               ]
             ),
             trackBar: FlutterSliderTrackBar(
@@ -396,7 +396,7 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
             SizedBox(width: 16),
             Text("-100%", style: TextStyle(fontSize: 12)),
             Spacer(),
-            Text("+400%", style: TextStyle(fontSize: 12)),
+            Text("+200%", style: TextStyle(fontSize: 12)),
             SizedBox(width: 16),
           ],
         ),
@@ -426,9 +426,9 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
         SizedBox(
           height: 60,
           child: FlutterSlider(
-            values: [bassGain.toDouble(), 20],
-            min: -20,
-            max: 20,
+            values: [bassGain.toDouble(), 5],
+            min: -5,
+            max: 5,
             onDragging: (value, currentValue, upperValue) {
               bassGainStream.add(currentValue.toInt());
               bassGain = currentValue.toInt();
@@ -436,7 +436,7 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
             step: FlutterSliderStep(
               isPercentRange: true,
               rangeList: [
-                FlutterSliderRangeStep(from: -20, to: 20, step: 1),
+                FlutterSliderRangeStep(from: -5, to: 5, step: 1),
               ]
             ),
             trackBar: FlutterSliderTrackBar(
@@ -489,9 +489,9 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
         SizedBox(
           height: 60,
           child: FlutterSlider(
-            values: [trebleGain.toDouble(), 20],
-            min: -20,
-            max: 20,
+            values: [trebleGain.toDouble(), 5],
+            min: -5,
+            max: 5,
             onDragging: (value, currentValue, upperValue) {
               trebleGainStream.add(currentValue.toInt());
               trebleGain = currentValue.toInt();
@@ -499,7 +499,7 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
             step: FlutterSliderStep(
               isPercentRange: true,
               rangeList: [
-                FlutterSliderRangeStep(from: -20, to: 20, step: 1),
+                FlutterSliderRangeStep(from: -5, to: 5, step: 1),
               ]
             ),
             trackBar: FlutterSliderTrackBar(
