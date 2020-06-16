@@ -6,27 +6,27 @@ import 'package:just_audio/just_audio.dart';
 import 'package:audio_service/audio_service.dart';
 
 MediaControl playControl = MediaControl(
-  androidIcon: 'mipmap/ic_play_arrow',
+  androidIcon: 'drawable/ic_play_arrow',
   label: 'Play',
   action: MediaAction.play,
 );
 MediaControl pauseControl = MediaControl(
-  androidIcon: 'mipmap/ic_pause',
+  androidIcon: 'drawable/ic_pause',
   label: 'Pause',
   action: MediaAction.pause,
 );
 MediaControl skipToNextControl = MediaControl(
-  androidIcon: 'mipmap/ic_navigate_next',
+  androidIcon: 'drawable/ic_navigate_next',
   label: 'Next',
   action: MediaAction.skipToNext,
 );
 MediaControl skipToPreviousControl = MediaControl(
-  androidIcon: 'mipmap/ic_navigate_before',
+  androidIcon: 'drawable/ic_navigate_before',
   label: 'Previous',
   action: MediaAction.skipToPrevious,
 );
 MediaControl stopControl = MediaControl(
-  androidIcon: 'mipmap/ic_clear',
+  androidIcon: 'drawable/ic_clear',
   label: 'Stop',
   action: MediaAction.stop,
 );

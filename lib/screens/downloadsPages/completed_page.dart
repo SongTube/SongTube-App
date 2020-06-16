@@ -81,7 +81,7 @@ class _CompletedPageState extends State<CompletedPage> with TickerProviderStateM
                                 // Enable this if you want the Android service to exit the foreground state on pause.
                                 //androidStopForegroundOnPause: true,
                                 androidNotificationColor: 0xFF2196f3,
-                                androidNotificationIcon: 'mipmap/ic_stat_music_note',
+                                androidNotificationIcon: 'drawable/ic_stat_music_note',
                                 androidEnableQueue: true,
                               );
                             }
