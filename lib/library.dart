@@ -10,7 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:songtube/internal/native.dart';
 import 'package:songtube/internal/youtube/infoparser.dart';
 import 'package:songtube/provider/app_provider.dart';
-import 'package:songtube/provider/player_provider.dart';
+import 'package:songtube/provider/downloads_manager.dart';
 import 'package:songtube/screens/downloads.dart';
 import 'package:songtube/screens/home.dart';
 import 'package:songtube/screens/more.dart';
@@ -98,6 +98,7 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
   @override
   Widget build(BuildContext context) {
     AppDataProvider appData = Provider.of<AppDataProvider>(context);
+    ManagerProvider manager = Provider.of<ManagerProvider>(context);
     Brightness _themeBrightness = Theme.of(context).brightness;
     Brightness _systemBrightness = Theme.of(context).brightness;
     Brightness _statusBarBrightness = _systemBrightness == Brightness.light
@@ -112,7 +113,6 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
         systemNavigationBarIconBrightness: _themeBrightness
       ),
     );
-    Player audioPlayer = Provider.of<Player>(context);
     appSnack = new AppSnack(scaffoldKey: appData.libraryScaffoldKey, context: context);
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
@@ -151,24 +151,20 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
                 centerTitle: true,
                 actions: <Widget>[
                   AnimatedOpacity(
-                    opacity: audioPlayer.playerState == PlayerState.playing || audioPlayer.playerState == PlayerState.paused ? 1.0 : 0.0,
+                    opacity: 1.0,
                     duration: Duration(milliseconds: 300),
                     child: PlayerWidget(
-                      playerState: audioPlayer.playerState,
-                      onPlayPauseTap: () {
-                        if (audioPlayer.playerState == PlayerState.paused) audioPlayer.play();
-                        if (audioPlayer.playerState == PlayerState.playing) audioPlayer.pause();
-                      },
-                      onPlayPauseLongPress: () => audioPlayer.stop(),
-                      showPlayPause: audioPlayer.showMediaPlayer ? false : true,
+                      onPlayPauseTap: () {},
+                      onPlayPauseLongPress: () {},
+                      showPlayPause: true,
                       leadingIcon: Icon(
-                        audioPlayer.showMediaPlayer ? Icons.expand_less : Icons.expand_more,
+                        manager.showMediaPlayer ? Icons.expand_less : Icons.expand_more,
                         color: Theme.of(context).iconTheme.color,
                       ),
                       leadingAction: () {
                         FocusScope.of(context).requestFocus(new FocusNode());
                         setState(() {
-                          audioPlayer.showMediaPlayer = !audioPlayer.showMediaPlayer;
+                          manager.showMediaPlayer = !manager.showMediaPlayer;
                         });
                       },
                     ),
@@ -225,13 +221,13 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
               ),
               AnimatedSwitcher(
                 duration: Duration(milliseconds: 150),
-                child: audioPlayer.showMediaPlayer
+                child: manager.showMediaPlayer
                   ? Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: FullPlayerWidget(),
                   )
                   : Container()
-              )
+              ),
             ],
           ),
         ),
@@ -244,7 +240,7 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
           unselectedItemColor: Theme.of(context).iconTheme.color,
           type: BottomNavigationBarType.fixed,
           onTap: (int index) {
-            if (audioPlayer.showMediaPlayer == true) audioPlayer.showMediaPlayer = false;
+            if (manager.showMediaPlayer == true) manager.showMediaPlayer = false;
             appData.screenIndex = index;
           },
           items: [

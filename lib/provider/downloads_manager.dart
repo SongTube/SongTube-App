@@ -2,6 +2,7 @@
 import 'dart:async';
 
 // Flutter
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 
 // Internal
@@ -35,6 +36,8 @@ class ManagerProvider extends ChangeNotifier {
     showFloatingActionButtom = false;
     showAppBar               = true;
     showDownloadTabsStatus   = false;
+    showMediaPlayer          = false;
+    serviceQueue             = [];
     // Controllers
     urlController    = new TextEditingController();
     titleController  = new TextEditingController();
@@ -67,6 +70,10 @@ class ManagerProvider extends ChangeNotifier {
   int _downloadsTabIndex = 0;
   StreamController<bool> showDownloadsTabs;
   bool showDownloadTabsStatus;
+  // AudioService
+  bool _showMediaPlayer;
+  List<MediaItem> serviceQueue;
+
 
   // -----------------------------
   // App Global MediaStreamInfoSet
@@ -77,8 +84,9 @@ class ManagerProvider extends ChangeNotifier {
   // Database
   // --------
   final dbHelper = DatabaseService.instance;
-  void getDatabase() async {
+  Future<void> getDatabase() async {
     _downloadedFileList = await dbHelper.getDownloadList();
+    await getDatabaseQueue();
     notifyListeners();
   }
 
@@ -151,6 +159,37 @@ class ManagerProvider extends ChangeNotifier {
     await getMediaStreamInfo(id);
     loadHome(0);
     return 0;
+  }
+  Future<void> getDatabaseQueue() async {
+    List<MediaItem> list = [];
+    _downloadedFileList.forEach((DownloadedFile element) {
+      Duration duration = Duration(milliseconds: _parseDuration(element.duration).inMilliseconds);
+      list.add(
+        new MediaItem(
+          id: element.path,
+          title: element.title,
+          album: element.album,
+          artist: element.author,
+          artUri: element.coverUrl,
+          duration: duration
+        )
+      );
+    });
+    serviceQueue = list;
+  }
+  Duration _parseDuration(String s) {
+    int hours = 0;
+    int minutes = 0;
+    int micros;
+    List<String> parts = s.split(':');
+    if (parts.length > 2) {
+      hours = int.parse(parts[parts.length - 3]);
+    }
+    if (parts.length > 1) {
+      minutes = int.parse(parts[parts.length - 2]);
+    }
+    micros = (double.parse(parts[parts.length - 1]) * 1000000).round();
+    return Duration(hours: hours, minutes: minutes, microseconds: micros);
   }
 
   // -------------------------------------
@@ -286,6 +325,11 @@ class ManagerProvider extends ChangeNotifier {
   bool get showAppBar => _showAppBar;
   set showAppBar(bool value) {
     _showAppBar = value;
+    notifyListeners();
+  }
+  bool get showMediaPlayer => _showMediaPlayer;
+  set showMediaPlayer(bool value) {
+    _showMediaPlayer = value;
     notifyListeners();
   }
 }

@@ -1,22 +1,23 @@
 // Flutter
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 // Internal
 import 'package:songtube/provider/downloads_manager.dart';
-import 'package:songtube/provider/player_provider.dart';
-import 'package:songtube/ui/themes.dart';
 import 'package:songtube/provider/app_provider.dart';
 import 'package:songtube/library.dart';
 
 // Packages
 import 'package:audio_service/audio_service.dart';
+import 'package:provider/provider.dart';
+
+// UI
+import 'package:songtube/ui/themes.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); 
   AppDataProvider provider = AppDataProvider();
   provider.initProvider();
-  await Future.delayed(Duration(milliseconds: 500), () {
+  await Future.delayed(Duration(milliseconds: 150), () {
     runApp(Main(provider));
   });
 }
@@ -33,7 +34,6 @@ class Main extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: provider),
-        ChangeNotifierProvider<Player>(create: (context) => Player()),
         ChangeNotifierProvider<ManagerProvider>(create: (context) => ManagerProvider())
       ],
       child: Builder( builder: (context) {
