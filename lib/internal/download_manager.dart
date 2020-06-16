@@ -237,7 +237,9 @@ class DownloadManager {
       final dbHelper = DatabaseService.instance;
       await dbHelper.insertDownload(new DownloadedFile.toDatabase(
         title: infoset.metadata.title,
+        album: infoset.metadata.album,
         author: infoset.metadata.artist,
+        duration: infoset.mediaStream.videoDetails.duration.toString(),
         downloadType: infoset.downloadType == DownloadType.audio
           ? "Audio"
           : "Video",

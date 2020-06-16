@@ -5,7 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:songtube/internal/database/models/downloaded_file.dart';
 import 'package:sqflite/sqflite.dart';
 
-const String table = "downloadsTable";
+const String table = "itemsTable";
 
 class DatabaseService {
 
@@ -23,7 +23,7 @@ class DatabaseService {
 
   _initDatabase() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, 'downloadDatabase.db');
+    String path = join(documentsDirectory.path, 'MediaItems.db');
     return await openDatabase(path,
         version: 1,
         onCreate: _onCreate);
@@ -35,7 +35,9 @@ class DatabaseService {
       '''CREATE TABLE $table(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         title STRING,
+        album STRING,
         author STRING,
+        duration STRING,
         downloadType STRING,
         path STRING,
         fileSize STRING,
@@ -69,7 +71,9 @@ class DatabaseService {
     var result = await db.query(table, columns: [
       "id",
       "title",
+      "album",
       "author",
+      "duration",
       "downloadType",
       "path",
       "fileSize",
