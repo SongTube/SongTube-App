@@ -41,77 +41,79 @@ class MoreScreen extends StatelessWidget {
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 16),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        // App Name
-                        Container(
-                          padding: EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Theme.of(context).cardColor,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black12.withOpacity(0.05),
-                                offset: Offset(3, 3), //(x,y)
-                                blurRadius: 6.0,
-                                spreadRadius: 1 
-                              )
-                            ]
-                          ),
-                          child: Text(
-                            appData.appName,
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontFamily: "Varela",
-                              fontWeight: FontWeight.w700,
-                              color: Colors.redAccent
+                    child: appData.appName != null
+                    ? Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          // App Name
+                          Container(
+                            padding: EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Theme.of(context).cardColor,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black12.withOpacity(0.05),
+                                  offset: Offset(3, 3), //(x,y)
+                                  blurRadius: 6.0,
+                                  spreadRadius: 1 
+                                )
+                              ]
                             ),
-                          )
-                        ),
-                        SizedBox(height: 8),
-                        // App Version
-                        Container(
-                          padding: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Theme.of(context).cardColor,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black12.withOpacity(0.05),
-                                offset: Offset(0, 3), //(x,y)
-                                blurRadius: 6.0,
-                                spreadRadius: 0.01 
-                              )
-                            ]
+                            child: Text(
+                              appData.appName,
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontFamily: "Varela",
+                                fontWeight: FontWeight.w700,
+                                color: Colors.redAccent
+                              ),
+                            )
                           ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              Text(
-                                "Version: ",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontFamily: "Varela",
-                                  fontWeight: FontWeight.w700,
-                                  color: Theme.of(context).iconTheme.color
+                          SizedBox(height: 8),
+                          // App Version
+                          Container(
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Theme.of(context).cardColor,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black12.withOpacity(0.05),
+                                  offset: Offset(0, 3), //(x,y)
+                                  blurRadius: 6.0,
+                                  spreadRadius: 0.01 
+                                )
+                              ]
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Text(
+                                  "Version: ",
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontFamily: "Varela",
+                                    fontWeight: FontWeight.w700,
+                                    color: Theme.of(context).iconTheme.color
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                appData.appVersion,
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontFamily: "Varela",
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.redAccent
+                                Text(
+                                  appData.appVersion,
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontFamily: "Varela",
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.redAccent
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            )
                           )
-                        )
-                      ],
-                    ),
+                        ],
+                      )
+                    : Container(),
                   ),
                 )
               ],
