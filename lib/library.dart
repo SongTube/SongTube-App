@@ -3,11 +3,13 @@ import 'dart:async';
 import 'dart:io';
 
 // Flutter
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 // Internal
 import 'package:songtube/internal/native.dart';
+import 'package:songtube/internal/player_service.dart';
 import 'package:songtube/internal/youtube/infoparser.dart';
 import 'package:songtube/provider/app_provider.dart';
 import 'package:songtube/provider/downloads_manager.dart';
@@ -150,24 +152,27 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
                 ),
                 centerTitle: true,
                 actions: <Widget>[
-                  AnimatedOpacity(
-                    opacity: 1.0,
-                    duration: Duration(milliseconds: 300),
-                    child: PlayerWidget(
-                      onPlayPauseTap: () {},
-                      onPlayPauseLongPress: () {},
-                      showPlayPause: true,
-                      leadingIcon: Icon(
-                        manager.showMediaPlayer ? Icons.expand_less : Icons.expand_more,
-                        color: Theme.of(context).iconTheme.color,
-                      ),
-                      leadingAction: () {
-                        FocusScope.of(context).requestFocus(new FocusNode());
-                        setState(() {
-                          manager.showMediaPlayer = !manager.showMediaPlayer;
-                        });
-                      },
-                    ),
+                  StreamBuilder<ScreenState>(
+                    stream: manager.screenStateStream,
+                    builder: (context, snapshot) {
+                      final screenState = snapshot.data;
+                      final state = screenState?.playbackState;
+                      final processingState =
+                        state?.processingState ?? AudioProcessingState.none;
+                      return AnimatedOpacity(
+                        opacity: 1.0,
+                        duration: Duration(milliseconds: 300),
+                        child: processingState != AudioProcessingState.none
+                        ? ExpandPlayer(
+                            onTap: () => manager.showMediaPlayer = !manager.showMediaPlayer,
+                            icon: Icon(
+                              manager.showMediaPlayer ? Icons.expand_less : Icons.expand_more,
+                              color: Colors.white,
+                            ),
+                          )
+                        : Container()
+                      );
+                    }
                   ),
                   SizedBox(width: 12)
                 ],

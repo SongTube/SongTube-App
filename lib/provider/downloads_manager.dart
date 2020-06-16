@@ -1,5 +1,6 @@
 // Dart
 import 'dart:async';
+import 'package:rxdart/rxdart.dart';
 
 // Flutter
 import 'package:audio_service/audio_service.dart';
@@ -14,6 +15,7 @@ import 'package:songtube/internal/models/downloadinfoset.dart';
 import 'package:songtube/internal/models/enums.dart';
 import 'package:songtube/internal/models/metadata.dart';
 import 'package:songtube/internal/native.dart';
+import 'package:songtube/internal/player_service.dart';
 import 'package:songtube/internal/youtube/infoparser.dart';
 import 'package:songtube/provider/app_provider.dart';
 
@@ -51,6 +53,14 @@ class ManagerProvider extends ChangeNotifier {
     showDownloadsTabs = new StreamController<bool>.broadcast();
     showDownloadsTabs.add(true);
     getDatabase();
+    // Listeners
+    screenStateStream.listen((event) {
+      if (AudioService.playbackState != null) {
+        if (AudioService.playbackState.processingState == AudioProcessingState.stopped) {
+          showMediaPlayer = false;
+        }
+      }
+    });
   }
 
   // -------------
@@ -73,7 +83,15 @@ class ManagerProvider extends ChangeNotifier {
   // AudioService
   bool _showMediaPlayer;
   List<MediaItem> serviceQueue;
-
+  /// Encapsulate all the different data we're interested in into a single
+  /// stream so we don't have to nest StreamBuilders.
+  Stream<ScreenState> get screenStateStream =>
+      Rx.combineLatest3<List<MediaItem>, MediaItem, PlaybackState, ScreenState>(
+          AudioService.queueStream,
+          AudioService.currentMediaItemStream,
+          AudioService.playbackStateStream,
+          (queue, mediaItem, playbackState) =>
+              ScreenState(queue, mediaItem, playbackState));
 
   // -----------------------------
   // App Global MediaStreamInfoSet

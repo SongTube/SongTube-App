@@ -11,79 +11,49 @@ import 'package:songtube/internal/player_service.dart';
 import 'package:songtube/provider/downloads_manager.dart';
 
 // Packages
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:provider/provider.dart';
 
-class PlayerWidget extends StatefulWidget {
-  final Function onPlayPauseTap;
-  final Function onPlayPauseLongPress;
-  final bool showPlayPause;
-  final EdgeInsetsGeometry padding;
-  final Icon leadingIcon;
-  final Function leadingAction;
-  PlayerWidget({
-    @required this.onPlayPauseTap,
-    @required this.onPlayPauseLongPress,
-    @required this.showPlayPause,
-    this.padding,
-    @required this.leadingIcon,
-    @required this.leadingAction
+class ExpandPlayer extends StatelessWidget {
+  final Function onTap;
+  final Widget icon;
+  ExpandPlayer({
+    @required this.onTap,
+    @required this.icon
   });
-
-  @override
-  _PlayerWidgetState createState() => _PlayerWidgetState();
-}
-
-class _PlayerWidgetState extends State<PlayerWidget> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        // Expand Less/More Icon
-        Container(
-          width: 40,
-          height: 40,
-          color: Colors.transparent,
-          child: IconButton(
-            icon: AnimatedSwitcher(
-              duration: Duration(milliseconds: 200),
-              child: widget.leadingIcon
-            ),
-            onPressed: widget.leadingAction
+    return GestureDetector(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 8, bottom: 8),
+        child: Container(
+          margin: EdgeInsets.only(left: 10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: Colors.redAccent
+          ),
+          child: AnimatedSwitcher(
+            duration: Duration(milliseconds: 200),
+            child: Row(
+              children: <Widget>[
+                SizedBox(width: 8),
+                icon,
+                SizedBox(width: 4),
+                Text(
+                  "Playing",
+                  style: TextStyle(
+                    fontFamily: "Varela",
+                    fontWeight: FontWeight.w600
+                  )
+                ),
+                SizedBox(width: 12),
+              ],
+            )
           ),
         ),
-        // Padding
-        SizedBox(width: 10),
-        // Play/Pause song
-        AnimatedSize(
-          duration: Duration(milliseconds: 150),
-          vsync: this,
-          child: widget.showPlayPause
-          ? Container(
-            width: 46,
-            height: 46,
-            decoration: BoxDecoration(
-              color: Colors.redAccent,
-              borderRadius: BorderRadius.circular(30),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black12.withOpacity(0.1),
-                  offset: Offset(0, 3), //(x,y)
-                  blurRadius: 6.0,
-                  spreadRadius: 0.05 
-                )
-              ]
-            ),
-            child: IconButton(
-              icon: Icon(MdiIcons.pause, color: Colors.white),
-              onPressed: widget.onPlayPauseTap,
-            ),
-          )
-          : Container()
-        ),
-      ],
+      ),
     );
   }
 }
@@ -95,11 +65,6 @@ class FullPlayerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
-    _screenStateStream.listen((event) {
-      if (AudioService.playbackState.processingState == AudioProcessingState.stopped) {
-        manager.showMediaPlayer = false;
-      }
-    });
     return Container(
       width: double.infinity,
       height: MediaQuery.of(context).size.height - kToolbarHeight*1.5 - kBottomNavigationBarHeight,
@@ -116,7 +81,7 @@ class FullPlayerWidget extends StatelessWidget {
         ],
       ),
     child: StreamBuilder<ScreenState>(
-      stream: _screenStateStream,
+      stream: manager.screenStateStream,
         builder: (context, snapshot) {
           final screenState = snapshot.data;
           final mediaItem = screenState?.mediaItem;
@@ -243,16 +208,6 @@ class FullPlayerWidget extends StatelessWidget {
       ),
     );
   }
-
-  /// Encapsulate all the different data we're interested in into a single
-  /// stream so we don't have to nest StreamBuilders.
-  Stream<ScreenState> get _screenStateStream =>
-      Rx.combineLatest3<List<MediaItem>, MediaItem, PlaybackState, ScreenState>(
-          AudioService.queueStream,
-          AudioService.currentMediaItemStream,
-          AudioService.playbackStateStream,
-          (queue, mediaItem, playbackState) =>
-              ScreenState(queue, mediaItem, playbackState));
 
   Widget positionIndicator(MediaItem mediaItem, PlaybackState state) {
     double seekPos;
