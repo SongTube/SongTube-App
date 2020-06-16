@@ -35,9 +35,7 @@ class _SearchBarState extends State<SearchBar> {
   Widget build(BuildContext context) {
     return Padding(
     padding: widget.padding,
-    child: Container(
-      padding: const EdgeInsets.only(bottom: 8),
-      height: kToolbarHeight*1.1,
+    child: Ink(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
         color: widget.containerColor,
@@ -50,99 +48,103 @@ class _SearchBarState extends State<SearchBar> {
           ),
         ],
       ),
-      child: Column(
-        children: <Widget>[
-          // Search indicator Bar
-          ClipRRect(
-            borderRadius: BorderRadius.circular(50),
-            child: SizedBox(
-              height: 2,
-              width: MediaQuery.of(context).size.width*0.9,
-              child: LinearProgressIndicator(
-                value: widget.indicatorValue,
-                backgroundColor: Theme.of(context).canvasColor,
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.redAccent),
+      child: Container(
+        padding: const EdgeInsets.only(bottom: 8),
+        height: kToolbarHeight*1.1,
+        child: Column(
+          children: <Widget>[
+            // Search indicator Bar
+            ClipRRect(
+              borderRadius: BorderRadius.circular(50),
+              child: SizedBox(
+                height: 2,
+                width: MediaQuery.of(context).size.width*0.9,
+                child: LinearProgressIndicator(
+                  value: widget.indicatorValue,
+                  backgroundColor: Colors.transparent,
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.redAccent),
+                ),
               ),
             ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.only(top: 6, left: 8, right: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  // URL Input
-                  Expanded(
-                    child: TextFormField(
-                      cursorColor: Colors.redAccent,
-                      controller: widget.controller,
-                      decoration: InputDecoration(
-                        contentPadding: widget.prefixIcon != null
-                          ? EdgeInsets.only(top: 15)
-                          : EdgeInsets.only(top: 15, left: 8),
-                        prefixIcon: widget.prefixIcon != null ? widget.prefixIcon : null,
-                        filled: true,
-                        fillColor: widget.textfieldColor,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(
-                            width: 0, 
-                            style: BorderStyle.none,
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.only(top: 6, left: 8, right: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    // URL Input
+                    Expanded(
+                      child: TextFormField(
+                        cursorColor: Colors.redAccent,
+                        controller: widget.controller,
+                        decoration: InputDecoration(
+                          contentPadding: widget.prefixIcon != null
+                            ? EdgeInsets.only(top: 15)
+                            : EdgeInsets.only(top: 15, left: 8),
+                          prefixIcon: widget.prefixIcon != null ? widget.prefixIcon : null,
+                          filled: true,
+                          fillColor: widget.textfieldColor,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: BorderSide(
+                              width: 0, 
+                              style: BorderStyle.none,
+                            ),
+                          ),
+                          hintText: widget.hintText,
+                          suffixIcon: AnimatedOpacity (
+                            duration: Duration(milliseconds: 200),
+                            opacity: widget.controller.text == "" ? 0.0 : 1.0,
+                            child: IconButton(
+                              icon: Icon(Icons.clear,
+                              color: Theme.of(context).iconTheme.color),
+                              onPressed: () {
+                                Future.delayed(
+                                  Duration(milliseconds: 50),
+                                  ).then((_) {
+                                    setState(() => widget.controller.clear());
+                                  },
+                                );
+                              }
+                            )
                           ),
                         ),
-                        hintText: widget.hintText,
-                        suffixIcon: AnimatedOpacity (
-                          duration: Duration(milliseconds: 200),
-                          opacity: widget.controller.text == "" ? 0.0 : 1.0,
-                          child: IconButton(
-                            icon: Icon(Icons.clear,
-                            color: Theme.of(context).iconTheme.color),
-                            onPressed: () {
-                              Future.delayed(
-                                Duration(milliseconds: 50),
-                                ).then((_) {
-                                  setState(() => widget.controller.clear());
-                                },
-                              );
-                            }
-                          )
+                        onChanged: widget.onTextChanged,
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyText1.color,
                         ),
                       ),
-                      onChanged: widget.onTextChanged,
-                      style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyText1.color,
-                      ),
                     ),
-                  ),
-                  // ClipBoard Paste Button
-                  widget.enablePasteButton
-                    ? Center(
+                    // ClipBoard Paste Button
+                    widget.enablePasteButton
+                      ? Center(
+                        child: IconButton(
+                          icon: Icon(Icons.content_paste),
+                          onPressed: () async {
+                            ClipboardData data = await Clipboard.getData('text/plain');
+                            if (data == null) return;
+                            setState(() => widget.controller.text = data.text);
+                            FocusScope.of(context).unfocus();
+                          },
+                        ),
+                      )
+                      : Container(),
+                    // Start Searching Button
+                    Center(
                       child: IconButton(
-                        icon: Icon(Icons.content_paste),
-                        onPressed: () async {
-                          ClipboardData data = await Clipboard.getData('text/plain');
-                          if (data == null) return;
-                          setState(() => widget.controller.text = data.text);
-                          FocusScope.of(context).unfocus();
-                        },
+                        icon: Icon(EvaIcons.searchOutline),
+                        onPressed: widget.onSearchPressed,
                       ),
-                    )
-                    : Container(),
-                  // Start Searching Button
-                  Center(
-                    child: IconButton(
-                      icon: Icon(EvaIcons.searchOutline),
-                      onPressed: widget.onSearchPressed,
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-          ],
-        )
-      ),
+            ],
+          )
+        ),
+    ),
     );
   }
 }

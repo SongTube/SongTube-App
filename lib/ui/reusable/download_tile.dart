@@ -171,7 +171,7 @@ class DownloadTileWithoutStream extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Ink(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: Theme.of(context).cardColor,

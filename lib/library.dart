@@ -250,6 +250,7 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
               Future.delayed(Duration(milliseconds: 150), () => appData.screenIndex = index);
             } else {
               appData.screenIndex = index;
+            }
           },
           items: [
             BottomNavigationBarItem(
