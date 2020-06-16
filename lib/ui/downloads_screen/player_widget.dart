@@ -95,6 +95,11 @@ class FullPlayerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
+    _screenStateStream.listen((event) {
+      if (AudioService.playbackState.processingState == AudioProcessingState.stopped) {
+        manager.showMediaPlayer = false;
+      }
+    });
     return Container(
       width: double.infinity,
       height: MediaQuery.of(context).size.height - kToolbarHeight*1.5 - kBottomNavigationBarHeight,
