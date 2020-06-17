@@ -154,7 +154,7 @@ class FullPlayerWidget extends StatelessWidget {
                     // Previous button
                     IconButton(
                       icon: Icon(Icons.arrow_back_ios, color: Theme.of(context).iconTheme.color),
-                      onPressed: () => AudioService.skipToNext(),
+                      onPressed: () => AudioService.skipToPrevious(),
                     ),
                     // Padding
                     SizedBox(width: 30),
