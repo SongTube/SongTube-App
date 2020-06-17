@@ -171,7 +171,7 @@ class DownloadTileWithoutStream extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
-    return Ink(
+    return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: Theme.of(context).cardColor,
@@ -184,71 +184,75 @@ class DownloadTileWithoutStream extends StatelessWidget {
           )
         ]
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: <Widget> [
-            Row(
-              children: <Widget> [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(15.0),
-                  child: FadeInImage(
-                    image: NetworkImage(coverUrl),
-                    placeholder: MemoryImage(kTransparentImage),
-                    height: 90,
-                    width: 160,
-                    fit: BoxFit.fitWidth,
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 10),
-                    child: Column(
-                      children: <Widget> [
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            title.toString(),
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            softWrap: true,
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            author.toString(),
-                            overflow: TextOverflow.clip,
-                            maxLines: 1,
-                            softWrap: true,
-                            style: TextStyle(
-                              color: Colors.grey[500]
-                            ),
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: <Widget>[
-                              IconButton(
-                                icon: Icon(Icons.play_arrow, size: 18),
-                                onPressed: onTilePlay,
-                              ),
-                              IconButton(
-                                icon: Icon(Icons.clear, size: 18),
-                                onPressed: onTileRemove,
-                              )
-                            ],
-                          ),
-                        ),
-                      ]
+      child: Material(
+        color: Theme.of(context).cardColor,
+        borderRadius: BorderRadius.circular(20),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: <Widget> [
+              Row(
+                children: <Widget> [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(15.0),
+                    child: FadeInImage(
+                      image: NetworkImage(coverUrl),
+                      placeholder: MemoryImage(kTransparentImage),
+                      height: 90,
+                      width: 160,
+                      fit: BoxFit.fitWidth,
                     ),
                   ),
-                ),
-              ]
-            ),
-          ]
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Column(
+                        children: <Widget> [
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              title.toString(),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              softWrap: true,
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              author.toString(),
+                              overflow: TextOverflow.clip,
+                              maxLines: 1,
+                              softWrap: true,
+                              style: TextStyle(
+                                color: Colors.grey[500]
+                              ),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.bottomRight,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: <Widget>[
+                                IconButton(
+                                  icon: Icon(Icons.play_arrow, size: 18),
+                                  onPressed: onTilePlay,
+                                ),
+                                IconButton(
+                                  icon: Icon(Icons.clear, size: 18),
+                                  onPressed: onTileRemove,
+                                )
+                              ],
+                            ),
+                          ),
+                        ]
+                      ),
+                    ),
+                  ),
+                ]
+              ),
+            ]
+          ),
         ),
       ),
     );
