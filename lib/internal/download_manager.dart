@@ -10,6 +10,7 @@ import 'package:ext_storage/ext_storage.dart';
 import 'package:path/path.dart';
 import 'package:songtube/internal/database/infoset_database.dart';
 import 'package:songtube/internal/database/models/downloaded_file.dart';
+import 'package:http/http.dart' as http;
 
 // Internal
 import 'package:songtube/internal/models/downloadinfoset.dart';
@@ -268,9 +269,16 @@ class DownloadManager {
         disc: infoset.metadata.disk,
         track: infoset.metadata.track
       );
+      String artworkUri;
+      final response = await http.get(infoset.mediaStream.videoDetails.thumbnailSet.maxResUrl);
+      if (response.statusCode == 200) {
+        artworkUri = infoset.mediaStream.videoDetails.thumbnailSet.maxResUrl;
+      } else {
+        artworkUri = infoset.mediaStream.videoDetails.thumbnailSet.highResUrl;
+      }
       await TagsManager.writeArtwork(
         songPath: filePath,
-        artworkUrl: infoset.mediaStream.videoDetails.thumbnailSet.maxResUrl
+        artworkUrl: artworkUri
       );
     } on Exception catch (e) {
       print(e);
