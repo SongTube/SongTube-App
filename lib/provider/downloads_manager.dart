@@ -227,7 +227,7 @@ class ManagerProvider extends ChangeNotifier {
     loadHome(1);
     MediaStreamInfoSet tmp;
     try {
-      tmp = await YoutubeInfo.getVideoInfo(id).timeout(Duration(seconds: 15),
+      tmp = await YoutubeInfo.getVideoInfo(id).timeout(Duration(seconds: 20),
         onTimeout: () {
           print("Timeout");
           loadHome(1);
