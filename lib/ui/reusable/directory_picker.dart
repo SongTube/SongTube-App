@@ -85,7 +85,10 @@ class _DirectoryExplorerState extends State<DirectoryExplorer> with TickerProvid
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: widget.backgroundColor,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: widget.backgroundColor
+      ),
       child: Column(
         children: <Widget>[
           Container(
