@@ -127,7 +127,9 @@ class ManagerProvider extends ChangeNotifier {
     albumController.text  = "YouTube";
     artistController.text = mediaStream.videoDetails.author;
     genreController.text  = "Any";
-    dateController.text   = "${DateTime.now().year}/${DateTime.now().month}/${DateTime.now().day}";
+    dateController.text   = "${mediaStream.videoDetails.uploadDate.year}/"
+                            + "${mediaStream.videoDetails.uploadDate.month}/"
+                            + "${mediaStream.videoDetails.uploadDate.day}";
     discController.text   = "1";
     trackController.text  = "1";
     notifyListeners();
