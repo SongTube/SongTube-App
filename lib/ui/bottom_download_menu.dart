@@ -32,10 +32,6 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
   double menuSize = 160;
   int subMenu;
 
-  // Menu Border Colors
-  Color audioTabBorderColor = Colors.black12;
-  Color videoTabBorderColor = Colors.black12;
-
   String volumeString(double value) {
     if (value == 1) {
       return "Default";
@@ -46,20 +42,6 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
     } else {
       return "Not Supported";
     }
-  }
-
-  void animateAudioTabBorderColor() async {
-    setState(() => audioTabBorderColor = Colors.redAccent);
-    Future.delayed(Duration(milliseconds: 60), () {
-      setState(() => audioTabBorderColor = Colors.black12);
-    });
-  }
-
-  void animateVideoTabBorderColor() async {
-    setState(() => videoTabBorderColor = Colors.redAccent);
-    Future.delayed(Duration(milliseconds: 60), () {
-      setState(() => videoTabBorderColor = Colors.black12);
-    });
   }
 
   void initState() {
@@ -158,7 +140,6 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
                       Expanded(
                         child: GestureDetector(
                           onTap: () {
-                            animateAudioTabBorderColor();
                             setState(() {
                               menuSize = MediaQuery.of(context).size.height*0.55;
                               subMenu = 2;
@@ -174,7 +155,14 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
                               color: Theme.of(context).cardColor,
-                              border: Border.all(color: audioTabBorderColor, width: 2)
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black12.withOpacity(0.05),
+                                  offset: Offset(0, 3), //(x,y)
+                                  blurRadius: 6.0,
+                                  spreadRadius: 0.01 
+                                )
+                              ]
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -208,7 +196,6 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
                       Expanded(
                         child: GestureDetector(
                           onTap: () {
-                            animateVideoTabBorderColor();
                             setState(() {
                               menuSize = MediaQuery.of(context).size.height*0.55;
                               subMenu = 2;
@@ -224,7 +211,14 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
                               color: Theme.of(context).cardColor,
-                              border: Border.all(color: videoTabBorderColor, width: 2)
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black12.withOpacity(0.05),
+                                  offset: Offset(0, 3), //(x,y)
+                                  blurRadius: 6.0,
+                                  spreadRadius: 0.01 
+                                )
+                              ]
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
