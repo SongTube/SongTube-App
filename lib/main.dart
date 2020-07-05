@@ -1,5 +1,6 @@
 // Flutter
 import 'package:flutter/material.dart';
+import 'package:songtube/internal/preferences.dart';
 
 // Internal
 import 'package:songtube/provider/downloads_manager.dart';
@@ -14,30 +15,30 @@ import 'package:provider/provider.dart';
 import 'package:songtube/ui/themes.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized(); 
-  AppDataProvider provider = AppDataProvider();
-  provider.initProvider();
-  await Future.delayed(Duration(milliseconds: 150), () {
-    runApp(Main(provider));
-  });
+  WidgetsFlutterBinding.ensureInitialized();
+  Preferences preferences = new Preferences();
+  await preferences.initPreferences();
+  runApp(Main(preloadedFs: preferences));
 }
-
-AppDataProvider appData;
 
 class Main extends StatelessWidget {
 
-  final AppDataProvider provider;
-  Main(this.provider);
+  final Preferences preloadedFs;
+  Main({
+    @required this.preloadedFs
+  });
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider.value(value: provider),
+        ChangeNotifierProvider<AppDataProvider>(create: (context) => AppDataProvider(
+          preferences: preloadedFs
+        )),
         ChangeNotifierProvider<ManagerProvider>(create: (context) => ManagerProvider())
       ],
       child: Builder( builder: (context) {
-        appData = Provider.of<AppDataProvider>(context);
+        AppDataProvider appData = Provider.of<AppDataProvider>(context);
         ThemeData customTheme;
         ThemeData darkTheme;
 

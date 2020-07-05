@@ -9,16 +9,25 @@ import 'package:songtube/internal/preferences.dart';
 import 'package:ext_storage/ext_storage.dart';
 
 class AppDataProvider extends ChangeNotifier {
-  Preferences preferences;
 
-  Future<void> initProvider() async {
-    preferences = new Preferences();
-    await preferences.init();
-    await loadSavedData();
+  Preferences preferences;
+  AppDataProvider({
+    @required this.preferences
+  }){
+    preferences = this.preferences;
+    initProvider();
+  }
+
+  void initProvider() {
+    loadSavedData();
     if (_audioDownloadPath == null)
-      _audioDownloadPath = await ExtStorage.getExternalStorageDirectory() + "/SongTube";
+      ExtStorage.getExternalStorageDirectory().then((value) {
+        _audioDownloadPath = value + "/SongTube";
+      });
     if (_videoDownloadPath == null)
-      _videoDownloadPath = await ExtStorage.getExternalStorageDirectory() + "/SongTube";
+      ExtStorage.getExternalStorageDirectory().then((value) {
+        _videoDownloadPath = value + "/SongTube";
+      });
     _libraryScaffoldKey = new GlobalKey<ScaffoldState>();
     PackageInfo.fromPlatform().then((value) {
       appName = value.appName;
@@ -117,8 +126,8 @@ class AppDataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> loadSavedData() async {
-    systemThemeAvailable = await preferences.isSystemThemeAvailable();
+  void loadSavedData() {
+    systemThemeAvailable = preferences.isSystemThemeAvailable;
     accentColor = preferences.getAccentColor();
     darkThemeEnabled = preferences.getDarkThemeEnabled();
     blackThemeEnabled = preferences.getBlackThemeEnabled();
