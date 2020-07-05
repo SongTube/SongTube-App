@@ -450,9 +450,9 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
         Row(
           children: <Widget>[
             SizedBox(width: 16),
-            Text("-20", style: TextStyle(fontSize: 12)),
+            Text("-5", style: TextStyle(fontSize: 12)),
             Spacer(),
-            Text("+20", style: TextStyle(fontSize: 12)),
+            Text("+5", style: TextStyle(fontSize: 12)),
             SizedBox(width: 16),
           ],
         ),
@@ -513,9 +513,9 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
         Row(
           children: <Widget>[
             SizedBox(width: 16),
-            Text("-20", style: TextStyle(fontSize: 12)),
+            Text("-5", style: TextStyle(fontSize: 12)),
             Spacer(),
-            Text("+20", style: TextStyle(fontSize: 12)),
+            Text("+5", style: TextStyle(fontSize: 12)),
             SizedBox(width: 16),
           ],
         ),
