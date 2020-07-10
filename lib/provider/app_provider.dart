@@ -28,7 +28,6 @@ class AppDataProvider extends ChangeNotifier {
       ExtStorage.getExternalStorageDirectory().then((value) {
         _videoDownloadPath = value + "/SongTube";
       });
-    _libraryScaffoldKey = new GlobalKey<ScaffoldState>();
     PackageInfo.fromPlatform().then((value) {
       appName = value.appName;
       packageName = value.packageName;
@@ -50,10 +49,7 @@ class AppDataProvider extends ChangeNotifier {
   bool _blackThemeEnabled = false;
   bool _appBarEnabled = true;
   bool _enableAudioConvertion = true;
-  bool _enableVideoConvertion = false;
-  // Library
-  GlobalKey<ScaffoldState> _libraryScaffoldKey;
-  int _screenIndex = 0;
+  bool _enableVideoConvertion = false;  
   // Converting audio format
   String _audioConvertFormat = "AAC";
   // Download paths
@@ -61,7 +57,6 @@ class AppDataProvider extends ChangeNotifier {
   String _videoDownloadPath;
   // Use Youtube Webview
   bool _useYoutubeWebview = false;
-
   Color get accentColor => _accentColor;
   bool get systemThemeAvailable => _systemThemeAvailable;
   bool get systemThemeEnabled => _systemThemeEnabled;
@@ -70,9 +65,6 @@ class AppDataProvider extends ChangeNotifier {
   bool get appBarEnabled => _appBarEnabled;
   bool get enableAudioConvertion => _enableAudioConvertion;
   bool get enableVideoConvertion => _enableVideoConvertion;
-  // Library
-  GlobalKey<ScaffoldState> get libraryScaffoldKey => _libraryScaffoldKey;
-  int get screenIndex => _screenIndex;
   // Converting audio format
   String get audioConvertFormat => _audioConvertFormat;
   // Download paths
@@ -135,12 +127,6 @@ class AppDataProvider extends ChangeNotifier {
     audioDownloadPath = preferences.getAudioDownloadPath();
     videoDownloadPath = preferences.getVideoDownloadPath();
     useYoutubeWebview = true;
-  }
-
-  // Library
-  set screenIndex(int newValue) {
-    _screenIndex = newValue;
-    notifyListeners();
   }
 
   // Converting audio format

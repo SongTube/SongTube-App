@@ -1,6 +1,5 @@
 // Dart
 import 'dart:async';
-import 'dart:io';
 
 // Flutter
 import 'package:flutter/material.dart';

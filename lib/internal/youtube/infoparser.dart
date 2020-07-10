@@ -1,5 +1,3 @@
-import 'package:songtube/ui/snackbar.dart';
-
 // Packages
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
@@ -19,10 +17,8 @@ class YoutubeInfo {
     try {
       mediaStream = await yt.getVideoMediaStream(id);
     } on VideoRequiresPurchaseException catch (_) {
-      appSnack.videoIsPremium();
       yt.close(); return null;
     } on Exception catch (_) {
-      appSnack.internetError();
       yt.close(); return null;
     }
 

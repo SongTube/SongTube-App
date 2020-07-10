@@ -18,6 +18,7 @@ import 'package:songtube/internal/native.dart';
 import 'package:songtube/internal/player_service.dart';
 import 'package:songtube/internal/youtube/infoparser.dart';
 import 'package:songtube/provider/app_provider.dart';
+import 'package:songtube/ui/snackbar.dart';
 
 // Packages
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
@@ -40,6 +41,8 @@ class ManagerProvider extends ChangeNotifier {
     showDownloadTabsStatus   = false;
     showMediaPlayer          = false;
     serviceQueue             = [];
+    // Library Scaffold Key
+    _libraryScaffoldKey = new GlobalKey<ScaffoldState>();
     // Controllers
     urlController    = new TextEditingController();
     titleController  = new TextEditingController();
@@ -67,6 +70,9 @@ class ManagerProvider extends ChangeNotifier {
   // App Variables
   // -------------
   //
+  // Library
+  GlobalKey<ScaffoldState> _libraryScaffoldKey;
+  int _screenIndex = 0;
   // Home Screen
   bool showEmptyScreenWidget;
   bool openWebviewPlayer;
@@ -97,6 +103,11 @@ class ManagerProvider extends ChangeNotifier {
   // App Global MediaStreamInfoSet
   // -----------------------------
   MediaStreamInfoSet _mediaStream;
+
+  // --------
+  // SnackBar
+  // --------
+  AppSnack snackBar;
 
   // --------
   // Database
@@ -148,6 +159,15 @@ class ManagerProvider extends ChangeNotifier {
   // Unload HomeScreen Data
   void loadHome(int option) {
     switch(option) {
+      // Failed to get mediaStream
+      case 2:
+        showEmptyScreenWidget    = true;
+        openWebviewPlayer        = false;
+        showLoadingBar           = false;
+        showFloatingActionButtom = false;
+        mediaStreamReady         = false;
+        break;
+      // Is loading mediaStream
       case 1:
         showEmptyScreenWidget    = false;
         openWebviewPlayer        = false;
@@ -155,6 +175,7 @@ class ManagerProvider extends ChangeNotifier {
         showFloatingActionButtom = false;
         mediaStreamReady         = false;
         break;
+      // mediaStream is loaded
       case 0:
         openWebviewPlayer        = false;
         showLoadingBar           = false;
@@ -169,6 +190,9 @@ class ManagerProvider extends ChangeNotifier {
   }
   // Handle incoming intents (Links via share)
   Future<int> handleIntent() async {
+    // Return if the a mediaStream is beign loaded
+    if (showLoadingBar = true) return null;
+    // Handle Intent
     String url; String id;
     await NativeMethod.handleIntent().then((resultText) => url = resultText);
     if (url == null) return 1;
@@ -180,10 +204,28 @@ class ManagerProvider extends ChangeNotifier {
     loadHome(0);
     return 0;
   }
+  // Create Music Queue from Database
   Future<void> getDatabaseQueue() async {
     List<MediaItem> list = [];
     _downloadedFileList.forEach((DownloadedFile element) {
-      Duration duration = Duration(milliseconds: _parseDuration(element.duration).inMilliseconds);
+      int hours = 0;
+      int minutes = 0;
+      int micros;
+      List<String> parts = element.duration.split(':');
+      if (parts.length > 2) {
+        hours = int.parse(parts[parts.length - 3]);
+      }
+      if (parts.length > 1) {
+        minutes = int.parse(parts[parts.length - 2]);
+      }
+      micros = (double.parse(parts[parts.length - 1]) * 1000000).round();
+      Duration duration = Duration(
+        milliseconds: Duration(
+          hours: hours,
+          minutes: minutes,
+          microseconds: micros
+        ).inMilliseconds
+      );
       list.add(
         new MediaItem(
           id: element.path,
@@ -197,19 +239,26 @@ class ManagerProvider extends ChangeNotifier {
     });
     serviceQueue = list;
   }
-  Duration _parseDuration(String s) {
-    int hours = 0;
-    int minutes = 0;
-    int micros;
-    List<String> parts = s.split(':');
-    if (parts.length > 2) {
-      hours = int.parse(parts[parts.length - 3]);
+  // Handle Library WillPop
+  DateTime _currentBackPressTime;
+  Future<bool> handlePop() async {
+    if (screenIndex != 0) {
+      screenIndex = 0;
+      return false;
+    } else {
+      DateTime now = DateTime.now();
+      if (_currentBackPressTime == null || 
+          now.difference(_currentBackPressTime) > Duration(seconds: 2)) {
+        _currentBackPressTime = now;
+        snackBar.showSnackBar(
+          icon: Icons.warning,
+          title: "Press back again to exit",
+          duration: Duration(seconds: 1)
+        );
+        return Future.value(false);
+      }
+      return Future.value(true);
     }
-    if (parts.length > 1) {
-      minutes = int.parse(parts[parts.length - 2]);
-    }
-    micros = (double.parse(parts[parts.length - 1]) * 1000000).round();
-    return Duration(hours: hours, minutes: minutes, microseconds: micros);
   }
 
   // -------------------------------------
@@ -226,19 +275,20 @@ class ManagerProvider extends ChangeNotifier {
   }
   // Get Video MediaStreamInfo from Id
   Future<int> getMediaStreamInfo(String id) async {
+    if (YoutubeExplode.parseVideoId(id) == null) return null;
     loadHome(1);
     MediaStreamInfoSet tmp;
     try {
       tmp = await YoutubeInfo.getVideoInfo(id).timeout(Duration(seconds: 20),
         onTimeout: () {
           print("Timeout");
-          loadHome(1);
-          showLoadingBar = false;
+          loadHome(2);
           return null;
         }
       );
-    } on Exception catch (e) {
+    } catch (e) {
       print(e);
+      loadHome(2);
       return null;
     }
     if (tmp != null) {
@@ -308,7 +358,7 @@ class ManagerProvider extends ChangeNotifier {
       infoset: infoset
     );
     addItemToDownloadList(infoset);
-    appData.screenIndex = 1;
+    screenIndex = 1;
     downloadsTabIndex = 0;
     _manager.handleDownload();
   }
@@ -317,6 +367,13 @@ class ManagerProvider extends ChangeNotifier {
   // Getters and Setters
   // -------------------
   //
+  // Library
+  GlobalKey<ScaffoldState> get libraryScaffoldKey => _libraryScaffoldKey;
+  int get screenIndex => _screenIndex;
+  set screenIndex(int newValue) {
+    _screenIndex = newValue;
+    notifyListeners();
+  }
   // MediaStreamInfoSet Getter and Setter
   MediaStreamInfoSet get mediaStream => _mediaStream;
   set mediaStream(MediaStreamInfoSet newMediaStream) {
