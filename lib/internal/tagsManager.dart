@@ -43,6 +43,7 @@ class TagsManager {
     return result;
   }
 
+  // Write artwork using local Image or from Url
   static Future<int> writeArtwork({
     String songPath,
     String artworkPath,
