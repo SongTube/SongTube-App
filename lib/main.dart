@@ -13,7 +13,7 @@ import 'package:provider/provider.dart';
 import 'package:songtube/ui/snackbar.dart';
 
 // UI
-import 'package:songtube/ui/themes.dart';
+import 'package:songtube/ui/themeValues.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

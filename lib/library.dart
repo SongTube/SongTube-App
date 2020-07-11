@@ -24,8 +24,8 @@ import 'package:provider/provider.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 
 // UI
-import 'package:songtube/ui/ui_elements.dart';
-import 'package:songtube/screens/player.dart';
+import 'package:songtube/ui/elementsUI.dart';
+import 'package:songtube/screens/musicPlayer.dart';
 
 class Library extends StatefulWidget {
   @override

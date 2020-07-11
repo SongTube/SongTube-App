@@ -4,7 +4,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:provider/provider.dart';
 import 'package:songtube/provider/app_provider.dart';
 import 'package:songtube/screens/settings.dart';
-import 'package:songtube/ui/moreScreen/quickaccess_tile.dart';
+import 'package:songtube/screens/moreScreen/quickAcessTile.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MoreScreen extends StatelessWidget {
