@@ -1,47 +1,43 @@
 // Flutter
 import 'package:flutter/material.dart';
-import 'package:songtube/internal/preferences.dart';
 
 // Internal
-import 'package:songtube/provider/managerProvider.dart';
+import 'package:songtube/provider/downloads_manager.dart';
 import 'package:songtube/provider/app_provider.dart';
 import 'package:songtube/library.dart';
 
 // Packages
 import 'package:audio_service/audio_service.dart';
 import 'package:provider/provider.dart';
-import 'package:songtube/ui/snackbar.dart';
 
 // UI
-import 'package:songtube/ui/themeValues.dart';
+import 'package:songtube/ui/themes.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  Preferences preferences = new Preferences();
-  await preferences.initPreferences();
-  runApp(Main(preloadedFs: preferences));
+  WidgetsFlutterBinding.ensureInitialized(); 
+  AppDataProvider provider = AppDataProvider();
+  provider.initProvider();
+  await Future.delayed(Duration(milliseconds: 150), () {
+    runApp(Main(provider));
+  });
 }
+
+AppDataProvider appData;
 
 class Main extends StatelessWidget {
 
-  final Preferences preloadedFs;
-  Main({
-    @required this.preloadedFs
-  });
+  final AppDataProvider provider;
+  Main(this.provider);
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<AppDataProvider>(create: (context) => AppDataProvider(
-          preferences: preloadedFs
-        )),
+        ChangeNotifierProvider.value(value: provider),
         ChangeNotifierProvider<ManagerProvider>(create: (context) => ManagerProvider())
       ],
       child: Builder( builder: (context) {
-        AppDataProvider appData = Provider.of<AppDataProvider>(context);
-        ManagerProvider manager = Provider.of<ManagerProvider>(context);
-        manager.snackBar = new AppSnack(scaffoldKey: manager.libraryScaffoldKey, context: context);
+        appData = Provider.of<AppDataProvider>(context);
         ThemeData customTheme;
         ThemeData darkTheme;
 

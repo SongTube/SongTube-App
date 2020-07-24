@@ -3,7 +3,7 @@ import 'dart:ui';
 
 // Flutter
 import 'package:flutter/material.dart';
-import 'package:songtube/provider/managerProvider.dart';
+import 'package:songtube/provider/downloads_manager.dart';
 
 // Packages
 import 'package:provider/provider.dart';

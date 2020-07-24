@@ -2,8 +2,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-// Add this to any Widget in the App to detect if
-// the app is inactive, paused, detached or resumed
 class LifecycleEventHandler extends WidgetsBindingObserver {
   final AsyncCallback resumeCallBack;
   final AsyncCallback suspendingCallBack;

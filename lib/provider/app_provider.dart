@@ -9,25 +9,17 @@ import 'package:songtube/internal/preferences.dart';
 import 'package:ext_storage/ext_storage.dart';
 
 class AppDataProvider extends ChangeNotifier {
-
   Preferences preferences;
-  AppDataProvider({
-    @required this.preferences
-  }){
-    preferences = this.preferences;
-    initProvider();
-  }
 
-  void initProvider() {
-    loadSavedData();
+  Future<void> initProvider() async {
+    preferences = new Preferences();
+    await preferences.init();
+    await loadSavedData();
     if (_audioDownloadPath == null)
-      ExtStorage.getExternalStorageDirectory().then((value) {
-        _audioDownloadPath = value + "/SongTube";
-      });
+      _audioDownloadPath = await ExtStorage.getExternalStorageDirectory() + "/SongTube";
     if (_videoDownloadPath == null)
-      ExtStorage.getExternalStorageDirectory().then((value) {
-        _videoDownloadPath = value + "/SongTube";
-      });
+      _videoDownloadPath = await ExtStorage.getExternalStorageDirectory() + "/SongTube";
+    _libraryScaffoldKey = new GlobalKey<ScaffoldState>();
     PackageInfo.fromPlatform().then((value) {
       appName = value.appName;
       packageName = value.packageName;
@@ -49,7 +41,10 @@ class AppDataProvider extends ChangeNotifier {
   bool _blackThemeEnabled = false;
   bool _appBarEnabled = true;
   bool _enableAudioConvertion = true;
-  bool _enableVideoConvertion = false;  
+  bool _enableVideoConvertion = false;
+  // Library
+  GlobalKey<ScaffoldState> _libraryScaffoldKey;
+  int _screenIndex = 0;
   // Converting audio format
   String _audioConvertFormat = "AAC";
   // Download paths
@@ -57,6 +52,7 @@ class AppDataProvider extends ChangeNotifier {
   String _videoDownloadPath;
   // Use Youtube Webview
   bool _useYoutubeWebview = false;
+
   Color get accentColor => _accentColor;
   bool get systemThemeAvailable => _systemThemeAvailable;
   bool get systemThemeEnabled => _systemThemeEnabled;
@@ -65,6 +61,9 @@ class AppDataProvider extends ChangeNotifier {
   bool get appBarEnabled => _appBarEnabled;
   bool get enableAudioConvertion => _enableAudioConvertion;
   bool get enableVideoConvertion => _enableVideoConvertion;
+  // Library
+  GlobalKey<ScaffoldState> get libraryScaffoldKey => _libraryScaffoldKey;
+  int get screenIndex => _screenIndex;
   // Converting audio format
   String get audioConvertFormat => _audioConvertFormat;
   // Download paths
@@ -118,8 +117,8 @@ class AppDataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void loadSavedData() {
-    systemThemeAvailable = preferences.isSystemThemeAvailable;
+  Future<void> loadSavedData() async {
+    systemThemeAvailable = await preferences.isSystemThemeAvailable();
     accentColor = preferences.getAccentColor();
     darkThemeEnabled = preferences.getDarkThemeEnabled();
     blackThemeEnabled = preferences.getBlackThemeEnabled();
@@ -127,6 +126,12 @@ class AppDataProvider extends ChangeNotifier {
     audioDownloadPath = preferences.getAudioDownloadPath();
     videoDownloadPath = preferences.getVideoDownloadPath();
     useYoutubeWebview = true;
+  }
+
+  // Library
+  set screenIndex(int newValue) {
+    _screenIndex = newValue;
+    notifyListeners();
   }
 
   // Converting audio format

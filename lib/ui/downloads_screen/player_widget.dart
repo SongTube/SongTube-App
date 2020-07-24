@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 
 // Internal
 import 'package:songtube/internal/player_service.dart';
-import 'package:songtube/provider/managerProvider.dart';
+import 'package:songtube/provider/downloads_manager.dart';
 
 // Packages
 import 'package:audio_service/audio_service.dart';

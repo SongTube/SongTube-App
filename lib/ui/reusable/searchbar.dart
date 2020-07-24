@@ -75,49 +75,44 @@ class _SearchBarState extends State<SearchBar> {
                   children: <Widget>[
                     // URL Input
                     Expanded(
-                      child: Theme(
-                        data: Theme.of(context)
-                          .copyWith(accentColor: Colors.redAccent),
-                        child: TextFormField(
-                          cursorColor: Colors.redAccent,
-                          controller: widget.controller,
-                          decoration: InputDecoration(
-                            contentPadding: widget.prefixIcon != null
-                              ? EdgeInsets.only(top: 15)
-                              : EdgeInsets.only(top: 15, left: 8),
-                            prefixIcon: widget.prefixIcon != null ? widget.prefixIcon : null,
-                            filled: true,
-                            fillColor: widget.textfieldColor,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide(
-                                width: 0, 
-                                style: BorderStyle.none,
-                              ),
-                            ),
-                            hintText: widget.hintText,
-                            suffixIcon: AnimatedOpacity (
-                              duration: Duration(milliseconds: 200),
-                              opacity: widget.controller.text == "" ? 0.0 : 1.0,
-                              child: IconButton(
-                                icon: Icon(Icons.clear,
-                                color: Theme.of(context).iconTheme.color),
-                                onPressed: () {
-                                  Future.delayed(
-                                    Duration(milliseconds: 50),
-                                    ).then((_) {
-                                      setState(() => widget.controller.clear());
-                                      FocusScope.of(context).requestFocus(new FocusNode());
-                                    },
-                                  );
-                                }
-                              )
+                      child: TextFormField(
+                        cursorColor: Colors.redAccent,
+                        controller: widget.controller,
+                        decoration: InputDecoration(
+                          contentPadding: widget.prefixIcon != null
+                            ? EdgeInsets.only(top: 15)
+                            : EdgeInsets.only(top: 15, left: 8),
+                          prefixIcon: widget.prefixIcon != null ? widget.prefixIcon : null,
+                          filled: true,
+                          fillColor: widget.textfieldColor,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: BorderSide(
+                              width: 0, 
+                              style: BorderStyle.none,
                             ),
                           ),
-                          onChanged: widget.onTextChanged,
-                          style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1.color,
+                          hintText: widget.hintText,
+                          suffixIcon: AnimatedOpacity (
+                            duration: Duration(milliseconds: 200),
+                            opacity: widget.controller.text == "" ? 0.0 : 1.0,
+                            child: IconButton(
+                              icon: Icon(Icons.clear,
+                              color: Theme.of(context).iconTheme.color),
+                              onPressed: () {
+                                Future.delayed(
+                                  Duration(milliseconds: 50),
+                                  ).then((_) {
+                                    setState(() => widget.controller.clear());
+                                  },
+                                );
+                              }
+                            )
                           ),
+                        ),
+                        onChanged: widget.onTextChanged,
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyText1.color,
                         ),
                       ),
                     ),

@@ -2,14 +2,12 @@
 import 'package:flutter/material.dart';
 
 // Internal
-import 'package:songtube/provider/managerProvider.dart';
+import 'package:songtube/provider/downloads_manager.dart';
+import 'package:songtube/screens/downloadsPages/completed_page.dart';
+import 'package:songtube/screens/downloadsPages/downloading_page.dart';
 
 // Packages
 import 'package:provider/provider.dart';
-
-// UI
-import 'package:songtube/screens/downloadsPages/completedPage.dart';
-import 'package:songtube/screens/downloadsPages/downloadingPage.dart';
 
 class DownloadTab extends StatefulWidget {
   _DownloadTabState createState() => _DownloadTabState();

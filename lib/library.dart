@@ -11,7 +11,8 @@ import 'package:flutter/services.dart';
 import 'package:songtube/internal/native.dart';
 import 'package:songtube/internal/player_service.dart';
 import 'package:songtube/internal/youtube/infoparser.dart';
-import 'package:songtube/provider/managerProvider.dart';
+import 'package:songtube/provider/app_provider.dart';
+import 'package:songtube/provider/downloads_manager.dart';
 import 'package:songtube/screens/downloads.dart';
 import 'package:songtube/screens/home.dart';
 import 'package:songtube/screens/more.dart';
@@ -24,8 +25,9 @@ import 'package:provider/provider.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 
 // UI
-import 'package:songtube/ui/elementsUI.dart';
-import 'package:songtube/screens/musicPlayer.dart';
+import 'package:songtube/ui/snackbar.dart';
+import 'package:songtube/ui/ui_elements.dart';
+import 'package:songtube/ui/downloads_screen/player_widget.dart';
 
 class Library extends StatefulWidget {
   @override
@@ -35,6 +37,7 @@ class Library extends StatefulWidget {
 class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerProviderStateMixin {
 
   // Local Variables
+  DateTime currentBackPressTime;
   List<String> appBarTitle = ["SongTube", "Downloads", "Youtube", "More"];
 
   @override
@@ -76,8 +79,27 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
     }
   }
 
+  Future<bool> handlePop(AppDataProvider provider) async {
+    if (provider.screenIndex != 0) {
+      setState(() {
+        provider.screenIndex = 0;
+      });
+      return false;
+    } else {
+      DateTime now = DateTime.now();
+      if (currentBackPressTime == null || 
+          now.difference(currentBackPressTime) > Duration(seconds: 2)) {
+        currentBackPressTime = now;
+        appSnack.pressAgainExit();
+        return Future.value(false);
+      }
+      return Future.value(true);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    AppDataProvider appData = Provider.of<AppDataProvider>(context);
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
     Brightness _themeBrightness = Theme.of(context).brightness;
     Brightness _systemBrightness = Theme.of(context).brightness;
@@ -93,11 +115,12 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
         systemNavigationBarIconBrightness: _themeBrightness
       ),
     );
+    appSnack = new AppSnack(scaffoldKey: appData.libraryScaffoldKey, context: context);
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
       child: Scaffold(
-        key: manager.libraryScaffoldKey,
-        appBar: manager.screenIndex != 2 
+        key: appData.libraryScaffoldKey,
+        appBar: appData.screenIndex != 2 
         ? PreferredSize(
           preferredSize: Size(
             double.infinity,
@@ -121,7 +144,7 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
                 elevation: 0,
                 backgroundColor: Theme.of(context).cardColor,
                 title: Text(
-                  appBarTitle[manager.screenIndex],
+                  appBarTitle[appData.screenIndex],
                   style: TextStyle(
                     color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.8),
                     fontWeight: FontWeight.w600
@@ -166,38 +189,38 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
         ),
         resizeToAvoidBottomPadding: true,
         body: WillPopScope(
-          onWillPop: () => manager.handlePop(),
+          onWillPop: () => handlePop(appData),
           child: Stack(
             children: <Widget>[
               IgnorePointer(
-                ignoring: manager.screenIndex == 0 ? false : true,
+                ignoring: appData.screenIndex == 0 ? false : true,
                 child: AnimatedOpacity(
                   duration: Duration(milliseconds: 300),
-                  opacity: manager.screenIndex == 0 ? 1.0 : 0.0,
+                  opacity: appData.screenIndex == 0 ? 1.0 : 0.0,
                   child: HomeScreen()
                 )
               ),
               IgnorePointer(
-                ignoring: manager.screenIndex == 1 ? false : true,
+                ignoring: appData.screenIndex == 1 ? false : true,
                 child: AnimatedOpacity(
                   duration: Duration(milliseconds: 300),
-                  opacity: manager.screenIndex == 1 ? 1.0 : 0.0,
+                  opacity: appData.screenIndex == 1 ? 1.0 : 0.0,
                   child: DownloadTab()
                 )
               ),
               IgnorePointer(
-                ignoring: manager.screenIndex == 2 ? false : true,
+                ignoring: appData.screenIndex == 2 ? false : true,
                 child: AnimatedOpacity(
                   duration: Duration(milliseconds: 300),
-                  opacity: manager.screenIndex == 2 ? 1.0 : 0.0,
-                  child: manager.screenIndex == 2 ? Navigate() : Container(),
+                  opacity: appData.screenIndex == 2 ? 1.0 : 0.0,
+                  child: appData.screenIndex == 2 ? Navigate() : Container(),
                 )
               ),
               IgnorePointer(
-                ignoring: manager.screenIndex == 3 ? false : true,
+                ignoring: appData.screenIndex == 3 ? false : true,
                 child: AnimatedOpacity(
                   duration: Duration(milliseconds: 300),
-                  opacity: manager.screenIndex == 3 ? 1.0 : 0.0,
+                  opacity: appData.screenIndex == 3 ? 1.0 : 0.0,
                   child: MoreScreen(),
                 )
               ),
@@ -215,8 +238,8 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
         ),
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Theme.of(context).cardColor,
-          currentIndex: manager.screenIndex,
-          elevation: manager.screenIndex == 0 ? 0 : 8,
+          currentIndex: appData.screenIndex,
+          elevation: appData.screenIndex == 0 ? 0 : 8,
           selectedFontSize: 14,
           selectedItemColor: Colors.redAccent,
           unselectedItemColor: Theme.of(context).iconTheme.color,
@@ -224,9 +247,9 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
           onTap: (int index) {
             if (manager.showMediaPlayer == true) {
               manager.showMediaPlayer = false;
-              Future.delayed(Duration(milliseconds: 150), () => manager.screenIndex = index);
+              Future.delayed(Duration(milliseconds: 150), () => appData.screenIndex = index);
             } else {
-              manager.screenIndex = index;
+              appData.screenIndex = index;
             }
           },
           items: [

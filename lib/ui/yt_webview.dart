@@ -3,19 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 // Internal
-import 'package:songtube/provider/managerProvider.dart';
+import 'package:songtube/provider/app_provider.dart';
+import 'package:songtube/provider/downloads_manager.dart';
 
 // Packages
 import 'package:youtube_explode_dart/youtube_explode_dart.dart' as youtube;
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:provider/provider.dart';
 
-class YoutubePageWebview extends StatefulWidget {
+// UI
+import 'package:songtube/ui/snackbar.dart';
+
+class YoutubeWebview extends StatefulWidget {
   @override
-  _YoutubePageWebviewState createState() => _YoutubePageWebviewState();
+  _YoutubeWebviewState createState() => _YoutubeWebviewState();
 }
 
-class _YoutubePageWebviewState extends State<YoutubePageWebview> with AutomaticKeepAliveClientMixin {
+class _YoutubeWebviewState extends State<YoutubeWebview> with AutomaticKeepAliveClientMixin {
 
   @override
   bool get wantKeepAlive => true;
@@ -34,6 +38,7 @@ class _YoutubePageWebviewState extends State<YoutubePageWebview> with AutomaticK
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    AppDataProvider appData = Provider.of<AppDataProvider>(context);
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
@@ -87,12 +92,14 @@ class _YoutubePageWebviewState extends State<YoutubePageWebview> with AutomaticK
                     child: GestureDetector(
                       onLongPress: () async {
                         Clipboard.setData(new ClipboardData(text: await webController.currentUrl()));
-                        manager.snackBar.showSnackBar(
-                          icon: Icons.content_copy,
-                          title: "Copy",
-                          message: "Text copied to Clipboard",
-                          duration: Duration(seconds: 1)
+                        final snackBar = AppSnack.withEverything(
+                          context,
+                          Icons.content_copy,
+                          "Copy",
+                          "Text copied to Clipboard",
+                          Duration(seconds: 1)
                         );
+                        scaffoldState.currentState.showSnackBar(snackBar);
                       },
                       child: Container(
                         height: kToolbarHeight*0.8,
@@ -127,25 +134,31 @@ class _YoutubePageWebviewState extends State<YoutubePageWebview> with AutomaticK
               try {
                 _url = await webController.currentUrl();
               } catch (_) {
-                manager.snackBar.showSnackBar(
-                  icon: Icons.error,
-                  title: "Error",
-                  message: "Page is still loading",
-                  duration: Duration(seconds: 2)
+                scaffoldState.currentState.showSnackBar(
+                  AppSnack.withEverything(
+                    context,
+                    Icons.error,
+                    "Error",
+                    "Page still loading...",
+                    Duration(seconds: 2)
+                  )
                 );
                 return;
               }
               String _id = youtube.YoutubeExplode.parseVideoId(_url);
               if (_id == null) {
-                manager.snackBar.showSnackBar(
-                  icon: Icons.error,
-                  title: "Error",
-                  message: "Select a valid Video",
-                  duration: Duration(seconds: 2)
+                scaffoldState.currentState.showSnackBar(
+                  AppSnack.withEverything(
+                    context,
+                    Icons.error,
+                    "Error",
+                    "Select a valid video",
+                    Duration(seconds: 2)
+                  )
                 );
                 return;
               }
-              manager.screenIndex = 0;
+              appData.screenIndex = 0;
               manager.urlController.text = _url;
               manager.getMediaStreamInfo(_id);
             },

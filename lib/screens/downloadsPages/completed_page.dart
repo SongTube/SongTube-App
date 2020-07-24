@@ -9,7 +9,7 @@ import 'package:flutter/rendering.dart';
 import 'package:songtube/internal/database/infoset_database.dart';
 import 'package:songtube/internal/database/models/downloaded_file.dart';
 import 'package:songtube/internal/native.dart';
-import 'package:songtube/provider/managerProvider.dart';
+import 'package:songtube/provider/downloads_manager.dart';
 import 'package:songtube/internal/player_service.dart';
 
 // Packages
@@ -17,8 +17,8 @@ import 'package:audio_service/audio_service.dart';
 import 'package:provider/provider.dart';
 
 // UI
-import 'package:songtube/ui/reusable/downloadTile.dart';
-import 'package:songtube/screens/downloadsPages/downloadLibraryEmpty.dart';
+import 'package:songtube/ui/downloads_screen/no_downloads_completed.dart';
+import 'package:songtube/ui/reusable/download_tile.dart';
 
 class CompletedPage extends StatefulWidget {
   @override
@@ -51,9 +51,12 @@ class _CompletedPageState extends State<CompletedPage> with TickerProviderStateM
           stream: _screenStateStream,
           builder: (context, snapshot) {
             final screenState = snapshot.data;
+            final queue = screenState?.queue;
+            final mediaItem = screenState?.mediaItem;
             final state = screenState?.playbackState;
             final processingState =
                 state?.processingState ?? AudioProcessingState.none;
+            final playing = state?.playing ?? false;
             return AnimatedSize(
               vsync: this,
               duration: Duration(milliseconds: 300),

@@ -1,5 +1,6 @@
 // Dart
 import 'dart:async';
+import 'dart:io';
 
 // Flutter
 import 'package:flutter/material.dart';
@@ -21,20 +22,23 @@ String videoDownloadPath = "video_download_path";
 String useYoutubeWebview = "use_youtube_webview";
 
 class Preferences {
-  
   SharedPreferences prefs;
 
-  Future<void> initPreferences() async {
-    prefs = await SharedPreferences.getInstance();
-    String version;
-    AndroidDeviceInfo deviceInfo = await DeviceInfoPlugin().androidInfo;
-    version = deviceInfo.version.release;
-    if (double.parse(version) >= 9 || double.parse(version) >= 13) {
-      isSystemThemeAvailable = true;
-    } else {isSystemThemeAvailable = false;}
-  }
+  Future<void> init() async => prefs = await SharedPreferences.getInstance();
 
-  bool isSystemThemeAvailable;
+  Future<bool> isSystemThemeAvailable() async {
+    String version;
+    if(Platform.isAndroid){
+      AndroidDeviceInfo deviceInfo = await DeviceInfoPlugin().androidInfo;
+      version = deviceInfo.version.release;
+    } else if (Platform.isIOS) {
+      IosDeviceInfo deviceInfo = await DeviceInfoPlugin().iosInfo;
+      version = deviceInfo.systemVersion;
+    }
+    if (double.parse(version) >= 9 || double.parse(version) >= 13)
+      return true;
+    else return false;
+  }
 
   Color getAccentColor() {
     return Color(prefs.getInt(accentKey) ?? Colors.blueAccent.value);
