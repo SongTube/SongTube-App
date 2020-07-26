@@ -13,12 +13,11 @@ import 'package:songtube/provider/app_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:ext_storage/ext_storage.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:songtube/provider/downloads_manager.dart';
-import 'package:songtube/ui/snackbar.dart';
+import 'package:songtube/provider/managerProvider.dart';
 
 // UI
-import 'package:songtube/ui/reusable/alertdialog.dart';
-import 'package:songtube/ui/reusable/directory_picker.dart';
+import 'package:songtube/ui/reusable/alertDialog.dart';
+import 'package:songtube/ui/reusable/directoryPicker.dart';
 
 class SettingsTab extends StatefulWidget {
   @override
@@ -696,13 +695,19 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                             if (!await Directory(backupPath).exists()) await Directory(backupPath).create();
                             String path = join(documentsDirectory.path, 'MediaItems.db');
                             if (!await File(path).exists()) {
-                              final snackbar = AppSnack.withIconTitle(context, Icons.warning, "Your Library is Empty");
-                              appData.libraryScaffoldKey.currentState.showSnackBar(snackbar);
+                              manager.snackBar.showSnackBar(
+                                icon: Icons.warning,
+                                title: "Your Library is Empty",
+                                duration: Duration(seconds: 2)
+                              );
                               return;
                             }
                             await File(path).copy(backupPath + 'MediaItems.db');
-                            final snackbar = AppSnack.withIconTitle(context, Icons.backup, "Backup Completed");
-                            appData.libraryScaffoldKey.currentState.showSnackBar(snackbar);
+                            manager.snackBar.showSnackBar(
+                              icon: Icons.backup,
+                              title: "Backup Completed",
+                              duration: Duration(seconds: 2)
+                            );
                           }
                         )
                       )
@@ -731,13 +736,19 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                             String backupPath = await ExtStorage.getExternalStorageDirectory() + "/SongTube/Backup/";
                             String path = join(documentsDirectory.path, 'downloadDatabase.db');
                             if (!await File(backupPath + 'downloadDatabase.db').exists()) {
-                              final snackbar = AppSnack.withIconTitle(context, Icons.warning, "You have no Backup");
-                              appData.libraryScaffoldKey.currentState.showSnackBar(snackbar);
+                              manager.snackBar.showSnackBar(
+                                icon: Icons.warning,
+                                title: "You have no Backup",
+                                duration: Duration(seconds: 2)
+                              );
                               return;
                             }
                             await File(backupPath + 'downloadDatabase.db').copy(path);
-                            final snackbar = AppSnack.withIconTitle(context, Icons.restore, "Restore Completed");
-                            appData.libraryScaffoldKey.currentState.showSnackBar(snackbar);
+                            manager.snackBar.showSnackBar(
+                                icon: Icons.restore,
+                                title: "Restore Completed",
+                                duration: Duration(seconds: 2)
+                              );
                             manager.getDatabase();
                           }
                         )

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class IconTile extends StatelessWidget {
+class RoundTile extends StatelessWidget {
   final Icon icon;
   final Text text;
   final Function onPressed;
-  IconTile({
+  RoundTile({
     @required this.icon,
     @required this.text,
     this.onPressed

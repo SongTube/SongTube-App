@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 
 // Internal
 import 'package:songtube/internal/models/downloadinfoset.dart';
-import 'package:songtube/provider/downloads_manager.dart';
+import 'package:songtube/provider/managerProvider.dart';
 
 // Packages
 import 'package:provider/provider.dart';
 
 // UI
-import 'package:songtube/ui/downloads_screen/no_downloads.dart';
-import 'package:songtube/ui/reusable/download_tile.dart';
+import 'package:songtube/screens/downloadsPages/downloadsEmpty.dart';
+import 'package:songtube/ui/reusable/downloadTile.dart';
 
 class DownloadingPage extends StatefulWidget {
   @override

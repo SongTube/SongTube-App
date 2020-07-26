@@ -6,7 +6,6 @@ import 'package:ext_storage/ext_storage.dart';
 
 // Packages
 import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
-import 'package:songtube/ui/snackbar.dart';
 
 // Type of actions for FFmpegArgs and Converter
 enum FFmpegArgs { argsToACC, argsToMP4, argsToOGG, argsToOGGVorbis, argsToMP3 }
@@ -72,7 +71,6 @@ class Converter {
         ];
         return _argsList;
       }
-      appSnack.unrecognizedEncoding(saveFormat);
     }
 
     // Convert audio to Specified format by FFmpegArgs
