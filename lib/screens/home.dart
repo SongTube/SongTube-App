@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 
 
 // Internal
-import 'package:songtube/internal/lifecycle_events.dart';
+import 'package:songtube/internal/lifecycleEvents.dart';
 import 'package:songtube/internal/youtube/downloader.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/screens/homeScreen/shimmerPage.dart';

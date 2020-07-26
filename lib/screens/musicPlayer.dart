@@ -7,7 +7,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:flutter/material.dart';
 
 // Internal
-import 'package:songtube/internal/player_service.dart';
+import 'package:songtube/internal/playerService.dart';
 import 'package:songtube/provider/managerProvider.dart';
 
 // Packages

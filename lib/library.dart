@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 // Internal
-import 'package:songtube/internal/native.dart';
-import 'package:songtube/internal/player_service.dart';
+import 'package:songtube/internal/nativeMethods.dart';
+import 'package:songtube/internal/playerService.dart';
 import 'package:songtube/internal/youtube/infoparser.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/screens/downloads.dart';

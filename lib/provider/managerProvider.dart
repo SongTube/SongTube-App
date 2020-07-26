@@ -9,13 +9,13 @@ import 'package:flutter/material.dart';
 // Internal
 import 'package:songtube/internal/database/infoset_database.dart';
 import 'package:songtube/internal/database/models/downloaded_file.dart';
-import 'package:songtube/internal/download_manager.dart';
+import 'package:songtube/internal/downloadManager.dart';
 import 'package:songtube/internal/ffmpeg/converter.dart';
 import 'package:songtube/internal/models/downloadinfoset.dart';
 import 'package:songtube/internal/models/enums.dart';
 import 'package:songtube/internal/models/metadata.dart';
-import 'package:songtube/internal/native.dart';
-import 'package:songtube/internal/player_service.dart';
+import 'package:songtube/internal/nativeMethods.dart';
+import 'package:songtube/internal/playerService.dart';
 import 'package:songtube/internal/youtube/infoparser.dart';
 import 'package:songtube/provider/app_provider.dart';
 import 'package:songtube/ui/snackbar.dart';

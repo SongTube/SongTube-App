@@ -14,10 +14,10 @@ import 'package:http/http.dart' as http;
 
 // Internal
 import 'package:songtube/internal/models/downloadinfoset.dart';
-import 'package:songtube/internal/native.dart';
+import 'package:songtube/internal/nativeMethods.dart';
 import 'package:songtube/internal/ffmpeg/converter.dart';
 import 'package:songtube/internal/models/enums.dart';
-import 'package:songtube/internal/tags_manager.dart';
+import 'package:songtube/internal/tagsManager.dart';
 
 class DownloadManager {
 

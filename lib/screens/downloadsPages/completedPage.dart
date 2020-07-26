@@ -8,9 +8,9 @@ import 'package:flutter/rendering.dart';
 // Internal
 import 'package:songtube/internal/database/infoset_database.dart';
 import 'package:songtube/internal/database/models/downloaded_file.dart';
-import 'package:songtube/internal/native.dart';
+import 'package:songtube/internal/nativeMethods.dart';
 import 'package:songtube/provider/managerProvider.dart';
-import 'package:songtube/internal/player_service.dart';
+import 'package:songtube/internal/playerService.dart';
 
 // Packages
 import 'package:audio_service/audio_service.dart';
