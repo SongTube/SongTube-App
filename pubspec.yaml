@@ -55,6 +55,10 @@ dependencies:
   audio_service: ^0.11.0
   shimmer: ^1.1.1
   flutter_material_color_picker: ^1.0.5
+  circular_check_box:
+    git:
+      url: git://github.com/not-holar/circular_check_box.git
+      ref: master
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
