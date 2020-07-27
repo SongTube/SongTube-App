@@ -17,6 +17,7 @@ class AppSnack {
     String message,
     Duration duration
   }) {
+    scaffoldKey.currentState.removeCurrentSnackBar();
     final snack = SnackBar(
       content: Row(
         mainAxisSize: MainAxisSize.min,
