@@ -218,7 +218,7 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
           currentIndex: manager.screenIndex,
           elevation: manager.screenIndex == 0 ? 0 : 8,
           selectedFontSize: 14,
-          selectedItemColor: Colors.redAccent,
+          selectedItemColor: Theme.of(context).accentColor,
           unselectedItemColor: Theme.of(context).iconTheme.color,
           type: BottomNavigationBarType.fixed,
           onTap: (int index) {

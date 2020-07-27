@@ -24,7 +24,7 @@ class IntroSplash extends StatelessWidget {
                   child: Icon(
                     EvaIcons.activityOutline,
                     size: 150,
-                    color: Colors.redAccent
+                    color: Theme.of(context).accentColor
                   ),
                 ),
                 SizedBox(height: 4),
@@ -63,7 +63,7 @@ class IntroSplash extends StatelessWidget {
                     child: Container(
                       padding: EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Colors.redAccent,
+                        color: Theme.of(context).accentColor,
                         borderRadius: BorderRadius.circular(20)
                       ),
                       child: Row(

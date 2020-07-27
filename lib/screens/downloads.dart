@@ -82,7 +82,7 @@ class _DownloadTabState extends State<DownloadTab> with TickerProviderStateMixin
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20),
                                     color: manager.downloadsTabIndex == 0
-                                      ? Colors.redAccent
+                                      ? Theme.of(context).accentColor
                                       : Theme.of(context).canvasColor,
                                     boxShadow: [
                                       BoxShadow(
@@ -118,7 +118,7 @@ class _DownloadTabState extends State<DownloadTab> with TickerProviderStateMixin
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20),
                                     color: manager.downloadsTabIndex == 1
-                                      ? Colors.redAccent
+                                      ? Theme.of(context).accentColor
                                       : Theme.of(context).canvasColor,
                                     boxShadow: [
                                       BoxShadow(

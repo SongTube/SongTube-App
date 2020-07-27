@@ -27,7 +27,7 @@ class TextFieldTile extends StatelessWidget {
       ),
       child: TextField(
         keyboardType: inputType,
-        cursorColor: Colors.redAccent,
+        cursorColor: Theme.of(context).accentColor,
         controller: textController,
         decoration: InputDecoration(
           prefixIcon: Icon(icon,

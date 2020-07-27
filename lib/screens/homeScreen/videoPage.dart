@@ -57,9 +57,9 @@ class _VideoPageState extends State<VideoPage> {
                       playedColor: Colors.red,
                       bufferedColor: Colors.white70,
                       backgroundColor: Colors.transparent,
-                      handleColor: Colors.redAccent,
+                      handleColor: Theme.of(context).accentColor,
                     ),
-                    progressIndicatorColor: Colors.redAccent,
+                    progressIndicatorColor: Theme.of(context).accentColor,
                   )
                   : Container(
                     width: MediaQuery.of(context).size.width,

@@ -34,6 +34,7 @@ class AppDataProvider extends ChangeNotifier {
       appVersion = value.version;
       buildNumber = value.buildNumber;
     });
+    accentColor = preferences.getAccentColor();
   }
 
   // Platform Info
@@ -42,7 +43,7 @@ class AppDataProvider extends ChangeNotifier {
   String appVersion;
   String buildNumber;
 
-  Color _accentColor = Colors.redAccent;
+  Color _accentColor;
   bool _systemThemeAvailable = false;
   bool _systemThemeEnabled = false;
   bool _darkThemeEnabled = false;

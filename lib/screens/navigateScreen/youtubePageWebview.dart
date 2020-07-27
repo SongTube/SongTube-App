@@ -120,7 +120,7 @@ class _YoutubePageWebviewState extends State<YoutubePageWebview> with AutomaticK
           padding: EdgeInsets.only(bottom: kToolbarHeight),
           child: FloatingActionButton(
             child: Icon(Icons.file_download),
-            backgroundColor: Colors.redAccent,
+            backgroundColor: Theme.of(context).accentColor,
             foregroundColor: Colors.white,
             onPressed: () async {
               String _url;

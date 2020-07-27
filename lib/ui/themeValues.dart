@@ -28,14 +28,14 @@ class AppTheme {
       cardColor: Color.fromARGB(255, 255, 255, 255),
       inputDecorationTheme: InputDecorationTheme(
         labelStyle: TextStyle(
-          color: Colors.redAccent,
+          color: accent,
         ),
         fillColor: Colors.grey[100]
       ),
       tabBarTheme: TabBarTheme(
         labelColor: Colors.grey[200],
       ),
-      textSelectionHandleColor: Colors.redAccent,
+      textSelectionHandleColor: accent,
     );
   }
 
@@ -63,13 +63,13 @@ class AppTheme {
       cardColor: Color.fromARGB(255, 60, 60, 60),
       inputDecorationTheme: InputDecorationTheme(
         labelStyle: TextStyle(
-          color: Colors.redAccent,
+          color: accent,
         ),
       ),
       tabBarTheme: TabBarTheme(
         labelColor: Colors.black12
       ),
-      textSelectionHandleColor: Colors.redAccent,
+      textSelectionHandleColor: accent,
     );
   }
 
@@ -103,13 +103,13 @@ class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
         fillColor: Colors.black26,
         labelStyle: TextStyle(
-          color: Colors.redAccent,
+          color: accent,
         ),
       ),
       tabBarTheme: TabBarTheme(
         labelColor: Color.fromARGB(255, 20, 20, 20),
       ),
-      textSelectionHandleColor: Colors.redAccent,
+      textSelectionHandleColor: accent,
     );
   }
 }

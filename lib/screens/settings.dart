@@ -14,6 +14,8 @@ import 'package:provider/provider.dart';
 import 'package:ext_storage/ext_storage.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:songtube/provider/managerProvider.dart';
+import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
+import 'package:songtube/screens/settings/accentPicker.dart';
 
 // UI
 import 'package:songtube/ui/reusable/alertDialog.dart';
@@ -118,7 +120,7 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                       ),
                       subtitle: Text("Enable/Disable automatic theme", style: TextStyle(fontSize: 12),),
                       trailing: Checkbox(
-                        activeColor: Colors.redAccent,
+                        activeColor: Theme.of(context).accentColor,
                         value: appData.systemThemeEnabled,
                         onChanged: (bool newValue) {
                           appData.systemThemeEnabled = newValue;
@@ -141,7 +143,7 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                           ),
                           subtitle: Text("Use dark theme by default", style: TextStyle(fontSize: 12),),
                           trailing: Checkbox(
-                            activeColor: Colors.redAccent,
+                            activeColor: Theme.of(context).accentColor,
                             value: appData.darkThemeEnabled,
                             onChanged: (bool newValue) {
                               appData.darkThemeEnabled = newValue;
@@ -161,12 +163,39 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                       ),
                       subtitle: Text("Pure black theme", style: TextStyle(fontSize: 12),),
                       trailing: Checkbox(
-                        activeColor: Colors.redAccent,
+                        activeColor: Theme.of(context).accentColor,
                         value: appData.blackThemeEnabled,
                         onChanged: (bool newValue) {
                           appData.blackThemeEnabled = newValue;
                         },
                       ),
+                    ),
+                    ListTile(
+                      onTap: () => appData.systemThemeEnabled = !appData.systemThemeEnabled,
+                      title: Text(
+                        "Accent Color",
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyText1.color,
+                          fontWeight: FontWeight.w500
+                        ),
+                      ),
+                      subtitle: Text("Customize accent color", style: TextStyle(fontSize: 12),),
+                      trailing: IconButton(
+                        icon: Icon(Icons.colorize),
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AccentPicker(
+                                onColorChanged: (Color color) {
+                                  appData.accentColor = color;
+                                  Navigator.pop(context);
+                                },
+                              );
+                            },
+                          );
+                        },
+                      )
                     ),
                   ],
                 ),
@@ -238,7 +267,7 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                       trailing: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(30),
-                          color: Colors.redAccent
+                          color: Theme.of(context).accentColor
                         ),
                         child: IconButton(
                           icon: Icon(Icons.folder, color: Colors.white),
@@ -280,7 +309,7 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                       trailing: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(30),
-                          color: Colors.redAccent
+                          color: Theme.of(context).accentColor
                         ),
                         child: IconButton(
                           icon: Icon(Icons.folder, color: Colors.white),
@@ -322,7 +351,7 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                       trailing: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(30),
-                          color: Colors.redAccent
+                          color: Theme.of(context).accentColor
                         ),
                         child: IconButton(
                           icon: Icon(MdiIcons.trashCan, color: Colors.white),
@@ -448,7 +477,7 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                         style: TextStyle(fontSize: 12)
                       ),
                       trailing: CircularCheckBox(
-                        activeColor: Colors.redAccent,
+                        activeColor: Theme.of(context).accentColor,
                         value: appData.useYoutubeWebview,
                         onChanged: (bool newValue) {
                           appData.useYoutubeWebview = newValue;
@@ -525,7 +554,7 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                         style: TextStyle(fontSize: 12)
                       ),
                       trailing: Checkbox(
-                        activeColor: Colors.redAccent,
+                        activeColor: Theme.of(context).accentColor,
                         value: appData.enableAudioConvertion,
                         onChanged: (bool newValue) async {
                           if (newValue == false) {
@@ -685,7 +714,7 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                       trailing: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(30),
-                          color: Colors.redAccent
+                          color: Theme.of(context).accentColor
                         ),
                         child: IconButton(
                           icon: Icon(Icons.backup, color: Colors.white),
@@ -727,7 +756,7 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
                       trailing: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(30),
-                          color: Colors.redAccent
+                          color: Theme.of(context).accentColor
                         ),
                         child: IconButton(
                           icon: Icon(Icons.restore, color: Colors.white),

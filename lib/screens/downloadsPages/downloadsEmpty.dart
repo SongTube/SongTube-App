@@ -17,7 +17,7 @@ class NoDownloads extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Icon(MdiIcons.cloudDownload, size: 100, color: Colors.redAccent),
+            Icon(MdiIcons.cloudDownload, size: 100, color: Theme.of(context).accentColor),
             Text(
               "No downloads yet!",
               style: TextStyle(fontWeight: FontWeight.w700),

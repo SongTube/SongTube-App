@@ -86,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
               padding: const EdgeInsets.only(bottom: 60),
               child: FloatingActionButton(
                 child: Icon(Icons.file_download),
-                backgroundColor: Colors.redAccent,
+                backgroundColor: Theme.of(context).accentColor,
                 foregroundColor: Colors.white,
                 onPressed: () async {
                   FocusScope.of(context).requestFocus(new FocusNode());

@@ -25,7 +25,7 @@ Future<void> showCustomDialog(BuildContext context) async {
     child: Text(
       "OK",
       style: TextStyle(
-        color: Colors.redAccent
+        color: Theme.of(context).accentColor
       ),
     ),
     onPressed: () {
@@ -40,7 +40,7 @@ Future<void> showCustomDialog(BuildContext context) async {
     child: Text(
       "Cancel",
       style: TextStyle(
-        color: Colors.redAccent
+        color: Theme.of(context).accentColor
       ),
     ),
     onPressed: () {
@@ -87,7 +87,7 @@ Future<void> showAlertDialog(BuildContext context, bool permanent) async {
     child: Text(
       "OK",
       style: TextStyle(
-        color: Colors.redAccent
+        color: Theme.of(context).accentColor
       ),
     ),
     onPressed: () {

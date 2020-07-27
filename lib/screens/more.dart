@@ -67,7 +67,7 @@ class MoreScreen extends StatelessWidget {
                                 fontSize: 20,
                                 fontFamily: "Varela",
                                 fontWeight: FontWeight.w700,
-                                color: Colors.redAccent
+                                color: Theme.of(context).accentColor
                               ),
                             )
                           ),
@@ -105,7 +105,7 @@ class MoreScreen extends StatelessWidget {
                                     fontSize: 15,
                                     fontFamily: "Varela",
                                     fontWeight: FontWeight.w700,
-                                    color: Colors.redAccent
+                                    color: Theme.of(context).accentColor
                                   ),
                                 ),
                               ],

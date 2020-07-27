@@ -32,7 +32,7 @@ class ExpandPlayer extends StatelessWidget {
           margin: EdgeInsets.only(left: 10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            color: Colors.redAccent
+            color: Theme.of(context).accentColor
           ),
           child: AnimatedSwitcher(
             duration: Duration(milliseconds: 200),
@@ -168,7 +168,7 @@ class FullPlayerWidget extends StatelessWidget {
                         width: 60,
                         padding: EdgeInsets.all(4),
                         decoration: BoxDecoration(
-                          color: Colors.redAccent,
+                          color: Theme.of(context).accentColor,
                           borderRadius: BorderRadius.circular(40),
                             boxShadow: [
                               BoxShadow(
@@ -229,11 +229,11 @@ class FullPlayerWidget extends StatelessWidget {
                     thumbShape: RoundSliderThumbShape(enabledThumbRadius: 0),
                     overlayShape: RoundSliderOverlayShape(overlayRadius: 10),
                     valueIndicatorTextStyle: TextStyle(
-                      color: Colors.redAccent,
+                      color: Theme.of(context).accentColor,
                     ),
                   ),
                   child: Slider(
-                    activeColor: Colors.redAccent,
+                    activeColor: Theme.of(context).accentColor,
                     inactiveColor: Colors.black12.withOpacity(0.2),
                     min: 0.0,
                     max: duration.inMilliseconds?.toDouble(),

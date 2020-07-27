@@ -62,7 +62,7 @@ class _SearchBarState extends State<SearchBar> {
                 child: LinearProgressIndicator(
                   value: widget.indicatorValue,
                   backgroundColor: Colors.transparent,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.redAccent),
+                  valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).accentColor),
                 ),
               ),
             ),
@@ -77,9 +77,9 @@ class _SearchBarState extends State<SearchBar> {
                     Expanded(
                       child: Theme(
                         data: Theme.of(context)
-                          .copyWith(accentColor: Colors.redAccent),
+                          .copyWith(accentColor: Theme.of(context).accentColor),
                         child: TextFormField(
-                          cursorColor: Colors.redAccent,
+                          cursorColor: Theme.of(context).accentColor,
                           controller: widget.controller,
                           decoration: InputDecoration(
                             contentPadding: widget.prefixIcon != null

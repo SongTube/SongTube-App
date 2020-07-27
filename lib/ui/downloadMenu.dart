@@ -75,7 +75,7 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
                       child: Container(
                         padding: EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                          color: Colors.redAccent,
+                          color: Theme.of(context).accentColor,
                           borderRadius: BorderRadius.circular(30)
                         ),
                         child: Row(
@@ -172,7 +172,7 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
                                   width: 70,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(50),
-                                    color: Colors.redAccent
+                                    color: Theme.of(context).accentColor
                                   ),
                                   child: Icon(EvaIcons.musicOutline, size: 55, color: Colors.white),
                                 ),
@@ -228,7 +228,7 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
                                   width: 70,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(50),
-                                    color: Colors.redAccent
+                                    color: Theme.of(context).accentColor
                                   ),
                                   child: Icon(EvaIcons.videoOutline, size: 55, color: Colors.white),
                                 ),
@@ -300,7 +300,7 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
         ListTile(
           leading: Padding(
             padding: const EdgeInsets.only(left: 8.0),
-            child: Icon(EvaIcons.musicOutline, color: Colors.redAccent),
+            child: Icon(EvaIcons.musicOutline, color: Theme.of(context).accentColor),
           ),
           title: Text(
             "Audio",
@@ -312,7 +312,7 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
           subtitle: Text("Download the audio from this video at maximum quality"),
           trailing: Container(
             decoration: BoxDecoration(
-              color: Colors.redAccent,
+              color: Theme.of(context).accentColor,
               borderRadius: BorderRadius.circular(30)
             ),
             child: Padding(
@@ -346,7 +346,7 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-                color: Colors.redAccent
+                color: Theme.of(context).accentColor
               ),
             ),
           ],
@@ -376,7 +376,7 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
               ),
               activeTrackBar: BoxDecoration(
                 borderRadius: BorderRadius.circular(4),
-                color: Colors.redAccent
+                color: Theme.of(context).accentColor
               ),
             ),
             tooltip: FlutterSliderTooltip(
@@ -411,7 +411,7 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-                color: Colors.redAccent
+                color: Theme.of(context).accentColor
               ),
             ),
           ],
@@ -439,7 +439,7 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
               ),
               activeTrackBar: BoxDecoration(
                 borderRadius: BorderRadius.circular(4),
-                color: Colors.redAccent
+                color: Theme.of(context).accentColor
               ),
             ),
             tooltip: FlutterSliderTooltip(
@@ -474,7 +474,7 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-                color: Colors.redAccent
+                color: Theme.of(context).accentColor
               ),
             ),
           ],
@@ -502,7 +502,7 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
               ),
               activeTrackBar: BoxDecoration(
                 borderRadius: BorderRadius.circular(4),
-                color: Colors.redAccent
+                color: Theme.of(context).accentColor
               ),
             ),
             tooltip: FlutterSliderTooltip(
@@ -531,7 +531,7 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
         Padding(
           padding: EdgeInsets.only(left: 22, right: MediaQuery.of(context).size.width*0.2),
           child: ListTile(
-            leading: Icon(EvaIcons.videoOutline, color: Colors.redAccent),
+            leading: Icon(EvaIcons.videoOutline, color: Theme.of(context).accentColor),
             title: Text("Video", style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color, fontWeight: FontWeight.w600)),
             subtitle: Text("Download video at selected quality bellow"),
             onTap: () {},
@@ -569,7 +569,7 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
                     ? Text(
                       "HDR ", style: TextStyle(
                         fontWeight: FontWeight.w600,
-                        color: Colors.redAccent,
+                        color: Theme.of(context).accentColor,
                         fontFamily: "Varela"
                       ),
                     ) : Container(),
@@ -581,7 +581,7 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
                     GestureDetector(
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.redAccent,
+                          color: Theme.of(context).accentColor,
                           borderRadius: BorderRadius.circular(30)
                         ),
                         child: Padding(

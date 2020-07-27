@@ -28,7 +28,7 @@ class _YoutubePageState extends State<YoutubePage> with TickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.redAccent,
+      backgroundColor: Theme.of(context).accentColor,
       body: Column(
         children: <Widget>[
           AnimatedSize(
@@ -77,7 +77,7 @@ class _YoutubePageState extends State<YoutubePage> with TickerProviderStateMixin
           child: Padding(
             padding: EdgeInsets.only(right: 8),
             child: FloatingActionButton(
-              backgroundColor: Colors.redAccent,
+              backgroundColor: Theme.of(context).accentColor,
               foregroundColor: Colors.white,
               child: Icon(Icons.search),
               onPressed: () {

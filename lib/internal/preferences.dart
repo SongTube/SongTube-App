@@ -9,7 +9,7 @@ import 'package:device_info/device_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // Key identifiers for variables saved in SharedPreferences.
-String accentKey = "accent_color";
+String accentKey = "app_accent_color";
 String systemThemeKey = "use_system_theme";
 String darkThemeKey = "use_dark_theme";
 String blackThemeKey = "use_black_theme";
@@ -19,6 +19,7 @@ String audioConvertingFormat = "audio_converting_format";
 String audioDownloadPath = "audio_download_path";
 String videoDownloadPath = "video_download_path";
 String useYoutubeWebview = "use_youtube_webview";
+String appColor = "app_color";
 
 class Preferences {
   
@@ -37,7 +38,7 @@ class Preferences {
   bool isSystemThemeAvailable;
 
   Color getAccentColor() {
-    return Color(prefs.getInt(accentKey) ?? Colors.blueAccent.value);
+    return Color(prefs.getInt(accentKey) ?? Colors.redAccent.value);
   }
 
   void saveAccentColor(Color color) {

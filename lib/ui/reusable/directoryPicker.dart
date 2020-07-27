@@ -162,7 +162,7 @@ class _DirectoryExplorerState extends State<DirectoryExplorer> with TickerProvid
                           padding: EdgeInsets.all(8),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
-                            color: Colors.redAccent
+                            color: Theme.of(context).accentColor
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -187,7 +187,7 @@ class _DirectoryExplorerState extends State<DirectoryExplorer> with TickerProvid
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        color: Colors.redAccent
+                        color: Theme.of(context).accentColor
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
