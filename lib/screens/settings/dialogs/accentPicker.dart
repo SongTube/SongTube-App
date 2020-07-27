@@ -27,21 +27,36 @@ class _AccentPickerState extends State<AccentPicker> {
           width: 300,
           child: Column(
             children: <Widget>[
-              ShowUpTransition(
-                delay: Duration(milliseconds: 100),
-                duration: Duration(milliseconds: 200),
-                child: Container(
-                  margin: EdgeInsets.only(top: 24, bottom: 16),
+              Container(
+                width: 300,
+                padding: EdgeInsets.only(top: 24, bottom: 16),
+                margin: EdgeInsets.only(bottom: 8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+                  color: Theme.of(context).accentColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12.withOpacity(0.10),
+                      offset: Offset(0, 3), //(x,y)
+                      blurRadius: 6.0,
+                      spreadRadius: 0.11 
+                    )
+                  ]
+                ),
+                child: ShowUpTransition(
+                  delay: Duration(milliseconds: 100),
+                  duration: Duration(milliseconds: 200),
                   child: Text(
                     "Choose Color",
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
-                      fontSize: 22
+                      fontSize: 22,
+                      color: Colors.white
                     ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
               ),
-              Divider(indent: 16, endIndent: 16),
               Expanded(
                 child: FadeInTransition(
                   delay: Duration(milliseconds: 200),
