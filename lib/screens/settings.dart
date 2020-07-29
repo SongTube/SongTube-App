@@ -16,17 +16,34 @@ class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: Text(
-          "Settings",
-          style: TextStyle(
-            color: Theme.of(context).textTheme.bodyText1.color
-          ),
+      appBar: PreferredSize(
+        preferredSize: Size(
+          double.infinity,
+          kToolbarHeight
         ),
-        iconTheme: IconThemeData(
-          color: Theme.of(context).iconTheme.color
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                offset: Offset(0.0, -2), //(x,y)
+                blurRadius: 10.0,
+                spreadRadius: 0.6
+              ),
+            ],
+          ),
+          child: AppBar(
+            elevation: 0,
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            title: Text(
+              "Settings",
+              style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
+            ),
+            iconTheme: IconThemeData(
+              color: Theme.of(context).iconTheme.color
+            ),
+          ),
         ),
       ),
       body: Padding(
