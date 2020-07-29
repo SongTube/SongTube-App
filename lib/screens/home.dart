@@ -69,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
               containerColor: Theme.of(context).cardColor,
               prefixIcon: Icon(Icons.https),
               indicatorValue: manager.showLoadingBar == true ? null : 0.0,
-              onSearchPressed: manager.showLoadingBar
+              onSearchPressed: manager.showLoadingBar == true
                 ? null
                 : () async {
                   await manager.getMediaStreamInfo(manager.getIdFromLink());
