@@ -17,7 +17,7 @@ import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 import 'package:provider/provider.dart';
 
 // UI
-import 'package:songtube/ui/downloadMenu.dart';
+import 'package:songtube/screens/homeScreen/downloadMenu.dart';
 import 'package:songtube/screens/homeScreen/IntroSplash.dart';
 import 'package:songtube/ui/reusable/searchBar.dart';
 
@@ -95,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                   ),
                     context: context,
                     builder: (context) {
-                      return CustomDownloadMenu(
+                      return DownloadMenu(
                         videoList: manager.streamManifest.videoOnly.sortByVideoQuality(),
                         onSettingsPressed: () {
                           showDialog(
