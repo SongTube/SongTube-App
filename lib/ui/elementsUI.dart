@@ -54,7 +54,7 @@ Future<void> showCustomDialog(BuildContext context) async {
       borderRadius: BorderRadius.circular(20),
     ),
     backgroundColor: Theme.of(context).canvasColor,
-    title: Text("DownTube",
+    title: Text("SongTube",
       style: TextStyle(
         color: Theme.of(context).textTheme.bodyText1.color
       ),
@@ -100,7 +100,7 @@ Future<void> showAlertDialog(BuildContext context, bool permanent) async {
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(20),
     ),
-    title: Text("DownTube",
+    title: Text("SongTube",
       style: TextStyle(
         color: Theme.of(context).textTheme.bodyText1.color
       ),
