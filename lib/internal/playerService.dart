@@ -101,7 +101,9 @@ class AudioPlayerTask extends BackgroundAudioTask {
     if (hasNext) {
       onSkipToNext();
     } else {
-      onStop();
+      _audioPlayer.stop();
+      _playing = false;
+      _setState(processingState: AudioProcessingState.completed);
     }
   }
 

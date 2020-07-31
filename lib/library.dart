@@ -26,6 +26,7 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 // UI
 import 'package:songtube/ui/elementsUI.dart';
 import 'package:songtube/screens/musicPlayer.dart';
+import 'package:songtube/ui/routeAnimations.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart' as yt;
 
 class Library extends StatefulWidget {
@@ -144,11 +145,9 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
                             duration: Duration(milliseconds: 300),
                             child: processingState != AudioProcessingState.none
                             ? ExpandPlayer(
-                                onTap: () => manager.showMediaPlayer = !manager.showMediaPlayer,
-                                icon: Icon(
-                                  manager.showMediaPlayer ? Icons.expand_less : Icons.expand_more,
-                                  color: Colors.white,
-                                ),
+                                onTap: () =>
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                                    FullPlayerWidget(pushedFrom: "SongTube")))
                               )
                             : Container()
                           );
@@ -203,14 +202,49 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
                   child: MoreScreen(),
                 )
               ),
-              AnimatedSwitcher(
-                duration: Duration(milliseconds: 150),
-                child: manager.showMediaPlayer
-                  ? Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: FullPlayerWidget(),
-                  )
-                  : Container()
+              StreamBuilder<ScreenState>(
+                stream: manager.screenStateStream,
+                builder: (context, snapshot) {
+                  final screenState = snapshot.data;
+                  final state = screenState?.playbackState;
+                  final processingState =
+                    state?.processingState ?? AudioProcessingState.none;
+                  return AnimatedSwitcher(
+                    duration: Duration(milliseconds: 300),
+                    child: appData.appBarEnabled == false && processingState != AudioProcessingState.none
+                    ? Align(
+                        alignment: Alignment.topRight,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                              FullPlayerWidget(pushedFrom: "SongTube")));
+                          },
+                          child: Container(
+                            width: 54,
+                            height: 54,
+                            margin: EdgeInsets.only(right: 12),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              color: appData.accentColor,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  offset: Offset(3.5, 3.5), //(x,y)
+                                  blurRadius: 5.0,
+                                  spreadRadius: 2.1 
+                                )
+                              ]
+                            ),
+                            child: Icon(
+                              Icons.play_arrow,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container()
+                  );
+                }
               ),
             ],
           ),
