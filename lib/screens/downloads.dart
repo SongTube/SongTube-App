@@ -20,8 +20,9 @@ class _DownloadTabState extends State<DownloadTab> with TickerProviderStateMixin
   void listener(ManagerProvider provider) {
     provider.downloadInfoSetList.forEach((element) {
       element.currentAction.stream.listen((event) {
-        if (event == "Done") {
+        if (event == "Completed") {
           provider.getDatabase();
+          setState(() {});
         }
       });
     });

@@ -48,7 +48,7 @@ class _VideoPageState extends State<VideoPage> {
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                   child: manager.openWebviewPlayer ? new YoutubePlayer(
                     controller: YoutubePlayerController(
-                      initialVideoId: manager.getIdFromLink(),
+                      initialVideoId: YoutubePlayer.convertUrlToId(manager.urlController.text),
                       flags: YoutubePlayerFlags(
                         autoPlay: true,
                       ),
@@ -69,7 +69,7 @@ class _VideoPageState extends State<VideoPage> {
                       children: <Widget>[
                         FadeInImage(
                           fadeInDuration: Duration(milliseconds: 300),
-                          image: NetworkImage(manager.mediaStream.videoDetails.thumbnailSet.highResUrl),
+                          image: NetworkImage(manager.videoDetails.thumbnails.highResUrl),
                           placeholder: MemoryImage(kTransparentImage),
                           fit: BoxFit.fitWidth,
                         ),
@@ -92,8 +92,8 @@ class _VideoPageState extends State<VideoPage> {
                   Padding(
                     padding: EdgeInsets.only(left: 16, right: 16, bottom: 6),
                     child: Text(
-                      manager.mediaStream.videoDetails.duration.inMinutes.remainder(60).toString().padLeft(2, '0') + " min "
-                      + manager.mediaStream.videoDetails.duration.inSeconds.remainder(60).toString().padLeft(2, '0') + " sec",
+                      manager.videoDetails.duration.inMinutes.remainder(60).toString().padLeft(2, '0') + " min "
+                      + manager.videoDetails.duration.inSeconds.remainder(60).toString().padLeft(2, '0') + " sec",
                       style: TextStyle(
                         fontSize: 12,
                         color: Theme.of(context).iconTheme.color,
@@ -104,7 +104,9 @@ class _VideoPageState extends State<VideoPage> {
                   Padding(
                     padding: EdgeInsets.only(left: 16, right: 16, bottom: 6),
                     child: Text(
-                      "Audio: " + (manager.mediaStream.audio.last.size * 0.000001).toStringAsFixed(2).toString() + "MB",
+                      "${manager.videoDetails.uploadDate.year}/" +
+                      "${manager.videoDetails.uploadDate.month}/" +
+                      "${manager.videoDetails.uploadDate.day}",
                       style: TextStyle(
                         fontSize: 12,
                         color: Theme.of(context).iconTheme.color,
@@ -151,7 +153,7 @@ class _VideoPageState extends State<VideoPage> {
                     RoundTile(
                       icon: Icon(MdiIcons.thumbUpOutline, color: Theme.of(context).iconTheme.color),
                       text: Text(
-                        NumberFormat.compact().format(manager.mediaStream.videoDetails.statistics.likeCount),
+                        NumberFormat.compact().format(manager.videoDetails.engagement.likeCount),
                         style: TextStyle(
                           fontFamily: "Varela",
                           fontSize: 10
@@ -162,7 +164,7 @@ class _VideoPageState extends State<VideoPage> {
                     RoundTile(
                       icon: Icon(MdiIcons.thumbDownOutline, color: Theme.of(context).iconTheme.color),
                       text: Text(
-                        NumberFormat.compact().format(manager.mediaStream.videoDetails.statistics.dislikeCount),
+                        NumberFormat.compact().format(manager.videoDetails.engagement.dislikeCount),
                         style: TextStyle(
                           fontFamily: "Varela",
                           fontSize: 10
@@ -173,7 +175,7 @@ class _VideoPageState extends State<VideoPage> {
                     RoundTile(
                       icon: Icon(EvaIcons.eyeOutline, color: Theme.of(context).iconTheme.color),
                       text: Text(
-                        NumberFormat.compact().format(manager.mediaStream.videoDetails.statistics.viewCount),
+                        NumberFormat.compact().format(manager.videoDetails.engagement.viewCount),
                         style: TextStyle(
                           fontFamily: "Varela",
                           fontSize: 10

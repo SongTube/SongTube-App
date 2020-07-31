@@ -121,6 +121,7 @@ class AppDataProvider extends ChangeNotifier {
 
   void loadSavedData() {
     systemThemeAvailable = preferences.isSystemThemeAvailable;
+    appBarEnabled = preferences.getAppBarEnabled();
     accentColor = preferences.getAccentColor();
     darkThemeEnabled = preferences.getDarkThemeEnabled();
     blackThemeEnabled = preferences.getBlackThemeEnabled();
@@ -153,6 +154,13 @@ class AppDataProvider extends ChangeNotifier {
   set useYoutubeWebview(bool value) {
     _useYoutubeWebview = value;
     preferences.saveUseYoutubeWebview(value);
+    notifyListeners();
+  }
+
+  // Enable/Disable appBar
+  set appBarEnabled(bool value) {
+    _appBarEnabled = value;
+    preferences.saveAppBarEnabled(value);
     notifyListeners();
   }
 

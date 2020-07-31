@@ -10,7 +10,7 @@ import 'package:flutter/services.dart';
 // Internal
 import 'package:songtube/internal/nativeMethods.dart';
 import 'package:songtube/internal/playerService.dart';
-import 'package:songtube/internal/youtube/infoparser.dart';
+import 'package:songtube/provider/app_provider.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/screens/downloads.dart';
 import 'package:songtube/screens/home.dart';
@@ -26,6 +26,7 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 // UI
 import 'package:songtube/ui/elementsUI.dart';
 import 'package:songtube/screens/musicPlayer.dart';
+import 'package:youtube_explode_dart/youtube_explode_dart.dart' as yt;
 
 class Library extends StatefulWidget {
   @override
@@ -71,7 +72,7 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
       String _url; String _id;
       await NativeMethod.handleIntent().then((resultText) => _url = resultText);
       if (_url == null) return;
-      _id = YoutubeInfo.getLinkID(_url);
+      _id = yt.VideoId.parseVideoId(_url);
       if (_id == null) return;
     }
   }
@@ -79,6 +80,7 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
   @override
   Widget build(BuildContext context) {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
+    AppDataProvider appData = Provider.of<AppDataProvider>(context);
     Brightness _themeBrightness = Theme.of(context).brightness;
     Brightness _systemBrightness = Theme.of(context).brightness;
     Brightness _statusBarBrightness = _systemBrightness == Brightness.light
@@ -97,74 +99,74 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
       onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
       child: Scaffold(
         key: manager.libraryScaffoldKey,
-        appBar: manager.screenIndex != 2 
-        ? PreferredSize(
-          preferredSize: Size(
-            double.infinity,
-            kToolbarHeight
-          ),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black12,
-                  offset: Offset(0.0, -2), //(x,y)
-                  blurRadius: 10.0,
-                  spreadRadius: 0.6
-                ),
-              ],
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
-              child: AppBar(
-                elevation: 0,
-                backgroundColor: Theme.of(context).cardColor,
-                title: Text(
-                  appBarTitle[manager.screenIndex],
-                  style: TextStyle(
-                    color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.8),
-                    fontWeight: FontWeight.w600
-                  ),
-                ),
-                centerTitle: true,
-                actions: <Widget>[
-                  StreamBuilder<ScreenState>(
-                    stream: manager.screenStateStream,
-                    builder: (context, snapshot) {
-                      final screenState = snapshot.data;
-                      final state = screenState?.playbackState;
-                      final processingState =
-                        state?.processingState ?? AudioProcessingState.none;
-                      return AnimatedOpacity(
-                        opacity: 1.0,
-                        duration: Duration(milliseconds: 300),
-                        child: processingState != AudioProcessingState.none
-                        ? ExpandPlayer(
-                            onTap: () => manager.showMediaPlayer = !manager.showMediaPlayer,
-                            icon: Icon(
-                              manager.showMediaPlayer ? Icons.expand_less : Icons.expand_more,
-                              color: Colors.white,
-                            ),
-                          )
-                        : Container()
-                      );
-                    }
-                  ),
-                  SizedBox(width: 12)
-                ],
-              ),
-            ),
-          ),
-        )
-        : PreferredSize(
-          preferredSize: Size(
-            double.infinity,
-            kToolbarHeight*0.1
-          ),
-          child: Container(),
-        ),
         resizeToAvoidBottomPadding: true,
+        appBar: appData.appBarEnabled == true
+          ? PreferredSize(
+              preferredSize: Size(
+                double.infinity,
+                kToolbarHeight
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12,
+                      offset: Offset(0.0, -2), //(x,y)
+                      blurRadius: 10.0,
+                      spreadRadius: 0.6
+                    ),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
+                  child: AppBar(
+                    elevation: 0,
+                    backgroundColor: Theme.of(context).cardColor,
+                    title: Text(
+                      appBarTitle[manager.screenIndex],
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.8),
+                        fontWeight: FontWeight.w600
+                      ),
+                    ),
+                    centerTitle: true,
+                    actions: <Widget>[
+                      StreamBuilder<ScreenState>(
+                        stream: manager.screenStateStream,
+                        builder: (context, snapshot) {
+                          final screenState = snapshot.data;
+                          final state = screenState?.playbackState;
+                          final processingState =
+                            state?.processingState ?? AudioProcessingState.none;
+                          return AnimatedOpacity(
+                            opacity: 1.0,
+                            duration: Duration(milliseconds: 300),
+                            child: processingState != AudioProcessingState.none
+                            ? ExpandPlayer(
+                                onTap: () => manager.showMediaPlayer = !manager.showMediaPlayer,
+                                icon: Icon(
+                                  manager.showMediaPlayer ? Icons.expand_less : Icons.expand_more,
+                                  color: Colors.white,
+                                ),
+                              )
+                            : Container()
+                          );
+                        }
+                      ),
+                      SizedBox(width: 12)
+                    ],
+                  ),
+                ),
+              )
+            )
+          : PreferredSize(
+              preferredSize: Size(
+                double.infinity,
+                kToolbarHeight*0.05
+              ),
+              child: Container(),
+            ),
         body: WillPopScope(
           onWillPop: () => manager.handlePop(),
           child: Stack(

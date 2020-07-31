@@ -20,6 +20,7 @@ String audioDownloadPath = "audio_download_path";
 String videoDownloadPath = "video_download_path";
 String useYoutubeWebview = "use_youtube_webview";
 String appColor = "app_color";
+String appBarEnabled = "app_bar_enabled";
 
 class Preferences {
   
@@ -116,5 +117,14 @@ class Preferences {
   void saveUseYoutubeWebview(bool value) {
     prefs.setBool(useYoutubeWebview, value);
   }
+
+  bool getAppBarEnabled() {
+    return prefs.getBool(appBarEnabled) ?? true;
+  }
+
+  void saveAppBarEnabled(bool value) {
+    prefs.setBool(appBarEnabled, value);
+  }
+
 
 }

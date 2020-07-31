@@ -5,17 +5,15 @@ import 'dart:ui';
 // Flutter
 import 'package:flutter/material.dart';
 
-
 // Internal
 import 'package:songtube/internal/lifecycleEvents.dart';
-import 'package:songtube/internal/youtube/downloader.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/screens/homeScreen/shimmerPage.dart';
 import 'package:songtube/screens/homeScreen/videoPage.dart';
 import 'package:songtube/screens/settings.dart';
 
 // Packages
-import 'package:youtube_explode_dart/youtube_explode_dart.dart' as youtube;
+import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 import 'package:provider/provider.dart';
 
 // UI
@@ -68,12 +66,10 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
               controller: manager.urlController,
               containerColor: Theme.of(context).cardColor,
               prefixIcon: Icon(Icons.https),
-              indicatorValue: manager.showLoadingBar == true ? null : 0.0,
-              onSearchPressed: manager.showLoadingBar == true
+              indicatorValue: manager.loadingVideo == true ? null : 0.0,
+              onSearchPressed: manager.loadingVideo == true
                 ? null
-                : () async {
-                  await manager.getMediaStreamInfo(manager.getIdFromLink());
-                }
+                : () => manager.getVideoDetails(manager.urlController.text)
             )
           ],
         ),
@@ -90,15 +86,17 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                 foregroundColor: Colors.white,
                 onPressed: () async {
                   FocusScope.of(context).requestFocus(new FocusNode());
-                  List<youtube.VideoStreamInfo> videoList = Downloader.extractVideoStreams(manager.mediaStream);
-                  List<String> response = await showModalBottomSheet(
+                  List<dynamic> response = await showModalBottomSheet(
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(30),
+                        topRight: Radius.circular(30)
+                      ),
                   ),
                     context: context,
                     builder: (context) {
                       return CustomDownloadMenu(
-                        videoList: videoList,
+                        videoList: manager.streamManifest.videoOnly.sortByVideoQuality(),
                         onSettingsPressed: () {
                           showDialog(
                             context: context,

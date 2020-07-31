@@ -2,21 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class DownloadTile extends StatelessWidget {
-  final Stream<String> dataProgress;
-  final Stream<double> progressBar;
-  final Stream<String> currentAction;
+  final Stream dataProgress;
+  final Stream currentAction;
+  final Stream progressBar;
   final String title;
   final String author;
   final String coverUrl;
   final Function onDownloadCancel;
+  final Widget cancelDownloadIcon;
   DownloadTile({
     @required this.dataProgress,
-    @required this.progressBar,
     @required this.currentAction,
+    @required this.progressBar,
     @required this.title,
     @required this.author,
     @required this.coverUrl,
     this.onDownloadCancel,
+    this.cancelDownloadIcon
   });
   @override
   Widget build(BuildContext context) {
@@ -74,20 +76,25 @@ class DownloadTile extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: Container(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: <Widget>[
-                                IconButton(
-                                  icon: Icon(Icons.clear, size: 18),
-                                  onPressed: onDownloadCancel
-                                )
-                              ],
+                        cancelDownloadIcon != null
+                        ? Align(
+                            alignment: Alignment.bottomRight,
+                            child: Container(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: <Widget>[
+                                  IconButton(
+                                    icon: AnimatedSwitcher(
+                                      duration: Duration(milliseconds: 200),
+                                      child: cancelDownloadIcon,
+                                    ),
+                                    onPressed: onDownloadCancel
+                                  )
+                                ],
+                              ),
                             ),
-                          ),
-                        ),
+                          )
+                        : Container()
                       ]
                     ),
                   ),
@@ -96,7 +103,7 @@ class DownloadTile extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.all(4.0),
-              child: StreamBuilder<double>(
+              child: StreamBuilder(
                 stream: progressBar,
                 builder: (context, snapshot) {
                   return ClipRRect(
@@ -114,13 +121,13 @@ class DownloadTile extends StatelessWidget {
               padding: const EdgeInsets.only(left: 8, right: 8),
               child: Row(
                 children: <Widget> [
-                  StreamBuilder<String>(
+                  StreamBuilder<Object>(
                     stream: dataProgress,
                     builder: (context, snapshot) {
                       return snapshot.data == null 
                       ? Container()
                       : Text(
-                        "Size: " + snapshot.data + "MB",
+                        snapshot.data,
                         style: TextStyle(
                           fontSize: 12
                         ),

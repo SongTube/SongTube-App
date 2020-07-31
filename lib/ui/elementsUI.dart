@@ -30,7 +30,7 @@ Future<void> showCustomDialog(BuildContext context) async {
     ),
     onPressed: () {
       manager.downloadInfoSetList.forEach((object){
-        if (!object.downloader.dataProgress.isClosed) object.downloader.dataProgress.close();
+        object.finishDownload(null);
       });
       manager.downloadInfoSetList = [];
       Navigator.pop(context);

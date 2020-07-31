@@ -118,6 +118,24 @@ class _ThemeSettingsState extends State<ThemeSettings> with TickerProviderStateM
             ),
           )
         ),
+        // Enable/Disable AppBar
+        ListTile(
+          onTap: () => appData.systemThemeEnabled = !appData.systemThemeEnabled,
+          title: Text(
+            "AppBar",
+            style: TextStyle(
+              color: Theme.of(context).textTheme.bodyText1.color,
+              fontWeight: FontWeight.w500
+            ),
+          ),
+          subtitle: Text("Enable/Disable AppBar", style: TextStyle(fontSize: 12),),
+          trailing: CircularCheckBox(
+            value: appData.appBarEnabled,
+            onChanged: (bool value) {
+              appData.appBarEnabled = value;
+            }
+          )
+        ),
       ],
     );
   }

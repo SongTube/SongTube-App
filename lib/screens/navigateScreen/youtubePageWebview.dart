@@ -135,7 +135,7 @@ class _YoutubePageWebviewState extends State<YoutubePageWebview> with AutomaticK
                 );
                 return;
               }
-              String _id = youtube.YoutubeExplode.parseVideoId(_url);
+              String _id = youtube.VideoId.parseVideoId(_url);
               if (_id == null) {
                 manager.snackBar.showSnackBar(
                   icon: Icons.error,
@@ -147,7 +147,7 @@ class _YoutubePageWebviewState extends State<YoutubePageWebview> with AutomaticK
               }
               manager.screenIndex = 0;
               manager.urlController.text = _url;
-              manager.getMediaStreamInfo(_id);
+              manager.getVideoDetails(_url);
             },
           ),
         ),

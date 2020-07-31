@@ -320,13 +320,16 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
               child: Text("Download", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontFamily: "Varela")),
             ),
           ),
-          onTap: () => Navigator.pop(context, [
-            "Audio",
-            "null", 
-            volumeModifier.toString(),
-            bassGain.toString(),
-            trebleGain.toString(),
-          ]),
+          onTap: () {
+            List<dynamic> list = [
+              "Audio",
+              "null", 
+              volumeModifier.toString(),
+              bassGain.toString(),
+              trebleGain.toString(),
+            ];
+            Navigator.pop(context, list);
+          }
         ),
         // Volume Modifier
         SizedBox(height: 16),
@@ -574,7 +577,7 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
                       ),
                     ) : Container(),
                     Text(
-                      (((widget.videoList[index].size)/1024)/1024).toStringAsFixed(2) +
+                      (((widget.videoList[index].size.totalBytes)/1024)/1024).toStringAsFixed(2) +
                       "MB", style: TextStyle(fontSize: 12, fontFamily: "Varela"),
                     ),
                     Spacer(),
@@ -590,7 +593,12 @@ class _CustomDownloadMenuState extends State<CustomDownloadMenu> with TickerProv
                         ),
                       ),
                       onTap: () {
-                        Navigator.pop(context, ["Video", index.toString(), "1.0", "0", "0"]);
+                        List<dynamic> list = [
+                          "Video",
+                          widget.videoList[index], 
+                          "1.0", "0", "0"
+                        ];
+                        Navigator.pop(context, list);
                       },
                     ),
                     SizedBox(width: 18)
