@@ -9,23 +9,32 @@ import 'package:songtube/internal/preferences.dart';
 import 'package:ext_storage/ext_storage.dart';
 
 class AppDataProvider extends ChangeNotifier {
-  Preferences preferences;
 
-  Future<void> initProvider() async {
-    preferences = new Preferences();
-    await preferences.init();
-    await loadSavedData();
+  Preferences preferences;
+  AppDataProvider({
+    @required this.preferences
+  }){
+    preferences = this.preferences;
+    initProvider();
+  }
+
+  void initProvider() {
+    loadSavedData();
     if (_audioDownloadPath == null)
-      _audioDownloadPath = await ExtStorage.getExternalStorageDirectory() + "/SongTube";
+      ExtStorage.getExternalStorageDirectory().then((value) {
+        _audioDownloadPath = value + "/SongTube";
+      });
     if (_videoDownloadPath == null)
-      _videoDownloadPath = await ExtStorage.getExternalStorageDirectory() + "/SongTube";
-    _libraryScaffoldKey = new GlobalKey<ScaffoldState>();
+      ExtStorage.getExternalStorageDirectory().then((value) {
+        _videoDownloadPath = value + "/SongTube";
+      });
     PackageInfo.fromPlatform().then((value) {
       appName = value.appName;
       packageName = value.packageName;
       appVersion = value.version;
       buildNumber = value.buildNumber;
     });
+    accentColor = preferences.getAccentColor();
   }
 
   // Platform Info
@@ -34,17 +43,14 @@ class AppDataProvider extends ChangeNotifier {
   String appVersion;
   String buildNumber;
 
-  Color _accentColor = Colors.redAccent;
+  Color _accentColor;
   bool _systemThemeAvailable = false;
   bool _systemThemeEnabled = false;
   bool _darkThemeEnabled = false;
   bool _blackThemeEnabled = false;
   bool _appBarEnabled = true;
   bool _enableAudioConvertion = true;
-  bool _enableVideoConvertion = false;
-  // Library
-  GlobalKey<ScaffoldState> _libraryScaffoldKey;
-  int _screenIndex = 0;
+  bool _enableVideoConvertion = false;  
   // Converting audio format
   String _audioConvertFormat = "AAC";
   // Download paths
@@ -52,7 +58,6 @@ class AppDataProvider extends ChangeNotifier {
   String _videoDownloadPath;
   // Use Youtube Webview
   bool _useYoutubeWebview = false;
-
   Color get accentColor => _accentColor;
   bool get systemThemeAvailable => _systemThemeAvailable;
   bool get systemThemeEnabled => _systemThemeEnabled;
@@ -61,9 +66,6 @@ class AppDataProvider extends ChangeNotifier {
   bool get appBarEnabled => _appBarEnabled;
   bool get enableAudioConvertion => _enableAudioConvertion;
   bool get enableVideoConvertion => _enableVideoConvertion;
-  // Library
-  GlobalKey<ScaffoldState> get libraryScaffoldKey => _libraryScaffoldKey;
-  int get screenIndex => _screenIndex;
   // Converting audio format
   String get audioConvertFormat => _audioConvertFormat;
   // Download paths
@@ -117,8 +119,9 @@ class AppDataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> loadSavedData() async {
-    systemThemeAvailable = await preferences.isSystemThemeAvailable();
+  void loadSavedData() {
+    systemThemeAvailable = preferences.isSystemThemeAvailable;
+    appBarEnabled = preferences.getAppBarEnabled();
     accentColor = preferences.getAccentColor();
     darkThemeEnabled = preferences.getDarkThemeEnabled();
     blackThemeEnabled = preferences.getBlackThemeEnabled();
@@ -126,12 +129,6 @@ class AppDataProvider extends ChangeNotifier {
     audioDownloadPath = preferences.getAudioDownloadPath();
     videoDownloadPath = preferences.getVideoDownloadPath();
     useYoutubeWebview = true;
-  }
-
-  // Library
-  set screenIndex(int newValue) {
-    _screenIndex = newValue;
-    notifyListeners();
   }
 
   // Converting audio format
@@ -157,6 +154,13 @@ class AppDataProvider extends ChangeNotifier {
   set useYoutubeWebview(bool value) {
     _useYoutubeWebview = value;
     preferences.saveUseYoutubeWebview(value);
+    notifyListeners();
+  }
+
+  // Enable/Disable appBar
+  set appBarEnabled(bool value) {
+    _appBarEnabled = value;
+    preferences.saveAppBarEnabled(value);
     notifyListeners();
   }
 

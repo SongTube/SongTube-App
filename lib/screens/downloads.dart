@@ -2,12 +2,14 @@
 import 'package:flutter/material.dart';
 
 // Internal
-import 'package:songtube/provider/downloads_manager.dart';
-import 'package:songtube/screens/downloadsPages/completed_page.dart';
-import 'package:songtube/screens/downloadsPages/downloading_page.dart';
+import 'package:songtube/provider/managerProvider.dart';
 
 // Packages
 import 'package:provider/provider.dart';
+
+// UI
+import 'package:songtube/screens/downloadsPages/completedPage.dart';
+import 'package:songtube/screens/downloadsPages/downloadingPage.dart';
 
 class DownloadTab extends StatefulWidget {
   _DownloadTabState createState() => _DownloadTabState();
@@ -18,8 +20,9 @@ class _DownloadTabState extends State<DownloadTab> with TickerProviderStateMixin
   void listener(ManagerProvider provider) {
     provider.downloadInfoSetList.forEach((element) {
       element.currentAction.stream.listen((event) {
-        if (event == "Done") {
+        if (event == "Completed") {
           provider.getDatabase();
+          setState(() {});
         }
       });
     });
@@ -80,7 +83,7 @@ class _DownloadTabState extends State<DownloadTab> with TickerProviderStateMixin
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20),
                                     color: manager.downloadsTabIndex == 0
-                                      ? Colors.redAccent
+                                      ? Theme.of(context).accentColor
                                       : Theme.of(context).canvasColor,
                                     boxShadow: [
                                       BoxShadow(
@@ -116,7 +119,7 @@ class _DownloadTabState extends State<DownloadTab> with TickerProviderStateMixin
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20),
                                     color: manager.downloadsTabIndex == 1
-                                      ? Colors.redAccent
+                                      ? Theme.of(context).accentColor
                                       : Theme.of(context).canvasColor,
                                     boxShadow: [
                                       BoxShadow(

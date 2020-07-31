@@ -1,6 +1,5 @@
 // Dart
 import 'dart:async';
-import 'dart:io';
 
 // Flutter
 import 'package:flutter/material.dart';
@@ -10,7 +9,7 @@ import 'package:device_info/device_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // Key identifiers for variables saved in SharedPreferences.
-String accentKey = "accent_color";
+String accentKey = "app_accent_color";
 String systemThemeKey = "use_system_theme";
 String darkThemeKey = "use_dark_theme";
 String blackThemeKey = "use_black_theme";
@@ -20,28 +19,27 @@ String audioConvertingFormat = "audio_converting_format";
 String audioDownloadPath = "audio_download_path";
 String videoDownloadPath = "video_download_path";
 String useYoutubeWebview = "use_youtube_webview";
+String appColor = "app_color";
+String appBarEnabled = "app_bar_enabled";
 
 class Preferences {
+  
   SharedPreferences prefs;
 
-  Future<void> init() async => prefs = await SharedPreferences.getInstance();
-
-  Future<bool> isSystemThemeAvailable() async {
+  Future<void> initPreferences() async {
+    prefs = await SharedPreferences.getInstance();
     String version;
-    if(Platform.isAndroid){
-      AndroidDeviceInfo deviceInfo = await DeviceInfoPlugin().androidInfo;
-      version = deviceInfo.version.release;
-    } else if (Platform.isIOS) {
-      IosDeviceInfo deviceInfo = await DeviceInfoPlugin().iosInfo;
-      version = deviceInfo.systemVersion;
-    }
-    if (double.parse(version) >= 9 || double.parse(version) >= 13)
-      return true;
-    else return false;
+    AndroidDeviceInfo deviceInfo = await DeviceInfoPlugin().androidInfo;
+    version = deviceInfo.version.release;
+    if (double.parse(version) >= 9 || double.parse(version) >= 13) {
+      isSystemThemeAvailable = true;
+    } else {isSystemThemeAvailable = false;}
   }
 
+  bool isSystemThemeAvailable;
+
   Color getAccentColor() {
-    return Color(prefs.getInt(accentKey) ?? Colors.blueAccent.value);
+    return Color(prefs.getInt(accentKey) ?? Colors.redAccent.value);
   }
 
   void saveAccentColor(Color color) {
@@ -119,5 +117,14 @@ class Preferences {
   void saveUseYoutubeWebview(bool value) {
     prefs.setBool(useYoutubeWebview, value);
   }
+
+  bool getAppBarEnabled() {
+    return prefs.getBool(appBarEnabled) ?? true;
+  }
+
+  void saveAppBarEnabled(bool value) {
+    prefs.setBool(appBarEnabled, value);
+  }
+
 
 }

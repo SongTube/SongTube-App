@@ -4,7 +4,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:provider/provider.dart';
 import 'package:songtube/provider/app_provider.dart';
 import 'package:songtube/screens/settings.dart';
-import 'package:songtube/ui/more_screen/quickaccess_tile.dart';
+import 'package:songtube/screens/moreScreen/quickAcessTile.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MoreScreen extends StatelessWidget {
@@ -67,7 +67,7 @@ class MoreScreen extends StatelessWidget {
                                 fontSize: 20,
                                 fontFamily: "Varela",
                                 fontWeight: FontWeight.w700,
-                                color: Colors.redAccent
+                                color: Theme.of(context).accentColor
                               ),
                             )
                           ),
@@ -105,7 +105,7 @@ class MoreScreen extends StatelessWidget {
                                     fontSize: 15,
                                     fontFamily: "Varela",
                                     fontWeight: FontWeight.w700,
-                                    color: Colors.redAccent
+                                    color: Theme.of(context).accentColor
                                   ),
                                 ),
                               ],

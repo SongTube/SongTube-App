@@ -8,11 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 // Internal
-import 'package:songtube/internal/native.dart';
-import 'package:songtube/internal/player_service.dart';
-import 'package:songtube/internal/youtube/infoparser.dart';
+import 'package:songtube/internal/nativeMethods.dart';
+import 'package:songtube/internal/playerService.dart';
 import 'package:songtube/provider/app_provider.dart';
-import 'package:songtube/provider/downloads_manager.dart';
+import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/screens/downloads.dart';
 import 'package:songtube/screens/home.dart';
 import 'package:songtube/screens/more.dart';
@@ -25,9 +24,9 @@ import 'package:provider/provider.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 
 // UI
-import 'package:songtube/ui/snackbar.dart';
-import 'package:songtube/ui/ui_elements.dart';
-import 'package:songtube/ui/downloads_screen/player_widget.dart';
+import 'package:songtube/ui/elementsUI.dart';
+import 'package:songtube/screens/musicPlayer.dart';
+import 'package:youtube_explode_dart/youtube_explode_dart.dart' as yt;
 
 class Library extends StatefulWidget {
   @override
@@ -37,7 +36,6 @@ class Library extends StatefulWidget {
 class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerProviderStateMixin {
 
   // Local Variables
-  DateTime currentBackPressTime;
   List<String> appBarTitle = ["SongTube", "Downloads", "Youtube", "More"];
 
   @override
@@ -74,33 +72,15 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
       String _url; String _id;
       await NativeMethod.handleIntent().then((resultText) => _url = resultText);
       if (_url == null) return;
-      _id = YoutubeInfo.getLinkID(_url);
+      _id = yt.VideoId.parseVideoId(_url);
       if (_id == null) return;
-    }
-  }
-
-  Future<bool> handlePop(AppDataProvider provider) async {
-    if (provider.screenIndex != 0) {
-      setState(() {
-        provider.screenIndex = 0;
-      });
-      return false;
-    } else {
-      DateTime now = DateTime.now();
-      if (currentBackPressTime == null || 
-          now.difference(currentBackPressTime) > Duration(seconds: 2)) {
-        currentBackPressTime = now;
-        appSnack.pressAgainExit();
-        return Future.value(false);
-      }
-      return Future.value(true);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    AppDataProvider appData = Provider.of<AppDataProvider>(context);
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
+    AppDataProvider appData = Provider.of<AppDataProvider>(context);
     Brightness _themeBrightness = Theme.of(context).brightness;
     Brightness _systemBrightness = Theme.of(context).brightness;
     Brightness _statusBarBrightness = _systemBrightness == Brightness.light
@@ -115,141 +95,173 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
         systemNavigationBarIconBrightness: _themeBrightness
       ),
     );
-    appSnack = new AppSnack(scaffoldKey: appData.libraryScaffoldKey, context: context);
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
       child: Scaffold(
-        key: appData.libraryScaffoldKey,
-        appBar: appData.screenIndex != 2 
-        ? PreferredSize(
-          preferredSize: Size(
-            double.infinity,
-            kToolbarHeight
-          ),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black12,
-                  offset: Offset(0.0, -2), //(x,y)
-                  blurRadius: 10.0,
-                  spreadRadius: 0.6
-                ),
-              ],
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
-              child: AppBar(
-                elevation: 0,
-                backgroundColor: Theme.of(context).cardColor,
-                title: Text(
-                  appBarTitle[appData.screenIndex],
-                  style: TextStyle(
-                    color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.8),
-                    fontWeight: FontWeight.w600
-                  ),
-                ),
-                centerTitle: true,
-                actions: <Widget>[
-                  StreamBuilder<ScreenState>(
-                    stream: manager.screenStateStream,
-                    builder: (context, snapshot) {
-                      final screenState = snapshot.data;
-                      final state = screenState?.playbackState;
-                      final processingState =
-                        state?.processingState ?? AudioProcessingState.none;
-                      return AnimatedOpacity(
-                        opacity: 1.0,
-                        duration: Duration(milliseconds: 300),
-                        child: processingState != AudioProcessingState.none
-                        ? ExpandPlayer(
-                            onTap: () => manager.showMediaPlayer = !manager.showMediaPlayer,
-                            icon: Icon(
-                              manager.showMediaPlayer ? Icons.expand_less : Icons.expand_more,
-                              color: Colors.white,
-                            ),
-                          )
-                        : Container()
-                      );
-                    }
-                  ),
-                  SizedBox(width: 12)
-                ],
-              ),
-            ),
-          ),
-        )
-        : PreferredSize(
-          preferredSize: Size(
-            double.infinity,
-            kToolbarHeight*0.1
-          ),
-          child: Container(),
-        ),
+        key: manager.libraryScaffoldKey,
         resizeToAvoidBottomPadding: true,
+        appBar: appData.appBarEnabled == true
+          ? PreferredSize(
+              preferredSize: Size(
+                double.infinity,
+                kToolbarHeight
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12,
+                      offset: Offset(0.0, -2), //(x,y)
+                      blurRadius: 10.0,
+                      spreadRadius: 0.6
+                    ),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
+                  child: AppBar(
+                    elevation: 0,
+                    backgroundColor: Theme.of(context).cardColor,
+                    title: Text(
+                      appBarTitle[manager.screenIndex],
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.8),
+                        fontWeight: FontWeight.w600
+                      ),
+                    ),
+                    centerTitle: true,
+                    actions: <Widget>[
+                      StreamBuilder<ScreenState>(
+                        stream: manager.screenStateStream,
+                        builder: (context, snapshot) {
+                          final screenState = snapshot.data;
+                          final state = screenState?.playbackState;
+                          final processingState =
+                            state?.processingState ?? AudioProcessingState.none;
+                          return AnimatedOpacity(
+                            opacity: 1.0,
+                            duration: Duration(milliseconds: 300),
+                            child: processingState != AudioProcessingState.none
+                            ? ExpandPlayer(
+                                onTap: () =>
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                                    FullPlayerWidget(pushedFrom: "SongTube")))
+                              )
+                            : Container()
+                          );
+                        }
+                      ),
+                      SizedBox(width: 12)
+                    ],
+                  ),
+                ),
+              )
+            )
+          : PreferredSize(
+              preferredSize: Size(
+                double.infinity,
+                kToolbarHeight*0.05
+              ),
+              child: Container(),
+            ),
         body: WillPopScope(
-          onWillPop: () => handlePop(appData),
+          onWillPop: () => manager.handlePop(),
           child: Stack(
             children: <Widget>[
               IgnorePointer(
-                ignoring: appData.screenIndex == 0 ? false : true,
+                ignoring: manager.screenIndex == 0 ? false : true,
                 child: AnimatedOpacity(
                   duration: Duration(milliseconds: 300),
-                  opacity: appData.screenIndex == 0 ? 1.0 : 0.0,
+                  opacity: manager.screenIndex == 0 ? 1.0 : 0.0,
                   child: HomeScreen()
                 )
               ),
               IgnorePointer(
-                ignoring: appData.screenIndex == 1 ? false : true,
+                ignoring: manager.screenIndex == 1 ? false : true,
                 child: AnimatedOpacity(
                   duration: Duration(milliseconds: 300),
-                  opacity: appData.screenIndex == 1 ? 1.0 : 0.0,
+                  opacity: manager.screenIndex == 1 ? 1.0 : 0.0,
                   child: DownloadTab()
                 )
               ),
               IgnorePointer(
-                ignoring: appData.screenIndex == 2 ? false : true,
+                ignoring: manager.screenIndex == 2 ? false : true,
                 child: AnimatedOpacity(
                   duration: Duration(milliseconds: 300),
-                  opacity: appData.screenIndex == 2 ? 1.0 : 0.0,
-                  child: appData.screenIndex == 2 ? Navigate() : Container(),
+                  opacity: manager.screenIndex == 2 ? 1.0 : 0.0,
+                  child: manager.screenIndex == 2 ? Navigate() : Container(),
                 )
               ),
               IgnorePointer(
-                ignoring: appData.screenIndex == 3 ? false : true,
+                ignoring: manager.screenIndex == 3 ? false : true,
                 child: AnimatedOpacity(
                   duration: Duration(milliseconds: 300),
-                  opacity: appData.screenIndex == 3 ? 1.0 : 0.0,
+                  opacity: manager.screenIndex == 3 ? 1.0 : 0.0,
                   child: MoreScreen(),
                 )
               ),
-              AnimatedSwitcher(
-                duration: Duration(milliseconds: 150),
-                child: manager.showMediaPlayer
-                  ? Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: FullPlayerWidget(),
-                  )
-                  : Container()
+              StreamBuilder<ScreenState>(
+                stream: manager.screenStateStream,
+                builder: (context, snapshot) {
+                  final screenState = snapshot.data;
+                  final state = screenState?.playbackState;
+                  final processingState =
+                    state?.processingState ?? AudioProcessingState.none;
+                  return AnimatedSwitcher(
+                    duration: Duration(milliseconds: 300),
+                    child: appData.appBarEnabled == false && processingState != AudioProcessingState.none
+                    ? Align(
+                        alignment: Alignment.topLeft,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                              FullPlayerWidget(pushedFrom: "SongTube")));
+                          },
+                          child: Container(
+                            width: 54,
+                            height: 54,
+                            margin: EdgeInsets.only(left: 12, top: 8),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              color: appData.accentColor,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  offset: Offset(3.5, 3.5), //(x,y)
+                                  blurRadius: 5.0,
+                                  spreadRadius: 2.1 
+                                )
+                              ]
+                            ),
+                            child: Icon(
+                              Icons.play_arrow,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container()
+                  );
+                }
               ),
             ],
           ),
         ),
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Theme.of(context).cardColor,
-          currentIndex: appData.screenIndex,
-          elevation: appData.screenIndex == 0 ? 0 : 8,
+          currentIndex: manager.screenIndex,
+          elevation: manager.screenIndex == 0 ? 0 : 8,
           selectedFontSize: 14,
-          selectedItemColor: Colors.redAccent,
+          selectedItemColor: Theme.of(context).accentColor,
           unselectedItemColor: Theme.of(context).iconTheme.color,
           type: BottomNavigationBarType.fixed,
           onTap: (int index) {
             if (manager.showMediaPlayer == true) {
               manager.showMediaPlayer = false;
-              Future.delayed(Duration(milliseconds: 150), () => appData.screenIndex = index);
+              Future.delayed(Duration(milliseconds: 150), () => manager.screenIndex = index);
             } else {
-              appData.screenIndex = index;
+              manager.screenIndex = index;
             }
           },
           items: [
