@@ -26,7 +26,6 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 // UI
 import 'package:songtube/ui/elementsUI.dart';
 import 'package:songtube/screens/musicPlayer.dart';
-import 'package:songtube/ui/routeAnimations.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart' as yt;
 
 class Library extends StatefulWidget {
@@ -213,7 +212,7 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
                     duration: Duration(milliseconds: 300),
                     child: appData.appBarEnabled == false && processingState != AudioProcessingState.none
                     ? Align(
-                        alignment: Alignment.topRight,
+                        alignment: Alignment.topLeft,
                         child: GestureDetector(
                           onTap: () {
                             Navigator.push(context, MaterialPageRoute(builder: (context) =>
@@ -222,7 +221,7 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
                           child: Container(
                             width: 54,
                             height: 54,
-                            margin: EdgeInsets.only(right: 12),
+                            margin: EdgeInsets.only(left: 12, top: 8),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(50),
                               color: appData.accentColor,

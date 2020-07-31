@@ -70,7 +70,7 @@ class FullPlayerWidget extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         centerTitle: true,
-        backgroundColor: Theme.of(context).cardColor,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         title: Text(
           "$pushedFrom",
           style: TextStyle(
@@ -92,7 +92,7 @@ class FullPlayerWidget extends StatelessWidget {
                 state?.processingState ?? AudioProcessingState.none;
             final playing = state?.playing ?? false;
             return Container(
-              color: Theme.of(context).cardColor,
+              color: Theme.of(context).scaffoldBackgroundColor,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -267,12 +267,6 @@ class FullPlayerWidget extends StatelessWidget {
                     },
                     onChangeEnd: (value) {
                       AudioService.seekTo(Duration(milliseconds: value.toInt()));
-                      // Due to a delay in platform channel communication, there is
-                      // a brief moment after releasing the Slider thumb before the
-                      // new position is broadcast from the platform side. This
-                      // hack is to hold onto seekPos until the next state update
-                      // comes through.
-                      // TODO: Improve this code.
                       seekPos = value;
                       _dragPositionSubject.add(null);
                     },
