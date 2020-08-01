@@ -104,7 +104,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> {
             onDragging: (value, currentValue, upperValue) {
               double value = (currentValue/100);
               value = double.parse(value.toStringAsFixed(2));
-              volumeModifier = value;
+              setState(() => volumeModifier = value);
             },
             step: FlutterSliderStep(
               isPercentRange: true,
@@ -166,7 +166,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> {
             min: -5,
             max: 5,
             onDragging: (value, currentValue, upperValue) {
-              bassGain = currentValue.toInt();
+              setState(() => bassGain = currentValue.toInt());
             },
             step: FlutterSliderStep(
               isPercentRange: true,
@@ -228,7 +228,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> {
             min: -5,
             max: 5,
             onDragging: (value, currentValue, upperValue) {
-              trebleGain = currentValue.toInt();
+              setState(() => trebleGain = currentValue.toInt());
             },
             step: FlutterSliderStep(
               isPercentRange: true,
