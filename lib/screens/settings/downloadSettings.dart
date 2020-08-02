@@ -54,6 +54,7 @@ class DownloadSettings extends StatelessWidget {
                     );
                   }
                 );
+                if (path == null) return;
                 appData.audioDownloadPath = path;
               }
             )
@@ -95,6 +96,7 @@ class DownloadSettings extends StatelessWidget {
                     );
                   }
                 );
+                if (path == null) return;
                 appData.videoDownloadPath = path;
               }
             )
