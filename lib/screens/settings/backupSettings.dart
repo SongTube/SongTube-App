@@ -79,8 +79,8 @@ class BackupSettings extends StatelessWidget {
               onPressed: () async {
                 Directory documentsDirectory = await getApplicationDocumentsDirectory();
                 String backupPath = await ExtStorage.getExternalStorageDirectory() + "/SongTube/Backup/";
-                String path = join(documentsDirectory.path, 'downloadDatabase.db');
-                if (!await File(backupPath + 'downloadDatabase.db').exists()) {
+                String path = join(documentsDirectory.path, 'MediaItems.db');
+                if (!await File(backupPath + 'MediaItems.db').exists()) {
                   manager.snackBar.showSnackBar(
                     icon: Icons.warning,
                     title: "You have no Backup",
@@ -88,7 +88,7 @@ class BackupSettings extends StatelessWidget {
                   );
                   return;
                 }
-                await File(backupPath + 'downloadDatabase.db').copy(path);
+                await File(backupPath + 'MediaItems.db').copy(path);
                 manager.snackBar.showSnackBar(
                     icon: Icons.restore,
                     title: "Restore Completed",
