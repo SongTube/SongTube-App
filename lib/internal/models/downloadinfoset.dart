@@ -78,6 +78,10 @@ class DownloadInfoSet {
   Future<void> downloadMedia() async {
     currentAction.add("Downloading...");
     cancelDownload = false;
+    // Check our Download Folder
+    if (!await Directory(downloadPath).exists()) {
+      await Directory(downloadPath).create();
+    }
     // Download File
     File downloadedFile = await downloadStream();
     if (downloadedFile == null) return;
