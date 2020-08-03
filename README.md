@@ -1,16 +1,39 @@
-# songtube
+# SongTube
 
-A new Flutter project.
+SongTube is a new beautiful and fast application made in flutter, it supports YouTube audio and video downloading at any quality, In-App YouTube Browser, audio conversion and an Audio tags editor.
 
-## Getting Started
+---
+![](https://i.imgur.com/PZSvMPi.jpg)
+![](https://i.imgur.com/f2ME62r.jpg)
+![](https://i.imgur.com/EmqkZgN.jpg)
+![](https://i.imgur.com/KOsb8xE.jpg)
+![](https://i.imgur.com/Azlv5ew.jpg)
+---
 
-This project is a starting point for a Flutter application.
+## Features
 
-A few resources to get you started if this is your first Flutter project:
++ Video Download at any available Quality
++ Download HDR and 60fps Videos
++ Audio Download at best available Quality
++ Audio Tags & Artwork Editor
++ Audio Filters (Volume, Bass, Treble)
++ Audio Conversion (AAC, OGG and MP3) (optional)
++ Set custom path for Audio/Video download
++ Music Player built-in
++ Video Player built-in
++ In-App Youtube Browser
++ Light/Dark/Black Themes
++ Accent Color Picker
++ UI Customizations
++ Backup Options
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+## Download SongTube
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+You can get this application from the Official SongTube Channel on **Telegram:** https://t.me/songtubechannel **You can also join SongTube Official Group from the Channel, any kind of issue report or recommendation is welcomed!**
+
+Other SongTube download sites:
+
++ Drive: https://tinyurl.com/SongTubeDrive
++ GitHub: https://tinyurl.com/STGithub
++ AppGallery: https://tinyurl.com/STAppGallery
+
