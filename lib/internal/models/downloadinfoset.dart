@@ -40,7 +40,6 @@ class DownloadInfoSet {
   String downloadPath;
   DownloadType downloadType;
   AudioConvert convertFormat;
-  bool downloadFinished = false;
   List audioModifiers;
   bool downloaderClosed;
   bool _cancelDownload;
