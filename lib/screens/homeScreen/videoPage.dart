@@ -46,44 +46,45 @@ class _VideoPageState extends State<VideoPage> {
                 padding: const EdgeInsets.only(left: 8, right: 8, bottom: 5),
                 child: ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(20)),
-                  child: manager.openWebviewPlayer ? new YoutubePlayer(
-                    controller: YoutubePlayerController(
-                      initialVideoId: YoutubePlayer.convertUrlToId(manager.videoDetails.url),
-                      flags: YoutubePlayerFlags(
-                        autoPlay: true,
-                      ),
-                    ),
-                    progressColors: ProgressBarColors(
-                      playedColor: Colors.red,
-                      bufferedColor: Colors.white70,
-                      backgroundColor: Colors.transparent,
-                      handleColor: Theme.of(context).accentColor,
-                    ),
-                    progressIndicatorColor: Theme.of(context).accentColor,
-                  )
-                  : Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: 208,
-                    child: Stack(
-                      fit: StackFit.expand,
-                      children: <Widget>[
-                        FadeInImage(
-                          fadeInDuration: Duration(milliseconds: 300),
-                          image: NetworkImage(manager.videoDetails.thumbnails.highResUrl),
-                          placeholder: MemoryImage(kTransparentImage),
-                          fit: BoxFit.fitWidth,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() => manager.openWebviewPlayer = true);
-                          },
-                          child: Center(
-                            child: Icon(Icons.play_arrow, size: 90, color: Colors.white),
+                  child: manager.openWebviewPlayer
+                    ? YoutubePlayer(
+                        controller: YoutubePlayerController(
+                          initialVideoId: YoutubePlayer.convertUrlToId(manager.videoDetails.url),
+                          flags: YoutubePlayerFlags(
+                            autoPlay: true,
                           ),
-                        )
-                      ],
-                    )
-                  ),
+                        ),
+                        progressColors: ProgressBarColors(
+                          playedColor: Colors.red,
+                          bufferedColor: Colors.white70,
+                          backgroundColor: Colors.transparent,
+                          handleColor: Theme.of(context).accentColor,
+                        ),
+                        progressIndicatorColor: Theme.of(context).accentColor,
+                      )
+                    : Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 208,
+                      child: Stack(
+                        fit: StackFit.expand,
+                        children: <Widget>[
+                          FadeInImage(
+                            fadeInDuration: Duration(milliseconds: 300),
+                            image: NetworkImage(manager.videoDetails.thumbnails.highResUrl),
+                            placeholder: MemoryImage(kTransparentImage),
+                            fit: BoxFit.fitWidth,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() => manager.openWebviewPlayer = true);
+                            },
+                            child: Center(
+                              child: Icon(Icons.play_arrow, size: 90, color: Colors.white),
+                            ),
+                          )
+                        ],
+                      )
+                    ),
                 ),
               ),
               // Video Duration and Weight
