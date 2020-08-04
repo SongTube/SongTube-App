@@ -48,7 +48,7 @@ class _VideoPageState extends State<VideoPage> {
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                   child: manager.openWebviewPlayer ? new YoutubePlayer(
                     controller: YoutubePlayerController(
-                      initialVideoId: YoutubePlayer.convertUrlToId(manager.urlController.text),
+                      initialVideoId: YoutubePlayer.convertUrlToId(manager.videoDetails.url),
                       flags: YoutubePlayerFlags(
                         autoPlay: true,
                       ),
