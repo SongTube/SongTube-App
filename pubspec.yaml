@@ -57,7 +57,7 @@ dependencies:
       url: git://github.com/not-holar/circular_check_box.git
       ref: master
   string_validator: ^0.1.4
-  keyboard_visibility: ^0.5.6
+  flutter_keyboard_visibility: ^3.2.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
