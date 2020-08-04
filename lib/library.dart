@@ -102,7 +102,8 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
       onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
       child: Scaffold(
         key: manager.libraryScaffoldKey,
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset:
+          manager.mediaStreamReady == false ? false : true,
         appBar: PreferredSize(
           preferredSize: Size(
             double.infinity,
