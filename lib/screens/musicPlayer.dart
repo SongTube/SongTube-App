@@ -140,7 +140,7 @@ class FullPlayerWidget extends StatelessWidget {
                         children: <Widget>[
                           // Title
                           Padding(
-                            padding: const EdgeInsets.only(left: 8, right: 8),
+                            padding: const EdgeInsets.only(left: 20, right: 20),
                             child: Text(
                               mediaItem.title,
                               style: TextStyle(
