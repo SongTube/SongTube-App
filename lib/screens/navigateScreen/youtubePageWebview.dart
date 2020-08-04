@@ -1,13 +1,13 @@
 // Flutter
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 // Internal
 import 'package:songtube/provider/managerProvider.dart';
 
 // Packages
 import 'package:youtube_explode_dart/youtube_explode_dart.dart' as youtube;
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:provider/provider.dart';
 
 class YoutubePageWebview extends StatefulWidget {
@@ -21,7 +21,7 @@ class _YoutubePageWebviewState extends State<YoutubePageWebview> with AutomaticK
   bool get wantKeepAlive => true;
 
   GlobalKey<ScaffoldState> scaffoldState;
-  WebViewController webController;
+  InAppWebViewController webController;
   String _currentUrl;
 
   @override
@@ -42,10 +42,9 @@ class _YoutubePageWebviewState extends State<YoutubePageWebview> with AutomaticK
         body: Column(
           children: <Widget>[
             Expanded(
-              child: WebView(
-                javascriptMode: JavascriptMode.unrestricted,
+              child: InAppWebView(
                 initialUrl: _currentUrl,
-                onWebViewCreated: (WebViewController controller) {
+                onWebViewCreated: (InAppWebViewController controller) {
                   webController = controller;
                 },
               )
@@ -72,7 +71,7 @@ class _YoutubePageWebviewState extends State<YoutubePageWebview> with AutomaticK
                       bool result = await webController.canGoForward();
                       if (result == true) {
                         webController.goForward();
-                        String url = await webController.currentUrl();
+                        String url = await webController.getUrl();
                         setState(() => _currentUrl = url);
                       }
                     }
@@ -86,7 +85,7 @@ class _YoutubePageWebviewState extends State<YoutubePageWebview> with AutomaticK
                   Expanded(
                     child: GestureDetector(
                       onLongPress: () async {
-                        Clipboard.setData(new ClipboardData(text: await webController.currentUrl()));
+                        Clipboard.setData(new ClipboardData(text: await webController.getUrl()));
                         manager.snackBar.showSnackBar(
                           icon: Icons.content_copy,
                           title: "Copy",
@@ -125,7 +124,7 @@ class _YoutubePageWebviewState extends State<YoutubePageWebview> with AutomaticK
             onPressed: () async {
               String _url;
               try {
-                _url = await webController.currentUrl();
+                _url = await webController.getUrl();
               } catch (_) {
                 manager.snackBar.showSnackBar(
                   icon: Icons.error,
