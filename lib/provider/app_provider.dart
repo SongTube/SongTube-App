@@ -48,7 +48,6 @@ class AppDataProvider extends ChangeNotifier {
   bool _systemThemeEnabled = false;
   bool _darkThemeEnabled = false;
   bool _blackThemeEnabled = false;
-  bool _appBarEnabled = true;
   bool _enableAudioConvertion = true;
   bool _enableVideoConvertion = false;  
   // Converting audio format
@@ -63,7 +62,6 @@ class AppDataProvider extends ChangeNotifier {
   bool get systemThemeEnabled => _systemThemeEnabled;
   bool get darkThemeEnabled => _darkThemeEnabled;
   bool get blackThemeEnabled => _blackThemeEnabled;
-  bool get appBarEnabled => _appBarEnabled;
   bool get enableAudioConvertion => _enableAudioConvertion;
   bool get enableVideoConvertion => _enableVideoConvertion;
   // Converting audio format
@@ -121,7 +119,6 @@ class AppDataProvider extends ChangeNotifier {
 
   void loadSavedData() {
     systemThemeAvailable = preferences.isSystemThemeAvailable;
-    appBarEnabled = preferences.getAppBarEnabled();
     accentColor = preferences.getAccentColor();
     darkThemeEnabled = preferences.getDarkThemeEnabled();
     blackThemeEnabled = preferences.getBlackThemeEnabled();
@@ -154,13 +151,6 @@ class AppDataProvider extends ChangeNotifier {
   set useYoutubeWebview(bool value) {
     _useYoutubeWebview = value;
     preferences.saveUseYoutubeWebview(value);
-    notifyListeners();
-  }
-
-  // Enable/Disable appBar
-  set appBarEnabled(bool value) {
-    _appBarEnabled = value;
-    preferences.saveAppBarEnabled(value);
     notifyListeners();
   }
 

@@ -35,9 +35,6 @@ class Library extends StatefulWidget {
 
 class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerProviderStateMixin {
 
-  // Local Variables
-  List<String> appBarTitle = ["SongTube", "Downloads", "Youtube", "More"];
-
   @override
   void initState() {
     checkPermissions();
@@ -100,77 +97,17 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
       child: Scaffold(
         key: manager.libraryScaffoldKey,
         resizeToAvoidBottomPadding: true,
-        appBar: appData.appBarEnabled == true
-          ? PreferredSize(
-              preferredSize: Size(
-                double.infinity,
-                kToolbarHeight
-              ),
-              child: Container(
-                decoration: manager.screenIndex != 0
-                  ? BoxDecoration(
-                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black12,
-                          offset: Offset(0.0, -2), //(x,y)
-                          blurRadius: 10.0,
-                          spreadRadius: 0.6
-                        ),
-                      ],
-                    )
-                  : BoxDecoration(),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
-                  child: AppBar(
-                    elevation: 0,
-                    backgroundColor: Theme.of(context).cardColor,
-                    title: Text(
-                      appBarTitle[manager.screenIndex],
-                      style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.8),
-                        fontWeight: FontWeight.w600
-                      ),
-                    ),
-                    centerTitle: true,
-                    actions: <Widget>[
-                      StreamBuilder<ScreenState>(
-                        stream: manager.screenStateStream,
-                        builder: (context, snapshot) {
-                          final screenState = snapshot.data;
-                          final state = screenState?.playbackState;
-                          final processingState =
-                            state?.processingState ?? AudioProcessingState.none;
-                          return AnimatedOpacity(
-                            opacity: 1.0,
-                            duration: Duration(milliseconds: 300),
-                            child: processingState != AudioProcessingState.none
-                            ? ExpandPlayer(
-                                onTap: () =>
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                                    FullPlayerWidget(pushedFrom: "SongTube")))
-                              )
-                            : Container()
-                          );
-                        }
-                      ),
-                      SizedBox(width: 12)
-                    ],
-                  ),
-                ),
-              )
-            )
-          : PreferredSize(
-              preferredSize: Size(
-                double.infinity,
-                kToolbarHeight*0.05
-              ),
-              child: Container(
-                color: manager.screenIndex != 0
-                  ? Theme.of(context).scaffoldBackgroundColor
-                  : Theme.of(context).cardColor
-              ),
-            ),
+        appBar: PreferredSize(
+          preferredSize: Size(
+            double.infinity,
+            kToolbarHeight*0.05
+          ),
+          child: Container(
+            color: manager.screenIndex != 0
+              ? Theme.of(context).scaffoldBackgroundColor
+              : Theme.of(context).cardColor
+          ),
+        ),
         body: WillPopScope(
           onWillPop: () => manager.handlePop(),
           child: Stack(
@@ -216,7 +153,7 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
                     state?.processingState ?? AudioProcessingState.none;
                   return AnimatedSwitcher(
                     duration: Duration(milliseconds: 300),
-                    child: appData.appBarEnabled == false && processingState != AudioProcessingState.none
+                    child: processingState != AudioProcessingState.none
                     ? Align(
                         alignment: Alignment.topLeft,
                         child: GestureDetector(

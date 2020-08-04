@@ -37,7 +37,6 @@ class ManagerProvider extends ChangeNotifier {
     loadingVideo             = false;
     mediaStreamReady         = false;
     showFloatingActionButtom = false;
-    showAppBar               = true;
     showDownloadTabsStatus   = false;
     showMediaPlayer          = false;
     serviceQueue             = [];
@@ -82,7 +81,6 @@ class ManagerProvider extends ChangeNotifier {
   bool _loadingVideo;
   bool mediaStreamReady;
   bool showFloatingActionButtom;
-  bool _showAppBar;
   // Downloads Screen
   List<DownloadInfoSet> _downloadInfoSetList = [];
   List<DownloadedFile> _downloadedFileList = [];
@@ -380,11 +378,6 @@ class ManagerProvider extends ChangeNotifier {
       showDownloadsTabs.add(false);
       showDownloadTabsStatus = false;
     }
-    notifyListeners();
-  }
-  bool get showAppBar => _showAppBar;
-  set showAppBar(bool value) {
-    _showAppBar = value;
     notifyListeners();
   }
   bool get showMediaPlayer => _showMediaPlayer;
