@@ -7,7 +7,16 @@ import 'package:songtube/screens/settings.dart';
 import 'package:songtube/screens/moreScreen/quickAcessTile.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class MoreScreen extends StatelessWidget {
+class MoreScreen extends StatefulWidget {
+  @override
+  _MoreScreenState createState() => _MoreScreenState();
+}
+
+class _MoreScreenState extends State<MoreScreen> {
+
+  // EXPLODE
+  bool explode = false;
+
   @override
   Widget build(BuildContext context) {
     AppDataProvider appData = Provider.of<AppDataProvider>(context);
@@ -35,7 +44,28 @@ class MoreScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: Image.asset('assets/images/ic_launcher.png', width: 150, height: 150)
+                  child: GestureDetector(
+                    onTap: () {
+                      if (explode == false) {
+                        setState(() => explode = true);
+                        Future.delayed(Duration(milliseconds: 1700), () {
+                          setState(() => explode = false);
+                        });
+                      }
+                    },
+                    child: Stack(
+                      children: <Widget>[
+                        AnimatedOpacity(
+                          duration: Duration(milliseconds: 1000),
+                          opacity: explode ? 0.0 : 1.0,
+                          child: Image.asset('assets/images/ic_launcher.png', width: 150, height: 150)
+                        ),
+                        explode
+                          ? Image.asset('assets/images/explosion.gif', width: 150, height: 150)
+                          : Container()
+                      ],
+                    ),
+                  )
                 ),
                 // App Info
                 Expanded(
