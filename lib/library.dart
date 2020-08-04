@@ -197,57 +197,66 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
             ],
           ),
         ),
-        bottomNavigationBar: ClipRRect(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20)
-          ),
-          child: BottomNavigationBar(
-            backgroundColor: Theme.of(context).cardColor,
-            currentIndex: manager.screenIndex,
-            elevation: 10,
-            selectedFontSize: 14,
-            selectedItemColor: Theme.of(context).accentColor,
-            unselectedItemColor: Theme.of(context).iconTheme.color,
-            type: BottomNavigationBarType.fixed,
-            onTap: (int index) {
-              if (manager.showMediaPlayer == true) {
-                manager.showMediaPlayer = false;
-                Future.delayed(Duration(milliseconds: 150), () => manager.screenIndex = index);
-              } else {
-                manager.screenIndex = index;
-              }
-            },
-            items: [
-              BottomNavigationBarItem(
-                icon: Icon(EvaIcons.homeOutline),
-                title: Text("Home", style: TextStyle(
-                  fontFamily: "Varela",
-                  fontWeight: FontWeight.w600
-                )),
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(EvaIcons.cloudDownloadOutline),
-                title: Text("Downloads", style: TextStyle(
-                  fontFamily: "Varela",
-                  fontWeight: FontWeight.w600
-                )),
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(EvaIcons.browserOutline),
-                title: Text("YouTube", style: TextStyle(
-                  fontFamily: "Varela",
-                  fontWeight: FontWeight.w600
-                )),
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(MdiIcons.dotsHorizontal),
-                title: Text("More", style: TextStyle(
-                  fontFamily: "Varela",
-                  fontWeight: FontWeight.w600
-                )),
-              )
-            ],
+        bottomNavigationBar: Container(
+          decoration: BoxDecoration(                                                   
+            borderRadius: BorderRadius.only(                                           
+              topRight: Radius.circular(30), topLeft: Radius.circular(30)),            
+            boxShadow: [                                                               
+              BoxShadow(color: Colors.black12, spreadRadius: 0, blurRadius: 10),       
+            ],                                                                         
+          ), 
+          child: ClipRRect(
+            borderRadius: BorderRadius.only(                                           
+              topLeft: Radius.circular(20.0),                                            
+              topRight: Radius.circular(20.0),                                           
+            ),    
+            child: BottomNavigationBar(
+              backgroundColor: Theme.of(context).cardColor,
+              currentIndex: manager.screenIndex,
+              selectedFontSize: 14,
+              elevation: 8,
+              selectedItemColor: Theme.of(context).accentColor,
+              unselectedItemColor: Theme.of(context).iconTheme.color,
+              type: BottomNavigationBarType.fixed,
+              onTap: (int index) {
+                if (manager.showMediaPlayer == true) {
+                  manager.showMediaPlayer = false;
+                  Future.delayed(Duration(milliseconds: 150), () => manager.screenIndex = index);
+                } else {
+                  manager.screenIndex = index;
+                }
+              },
+              items: [
+                BottomNavigationBarItem(
+                  icon: Icon(EvaIcons.homeOutline),
+                  title: Text("Home", style: TextStyle(
+                    fontFamily: "Varela",
+                    fontWeight: FontWeight.w600
+                  )),
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(EvaIcons.cloudDownloadOutline),
+                  title: Text("Downloads", style: TextStyle(
+                    fontFamily: "Varela",
+                    fontWeight: FontWeight.w600
+                  )),
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(EvaIcons.browserOutline),
+                  title: Text("YouTube", style: TextStyle(
+                    fontFamily: "Varela",
+                    fontWeight: FontWeight.w600
+                  )),
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(MdiIcons.dotsHorizontal),
+                  title: Text("More", style: TextStyle(
+                    fontFamily: "Varela",
+                    fontWeight: FontWeight.w600
+                  )),
+                )
+              ],
+            ),
           ),
         ),
       ),
