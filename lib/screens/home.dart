@@ -56,6 +56,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
     );
     return GestureDetector(
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
