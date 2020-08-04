@@ -49,26 +49,12 @@ class _SearchBarState extends State<SearchBar> {
         ],
       ),
       child: Container(
-        padding: const EdgeInsets.only(bottom: 8),
         height: kToolbarHeight*1.1,
         child: Column(
           children: <Widget>[
-            // Search indicator Bar
-            ClipRRect(
-              borderRadius: BorderRadius.circular(50),
-              child: SizedBox(
-                height: 2,
-                width: MediaQuery.of(context).size.width*0.9,
-                child: LinearProgressIndicator(
-                  value: widget.indicatorValue,
-                  backgroundColor: Colors.transparent,
-                  valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).accentColor),
-                ),
-              ),
-            ),
             Expanded(
               child: Padding(
-                padding: EdgeInsets.only(top: 6, left: 8, right: 8),
+                padding: EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 3),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -109,6 +95,7 @@ class _SearchBarState extends State<SearchBar> {
                           ),
                           onChanged: widget.onTextChanged,
                           onEditingComplete: widget.onSearchPressed,
+                          
                           style: TextStyle(
                             color: Theme.of(context).textTheme.bodyText1.color,
                           ),
@@ -137,6 +124,22 @@ class _SearchBarState extends State<SearchBar> {
                       ),
                     ),
                   ],
+                ),
+              ),
+            ),
+            // Search indicator Bar
+            Padding(
+              padding: EdgeInsets.only(bottom: 3),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(50),
+                child: SizedBox(
+                  height: 2,
+                  width: MediaQuery.of(context).size.width*0.9,
+                  child: LinearProgressIndicator(
+                    value: widget.indicatorValue,
+                    backgroundColor: Colors.transparent,
+                    valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).accentColor),
+                  ),
                 ),
               ),
             ),
