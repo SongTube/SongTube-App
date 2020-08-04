@@ -6,7 +6,7 @@ class AppTheme {
     return ThemeData.light().copyWith(
       accentColor: accent,
       toggleableActiveColor: accent,
-      primaryColor: Colors.white,
+      primaryColor: accent,
       iconTheme: IconThemeData(
         color: Colors.grey[700]
       ),
