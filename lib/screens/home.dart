@@ -10,7 +10,8 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:songtube/internal/lifecycleEvents.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/screens/homeScreen/searchResults.dart';
-import 'package:songtube/screens/homeScreen/shimmerPage.dart';
+import 'package:songtube/screens/homeScreen/shimmer/shimmerVideoPage.dart';
+import 'package:songtube/screens/homeScreen/shimmer/shimmerSearchPage.dart';
 import 'package:songtube/screens/homeScreen/videoPage.dart';
 import 'package:songtube/screens/settings.dart';
 
@@ -100,10 +101,10 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                 child: manager.mediaStreamReady
                   ? VideoPage()
                   : manager.loadingVideo
-                    ? ShimmerPage()
+                    ? ShimmerVideoPage()
                     : searching == true
                       ? searchResults == null
-                        ? ShimmerPage()
+                        ? ShimmerSearchPage()
                         : SearchResults(
                             results: searchResults,
                             onSelect: () {setState(() => searching = false);},

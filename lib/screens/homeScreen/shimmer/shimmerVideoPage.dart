@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:songtube/ui/animations/showUp.dart';
 
-class ShimmerPage extends StatelessWidget {
+class ShimmerVideoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
