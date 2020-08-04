@@ -58,6 +58,7 @@ dependencies:
       ref: master
   string_validator: ^0.1.4
   flutter_keyboard_visibility: ^3.2.1
+  easy_pip: ^0.1.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
