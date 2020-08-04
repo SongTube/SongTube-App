@@ -100,7 +100,7 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
                                       borderRadius: BorderRadius.circular(50),
                                       color: Theme.of(context).scaffoldBackgroundColor
                                     ),
-                                    child: Icon(EvaIcons.musicOutline, size: 35, color: Colors.white),
+                                    child: Icon(EvaIcons.musicOutline, size: 35, color: Theme.of(context).iconTheme.color)
                                   ),
                                   Container(
                                     padding: EdgeInsets.all(16),
@@ -153,7 +153,7 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
                                       borderRadius: BorderRadius.circular(50),
                                       color: Theme.of(context).scaffoldBackgroundColor
                                     ),
-                                    child: Icon(EvaIcons.videoOutline, size: 35, color: Colors.white),
+                                    child: Icon(EvaIcons.videoOutline, size: 35, color: Theme.of(context).iconTheme.color)
                                   ),
                                   Container(
                                     padding: EdgeInsets.all(16),
