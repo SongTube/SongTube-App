@@ -56,6 +56,7 @@ dependencies:
     git:
       url: git://github.com/not-holar/circular_check_box.git
       ref: master
+  string_validator: ^0.1.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
