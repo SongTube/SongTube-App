@@ -107,17 +107,19 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
                 kToolbarHeight
               ),
               child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black12,
-                      offset: Offset(0.0, -2), //(x,y)
-                      blurRadius: 10.0,
-                      spreadRadius: 0.6
-                    ),
-                  ],
-                ),
+                decoration: manager.screenIndex != 0
+                  ? BoxDecoration(
+                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black12,
+                          offset: Offset(0.0, -2), //(x,y)
+                          blurRadius: 10.0,
+                          spreadRadius: 0.6
+                        ),
+                      ],
+                    )
+                  : BoxDecoration(),
                 child: ClipRRect(
                   borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
                   child: AppBar(
@@ -163,7 +165,11 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
                 double.infinity,
                 kToolbarHeight*0.05
               ),
-              child: Container(),
+              child: Container(
+                color: manager.screenIndex != 0
+                  ? Theme.of(context).scaffoldBackgroundColor
+                  : Theme.of(context).cardColor
+              ),
             ),
         body: WillPopScope(
           onWillPop: () => manager.handlePop(),
@@ -248,52 +254,58 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
             ],
           ),
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Theme.of(context).cardColor,
-          currentIndex: manager.screenIndex,
-          elevation: manager.screenIndex == 0 ? 0 : 8,
-          selectedFontSize: 14,
-          selectedItemColor: Theme.of(context).accentColor,
-          unselectedItemColor: Theme.of(context).iconTheme.color,
-          type: BottomNavigationBarType.fixed,
-          onTap: (int index) {
-            if (manager.showMediaPlayer == true) {
-              manager.showMediaPlayer = false;
-              Future.delayed(Duration(milliseconds: 150), () => manager.screenIndex = index);
-            } else {
-              manager.screenIndex = index;
-            }
-          },
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(EvaIcons.homeOutline),
-              title: Text("Home", style: TextStyle(
-                fontFamily: "Varela",
-                fontWeight: FontWeight.w600
-              )),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(EvaIcons.cloudDownloadOutline),
-              title: Text("Downloads", style: TextStyle(
-                fontFamily: "Varela",
-                fontWeight: FontWeight.w600
-              )),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(EvaIcons.browserOutline),
-              title: Text("YouTube", style: TextStyle(
-                fontFamily: "Varela",
-                fontWeight: FontWeight.w600
-              )),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(MdiIcons.dotsHorizontal),
-              title: Text("More", style: TextStyle(
-                fontFamily: "Varela",
-                fontWeight: FontWeight.w600
-              )),
-            )
-          ],
+        bottomNavigationBar: ClipRRect(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20)
+          ),
+          child: BottomNavigationBar(
+            backgroundColor: Theme.of(context).cardColor,
+            currentIndex: manager.screenIndex,
+            elevation: 10,
+            selectedFontSize: 14,
+            selectedItemColor: Theme.of(context).accentColor,
+            unselectedItemColor: Theme.of(context).iconTheme.color,
+            type: BottomNavigationBarType.fixed,
+            onTap: (int index) {
+              if (manager.showMediaPlayer == true) {
+                manager.showMediaPlayer = false;
+                Future.delayed(Duration(milliseconds: 150), () => manager.screenIndex = index);
+              } else {
+                manager.screenIndex = index;
+              }
+            },
+            items: [
+              BottomNavigationBarItem(
+                icon: Icon(EvaIcons.homeOutline),
+                title: Text("Home", style: TextStyle(
+                  fontFamily: "Varela",
+                  fontWeight: FontWeight.w600
+                )),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(EvaIcons.cloudDownloadOutline),
+                title: Text("Downloads", style: TextStyle(
+                  fontFamily: "Varela",
+                  fontWeight: FontWeight.w600
+                )),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(EvaIcons.browserOutline),
+                title: Text("YouTube", style: TextStyle(
+                  fontFamily: "Varela",
+                  fontWeight: FontWeight.w600
+                )),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(MdiIcons.dotsHorizontal),
+                title: Text("More", style: TextStyle(
+                  fontFamily: "Varela",
+                  fontWeight: FontWeight.w600
+                )),
+              )
+            ],
+          ),
         ),
       ),
     );

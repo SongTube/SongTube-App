@@ -37,7 +37,7 @@ class _SearchBarState extends State<SearchBar> {
     padding: widget.padding,
     child: Ink(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+        borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
         color: widget.containerColor,
         boxShadow: [
           BoxShadow(
@@ -79,12 +79,13 @@ class _SearchBarState extends State<SearchBar> {
                         data: Theme.of(context)
                           .copyWith(accentColor: Theme.of(context).accentColor),
                         child: TextFormField(
+                          textCapitalization: TextCapitalization.sentences,
                           cursorColor: Theme.of(context).accentColor,
                           controller: widget.controller,
                           decoration: InputDecoration(
                             contentPadding: widget.prefixIcon != null
                               ? EdgeInsets.only(top: 15)
-                              : EdgeInsets.only(top: 15, left: 8),
+                              : EdgeInsets.only(top: 15, left: 16),
                             prefixIcon: widget.prefixIcon != null ? widget.prefixIcon : null,
                             filled: true,
                             fillColor: widget.textfieldColor,
@@ -102,19 +103,12 @@ class _SearchBarState extends State<SearchBar> {
                               child: IconButton(
                                 icon: Icon(Icons.clear,
                                 color: Theme.of(context).iconTheme.color),
-                                onPressed: () {
-                                  Future.delayed(
-                                    Duration(milliseconds: 50),
-                                    ).then((_) {
-                                      setState(() => widget.controller.clear());
-                                      FocusScope.of(context).requestFocus(new FocusNode());
-                                    },
-                                  );
-                                }
+                                onPressed: () => widget.controller.clear(),
                               )
                             ),
                           ),
                           onChanged: widget.onTextChanged,
+                          onEditingComplete: widget.onSearchPressed,
                           style: TextStyle(
                             color: Theme.of(context).textTheme.bodyText1.color,
                           ),
