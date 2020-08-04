@@ -22,6 +22,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:keyboard_visibility/keyboard_visibility.dart';
 
 // UI
 import 'package:songtube/ui/elementsUI.dart';
@@ -40,6 +41,11 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
     checkPermissions();
     super.initState();
     WidgetsBinding.instance.renderView.automaticSystemUiAdjustment=false;
+    KeyboardVisibilityNotification().addNewListener(
+      onChange: (bool visible) {
+        if (visible == false) FocusScope.of(context).unfocus();
+      },
+    );
   }
 
   // App external storage permission check
