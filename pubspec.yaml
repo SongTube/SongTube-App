@@ -38,7 +38,11 @@ dependencies:
   youtube_explode_dart: ^1.4.2
   ext_storage: ^1.0.3
   permission_handler: ^5.0.0+hotfix.3
-  youtube_player_flutter: ^7.0.0+7
+  youtube_player_flutter:
+    git:
+      url: git://github.com/SongTube/youtube_player_flutter.git
+      path: packages/youtube_player_flutter
+      ref: master
   flutter_ffmpeg: ^0.2.10
   path: ^1.7.0
   url_launcher: ^5.4.7
