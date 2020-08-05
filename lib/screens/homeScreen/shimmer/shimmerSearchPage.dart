@@ -16,7 +16,7 @@ class ShimmerSearchPage extends StatelessWidget {
             child: Container(
               margin: EdgeInsets.only(
                 top: index == 0 ? 20 : 10,
-                bottom: index == 0 ? 20 : 10,
+                bottom: index == 10 ? 20 : 10,
                 left: 20,
                 right: 20
               ),
