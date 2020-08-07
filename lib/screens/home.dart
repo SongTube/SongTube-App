@@ -9,7 +9,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 // Internal
 import 'package:songtube/internal/lifecycleEvents.dart';
 import 'package:songtube/provider/managerProvider.dart';
-import 'package:songtube/screens/homeScreen/searchResults.dart';
+import 'package:songtube/screens/homeScreen/searchPage.dart';
 import 'package:songtube/screens/homeScreen/shimmer/shimmerVideoPage.dart';
 import 'package:songtube/screens/homeScreen/shimmer/shimmerSearchPage.dart';
 import 'package:songtube/screens/homeScreen/videoPage.dart';
@@ -106,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                     : searching == true
                       ? searchResults == null
                         ? ShimmerSearchPage()
-                        : SearchResults(
+                        : SearchPage(
                             results: searchResults,
                             onSelect: () {setState(() => searching = false);},
                           )

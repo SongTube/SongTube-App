@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:songtube/ui/searchResult/videoTile.dart';
 
-class SearchResults extends StatefulWidget {
+class SearchPage extends StatefulWidget {
   final List results;
   final Function onSelect;
-  SearchResults({
+  SearchPage({
     @required this.results,
     @required this.onSelect,
   });
 
   @override
-  _SearchResultsState createState() => _SearchResultsState();
+  _SearchPageState createState() => _SearchPageState();
 }
 
-class _SearchResultsState extends State<SearchResults> with TickerProviderStateMixin {
+class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
