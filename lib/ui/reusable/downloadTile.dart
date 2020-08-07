@@ -9,7 +9,9 @@ class DownloadTile extends StatelessWidget {
   final String author;
   final String coverUrl;
   final Function onDownloadCancel;
+  final Function onPauseDownload;
   final Widget cancelDownloadIcon;
+  final Widget pauseDownloadIcon;
   DownloadTile({
     @required this.dataProgress,
     @required this.currentAction,
@@ -18,7 +20,9 @@ class DownloadTile extends StatelessWidget {
     @required this.author,
     @required this.coverUrl,
     this.onDownloadCancel,
-    this.cancelDownloadIcon
+    this.cancelDownloadIcon,
+    this.onPauseDownload,
+    this.pauseDownloadIcon
   });
   @override
   Widget build(BuildContext context) {
@@ -76,25 +80,50 @@ class DownloadTile extends StatelessWidget {
                             ),
                           ),
                         ),
-                        cancelDownloadIcon != null
-                        ? Align(
-                            alignment: Alignment.bottomRight,
-                            child: Container(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: <Widget>[
-                                  IconButton(
-                                    icon: AnimatedSwitcher(
-                                      duration: Duration(milliseconds: 200),
-                                      child: cancelDownloadIcon,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: <Widget>[
+                            pauseDownloadIcon != null
+                              ? Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: Container(
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: <Widget>[
+                                        IconButton(
+                                          icon: AnimatedSwitcher(
+                                            duration: Duration(milliseconds: 200),
+                                            child: pauseDownloadIcon,
+                                          ),
+                                          onPressed: onPauseDownload
+                                        )
+                                      ],
                                     ),
-                                    onPressed: onDownloadCancel
-                                  )
-                                ],
-                              ),
-                            ),
-                          )
-                        : Container()
+                                  ),
+                                )
+                              : Container(),
+                            cancelDownloadIcon != null
+                              ? Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: Container(
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: <Widget>[
+                                        IconButton(
+                                          icon: AnimatedSwitcher(
+                                            duration: Duration(milliseconds: 200),
+                                            child: cancelDownloadIcon,
+                                          ),
+                                          onPressed: onDownloadCancel
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              : Container()
+                          ],
+                        )
                       ]
                     ),
                   ),
