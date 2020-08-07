@@ -200,9 +200,15 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
         bottomNavigationBar: Container(
           decoration: BoxDecoration(                                                   
             borderRadius: BorderRadius.only(                                           
-              topRight: Radius.circular(30), topLeft: Radius.circular(30)),            
+              topRight: Radius.circular(30),
+              topLeft: Radius.circular(30)
+            ),
             boxShadow: [                                                               
-              BoxShadow(color: Colors.black12, spreadRadius: 0, blurRadius: 10),       
+              BoxShadow(
+                color: Colors.black12.withOpacity(0.05),
+                spreadRadius: 0.1,
+                blurRadius: 10
+              ),
             ],                                                                         
           ), 
           child: ClipRRect(

@@ -41,10 +41,10 @@ class _SearchBarState extends State<SearchBar> {
         color: widget.containerColor,
         boxShadow: [
           BoxShadow(
-            color: Colors.black12,
+            color: Colors.black12.withOpacity(0.05),
             offset: Offset(0.0, 1.5), //(x,y)
-            blurRadius: 5.0,
-            spreadRadius: 1.1
+            blurRadius: 10.0,
+            spreadRadius: 0.1
           ),
         ],
       ),
