@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:songtube/ui/searchResult/videoTile.dart';
+import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 class SearchPage extends StatefulWidget {
   final List results;
@@ -14,6 +15,22 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
+
+  // Youtube Explode Client
+  YoutubeExplode client;
+
+  @override
+  void initState() {
+    super.initState();
+    client = new YoutubeExplode();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    client.close();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -26,11 +43,12 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
             bottom: widget.results[index] == widget.results.last ? 10 : 0
           ),
           child: VideoTile(
+            client: client,
             video: widget.results[index],
             onSelect: widget.onSelect,
           ),
         );
-      },
+      }
     );
   }
 }

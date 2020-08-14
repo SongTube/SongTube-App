@@ -51,6 +51,7 @@ class ManagerProvider extends ChangeNotifier {
     dateController   = new TextEditingController();
     discController   = new TextEditingController();
     trackController  = new TextEditingController();
+    homeScrollController  = new ScrollController();
     // Streams
     showDownloadsTabs = new StreamController<bool>.broadcast();
     showDownloadsTabs.add(true);
@@ -81,6 +82,7 @@ class ManagerProvider extends ChangeNotifier {
   bool _loadingVideo;
   bool mediaStreamReady;
   bool showFloatingActionButtom;
+  ScrollController homeScrollController;
   // Downloads Screen
   List<DownloadInfoSet> _downloadInfoSetList = [];
   List<DownloadedFile> _downloadedFileList = [];

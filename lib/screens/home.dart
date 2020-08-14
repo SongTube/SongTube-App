@@ -63,39 +63,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            SearchBar(
-              padding: EdgeInsets.zero,
-              textfieldColor: Theme.of(context).inputDecorationTheme.fillColor,
-              hintText: "Quick Search",
-              controller: manager.urlController,
-              containerColor: Theme.of(context).cardColor,
-              prefixIcon: Icon(MdiIcons.youtube),
-              enablePasteButton: false,
-              indicatorValue: manager.loadingVideo == true ? null : 0.0,
-              onSearchPressed: manager.loadingVideo == true
-                ? null
-                : () async {
-                  FocusScope.of(context).unfocus();
-                  String url = manager.urlController.text;
-                  // Check if Input is URL
-                  bool validate = isURL(url);
-                  if (validate == true) {
-                    // If true, try fetch video Details
-                    manager.getVideoDetails(manager.urlController.text);
-                  } else {
-                    // If false, search on Youtube
-                    manager.loadHome(LoadingStatus.Failed);
-                    searching = true;
-                    YoutubeExplode yt = new YoutubeExplode();
-                    SearchQuery search = await yt.search.queryFromPage(manager.urlController.text);
-                    searchResults = new List<SearchVideo>();
-                    search.content.whereType<SearchVideo>().forEach((element) {
-                      searchResults.add(element);
-                    });
-                    setState((){});
-                  }
-                }
-            ),
+            searchBar(context),
             Expanded(
               child: AnimatedSwitcher(
                 duration: Duration(milliseconds: 200),
@@ -164,6 +132,43 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
           ),
         ),
       ),
+    );
+  }
+
+  Widget searchBar(BuildContext context) {
+    ManagerProvider manager = Provider.of<ManagerProvider>(context);
+    return SearchBar(
+      padding: EdgeInsets.zero,
+      textfieldColor: Theme.of(context).inputDecorationTheme.fillColor,
+      hintText: "Quick Search",
+      controller: manager.urlController,
+      containerColor: Theme.of(context).cardColor,
+      prefixIcon: Icon(MdiIcons.youtube),
+      enablePasteButton: false,
+      indicatorValue: manager.loadingVideo == true ? null : 0.0,
+      onSearchPressed: manager.loadingVideo == true
+        ? null
+        : () async {
+          FocusScope.of(context).unfocus();
+          String url = manager.urlController.text;
+          // Check if Input is URL
+          bool validate = isURL(url);
+          if (validate == true) {
+            // If true, try fetch video Details
+            manager.getVideoDetails(manager.urlController.text);
+          } else {
+            // If false, search on Youtube
+            manager.loadHome(LoadingStatus.Failed);
+            searching = true;
+            YoutubeExplode yt = new YoutubeExplode();
+            SearchQuery search = await yt.search.queryFromPage(manager.urlController.text);
+            searchResults = new List<SearchVideo>();
+            search.content.whereType<SearchVideo>().forEach((element) {
+              searchResults.add(element);
+            });
+            setState((){});
+          }
+        }
     );
   }
 }
