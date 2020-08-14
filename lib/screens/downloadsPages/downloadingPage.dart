@@ -45,7 +45,8 @@ class _DownloadingPageState extends State<DownloadingPage> {
             physics: BouncingScrollPhysics(),
             itemCount: manager.downloadInfoSetList.length,
             itemBuilder: (context, index) {
-              DownloadInfoSet infoset = manager.downloadInfoSetList[index];
+              List<DownloadInfoSet> reversedList = manager.downloadInfoSetList.reversed.toList();
+              DownloadInfoSet infoset = reversedList[index];
               return Padding(
                 padding: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
                   child: DownloadTile(
