@@ -1,6 +1,8 @@
 package com.example.songtube
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -15,9 +17,10 @@ import org.jaudiotagger.audio.exceptions.ReadOnlyFileException
 import org.jaudiotagger.tag.FieldKey
 import org.jaudiotagger.tag.TagException
 import org.jaudiotagger.tag.images.ArtworkFactory
+import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
-import com.soywiz.kaifu2x.*
 
 class MainActivity : FlutterActivity() {
     private var sharedText: String? = null
@@ -31,6 +34,22 @@ class MainActivity : FlutterActivity() {
                     if (call.method == "clearSharedText") {
                         sharedText = null
                         result.success(0)
+                    }
+                }
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, IMAGE_CHANNEL)
+                .setMethodCallHandler { call: MethodCall, result: MethodChannel.Result ->
+                    if (call.method == "cropToSquare") {
+                        val argument = call.argument<String>("imagePath")
+                        val bitmap = BitmapFactory.decodeFile(argument)
+                        val croppedBitmap = cropToSquare(bitmap)
+                        val bytes = ByteArrayOutputStream()
+                        croppedBitmap?.compress(Bitmap.CompressFormat.PNG, 0, bytes)
+                        val bitmapData = bytes.toByteArray()
+                        val fos = FileOutputStream(File("$argument.png"))
+                        fos.write(bitmapData)
+                        fos.flush()
+                        fos.close()
+                        result.success("$argument.png")
                     }
                 }
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CONVERTER_CHANNEL)
@@ -134,6 +153,19 @@ class MainActivity : FlutterActivity() {
         private const val CONVERTER_CHANNEL = "registerMedia"
         private const val TAGS_CHANNEL = "tagsChannel"
         private const val INTENT_CHANNEL = "intentChannel"
+        private const val IMAGE_CHANNEL = "imageProcessing"
+    }
+
+    fun cropToSquare(bitmap: Bitmap): Bitmap? {
+        val width: Int = bitmap.width
+        val height: Int = bitmap.height
+        val newWidth = if (height > width) width else height
+        val newHeight = if (height > width) height - (height - width) else height
+        var cropW = (width - height) / 2
+        cropW = if (cropW < 0) 0 else cropW
+        var cropH = (height - width) / 2
+        cropH = if (cropH < 0) 0 else cropH
+        return Bitmap.createBitmap(bitmap, cropW, cropH, newWidth, newHeight)
     }
 }
 

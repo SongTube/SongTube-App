@@ -9,6 +9,7 @@ class NativeMethod {
   static const media = const MethodChannel("registerMedia");
   static const platform = const MethodChannel("sharedTextChannel");
   static const intentPlatform = const MethodChannel("intentChannel");
+  static const imageProcessing = const MethodChannel("imageProcessing");
 
   // Handle Intent (Ej: when you share a YouTube link to this app)
   static Future<String> handleIntent() async {
@@ -30,6 +31,16 @@ class NativeMethod {
     if (await File(videoPath).exists()) {
       intentPlatform.invokeMethod('openVideo', {"videoPath": videoPath});
     }
+  }
+
+  // Crop image to Square
+  static Future<File> cropToSquare(File image) async {
+    if (await image.exists()) {
+      String croppedImagePath =
+        await imageProcessing.invokeMethod('cropToSquare', {"imagePath": image.path});
+      return File(croppedImagePath);
+    }
+    return null;
   }
 
 }

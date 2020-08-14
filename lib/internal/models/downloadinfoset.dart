@@ -19,6 +19,8 @@ import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:image_crop/image_crop.dart';
+import 'package:image_size_getter/image_size_getter.dart';
 
 enum DownloadType { AUDIO, VIDEO }
 
@@ -232,17 +234,20 @@ class DownloadInfoSet {
       );
       String artworkUri;
       var response;
+      File artwork = new File((await getTemporaryDirectory()).path +
+        "/${RandomString.getRandomString(5)}");
       try {
         response = await http.get(videoDetails.thumbnails.maxResUrl);
-      } catch (_) {}
-      if (response == null || response.statusCode == 200) {
-        artworkUri = videoDetails.thumbnails.maxResUrl;
-      } else {
-        artworkUri = videoDetails.thumbnails.mediumResUrl;
+        await artwork.writeAsBytes(response.bodyBytes);
+      } catch (_) {
+        response = await http.get(videoDetails.thumbnails.mediumResUrl);
+        await artwork.writeAsBytes(response.bodyBytes);
       }
+      // Crop Image before writting it to the Song
+      File croppedImage = await NativeMethod.cropToSquare(artwork);
       await TagsManager.writeArtwork(
         songPath: filePath,
-        artworkUrl: artworkUri
+        artworkPath: croppedImage.path
       );
     } on Exception catch (e) {
       print(e);
