@@ -20,7 +20,7 @@ class ShimmerSearchPage extends StatelessWidget {
                 left: 20,
                 right: 20
               ),
-              height: 100,
+              height: 300,
               width: double.infinity,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
