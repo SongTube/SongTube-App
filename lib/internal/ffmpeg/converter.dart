@@ -18,16 +18,11 @@ class Converter {
   FlutterFFmpeg flutterFFmpeg;
   FlutterFFprobe flutterFFprobe;
   FlutterFFmpegConfig ffconfig;
-  StreamController ffmpegStream;
-  ffmpegCallback(int time, int size, double bitrate, double speed, int videoFrameNumber, double videoQuality, double videoFps) {
-    ffmpegStream.add(time);
-  }
   // Initialize Converter
   Converter() {
     flutterFFmpeg = new FlutterFFmpeg();
     flutterFFprobe = new FlutterFFprobe();
     ffconfig = new FlutterFFmpegConfig();
-    ffmpegStream = new StreamController.broadcast();
   }
 
   String lastConvertedVideo;
