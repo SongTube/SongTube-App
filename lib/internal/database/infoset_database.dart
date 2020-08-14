@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:songtube/internal/database/models/downloaded_file.dart';
+import 'package:songtube/internal/models/songFile.dart';
 import 'package:sqflite/sqflite.dart';
 
 const String table = "itemsTable";
@@ -46,13 +46,13 @@ class DatabaseService {
     );
   }
 
-  Future<void> insertDownload(DownloadedFile download) async {
+  Future<void> insertDownload(SongFile download) async {
     Database db = await database;
     await db.insert(table, download.toMap());
     print("Database: data inserted correctly");
   }
 
-  Future<DownloadedFile> getDownload(String id) async {
+  Future<SongFile> getDownload(String id) async {
     Database db = await database;
     List<Map> data = await db.query(table,
       where: 'id = ?',
@@ -60,13 +60,13 @@ class DatabaseService {
     );
     if (data.length > 0) {
       print("Database: data retrieved correctly");
-      return DownloadedFile.fromMap(data.first);
+      return SongFile.fromMap(data.first);
     }
     return null;
   }
 
-  Future<List<DownloadedFile>> getDownloadList() async {
-    List<DownloadedFile> list = [];
+  Future<List<SongFile>> getDownloadList() async {
+    List<SongFile> list = [];
     Database db = await database;
     var result = await db.query(table, columns: [
       "id",
@@ -80,7 +80,7 @@ class DatabaseService {
       "coverUrl"
     ]);
     result.forEach((element) {
-      list.add(DownloadedFile.fromMap(element));
+      list.add(SongFile.fromMap(element));
     });
     return list;
   }

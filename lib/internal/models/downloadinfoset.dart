@@ -5,7 +5,7 @@ import 'dart:io';
 // Flutter
 import 'package:flutter/material.dart';
 import 'package:songtube/internal/database/infoset_database.dart';
-import 'package:songtube/internal/database/models/downloaded_file.dart';
+import 'package:songtube/internal/models/songFile.dart';
 
 // Internal Models
 import 'package:songtube/internal/models/metadata.dart';
@@ -19,8 +19,6 @@ import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:image_crop/image_crop.dart';
-import 'package:image_size_getter/image_size_getter.dart';
 
 enum DownloadType { AUDIO, VIDEO }
 
@@ -109,7 +107,7 @@ class DownloadInfoSet {
   Future<void> finishDownload(File finalFile) async {
     final dbHelper = DatabaseService.instance;
     String fileName = finalFile.path.split("/").last;
-    await dbHelper.insertDownload(new DownloadedFile.toDatabase(
+    await dbHelper.insertDownload(new SongFile.toDatabase(
       title: metadata.title,
       album: metadata.album,
       author: metadata.artist,

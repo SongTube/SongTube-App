@@ -7,7 +7,7 @@ import 'package:flutter/rendering.dart';
 
 // Internal
 import 'package:songtube/internal/database/infoset_database.dart';
-import 'package:songtube/internal/database/models/downloaded_file.dart';
+import 'package:songtube/internal/models/songFile.dart';
 import 'package:songtube/internal/nativeMethods.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/internal/playerService.dart';
@@ -46,7 +46,7 @@ class _CompletedPageState extends State<CompletedPage> with TickerProviderStateM
     });
     return AnimatedSwitcher(
       duration: Duration(milliseconds: 300),
-      child: manager.downloadedFileList.isNotEmpty
+      child: manager.songFileList.isNotEmpty
         ? StreamBuilder<ScreenState>(
           stream: _screenStateStream,
           builder: (context, snapshot) {
@@ -60,9 +60,9 @@ class _CompletedPageState extends State<CompletedPage> with TickerProviderStateM
               child: ListView.builder(
                 controller: scrollController,
                 physics: BouncingScrollPhysics(),
-                  itemCount: manager.downloadedFileList.length,
+                  itemCount: manager.songFileList.length,
                   itemBuilder: (context, index) {
-                    DownloadedFile download = manager.downloadedFileList[index];
+                    SongFile download = manager.songFileList[index];
                     return Padding(
                       padding: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
                       child: DownloadTileWithoutStream(

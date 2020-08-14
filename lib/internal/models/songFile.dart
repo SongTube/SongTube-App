@@ -2,7 +2,7 @@ import 'dart:core';
 
 import 'package:flutter/material.dart';
 
-class DownloadedFile {
+class SongFile {
 
   String id;
   String title;
@@ -14,7 +14,7 @@ class DownloadedFile {
   String fileSize;
   String coverUrl;
 
-  DownloadedFile({
+  SongFile({
     @required this.id,
     @required this.title,
     @required this.album,
@@ -26,7 +26,7 @@ class DownloadedFile {
     @required this.coverUrl
   });
 
-  DownloadedFile.toDatabase({
+  SongFile.toDatabase({
     @required this.title,
     @required this.album,
     @required this.author,
@@ -37,7 +37,7 @@ class DownloadedFile {
     @required this.coverUrl
   });
 
-  DownloadedFile.fromMap(Map<String, dynamic> map) {
+  SongFile.fromMap(Map<String, dynamic> map) {
     id = map["id"].toString();
     title = map["title"];
     album = map["album"];

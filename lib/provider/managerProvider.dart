@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 
 // Internal
 import 'package:songtube/internal/database/infoset_database.dart';
-import 'package:songtube/internal/database/models/downloaded_file.dart';
+import 'package:songtube/internal/models/songFile.dart';
 import 'package:songtube/internal/ffmpeg/converter.dart';
 import 'package:songtube/internal/models/downloadinfoset.dart';
 import 'package:songtube/internal/models/metadata.dart';
@@ -85,7 +85,7 @@ class ManagerProvider extends ChangeNotifier {
   ScrollController homeScrollController;
   // Downloads Screen
   List<DownloadInfoSet> _downloadInfoSetList = [];
-  List<DownloadedFile> _downloadedFileList = [];
+  List<SongFile> _songFileList = [];
   int _downloadsTabIndex = 0;
   StreamController<bool> showDownloadsTabs;
   bool showDownloadTabsStatus;
@@ -118,7 +118,7 @@ class ManagerProvider extends ChangeNotifier {
   // --------
   final dbHelper = DatabaseService.instance;
   Future<void> getDatabase() async {
-    _downloadedFileList = await dbHelper.getDownloadList();
+    _songFileList = await dbHelper.getDownloadList();
     await getDatabaseQueue();
     notifyListeners();
   }
@@ -205,7 +205,7 @@ class ManagerProvider extends ChangeNotifier {
   // Create Music Queue from Database
   Future<void> getDatabaseQueue() async {
     List<MediaItem> list = [];
-    _downloadedFileList.forEach((DownloadedFile element) {
+    _songFileList.forEach((SongFile element) {
       int hours = 0;
       int minutes = 0;
       int micros;
@@ -364,14 +364,14 @@ class ManagerProvider extends ChangeNotifier {
     notifyListeners();
   }
   List<DownloadInfoSet> get downloadInfoSetList => _downloadInfoSetList;
-  List<DownloadedFile> get downloadedFileList => _downloadedFileList;
+  List<SongFile> get songFileList => _songFileList;
   int get downloadsTabIndex => _downloadsTabIndex;
   set downloadInfoSetList(List<DownloadInfoSet> newList) {
     _downloadInfoSetList = newList;
     notifyListeners();
   }
-  set downloadedFileList(List<DownloadedFile> newList) {
-    _downloadedFileList = newList;
+  set songFileList(List<SongFile> newList) {
+    _songFileList = newList;
     notifyListeners();
   }
   set downloadsTabIndex(int value) {
