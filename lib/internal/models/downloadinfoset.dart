@@ -238,7 +238,7 @@ class DownloadInfoSet {
       if (response == null || response.statusCode == 200) {
         artworkUri = videoDetails.thumbnails.maxResUrl;
       } else {
-        artworkUri = videoDetails.thumbnails.highResUrl;
+        artworkUri = videoDetails.thumbnails.mediumResUrl;
       }
       await TagsManager.writeArtwork(
         songPath: filePath,
