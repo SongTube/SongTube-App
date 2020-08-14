@@ -24,8 +24,9 @@ import 'package:string_validator/string_validator.dart';
 import 'package:songtube/screens/homeScreen/downloadMenu.dart';
 import 'package:songtube/screens/homeScreen/IntroSplash.dart';
 import 'package:songtube/ui/reusable/searchBar.dart';
+import 'package:rxdart/rxdart.dart';
 
-StreamController<String> videoUrl = new StreamController.broadcast();
+BehaviorSubject<String> videoUrl = new BehaviorSubject();
 
 class HomeScreen extends StatefulWidget {
   @override

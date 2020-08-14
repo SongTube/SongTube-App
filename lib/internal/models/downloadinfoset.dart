@@ -19,15 +19,16 @@ import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:rxdart/rxdart.dart';
 
 enum DownloadType { AUDIO, VIDEO }
 
 class DownloadInfoSet {
 
   // Streams
-  StreamController<String> currentAction;
-  StreamController dataProgress;
-  StreamController progressBar;
+  BehaviorSubject<String> currentAction;
+  BehaviorSubject dataProgress;
+  BehaviorSubject progressBar;
 
   // Classes
   MediaMetaData metadata;
@@ -64,9 +65,9 @@ class DownloadInfoSet {
     this.videoStreamInfo
   }) {
     converter = new Converter();
-    currentAction = new StreamController.broadcast();
-    dataProgress = new StreamController.broadcast();
-    progressBar = new StreamController.broadcast();
+    currentAction = new BehaviorSubject();
+    dataProgress = new BehaviorSubject();
+    progressBar = new BehaviorSubject();
     cancelDownload = false;
   }
   
@@ -157,7 +158,7 @@ class DownloadInfoSet {
     }
 
     // Start stream download, also update internal public
-    // StreamController for external access
+    // BehaviorSubject for external access
     await for (var data in streamData) {
       if (cancelDownload == true) {
         _output.close(); return null;
