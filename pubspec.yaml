@@ -56,10 +56,7 @@ dependencies:
   audio_service: ^0.11.0
   shimmer: ^1.1.1
   flutter_material_color_picker: ^1.0.5
-  circular_check_box:
-    git:
-      url: git://github.com/not-holar/circular_check_box.git
-      ref: master
+  circular_check_box: ^1.0.1
   string_validator: ^0.1.4
   flutter_keyboard_visibility: ^3.2.1
   easy_pip: ^0.1.0
