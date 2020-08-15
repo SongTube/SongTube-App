@@ -107,7 +107,7 @@ class _VideoTileState extends State<VideoTile> with TickerProviderStateMixin{
                     child: FadeInImage(
                       fadeInDuration: Duration(milliseconds: 150),
                       image: logoUrl == null
-                        ? MemoryImage(kTransparentImage)
+                        ? AssetImage('assets/images/grey.jpg')
                         : NetworkImage(logoUrl),
                       placeholder: MemoryImage(kTransparentImage),
                     ),
