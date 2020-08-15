@@ -156,7 +156,7 @@ class MainActivity : FlutterActivity() {
         private const val IMAGE_CHANNEL = "imageProcessing"
     }
 
-    fun cropToSquare(bitmap: Bitmap): Bitmap? {
+    private fun cropToSquare(bitmap: Bitmap): Bitmap? {
         val width: Int = bitmap.width
         val height: Int = bitmap.height
         val newWidth = if (height > width) width else height
