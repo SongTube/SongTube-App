@@ -9,6 +9,7 @@ class ShimmerSearchPage extends StatelessWidget {
       itemCount: 11,
       itemBuilder: (context, index) {
         return ShowUpTransition(
+          forward: true,
           duration: Duration(milliseconds: 400),
           child: Shimmer.fromColors(
             baseColor: Theme.of(context).cardColor.withOpacity(0.4),

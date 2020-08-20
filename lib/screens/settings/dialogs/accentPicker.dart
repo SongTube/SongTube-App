@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
-import 'package:songtube/ui/animations/FadeIn.dart';
+import 'package:songtube/ui/animations/fadeIn.dart';
 import 'package:songtube/ui/animations/showUp.dart';
 
 class AccentPicker extends StatefulWidget {
@@ -44,6 +44,7 @@ class _AccentPickerState extends State<AccentPicker> {
                   ]
                 ),
                 child: ShowUpTransition(
+                  forward: true,
                   delay: Duration(milliseconds: 100),
                   duration: Duration(milliseconds: 200),
                   child: Text(

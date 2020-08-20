@@ -12,6 +12,7 @@ class ShimmerVideoPage extends StatelessWidget {
       physics: NeverScrollableScrollPhysics(),
       children: <Widget>[
         ShowUpTransition(
+          forward: true,
           delay: Duration(milliseconds: 100),
           child: Shimmer.fromColors(
             baseColor: Theme.of(context).cardColor.withOpacity(0.4),
@@ -27,6 +28,7 @@ class ShimmerVideoPage extends StatelessWidget {
           ),
         ),
         ShowUpTransition(
+          forward: true,
           delay: Duration(milliseconds: 200),
           child: Shimmer.fromColors(
             baseColor: Theme.of(context).cardColor.withOpacity(0.4),
@@ -43,6 +45,7 @@ class ShimmerVideoPage extends StatelessWidget {
           ),
         ),
         ShowUpTransition(
+          forward: true,
           delay: Duration(milliseconds: 300),
           child: Shimmer.fromColors(
             baseColor: Theme.of(context).cardColor.withOpacity(0.4),
@@ -60,6 +63,7 @@ class ShimmerVideoPage extends StatelessWidget {
         ),
         SizedBox(height: 16),
         ShowUpTransition(
+          forward: true,
           delay: Duration(milliseconds: 400),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -130,6 +134,7 @@ class ShimmerVideoPage extends StatelessWidget {
         ),
         SizedBox(height: 20),
         ShowUpTransition(
+          forward: true,
           delay: Duration(milliseconds: 500),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -164,6 +169,7 @@ class ShimmerVideoPage extends StatelessWidget {
         ),
         SizedBox(height: 16),
         ShowUpTransition(
+          forward: true,
           delay: Duration(milliseconds: 600),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -198,6 +204,7 @@ class ShimmerVideoPage extends StatelessWidget {
         ),
         SizedBox(height: 16),
         ShowUpTransition(
+          forward: true,
           delay: Duration(milliseconds: 700),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -232,6 +239,7 @@ class ShimmerVideoPage extends StatelessWidget {
         ),
         SizedBox(height: 16),
         ShowUpTransition(
+          forward: true,
           delay: Duration(milliseconds: 800),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

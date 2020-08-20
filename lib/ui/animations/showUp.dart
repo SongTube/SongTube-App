@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
+enum SlideFromSlide {TOP, BOTTOM, LEFT, RIGHT}
+
 class ShowUpTransition extends StatefulWidget {
   /// [child] to be Animated
   final Widget child;
@@ -8,11 +10,17 @@ class ShowUpTransition extends StatefulWidget {
   final Duration duration;
   /// Delay before starting Animation, default is Zero
   final Duration delay;
+  /// Bring forward/reverse the Animation
+  final bool forward;
+  /// From which direction start the [Slide] animation
+  final SlideFromSlide slideSide;
 
   ShowUpTransition({
     @required this.child,
     this.duration,
     this.delay,
+    this.slideSide = SlideFromSlide.LEFT,
+    @required this.forward
   });
 
   @override
@@ -20,30 +28,44 @@ class ShowUpTransition extends StatefulWidget {
 }
 
 class _ShowUpTransitionState extends State<ShowUpTransition> with TickerProviderStateMixin {
+  
   AnimationController _animController;
   Animation<Offset> _animOffset;
+
+  List<Offset> slideSides = [
+    Offset(-0.35,0.0), // LEFT
+    Offset(0.35,0.0),  // RIGHT
+    Offset(0.0,-0.35), // BOTTOM
+    Offset(0.0,0.35),  // TOP
+  ];
+  Offset selectedSlide;
 
   @override
   void initState() {
     super.initState();
     _animController =
         AnimationController(vsync: this, duration: widget.duration == null
-          ? Duration(milliseconds: 200)
+          ? Duration(milliseconds: 400)
           : widget.duration
         );
-    final curve =
-        CurvedAnimation(curve: Curves.decelerate, parent: _animController);
-    _animOffset =
-        Tween<Offset>(begin: const Offset(0.0, 0.35), end: Offset.zero)
-            .animate(curve);
-
-    if (widget.delay == null) {
-      _animController.forward();
-    } else {
-      Timer(widget.delay, () {
-        _animController.forward();
-      });
+    switch (widget.slideSide) {
+      case SlideFromSlide.LEFT:
+        selectedSlide = slideSides[0]; break;
+      case SlideFromSlide.RIGHT:
+        selectedSlide = slideSides[1]; break;
+      case SlideFromSlide.BOTTOM:
+        selectedSlide = slideSides[2]; break;
+      case SlideFromSlide.TOP:
+        selectedSlide = slideSides[3]; break;
     }
+    _animOffset =
+        Tween<Offset>(
+          begin: selectedSlide,
+          end: Offset.zero
+        ).animate(CurvedAnimation(
+          curve: Curves.fastLinearToSlowEaseIn,
+          parent: _animController
+        )); 
   }
 
   @override
@@ -54,6 +76,15 @@ class _ShowUpTransitionState extends State<ShowUpTransition> with TickerProvider
 
   @override
   Widget build(BuildContext context) {
+    Timer(widget.delay == null ? Duration.zero : widget.delay, () {
+      if (widget.forward) {
+        if (mounted)
+          _animController.forward();
+      } else {
+        if (mounted)
+          _animController.reverse();
+      }
+    });
     return FadeTransition(
       child: SlideTransition(
         position: _animOffset,

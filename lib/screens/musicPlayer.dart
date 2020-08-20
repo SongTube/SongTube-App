@@ -13,7 +13,7 @@ import 'package:songtube/provider/managerProvider.dart';
 
 // Packages
 import 'package:audio_service/audio_service.dart';
-import 'package:songtube/ui/animations/FadeIn.dart';
+import 'package:songtube/ui/animations/fadeIn.dart';
 import 'package:songtube/ui/animations/showUp.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:provider/provider.dart';
@@ -131,10 +131,12 @@ class FullPlayerWidget extends StatelessWidget {
                       ),
                     ),
                     ShowUpTransition(
+                      forward: true,
                       duration: Duration(milliseconds: 200),
                       child: positionIndicator(mediaItem, state)
                     ),
                     ShowUpTransition(
+                      forward: true,
                       delay: Duration(milliseconds: 100),
                       duration: Duration(milliseconds: 200),
                       child: Column(
@@ -165,6 +167,7 @@ class FullPlayerWidget extends StatelessWidget {
                       ),
                     ),
                     ShowUpTransition(
+                      forward: true,
                       delay: Duration(milliseconds: 200),
                       duration: Duration(milliseconds: 200),
                       child: Row(

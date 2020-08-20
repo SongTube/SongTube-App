@@ -1,5 +1,4 @@
 // Dart
-import 'dart:async';
 import 'dart:ui';
 
 // Flutter
