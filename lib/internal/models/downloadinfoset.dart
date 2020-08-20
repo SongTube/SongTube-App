@@ -228,7 +228,6 @@ class DownloadInfoSet {
         disc: metadata.disk,
         track: metadata.track
       );
-      String artworkUri;
       var response;
       File artwork = new File((await getTemporaryDirectory()).path +
         "/${RandomString.getRandomString(5)}");
