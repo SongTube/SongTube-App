@@ -98,6 +98,14 @@ flutter:
         - asset: assets/fonts/Montserrat-Regular.ttf
         - asset: assets/fonts/Montserrat-Bold.ttf
           weight: 700
+    - family: YTSans
+      fonts:
+        - asset: assets/fonts/youtube-sans-medium.ttf
+          weight: 500
+        - asset: assets/fonts/youtube-sans-light.ttf
+          weight: 300
+        - asset: assets/fonts/youtube-sans-bold.ttf
+          weight: 700
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

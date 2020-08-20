@@ -1,25 +1,25 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import 'animations/fadeIn.dart';
 import 'animations/showUp.dart';
 
-class FiveoAppBar extends StatefulWidget {
+class SongTubeAppBar extends StatefulWidget {
+  final TextEditingController controller;
   final Function(String) onSearch;
-  FiveoAppBar({
+  SongTubeAppBar({
+    @required this.controller,
     @required this.onSearch
   });
   @override
-  _FiveoAppBarState createState() => _FiveoAppBarState();
+  _SongTubeAppBarState createState() => _SongTubeAppBarState();
 }
 
-class _FiveoAppBarState extends State<FiveoAppBar> {
+class _SongTubeAppBarState extends State<SongTubeAppBar> {
   
   // Enable Search
   bool showSearch;
-
-  // SearchController
-  TextEditingController textEditingController;
 
   // Focus Node
   FocusNode focusNode;
@@ -28,7 +28,7 @@ class _FiveoAppBarState extends State<FiveoAppBar> {
     widget.onSearch(
       searchQuery != null
         ? searchQuery
-        : textEditingController.text
+        : widget.controller.text
     );
   }
 
@@ -36,8 +36,6 @@ class _FiveoAppBarState extends State<FiveoAppBar> {
   void initState() {
     super.initState();
     showSearch = false;
-    textEditingController =
-      new TextEditingController();
     focusNode = new FocusNode();
   }
 
@@ -45,8 +43,18 @@ class _FiveoAppBarState extends State<FiveoAppBar> {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: kToolbarHeight,
-      color: Theme.of(context).scaffoldBackgroundColor,
+      height: kToolbarHeight*0.9,
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12.withOpacity(0.05),
+            offset: Offset(0.0, 1.5), //(x,y)
+            blurRadius: 10.0,
+            spreadRadius: 0.1
+          ),
+        ],
+      ),
       child: Row(
         children: <Widget>[
           Expanded(
@@ -65,26 +73,18 @@ class _FiveoAppBarState extends State<FiveoAppBar> {
                       ),
                       decoration: BoxDecoration(
                         color: Theme.of(context).cardColor,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black12.withOpacity(0.05),
-                            offset: Offset(0, 3), //(x,y)
-                            blurRadius: 6.0,
-                            spreadRadius: 0.01 
-                          )
-                        ]
+                        borderRadius: BorderRadius.circular(20)
                       ),
                       child: Theme(
                         data: ThemeData(primaryColor: Theme.of(context).accentColor),
                         child: TextField(
                           keyboardType: TextInputType.url,
                           focusNode: focusNode,
-                          controller: textEditingController,
+                          controller: widget.controller,
                           decoration: InputDecoration(
-                            contentPadding: EdgeInsets.all(13.0),
-                            prefixIcon: Icon(Icons.video_library),
-                            hintText: 'Search...',
+                            contentPadding: EdgeInsets.all(15.0),
+                            prefixIcon: Icon(MdiIcons.youtube, size: 32),
+                            hintText: 'Search Youtube...',
                             border: UnderlineInputBorder(
                             borderRadius: BorderRadius.circular(20),
                             borderSide: BorderSide(
@@ -107,16 +107,31 @@ class _FiveoAppBarState extends State<FiveoAppBar> {
                   duration: Duration(milliseconds: 300),
                   child: Container(
                     alignment: Alignment.centerLeft,
-                    margin: EdgeInsets.only(left: 16),
-                    child: Text(
-                      "Fiveo",
-                      style: TextStyle(
-                        fontSize: 22,
-                        letterSpacing: 2,
-                        fontFamily: 'Varela',
-                        fontWeight: FontWeight.w600,
-                        color: Theme.of(context).textTheme.bodyText1.color
-                      ),
+                    margin: EdgeInsets.only(left: 12),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(right: 8),
+                          child: Icon(
+                            MdiIcons.youtube,
+                            color: Colors.red,
+                            size: 32,
+                          )
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(bottom: 4),
+                          child: Text(
+                            "SongTube",
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontFamily: 'YTSans',
+                              fontWeight: FontWeight.w500,
+                              color: Colors.grey[800]
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -136,10 +151,15 @@ class _FiveoAppBarState extends State<FiveoAppBar> {
                 onPressed: () {
                   if (!showSearch) {
                     focusNode.requestFocus();
+                    setState(() => showSearch = true);
                   } else {
-                    FocusScope.of(context).unfocus();
+                    if (widget.controller.text != "") {
+                      widget.controller.clear();
+                    } else {
+                      FocusScope.of(context).unfocus();
+                      setState(() => showSearch = false);
+                    }
                   }
-                  setState(() => showSearch = !showSearch);
                 }
               ),
             ),

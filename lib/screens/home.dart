@@ -13,6 +13,7 @@ import 'package:songtube/screens/homeScreen/shimmer/shimmerVideoPage.dart';
 import 'package:songtube/screens/homeScreen/shimmer/shimmerSearchPage.dart';
 import 'package:songtube/screens/homeScreen/videoPage.dart';
 import 'package:songtube/screens/settings.dart';
+import 'package:songtube/ui/appBar.dart';
 
 // Packages
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
@@ -137,18 +138,11 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
 
   Widget searchBar(BuildContext context) {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
-    return SearchBar(
-      padding: EdgeInsets.zero,
-      textfieldColor: Theme.of(context).inputDecorationTheme.fillColor,
-      hintText: "Quick Search",
+    return SongTubeAppBar(
       controller: manager.urlController,
-      containerColor: Theme.of(context).cardColor,
-      prefixIcon: Icon(MdiIcons.youtube),
-      enablePasteButton: false,
-      indicatorValue: manager.loadingVideo == true ? null : 0.0,
-      onSearchPressed: manager.loadingVideo == true
+      onSearch: manager.loadingVideo == true
         ? null
-        : () async {
+        : (String searchQuery) async {
           FocusScope.of(context).unfocus();
           String url = manager.urlController.text;
           // Check if Input is URL
