@@ -3,7 +3,6 @@ import 'dart:ui';
 
 // Flutter
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 // Internal
 import 'package:songtube/internal/lifecycleEvents.dart';
@@ -23,7 +22,6 @@ import 'package:string_validator/string_validator.dart';
 // UI
 import 'package:songtube/screens/homeScreen/downloadMenu.dart';
 import 'package:songtube/screens/homeScreen/IntroSplash.dart';
-import 'package:songtube/ui/reusable/searchBar.dart';
 import 'package:rxdart/rxdart.dart';
 
 BehaviorSubject<String> videoUrl = new BehaviorSubject();
