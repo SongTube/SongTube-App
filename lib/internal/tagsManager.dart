@@ -8,6 +8,9 @@ import 'package:http/http.dart';
 
 // Packages
 import 'package:path_provider/path_provider.dart';
+import 'package:songtube/internal/nativeMethods.dart';
+import 'package:songtube/internal/randomString.dart';
+import 'package:http/http.dart' as http;
 
 class TagsManager {
 
@@ -86,5 +89,17 @@ class TagsManager {
       6, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))
     ));
     return string;
+  }
+
+  // Generate a Square Cover Image
+  static Future<File> generateCover(String url) async {
+    File artwork =
+      new File((await getTemporaryDirectory()).path + "/${RandomString.getRandomString(5)}");
+    var response; try {
+      response = await http.get(url);
+    } catch (_) {return null;}
+    await artwork.writeAsBytes(response.bodyBytes);
+    File croppedImage = await NativeMethod.cropToSquare(artwork);
+    return croppedImage;
   }
 }

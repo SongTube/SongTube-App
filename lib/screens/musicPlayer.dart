@@ -1,4 +1,5 @@
 // Dart
+import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
 import 'package:rxdart/rxdart.dart';
@@ -123,7 +124,7 @@ class FullPlayerWidget extends StatelessWidget {
                             fadeOutDuration: Duration(milliseconds: 300),
                             fadeInDuration: Duration(milliseconds: 300),
                             placeholder: MemoryImage(kTransparentImage),
-                            image: NetworkImage(mediaItem.artUri),
+                            image: FileImage(File(mediaItem.artUri.replaceFirst("file://", ""))),
                             fit: BoxFit.cover,
                           ),
                         ),

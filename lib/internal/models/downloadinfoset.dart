@@ -26,7 +26,7 @@ enum DownloadType { AUDIO, VIDEO }
 class DownloadInfoSet {
 
   // Streams
-  BehaviorSubject<String> currentAction;
+  StreamController<String> currentAction;
   BehaviorSubject dataProgress;
   BehaviorSubject progressBar;
 
@@ -65,7 +65,7 @@ class DownloadInfoSet {
     this.videoStreamInfo
   }) {
     converter = new Converter();
-    currentAction = new BehaviorSubject();
+    currentAction = new StreamController.broadcast();
     dataProgress = new BehaviorSubject();
     progressBar = new BehaviorSubject();
     cancelDownload = false;
@@ -92,22 +92,18 @@ class DownloadInfoSet {
       currentAction.add("Writting Tags & Artwork...");
       await writeAllMetadata(downloadedFile.path);
     }
-    // Register File in Android MediaStore
-    NativeMethod.registerFile(downloadedFile.path);
     // Move file to its Predefined Directory
     Permission.storage.request().then((value) async {
       if (value == PermissionStatus.granted) {
         String fileName = downloadedFile.path.split("/").last;
-        await downloadedFile.copy("$downloadPath/$fileName");
+        File finalFile = await downloadedFile.copy("$downloadPath/$fileName");
+        await finishDownload(finalFile);
       }
     });
-    // Register on Database
-    await finishDownload(downloadedFile);
   }
 
   Future<void> finishDownload(File finalFile) async {
     final dbHelper = DatabaseService.instance;
-    String fileName = finalFile.path.split("/").last;
     await dbHelper.insertDownload(new SongFile.toDatabase(
       title: metadata.title,
       album: metadata.album,
@@ -118,11 +114,12 @@ class DownloadInfoSet {
         : "Video",
       fileSize: ((await finalFile.length()) * 0.000001).toStringAsFixed(2),
       coverUrl: metadata.coverurl,
-      path: "$downloadPath/$fileName"
+      path: finalFile.path
     ));
     currentAction.add("Completed");
     progressBar.add(1.0);
     downloaderClosed = true;
+    NativeMethod.registerFile(finalFile.path);
   }
 
   Future<File> downloadStream() async { 

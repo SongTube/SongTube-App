@@ -13,6 +13,7 @@ class SongFile {
   String path;
   String fileSize;
   String coverUrl;
+  String coverPath;
 
   SongFile({
     @required this.id,
@@ -23,7 +24,8 @@ class SongFile {
     @required this.downloadType,
     @required this.path,
     @required this.fileSize,
-    @required this.coverUrl
+    @required this.coverUrl,
+    this.coverPath
   });
 
   SongFile.toDatabase({

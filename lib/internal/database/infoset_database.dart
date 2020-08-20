@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:songtube/internal/models/songFile.dart';
+import 'package:songtube/internal/tagsManager.dart';
 import 'package:sqflite/sqflite.dart';
 
 const String table = "itemsTable";
@@ -79,8 +80,11 @@ class DatabaseService {
       "fileSize",
       "coverUrl"
     ]);
-    result.forEach((element) {
-      list.add(SongFile.fromMap(element));
+    await Future.forEach(result, (element) async {
+      SongFile songFile = SongFile.fromMap(element);
+      File croppedImage = await TagsManager.generateCover(songFile.coverUrl);
+      songFile.coverPath = croppedImage.uri.path;
+      list.add(songFile);
     });
     return list;
   }

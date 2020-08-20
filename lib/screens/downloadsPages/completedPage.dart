@@ -68,7 +68,7 @@ class _CompletedPageState extends State<CompletedPage> with TickerProviderStateM
                       child: DownloadTileWithoutStream(
                         title: download.title,
                         author: download.author,
-                        coverUrl: download.coverUrl,
+                        coverPath: download.coverPath,
                         onTilePlay: () async {
                           if (download.downloadType == "Audio") {
                             if (processingState == AudioProcessingState.none) {

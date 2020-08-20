@@ -230,7 +230,7 @@ class ManagerProvider extends ChangeNotifier {
           title: element.title,
           album: element.album,
           artist: element.author,
-          artUri: element.coverUrl,
+          artUri: "file://${element.coverPath}",
           duration: duration
         )
       );
@@ -304,7 +304,7 @@ class ManagerProvider extends ChangeNotifier {
       albumController.text,
       artistController.text,
       genreController.text,
-      videoDetails.thumbnails.highResUrl,
+      videoDetails.thumbnails.mediumResUrl,
       dateController.text,
       discController.text,
       trackController.text,
@@ -338,7 +338,7 @@ class ManagerProvider extends ChangeNotifier {
       downloadType: downloadType,
       downloadPath: downloadPath,
       convertFormat: convertFormat,
-      audioModifiers: [double.parse(data[2]), int.parse(data[3]), int.parse(data[4])]
+      audioModifiers: [double.parse(data[2]), int.parse(data[3]), int.parse(data[4])],
     );
     infoset.downloadMedia();
     addItemToDownloadList(infoset);

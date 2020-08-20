@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -195,13 +197,13 @@ class DownloadTile extends StatelessWidget {
 class DownloadTileWithoutStream extends StatelessWidget {
   final String title;
   final String author;
-  final String coverUrl;
+  final String coverPath;
   final Function onTilePlay;
   final Function onTileRemove;
   DownloadTileWithoutStream({
     @required this.title,
     @required this.author,
-    @required this.coverUrl,
+    @required this.coverPath,
     this.onTilePlay,
     this.onTileRemove
   });
@@ -231,12 +233,10 @@ class DownloadTileWithoutStream extends StatelessWidget {
                 children: <Widget> [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(15.0),
-                    child: FadeInImage(
-                      image: NetworkImage(coverUrl),
-                      placeholder: MemoryImage(kTransparentImage),
+                    child: Image.file(
+                      File(coverPath),
                       height: 90,
-                      width: 160,
-                      fit: BoxFit.fitWidth,
+                      width: 90,
                     ),
                   ),
                   Expanded(
