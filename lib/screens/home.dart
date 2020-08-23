@@ -7,17 +7,13 @@ import 'package:flutter/material.dart';
 // Internal
 import 'package:songtube/internal/lifecycleEvents.dart';
 import 'package:songtube/provider/managerProvider.dart';
-import 'package:songtube/screens/homeScreen/searchPage.dart';
 import 'package:songtube/screens/homeScreen/shimmer/shimmerVideoPage.dart';
-import 'package:songtube/screens/homeScreen/shimmer/shimmerSearchPage.dart';
 import 'package:songtube/screens/homeScreen/videoPage.dart';
 import 'package:songtube/screens/settings.dart';
-import 'package:songtube/ui/appBar.dart';
 
 // Packages
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 import 'package:provider/provider.dart';
-import 'package:string_validator/string_validator.dart';
 
 // UI
 import 'package:songtube/screens/homeScreen/downloadMenu.dart';
@@ -36,17 +32,6 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
   @override
   bool get wantKeepAlive => true;
 
-  // Variables
-  Image cachedImage;
-  bool _searching = false;
-  bool get searching => _searching;
-  set searching(bool value) {
-    searchResults = null;
-    _searching = value;
-    setState((){});
-  }
-  List<SearchVideo> searchResults;
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -62,7 +47,6 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            searchBar(context),
             Expanded(
               child: AnimatedSwitcher(
                 duration: Duration(milliseconds: 200),
@@ -70,14 +54,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                   ? VideoPage()
                   : manager.loadingVideo
                     ? ShimmerVideoPage()
-                    : searching == true
-                      ? searchResults == null
-                        ? ShimmerSearchPage()
-                        : SearchPage(
-                            results: searchResults,
-                            onSelect: () {setState(() => searching = false);},
-                          )
-                      : IntroSplash()
+                    : IntroSplash()
               ),
             ),
           ],
@@ -131,36 +108,6 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
           ),
         ),
       ),
-    );
-  }
-
-  Widget searchBar(BuildContext context) {
-    ManagerProvider manager = Provider.of<ManagerProvider>(context);
-    return SongTubeAppBar(
-      controller: manager.urlController,
-      onSearch: manager.loadingVideo == true
-        ? null
-        : (String searchQuery) async {
-          FocusScope.of(context).unfocus();
-          String url = manager.urlController.text;
-          // Check if Input is URL
-          bool validate = isURL(url);
-          if (validate == true) {
-            // If true, try fetch video Details
-            manager.getVideoDetails(manager.urlController.text);
-          } else {
-            // If false, search on Youtube
-            manager.loadHome(LoadingStatus.Failed);
-            searching = true;
-            YoutubeExplode yt = new YoutubeExplode();
-            SearchQuery search = await yt.search.queryFromPage(manager.urlController.text);
-            searchResults = new List<SearchVideo>();
-            search.content.whereType<SearchVideo>().forEach((element) {
-              searchResults.add(element);
-            });
-            setState((){});
-          }
-        }
     );
   }
 }

@@ -90,7 +90,7 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
         : Brightness.light;
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
+        statusBarColor: Theme.of(context).scaffoldBackgroundColor,
         statusBarBrightness: _statusBarBrightness,
         statusBarIconBrightness: _statusBarBrightness,
         systemNavigationBarColor: Theme.of(context).cardColor,
@@ -100,101 +100,95 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
       child: Scaffold(
+        backgroundColor: manager.screenIndex == 2
+          ? Theme.of(context).cardColor
+          : Theme.of(context).scaffoldBackgroundColor,
         key: manager.libraryScaffoldKey,
         resizeToAvoidBottomInset:
           manager.mediaStreamReady == false ? false : true,
-        appBar: PreferredSize(
-          preferredSize: Size(
-            double.infinity,
-            kToolbarHeight*0.05
-          ),
-          child: Container(
-            color: manager.screenIndex != 0
-              ? Theme.of(context).scaffoldBackgroundColor
-              : Theme.of(context).cardColor
-          ),
-        ),
-        body: WillPopScope(
-          onWillPop: () => manager.handlePop(),
-          child: Stack(
-            children: <Widget>[
-              IgnorePointer(
-                ignoring: manager.screenIndex == 0 ? false : true,
-                child: AnimatedOpacity(
-                  duration: Duration(milliseconds: 300),
-                  opacity: manager.screenIndex == 0 ? 1.0 : 0.0,
-                  child: HomeScreen()
-                )
-              ),
-              IgnorePointer(
-                ignoring: manager.screenIndex == 1 ? false : true,
-                child: AnimatedOpacity(
-                  duration: Duration(milliseconds: 300),
-                  opacity: manager.screenIndex == 1 ? 1.0 : 0.0,
-                  child: DownloadTab()
-                )
-              ),
-              IgnorePointer(
-                ignoring: manager.screenIndex == 2 ? false : true,
-                child: AnimatedOpacity(
-                  duration: Duration(milliseconds: 300),
-                  opacity: manager.screenIndex == 2 ? 1.0 : 0.0,
-                  child: manager.screenIndex == 2 ? Navigate() : Container(),
-                )
-              ),
-              IgnorePointer(
-                ignoring: manager.screenIndex == 3 ? false : true,
-                child: AnimatedOpacity(
-                  duration: Duration(milliseconds: 300),
-                  opacity: manager.screenIndex == 3 ? 1.0 : 0.0,
-                  child: MoreScreen(),
-                )
-              ),
-              StreamBuilder<ScreenState>(
-                stream: manager.screenStateStream,
-                builder: (context, snapshot) {
-                  final screenState = snapshot.data;
-                  final state = screenState?.playbackState;
-                  final processingState =
-                    state?.processingState ?? AudioProcessingState.none;
-                  return AnimatedSwitcher(
+        body: SafeArea(
+          child: WillPopScope(
+            onWillPop: () => manager.handlePop(),
+            child: Stack(
+              children: <Widget>[
+                IgnorePointer(
+                  ignoring: manager.screenIndex == 0 ? false : true,
+                  child: AnimatedOpacity(
                     duration: Duration(milliseconds: 300),
-                    child: processingState != AudioProcessingState.none
-                    ? Align(
-                        alignment: Alignment.topLeft,
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                              FullPlayerWidget(pushedFrom: "SongTube")));
-                          },
-                          child: Container(
-                            width: 54,
-                            height: 54,
-                            margin: EdgeInsets.only(left: 12, top: 8),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50),
-                              color: appData.accentColor,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  offset: Offset(3.5, 3.5), //(x,y)
-                                  blurRadius: 5.0,
-                                  spreadRadius: 2.1 
-                                )
-                              ]
-                            ),
-                            child: Icon(
-                              Icons.play_arrow,
-                              color: Colors.white,
+                    opacity: manager.screenIndex == 0 ? 1.0 : 0.0,
+                    child: HomeScreen()
+                  )
+                ),
+                IgnorePointer(
+                  ignoring: manager.screenIndex == 1 ? false : true,
+                  child: AnimatedOpacity(
+                    duration: Duration(milliseconds: 300),
+                    opacity: manager.screenIndex == 1 ? 1.0 : 0.0,
+                    child: DownloadTab()
+                  )
+                ),
+                IgnorePointer(
+                  ignoring: manager.screenIndex == 2 ? false : true,
+                  child: AnimatedOpacity(
+                    duration: Duration(milliseconds: 300),
+                    opacity: manager.screenIndex == 2 ? 1.0 : 0.0,
+                    child: manager.screenIndex == 2 ? Navigate() : Container(),
+                  )
+                ),
+                IgnorePointer(
+                  ignoring: manager.screenIndex == 3 ? false : true,
+                  child: AnimatedOpacity(
+                    duration: Duration(milliseconds: 300),
+                    opacity: manager.screenIndex == 3 ? 1.0 : 0.0,
+                    child: MoreScreen(),
+                  )
+                ),
+                StreamBuilder<ScreenState>(
+                  stream: manager.screenStateStream,
+                  builder: (context, snapshot) {
+                    final screenState = snapshot.data;
+                    final state = screenState?.playbackState;
+                    final processingState =
+                      state?.processingState ?? AudioProcessingState.none;
+                    return AnimatedSwitcher(
+                      duration: Duration(milliseconds: 300),
+                      child: processingState != AudioProcessingState.none
+                      ? Align(
+                          alignment: Alignment.topLeft,
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                                FullPlayerWidget(pushedFrom: "SongTube")));
+                            },
+                            child: Container(
+                              width: 54,
+                              height: 54,
+                              margin: EdgeInsets.only(left: 12, top: 8),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50),
+                                color: appData.accentColor,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black12,
+                                    offset: Offset(3.5, 3.5), //(x,y)
+                                    blurRadius: 5.0,
+                                    spreadRadius: 2.1 
+                                  )
+                                ]
+                              ),
+                              child: Icon(
+                                Icons.play_arrow,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
-                        ),
-                      )
-                    : Container()
-                  );
-                }
-              ),
-            ],
+                        )
+                      : Container()
+                    );
+                  }
+                ),
+              ],
+            ),
           ),
         ),
         bottomNavigationBar: Container(

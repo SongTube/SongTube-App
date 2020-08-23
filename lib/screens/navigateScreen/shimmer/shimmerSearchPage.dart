@@ -6,13 +6,13 @@ class ShimmerSearchPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: 11,
+      itemCount: 12,
       itemBuilder: (context, index) {
         return ShowUpTransition(
           forward: true,
           duration: Duration(milliseconds: 400),
           child: Shimmer.fromColors(
-            baseColor: Theme.of(context).cardColor.withOpacity(0.4),
+            baseColor: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.2),
             highlightColor: Theme.of(context).cardColor,
             child: Container(
               margin: EdgeInsets.only(
@@ -21,11 +21,11 @@ class ShimmerSearchPage extends StatelessWidget {
                 left: 20,
                 right: 20
               ),
-              height: 300,
+              height: 100,
               width: double.infinity,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                color: Theme.of(context).cardColor
+                color: Theme.of(context).scaffoldBackgroundColor
               ),
             ),
           ),

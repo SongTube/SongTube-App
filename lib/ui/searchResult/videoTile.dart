@@ -8,11 +8,9 @@ import 'package:youtube_explode_dart/youtube_explode_dart.dart' as yt;
 
 class VideoTile extends StatelessWidget {
   final yt.SearchVideo video;
-  final yt.YoutubeExplode client;
   final Function onSelect;
   VideoTile({
     @required this.video,
-    @required this.client,
     @required this.onSelect
   });
   @override
@@ -22,62 +20,36 @@ class VideoTile extends StatelessWidget {
       onTap: () => manager
         .getVideoDetails("https://www.youtube.com/watch?v=${video.videoId}"),
       child: Ink(
-        height: 310,
+        height: 100,
         width: double.infinity,
         decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12.withOpacity(0.05),
-              offset: Offset(0, 3), //(x,y)
-              blurRadius: 6.0,
-              spreadRadius: 0.01 
-            )
-          ]
+          color: Theme.of(context).cardColor
         ),
-        child: Column(
+        child: Row(
           children: <Widget>[
             Container(
-              height: 230,
-              width: double.infinity,
-              child: FadeInImage(
-                fadeInDuration: Duration(milliseconds: 200),
-                placeholder: MemoryImage(kTransparentImage),
-                image: NetworkImage("http://img.youtube.com/vi/${video.videoId}/hqdefault.jpg"),
-                fit: BoxFit.fitWidth,
-              )
+              margin: EdgeInsets.only(left: 8),
+              width: 150,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: FadeInImage(
+                  fadeInDuration: Duration(milliseconds: 200),
+                  placeholder: MemoryImage(kTransparentImage),
+                  image: NetworkImage("http://img.youtube.com/vi/${video.videoId}/mqdefault.jpg"),
+                  fit: BoxFit.fitWidth,
+                ),
+              ),
             ),
             Expanded(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.only(left: 8),
-                    height: 50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(50),
-                      child: FutureBuilder(
-                        future: client.channels.getByVideo(video.videoId),
-                        builder: (context, AsyncSnapshot<yt.Channel> result) {
-                          if (result.hasData) {
-                            return Image.network(result.data.logoUrl);
-                          } else {
-                            return Image.asset('assets/images/grey.jpg');
-                          }
-                        },
-                      )
-                    )
-                  ),
                   Expanded(
                     child: Container(
-                      margin: EdgeInsets.only(left: 8, right: 8),
+                      margin: EdgeInsets.only(left: 8, right: 8, top: 8),
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(

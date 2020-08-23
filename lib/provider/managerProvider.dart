@@ -273,6 +273,7 @@ class ManagerProvider extends ChangeNotifier {
   Future<int> getVideoDetails(String url) async {
     if (loadingVideo == true) return null;
     if (VideoId.parseVideoId(url) == null) return null;
+    screenIndex = 0;
     loadHome(LoadingStatus.Loading);
     try {
       videoDetails = await yt.getVideoDetails(url).timeout(Duration(seconds: 20));

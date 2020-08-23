@@ -5,18 +5,18 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'animations/fadeIn.dart';
 import 'animations/showUp.dart';
 
-class SongTubeAppBar extends StatefulWidget {
+class SearchBar extends StatefulWidget {
   final TextEditingController controller;
   final Function(String) onSearch;
-  SongTubeAppBar({
+  SearchBar({
     @required this.controller,
     @required this.onSearch
   });
   @override
-  _SongTubeAppBarState createState() => _SongTubeAppBarState();
+  _SearchBarState createState() => _SearchBarState();
 }
 
-class _SongTubeAppBarState extends State<SongTubeAppBar> {
+class _SearchBarState extends State<SearchBar> {
   
   // Enable Search
   bool showSearch;
@@ -25,11 +25,7 @@ class _SongTubeAppBarState extends State<SongTubeAppBar> {
   FocusNode focusNode;
 
   void _onSearch(String searchQuery) {
-    widget.onSearch(
-      searchQuery != null
-        ? searchQuery
-        : widget.controller.text
-    );
+    widget.onSearch(searchQuery);
   }
 
   @override
@@ -43,14 +39,14 @@ class _SongTubeAppBarState extends State<SongTubeAppBar> {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: kToolbarHeight*0.9,
+      height: kToolbarHeight,
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         boxShadow: [
           BoxShadow(
-            color: Colors.black12.withOpacity(0.05),
+            color: Colors.black12.withOpacity(0.08),
             offset: Offset(0.0, 1.5), //(x,y)
-            blurRadius: 10.0,
+            blurRadius: 7.0,
             spreadRadius: 0.1
           ),
         ],
@@ -68,35 +64,69 @@ class _SongTubeAppBarState extends State<SongTubeAppBar> {
                     opacity: showSearch ? 1.0 : 0.0,
                     curve: Curves.easeIn,
                     child: Container(
+                      height: 40,
                       margin: EdgeInsets.only(
                         left: 16,
                       ),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).cardColor,
+                        color: Theme.of(context).scaffoldBackgroundColor,
                         borderRadius: BorderRadius.circular(20)
                       ),
                       child: Theme(
                         data: ThemeData(primaryColor: Theme.of(context).accentColor),
-                        child: TextField(
-                          keyboardType: TextInputType.url,
-                          focusNode: focusNode,
-                          controller: widget.controller,
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.all(15.0),
-                            prefixIcon: Icon(MdiIcons.youtube, size: 32),
-                            hintText: 'Search Youtube...',
-                            border: UnderlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide(
-                              width: 0, 
-                              style: BorderStyle.none,
+                        child: Stack(
+                          children: [
+                            TextField(
+                              keyboardType: TextInputType.url,
+                              style: TextStyle(
+                                color: Theme.of(context).textTheme.bodyText1.color,
+                                fontSize: 14
+                              ),
+                              focusNode: focusNode,
+                              controller: widget.controller,
+                              decoration: InputDecoration(
+                                contentPadding: EdgeInsets.all(14.0),
+                                prefixIcon: Icon(MdiIcons.youtube, size: 32, color: Colors.red),
+                                hintText: 'Search Youtube...',
+                                hintStyle: TextStyle(
+                                  color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.4),
+                                  fontSize: 14
+                                ),
+                                border: UnderlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                                borderSide: BorderSide(
+                                  width: 0, 
+                                  style: BorderStyle.none,
+                                ),
+                              ),
+                              ),
+                              onChanged: (_) => setState(() {}),
+                              onSubmitted: (searchQuery) {
+                                FocusScope.of(context).unfocus();
+                                if (searchQuery == "" && searchQuery == null) {
+                                  FocusScope.of(context).unfocus();
+                                  setState(() => showSearch = false);
+                                } else {
+                                  _onSearch(searchQuery);
+                                }
+                              }
                             ),
-                          ),
-                          ),
-                          onSubmitted: (searchQuery) {
-                            FocusScope.of(context).unfocus();
-                            _onSearch(searchQuery);
-                          }
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: widget.controller.text != ""
+                                ? IconButton(
+                                    icon: Icon(
+                                      Icons.clear,
+                                      size: 20,
+                                      color: Theme.of(context).iconTheme.color
+                                    ),
+                                    onPressed: () {
+                                      setState(() => widget.controller.clear());
+                                    },
+                                  )
+                                : Container(),
+                            )
+                          ],
                         ),
                       ),
                     ),
@@ -122,12 +152,12 @@ class _SongTubeAppBarState extends State<SongTubeAppBar> {
                         Container(
                           margin: EdgeInsets.only(bottom: 4),
                           child: Text(
-                            "SongTube",
+                            "YouTube",
                             style: TextStyle(
                               fontSize: 22,
                               fontFamily: 'YTSans',
                               fontWeight: FontWeight.w500,
-                              color: Colors.grey[800]
+                              color: Theme.of(context).textTheme.bodyText1.color
                             ),
                           ),
                         ),
@@ -146,7 +176,7 @@ class _SongTubeAppBarState extends State<SongTubeAppBar> {
               child: IconButton(
                 icon: AnimatedSwitcher(
                   duration: Duration(milliseconds: 200),
-                  child: Icon(showSearch ? Icons.clear : EvaIcons.searchOutline),
+                  child: Icon(EvaIcons.searchOutline),
                 ),
                 onPressed: () {
                   if (!showSearch) {
@@ -154,7 +184,7 @@ class _SongTubeAppBarState extends State<SongTubeAppBar> {
                     setState(() => showSearch = true);
                   } else {
                     if (widget.controller.text != "") {
-                      widget.controller.clear();
+                      _onSearch(widget.controller.text);
                     } else {
                       FocusScope.of(context).unfocus();
                       setState(() => showSearch = false);

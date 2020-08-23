@@ -144,7 +144,6 @@ class _YoutubePageWebviewState extends State<YoutubePageWebview> with AutomaticK
                 );
                 return;
               }
-              manager.screenIndex = 0;
               manager.urlController.text = _url;
               manager.getVideoDetails(_url);
             },
