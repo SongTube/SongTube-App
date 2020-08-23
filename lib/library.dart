@@ -90,7 +90,7 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
         : Brightness.light;
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
-        statusBarColor: Theme.of(context).scaffoldBackgroundColor,
+        statusBarColor: Colors.transparent,
         statusBarBrightness: _statusBarBrightness,
         statusBarIconBrightness: _statusBarBrightness,
         systemNavigationBarColor: Theme.of(context).cardColor,
