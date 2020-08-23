@@ -54,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                   ? VideoPage()
                   : manager.loadingVideo
                     ? ShimmerVideoPage()
-                    : IntroSplash()
+                    : Center(child: IntroSplash())
               ),
             ),
           ],
