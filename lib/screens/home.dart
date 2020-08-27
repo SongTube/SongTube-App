@@ -39,11 +39,15 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
   bool clipboardHasLink;
   String clipboardLink;
 
+  // IntroSplash Animation
+  bool forward;
+
   @override
   void initState() {
     super.initState();
     clipboardHasLink = false;
     clipboardLink = "";
+    forward = true;
     checkClipboard();
   }
 
@@ -85,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                   ? VideoPage()
                   : manager.loadingVideo
                     ? ShimmerVideoPage()
-                    : Center(child: IntroSplash())
+                    : Center(child: IntroSplash(forward))
               ),
             ),
           ],
@@ -107,7 +111,15 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                     color: Theme.of(context).accentColor
                   ),
                   backgroundColor: Theme.of(context).cardColor,
-                  onPressed: () => manager.getVideoDetails(clipboardLink),
+                  onPressed: () async {
+                    setState(() => forward = false);
+                    await Future.delayed(Duration(milliseconds: 400), () {
+                      manager.getVideoDetails(clipboardLink);
+                    });
+                    await Future.delayed(Duration(milliseconds: 400), () {
+                      setState(() => forward = true);
+                    });
+                  },
                 ),
               )
             : IgnorePointer(

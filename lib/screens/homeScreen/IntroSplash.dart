@@ -6,6 +6,8 @@ import 'package:songtube/ui/animations/fadeIn.dart';
 import 'package:songtube/ui/animations/showUp.dart';
 
 class IntroSplash extends StatelessWidget {
+  final bool forward;
+  IntroSplash(this.forward);
   @override
   Widget build(BuildContext context) {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
