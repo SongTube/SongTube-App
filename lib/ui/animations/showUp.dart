@@ -35,8 +35,8 @@ class _ShowUpTransitionState extends State<ShowUpTransition> with TickerProvider
   List<Offset> slideSides = [
     Offset(-0.35,0.0), // LEFT
     Offset(0.35,0.0),  // RIGHT
-    Offset(0.0,-0.35), // BOTTOM
-    Offset(0.0,0.35),  // TOP
+    Offset(0.0,0.35), // BOTTOM
+    Offset(0.0,-0.35),  // TOP
   ];
   Offset selectedSlide;
 
