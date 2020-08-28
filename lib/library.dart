@@ -132,7 +132,9 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
                   child: AnimatedOpacity(
                     duration: Duration(milliseconds: 300),
                     opacity: manager.screenIndex == 2 ? 1.0 : 0.0,
-                    child: manager.screenIndex == 2 ? Navigate() : Container(),
+                    child: manager.screenIndex == 2
+                      ? Navigate(searchQuery: manager.navigateIntent)
+                      : Container(),
                   )
                 ),
                 IgnorePointer(

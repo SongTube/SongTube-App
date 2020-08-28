@@ -12,6 +12,10 @@ import 'package:songtube/ui/appBar.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 class Navigate extends StatefulWidget {
+  final String searchQuery;
+  Navigate({
+    this.searchQuery
+  });
   @override
   _NavigateState createState() => _NavigateState();
 }
@@ -29,7 +33,7 @@ class _NavigateState extends State<Navigate> {
     super.initState();
     yt= new YoutubeExplode();
     searchResults = new List<SearchVideo>();
-    search();
+    search(widget.searchQuery);
   }
 
   void search([String searchQuery]) async {

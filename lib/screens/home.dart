@@ -35,6 +35,9 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
   @override
   bool get wantKeepAlive => true;
 
+  // QuickSearch Controller
+  TextEditingController quickSearchController;
+
   // ClipBoard Data
   bool clipboardHasLink;
   String clipboardLink;
@@ -45,6 +48,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
   @override
   void initState() {
     super.initState();
+    quickSearchController = new TextEditingController();
     clipboardHasLink = false;
     clipboardLink = "";
     forward = true;
@@ -89,7 +93,16 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                   ? VideoPage()
                   : manager.loadingVideo
                     ? ShimmerVideoPage()
-                    : Center(child: IntroSplash(forward))
+                    : Center(
+                        child: IntroSplash(
+                          forward: forward,
+                          controller: quickSearchController,
+                          onQuickSearch: (String searchQuery) {
+                            quickSearchController.clear();
+                            manager.pushYoutubePage(searchQuery);
+                          },
+                        )
+                      )
               ),
             ),
           ],
@@ -99,18 +112,15 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
           child: manager.showEmptyScreenWidget
             ? ShowUpTransition(
                 forward: clipboardHasLink ? true : false,
-                duration: Duration(milliseconds: 600),
+                duration: Duration(milliseconds: 400),
                 slideSide: SlideFromSlide.BOTTOM,
-                child: FloatingActionButton.extended(
-                  elevation: 120,
-                  label: Text("Clipboard Search", style: TextStyle(
-                    color: Theme.of(context).textTheme.bodyText1.color
-                  )),
-                  icon: Icon(
+                child: FloatingActionButton(
+                  elevation: 0,
+                  child: Icon(
                     EvaIcons.linkOutline,
                     color: Theme.of(context).accentColor
                   ),
-                  backgroundColor: Theme.of(context).cardColor,
+                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                   onPressed: () async {
                     setState(() => forward = false);
                     await Future.delayed(Duration(milliseconds: 400), () {

@@ -89,6 +89,8 @@ class ManagerProvider extends ChangeNotifier {
   int _downloadsTabIndex = 0;
   StreamController<bool> showDownloadsTabs;
   bool showDownloadTabsStatus;
+  // Navitate Screen
+  String navigateIntent;
   // AudioService
   bool _showMediaPlayer;
   List<MediaItem> serviceQueue;
@@ -257,6 +259,12 @@ class ManagerProvider extends ChangeNotifier {
       }
       return Future.value(true);
     }
+  }
+  // Move to Navigate Screen with a Search Intent
+  void pushYoutubePage(String searchQuery) {
+    navigateIntent = searchQuery;
+    screenIndex = 2;
+    Future.delayed(Duration(milliseconds: 100), () => navigateIntent = null);
   }
 
   // -------------------------------------
