@@ -70,8 +70,8 @@ class _ShowUpTransitionState extends State<ShowUpTransition> with TickerProvider
 
   @override
   void dispose() {
-    super.dispose();
     _animController.dispose();
+    super.dispose();
   }
 
   @override
