@@ -78,7 +78,7 @@ class ManagerProvider extends ChangeNotifier {
   int _screenIndex = 0;
   // Home Screen
   bool showEmptyScreenWidget;
-  bool openWebviewPlayer;
+  bool _openWebviewPlayer;
   bool _loadingVideo;
   bool mediaStreamReady;
   bool showFloatingActionButtom;
@@ -370,6 +370,12 @@ class ManagerProvider extends ChangeNotifier {
   bool get loadingVideo => _loadingVideo;
   set loadingVideo(bool value) {
     _loadingVideo = value;
+    notifyListeners();
+  }
+  // Open WebView Player
+  bool get openWebviewPlayer => _openWebviewPlayer;
+  set openWebviewPlayer(bool value) {
+    _openWebviewPlayer = value;
     notifyListeners();
   }
   List<DownloadInfoSet> get downloadInfoSetList => _downloadInfoSetList;
