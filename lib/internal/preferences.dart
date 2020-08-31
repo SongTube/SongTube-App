@@ -20,6 +20,7 @@ String audioDownloadPath = "audio_download_path";
 String videoDownloadPath = "video_download_path";
 String useYoutubeWebview = "use_youtube_webview";
 String appColor = "app_color";
+String showIntroduction = "show_introduction";
 
 class Preferences {
   
@@ -115,6 +116,14 @@ class Preferences {
 
   void saveUseYoutubeWebview(bool value) {
     prefs.setBool(useYoutubeWebview, value);
+  }
+
+  bool showIntroductionPages() {
+    return prefs.getBool(showIntroduction) ?? true;
+  }
+
+  void saveShowIntroductionPages(bool value) {
+    prefs.setBool(showIntroduction, value);
   }
 
 }

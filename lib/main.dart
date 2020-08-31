@@ -10,6 +10,7 @@ import 'package:songtube/library.dart';
 // Packages
 import 'package:audio_service/audio_service.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/screens/introduction.dart';
 import 'package:songtube/ui/snackbar.dart';
 
 // UI
@@ -61,7 +62,13 @@ class Main extends StatelessWidget {
           darkTheme: appData.systemThemeEnabled
                      ? darkTheme
                      : customTheme,
-          home: AudioServiceWidget(child: Library()),
+          initialRoute: appData.preferences.showIntroductionPages()
+            ? 'introScreen'
+            : 'homeScreen',
+          routes: {
+            'homeScreen':  (context) => Library(),
+            'introScreen': (context) => IntroScreen()
+          },
         );
       }, ),
     );

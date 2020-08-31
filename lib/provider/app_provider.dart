@@ -42,7 +42,11 @@ class AppDataProvider extends ChangeNotifier {
       buildNumber = value.buildNumber;
     });
     accentColor = preferences.getAccentColor();
+    showIntroduction = preferences.showIntroductionPages();
   }
+
+  // App Introduction
+  bool showIntroduction;
 
   // Platform Info
   String appName;
