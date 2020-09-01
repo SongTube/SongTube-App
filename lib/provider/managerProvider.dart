@@ -1,5 +1,6 @@
 // Dart
 import 'dart:async';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:rxdart/rxdart.dart';
 
 // Flutter
@@ -349,10 +350,10 @@ class ManagerProvider extends ChangeNotifier {
       convertFormat: convertFormat,
       audioModifiers: [double.parse(data[2]), int.parse(data[3]), int.parse(data[4])],
     );
-    infoset.downloadMedia();
     addItemToDownloadList(infoset);
     screenIndex = 1;
     downloadsTabIndex = 0;
+    infoset.downloadMedia();
   }
 
   // -------------------

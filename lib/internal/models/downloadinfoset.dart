@@ -76,8 +76,16 @@ class DownloadInfoSet {
   // Download, Convert, Write Metadata and Save
   // ---------------------------------------------
   Future<void> downloadMedia() async {
+    var status = await Permission.storage.request();
+    if (status != PermissionStatus.granted) {
+      cancelDownload = true;
+      currentAction.add("Access Denied");
+      dataProgress.add("Can't Download");
+      progressBar.add(0.0);
+      return;
+    }
     currentAction.add("Downloading...");
-    cancelDownload = false;
+    currentAction.add(" ");
     // Check our Download Folder
     if (!await Directory(downloadPath).exists()) {
       await Directory(downloadPath).create();

@@ -24,6 +24,9 @@ class _DownloadTabState extends State<DownloadTab> with TickerProviderStateMixin
           provider.getDatabase();
           setState(() {});
         }
+        if (event == "Access Denied") {
+          setState(() {});
+        }
       });
     });
   }

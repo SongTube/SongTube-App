@@ -1,6 +1,7 @@
 // Flutter
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 // Internal
 import 'package:songtube/internal/models/downloadinfoset.dart';
@@ -63,8 +64,12 @@ class _DownloadingPageState extends State<DownloadingPage> {
                               setState(() {});
                             }
                           : () {
-                              infoset.downloadMedia();
-                              setState((){});
+                              Permission.storage.request().then((value) {
+                                if (value == PermissionStatus.granted) {
+                                  infoset.downloadMedia();
+                                  setState((){});
+                                }
+                              });
                             }
                       : null,
                     cancelDownloadIcon: infoset.downloaderClosed != true
