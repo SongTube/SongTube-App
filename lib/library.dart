@@ -38,34 +38,12 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
 
   @override
   void initState() {
-    checkPermissions();
     super.initState();
     WidgetsBinding.instance.renderView.automaticSystemUiAdjustment=false;
     KeyboardVisibility.onChange.listen((bool visible) {
         if (visible == false) FocusScope.of(context).unfocus();
       }
     );
-  }
-
-  // App external storage permission check
-  checkPermissions() async {
-    final status = await Permission.storage.status;
-    if (status.isUndetermined) {
-      await showAlertDialog(context, false);
-      final response = await Permission.storage.request();
-      if (response.isDenied) exit(0);
-      if (response.isPermanentlyDenied) exit(0);
-    } else if (status.isGranted) {
-      return;
-    } else if (status.isDenied) {
-      await showAlertDialog(context, false);
-      final response = await Permission.storage.request();
-      if (response.isDenied) exit(0);
-      if (response.isPermanentlyDenied) exit(0);
-    } else if (status.isPermanentlyDenied) {
-      await showAlertDialog(context, true);
-      exit(0);
-    }
   }
 
   @override
