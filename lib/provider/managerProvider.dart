@@ -43,6 +43,8 @@ class ManagerProvider extends ChangeNotifier {
     serviceQueue             = [];
     // Library Scaffold Key
     _libraryScaffoldKey = new GlobalKey<ScaffoldState>();
+    screenIndex         = new BehaviorSubject<int>();
+    screenIndex.add(0);
     // Controllers
     urlController    = new TextEditingController();
     titleController  = new TextEditingController();
@@ -76,7 +78,7 @@ class ManagerProvider extends ChangeNotifier {
   //
   // Library
   GlobalKey<ScaffoldState> _libraryScaffoldKey;
-  int _screenIndex = 0;
+  BehaviorSubject<int> screenIndex;
   // Home Screen
   bool showEmptyScreenWidget;
   bool _openWebviewPlayer;
@@ -242,9 +244,9 @@ class ManagerProvider extends ChangeNotifier {
   }
   // Handle Library WillPop
   DateTime _currentBackPressTime;
-  Future<bool> handlePop() async {
-    if (screenIndex != 0) {
-      screenIndex = 0;
+  Future<bool> handlePop(index) async {
+    if (index != 0) {
+      screenIndex.add(0);
       return false;
     } else {
       DateTime now = DateTime.now();
@@ -264,7 +266,7 @@ class ManagerProvider extends ChangeNotifier {
   // Move to Navigate Screen with a Search Intent
   void pushYoutubePage(String searchQuery) {
     navigateIntent = searchQuery;
-    screenIndex = 2;
+    screenIndex.add(2);
     Future.delayed(Duration(milliseconds: 100), () => navigateIntent = null);
   }
 
@@ -282,7 +284,7 @@ class ManagerProvider extends ChangeNotifier {
   Future<int> getVideoDetails(String url) async {
     if (loadingVideo == true) return null;
     if (VideoId.parseVideoId(url) == null) return null;
-    screenIndex = 0;
+    screenIndex.add(0);
     loadHome(LoadingStatus.Loading);
     try {
       videoDetails = await yt.getVideoDetails(url).timeout(Duration(seconds: 20));
@@ -351,7 +353,7 @@ class ManagerProvider extends ChangeNotifier {
       audioModifiers: [double.parse(data[2]), int.parse(data[3]), int.parse(data[4])],
     );
     addItemToDownloadList(infoset);
-    screenIndex = 1;
+    screenIndex.add(1);
     downloadsTabIndex = 0;
     infoset.downloadMedia();
   }
@@ -362,11 +364,6 @@ class ManagerProvider extends ChangeNotifier {
   //
   // Library
   GlobalKey<ScaffoldState> get libraryScaffoldKey => _libraryScaffoldKey;
-  int get screenIndex => _screenIndex;
-  set screenIndex(int newValue) {
-    _screenIndex = newValue;
-    notifyListeners();
-  }
   // Loading Video
   bool get loadingVideo => _loadingVideo;
   set loadingVideo(bool value) {

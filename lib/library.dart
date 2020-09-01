@@ -36,6 +36,17 @@ class Library extends StatefulWidget {
 
 class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerProviderStateMixin {
 
+  // TabBar Controller
+  TabController tabController;
+
+  // Library Screens
+  List<Widget> screens = [
+    HomeScreen(),
+    DownloadTab(),
+    Navigate(),
+    MoreScreen()
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -44,6 +55,21 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
         if (visible == false) FocusScope.of(context).unfocus();
       }
     );
+    tabController = new TabController(
+      initialIndex: 0,
+      length: screens.length,
+      vsync: this
+    );
+    tabController.animation.addListener(() {
+      int value = tabController.animation.value.round();
+      if (value != tabController.index)
+        setState(() => tabController.index = value);
+    });
+    Provider.of<ManagerProvider>(context, listen: false).screenIndex.listen((value) {
+      setState(() {
+        tabController.index = value;
+      });
+    });
   }
 
   @override
@@ -78,50 +104,19 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
       child: Scaffold(
-        backgroundColor: manager.screenIndex == 2
-          ? Theme.of(context).cardColor
-          : Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         key: manager.libraryScaffoldKey,
         resizeToAvoidBottomInset:
           manager.mediaStreamReady == false ? false : true,
         body: SafeArea(
           child: WillPopScope(
-            onWillPop: () => manager.handlePop(),
+            onWillPop: () => manager.handlePop(tabController.index),
             child: Stack(
               children: <Widget>[
-                IgnorePointer(
-                  ignoring: manager.screenIndex == 0 ? false : true,
-                  child: AnimatedOpacity(
-                    duration: Duration(milliseconds: 300),
-                    opacity: manager.screenIndex == 0 ? 1.0 : 0.0,
-                    child: HomeScreen()
-                  )
-                ),
-                IgnorePointer(
-                  ignoring: manager.screenIndex == 1 ? false : true,
-                  child: AnimatedOpacity(
-                    duration: Duration(milliseconds: 300),
-                    opacity: manager.screenIndex == 1 ? 1.0 : 0.0,
-                    child: DownloadTab()
-                  )
-                ),
-                IgnorePointer(
-                  ignoring: manager.screenIndex == 2 ? false : true,
-                  child: AnimatedOpacity(
-                    duration: Duration(milliseconds: 300),
-                    opacity: manager.screenIndex == 2 ? 1.0 : 0.0,
-                    child: manager.screenIndex == 2
-                      ? Navigate(searchQuery: manager.navigateIntent)
-                      : Container(),
-                  )
-                ),
-                IgnorePointer(
-                  ignoring: manager.screenIndex == 3 ? false : true,
-                  child: AnimatedOpacity(
-                    duration: Duration(milliseconds: 300),
-                    opacity: manager.screenIndex == 3 ? 1.0 : 0.0,
-                    child: MoreScreen(),
-                  )
+                TabBarView(
+                  physics: BouncingScrollPhysics(),
+                  controller: tabController,
+                  children: screens,
                 ),
                 StreamBuilder<ScreenState>(
                   stream: manager.screenStateStream,
@@ -192,7 +187,7 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
             ),    
             child: BottomNavigationBar(
               backgroundColor: Theme.of(context).cardColor,
-              currentIndex: manager.screenIndex,
+              currentIndex: tabController.index,
               selectedFontSize: 14,
               elevation: 8,
               selectedItemColor: Theme.of(context).accentColor,
@@ -201,9 +196,9 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
               onTap: (int index) {
                 if (manager.showMediaPlayer == true) {
                   manager.showMediaPlayer = false;
-                  Future.delayed(Duration(milliseconds: 150), () => manager.screenIndex = index);
+                  Future.delayed(Duration(milliseconds: 150), () => manager.screenIndex.add(index));
                 } else {
-                  manager.screenIndex = index;
+                  manager.screenIndex.add(index);
                 }
               },
               items: [

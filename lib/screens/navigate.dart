@@ -51,7 +51,9 @@ class _NavigateState extends State<Navigate> {
     search.content.whereType<SearchVideo>().forEach((element) {
       searchResults.add(element);
     });
-    setState((){});
+    if (mounted) {
+      setState((){});
+    }
   }
 
   @override
