@@ -82,7 +82,7 @@ class _CompletedPageState extends State<CompletedPage> with TickerProviderStateM
                                 androidEnableQueue: true,
                               );
                             }
-                            await AudioService.updateQueue(manager.serviceQueue);
+                            await AudioService.updateQueue(manager.getCurrentMediaItemList());
                             MediaItem item = AudioService.queue[index];
                             await AudioService.playMediaItem(item);
                           }
