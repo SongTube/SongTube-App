@@ -21,9 +21,6 @@ import 'package:provider/provider.dart';
 // UI
 import 'package:songtube/screens/homeScreen/downloadMenu.dart';
 import 'package:songtube/screens/homeScreen/IntroSplash.dart';
-import 'package:rxdart/rxdart.dart';
-
-BehaviorSubject<String> videoUrl = new BehaviorSubject();
 
 class HomeScreen extends StatefulWidget {
   @override
