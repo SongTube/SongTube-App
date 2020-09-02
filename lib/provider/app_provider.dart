@@ -26,14 +26,10 @@ class AppDataProvider extends ChangeNotifier {
     if (_audioDownloadPath == null)
       ExtStorage.getExternalStorageDirectory().then((value) {
         _audioDownloadPath = value + "/SongTube";
-        if (!Directory(_audioDownloadPath).existsSync())
-          Directory(_audioDownloadPath).createSync();
       });
     if (_videoDownloadPath == null)
       ExtStorage.getExternalStorageDirectory().then((value) {
         _videoDownloadPath = value + "/SongTube";
-        if (!Directory(_videoDownloadPath).existsSync())
-          Directory(_videoDownloadPath).createSync();
       });
     PackageInfo.fromPlatform().then((value) {
       appName = value.appName;

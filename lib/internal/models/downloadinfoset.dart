@@ -103,6 +103,9 @@ class DownloadInfoSet {
     // Move file to its Predefined Directory
     Permission.storage.request().then((value) async {
       if (value == PermissionStatus.granted) {
+        if (!await Directory(downloadPath).exists()) {
+          await Directory(downloadPath).create(recursive: true);
+        }
         String fileName = downloadedFile.path.split("/").last;
         File finalFile = await downloadedFile.copy("$downloadPath/$fileName");
         await finishDownload(finalFile);
