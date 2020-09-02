@@ -57,6 +57,11 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
 
   void checkClipboard() {
     Clipboard.getData('text/plain').then((data) {
+      if (data == null) {
+        clipboardLink = "";
+        setState(() => clipboardHasLink = false);
+        return;
+      }
       if (VideoId.parseVideoId(data.text) == null) {
         clipboardLink = "";
         setState(() => clipboardHasLink = false);
