@@ -27,10 +27,7 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMixin {
-
-  @override
-  bool get wantKeepAlive => true;
+class _HomeScreenState extends State<HomeScreen> {
 
   // QuickSearch Controller
   TextEditingController quickSearchController;
@@ -71,7 +68,6 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
     WidgetsBinding.instance.addObserver(
       new LifecycleEventHandler(resumeCallBack: () {

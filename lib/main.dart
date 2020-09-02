@@ -40,9 +40,7 @@ class Main extends StatelessWidget {
         ChangeNotifierProvider<ManagerProvider>(create: (context) => ManagerProvider())
       ],
       child: Builder( builder: (context) {
-        AppDataProvider appData = Provider.of<AppDataProvider>(context);
-        ManagerProvider manager = Provider.of<ManagerProvider>(context);
-        manager.snackBar = new AppSnack(scaffoldKey: manager.libraryScaffoldKey, context: context);
+        AppDataProvider appData = Provider.of<AppDataProvider>(context);        
         ThemeData customTheme;
         ThemeData darkTheme;
 

@@ -7,12 +7,7 @@ import 'package:songtube/screens/settings/converterSettings.dart';
 import 'package:songtube/screens/settings/downloadSettings.dart';
 import 'package:songtube/screens/settings/themeSettings.dart';
 
-class SettingsTab extends StatefulWidget {
-  @override
-  _SettingsTabState createState() => _SettingsTabState();
-}
-
-class _SettingsTabState extends State<SettingsTab> with TickerProviderStateMixin {
+class SettingsTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

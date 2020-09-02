@@ -15,9 +15,13 @@ class DownloadTab extends StatefulWidget {
   _DownloadTabState createState() => _DownloadTabState();
 }
 
-class _DownloadTabState extends State<DownloadTab> with TickerProviderStateMixin {
+class _DownloadTabState extends State<DownloadTab> {
 
-  void listener(ManagerProvider provider) {
+  @override
+  void initState() {
+    super.initState();
+    ManagerProvider provider =
+      Provider.of<ManagerProvider>(context, listen: false);
     provider.downloadInfoSetList.forEach((element) {
       element.currentAction.stream.listen((event) {
         if (event == "Completed") {
@@ -34,7 +38,6 @@ class _DownloadTabState extends State<DownloadTab> with TickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
     ManagerProvider manager = Provider.of<ManagerProvider>(context, listen: true);
-    listener(manager);
     return Scaffold(
       body: Column(
         children: <Widget>[

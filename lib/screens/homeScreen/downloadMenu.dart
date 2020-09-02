@@ -15,7 +15,7 @@ class DownloadMenu extends StatefulWidget {
   _DownloadMenuState createState() => _DownloadMenuState();
 }
 
-class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMixin {
+class _DownloadMenuState extends State<DownloadMenu> {
 
   // Variables
   double menuSize = 190;
@@ -74,10 +74,9 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
                                 subMenu = 1;
                               });
                             },
-                            child: AnimatedContainer(
+                            child: Container(
                               margin: EdgeInsets.only(left:16, right:16),
                               padding: EdgeInsets.all(8),
-                              duration: Duration(milliseconds: 60),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
                                 color: Theme.of(context).cardColor,
@@ -127,10 +126,9 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
                                 subMenu = 2;
                               });
                             },
-                            child: AnimatedContainer(
+                            child: Container(
                               margin: EdgeInsets.only(left:16, right:16),
                               padding: EdgeInsets.all(8),
-                              duration: Duration(milliseconds: 60),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
                                 color: Theme.of(context).cardColor,

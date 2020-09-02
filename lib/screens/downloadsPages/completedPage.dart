@@ -25,7 +25,7 @@ class CompletedPage extends StatefulWidget {
   _CompletedPageState createState() => _CompletedPageState();
 }
 
-class _CompletedPageState extends State<CompletedPage> with TickerProviderStateMixin {
+class _CompletedPageState extends State<CompletedPage> {
 
   ScrollController scrollController = new ScrollController();
 
@@ -54,54 +54,50 @@ class _CompletedPageState extends State<CompletedPage> with TickerProviderStateM
             final state = screenState?.playbackState;
             final processingState =
                 state?.processingState ?? AudioProcessingState.none;
-            return AnimatedSize(
-              vsync: this,
-              duration: Duration(milliseconds: 300),
-              child: ListView.builder(
-                controller: scrollController,
-                physics: BouncingScrollPhysics(),
-                  itemCount: manager.songFileList.length,
-                  itemBuilder: (context, index) {
-                    SongFile download = manager.songFileList[index];
-                    return Padding(
-                      padding: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
-                      child: DownloadTileWithoutStream(
-                        title: download.title,
-                        author: download.author,
-                        coverPath: download.coverPath,
-                        onTilePlay: () async {
-                          if (download.downloadType == "Audio") {
-                            if (processingState == AudioProcessingState.none) {
-                              await AudioService.start(
-                                backgroundTaskEntrypoint: audioPlayerTaskEntrypoint,
-                                androidNotificationChannelName: 'SongTube',
-                                // Enable this if you want the Android service to exit the foreground state on pause.
-                                //androidStopForegroundOnPause: true,
-                                androidNotificationColor: 0xFF2196f3,
-                                androidNotificationIcon: 'drawable/ic_stat_music_note',
-                                androidEnableQueue: true,
-                              );
-                            }
-                            await AudioService.updateQueue(manager.getCurrentMediaItemList());
-                            MediaItem item = AudioService.queue[index];
-                            await AudioService.playMediaItem(item);
+            return ListView.builder(
+              controller: scrollController,
+              physics: BouncingScrollPhysics(),
+                itemCount: manager.songFileList.length,
+                itemBuilder: (context, index) {
+                  SongFile download = manager.songFileList[index];
+                  return Padding(
+                    padding: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
+                    child: DownloadTileWithoutStream(
+                      title: download.title,
+                      author: download.author,
+                      coverPath: download.coverPath,
+                      onTilePlay: () async {
+                        if (download.downloadType == "Audio") {
+                          if (processingState == AudioProcessingState.none) {
+                            await AudioService.start(
+                              backgroundTaskEntrypoint: audioPlayerTaskEntrypoint,
+                              androidNotificationChannelName: 'SongTube',
+                              // Enable this if you want the Android service to exit the foreground state on pause.
+                              //androidStopForegroundOnPause: true,
+                              androidNotificationColor: 0xFF2196f3,
+                              androidNotificationIcon: 'drawable/ic_stat_music_note',
+                              androidEnableQueue: true,
+                            );
                           }
-                          if (download.downloadType == "Video") {
-                            NativeMethod.openVideo(download.path);
-                          }
-                        },
-                        onTileRemove: () {
-                          final dbHelper = DatabaseService.instance;
-                          dbHelper.deleteDownload(int.parse(download.id));
-                          setState(() {
-                            manager.getDatabase();
-                          });
-                        },
-                      ),
-                    );
-                  },
-                ),
-            );
+                          await AudioService.updateQueue(manager.getCurrentMediaItemList());
+                          MediaItem item = AudioService.queue[index];
+                          await AudioService.playMediaItem(item);
+                        }
+                        if (download.downloadType == "Video") {
+                          NativeMethod.openVideo(download.path);
+                        }
+                      },
+                      onTileRemove: () {
+                        final dbHelper = DatabaseService.instance;
+                        dbHelper.deleteDownload(int.parse(download.id));
+                        setState(() {
+                          manager.getDatabase();
+                        });
+                      },
+                    ),
+                  );
+                },
+              );
           }
         )
         : NoDownloadsCompleted()

@@ -24,6 +24,7 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 // UI
 import 'package:songtube/screens/musicPlayer.dart';
+import 'package:songtube/ui/snackbar.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart' as yt;
 
 class Library extends StatefulWidget {
@@ -98,6 +99,7 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
         systemNavigationBarIconBrightness: _themeBrightness
       ),
     );
+    manager.snackBar = new AppSnack(scaffoldKey: manager.libraryScaffoldKey, context: context);
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
       child: Scaffold(
