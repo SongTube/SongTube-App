@@ -1,6 +1,5 @@
 // Dart
 import 'dart:async';
-import 'dart:io';
 
 // Flutter
 import 'package:audio_service/audio_service.dart';
@@ -18,14 +17,12 @@ import 'package:songtube/screens/more.dart';
 import 'package:songtube/screens/navigate.dart';
 
 // Packages
-import 'package:permission_handler/permission_handler.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 // UI
-import 'package:songtube/ui/elementsUI.dart';
 import 'package:songtube/screens/musicPlayer.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart' as yt;
 
