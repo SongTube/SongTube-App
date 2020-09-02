@@ -113,10 +113,15 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
             onWillPop: () => manager.handlePop(tabController.index),
             child: Stack(
               children: <Widget>[
-                TabBarView(
-                  physics: BouncingScrollPhysics(),
-                  controller: tabController,
-                  children: screens,
+                NotificationListener<OverscrollIndicatorNotification>(
+                  onNotification: (OverscrollIndicatorNotification overscroll) {
+                    overscroll.disallowGlow();
+                    return;
+                  },
+                  child: TabBarView(
+                    controller: tabController,
+                    children: screens,
+                  ),
                 ),
                 StreamBuilder<ScreenState>(
                   stream: manager.screenStateStream,
