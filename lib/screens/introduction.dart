@@ -101,7 +101,8 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
                         ),
                       ),
                       onPressed: () {
-
+                        Provider.of<AppDataProvider>(context, listen: false).preferences.saveShowIntroductionPages(false);
+                        Navigator.pushReplacementNamed(context, 'homeScreen');
                       },
                     ),
                   ),
