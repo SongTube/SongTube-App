@@ -1,6 +1,5 @@
 // Dart
 import 'dart:async';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:rxdart/rxdart.dart';
 
 // Flutter
@@ -40,7 +39,6 @@ class ManagerProvider extends ChangeNotifier {
     showFloatingActionButtom = false;
     showDownloadTabsStatus   = false;
     showMediaPlayer          = false;
-    serviceQueue             = [];
     // Library Scaffold Key
     _libraryScaffoldKey = new GlobalKey<ScaffoldState>();
     screenIndex         = new BehaviorSubject<int>();
@@ -96,7 +94,6 @@ class ManagerProvider extends ChangeNotifier {
   String navigateIntent;
   // AudioService
   bool _showMediaPlayer;
-  List<MediaItem> serviceQueue;
   /// Encapsulate all the different data we're interested in into a single
   /// stream so we don't have to nest StreamBuilders.
   Stream<ScreenState> get screenStateStream =>
@@ -124,7 +121,6 @@ class ManagerProvider extends ChangeNotifier {
   final dbHelper = DatabaseService.instance;
   Future<void> getDatabase() async {
     _songFileList = await dbHelper.getDownloadList();
-    await getDatabaseQueue();
     notifyListeners();
   }
 
@@ -207,8 +203,8 @@ class ManagerProvider extends ChangeNotifier {
     urlController.text = url; notifyListeners();
     await getVideoDetails(url);
   }
-  // Create Music Queue from Database
-  Future<void> getDatabaseQueue() async {
+  // Get Current MediaItem List from our SongFile List
+  List<MediaItem> getCurrentMediaItemList() {
     List<MediaItem> list = [];
     _songFileList.forEach((SongFile element) {
       int hours = 0;
@@ -240,7 +236,7 @@ class ManagerProvider extends ChangeNotifier {
         )
       );
     });
-    serviceQueue = list;
+    return list;
   }
   // Handle Library WillPop
   DateTime _currentBackPressTime;
