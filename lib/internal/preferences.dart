@@ -28,10 +28,9 @@ class Preferences {
 
   Future<void> initPreferences() async {
     prefs = await SharedPreferences.getInstance();
-    String version;
     AndroidDeviceInfo deviceInfo = await DeviceInfoPlugin().androidInfo;
-    version = deviceInfo.version.release;
-    if (double.parse(version) >= 9 || double.parse(version) >= 13) {
+    int version = deviceInfo.version.sdkInt;
+    if (version >= 28) {
       isSystemThemeAvailable = true;
     } else {isSystemThemeAvailable = false;}
   }
