@@ -17,6 +17,12 @@ class DownloadTab extends StatefulWidget {
 
 class _DownloadTabState extends State<DownloadTab> {
 
+  // Pages
+  List<Widget> downloadPages = [
+    DownloadingPage(),
+    CompletedPage()
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -46,25 +52,11 @@ class _DownloadTabState extends State<DownloadTab> {
             child: Stack(
               alignment: Alignment.center,
               children: <Widget>[
-                // Ongoing Downloads Page
-                IgnorePointer(
-                  ignoring: manager.downloadsTabIndex == 0 ? false : true,
-                  child: AnimatedOpacity(
-                    duration: Duration(milliseconds: 200),
-                    opacity: manager.downloadsTabIndex == 0 ? 1.0 : 0.0,
-                    child: DownloadingPage(),
-                  ),
+                // Ongoing & Completed Downloads Pages
+                AnimatedSwitcher(
+                  duration: Duration(milliseconds: 400),
+                  child: downloadPages[manager.downloadsTabIndex]
                 ),
-                // Completed Downloads Page
-                IgnorePointer(
-                  ignoring: manager.downloadsTabIndex == 1 ? false : true,
-                  child: AnimatedOpacity(
-                    duration: Duration(milliseconds: 200),
-                    opacity: manager.downloadsTabIndex == 1 ? 1.0 : 0.0,
-                    child: CompletedPage(),
-                  ),
-                ),
-                // Download and Completed Page Buttoms
                 StreamBuilder<Object>(
                   stream: manager.showDownloadsTabs.stream,
                   builder: (context, snapshot) {

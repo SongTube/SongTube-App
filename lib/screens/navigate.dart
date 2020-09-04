@@ -31,7 +31,7 @@ class _NavigateState extends State<Navigate> {
   @override
   void initState() {
     super.initState();
-    yt= new YoutubeExplode();
+    yt = new YoutubeExplode();
     searchResults = new List<SearchVideo>();
     search(widget.searchQuery);
   }
@@ -47,7 +47,6 @@ class _NavigateState extends State<Navigate> {
             ))
           : searchQuery
       );
-    searchResults = new List<SearchVideo>();
     search.content.whereType<SearchVideo>().forEach((element) {
       searchResults.add(element);
     });

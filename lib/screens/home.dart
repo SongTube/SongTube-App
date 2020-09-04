@@ -45,13 +45,20 @@ class _HomeScreenState extends State<HomeScreen> {
     quickSearchController = new TextEditingController();
     clipboardHasLink = false;
     clipboardLink = "";
-    forward = true;
     checkClipboard();
+    forward = true;
+    WidgetsBinding.instance.addObserver(
+      new LifecycleEventHandler(resumeCallBack: () {
+        Provider.of<ManagerProvider>(context, listen: false).handleIntent();
+        checkClipboard();
+        return;
+      })
+    );
   }
 
   void checkClipboard() {
     Clipboard.getData('text/plain').then((data) {
-      if (data == null) {
+      if (data == null && mounted) {
         clipboardLink = "";
         setState(() => clipboardHasLink = false);
         return;
@@ -69,13 +76,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
-    WidgetsBinding.instance.addObserver(
-      new LifecycleEventHandler(resumeCallBack: () {
-        manager.handleIntent();
-        checkClipboard();
-        return;
-      })
-    );
     return GestureDetector(
       child: Scaffold(
         resizeToAvoidBottomInset:
