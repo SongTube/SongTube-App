@@ -3,10 +3,8 @@ import 'package:songtube/ui/searchResult/videoTile.dart';
 
 class SearchPage extends StatelessWidget {
   final List results;
-  final Function onSelect;
   SearchPage({
     @required this.results,
-    @required this.onSelect,
   });
   @override
   Widget build(BuildContext context) {
@@ -19,14 +17,14 @@ class SearchPage extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(
                 top: video == results.first ? 10 : 5,
-                bottom: video == results.last ? 10 : 5
+                bottom: video == results.last ? 10 : 5,
+                left: 12,
               ),
               child: VideoTile(
                 video: results[index],
-                onSelect: onSelect,
+                onSelect: () {}
               ),
             ),
-            Divider(height: 1, indent: 32, endIndent: 32)
           ],
         );
       }

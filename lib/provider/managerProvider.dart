@@ -39,7 +39,7 @@ class ManagerProvider extends ChangeNotifier {
     showDownloadTabsStatus   = false;
     // Library Scaffold Key
     _libraryScaffoldKey = new GlobalKey<ScaffoldState>();
-    screenIndex         = new BehaviorSubject<int>();
+    screenIndex         = new StreamController<int>.broadcast();
     screenIndex.add(0);
     // Controllers
     urlController    = new TextEditingController();
@@ -66,7 +66,7 @@ class ManagerProvider extends ChangeNotifier {
   //
   // Library
   GlobalKey<ScaffoldState> _libraryScaffoldKey;
-  BehaviorSubject<int> screenIndex;
+  StreamController<int> screenIndex;
   // Home Screen
   bool showEmptyScreenWidget;
   bool _openWebviewPlayer;
@@ -242,8 +242,9 @@ class ManagerProvider extends ChangeNotifier {
   // Move to Navigate Screen with a Search Intent
   void pushYoutubePage(String searchQuery) {
     navigateIntent = searchQuery;
-    screenIndex.add(2);
-    Future.delayed(Duration(milliseconds: 100), () => navigateIntent = null);
+    Future.delayed((Duration(milliseconds: 200)), () => screenIndex.add(2));
+    Future.delayed((Duration(milliseconds: 200)), () => navigateIntent = null);
+    notifyListeners();
   }
 
   // -------------------------------------

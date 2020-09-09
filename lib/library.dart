@@ -34,14 +34,6 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
   // TabBar Controller
   TabController tabController;
 
-  // Library Screens
-  List<Widget> screens = [
-    HomeScreen(),
-    DownloadTab(),
-    Navigate(),
-    MoreScreen()
-  ];
-
   @override
   void initState() {
     super.initState();
@@ -52,18 +44,13 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
     );
     tabController = new TabController(
       initialIndex: 0,
-      length: screens.length,
+      length: 4,
       vsync: this
     );
     tabController.animation.addListener(() {
       int value = tabController.animation.value.round();
       if (value != tabController.index)
         setState(() => tabController.index = value);
-    });
-    Provider.of<ManagerProvider>(context, listen: false).screenIndex.listen((value) {
-      setState(() {
-        tabController.index = value;
-      });
     });
     ManagerProvider provider =
       Provider.of<ManagerProvider>(context, listen: false);
@@ -108,6 +95,11 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
         systemNavigationBarIconBrightness: _themeBrightness
       ),
     );
+    manager.screenIndex.stream.listen((value) {
+      setState(() {
+        tabController.index = value;
+      });
+    });
     manager.snackBar = new AppSnack(scaffoldKey: manager.libraryScaffoldKey, context: context);
     return Material(
       child: Stack(
@@ -141,7 +133,14 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
                   Expanded(
                     child: TabBarView(
                       controller: tabController,
-                      children: screens,
+                      children: [
+                        HomeScreen(),
+                        DownloadTab(),
+                        Navigate(
+                          searchQuery: manager.navigateIntent,
+                        ),
+                        MoreScreen()
+                      ],
                     ),
                   ),
                   playerPadding(context)

@@ -23,7 +23,7 @@ class VideoTile extends StatelessWidget {
         height: 100,
         width: double.infinity,
         decoration: BoxDecoration(
-          color: Theme.of(context).cardColor
+          color: Theme.of(context).scaffoldBackgroundColor
         ),
         child: Row(
           children: <Widget>[
@@ -79,7 +79,10 @@ class VideoTile extends StatelessWidget {
                     height: 30,
                     width: 30,
                     margin: EdgeInsets.all(16),
-                    color: Theme.of(context).cardColor,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).cardColor,
+                      borderRadius: BorderRadius.circular(50)
+                    ),
                     child: Icon(EvaIcons.downloadOutline, size: 20, color: Theme.of(context).iconTheme.color),
                   ),
                 ],

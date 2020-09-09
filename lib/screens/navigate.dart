@@ -11,10 +11,12 @@ import 'package:songtube/screens/navigateScreen/shimmer/shimmerSearchPage.dart';
 import 'package:songtube/ui/appBar.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
+List<SearchVideo> searchResults = new List<SearchVideo>();
+
 class Navigate extends StatefulWidget {
   final String searchQuery;
   Navigate({
-    this.searchQuery
+    this.searchQuery,
   });
   @override
   _NavigateState createState() => _NavigateState();
@@ -25,15 +27,17 @@ class _NavigateState extends State<Navigate> {
   // YT Explode Instance
   YoutubeExplode yt;
 
-  // List Videos
-  List<SearchVideo> searchResults;
+  // No Internet
+  bool errorSearching;
 
   @override
   void initState() {
     super.initState();
+    errorSearching = false;
     yt = new YoutubeExplode();
-    searchResults = new List<SearchVideo>();
-    search(widget.searchQuery);
+    if (searchResults.isEmpty || widget.searchQuery != null) {
+      search(widget.searchQuery);
+    }
   }
 
   void search([String searchQuery]) async {
@@ -46,6 +50,12 @@ class _NavigateState extends State<Navigate> {
               .codeUnitAt(Random().nextInt('qwertyuiopasdfgjlcvbnm'.length))
             ))
           : searchQuery
+      ).timeout(
+        Duration(seconds: 20),
+        onTimeout: () {
+          setState(() => errorSearching = true);
+          return;
+        }
       );
     search.content.whereType<SearchVideo>().forEach((element) {
       searchResults.add(element);
@@ -58,19 +68,25 @@ class _NavigateState extends State<Navigate> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).cardColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Column(
         children: [
           searchBar(context),
           Expanded(
             child: AnimatedSwitcher(
               duration: Duration(milliseconds: 200),
-              child: searchResults.isNotEmpty
-                ? SearchPage(
-                    results: searchResults,
-                    onSelect: () {setState(() {});},
+              child: errorSearching
+                ? Center(
+                    child: IconButton(
+                      icon: Icon(Icons.refresh),
+                      onPressed: () => search(widget.searchQuery),
+                    ),
                   )
-                : ShimmerSearchPage()
+                : searchResults.isNotEmpty
+                    ? SearchPage(
+                        results: searchResults,
+                      )
+                    : ShimmerSearchPage()
             ),
           )
         ]

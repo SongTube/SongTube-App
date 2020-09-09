@@ -41,7 +41,7 @@ class _SearchBarState extends State<SearchBar> {
       width: double.infinity,
       height: kToolbarHeight,
       decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
+        color: Theme.of(context).scaffoldBackgroundColor,
         boxShadow: [
           BoxShadow(
             color: Colors.black12.withOpacity(0.08),
@@ -69,7 +69,7 @@ class _SearchBarState extends State<SearchBar> {
                         left: 16,
                       ),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).scaffoldBackgroundColor,
+                        color: Theme.of(context).cardColor,
                         borderRadius: BorderRadius.circular(20)
                       ),
                       child: Theme(
