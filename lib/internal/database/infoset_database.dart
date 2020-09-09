@@ -82,8 +82,13 @@ class DatabaseService {
     ]);
     await Future.forEach(result, (element) async {
       SongFile songFile = SongFile.fromMap(element);
-      File croppedImage = await TagsManager.generateCover(songFile.coverUrl);
-      songFile.coverPath = croppedImage.uri.path;
+      File coverPath = File((await getApplicationDocumentsDirectory()).path +
+        "${songFile.title}.jpg");
+      if (!await coverPath.exists()) {
+        File croppedImage = await TagsManager.generateCover(songFile.coverUrl);
+        await croppedImage.copy(coverPath.path);
+      }
+      songFile.coverPath = coverPath.path;
       list.add(songFile);
     });
     return list;

@@ -44,6 +44,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
   AudioPlayer _player;
   StreamSubscription<Duration> _eventSubscription;
   StreamSubscription<AudioPlayerState> _playerStateSubscription;
+  int timesPositionChanged = 0;
   int _index = 0;
 
   // Audio Session
@@ -58,6 +59,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
       _skip(-1);
     } else {
       _player.seek(Duration(seconds: 0));
+      _setState();
     }
   }
   @override
@@ -101,8 +103,18 @@ class AudioPlayerTask extends BackgroundAudioTask {
       _player.pause();
     });
     _player = new AudioPlayer();
-    _eventSubscription = _player.onAudioPositionChanged.listen((event) {
-      _setState(position: event);
+    _eventSubscription = _player.onAudioPositionChanged.listen((event) async {
+      if (timesPositionChanged < 5) {
+        timesPositionChanged += 1;
+      } else {
+        PlaybackState(
+          processingState: AudioServiceBackground.state.processingState,
+          playing: _player.state == AudioPlayerState.PLAYING ? true : false,
+          position: Duration(milliseconds: await _player.getCurrentPosition()),
+          actions: Set()
+        );
+        timesPositionChanged = 0;
+      }
     });
     _playerStateSubscription = _player.onPlayerStateChanged.listen((state) {
       switch (state) {
@@ -113,6 +125,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
           break;
       }
     });
+    _setState();
   }
 
   Future<void> _handlePlaybackCompleted() async {
@@ -188,6 +201,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
   @override
   Future<void> onSeekTo(Duration position) async {
     _player.seek(position);
+    _setState();
   }
 
   /// Get MediaPlayer Controls
@@ -211,20 +225,15 @@ class AudioPlayerTask extends BackgroundAudioTask {
 
   Future<void> _setState({
     AudioProcessingState processingState,
-    Duration position,
     Duration bufferedPosition,
   }) async {
-    if (position == null) {
-      position = Duration(milliseconds: await _player.getCurrentPosition());
-    }
     await AudioServiceBackground.setState(
       controls: getControls(),
       systemActions: [MediaAction.seekTo],
       processingState:
           processingState ?? AudioServiceBackground.state.processingState,
       playing: _player.state == AudioPlayerState.PLAYING ? true : false,
-      position: position,
-      bufferedPosition: bufferedPosition ?? position,
+      position: Duration(milliseconds: await _player.getCurrentPosition()),
     );
   }
 }

@@ -94,7 +94,8 @@ class TagsManager {
   // Generate a Square Cover Image
   static Future<File> generateCover(String url) async {
     File artwork =
-      new File((await getTemporaryDirectory()).path + "/${RandomString.getRandomString(5)}");
+      new File((await getApplicationDocumentsDirectory()).path +
+        "/${RandomString.getRandomString(5)}.jpg");
     var response; try {
       response = await http.get(url);
     } catch (_) {return null;}

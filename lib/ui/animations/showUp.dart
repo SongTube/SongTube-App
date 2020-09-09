@@ -85,12 +85,14 @@ class _ShowUpTransitionState extends State<ShowUpTransition> with TickerProvider
           _animController.reverse();
       }
     });
-    return FadeTransition(
-      child: SlideTransition(
-        position: _animOffset,
-        child: widget.child,
-      ),
-      opacity: _animController,
-    );
+    return widget.forward
+      ? FadeTransition(
+        child: SlideTransition(
+          position: _animOffset,
+          child: widget.child,
+        ),
+        opacity: _animController,
+      )
+      : Container();
   }
 }

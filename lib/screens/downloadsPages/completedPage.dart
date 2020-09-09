@@ -15,6 +15,7 @@ import 'package:songtube/internal/playerService.dart';
 // Packages
 import 'package:audio_service/audio_service.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/screens/musicPlayer/screenStateStream.dart';
 
 // UI
 import 'package:songtube/ui/reusable/downloadTile.dart';
@@ -48,7 +49,7 @@ class _CompletedPageState extends State<CompletedPage> {
       duration: Duration(milliseconds: 300),
       child: manager.songFileList.isNotEmpty
         ? StreamBuilder<ScreenState>(
-          stream: _screenStateStream,
+          stream: screenStateStream,
           builder: (context, snapshot) {
             final screenState = snapshot.data;
             final state = screenState?.playbackState;
@@ -103,13 +104,4 @@ class _CompletedPageState extends State<CompletedPage> {
         : NoDownloadsCompleted()
     );
   }
-  /// Encapsulate all the different data we're interested in into a single
-  /// stream so we don't have to nest StreamBuilders.
-  Stream<ScreenState> get _screenStateStream =>
-      Rx.combineLatest3<List<MediaItem>, MediaItem, PlaybackState, ScreenState>(
-          AudioService.queueStream,
-          AudioService.currentMediaItemStream,
-          AudioService.playbackStateStream,
-          (queue, mediaItem, playbackState) =>
-              ScreenState(queue, mediaItem, playbackState));
 }

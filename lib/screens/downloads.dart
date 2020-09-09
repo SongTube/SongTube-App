@@ -24,24 +24,6 @@ class _DownloadTabState extends State<DownloadTab> {
   ];
 
   @override
-  void initState() {
-    super.initState();
-    ManagerProvider provider =
-      Provider.of<ManagerProvider>(context, listen: false);
-    provider.downloadInfoSetList.forEach((element) {
-      element.currentAction.stream.listen((event) {
-        if (event == "Completed") {
-          provider.getDatabase();
-          setState(() {});
-        }
-        if (event == "Access Denied") {
-          setState(() {});
-        }
-      });
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     ManagerProvider manager = Provider.of<ManagerProvider>(context, listen: true);
     return Scaffold(

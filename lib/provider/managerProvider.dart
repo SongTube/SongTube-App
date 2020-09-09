@@ -13,7 +13,6 @@ import 'package:songtube/internal/ffmpeg/converter.dart';
 import 'package:songtube/internal/models/downloadinfoset.dart';
 import 'package:songtube/internal/models/metadata.dart';
 import 'package:songtube/internal/nativeMethods.dart';
-import 'package:songtube/internal/playerService.dart';
 import 'package:songtube/internal/youtube/youtubeInfo.dart';
 import 'package:songtube/provider/app_provider.dart';
 import 'package:songtube/ui/snackbar.dart';
@@ -38,7 +37,6 @@ class ManagerProvider extends ChangeNotifier {
     mediaStreamReady         = false;
     showFloatingActionButtom = false;
     showDownloadTabsStatus   = false;
-    showMediaPlayer          = false;
     // Library Scaffold Key
     _libraryScaffoldKey = new GlobalKey<ScaffoldState>();
     screenIndex         = new BehaviorSubject<int>();
@@ -60,14 +58,6 @@ class ManagerProvider extends ChangeNotifier {
     yt = new YoutubeInfo();
     // Database
     getDatabase();
-    // Listeners
-    screenStateStream.listen((event) {
-      if (AudioService.playbackState != null) {
-        if (AudioService.playbackState.processingState == AudioProcessingState.stopped) {
-          showMediaPlayer = false;
-        }
-      }
-    });
   }
 
   // -------------
@@ -93,16 +83,6 @@ class ManagerProvider extends ChangeNotifier {
   // Navitate Screen
   String navigateIntent;
   // AudioService
-  bool _showMediaPlayer;
-  /// Encapsulate all the different data we're interested in into a single
-  /// stream so we don't have to nest StreamBuilders.
-  Stream<ScreenState> get screenStateStream =>
-      Rx.combineLatest3<List<MediaItem>, MediaItem, PlaybackState, ScreenState>(
-          AudioService.queueStream,
-          AudioService.currentMediaItemStream,
-          AudioService.playbackStateStream,
-          (queue, mediaItem, playbackState) =>
-              ScreenState(queue, mediaItem, playbackState));
 
   // --------------------------------
   // Current Video and StreamManifest
@@ -389,11 +369,6 @@ class ManagerProvider extends ChangeNotifier {
       showDownloadsTabs.add(false);
       showDownloadTabsStatus = false;
     }
-    notifyListeners();
-  }
-  bool get showMediaPlayer => _showMediaPlayer;
-  set showMediaPlayer(bool value) {
-    _showMediaPlayer = value;
     notifyListeners();
   }
 }
