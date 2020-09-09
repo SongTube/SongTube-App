@@ -233,7 +233,8 @@ class AudioPlayerTask extends BackgroundAudioTask {
       processingState:
           processingState ?? AudioServiceBackground.state.processingState,
       playing: _player.state == AudioPlayerState.PLAYING ? true : false,
-      position: Duration(milliseconds: await _player.getCurrentPosition()),
+      position: Duration(milliseconds: _player.state == AudioPlayerState.PLAYING
+        ? await _player.getCurrentPosition() : 0),
     );
   }
 }
