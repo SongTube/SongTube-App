@@ -256,7 +256,7 @@ class DownloadInfoSet {
         artworkPath: croppedImage.path
       );
       // Copy our CoverArt to default folder
-      await artwork.copy((await getApplicationDocumentsDirectory()).path +
+      await croppedImage.copy((await getApplicationDocumentsDirectory()).path +
         "${metadata.title}.jpg");
     } on Exception catch (e) {
       print(e);
