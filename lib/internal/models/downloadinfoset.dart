@@ -26,7 +26,7 @@ enum DownloadType { AUDIO, VIDEO }
 class DownloadInfoSet {
 
   // Streams
-  StreamController<String> currentAction;
+  BehaviorSubject<String> currentAction;
   BehaviorSubject dataProgress;
   BehaviorSubject progressBar;
 
@@ -65,7 +65,7 @@ class DownloadInfoSet {
     this.videoStreamInfo
   }) {
     converter = new Converter();
-    currentAction = new StreamController.broadcast();
+    currentAction = new BehaviorSubject();
     dataProgress = new BehaviorSubject();
     progressBar = new BehaviorSubject();
     cancelDownload = false;
@@ -131,6 +131,9 @@ class DownloadInfoSet {
     progressBar.add(1.0);
     downloaderClosed = true;
     NativeMethod.registerFile(finalFile.path);
+    currentAction.close();
+    progressBar.close();
+    dataProgress.close();
   }
 
   Future<File> downloadStream() async { 
