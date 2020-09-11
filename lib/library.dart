@@ -52,19 +52,6 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
       if (value != tabController.index)
         setState(() => tabController.index = value);
     });
-    ManagerProvider provider =
-      Provider.of<ManagerProvider>(context, listen: false);
-    provider.downloadInfoSetList.forEach((element) {
-      element.currentAction.stream.listen((event) {
-        if (event == "Completed") {
-          provider.getDatabase();
-          setState(() {});
-        }
-        if (event == "Access Denied") {
-          setState(() {});
-        }
-      });
-    });
   }
 
   @override
@@ -98,6 +85,19 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
       setState(() {
         tabController.index = value;
       });
+    });
+    manager.downloadInfoSetList.forEach((element) {
+      if (!element.currentAction.isClosed) {
+        element.currentAction.stream.listen((event) {
+          if (event == "Completed") {
+            manager.getDatabase();
+            setState(() {});
+          }
+          if (event == "Access Denied") {
+            setState(() {});
+          }
+        });
+      }
     });
     manager.snackBar = new AppSnack(scaffoldKey: manager.libraryScaffoldKey, context: context);
     return Material(
