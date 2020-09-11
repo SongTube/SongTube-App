@@ -152,8 +152,8 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
           clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(                                                   
             borderRadius: BorderRadius.only(                                           
-              topRight: Radius.circular(30),
-              topLeft: Radius.circular(30)
+              topRight: Radius.circular(10),
+              topLeft: Radius.circular(10)
             ),
             boxShadow: [                                                               
               BoxShadow(
