@@ -81,7 +81,6 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
   @override
   Widget build(BuildContext context) {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
-    Brightness _themeBrightness = Theme.of(context).brightness;
     Brightness _systemBrightness = Theme.of(context).brightness;
     Brightness _statusBarBrightness = _systemBrightness == Brightness.light
         ? Brightness.dark
@@ -92,7 +91,7 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
         statusBarBrightness: _statusBarBrightness,
         statusBarIconBrightness: _statusBarBrightness,
         systemNavigationBarColor: Theme.of(context).cardColor,
-        systemNavigationBarIconBrightness: _themeBrightness
+        systemNavigationBarIconBrightness: _statusBarBrightness,
       ),
     );
     manager.screenIndex.stream.listen((value) {

@@ -2,6 +2,7 @@
 import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
+import 'package:flutter/services.dart';
 import 'package:rxdart/rxdart.dart';
 
 // Flutter
@@ -23,45 +24,37 @@ class ExpandedPlayer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        centerTitle: true,
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        title: Text(
-          "SongTube",
-          style: TextStyle(
-            color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.7),
-            fontSize: 16
-          ),
-        ),
-        iconTheme: IconThemeData(
-          color: Theme.of(context).iconTheme.color.withOpacity(0.7)
-        ),
-      ),
       body: StreamBuilder<ScreenState>(
         stream: screenStateStream,
         builder: (context, snapshot) {
           final screenState = snapshot.data;
           final mediaItem = screenState?.mediaItem;
           final state = screenState?.playbackState;
-          final processingState =
-              state?.processingState ?? AudioProcessingState.none;
           final playing = state?.playing ?? false;
           return Container(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                if (processingState == AudioProcessingState.none) ...[
-                  Text("No audio in Queue")
-                ] else ...[
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                fit: BoxFit.fill,
+                image: FileImage(File(mediaItem.artUri.replaceFirst("file://", ""))),
+                colorFilter: ColorFilter.mode(
+                  Theme.of(context).scaffoldBackgroundColor.withOpacity(0.7),
+                  BlendMode.darken
+                )
+              )
+            ),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
                   FadeInTransition(
                     delay: Duration(milliseconds: 100),
                     duration: Duration(milliseconds: 200),
                     child: Container(
                       height: 320,
                       width: 320,
+                      margin: EdgeInsets.only(top: kToolbarHeight*0.5),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
@@ -71,7 +64,7 @@ class ExpandedPlayer extends StatelessWidget {
                             blurRadius: 6.0,
                             spreadRadius: 1.0 
                           )
-                        ]
+                        ],
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(20),
@@ -105,7 +98,7 @@ class ExpandedPlayer extends StatelessWidget {
                               fontSize: 17,
                               fontWeight: FontWeight.w600,
                               fontFamily: "Varela",
-                              color: Theme.of(context).textTheme.bodyText1.color,
+                              color: Colors.white,
                             ),
                             textAlign: TextAlign.center,
                             maxLines: 1,
@@ -116,7 +109,7 @@ class ExpandedPlayer extends StatelessWidget {
                         // Artist
                         Text(
                           mediaItem.artist,
-                          style: TextStyle(color: Theme.of(context).iconTheme.color, fontFamily: "Varela")
+                          style: TextStyle(color: Colors.white, fontFamily: "Varela")
                         ),
                       ],
                     ),
@@ -133,7 +126,7 @@ class ExpandedPlayer extends StatelessWidget {
                           icon: Icon(
                             Icons.arrow_back_ios,
                             size: 18,
-                            color: Theme.of(context).iconTheme.color.withOpacity(0.7)
+                            color: Colors.white.withOpacity(0.7)
                           ),
                           onPressed: () => AudioService.skipToPrevious(),
                         ),
@@ -149,16 +142,8 @@ class ExpandedPlayer extends StatelessWidget {
                             width: 60,
                             padding: EdgeInsets.all(4),
                             decoration: BoxDecoration(
-                              color: Theme.of(context).accentColor,
+                              color: Colors.black12,
                               borderRadius: BorderRadius.circular(40),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black12.withOpacity(0.2),
-                                    offset: Offset(0, 3), //(x,y)
-                                    blurRadius: 6.0,
-                                    spreadRadius: 1.0 
-                                  )
-                                ]
                             ),
                             child: playing
                               ? Icon(Icons.pause, size: 25, color: Colors.white)
@@ -172,7 +157,7 @@ class ExpandedPlayer extends StatelessWidget {
                           icon: Icon(
                             Icons.arrow_forward_ios,
                             size: 18,
-                            color: Theme.of(context).iconTheme.color.withOpacity(0.7)
+                            color: Colors.white.withOpacity(0.7)
                           ),
                           onPressed: () => AudioService.skipToNext(),
                         )
@@ -181,7 +166,7 @@ class ExpandedPlayer extends StatelessWidget {
                   ),
                   SizedBox(height: 20)
                 ],
-              ],
+              ),
             ),
           );
         },
@@ -213,7 +198,7 @@ class ExpandedPlayer extends StatelessWidget {
                     ),
                   ),
                   child: Slider(
-                    activeColor: Theme.of(context).accentColor,
+                    activeColor: Colors.white.withOpacity(0.6),
                     inactiveColor: Colors.black12.withOpacity(0.2),
                     min: 0.0,
                     max: duration.inMilliseconds?.toDouble(),
@@ -241,6 +226,7 @@ class ExpandedPlayer extends StatelessWidget {
                       style: TextStyle(
                         fontFamily: "Varela",
                         fontSize: 12,
+                        color: Colors.white
                       ),
                     ),
                     Spacer(),
@@ -249,6 +235,7 @@ class ExpandedPlayer extends StatelessWidget {
                       style: TextStyle(
                         fontFamily: "Varela",
                         fontSize: 12,
+                        color: Colors.white
                       ),
                     )
                   ],

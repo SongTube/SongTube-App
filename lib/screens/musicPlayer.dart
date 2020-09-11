@@ -1,6 +1,7 @@
 // Flutter
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 // Packages
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -17,8 +18,9 @@ class SlidingPlayerPanel extends StatefulWidget {
 
 class _SlidingPlayerPanelState extends State<SlidingPlayerPanel> {
 
+
   double _percent = 1;
-  
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<ScreenState>(
@@ -36,7 +38,27 @@ class _SlidingPlayerPanelState extends State<SlidingPlayerPanel> {
             stream: null,
             builder: (context, snapshot) {
               return SlidingUpPanel(
-                backdropEnabled: true,
+                onPanelClosed: () {
+                  Brightness _systemBrightness = Theme.of(context).brightness;
+                  Brightness _statusBarBrightness = _systemBrightness == Brightness.light
+                      ? Brightness.dark
+                      : Brightness.light;
+                  SystemChrome.setSystemUIOverlayStyle(
+                    SystemUiOverlayStyle(
+                      statusBarIconBrightness: _statusBarBrightness,
+                      systemNavigationBarColor: Theme.of(context).cardColor,
+                      systemNavigationBarIconBrightness: _statusBarBrightness
+                    ),
+                  );
+                },
+                onPanelOpened: () {
+                  SystemChrome.setSystemUIOverlayStyle(
+                    SystemUiOverlayStyle(
+                      statusBarIconBrightness: Brightness.light,
+                    ),
+                  );
+                },
+                borderRadius: BorderRadius.circular(10),
                 margin: EdgeInsets.only(
                   bottom: kBottomNavigationBarHeight * _percent,
                 ),
