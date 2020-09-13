@@ -84,6 +84,7 @@ class DownloadInfoSet {
       progressBar.add(0.0);
       return;
     }
+    cancelDownload = false;
     currentAction.add("Downloading...");
     currentAction.add(" ");
     // Check our Download Folder
