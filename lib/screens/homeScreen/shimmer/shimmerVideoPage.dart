@@ -11,6 +11,7 @@ class ShimmerVideoPage extends StatelessWidget {
     return ListView(
       physics: NeverScrollableScrollPhysics(),
       children: <Widget>[
+        // Video Player
         ShowUpTransition(
           forward: true,
           delay: Duration(milliseconds: 100),
@@ -18,7 +19,7 @@ class ShimmerVideoPage extends StatelessWidget {
             baseColor: Theme.of(context).cardColor.withOpacity(0.4),
             highlightColor: Theme.of(context).cardColor,
             child: Container(
-              margin: EdgeInsets.all(16),
+              margin: EdgeInsets.only(left: 8, right: 8),
               height: 208,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
@@ -27,44 +28,70 @@ class ShimmerVideoPage extends StatelessWidget {
             ),
           ),
         ),
+        // Channel Logo, Video Title & Author
         ShowUpTransition(
           forward: true,
           delay: Duration(milliseconds: 200),
-          child: Shimmer.fromColors(
-            baseColor: Theme.of(context).cardColor.withOpacity(0.4),
-            highlightColor: Theme.of(context).cardColor,
-            child: Container(
-              margin: EdgeInsets.only(right: 36, left: 36, bottom: 4),
-              height: 30,
-              width: MediaQuery.of(context).size.width*0.8,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Theme.of(context).cardColor
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Shimmer.fromColors(
+                baseColor: Theme.of(context).cardColor.withOpacity(0.4),
+                highlightColor: Theme.of(context).cardColor,
+                child: Container(
+                  margin: EdgeInsets.all(8),
+                  height: 60,
+                  width: 60,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50),
+                    color: Theme.of(context).cardColor
+                  ),
+                ),
               ),
-            ),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Shimmer.fromColors(
+                      baseColor: Theme.of(context).cardColor.withOpacity(0.4),
+                      highlightColor: Theme.of(context).cardColor,
+                      child: Container(
+                        margin: EdgeInsets.only(left: 8, bottom: 4, top: 8, right: 8),
+                        height: 30,
+                        width: MediaQuery.of(context).size.width*0.8,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Theme.of(context).cardColor
+                        ),
+                      ),
+                    ),
+                    Shimmer.fromColors(
+                      baseColor: Theme.of(context).cardColor.withOpacity(0.4),
+                      highlightColor: Theme.of(context).cardColor,
+                      child: Container(
+                        margin: EdgeInsets.only(left: 8),
+                        height: 20,
+                        width: MediaQuery.of(context).size.width*0.5,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Theme.of(context).cardColor
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
           ),
+        ),
+        Container(
+          margin: EdgeInsets.only(bottom: 4),
         ),
         ShowUpTransition(
           forward: true,
           delay: Duration(milliseconds: 300),
-          child: Shimmer.fromColors(
-            baseColor: Theme.of(context).cardColor.withOpacity(0.4),
-            highlightColor: Theme.of(context).cardColor,
-            child: Container(
-              margin: EdgeInsets.only(right: 100, left: 100),
-              height: 20,
-              width: MediaQuery.of(context).size.width*0.8,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Theme.of(context).cardColor
-              ),
-            ),
-          ),
-        ),
-        SizedBox(height: 16),
-        ShowUpTransition(
-          forward: true,
-          delay: Duration(milliseconds: 400),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -135,7 +162,7 @@ class ShimmerVideoPage extends StatelessWidget {
         SizedBox(height: 20),
         ShowUpTransition(
           forward: true,
-          delay: Duration(milliseconds: 500),
+          delay: Duration(milliseconds: 400),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -144,22 +171,10 @@ class ShimmerVideoPage extends StatelessWidget {
                 baseColor: Theme.of(context).cardColor.withOpacity(0.4),
                 highlightColor: Theme.of(context).cardColor,
                 child: Container(
-                  width: MediaQuery.of(context).size.width*0.475,
+                  width: MediaQuery.of(context).size.width*0.96,
                   height: 50,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50),
-                    color: Theme.of(context).cardColor.withOpacity(0.4)
-                  ),
-                ),
-              ),
-              Shimmer.fromColors(
-                baseColor: Theme.of(context).cardColor.withOpacity(0.4),
-                highlightColor: Theme.of(context).cardColor,
-                child: Container(
-                  width: MediaQuery.of(context).size.width*0.475,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50),
+                    borderRadius: BorderRadius.circular(10),
                     color: Theme.of(context).cardColor.withOpacity(0.4)
                   ),
                 ),
@@ -182,7 +197,7 @@ class ShimmerVideoPage extends StatelessWidget {
                   width: MediaQuery.of(context).size.width*0.475,
                   height: 50,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50),
+                    borderRadius: BorderRadius.circular(10),
                     color: Theme.of(context).cardColor.withOpacity(0.4)
                   ),
                 ),
@@ -194,7 +209,7 @@ class ShimmerVideoPage extends StatelessWidget {
                   width: MediaQuery.of(context).size.width*0.475,
                   height: 50,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50),
+                    borderRadius: BorderRadius.circular(10),
                     color: Theme.of(context).cardColor.withOpacity(0.4)
                   ),
                 ),
@@ -217,7 +232,7 @@ class ShimmerVideoPage extends StatelessWidget {
                   width: MediaQuery.of(context).size.width*0.475,
                   height: 50,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50),
+                    borderRadius: BorderRadius.circular(10),
                     color: Theme.of(context).cardColor.withOpacity(0.4)
                   ),
                 ),
@@ -229,7 +244,7 @@ class ShimmerVideoPage extends StatelessWidget {
                   width: MediaQuery.of(context).size.width*0.475,
                   height: 50,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50),
+                    borderRadius: BorderRadius.circular(10),
                     color: Theme.of(context).cardColor.withOpacity(0.4)
                   ),
                 ),
@@ -252,7 +267,7 @@ class ShimmerVideoPage extends StatelessWidget {
                   width: MediaQuery.of(context).size.width*0.475,
                   height: 50,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50),
+                    borderRadius: BorderRadius.circular(10),
                     color: Theme.of(context).cardColor.withOpacity(0.4)
                   ),
                 ),
@@ -264,7 +279,7 @@ class ShimmerVideoPage extends StatelessWidget {
                   width: MediaQuery.of(context).size.width*0.475,
                   height: 50,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50),
+                    borderRadius: BorderRadius.circular(10),
                     color: Theme.of(context).cardColor.withOpacity(0.4)
                   ),
                 ),
