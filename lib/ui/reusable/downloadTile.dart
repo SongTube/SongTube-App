@@ -124,21 +124,23 @@ class DownloadTile extends StatelessWidget {
                 ),
               ]
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: StreamBuilder(
-                stream: progressBar,
-                builder: (context, snapshot) {
-                  return ClipRRect(
+            StreamBuilder(
+              stream: progressBar,
+              builder: (context, snapshot) {
+                return AnimatedContainer(
+                  duration: Duration(milliseconds: 400),
+                  padding: EdgeInsets.all(8),
+                  height: snapshot.data == 0.0 ? 8 : 20,
+                  child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: LinearProgressIndicator(
                       value: snapshot.data,
                       backgroundColor: Theme.of(context).cardColor,
                       valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).accentColor),
                     ),
-                  );
-                }
-              ),
+                  ),
+                );
+              }
             ),
             Padding(
               padding: const EdgeInsets.only(left: 8, right: 8),

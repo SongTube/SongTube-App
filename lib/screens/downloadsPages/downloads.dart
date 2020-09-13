@@ -37,7 +37,7 @@ class _DownloadingPageState extends State<DownloadingPage> {
               List<DownloadInfoSet> reversedList = manager.downloadInfoSetList.reversed.toList();
               DownloadInfoSet infoset = reversedList[index];
               return Padding(
-                padding: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
+                padding: EdgeInsets.only(left: 16, right: 16, bottom: 8),
                   child: DownloadTile(
                     dataProgress: infoset.dataProgress.stream,
                     progressBar: infoset.progressBar.stream,
