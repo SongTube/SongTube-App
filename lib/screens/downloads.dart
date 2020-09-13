@@ -6,12 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:songtube/screens/downloadsPages/downloads.dart';
 import 'package:songtube/ui/animations/showUp.dart';
 
-class DownloadTab extends StatefulWidget {
-  _DownloadTabState createState() => _DownloadTabState();
-}
-
-class _DownloadTabState extends State<DownloadTab> {
-
+class DownloadTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
