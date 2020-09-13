@@ -128,9 +128,9 @@ class DownloadTile extends StatelessWidget {
               stream: progressBar,
               builder: (context, snapshot) {
                 return AnimatedContainer(
-                  duration: Duration(milliseconds: 400),
+                  duration: Duration(milliseconds: 300),
                   padding: EdgeInsets.all(8),
-                  height: snapshot.data == 0.0 ? 8 : 20,
+                  height: snapshot.data == 0.0 || snapshot.data == 1.0 ? 8 : 20,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: LinearProgressIndicator(
