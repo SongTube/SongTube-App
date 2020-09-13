@@ -51,9 +51,6 @@ class ManagerProvider extends ChangeNotifier {
     discController   = new TextEditingController();
     trackController  = new TextEditingController();
     homeScrollController  = new ScrollController();
-    // Streams
-    showDownloadsTabs = new StreamController<bool>.broadcast();
-    showDownloadsTabs.add(true);
     // YouTube Explode
     yt = new YoutubeInfo();
     // Database
@@ -77,8 +74,6 @@ class ManagerProvider extends ChangeNotifier {
   // Downloads Screen
   List<DownloadInfoSet> _downloadInfoSetList = [];
   List<SongFile> _songFileList = [];
-  int _downloadsTabIndex = 0;
-  StreamController<bool> showDownloadsTabs;
   bool showDownloadTabsStatus;
   // Navitate Screen
   String navigateIntent;
@@ -252,7 +247,7 @@ class ManagerProvider extends ChangeNotifier {
   // Move to Navigate Screen with a Search Intent
   void pushYoutubePage(String searchQuery) {
     navigateIntent = searchQuery;
-    Future.delayed((Duration(milliseconds: 200)), () => screenIndex.add(2));
+    Future.delayed((Duration(milliseconds: 200)), () => screenIndex.add(3));
     Future.delayed((Duration(milliseconds: 200)), () => navigateIntent = null);
     notifyListeners();
   }
@@ -343,7 +338,6 @@ class ManagerProvider extends ChangeNotifier {
     );
     addItemToDownloadList(infoset);
     screenIndex.add(1);
-    downloadsTabIndex = 0;
     infoset.downloadMedia();
   }
 
@@ -367,21 +361,12 @@ class ManagerProvider extends ChangeNotifier {
   }
   List<DownloadInfoSet> get downloadInfoSetList => _downloadInfoSetList;
   List<SongFile> get songFileList => _songFileList;
-  int get downloadsTabIndex => _downloadsTabIndex;
   set downloadInfoSetList(List<DownloadInfoSet> newList) {
     _downloadInfoSetList = newList;
     notifyListeners();
   }
   set songFileList(List<SongFile> newList) {
     _songFileList = newList;
-    notifyListeners();
-  }
-  set downloadsTabIndex(int value) {
-    _downloadsTabIndex = value;
-    if (value == 0) {
-      showDownloadsTabs.add(false);
-      showDownloadTabsStatus = false;
-    }
     notifyListeners();
   }
 }

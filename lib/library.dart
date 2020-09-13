@@ -9,6 +9,7 @@ import 'package:songtube/internal/playerService.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/screens/downloads.dart';
 import 'package:songtube/screens/home.dart';
+import 'package:songtube/screens/media.dart';
 import 'package:songtube/screens/more.dart';
 import 'package:songtube/screens/musicPlayer/screenStateStream.dart';
 import 'package:songtube/screens/navigate.dart';
@@ -44,7 +45,7 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
     );
     tabController = new TabController(
       initialIndex: 0,
-      length: 4,
+      length: 5,
       vsync: this
     );
   }
@@ -126,6 +127,7 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
                     children: [
                       HomeScreen(),
                       DownloadTab(),
+                      MediaScreen(),
                       Navigate(
                         searchQuery: manager.navigateIntent,
                       ),
@@ -170,6 +172,13 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
               BottomNavigationBarItem(
                 icon: Icon(EvaIcons.cloudDownloadOutline),
                 title: Text("Downloads", style: TextStyle(
+                  fontFamily: "Varela",
+                  fontWeight: FontWeight.w600
+                )),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(EvaIcons.musicOutline),
+                title: Text("Media", style: TextStyle(
                   fontFamily: "Varela",
                   fontWeight: FontWeight.w600
                 )),

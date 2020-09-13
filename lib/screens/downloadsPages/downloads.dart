@@ -26,18 +26,6 @@ class _DownloadingPageState extends State<DownloadingPage> {
   @override
   Widget build(BuildContext context) {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
-    scrollController.addListener(() {
-      if (scrollController.position.userScrollDirection == ScrollDirection.forward
-        && manager.showDownloadTabsStatus == true) {
-          manager.showDownloadsTabs.add(false);
-          manager.showDownloadTabsStatus = false;
-      }
-      if (scrollController.position.userScrollDirection == ScrollDirection.reverse
-        && manager.showDownloadTabsStatus == false) {
-        manager.showDownloadsTabs.add(true);
-        manager.showDownloadTabsStatus = true;
-      }
-    });
     return AnimatedSwitcher(
       duration: Duration(milliseconds: 200),
       child: manager.downloadInfoSetList.isNotEmpty 
