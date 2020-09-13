@@ -51,7 +51,7 @@ Future<void> showCustomDialog(BuildContext context) async {
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
     shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(20),
+      borderRadius: BorderRadius.circular(10),
     ),
     backgroundColor: Theme.of(context).canvasColor,
     title: Text("SongTube",
@@ -98,7 +98,7 @@ Future<void> showAlertDialog(BuildContext context, bool permanent) async {
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
     shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(20),
+      borderRadius: BorderRadius.circular(10),
     ),
     title: Text("SongTube",
       style: TextStyle(

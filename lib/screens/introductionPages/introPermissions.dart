@@ -151,7 +151,7 @@ class _IntroPermissionsState extends State<IntroPermissions> {
                   decoration: BoxDecoration(
                     borderRadius: accessGranted
                       ? BorderRadius.circular(50)
-                      : BorderRadius.circular(20),
+                      : BorderRadius.circular(10),
                     color: Theme.of(context).accentColor
                   ),
                   child: AnimatedSwitcher(

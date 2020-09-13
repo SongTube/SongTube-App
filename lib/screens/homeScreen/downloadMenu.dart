@@ -78,7 +78,7 @@ class _DownloadMenuState extends State<DownloadMenu> {
                               margin: EdgeInsets.only(left:16, right:16),
                               padding: EdgeInsets.all(8),
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
+                                borderRadius: BorderRadius.circular(10),
                                 color: Theme.of(context).cardColor,
                                 boxShadow: [
                                   BoxShadow(
@@ -130,7 +130,7 @@ class _DownloadMenuState extends State<DownloadMenu> {
                               margin: EdgeInsets.only(left:16, right:16),
                               padding: EdgeInsets.all(8),
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
+                                borderRadius: BorderRadius.circular(10),
                                 color: Theme.of(context).cardColor,
                                 boxShadow: [
                                   BoxShadow(

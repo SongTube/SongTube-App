@@ -152,7 +152,7 @@ class _IntroThemeState extends State<IntroTheme> {
                       height: 50,
                       width: 80,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(10),
                         color: theme == ThemeSelected.System
                           ? Theme.of(context).accentColor
                           : Theme.of(context).cardColor,
@@ -190,7 +190,7 @@ class _IntroThemeState extends State<IntroTheme> {
                       height: 50,
                       width: 80,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(10),
                         color: theme == ThemeSelected.Light
                           ? Theme.of(context).accentColor
                           : Theme.of(context).cardColor,
@@ -228,7 +228,7 @@ class _IntroThemeState extends State<IntroTheme> {
                       height: 50,
                       width: 80,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(10),
                         color: theme == ThemeSelected.Dark
                           ? Theme.of(context).accentColor
                           : Theme.of(context).cardColor,

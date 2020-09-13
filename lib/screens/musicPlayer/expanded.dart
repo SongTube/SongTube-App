@@ -56,7 +56,7 @@ class ExpandedPlayer extends StatelessWidget {
                       width: 320,
                       margin: EdgeInsets.only(top: kToolbarHeight*0.5),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(10),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black12.withOpacity(0.2),
@@ -67,7 +67,7 @@ class ExpandedPlayer extends StatelessWidget {
                         ],
                       ),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(10),
                         child: FadeInImage(
                           fadeOutDuration: Duration(milliseconds: 300),
                           fadeInDuration: Duration(milliseconds: 300),

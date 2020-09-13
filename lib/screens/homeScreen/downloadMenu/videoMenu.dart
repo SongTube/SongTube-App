@@ -42,7 +42,7 @@ class VideoDownloadMenu extends StatelessWidget {
               child: Container(
                 padding: EdgeInsets.only(top: 16, bottom: 16, left: 32),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(10),
                   color: Theme.of(context).cardColor
                 ),
                 child: Row(

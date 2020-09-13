@@ -41,13 +41,8 @@ class YoutubeInfo {
     
   }
 
-  Future<String> getChannelLink(String url) async {
-    // Get channel by URL
-    String channelUrl;
-    await yt.channels.getByVideo(VideoId.parseVideoId(url)).then((value) => {
-      channelUrl = value.url
-    });
-    return channelUrl;
+  Future<Channel> getChannel(String url) async {
+    return await yt.channels.getByVideo(VideoId.parseVideoId(url));
   }
 
 }

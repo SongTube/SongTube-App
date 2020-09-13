@@ -22,19 +22,8 @@ class QuickAccessTile extends StatelessWidget {
           bottom: 8
         ),
         child: Container(
+          color: Theme.of(context).scaffoldBackgroundColor,
           height: kToolbarHeight,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: Theme.of(context).cardColor,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black12.withOpacity(0.05),
-                offset: Offset(0, 3), //(x,y)
-                blurRadius: 6.0,
-                spreadRadius: 0.01 
-              )
-            ]
-          ),
           child: Row(
             children: <Widget>[
               SizedBox(width: 32),
@@ -50,7 +39,14 @@ class QuickAccessTile extends StatelessWidget {
                 ),
               ),
               Spacer(),
-              Icon(EvaIcons.arrowForwardOutline),
+              Container(
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50),
+                  border: Border.all(color: Theme.of(context).cardColor, width: 2)
+                ),
+                child: Icon(EvaIcons.arrowForwardOutline)
+              ),
               SizedBox(width: 32)
             ],
           ),

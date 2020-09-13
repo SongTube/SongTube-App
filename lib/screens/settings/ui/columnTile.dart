@@ -14,7 +14,7 @@ class SettingsColumnTile extends StatelessWidget {
     return Container(
       margin: EdgeInsets.all(20),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(10),
         color: Theme.of(context).cardColor,
         boxShadow: [
           BoxShadow(
@@ -32,7 +32,7 @@ class SettingsColumnTile extends StatelessWidget {
             margin: EdgeInsets.only(bottom: 8),
             padding: EdgeInsets.only(top: 16, bottom: 16),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
               color: Theme.of(context).accentColor,
               boxShadow: [
                 BoxShadow(

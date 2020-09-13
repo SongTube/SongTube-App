@@ -20,7 +20,7 @@ class CollapsedPanel extends StatelessWidget {
         final playing = state?.playing ?? false;
         if (mediaItem != null) {
           return Container(
-            color: Theme.of(context).scaffoldBackgroundColor,
+            color: Theme.of(context).cardColor,
             child: Row(
               children: [
                 // Song AlbumArt & Title and Author

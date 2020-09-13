@@ -86,7 +86,7 @@ class _DirectoryExplorerState extends State<DirectoryExplorer> with TickerProvid
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(10),
         color: widget.backgroundColor
       ),
       child: Column(
@@ -161,7 +161,7 @@ class _DirectoryExplorerState extends State<DirectoryExplorer> with TickerProvid
                         child: Container(
                           padding: EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(10),
                             color: Theme.of(context).accentColor
                           ),
                           child: Row(
@@ -186,7 +186,7 @@ class _DirectoryExplorerState extends State<DirectoryExplorer> with TickerProvid
                     child: Container(
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(10),
                         color: Theme.of(context).accentColor
                       ),
                       child: Row(

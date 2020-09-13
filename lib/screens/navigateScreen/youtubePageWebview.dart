@@ -96,7 +96,7 @@ class _YoutubePageWebviewState extends State<YoutubePageWebview> with AutomaticK
                       child: Container(
                         height: kToolbarHeight*0.8,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(10),
                           color: Theme.of(context).cardColor
                         ),
                         child: Row(

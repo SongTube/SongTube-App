@@ -60,7 +60,7 @@ class _IntroSplashState extends State<IntroSplash> {
                   padding: EdgeInsets.only(left: 16, right: 8),
                   decoration: BoxDecoration(
                     color: Theme.of(context).cardColor,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(10),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black12.withOpacity(0.08),
@@ -165,7 +165,7 @@ class _IntroSplashState extends State<IntroSplash> {
                             opacity: manager.showEmptyScreenWidget == true ? 1.0 : 0.0,
                             duration: (Duration(milliseconds: 600)),
                             child: Container(
-                              padding: EdgeInsets.all(8),
+                              padding: EdgeInsets.all(4),
                               decoration: BoxDecoration(
                                 color: Theme.of(context).cardColor,
                                 borderRadius: BorderRadius.circular(20)
@@ -206,7 +206,7 @@ class _IntroSplashState extends State<IntroSplash> {
                                     ),
                                     child: Icon(
                                       MdiIcons.arrowRight,
-                                      color: Theme.of(context).accentColor
+                                      color: Theme.of(context).iconTheme.color
                                     ),
                                   ),
                                 ],

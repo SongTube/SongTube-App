@@ -13,41 +13,28 @@ class TextFieldTile extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12.withOpacity(0.05),
-            offset: Offset(0, 3), //(x,y)
-            blurRadius: 6.0,
-            spreadRadius: 0.01 
-          )
-        ]
+    return TextField(
+      keyboardType: inputType,
+      cursorColor: Theme.of(context).accentColor,
+      controller: textController,
+      decoration: InputDecoration(
+        prefixIcon: Icon(icon,
+          color: Theme.of(context).iconTheme.color
+        ),
+        filled: true,
+        fillColor: Theme.of(context).scaffoldBackgroundColor,
+        border: UnderlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(
+            width: 0, 
+            style: BorderStyle.none,
+          ),
+        ),
+        labelText: labelText,
       ),
-      child: TextField(
-        keyboardType: inputType,
-        cursorColor: Theme.of(context).accentColor,
-        controller: textController,
-        decoration: InputDecoration(
-          prefixIcon: Icon(icon,
-            color: Theme.of(context).iconTheme.color
-          ),
-          filled: true,
-          fillColor: Theme.of(context).cardColor,
-          border: UnderlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-            borderSide: BorderSide(
-              width: 0, 
-              style: BorderStyle.none,
-            ),
-          ),
-          labelText: labelText,
-        ),
-        style: TextStyle(
-          color: Theme.of(context).textTheme.bodyText1.color,
-          fontSize: 14,
-        ),
+      style: TextStyle(
+        color: Theme.of(context).textTheme.bodyText1.color,
+        fontSize: 14,
       ),
     );
   }

@@ -114,7 +114,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> {
             ),
             trackBar: FlutterSliderTrackBar(
               inactiveTrackBar: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(10),
                 color: Colors.black12,
               ),
               activeTrackBar: BoxDecoration(
@@ -176,7 +176,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> {
             ),
             trackBar: FlutterSliderTrackBar(
               inactiveTrackBar: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(10),
                 color: Colors.black12,
               ),
               activeTrackBar: BoxDecoration(
@@ -238,7 +238,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> {
             ),
             trackBar: FlutterSliderTrackBar(
               inactiveTrackBar: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(10),
                 color: Colors.black12,
               ),
               activeTrackBar: BoxDecoration(

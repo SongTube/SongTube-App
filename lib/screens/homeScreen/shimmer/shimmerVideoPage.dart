@@ -21,7 +21,7 @@ class ShimmerVideoPage extends StatelessWidget {
               margin: EdgeInsets.all(16),
               height: 208,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(10),
                 color: Theme.of(context).cardColor
               ),
             ),
@@ -38,7 +38,7 @@ class ShimmerVideoPage extends StatelessWidget {
               height: 30,
               width: MediaQuery.of(context).size.width*0.8,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(10),
                 color: Theme.of(context).cardColor
               ),
             ),
@@ -55,7 +55,7 @@ class ShimmerVideoPage extends StatelessWidget {
               height: 20,
               width: MediaQuery.of(context).size.width*0.8,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(10),
                 color: Theme.of(context).cardColor
               ),
             ),

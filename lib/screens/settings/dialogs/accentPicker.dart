@@ -19,7 +19,7 @@ class _AccentPickerState extends State<AccentPicker> {
       duration: Duration(milliseconds: 250),
       child: Dialog(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20)
+          borderRadius: BorderRadius.circular(10)
         ),
         clipBehavior: Clip.hardEdge,
         child: Container(
@@ -32,7 +32,7 @@ class _AccentPickerState extends State<AccentPicker> {
                 padding: EdgeInsets.only(top: 24, bottom: 16),
                 margin: EdgeInsets.only(bottom: 8),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
                   color: Theme.of(context).accentColor,
                   boxShadow: [
                     BoxShadow(

@@ -54,8 +54,8 @@ class AppSnack {
       duration: duration == null ? 3 : duration,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20)
+          topLeft: Radius.circular(10),
+          topRight: Radius.circular(10)
         )
       ),
       backgroundColor: Theme.of(context).canvasColor

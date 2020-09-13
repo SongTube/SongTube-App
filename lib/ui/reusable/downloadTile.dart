@@ -30,16 +30,8 @@ class DownloadTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(10),
         color: Theme.of(context).cardColor,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12.withOpacity(0.05),
-            offset: Offset(0, 3), //(x,y)
-            blurRadius: 6.0,
-            spreadRadius: 0.01 
-          )
-        ]
       ),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -48,7 +40,7 @@ class DownloadTile extends StatelessWidget {
             Row(
               children: <Widget> [
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(15.0),
+                  borderRadius: BorderRadius.circular(10),
                   child: FadeInImage(
                     image: NetworkImage(coverUrl),
                     placeholder: MemoryImage(kTransparentImage),
@@ -138,7 +130,7 @@ class DownloadTile extends StatelessWidget {
                 stream: progressBar,
                 builder: (context, snapshot) {
                   return ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(10),
                     child: LinearProgressIndicator(
                       value: snapshot.data,
                       backgroundColor: Theme.of(context).cardColor,
@@ -211,84 +203,74 @@ class DownloadTileWithoutStream extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(10),
         color: Theme.of(context).cardColor,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12.withOpacity(0.05),
-            offset: Offset(0, 3), //(x,y)
-            blurRadius: 6.0,
-            spreadRadius: 0.01 
-          )
-        ]
       ),
       child: Material(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(20),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: <Widget> [
-              Row(
-                children: <Widget> [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(15.0),
-                    child: Image.file(
-                      File(coverPath),
-                      height: 90,
-                      width: 90,
-                    ),
+        borderRadius: BorderRadius.circular(10),
+        child: Column(
+          children: <Widget> [
+            Row(
+              children: <Widget> [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(15.0),
+                  child: Image.file(
+                    File(coverPath),
+                    height: 90,
+                    width: 90,
                   ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: Column(
-                        children: <Widget> [
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child: Text(
-                              title.toString(),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              softWrap: true,
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10, top: 8),
+                    child: Column(
+                      children: <Widget> [
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            title.toString(),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            softWrap: true,
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            author.toString(),
+                            overflow: TextOverflow.clip,
+                            maxLines: 1,
+                            softWrap: true,
+                            style: TextStyle(
+                              color: Colors.grey[500]
                             ),
                           ),
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child: Text(
-                              author.toString(),
-                              overflow: TextOverflow.clip,
-                              maxLines: 1,
-                              softWrap: true,
-                              style: TextStyle(
-                                color: Colors.grey[500]
+                        ),
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              IconButton(
+                                icon: Icon(Icons.play_arrow, size: 18),
+                                onPressed: onTilePlay,
                               ),
-                            ),
+                              IconButton(
+                                icon: Icon(Icons.clear, size: 18),
+                                onPressed: onTileRemove,
+                              )
+                            ],
                           ),
-                          Align(
-                            alignment: Alignment.bottomRight,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: <Widget>[
-                                IconButton(
-                                  icon: Icon(Icons.play_arrow, size: 18),
-                                  onPressed: onTilePlay,
-                                ),
-                                IconButton(
-                                  icon: Icon(Icons.clear, size: 18),
-                                  onPressed: onTileRemove,
-                                )
-                              ],
-                            ),
-                          ),
-                        ]
-                      ),
+                        ),
+                      ]
                     ),
                   ),
-                ]
-              ),
-            ]
-          ),
+                ),
+              ]
+            ),
+            SizedBox(height: 8),
+            SizedBox(height: 8),
+          ]
         ),
       ),
     );

@@ -47,11 +47,6 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
       length: 4,
       vsync: this
     );
-    tabController.animation.addListener(() {
-      int value = tabController.animation.value.round();
-      if (value != tabController.index)
-        setState(() => tabController.index = value);
-    });
   }
 
   @override
@@ -122,39 +117,29 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
         body: SafeArea(
           child: WillPopScope(
             onWillPop: () => manager.handlePop(tabController.index),
-            child: NotificationListener<OverscrollIndicatorNotification>(
-              onNotification: (OverscrollIndicatorNotification overscroll) {
-                overscroll.disallowGlow();
-                return;
-              },
-              child: Column(
-                children: [
-                  Expanded(
-                    child: TabBarView(
-                      controller: tabController,
-                      children: [
-                        HomeScreen(),
-                        DownloadTab(),
-                        Navigate(
-                          searchQuery: manager.navigateIntent,
-                        ),
-                        MoreScreen()
-                      ],
-                    ),
+            child: Column(
+              children: [
+                Expanded(
+                  child: TabBarView(
+                    physics: NeverScrollableScrollPhysics(),
+                    controller: tabController,
+                    children: [
+                      HomeScreen(),
+                      DownloadTab(),
+                      Navigate(
+                        searchQuery: manager.navigateIntent,
+                      ),
+                      MoreScreen()
+                    ],
                   ),
-                  playerPadding(context)
-                ],
-              ),
+                ),
+                playerPadding(context)
+              ],
             ),
           ),
         ),
         bottomNavigationBar: Container(
-          clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(                                                   
-            borderRadius: BorderRadius.only(                                           
-              topRight: Radius.circular(10),
-              topLeft: Radius.circular(10)
-            ),
+          decoration: BoxDecoration(
             boxShadow: [                                                               
               BoxShadow(
                 color: Colors.black12.withOpacity(0.05),

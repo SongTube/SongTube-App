@@ -1,3 +1,4 @@
+import 'package:avatar_glow/avatar_glow.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -21,21 +22,28 @@ class MoreScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 // App Logo
-                Container(
-                  width: 150,
-                  height: 150,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(100),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black12.withOpacity(0.15),
-                        offset: Offset(2.0, 2.0), //(x,y)
-                        blurRadius: 20.0,
-                        spreadRadius: 4.0
-                      ),
-                    ],
+                AvatarGlow(
+                  repeat: true,
+                  endRadius: 80,
+                  showTwoGlows: false,
+                  glowColor: Theme.of(context).accentColor,
+                  repeatPauseDuration: Duration(milliseconds: 50),
+                  child: Container(
+                    width: 120,
+                    height: 120,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black12.withOpacity(0.15),
+                          offset: Offset(2.0, 2.0), //(x,y)
+                          blurRadius: 20.0,
+                          spreadRadius: 4.0
+                        ),
+                      ],
+                    ),
+                    child: Image.asset('assets/images/logo.png')
                   ),
-                  child: Image.asset('assets/images/ic_launcher.png', width: 150, height: 150)
                 ),
                 // App Info
                 Expanded(
@@ -48,24 +56,11 @@ class MoreScreen extends StatelessWidget {
                         children: <Widget>[
                           // App Name
                           Container(
-                            padding: EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: Theme.of(context).cardColor,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black12.withOpacity(0.05),
-                                  offset: Offset(3, 3), //(x,y)
-                                  blurRadius: 6.0,
-                                  spreadRadius: 1 
-                                )
-                              ]
-                            ),
                             child: Text(
                               appData.appName,
                               style: TextStyle(
-                                fontSize: 20,
-                                fontFamily: "Varela",
+                                fontSize: 26,
+                                fontFamily: "YTSans",
                                 fontWeight: FontWeight.w700,
                                 color: Theme.of(context).accentColor
                               ),
@@ -74,19 +69,6 @@ class MoreScreen extends StatelessWidget {
                           SizedBox(height: 8),
                           // App Version
                           Container(
-                            padding: EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: Theme.of(context).cardColor,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black12.withOpacity(0.05),
-                                  offset: Offset(0, 3), //(x,y)
-                                  blurRadius: 6.0,
-                                  spreadRadius: 0.01 
-                                )
-                              ]
-                            ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
@@ -94,7 +76,7 @@ class MoreScreen extends StatelessWidget {
                                   "Version: ",
                                   style: TextStyle(
                                     fontSize: 15,
-                                    fontFamily: "Varela",
+                                    fontFamily: "YTSans",
                                     fontWeight: FontWeight.w700,
                                     color: Theme.of(context).iconTheme.color
                                   ),

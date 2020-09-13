@@ -14,18 +14,6 @@ class RoundTile extends StatelessWidget {
     return Container(
       width: 65,
       height: 65,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(50),
-        color: Theme.of(context).cardColor,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12.withOpacity(0.05),
-            offset: Offset(0, 3), //(x,y)
-            blurRadius: 6.0,
-            spreadRadius: 0.01 
-          )
-        ]
-      ),
       child: InkWell(
         borderRadius: BorderRadius.circular(25),
         onTap: onPressed,

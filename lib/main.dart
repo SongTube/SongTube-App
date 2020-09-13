@@ -11,7 +11,6 @@ import 'package:songtube/library.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/screens/introduction.dart';
-import 'package:songtube/ui/snackbar.dart';
 
 // UI
 import 'package:songtube/ui/themeValues.dart';

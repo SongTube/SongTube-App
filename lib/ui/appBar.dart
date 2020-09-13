@@ -70,7 +70,7 @@ class _SearchBarState extends State<SearchBar> {
                       ),
                       decoration: BoxDecoration(
                         color: Theme.of(context).cardColor,
-                        borderRadius: BorderRadius.circular(20)
+                        borderRadius: BorderRadius.circular(10)
                       ),
                       child: Theme(
                         data: ThemeData(primaryColor: Theme.of(context).accentColor),
@@ -93,7 +93,7 @@ class _SearchBarState extends State<SearchBar> {
                                   fontSize: 14
                                 ),
                                 border: UnderlineInputBorder(
-                                borderRadius: BorderRadius.circular(20),
+                                borderRadius: BorderRadius.circular(10),
                                 borderSide: BorderSide(
                                   width: 0, 
                                   style: BorderStyle.none,

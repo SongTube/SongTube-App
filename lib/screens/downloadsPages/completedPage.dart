@@ -56,13 +56,14 @@ class _CompletedPageState extends State<CompletedPage> {
             final processingState =
                 state?.processingState ?? AudioProcessingState.none;
             return ListView.builder(
+
               controller: scrollController,
               physics: BouncingScrollPhysics(),
                 itemCount: manager.songFileList.length,
                 itemBuilder: (context, index) {
                   SongFile download = manager.songFileList[index];
                   return Padding(
-                    padding: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
+                    padding: EdgeInsets.only(left: 16, right: 16, top: index == 0 ? 8 : 0),
                     child: DownloadTileWithoutStream(
                       title: download.title,
                       author: download.author,

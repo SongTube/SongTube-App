@@ -89,6 +89,8 @@ class ManagerProvider extends ChangeNotifier {
   // --------------------------------
   StreamManifest streamManifest;
   Video videoDetails;
+  // Current Channel
+  Channel channelDetails;
 
   // --------
   // SnackBar
@@ -115,6 +117,7 @@ class ManagerProvider extends ChangeNotifier {
   TextEditingController dateController;
   TextEditingController discController;
   TextEditingController trackController;
+  String artworkController;
   //
   // Update TextControllers Information
   //  
@@ -128,6 +131,11 @@ class ManagerProvider extends ChangeNotifier {
                             + "${videoDetails.uploadDate.day}";
     discController.text   = "1";
     trackController.text  = "1";
+    artworkController     = videoDetails.thumbnails.mediumResUrl;
+    notifyListeners();
+  }
+  void updateArtworkController(String artwork) {
+    artworkController = artwork;
     notifyListeners();
   }
   // ----------------------------------
@@ -151,6 +159,7 @@ class ManagerProvider extends ChangeNotifier {
         loadingVideo             = false;
         showFloatingActionButtom = false;
         mediaStreamReady         = false;
+        channelDetails           = null;
         break;
       // Is loading mediaStream
       case LoadingStatus.Loading:
@@ -159,6 +168,7 @@ class ManagerProvider extends ChangeNotifier {
         loadingVideo             = true;
         showFloatingActionButtom = false;
         mediaStreamReady         = false;
+        channelDetails           = null;
         break;
       // mediaStream is loaded
       case LoadingStatus.Success:
@@ -254,8 +264,8 @@ class ManagerProvider extends ChangeNotifier {
   // YouTube Explode
   YoutubeInfo yt;
   // Get Channel Link
-  Future<String> getChannelLink() async {
-    return await yt.getChannelLink(urlController.text);
+  Future<Channel> getChannel() async {
+    return await yt.getChannel(urlController.text);
   }
   // Get Video MediaStreamInfo from Id
   Future<int> getVideoDetails(String url) async {
@@ -272,6 +282,8 @@ class ManagerProvider extends ChangeNotifier {
     }
     updateTextControllers();
     loadHome(LoadingStatus.Success);
+    channelDetails = await yt.getChannel(url);
+    notifyListeners();
     return 0;
   }
   // Handle Downloads
