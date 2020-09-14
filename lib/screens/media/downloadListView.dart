@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/models/songFile.dart';
+import 'package:songtube/internal/models/videoFile.dart';
 import 'package:songtube/internal/playerService.dart';
+import 'package:songtube/internal/videoPlayer.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/screens/media/ui/downloadsEmpty.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -91,7 +93,14 @@ class _MediaDownloadListState extends State<MediaDownloadList> with AutomaticKee
                     await AudioService.updateQueue(manager.getCurrentMediaItemList());
                     await AudioService.playFromMediaId(index.toString());
                   } else {
-                    // TODO: Play Video
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => 
+                        AppVideoPlayer(VideoFile(
+                          name: song.title,
+                          path: song.path,
+                        )))
+                    );
                   }
                 },
               );
