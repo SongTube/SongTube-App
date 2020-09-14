@@ -11,9 +11,19 @@ import 'package:songtube/internal/playerService.dart';
 import 'package:songtube/provider/mediaProvider.dart';
 import 'package:transparent_image/transparent_image.dart';
 
-class MediaMusicList extends StatelessWidget {
+class MediaMusicList extends StatefulWidget {
+  @override
+  _MediaMusicListState createState() => _MediaMusicListState();
+}
+
+class _MediaMusicListState extends State<MediaMusicList> with AutomaticKeepAliveClientMixin {
+
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
     return AnimatedSwitcher(
       duration: Duration(milliseconds: 400),

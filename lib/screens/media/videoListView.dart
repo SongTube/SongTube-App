@@ -14,13 +14,17 @@ class MediaVideoList extends StatefulWidget {
   _MediaVideoListState createState() => _MediaVideoListState();
 }
 
-class _MediaVideoListState extends State<MediaVideoList> {
+class _MediaVideoListState extends State<MediaVideoList> with AutomaticKeepAliveClientMixin {
+
+  @override
+  bool get wantKeepAlive => true;
 
   // Current Viewing Folder
   FolderItem folderOnView;
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
     return AnimatedSwitcher(
       duration: Duration(milliseconds: 400),

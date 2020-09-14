@@ -10,9 +10,19 @@ import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/screens/media/ui/downloadsEmpty.dart';
 import 'package:transparent_image/transparent_image.dart';
 
-class MediaDownloadList extends StatelessWidget {
+class MediaDownloadList extends StatefulWidget {
+  @override
+  _MediaDownloadListState createState() => _MediaDownloadListState();
+}
+
+class _MediaDownloadListState extends State<MediaDownloadList> with AutomaticKeepAliveClientMixin {
+
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
     return AnimatedSwitcher(
       duration: Duration(milliseconds: 400),
