@@ -22,7 +22,6 @@ class MediaProvider extends ChangeNotifier {
     audioQuery = new FlutterAudioQuery();
     listSongs = new List<SongFile>();
     listMediaItems = new List<MediaItem>();
-    loadSongList();
   }
 
   void loadSongList() async {

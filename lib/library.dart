@@ -48,6 +48,7 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
       length: 5,
       vsync: this
     );
+    Provider.of<MediaProvider>(context, listen: false).loadSongList();
   }
 
   @override
