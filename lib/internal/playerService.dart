@@ -176,9 +176,10 @@ class AudioPlayerTask extends BackgroundAudioTask {
   }
 
   @override
-  Future<void> onPlayMediaItem(MediaItem item) async {
-    _index = AudioServiceBackground.queue.indexOf(item);
-    await AudioServiceBackground.setMediaItem(item);
+  Future<void> onPlayFromMediaId(String index) async {
+    int ind = int.parse(index);
+    _index = ind;
+    await AudioServiceBackground.setMediaItem(_queue[ind]);
     onPlay();
   }
 

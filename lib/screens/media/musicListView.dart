@@ -99,8 +99,7 @@ class MediaMusicList extends StatelessWidget {
                       );
                     }
                     await AudioService.updateQueue(mediaProvider.listMediaItems);
-                    MediaItem item = AudioService.queue[index];
-                    await AudioService.playMediaItem(item);
+                    await AudioService.playFromMediaId(index.toString());
                   },
                 );
               },
