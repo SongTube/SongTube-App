@@ -1,12 +1,17 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:ext_storage/ext_storage.dart';
 import 'package:flutter/services.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_audio_query/flutter_audio_query.dart';
+import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:songtube/internal/models/folder.dart';
 import 'package:songtube/internal/models/songFile.dart';
+import 'package:rxdart/rxdart.dart';
+import 'package:songtube/internal/models/videoFile.dart';
 
 class MediaProvider extends ChangeNotifier {
 
@@ -18,6 +23,12 @@ class MediaProvider extends ChangeNotifier {
 
   // List MediaItems for AudioService
   List<MediaItem> listMediaItems;
+
+  // List all Videos
+  List<VideoFile> listVideos;
+
+  // List Video Folders
+  List<FolderItem> listFolders;
 
   // Do we have storage Permission?
   bool _storagePermission;
@@ -31,6 +42,8 @@ class MediaProvider extends ChangeNotifier {
     audioQuery = new FlutterAudioQuery();
     listSongs = new List<SongFile>();
     listMediaItems = new List<MediaItem>();
+    listVideos = new List<VideoFile>();
+    listFolders = new List<FolderItem>();
     storagePermission = true;
   }
 
@@ -82,6 +95,65 @@ class MediaProvider extends ChangeNotifier {
       );
     }
     notifyListeners();
+  }
+
+  // Load list of Videos from device
+  Future<void> loadVideoList() async {
+    var storageStatus = await Permission.storage.status;
+    if (storageStatus != PermissionStatus.granted) {
+      storagePermission = false;
+      return;
+    }
+    String extPath = await ExtStorage.getExternalStorageDirectory();
+    Directory(extPath).list(recursive: true).map((file) => file.path)
+      .where((item) =>
+        // Scan for these Video files with these
+        // specific video extensions
+        item.endsWith(".mp4") ||
+        item.endsWith(".mkv") ||
+        item.endsWith(".mov") ||
+        item.endsWith(".flv") ||
+        item.endsWith(".avi") ||
+        item.endsWith(".wmv") ||
+        item.endsWith(".avi") ||
+        item.endsWith(".webm")
+      ).listen((event) {
+        if (
+          // Filters, do not process this video
+          // if any of these matches
+          !event.contains("/.") &&
+          !event.contains("0/Android/") &&
+          !RegExp(r'\d{6,}').hasMatch(event)
+        ) {
+          VideoFile videoItem = VideoFile(
+            name: event.split("/").last,
+            path: event,
+            size: (File(event).lengthSync()).toString(),
+            lastModified: FileStat.statSync(event).modified
+          );
+          listVideos.add(videoItem);
+          if (listFolders.firstWhere((element) => element.path == dirname(videoItem.path), orElse: () => null) == null) {
+            listFolders.add(FolderItem(
+              name: dirname(videoItem.path).split("/").last,
+              path: dirname(videoItem.path)
+            ));
+            listFolders.sort((a, b) => a.name.compareTo(b.name));
+          }
+          listFolders.forEach((element) {
+            if (element.path == dirname(videoItem.path)) {
+              element.videos.add(videoItem);
+            }
+          });
+        }
+      },
+        onDone: () {
+          // Order Alphabetically Videos on all FolderItems
+          listFolders.forEach((element) {
+            element.videos.sort((a,b) => a.name.compareTo(b.name));
+          });
+          notifyListeners();
+        }
+      );
   }
 
 }
