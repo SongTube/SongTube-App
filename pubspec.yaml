@@ -66,6 +66,7 @@ dependencies:
   flutter_audio_query: ^0.3.5+6
   video_player: ^0.10.12+2
   wakelock: ^0.1.4+2
+  file_picker: ^1.12.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
