@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:string_validator/string_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -42,7 +42,9 @@ class DownloadTile extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: FadeInImage(
-                    image: NetworkImage(coverUrl),
+                    image: isURL(coverUrl)
+                      ? NetworkImage(coverUrl)
+                      : FileImage(File(coverUrl)),
                     placeholder: MemoryImage(kTransparentImage),
                     height: 90,
                     width: 160,

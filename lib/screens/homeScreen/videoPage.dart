@@ -17,6 +17,7 @@ import 'package:string_validator/string_validator.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:file_picker/file_picker.dart';
 
 // UI
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
@@ -343,6 +344,13 @@ class _VideoPageState extends State<VideoPage> {
                           ),
                           Spacer(),
                           GestureDetector(
+                            onTap: () async {
+                              File image = await FilePicker.getFile(type: FileType.image);
+                              if (image == null) return;
+                              setState(() {
+                                manager.artworkController = image.path;
+                              });
+                            },
                             child: Container(
                               padding: EdgeInsets.only(left: 8),
                               decoration: BoxDecoration(

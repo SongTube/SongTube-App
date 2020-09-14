@@ -335,7 +335,7 @@ class ManagerProvider extends ChangeNotifier {
       albumController.text,
       artistController.text,
       genreController.text,
-      videoDetails.thumbnails.mediumResUrl,
+      artworkController,
       dateController.text,
       discController.text,
       trackController.text,

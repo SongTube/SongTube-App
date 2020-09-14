@@ -13,6 +13,7 @@ import 'package:songtube/internal/ffmpeg/converter.dart';
 import 'package:songtube/internal/nativeMethods.dart';
 import 'package:songtube/internal/randomString.dart';
 import 'package:songtube/internal/tagsManager.dart';
+import 'package:string_validator/string_validator.dart';
 
 // Packages
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
@@ -243,18 +244,29 @@ class DownloadInfoSet {
         disc: metadata.disk,
         track: metadata.track
       );
-      var response;
-      File artwork = new File((await getTemporaryDirectory()).path +
-        "/${RandomString.getRandomString(5)}");
-      try {
-        response = await http.get(videoDetails.thumbnails.maxResUrl);
-        await artwork.writeAsBytes(response.bodyBytes);
-      } catch (_) {
-        response = await http.get(videoDetails.thumbnails.mediumResUrl);
-        await artwork.writeAsBytes(response.bodyBytes);
+      File croppedImage;
+      if (isURL(metadata.coverurl)) {
+        var response;
+        File artwork = new File((await getTemporaryDirectory()).path +
+          "/${RandomString.getRandomString(5)}");
+        if (metadata.coverurl == videoDetails.thumbnails.mediumResUrl) {
+          try {
+            response = await http.get(videoDetails.thumbnails.maxResUrl);
+            await artwork.writeAsBytes(response.bodyBytes);
+          } catch (_) {
+            response = await http.get(videoDetails.thumbnails.mediumResUrl);
+            await artwork.writeAsBytes(response.bodyBytes);
+          }
+        } else {
+          try {
+            response = await http.get(metadata.coverurl);
+            await artwork.writeAsBytes(response.bodyBytes);
+          } catch (_) {}
+        }
+        croppedImage = await NativeMethod.cropToSquare(artwork);
+      } else {
+        croppedImage = await NativeMethod.cropToSquare(File(metadata.coverurl));
       }
-      // Crop Image before writting it to the Song
-      File croppedImage = await NativeMethod.cropToSquare(artwork);
       await TagsManager.writeArtwork(
         songPath: filePath,
         artworkPath: croppedImage.path
