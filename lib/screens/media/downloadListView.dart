@@ -77,8 +77,8 @@ class MediaDownloadList extends StatelessWidget {
                         androidNotificationIcon: 'drawable/ic_stat_music_note',
                         androidEnableQueue: true,
                       );
-                      await AudioService.updateQueue(manager.getCurrentMediaItemList());
                     }
+                    await AudioService.updateQueue(manager.getCurrentMediaItemList());
                     MediaItem item = AudioService.queue[index];
                     await AudioService.playMediaItem(item);
                   } else {

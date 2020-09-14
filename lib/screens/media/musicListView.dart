@@ -97,8 +97,8 @@ class MediaMusicList extends StatelessWidget {
                         androidNotificationIcon: 'drawable/ic_stat_music_note',
                         androidEnableQueue: true,
                       );
-                      await AudioService.updateQueue(mediaProvider.listMediaItems);
                     }
+                    await AudioService.updateQueue(mediaProvider.listMediaItems);
                     MediaItem item = AudioService.queue[index];
                     await AudioService.playMediaItem(item);
                   },
