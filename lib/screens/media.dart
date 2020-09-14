@@ -78,9 +78,30 @@ class _MediaScreenState extends State<MediaScreen> {
                 indicatorSize: TabBarIndicatorSize.label,
                 indicatorColor: Theme.of(context).accentColor,
                 tabs: [
-                  Tab(child: Text("Music")),
-                  Tab(child: Text("Videos")),
-                  Tab(child: Text("Downloads"))
+                  Tab(child: Text(
+                    "Music",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Varela',
+                      color: Theme.of(context).iconTheme.color
+                    ),
+                  )),
+                  Tab(child: Text(
+                    "Videos",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Varela',
+                      color: Theme.of(context).iconTheme.color
+                    ),
+                  )),
+                  Tab(child: Text(
+                    "Downloads",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Varela',
+                      color: Theme.of(context).iconTheme.color
+                    ),
+                  ))
                 ],
               ),
             ),
