@@ -89,8 +89,7 @@ class _MediaDownloadListState extends State<MediaDownloadList> with AutomaticKee
                       );
                     }
                     await AudioService.updateQueue(manager.getCurrentMediaItemList());
-                    MediaItem item = AudioService.queue[index];
-                    await AudioService.playMediaItem(item);
+                    await AudioService.playFromMediaId(index.toString());
                   } else {
                     // TODO: Play Video
                   }
