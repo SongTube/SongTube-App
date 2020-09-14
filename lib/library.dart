@@ -116,8 +116,7 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         key: manager.libraryScaffoldKey,
-        resizeToAvoidBottomInset:
-          manager.mediaStreamReady == false ? false : true,
+        resizeToAvoidBottomInset: false,
         body: SafeArea(
           child: WillPopScope(
             onWillPop: () => manager.handlePop(tabController.index),
