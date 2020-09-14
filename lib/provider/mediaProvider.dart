@@ -5,6 +5,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_audio_query/flutter_audio_query.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:songtube/internal/models/songFile.dart';
 
 class MediaProvider extends ChangeNotifier {
@@ -18,13 +19,27 @@ class MediaProvider extends ChangeNotifier {
   // List MediaItems for AudioService
   List<MediaItem> listMediaItems;
 
+  // Do we have storage Permission?
+  bool _storagePermission;
+  bool get storagePermission => _storagePermission;
+  set storagePermission(bool value) {
+    _storagePermission = value;
+    notifyListeners();
+  }
+
   MediaProvider() {
     audioQuery = new FlutterAudioQuery();
     listSongs = new List<SongFile>();
     listMediaItems = new List<MediaItem>();
+    storagePermission = true;
   }
 
   void loadSongList() async {
+    var storageStatus = await Permission.storage.status;
+    if (storageStatus != PermissionStatus.granted) {
+      storagePermission = false;
+      return;
+    }
     List<SongInfo> songInfoList = await audioQuery.getSongs();
     for (SongInfo song in songInfoList) {
       File artworkFile = File((await getApplicationDocumentsDirectory()).path +
