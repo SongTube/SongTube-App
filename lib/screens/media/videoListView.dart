@@ -4,6 +4,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/models/folder.dart';
 import 'package:songtube/internal/models/videoFile.dart';
+import 'package:songtube/internal/videoPlayer.dart';
 import 'package:songtube/provider/mediaProvider.dart';
 import 'package:songtube/screens/media/ui/folderGridView.dart';
 import 'package:songtube/screens/media/ui/videosOnFolderListView.dart';
@@ -58,7 +59,11 @@ class _MediaVideoListState extends State<MediaVideoList> {
                   list: folderOnView.videos,
                   onBackPressed: () => setState(() => folderOnView = null),
                   onVideoTap: (VideoFile video) {
-                    // TODO: Play video
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => 
+                        AppVideoPlayer(video))
+                    );
                   }
                 )
             )
