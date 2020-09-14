@@ -7,10 +7,20 @@ import 'package:songtube/screens/settings/converterSettings.dart';
 import 'package:songtube/screens/settings/downloadSettings.dart';
 import 'package:songtube/screens/settings/themeSettings.dart';
 
-class SettingsTab extends StatelessWidget {
+class SettingsTab extends StatefulWidget {
+  @override
+  _SettingsTabState createState() => _SettingsTabState();
+}
+
+class _SettingsTabState extends State<SettingsTab> {
+  
+  // Scaffold Key
+  GlobalKey<ScaffoldState> scaffoldState = new GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldState,
       appBar: PreferredSize(
         preferredSize: Size(
           double.infinity,
@@ -53,7 +63,7 @@ class SettingsTab extends StatelessWidget {
             // Converter Settings
             ConverterSettings(),
             // Backup Options
-            BackupSettings(),
+            BackupSettings(scaffoldKey: scaffoldState),
           ],
         ),
       ),

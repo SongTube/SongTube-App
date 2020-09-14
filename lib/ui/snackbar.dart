@@ -8,9 +8,11 @@ class AppSnack {
 
   GlobalKey<ScaffoldState> scaffoldKey;
   BuildContext context;
+  bool addPadding;
   AppSnack({
     @required this.scaffoldKey,
-    @required this.context
+    @required this.context,
+    this.addPadding = true,
   });
 
   // Show SnackBar with Icon, Title and Message
@@ -59,6 +61,7 @@ class AppSnack {
               ),
             ],
           ),
+          if (addPadding)
           StreamBuilder<ScreenState>(
             stream: screenStateStream,
             builder: (context, snapshot) {

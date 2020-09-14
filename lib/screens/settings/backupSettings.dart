@@ -8,10 +8,16 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/screens/settings/ui/columnTile.dart';
+import 'package:songtube/ui/snackbar.dart';
 
 class BackupSettings extends StatelessWidget {
+  final GlobalKey<ScaffoldState> scaffoldKey;
+  BackupSettings({
+    @required this.scaffoldKey
+  });
   @override
   Widget build(BuildContext context) {
+    AppSnack snackbar = new AppSnack(scaffoldKey: scaffoldKey, context: context, addPadding: false);
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
     return SettingsColumnTile(
       title: "Backup",
@@ -41,7 +47,7 @@ class BackupSettings extends StatelessWidget {
                 if (!await Directory(backupPath).exists()) await Directory(backupPath).create();
                 String path = join(documentsDirectory.path, 'MediaItems.db');
                 if (!await File(path).exists()) {
-                  manager.snackBar.showSnackBar(
+                  snackbar.showSnackBar(
                     icon: Icons.warning,
                     title: "Your Library is Empty",
                     duration: Duration(seconds: 2)
@@ -49,7 +55,7 @@ class BackupSettings extends StatelessWidget {
                   return;
                 }
                 await File(path).copy(backupPath + 'MediaItems.db');
-                manager.snackBar.showSnackBar(
+                snackbar.showSnackBar(
                   icon: Icons.backup,
                   title: "Backup Completed",
                   duration: Duration(seconds: 2)
@@ -81,7 +87,7 @@ class BackupSettings extends StatelessWidget {
                 String backupPath = await ExtStorage.getExternalStorageDirectory() + "/SongTube/Backup/";
                 String path = join(documentsDirectory.path, 'MediaItems.db');
                 if (!await File(backupPath + 'MediaItems.db').exists()) {
-                  manager.snackBar.showSnackBar(
+                  snackbar.showSnackBar(
                     icon: Icons.warning,
                     title: "You have no Backup",
                     duration: Duration(seconds: 2)
@@ -89,7 +95,7 @@ class BackupSettings extends StatelessWidget {
                   return;
                 }
                 await File(backupPath + 'MediaItems.db').copy(path);
-                manager.snackBar.showSnackBar(
+                snackbar.showSnackBar(
                     icon: Icons.restore,
                     title: "Restore Completed",
                     duration: Duration(seconds: 2)
