@@ -14,6 +14,7 @@ class MoreScreen extends StatelessWidget {
     AppDataProvider appData = Provider.of<AppDataProvider>(context);
     return Scaffold(
       body: ListView(
+        physics: BouncingScrollPhysics(),
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.all(28),
