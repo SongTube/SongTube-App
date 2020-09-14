@@ -40,7 +40,8 @@ void audioPlayerTaskEntrypoint() async {
 
 class AudioPlayerTask extends BackgroundAudioTask {
 
-  List<MediaItem> _queue = [];
+  List<MediaItem> _queue;
+  List<MediaItem> get queue => _queue;
   AudioPlayer _player;
   StreamSubscription<Duration> _eventSubscription;
   StreamSubscription<AudioPlayerState> _playerStateSubscription;
@@ -70,6 +71,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
   // Initialise your audio task.
   @override
   Future<void> onStart(Map<String, dynamic> params) async {
+    _queue = new List<MediaItem>();
     session = await AudioSession.instance;
     await session.configure(AudioSessionConfiguration.music());
     session.interruptionEventStream.listen((event) {
@@ -194,7 +196,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
   Future<void> onUpdateQueue(List<MediaItem> queue) async {
     await AudioServiceBackground.setQueue(queue);
     _queue = queue;
-    return super.onUpdateQueue(queue);
+    return;
   }
 
   // Handle a request to seek to a position.
@@ -226,6 +228,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
   Future<void> _setState({
     AudioProcessingState processingState,
     Duration bufferedPosition,
+    int position
   }) async {
     await AudioServiceBackground.setState(
       controls: getControls(),
@@ -234,7 +237,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
           processingState ?? AudioServiceBackground.state.processingState,
       playing: _player.state == AudioPlayerState.PLAYING ? true : false,
       position: Duration(milliseconds: _player.state == AudioPlayerState.PLAYING
-        ? await _player.getCurrentPosition() : 0),
+        ? await _player.getCurrentPosition() : 0)
     );
   }
 }

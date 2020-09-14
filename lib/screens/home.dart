@@ -27,7 +27,10 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMixin {
+
+  @override
+  bool get wantKeepAlive => true;
 
   // QuickSearch Controller
   TextEditingController quickSearchController;
@@ -75,6 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
     return GestureDetector(
       child: Scaffold(
@@ -147,7 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             topLeft: Radius.circular(30),
                             topRight: Radius.circular(30)
                           ),
-                      ),
+                        ),
                         context: context,
                         builder: (context) {
                           return DownloadMenu(

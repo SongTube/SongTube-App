@@ -24,12 +24,26 @@ import 'package:songtube/screens/homeScreen/roundTile.dart';
 import 'package:songtube/ui/reusable/textfieldTile.dart';
 import 'package:songtube/ui/animations/showUp.dart';
 
-class VideoPage extends StatelessWidget {
+class VideoPage extends StatefulWidget {
+  @override
+  _VideoPageState createState() => _VideoPageState();
+}
+
+class _VideoPageState extends State<VideoPage> {
+
+  GlobalKey key;
+
+  @override
+  void initState() {
+    key = new GlobalKey();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
     return Dismissible(
-      key: GlobalKey(),
+      key: key,
       direction: DismissDirection.startToEnd,
       onDismissed: (direction) {
         manager.loadHome(LoadingStatus.Failed);
@@ -84,14 +98,14 @@ class VideoPage extends StatelessWidget {
                                 fit: BoxFit.fitWidth,
                               ),
                               Center(
-                                child: Icon(MdiIcons.play, size: 40, color: Colors.white),
+                                child: Icon(MdiIcons.play, size: 60, color: Colors.white),
                               ),
                               GestureDetector(
                                 onTap: () {
                                   manager.openWebviewPlayer = true;
                                 },
                                 child: Center(
-                                  child: Icon(MdiIcons.youtube, size: 60, color: Colors.red),
+                                  child: Icon(MdiIcons.youtube, size: 80, color: Colors.red),
                                 ),
                               )
                             ],
@@ -274,7 +288,7 @@ class VideoPage extends StatelessWidget {
               // Video Metadata
               // --------------
               Padding(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.only(left: 8, right: 8, top: 4),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -382,7 +396,7 @@ class VideoPage extends StatelessWidget {
                                       ),
                                       Container(
                                         margin: EdgeInsets.only(bottom: 2),
-                                        child: Icon(EvaIcons.editOutline, size: 18)
+                                        child: Icon(EvaIcons.editOutline, size: 18, color: Colors.white),
                                       )
                                     ],
                                   ),

@@ -20,9 +20,6 @@ class DownloadingPage extends StatefulWidget {
 }
 
 class _DownloadingPageState extends State<DownloadingPage> {
-
-  ScrollController scrollController = new ScrollController();
-
   @override
   Widget build(BuildContext context) {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
@@ -30,7 +27,6 @@ class _DownloadingPageState extends State<DownloadingPage> {
       duration: Duration(milliseconds: 200),
       child: manager.downloadInfoSetList.isNotEmpty 
         ? ListView.builder(
-            controller: scrollController,
             physics: BouncingScrollPhysics(),
             itemCount: manager.downloadInfoSetList.length,
             itemBuilder: (context, index) {

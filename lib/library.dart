@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:songtube/internal/nativeMethods.dart';
 import 'package:songtube/internal/playerService.dart';
 import 'package:songtube/provider/managerProvider.dart';
+import 'package:songtube/provider/mediaProvider.dart';
 import 'package:songtube/screens/downloads.dart';
 import 'package:songtube/screens/home.dart';
 import 'package:songtube/screens/media.dart';

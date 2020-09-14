@@ -38,26 +38,6 @@ class _SlidingPlayerPanelState extends State<SlidingPlayerPanel> {
             stream: null,
             builder: (context, snapshot) {
               return SlidingUpPanel(
-                onPanelClosed: () {
-                  Brightness _systemBrightness = Theme.of(context).brightness;
-                  Brightness _statusBarBrightness = _systemBrightness == Brightness.light
-                      ? Brightness.dark
-                      : Brightness.light;
-                  SystemChrome.setSystemUIOverlayStyle(
-                    SystemUiOverlayStyle(
-                      statusBarIconBrightness: _statusBarBrightness,
-                      systemNavigationBarColor: Theme.of(context).cardColor,
-                      systemNavigationBarIconBrightness: _statusBarBrightness
-                    ),
-                  );
-                },
-                onPanelOpened: () {
-                  SystemChrome.setSystemUIOverlayStyle(
-                    SystemUiOverlayStyle(
-                      statusBarIconBrightness: Brightness.light,
-                    ),
-                  );
-                },
                 borderRadius: BorderRadius.circular(10),
                 margin: EdgeInsets.only(
                   bottom: kBottomNavigationBarHeight * _percent,

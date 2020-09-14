@@ -10,6 +10,7 @@ import 'package:songtube/library.dart';
 // Packages
 import 'package:audio_service/audio_service.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/provider/mediaProvider.dart';
 import 'package:songtube/screens/introduction.dart';
 
 // UI
@@ -36,7 +37,8 @@ class Main extends StatelessWidget {
         ChangeNotifierProvider<AppDataProvider>(create: (context) => AppDataProvider(
           preferences: preloadedFs
         )),
-        ChangeNotifierProvider<ManagerProvider>(create: (context) => ManagerProvider())
+        ChangeNotifierProvider<ManagerProvider>(create: (context) => ManagerProvider()),
+        ChangeNotifierProvider<MediaProvider>(create: (context) => MediaProvider())
       ],
       child: Builder( builder: (context) {
         AppDataProvider appData = Provider.of<AppDataProvider>(context);        
