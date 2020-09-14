@@ -41,10 +41,6 @@ class QuickAccessTile extends StatelessWidget {
               Spacer(),
               Container(
                 padding: EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50),
-                  border: Border.all(color: Theme.of(context).cardColor, width: 2)
-                ),
                 child: Icon(EvaIcons.arrowForwardOutline)
               ),
               SizedBox(width: 32)
