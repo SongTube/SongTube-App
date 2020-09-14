@@ -1,6 +1,3 @@
-// Dart
-import 'dart:io';
-
 // Flutter
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';

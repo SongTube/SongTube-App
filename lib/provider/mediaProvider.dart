@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_audio_query/flutter_audio_query.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:songtube/internal/models/songFile.dart';
-import 'package:songtube/internal/playerService.dart';
 
 class MediaProvider extends ChangeNotifier {
 

@@ -1,6 +1,5 @@
 // Dart
 import 'dart:async';
-import 'package:rxdart/rxdart.dart';
 
 // Flutter
 import 'package:audio_service/audio_service.dart';

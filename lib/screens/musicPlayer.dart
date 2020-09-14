@@ -1,7 +1,6 @@
 // Flutter
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 // Packages
 import 'package:sliding_up_panel/sliding_up_panel.dart';
