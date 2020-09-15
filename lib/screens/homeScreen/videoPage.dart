@@ -284,7 +284,6 @@ class _VideoPageState extends State<VideoPage> {
                   ],
                 ),
               ),
-              Divider(indent: 8, endIndent: 8),
               // --------------
               // Video Metadata
               // --------------
