@@ -10,7 +10,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:songtube/internal/models/folder.dart';
 import 'package:songtube/internal/models/songFile.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:songtube/internal/models/videoFile.dart';
 
 class MediaProvider extends ChangeNotifier {
@@ -56,16 +55,17 @@ class MediaProvider extends ChangeNotifier {
     List<SongInfo> songInfoList = await audioQuery.getSongs();
     for (SongInfo song in songInfoList) {
       File artworkFile = File((await getApplicationDocumentsDirectory()).path +
-        "/${song.album.replaceAll("/", "_")}.jpg");
+        "/${song.title.replaceAll("/", "_")}MQ.jpg");
       if (!await artworkFile.exists()) {
         Uint8List artwork = await audioQuery.getArtwork(
           type: ResourceType.SONG,
-          id: song.id
+          id: song.id,
+          size: Size(128,128)
         );
         if (artwork.isNotEmpty) {
           await artworkFile.writeAsBytes(artwork);
         } else {
-          var bytes = await rootBundle.load('assets/images/songPlaceholder.png');
+          var bytes = await rootBundle.load('assets/images/artworkPlaceholder_small.png');
           await artworkFile.writeAsBytes(bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes));
         }
       }
@@ -78,7 +78,7 @@ class MediaProvider extends ChangeNotifier {
           path:         song.filePath,
           fileSize:     song.fileSize,
           duration:     song.duration,
-          id:           null,
+          id:           song.id,
           downloadType: null,
           coverUrl:     null,
         )
@@ -91,6 +91,7 @@ class MediaProvider extends ChangeNotifier {
           artist:   song.artist,
           duration: Duration(milliseconds: int.parse(song.duration)),
           artUri:   "file://${artworkFile.path}",
+          extras:   { "albumId": song.id }
         )
       );
     }
@@ -155,5 +156,4 @@ class MediaProvider extends ChangeNotifier {
         }
       );
   }
-
 }

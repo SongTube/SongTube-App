@@ -1,7 +1,11 @@
 // Dart
 import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
 import 'dart:ui';
+import 'package:flutter/services.dart';
+import 'package:flutter_audio_query/flutter_audio_query.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:rxdart/rxdart.dart';
 
 // Flutter
@@ -48,20 +52,27 @@ class ExpandedPlayer extends StatelessWidget {
                         BoxShadow(
                           color: Colors.black87.withOpacity(0.2),
                           offset: Offset(0,0), //(x,y)
-                          blurRadius: 8.0,
+                          blurRadius: 10.0,
                           spreadRadius: 2.0 
                         )
                       ],
                     ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: FadeInImage(
-                        fadeOutDuration: Duration(milliseconds: 300),
-                        fadeInDuration: Duration(milliseconds: 300),
-                        placeholder: MemoryImage(kTransparentImage),
-                        image: FileImage(File(mediaItem.artUri.replaceFirst("file://", ""))),
-                        fit: BoxFit.cover,
-                      ),
+                    child: FutureBuilder(
+                      future: generateArtwork(File(mediaItem.id), mediaItem.extras["albumId"]),
+                      builder: (context, AsyncSnapshot<File> image) {
+                        return ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: FadeInImage(
+                            fadeOutDuration: Duration(milliseconds: 300),
+                            fadeInDuration: Duration(milliseconds: 300),
+                            placeholder: MemoryImage(kTransparentImage),
+                            image: image.hasData
+                              ? FileImage(image.data)
+                              : MemoryImage(kTransparentImage),
+                            fit: BoxFit.cover,
+                          ),
+                        );
+                      }
                     ),
                   ),
                 ),
@@ -247,6 +258,25 @@ class ExpandedPlayer extends StatelessWidget {
           : Container();
       },
     );
+  }
+
+  Future<File> generateArtwork(File song, String id) async {
+    File artwork = File((await getApplicationDocumentsDirectory()).path +
+      "/${song.path.split("/").last.replaceAll("/", "_")}HQ.jpg");
+    if (!await artwork.exists()) {
+      Uint8List bytes =  await FlutterAudioQuery().getArtwork(
+        type: ResourceType.SONG,
+        id: id,
+        size: Size(500,500)
+      );
+      if (bytes.isNotEmpty) {
+        await artwork.writeAsBytes(bytes);
+      } else {
+        var assetBytes = await rootBundle.load('assets/images/artworkPlaceholder_big.png');
+        await artwork.writeAsBytes(assetBytes.buffer.asUint8List(assetBytes.offsetInBytes, assetBytes.lengthInBytes));
+      }
+    }
+    return artwork;
   }
 
 }
