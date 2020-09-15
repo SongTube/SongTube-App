@@ -46,6 +46,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
   StreamSubscription<AudioPlayerState> _playerStateSubscription;
   int timesPositionChanged = 0;
   int _index = 0;
+  int lastPlayerPosition = 0;
 
   // Audio Session
   AudioSession session;
@@ -104,16 +105,18 @@ class AudioPlayerTask extends BackgroundAudioTask {
       _player.pause();
     });
     _player = new AudioPlayer();
-    _eventSubscription = _player.onAudioPositionChanged.listen((event) async {
+    _eventSubscription = _player.onAudioPositionChanged.listen((position) async {
       if (timesPositionChanged < 5) {
         timesPositionChanged += 1;
       } else {
+        int actualPosition = await _player.getCurrentPosition();
         PlaybackState(
           processingState: AudioServiceBackground.state.processingState,
           playing: _player.state == AudioPlayerState.PLAYING ? true : false,
-          position: Duration(milliseconds: await _player.getCurrentPosition()),
+          position: Duration(milliseconds: actualPosition),
           actions: Set()
         );
+        lastPlayerPosition = actualPosition;
         timesPositionChanged = 0;
       }
     });
@@ -237,7 +240,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
           processingState ?? AudioServiceBackground.state.processingState,
       playing: _player.state == AudioPlayerState.PLAYING ? true : false,
       position: Duration(milliseconds: _player.state == AudioPlayerState.PLAYING
-        ? await _player.getCurrentPosition() : 0)
+        ? await _player.getCurrentPosition() : lastPlayerPosition)
     );
   }
 }
