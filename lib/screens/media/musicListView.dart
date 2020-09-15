@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:songtube/internal/models/songFile.dart';
 import 'package:songtube/internal/playerService.dart';
 import 'package:songtube/provider/mediaProvider.dart';
+import 'package:songtube/screens/media/ui/dialogs/confirmDialog.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class MediaMusicList extends StatefulWidget {
@@ -90,10 +91,53 @@ class _MediaMusicListState extends State<MediaMusicList> with AutomaticKeepAlive
                       )
                     ),
                   ),
-                  trailing: IconButton(
+                  trailing: PopupMenuButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)
+                    ),
                     icon: Icon(MdiIcons.dotsVertical, size: 18),
-                    onPressed: () {
-
+                    itemBuilder: (context) {
+                      return [
+                        PopupMenuItem(
+                          value: "Delete",
+                          child: Text(
+                            "Delete",
+                            style: TextStyle(
+                              color: Theme.of(context).textTheme.bodyText1.color
+                            ),
+                          ),
+                        )
+                      ];
+                    },
+                    onSelected: (String value) {
+                      switch (value) {
+                        case "Delete":
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return ConfirmDialog(
+                                onConfirm: () async {
+                                  Navigator.pop(context);
+                                  if (AudioService.playbackState.playing) {
+                                    if (AudioService.currentMediaItem.id == song.path) {
+                                      AudioService.stop();
+                                    }
+                                  }
+                                  mediaProvider.listSongs.removeAt(index);
+                                  mediaProvider.listMediaItems.removeAt(index);
+                                  await File(song.path).delete();
+                                },
+                                onCancel: () {
+                                  Navigator.pop(context);
+                                  return null;
+                                },
+                              );
+                            }
+                          );
+                          break;
+                        default:
+                          break;
+                      }
                     },
                   ),
                   onTap: () async {
