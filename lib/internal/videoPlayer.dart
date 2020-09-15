@@ -72,6 +72,44 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
         });
         // Update current Playback Position
         updater();
+      }, onError: (_) async {
+        await showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10)
+              ),
+              title: Text(
+                "Not Supported",
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.bodyText1.color
+                ),
+              ),
+              content: Text(
+                "This video is not natively supported by your device",
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.bodyText1.color
+                ),
+              ),
+              actions: [
+                FlatButton(
+                  child: Text(
+                    "OK",
+                    style: TextStyle(
+                      color: Theme.of(context).accentColor
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                )
+              ],
+            );
+          },
+        );
+        Navigator.pop(context);
       });
     Future.delayed(Duration(seconds: 2), () {
       setState(() => hideControls = true);
