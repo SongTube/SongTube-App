@@ -263,8 +263,10 @@ class ExpandedPlayer extends StatelessWidget {
   }
 
   Future<File> generateArtwork(File song, String id) async {
+    if (!await Directory((await getApplicationDocumentsDirectory()).path + "/Artworks/").exists())
+      await Directory((await getApplicationDocumentsDirectory()).path + "/Artworks/").create();
     File artwork = File((await getApplicationDocumentsDirectory()).path +
-      "/${song.path.split("/").last.replaceAll("/", "_")}HQ.jpg");
+      "/Artworks/${song.path.split("/").last.replaceAll("/", "_")}HQ.jpg");
     if (!await artwork.exists()) {
       Uint8List bytes =  await FlutterAudioQuery().getArtwork(
         type: ResourceType.SONG,

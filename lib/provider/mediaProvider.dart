@@ -60,9 +60,11 @@ class MediaProvider extends ChangeNotifier {
       return;
     }
     List<SongInfo> songInfoList = await audioQuery.getSongs();
+    if (!await Directory((await getApplicationDocumentsDirectory()).path + "/Thumbnails/").exists())
+      await Directory((await getApplicationDocumentsDirectory()).path + "/Thumbnails/").create();
     for (SongInfo song in songInfoList) {
       File artworkFile = File((await getApplicationDocumentsDirectory()).path +
-        "/${song.title.replaceAll("/", "_")}MQ.jpg");
+        "/Thumbnails/${song.title.replaceAll("/", "_")}MQ.jpg");
       if (!await artworkFile.exists()) {
         Uint8List artwork = await audioQuery.getArtwork(
           type: ResourceType.SONG,
