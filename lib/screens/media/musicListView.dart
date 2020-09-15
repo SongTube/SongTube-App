@@ -7,6 +7,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/models/songFile.dart';
+import 'package:songtube/internal/nativeMethods.dart';
 import 'package:songtube/internal/playerService.dart';
 import 'package:songtube/provider/mediaProvider.dart';
 import 'package:songtube/screens/media/ui/dialogs/confirmDialog.dart';
@@ -126,6 +127,7 @@ class _MediaMusicListState extends State<MediaMusicList> with AutomaticKeepAlive
                                   mediaProvider.listSongs.removeAt(index);
                                   mediaProvider.listMediaItems.removeAt(index);
                                   await File(song.path).delete();
+                                  NativeMethod.registerFile(song.path);
                                 },
                                 onCancel: () {
                                   Navigator.pop(context);
