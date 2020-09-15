@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 // Packages
 import 'package:shimmer/shimmer.dart';
+
+// UI
 import 'package:songtube/ui/animations/showUp.dart';
 
 class ShimmerVideoPage extends StatelessWidget {

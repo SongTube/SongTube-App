@@ -1,11 +1,16 @@
-// Flutter
+// Dart
 import 'dart:io';
 
-import 'package:audio_service/audio_service.dart';
+// Flutter
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+
+// Internal
 import 'package:songtube/internal/playerService.dart';
 import 'package:songtube/screens/musicPlayer/screenStateStream.dart';
+
+// Packages
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:audio_service/audio_service.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class CollapsedPanel extends StatelessWidget {

@@ -6,7 +6,6 @@ import 'package:audio_service/audio_service.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:audio_session/audio_session.dart';
 
-
 MediaControl playControl = MediaControl(
   androidIcon: 'drawable/ic_play_arrow',
   label: 'Play',

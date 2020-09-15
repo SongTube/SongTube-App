@@ -4,12 +4,13 @@ import 'dart:math';
 
 // Flutter
 import 'package:flutter/services.dart';
-import 'package:http/http.dart';
+
+// Internal
+import 'package:songtube/internal/nativeMethods.dart';
+import 'package:songtube/internal/randomString.dart';
 
 // Packages
 import 'package:path_provider/path_provider.dart';
-import 'package:songtube/internal/nativeMethods.dart';
-import 'package:songtube/internal/randomString.dart';
 import 'package:http/http.dart' as http;
 
 class TagsManager {
@@ -61,13 +62,13 @@ class TagsManager {
     bool fromUrl;
     Directory directory;
     File artworkFile;
-    Response response;
+    http.Response response;
     if (artworkPath != null) {artwork = artworkPath; fromUrl = false;}
     if (artworkUrl  != null) {artwork = artworkUrl; fromUrl = true;}
     if (fromUrl == true) {
       directory    = await getTemporaryDirectory();
       artworkFile  = new File(directory.path + "/" + _randomString());
-      response     = await get(artwork);
+      response     = await http.get(artwork);
       artwork      = artworkFile.path;
       if (response.statusCode != 200) {
         throw Exception("Error downloading artwork, check your Url or internet connection");

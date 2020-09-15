@@ -1,16 +1,24 @@
+// Dart
 import 'dart:io';
 
-import 'package:audio_service/audio_service.dart';
+// Flutter
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:provider/provider.dart';
+
+// Internal
 import 'package:songtube/internal/models/songFile.dart';
 import 'package:songtube/internal/models/videoFile.dart';
+import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/internal/playerService.dart';
 import 'package:songtube/internal/videoPlayer.dart';
-import 'package:songtube/provider/managerProvider.dart';
-import 'package:songtube/screens/media/ui/downloadsEmpty.dart';
+
+// Packages
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:audio_service/audio_service.dart';
+import 'package:provider/provider.dart';
+
+// UI
+import 'package:songtube/screens/media/ui/downloadsEmpty.dart';
 
 class MediaDownloadList extends StatefulWidget {
   @override

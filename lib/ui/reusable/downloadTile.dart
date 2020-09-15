@@ -1,6 +1,11 @@
+// Dart
 import 'dart:io';
-import 'package:string_validator/string_validator.dart';
+
+// Flutter
 import 'package:flutter/material.dart';
+
+// Packages
+import 'package:string_validator/string_validator.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class DownloadTile extends StatelessWidget {

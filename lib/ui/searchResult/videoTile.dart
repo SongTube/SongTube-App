@@ -1,8 +1,13 @@
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+// Flutter
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
+
+// Internal
 import 'package:songtube/provider/managerProvider.dart';
+
+// Packages
+import 'package:intl/intl.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart' as yt;
 

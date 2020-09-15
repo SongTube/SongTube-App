@@ -1,7 +1,7 @@
 // Flutter
 import 'package:flutter/material.dart';
 
-// Packages
+// Internal
 import 'package:songtube/screens/settings/backupSettings.dart';
 import 'package:songtube/screens/settings/converterSettings.dart';
 import 'package:songtube/screens/settings/downloadSettings.dart';

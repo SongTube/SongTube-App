@@ -1,12 +1,17 @@
-import 'package:avatar_glow/avatar_glow.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+// Flutter
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:provider/provider.dart';
+
+// Internal
 import 'package:songtube/provider/app_provider.dart';
 import 'package:songtube/screens/settings.dart';
 import 'package:songtube/screens/moreScreen/quickAcessTile.dart';
+
+// Packages
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:avatar_glow/avatar_glow.dart';
+import 'package:provider/provider.dart';
 
 class MoreScreen extends StatelessWidget {
   @override

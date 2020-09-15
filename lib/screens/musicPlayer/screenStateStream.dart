@@ -1,5 +1,8 @@
-import 'package:audio_service/audio_service.dart';
+// Internal
 import 'package:songtube/internal/playerService.dart';
+
+// Packages
+import 'package:audio_service/audio_service.dart';
 import 'package:rxdart/rxdart.dart';
 
 /// Encapsulate all the different data we're interested in into a single

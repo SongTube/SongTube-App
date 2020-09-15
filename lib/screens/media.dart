@@ -1,8 +1,15 @@
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+// Flutter
 import 'package:flutter/material.dart';
+
+// Internal
 import 'package:songtube/screens/media/downloadListView.dart';
 import 'package:songtube/screens/media/musicListView.dart';
 import 'package:songtube/screens/media/videoListView.dart';
+
+// Packages
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+
+// UI
 import 'package:songtube/ui/animations/showUp.dart';
 
 class MediaScreen extends StatefulWidget {

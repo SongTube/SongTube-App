@@ -1,9 +1,14 @@
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+// Flutter
 import 'package:flutter/material.dart';
+
+// Packages
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:songtube/ui/animations/showUp.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+// UI
+import 'package:songtube/ui/animations/showUp.dart';
 
 class IntroWelcome extends StatelessWidget {
   final Function onNext;

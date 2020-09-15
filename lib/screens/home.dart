@@ -2,7 +2,6 @@
 import 'dart:ui';
 
 // Flutter
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -12,15 +11,16 @@ import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/screens/homeScreen/shimmer/shimmerVideoPage.dart';
 import 'package:songtube/screens/homeScreen/videoPage.dart';
 import 'package:songtube/screens/settings.dart';
-import 'package:songtube/ui/animations/showUp.dart';
 
 // Packages
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:provider/provider.dart';
 
 // UI
 import 'package:songtube/screens/homeScreen/downloadMenu.dart';
 import 'package:songtube/screens/homeScreen/IntroSplash.dart';
+import 'package:songtube/ui/animations/showUp.dart';
 
 class HomeScreen extends StatefulWidget {
   @override

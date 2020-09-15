@@ -1,7 +1,12 @@
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+// Flutter
 import 'package:flutter/material.dart';
+
+// Packages
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
+
+// UI
 import 'package:songtube/ui/animations/showUp.dart';
 
 class IntroPermissions extends StatefulWidget {

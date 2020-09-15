@@ -3,23 +3,25 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui';
+
+// Flutter
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+// Internal
+import 'package:songtube/internal/playerService.dart';
+import 'package:songtube/screens/musicPlayer/screenStateStream.dart';
+
+// Packages
+import 'package:audio_service/audio_service.dart';
+import 'package:transparent_image/transparent_image.dart';
 import 'package:flutter_audio_query/flutter_audio_query.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:rxdart/rxdart.dart';
 
-// Flutter
-import 'package:flutter/material.dart';
-
-// Internal
-import 'package:songtube/internal/playerService.dart';
-
-// Packages
-import 'package:audio_service/audio_service.dart';
-import 'package:songtube/screens/musicPlayer/screenStateStream.dart';
+// UI
 import 'package:songtube/ui/animations/fadeIn.dart';
 import 'package:songtube/ui/animations/showUp.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class ExpandedPlayer extends StatelessWidget {
   final BehaviorSubject<double> _dragPositionSubject =

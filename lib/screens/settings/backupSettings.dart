@@ -1,12 +1,20 @@
+// Dart
 import 'dart:io';
 
+// Flutter
+import 'package:flutter/material.dart';
+
+// Internal
+import 'package:songtube/provider/managerProvider.dart';
+
+// Packages
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:ext_storage/ext_storage.dart';
-import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:songtube/provider/managerProvider.dart';
+
+// UI
 import 'package:songtube/screens/settings/ui/columnTile.dart';
 import 'package:songtube/ui/snackbar.dart';
 

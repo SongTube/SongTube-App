@@ -3,10 +3,7 @@ import 'dart:async';
 import 'dart:io';
 
 // Flutter
-import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
-import 'package:path_provider/path_provider.dart';
 
 // Internal
 import 'package:songtube/internal/database/infoset_database.dart';
@@ -17,11 +14,16 @@ import 'package:songtube/internal/models/metadata.dart';
 import 'package:songtube/internal/nativeMethods.dart';
 import 'package:songtube/internal/youtube/youtubeInfo.dart';
 import 'package:songtube/provider/app_provider.dart';
-import 'package:songtube/ui/snackbar.dart';
 
 // Packages
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:audio_service/audio_service.dart';
+
+// UI
+import 'package:songtube/ui/snackbar.dart';
 
 enum LoadingStatus {Success, Loading, Failed}
 

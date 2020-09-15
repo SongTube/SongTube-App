@@ -1,5 +1,10 @@
+// Flutter
 import 'package:flutter/material.dart';
+
+// Packages
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
+
+// UI
 import 'package:songtube/ui/animations/fadeIn.dart';
 import 'package:songtube/ui/animations/showUp.dart';
 

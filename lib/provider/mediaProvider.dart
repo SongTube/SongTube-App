@@ -1,16 +1,23 @@
+// Dart
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:ext_storage/ext_storage.dart';
-import 'package:flutter/services.dart';
-import 'package:audio_service/audio_service.dart';
+
+// Flutter
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+// Internal
+import 'package:songtube/internal/models/folder.dart';
+import 'package:songtube/internal/models/songFile.dart';
+import 'package:songtube/internal/models/videoFile.dart';
+
+// Packages
+import 'package:ext_storage/ext_storage.dart';
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter_audio_query/flutter_audio_query.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:songtube/internal/models/folder.dart';
-import 'package:songtube/internal/models/songFile.dart';
-import 'package:songtube/internal/models/videoFile.dart';
 
 class MediaProvider extends ChangeNotifier {
 

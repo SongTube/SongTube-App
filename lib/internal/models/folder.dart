@@ -1,3 +1,4 @@
+// Internal
 import 'package:songtube/internal/models/videoFile.dart';
 
 class FolderItem {

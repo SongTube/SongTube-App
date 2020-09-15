@@ -1,5 +1,8 @@
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+// Flutter
 import 'package:flutter/material.dart';
+
+// Packages
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 
 class QuickAccessTile extends StatelessWidget {
   final Icon tileIcon;

@@ -1,9 +1,13 @@
+// Dart
 import 'dart:io';
 
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
+// Internal
 import 'package:songtube/internal/models/songFile.dart';
 import 'package:songtube/internal/tagsManager.dart';
+
+// Packages
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 const String table = "itemsTable";

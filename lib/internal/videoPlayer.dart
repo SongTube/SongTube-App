@@ -3,17 +3,17 @@ import 'dart:async';
 import 'dart:io';
 
 // Flutter
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 // Internal
 import 'package:songtube/internal/models/videoFile.dart';
 
 // Packages
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:video_player/video_player.dart';
 import 'package:wakelock/wakelock.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 
 class AppVideoPlayer extends StatefulWidget {
   final VideoFile video;

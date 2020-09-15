@@ -1,5 +1,8 @@
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+// Flutter
 import 'package:flutter/material.dart';
+
+// Packages
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart' as youtube;
 
 class VideoDownloadMenu extends StatelessWidget {

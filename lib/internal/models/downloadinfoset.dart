@@ -4,16 +4,15 @@ import 'dart:io';
 
 // Flutter
 import 'package:flutter/material.dart';
+
+// Internal
 import 'package:songtube/internal/database/infoset_database.dart';
 import 'package:songtube/internal/models/songFile.dart';
-
-// Internal Models
 import 'package:songtube/internal/models/metadata.dart';
 import 'package:songtube/internal/ffmpeg/converter.dart';
 import 'package:songtube/internal/nativeMethods.dart';
 import 'package:songtube/internal/randomString.dart';
 import 'package:songtube/internal/tagsManager.dart';
-import 'package:string_validator/string_validator.dart';
 
 // Packages
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
@@ -21,6 +20,7 @@ import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:string_validator/string_validator.dart';
 
 enum DownloadType { AUDIO, VIDEO }
 

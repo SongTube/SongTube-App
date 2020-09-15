@@ -1,11 +1,18 @@
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+// Flutter
 import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:provider/provider.dart';
+
+// Internal
 import 'package:songtube/internal/models/folder.dart';
 import 'package:songtube/internal/models/videoFile.dart';
 import 'package:songtube/internal/videoPlayer.dart';
+
+// Packages
+import 'package:permission_handler/permission_handler.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:songtube/provider/mediaProvider.dart';
+import 'package:provider/provider.dart';
+
+// UI
 import 'package:songtube/screens/media/ui/folderGridView.dart';
 import 'package:songtube/screens/media/ui/videosOnFolderListView.dart';
 

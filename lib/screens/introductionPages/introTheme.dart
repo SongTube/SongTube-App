@@ -1,7 +1,14 @@
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+// Flutter
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+
+// Internal
 import 'package:songtube/provider/app_provider.dart';
+
+// Packages
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:provider/provider.dart';
+
+// UI
 import 'package:songtube/ui/animations/showUp.dart';
 
 enum ThemeSelected { System, Light, Dark }

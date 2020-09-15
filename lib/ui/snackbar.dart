@@ -1,8 +1,12 @@
 // Flutter
-import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
+
+// Internal
 import 'package:songtube/internal/playerService.dart';
 import 'package:songtube/screens/musicPlayer/screenStateStream.dart';
+
+// Packages
+import 'package:audio_service/audio_service.dart';
 
 class AppSnack {
 

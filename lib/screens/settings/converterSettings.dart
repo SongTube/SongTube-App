@@ -1,9 +1,16 @@
-import 'package:circular_check_box/circular_check_box.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+// Flutter
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+
+// Internal
 import 'package:songtube/provider/app_provider.dart';
 import 'package:songtube/screens/settings/ui/columnTile.dart';
+
+// Packages
+import 'package:circular_check_box/circular_check_box.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:provider/provider.dart';
+
+// UI
 import 'package:songtube/ui/reusable/alertDialog.dart';
 
 class ConverterSettings extends StatefulWidget {

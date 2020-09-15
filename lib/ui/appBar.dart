@@ -1,7 +1,11 @@
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+// Flutter
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
+// Packages
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+
+// UI
 import 'animations/fadeIn.dart';
 import 'animations/showUp.dart';
 

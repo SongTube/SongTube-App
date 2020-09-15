@@ -2,12 +2,16 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 
-// Packages
-import 'package:sliding_up_panel/sliding_up_panel.dart';
+// Internal
 import 'package:songtube/internal/playerService.dart';
 import 'package:songtube/screens/musicPlayer/collapsed.dart';
 import 'package:songtube/screens/musicPlayer/expanded.dart';
 import 'package:songtube/screens/musicPlayer/screenStateStream.dart';
+
+// Packages
+import 'package:sliding_up_panel/sliding_up_panel.dart';
+
+// UI
 import 'package:songtube/ui/animations/showUp.dart';
 
 class SlidingPlayerPanel extends StatefulWidget {

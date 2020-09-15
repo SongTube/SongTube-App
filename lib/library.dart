@@ -1,5 +1,4 @@
 // Flutter
-import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -14,17 +13,18 @@ import 'package:songtube/screens/media.dart';
 import 'package:songtube/screens/more.dart';
 import 'package:songtube/screens/musicPlayer/screenStateStream.dart';
 import 'package:songtube/screens/navigate.dart';
+import 'package:songtube/screens/musicPlayer.dart';
 
 // Packages
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:youtube_explode_dart/youtube_explode_dart.dart' as yt;
+import 'package:audio_service/audio_service.dart';
 
 // UI
-import 'package:songtube/screens/musicPlayer.dart';
 import 'package:songtube/ui/snackbar.dart';
-import 'package:youtube_explode_dart/youtube_explode_dart.dart' as yt;
 
 class Library extends StatefulWidget {
   @override

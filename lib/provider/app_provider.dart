@@ -1,12 +1,12 @@
 // Flutter
 import 'package:flutter/material.dart';
-import 'package:package_info/package_info.dart';
 
 // Internal
 import 'package:songtube/internal/preferences.dart';
 
 // Packages
 import 'package:ext_storage/ext_storage.dart';
+import 'package:package_info/package_info.dart';
 
 class AppDataProvider extends ChangeNotifier {
 

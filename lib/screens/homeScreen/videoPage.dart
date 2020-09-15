@@ -18,9 +18,9 @@ import 'package:transparent_image/transparent_image.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 
 // UI
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:songtube/screens/homeScreen/roundTile.dart';
 import 'package:songtube/ui/reusable/textfieldTile.dart';
 import 'package:songtube/ui/animations/showUp.dart';

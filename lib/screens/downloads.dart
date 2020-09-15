@@ -1,9 +1,13 @@
 // Flutter
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 
-// UI
+// Internal
 import 'package:songtube/screens/downloadsPages/downloads.dart';
+
+// Packages
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+
+// UI
 import 'package:songtube/ui/animations/showUp.dart';
 
 class DownloadTab extends StatelessWidget {

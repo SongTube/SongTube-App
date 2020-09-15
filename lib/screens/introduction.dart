@@ -1,11 +1,16 @@
+// Flutter
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
-import 'package:songtube/provider/app_provider.dart';
+
+// Internal
 import 'package:songtube/screens/introductionPages/introPermissions.dart';
 import 'package:songtube/screens/introductionPages/introReady.dart';
 import 'package:songtube/screens/introductionPages/introTheme.dart';
 import 'package:songtube/screens/introductionPages/introWelcome.dart';
+import 'package:songtube/provider/app_provider.dart';
+
+// Packages
+import 'package:provider/provider.dart';
 
 class IntroScreen extends StatefulWidget {
 
