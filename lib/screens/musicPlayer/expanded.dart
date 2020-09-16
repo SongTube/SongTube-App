@@ -49,7 +49,8 @@ class ExpandedPlayer extends StatelessWidget {
                     width: 320,
                     margin: EdgeInsets.only(top: kToolbarHeight*0.5),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
+                      color: Theme.of(context).cardColor,
+                      borderRadius: BorderRadius.circular(20),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black87.withOpacity(0.2),
