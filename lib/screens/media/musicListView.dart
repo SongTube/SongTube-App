@@ -28,15 +28,6 @@ class MediaMusicList extends StatefulWidget {
 
 class _MediaMusicListState extends State<MediaMusicList> with AutomaticKeepAliveClientMixin {
 
-  // Current Queue
-  List<MediaItem> currentQueue;
-
-  @override
-  void initState() {
-    currentQueue = List<MediaItem>();
-    super.initState();
-  }
-
   @override
   bool get wantKeepAlive => true;
 
@@ -171,10 +162,7 @@ class _MediaMusicListState extends State<MediaMusicList> with AutomaticKeepAlive
                         androidEnableQueue: true,
                       );
                     }
-                    if (currentQueue != mediaProvider.listMediaItems) {
-                      currentQueue = mediaProvider.listMediaItems;
-                      await AudioService.updateQueue(mediaProvider.listMediaItems);
-                    }
+                    await AudioService.updateQueue(mediaProvider.listMediaItems);
                     await AudioService.playFromMediaId(index.toString());
                   },
                 );
