@@ -1,4 +1,4 @@
-SongTube 3.0.0:
+# SongTube 3.0.0:
 
 - Fixed Restore/Backup Options
 - Fixed default downloads folder not getting created
