@@ -37,7 +37,8 @@ Other SongTube download sites:
 
 ## Screenshots
 
-![](https://i.imgur.com/PZSvMPi.jpg) ![](https://i.imgur.com/f2ME62r.jpg)
-![](https://i.imgur.com/EmqkZgN.jpg) ![](https://i.imgur.com/KOsb8xE.jpg)
+![](https://i.imgur.com/20DZtPI.jpg) ![](https://i.imgur.com/MMsTOqH.jpg)
+![](https://i.imgur.com/JGl6cmN.jpg) ![](https://i.imgur.com/vov3Zva.jpg)
+![](https://i.imgur.com/ZBcykbt.jpg) ![](https://i.imgur.com/GXs2hTi.jpg)
 
 ---
