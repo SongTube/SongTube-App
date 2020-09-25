@@ -22,7 +22,7 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 
 // UI
 import 'package:songtube/screens/homeScreen/roundTile.dart';
-import 'package:songtube/ui/reusable/textfieldTile.dart';
+import 'package:songtube/ui/widgets/textfieldTile.dart';
 import 'package:songtube/ui/animations/showUp.dart';
 
 class VideoPage extends StatefulWidget {

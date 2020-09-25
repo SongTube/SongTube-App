@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 // Internal
-import 'package:songtube/screens/downloadsPages/downloads.dart';
+import 'package:songtube/screens/downloadScreen/downloads.dart';
 
 // Packages
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';

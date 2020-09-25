@@ -6,7 +6,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 // Internal
-import 'package:songtube/internal/database/infoset_database.dart';
+import 'package:songtube/internal/services/databaseService.dart';
 import 'package:songtube/internal/models/songFile.dart';
 import 'package:songtube/internal/models/metadata.dart';
 import 'package:songtube/internal/ffmpeg/converter.dart';

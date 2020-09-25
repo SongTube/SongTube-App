@@ -8,6 +8,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:songtube/ui/animations/showUp.dart';
 
 class ShimmerVideoPage extends StatelessWidget {
+  const ShimmerVideoPage();
   @override
   Widget build(BuildContext context) {
     return ListView(

@@ -2,9 +2,9 @@
 import 'package:flutter/material.dart';
 
 // Internal
-import 'package:songtube/screens/media/downloadListView.dart';
-import 'package:songtube/screens/media/musicListView.dart';
-import 'package:songtube/screens/media/videoListView.dart';
+import 'package:songtube/screens/mediaScreen/downloadsTab.dart';
+import 'package:songtube/screens/mediaScreen/musicTab.dart';
+import 'package:songtube/screens/mediaScreen/videosTab.dart';
 
 // Packages
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
@@ -12,12 +12,7 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 // UI
 import 'package:songtube/ui/animations/showUp.dart';
 
-class MediaScreen extends StatefulWidget {
-  @override
-  _MediaScreenState createState() => _MediaScreenState();
-}
-
-class _MediaScreenState extends State<MediaScreen> {
+class MediaScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -31,7 +26,10 @@ class _MediaScreenState extends State<MediaScreen> {
           ),
           child: Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(10),
+                bottomRight: Radius.circular(10)
+              ),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black12,
@@ -116,9 +114,9 @@ class _MediaScreenState extends State<MediaScreen> {
         ),
         body: TabBarView(
           children: [
-            MediaMusicList(),
-            MediaVideoList(),
-            MediaDownloadList()
+            MediaMusicTab(),
+            MediaVideoTab(),
+            MediaDownloadTab()
           ],
         ),
       ),

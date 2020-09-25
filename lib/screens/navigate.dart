@@ -7,14 +7,14 @@ import 'package:flutter/material.dart';
 // Internal
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/screens/navigateScreen/searchPage.dart';
-import 'package:songtube/screens/navigateScreen/shimmer/shimmerSearchPage.dart';
+import 'package:songtube/screens/navigateScreen/widgets/shimmer/shimmerSearchPage.dart';
 
 // Packages
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 import 'package:provider/provider.dart';
 
 // UI
-import 'package:songtube/ui/appBar.dart';
+import 'package:songtube/ui/widgets/appBar.dart';
 
 List<SearchVideo> searchResults = new List<SearchVideo>();
 
@@ -92,7 +92,7 @@ class _NavigateState extends State<Navigate> {
                     ? SearchPage(
                         results: searchResults,
                       )
-                    : ShimmerSearchPage()
+                    : const ShimmerSearchPage()
             ),
           )
         ]

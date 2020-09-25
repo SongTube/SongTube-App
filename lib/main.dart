@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 // Internal
-import 'package:songtube/screens/introduction.dart';
+import 'package:songtube/intro/introduction.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/provider/app_provider.dart';
 import 'package:songtube/library.dart';
@@ -14,7 +14,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:provider/provider.dart';
 
 // UI
-import 'package:songtube/ui/themeValues.dart';
+import 'package:songtube/ui/internal/themeValues.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

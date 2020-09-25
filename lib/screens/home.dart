@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 // Internal
-import 'package:songtube/internal/lifecycleEvents.dart';
+import 'package:songtube/ui/internal/lifecycleEvents.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/screens/homeScreen/shimmer/shimmerVideoPage.dart';
 import 'package:songtube/screens/homeScreen/videoPage.dart';
-import 'package:songtube/screens/settings.dart';
+import 'package:songtube/screens/moreScreen/settings.dart';
 
 // Packages
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
@@ -27,10 +27,7 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMixin {
-
-  @override
-  bool get wantKeepAlive => true;
+class _HomeScreenState extends State<HomeScreen> {
 
   // QuickSearch Controller
   TextEditingController quickSearchController;
@@ -78,7 +75,6 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
     return GestureDetector(
       child: Scaffold(
@@ -94,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                 child: manager.mediaStreamReady
                   ? VideoPage()
                   : manager.loadingVideo
-                    ? ShimmerVideoPage()
+                    ? const ShimmerVideoPage()
                     : Center(
                         child: IntroSplash(
                           forward: forward,

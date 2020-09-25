@@ -30,7 +30,8 @@ class ShowUpTransition extends StatefulWidget {
   _ShowUpTransitionState createState() => _ShowUpTransitionState();
 }
 
-class _ShowUpTransitionState extends State<ShowUpTransition> with TickerProviderStateMixin {
+class _ShowUpTransitionState extends State<ShowUpTransition> 
+  with SingleTickerProviderStateMixin {
   
   AnimationController _animController;
   Animation<Offset> _animOffset;

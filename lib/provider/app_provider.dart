@@ -129,7 +129,6 @@ class AppDataProvider extends ChangeNotifier {
     audioConvertFormat = preferences.getAudioConvertingFormat();
     audioDownloadPath = preferences.getAudioDownloadPath();
     videoDownloadPath = preferences.getVideoDownloadPath();
-    useYoutubeWebview = true;
   }
 
   // Converting audio format
@@ -148,13 +147,6 @@ class AppDataProvider extends ChangeNotifier {
   set videoDownloadPath(String path) {
     _videoDownloadPath = path;
     preferences.saveVideoDownloadPath(path);
-    notifyListeners();
-  }
-
-  // Use Youtube Webview
-  set useYoutubeWebview(bool value) {
-    _useYoutubeWebview = value;
-    preferences.saveUseYoutubeWebview(value);
     notifyListeners();
   }
 

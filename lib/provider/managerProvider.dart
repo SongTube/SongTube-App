@@ -6,7 +6,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 // Internal
-import 'package:songtube/internal/database/infoset_database.dart';
+import 'package:songtube/internal/services/databaseService.dart';
 import 'package:songtube/internal/models/songFile.dart';
 import 'package:songtube/internal/ffmpeg/converter.dart';
 import 'package:songtube/internal/models/downloadinfoset.dart';
@@ -23,7 +23,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:audio_service/audio_service.dart';
 
 // UI
-import 'package:songtube/ui/snackbar.dart';
+import 'package:songtube/ui/internal/snackbar.dart';
 
 enum LoadingStatus {Success, Loading, Failed}
 
