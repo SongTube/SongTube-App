@@ -11,7 +11,6 @@ import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/screens/homeScreen/shimmer/shimmerVideoPage.dart';
 import 'package:songtube/screens/homeScreen/videoPage.dart';
 import 'package:songtube/screens/moreScreen/settings.dart';
-import 'package:songtube/ui/internal/snackbar.dart';
 
 // Packages
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
@@ -141,7 +140,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       ? CircularProgressIndicator(
                           backgroundColor: Theme.of(context).accentColor,
                           valueColor: AlwaysStoppedAnimation(Colors.white),
-                          strokeWidth: 4,
                         )
                       : Icon(Icons.file_download),
                     backgroundColor: Theme.of(context).accentColor,
