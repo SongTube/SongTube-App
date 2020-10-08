@@ -137,18 +137,18 @@ class _IntroThemeState extends State<IntroTheme> {
               ),
             ),
           ),
-          ShowUpTransition(
-            duration: Duration(milliseconds: 600),
-            delay: Duration(milliseconds: 600),
-            forward: true,
-            slideSide: SlideFromSlide.BOTTOM,
-            child: Container(
-              alignment: Alignment.bottomCenter,
-              margin: EdgeInsets.only(bottom: 32),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  GestureDetector(
+          Container(
+            alignment: Alignment.bottomCenter,
+            margin: EdgeInsets.only(bottom: 32),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ShowUpTransition(
+                  duration: Duration(milliseconds: 600),
+                  delay: Duration(milliseconds: 600),
+                  forward: true,
+                  slideSide: SlideFromSlide.BOTTOM,
+                  child: GestureDetector(
                     onTap: () {
                       appData.systemThemeEnabled = true;
                       appData.darkThemeEnabled = false;
@@ -186,7 +186,13 @@ class _IntroThemeState extends State<IntroTheme> {
                       ),
                     ),
                   ),
-                  GestureDetector(
+                ),
+                ShowUpTransition(
+                  duration: Duration(milliseconds: 600),
+                  delay: Duration(milliseconds: 700),
+                  forward: true,
+                  slideSide: SlideFromSlide.BOTTOM,
+                  child: GestureDetector(
                     onTap: () {
                       appData.systemThemeEnabled = false;
                       appData.darkThemeEnabled = false;
@@ -224,7 +230,13 @@ class _IntroThemeState extends State<IntroTheme> {
                       ),
                     ),
                   ),
-                  GestureDetector(
+                ),
+                ShowUpTransition(
+                  duration: Duration(milliseconds: 600),
+                  delay: Duration(milliseconds: 800),
+                  forward: true,
+                  slideSide: SlideFromSlide.BOTTOM,
+                  child: GestureDetector(
                     onTap: () {
                       appData.systemThemeEnabled = false;
                       appData.darkThemeEnabled = true;
@@ -261,9 +273,9 @@ class _IntroThemeState extends State<IntroTheme> {
                         ),
                       ),
                     ),
-                  )
-                ],
-              ),
+                  ),
+                )
+              ],
             ),
           )
         ],
