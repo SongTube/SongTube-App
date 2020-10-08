@@ -84,6 +84,14 @@ class MediaScreen extends StatelessWidget {
                 indicatorColor: Theme.of(context).accentColor,
                 tabs: [
                   Tab(child: Text(
+                    "Downloads",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Varela',
+                      color: Theme.of(context).iconTheme.color
+                    ),
+                  )),
+                  Tab(child: Text(
                     "Music",
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
@@ -98,14 +106,6 @@ class MediaScreen extends StatelessWidget {
                       fontFamily: 'Varela',
                       color: Theme.of(context).iconTheme.color
                     ),
-                  )),
-                  Tab(child: Text(
-                    "Downloads",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontFamily: 'Varela',
-                      color: Theme.of(context).iconTheme.color
-                    ),
                   ))
                 ],
               ),
@@ -114,9 +114,9 @@ class MediaScreen extends StatelessWidget {
         ),
         body: TabBarView(
           children: [
+            MediaDownloadTab(),
             MediaMusicTab(),
-            MediaVideoTab(),
-            MediaDownloadTab()
+            MediaVideoTab()
           ],
         ),
       ),
