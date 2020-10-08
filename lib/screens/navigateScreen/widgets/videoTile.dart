@@ -44,51 +44,33 @@ class VideoTile extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Expanded(
-                    child: Container(
-                      margin: EdgeInsets.only(left: 8, right: 8, top: 8),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            "${video.videoTitle}",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500
-                            ),
-                            overflow: TextOverflow.clip,
-                            maxLines: 1,
-                          ),
-                          SizedBox(height: 4),
-                          Text(
-                            "${video.videoAuthor} • "
-                            "${NumberFormat.compact().format(video.videoViewCount)} views",
-                            style: TextStyle(
-                              color: Colors.grey[600],
-                              fontSize: 12
-                            ),
-                            overflow: TextOverflow.clip,
-                            maxLines: 1,
-                          ),
-                        ],
+              child: Container(
+                margin: EdgeInsets.only(left: 8, right: 8, top: 8),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      "${video.videoTitle}",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500
                       ),
+                      overflow: TextOverflow.clip,
+                      maxLines: 1,
                     ),
-                  ),
-                  Container(
-                    height: 30,
-                    width: 30,
-                    margin: EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).cardColor,
-                      borderRadius: BorderRadius.circular(50)
+                    SizedBox(height: 4),
+                    Text(
+                      "${video.videoAuthor} • "
+                      "${NumberFormat.compact().format(video.videoViewCount)} views",
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: 12
+                      ),
+                      overflow: TextOverflow.clip,
+                      maxLines: 1,
                     ),
-                    child: Icon(EvaIcons.downloadOutline, size: 20, color: Theme.of(context).iconTheme.color),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             Divider(height: 1, thickness: 2)
