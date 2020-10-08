@@ -1,14 +1,10 @@
 // Dart
 import 'dart:io';
 import 'dart:math';
-import 'dart:typed_data';
 import 'dart:ui';
 
 // Flutter
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
-import 'package:provider/provider.dart';
 
 // Internal
 import 'package:songtube/internal/services/playerService.dart';
@@ -17,10 +13,7 @@ import 'package:songtube/internal/screenStateStream.dart';
 // Packages
 import 'package:audio_service/audio_service.dart';
 import 'package:songtube/player/internal/artworkGenerator.dart';
-import 'package:songtube/provider/managerProvider.dart';
 import 'package:transparent_image/transparent_image.dart';
-import 'package:flutter_audio_query/flutter_audio_query.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:rxdart/rxdart.dart';
 
 // UI
