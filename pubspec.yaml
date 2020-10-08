@@ -35,7 +35,7 @@ dependencies:
   provider: ^4.1.2
   device_info: ^0.4.2+4
   http: any
-  youtube_explode_dart: ^1.5.1
+  youtube_explode_dart: ^1.5.2
   ext_storage: ^1.0.3
   permission_handler: ^5.0.0+hotfix.3
   youtube_player_flutter:
