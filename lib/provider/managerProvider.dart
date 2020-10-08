@@ -307,16 +307,31 @@ class ManagerProvider extends ChangeNotifier {
     loadHome(LoadingStatus.Loading);
     try {
       videoDetails = await yt.getVideoDetails(url).timeout(Duration(seconds: 20));
-      streamManifest = await yt.getVideoManifest(url).timeout(Duration(seconds: 20));
+      streamManifest = null;
     } catch (e) {
       loadHome(LoadingStatus.Failed);
       return null;
     }
     updateTextControllers();
     loadHome(LoadingStatus.Success);
+    notifyListeners();
+    getChannelDetails(url);
+    getStreamManifest(url);
+    return 0;
+  }
+  // Get StreamManifest
+  void getStreamManifest(String url) async {
+    while (streamManifest == null) {
+      try {
+        streamManifest = await yt.getVideoManifest(url).timeout(Duration(seconds: 30));
+        notifyListeners();
+      } catch (_) {}
+    }
+  }
+  // Get Channel Details
+  void getChannelDetails(String url) async {
     channelDetails = await yt.getChannel(url);
     notifyListeners();
-    return 0;
   }
   // Handle Downloads
   void handleDownload(BuildContext context, List data) {

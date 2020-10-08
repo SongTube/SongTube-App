@@ -11,6 +11,7 @@ import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/screens/homeScreen/shimmer/shimmerVideoPage.dart';
 import 'package:songtube/screens/homeScreen/videoPage.dart';
 import 'package:songtube/screens/moreScreen/settings.dart';
+import 'package:songtube/ui/internal/snackbar.dart';
 
 // Packages
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
@@ -136,44 +137,58 @@ class _HomeScreenState extends State<HomeScreen> {
                   duration: Duration(milliseconds: 300),
                   opacity: manager.showFloatingActionButtom ? 1.0 : 0.0,
                   child: FloatingActionButton(
-                    child: Icon(Icons.file_download),
+                    child: manager.streamManifest == null
+                      ? CircularProgressIndicator(
+                          backgroundColor: Theme.of(context).accentColor,
+                          valueColor: AlwaysStoppedAnimation(Colors.white),
+                          strokeWidth: 4,
+                        )
+                      : Icon(Icons.file_download),
                     backgroundColor: Theme.of(context).accentColor,
                     foregroundColor: Colors.white,
                     onPressed: () async {
-                      FocusScope.of(context).requestFocus(new FocusNode());
-                      List<dynamic> response = await showModalBottomSheet(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(30),
-                            topRight: Radius.circular(30)
+                      if (manager.streamManifest == null) {
+                        manager.snackBar.showSnackBar(
+                          icon: Icons.warning,
+                          title: "Please Wait",
+                          message: "Video Streams are beign loaded"
+                        );
+                      } else {
+                        FocusScope.of(context).requestFocus(new FocusNode());
+                        List<dynamic> response = await showModalBottomSheet(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(30),
+                              topRight: Radius.circular(30)
+                            ),
                           ),
-                        ),
-                        context: context,
-                        builder: (context) {
-                          return DownloadMenu(
-                            videoList: manager.streamManifest.videoOnly.sortByVideoQuality(),
-                            onSettingsPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return Dialog(
-                                    backgroundColor: Theme.of(context).canvasColor,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20.0),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: SettingsTab(),
-                                    )
-                                  );
-                                }
-                              );
-                            },
-                          );
-                        }
-                      );
-                      if (response == null) return;
-                      manager.handleDownload(context, response);
+                          context: context,
+                          builder: (context) {
+                            return DownloadMenu(
+                              videoList: manager.streamManifest.videoOnly.sortByVideoQuality(),
+                              onSettingsPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return Dialog(
+                                      backgroundColor: Theme.of(context).canvasColor,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20.0),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: SettingsTab(),
+                                      )
+                                    );
+                                  }
+                                );
+                              },
+                            );
+                          }
+                        );
+                        if (response == null) return;
+                        manager.handleDownload(context, response);
+                      }
                     }
                   ),
                 ),
