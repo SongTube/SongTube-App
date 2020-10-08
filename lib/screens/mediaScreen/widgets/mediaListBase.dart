@@ -17,7 +17,7 @@ class MediaListBase extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
-      duration: Duration(milliseconds: 400),
+      duration: Duration(milliseconds: 200),
       child: animatedSwitcherChild(),
     );
   }
