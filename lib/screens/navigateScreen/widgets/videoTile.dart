@@ -45,7 +45,7 @@ class VideoTile extends StatelessWidget {
             ),
             Expanded(
               child: Container(
-                margin: EdgeInsets.only(left: 8, right: 8, top: 8),
+                margin: EdgeInsets.only(left: 8, right: 16, top: 8),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,7 +56,7 @@ class VideoTile extends StatelessWidget {
                         fontWeight: FontWeight.w500
                       ),
                       overflow: TextOverflow.clip,
-                      maxLines: 1,
+                      maxLines: 2,
                     ),
                     SizedBox(height: 4),
                     Text(

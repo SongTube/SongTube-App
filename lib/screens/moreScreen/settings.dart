@@ -7,9 +7,15 @@ import 'package:songtube/screens/moreScreen/widgets/settings/widgets/converterSe
 import 'package:songtube/screens/moreScreen/widgets/settings/widgets/downloadSettings.dart';
 import 'package:songtube/screens/moreScreen/widgets/settings/widgets/themeSettings.dart';
 
-class SettingsTab extends StatelessWidget {
+class SettingsTab extends StatefulWidget {
   
   // Scaffold Key
+  @override
+  _SettingsTabState createState() => _SettingsTabState();
+}
+
+class _SettingsTabState extends State<SettingsTab> {
+  
   final GlobalKey<ScaffoldState> scaffoldState = new GlobalKey<ScaffoldState>();
 
   @override
