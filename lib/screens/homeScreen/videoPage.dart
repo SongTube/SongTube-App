@@ -23,7 +23,7 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 // UI
 import 'package:songtube/screens/homeScreen/roundTile.dart';
 import 'package:songtube/ui/widgets/textfieldTile.dart';
-import 'package:songtube/ui/animations/showUp.dart';
+import 'package:songtube/ui/animations/FadeIn.dart';
 
 class VideoPage extends StatefulWidget {
   @override
@@ -49,23 +49,21 @@ class _VideoPageState extends State<VideoPage> {
       onDismissed: (direction) {
         manager.loadHome(LoadingStatus.Failed);
       },
-      child: ListView(
-        padding: EdgeInsets.zero,
-        physics: BouncingScrollPhysics(),
-        children: <Widget> [
-          // --------------
-          // Video Content
-          // --------------
-          // Mini-Player
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              // Mini-Player
-              ShowUpTransition(
-                forward: true,
-                duration: Duration(milliseconds: 300),
-                slideSide: SlideFromSlide.TOP,
-                child: Container(
+      child: FadeInTransition(
+        duration: Duration(milliseconds: 400),
+        child: ListView(
+          padding: EdgeInsets.zero,
+          physics: BouncingScrollPhysics(),
+          children: <Widget> [
+            // --------------
+            // Video Content
+            // --------------
+            // Mini-Player
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                // Mini-Player
+                Container(
                   margin: const EdgeInsets.only(left: 8, right: 8),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
@@ -115,12 +113,7 @@ class _VideoPageState extends State<VideoPage> {
                       ),
                   ),
                 ),
-              ),
-              ShowUpTransition(
-                forward: true,
-                duration: Duration(milliseconds: 400),
-                slideSide: SlideFromSlide.LEFT,
-                child: Container(
+                Container(
                   margin: EdgeInsets.all(12),
                   child: Row(
                     children: [
@@ -173,13 +166,8 @@ class _VideoPageState extends State<VideoPage> {
                     ],
                   ),
                 ),
-              ),
-              // Video Duration and Weight
-              ShowUpTransition(
-                forward: true,
-                duration: Duration(milliseconds: 500),
-                slideSide: SlideFromSlide.BOTTOM,
-                child: Row(
+                // Video Duration and Weight
+                Row(
                   children: <Widget>[
                     Padding(
                       padding: EdgeInsets.only(left: 12, right: 12),
@@ -207,15 +195,10 @@ class _VideoPageState extends State<VideoPage> {
                     ),
                   ],
                 ),
-              ),
-              // ---------------------------------------
-              // Likes, dislikes, Views and Share button
-              // ---------------------------------------
-              ShowUpTransition(
-                forward: true,
-                duration: Duration(milliseconds: 600),
-                slideSide: SlideFromSlide.BOTTOM,
-                child: Row(
+                // ---------------------------------------
+                // Likes, dislikes, Views and Share button
+                // ---------------------------------------
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
@@ -283,21 +266,16 @@ class _VideoPageState extends State<VideoPage> {
                     ),
                   ],
                 ),
-              ),
-              // --------------
-              // Video Metadata
-              // --------------
-              Padding(
-                padding: const EdgeInsets.only(left: 8, right: 8, top: 4),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    // Metadata Text
-                    ShowUpTransition(
-                      forward: true,
-                      duration: Duration(milliseconds: 700),
-                      slideSide: SlideFromSlide.BOTTOM,
-                      child: Row(
+                // --------------
+                // Video Metadata
+                // --------------
+                Padding(
+                  padding: const EdgeInsets.only(left: 8, right: 8, top: 4),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      // Metadata Text
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -413,13 +391,8 @@ class _VideoPageState extends State<VideoPage> {
                           ),
                         ],
                       ),
-                    ),
-                    // Title TextField
-                    ShowUpTransition(
-                      forward: true,
-                      duration: Duration(milliseconds: 800),
-                      slideSide: SlideFromSlide.BOTTOM,
-                      child: Row(
+                      // Title TextField
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
@@ -433,14 +406,9 @@ class _VideoPageState extends State<VideoPage> {
                           ),
                         ],
                       ),
-                    ),
-                    SizedBox(height: 12),
-                    // Album & Artist TextField Row
-                    ShowUpTransition(
-                      forward: true,
-                      duration: Duration(milliseconds: 900),
-                      slideSide: SlideFromSlide.BOTTOM,
-                      child: Row(
+                      SizedBox(height: 12),
+                      // Album & Artist TextField Row
+                      Row(
                         children: <Widget>[
                           // Album TextField
                           Expanded(
@@ -463,14 +431,9 @@ class _VideoPageState extends State<VideoPage> {
                           ),
                         ],
                       ),
-                    ),
-                    SizedBox(height: 12),
-                    // Gender & Date TextField Row
-                    ShowUpTransition(
-                      forward: true,
-                      duration: Duration(milliseconds: 1000),
-                      slideSide: SlideFromSlide.BOTTOM,
-                      child: Row(
+                      SizedBox(height: 12),
+                      // Gender & Date TextField Row
+                      Row(
                         children: <Widget>[
                           // Gender TextField
                           Expanded(
@@ -493,14 +456,9 @@ class _VideoPageState extends State<VideoPage> {
                           ),
                         ],
                       ),
-                    ),
-                    SizedBox(height: 12),
-                    // Disk & Track TextField Row
-                    ShowUpTransition(
-                      forward: true,
-                      duration: Duration(milliseconds: 1100),
-                      slideSide: SlideFromSlide.BOTTOM,
-                      child: Row(
+                      SizedBox(height: 12),
+                      // Disk & Track TextField Row
+                      Row(
                         children: <Widget>[
                           // Disk TextField
                           Expanded(
@@ -523,14 +481,14 @@ class _VideoPageState extends State<VideoPage> {
                           ),
                         ],
                       ),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
-          SizedBox(height: 8),
-        ]
+                    ],
+                  ),
+                )
+              ],
+            ),
+            SizedBox(height: 8),
+          ]
+        ),
       ),
     );
   }
