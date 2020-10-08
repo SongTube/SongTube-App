@@ -16,6 +16,7 @@ import 'package:songtube/internal/screenStateStream.dart';
 
 // Packages
 import 'package:audio_service/audio_service.dart';
+import 'package:songtube/player/internal/artworkGenerator.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:flutter_audio_query/flutter_audio_query.dart';
@@ -64,7 +65,10 @@ class ExpandedPlayer extends StatelessWidget {
                       ],
                     ),
                     child: FutureBuilder(
-                      future: generateArtwork(File(mediaItem.id), mediaItem.extras["albumId"]),
+                      future: ArtworkGenerator.generateArtwork(
+                        File(mediaItem.id),
+                        mediaItem.extras["albumId"]
+                      ),
                       builder: (context, AsyncSnapshot<File> image) {
                         return ClipRRect(
                           borderRadius: BorderRadius.circular(20),
@@ -265,34 +269,4 @@ class ExpandedPlayer extends StatelessWidget {
       },
     );
   }
-
-  Future<File> generateArtwork(File song, String id) async {
-    if (!await Directory((await getApplicationDocumentsDirectory()).path + "/Artworks/").exists())
-      await Directory((await getApplicationDocumentsDirectory()).path + "/Artworks/").create();
-    File artwork = File((await getApplicationDocumentsDirectory()).path +
-      "/Artworks/${song.path.split("/").last.replaceAll("/", "_")}HQ.jpg");
-    if (!await artwork.exists()) {
-      // If id is null use FFmpeg Method to extract Artwork
-      if (id == null) {
-        await FlutterFFmpeg().executeWithArguments([
-          "-y", "-i", "${song.path}", "-filter:v", "scale=500:500", "-an",
-          "-q:v", "1", "${artwork.path}"
-        ]);
-      } else { // Else, use native Method from FlutterAudioQuery
-        Uint8List bytes =  await FlutterAudioQuery().getArtwork(
-          type: ResourceType.SONG,
-          id: id,
-          size: Size(500,500)
-        );
-        if (bytes.isNotEmpty) {
-          await artwork.writeAsBytes(bytes);
-        } else {
-          var assetBytes = await rootBundle.load('assets/images/artworkPlaceholder_big.png');
-          await artwork.writeAsBytes(assetBytes.buffer.asUint8List(assetBytes.offsetInBytes, assetBytes.lengthInBytes));
-        }
-      }
-    }
-    return artwork;
-  }
-
 }
