@@ -47,6 +47,7 @@ class _NavigateState extends State<Navigate> {
 
   void search([String searchQuery]) async {
     setState(() => searchResults.clear());
+    await Future.delayed(Duration(milliseconds: 200));
     SearchQuery search = await yt.search
       .queryFromPage(
         searchQuery == null
