@@ -315,6 +315,7 @@ class ManagerProvider extends ChangeNotifier {
     updateTextControllers();
     loadHome(LoadingStatus.Success);
     notifyListeners();
+    await Future.delayed(Duration(milliseconds: 400));
     getChannelDetails(url);
     getStreamManifest(url);
     return 0;
