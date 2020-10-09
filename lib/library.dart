@@ -10,7 +10,6 @@ import 'package:songtube/provider/mediaProvider.dart';
 import 'package:songtube/screens/downloads.dart';
 import 'package:songtube/screens/home.dart';
 import 'package:songtube/screens/media.dart';
-import 'package:songtube/screens/more.dart';
 import 'package:songtube/screens/navigate.dart';
 import 'package:songtube/player/musicPlayer.dart';
 
@@ -23,6 +22,20 @@ import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 // UI
 import 'package:songtube/ui/internal/snackbar.dart';
+
+class MainLibrary extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      child: Stack(
+        children: [
+          Library(),
+          SlidingPlayerPanel()
+        ],
+      )
+    );
+  }
+}
 
 class Library extends StatefulWidget {
   @override
@@ -54,8 +67,39 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver {
     }
   }
 
-  Widget library(BuildContext context) {
+  @override
+  Widget build(BuildContext context) {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
+    Brightness _systemBrightness = Theme.of(context).brightness;
+    Brightness _statusBarBrightness = _systemBrightness == Brightness.light
+      ? Brightness.dark
+      : Brightness.light;
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarBrightness: _statusBarBrightness,
+        statusBarIconBrightness: _statusBarBrightness,
+        systemNavigationBarColor: Theme.of(context).cardColor,
+        systemNavigationBarIconBrightness: _statusBarBrightness,
+      ),
+    );
+    manager.downloadInfoSetList.forEach((element) {
+      if (!element.currentAction.isClosed) {
+        element.currentAction.stream.listen((event) {
+          if (event == "Completed") {
+            manager.getDatabase();
+            setState(() {});
+          }
+          if (event == "Access Denied") {
+            setState(() {});
+          }
+        });
+      }
+    });
+    manager.snackBar = new AppSnack(
+      scaffoldKey: manager.libraryScaffoldKey,
+      context: context
+    );
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
       child: Scaffold(
@@ -103,46 +147,5 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    ManagerProvider manager = Provider.of<ManagerProvider>(context);
-    Brightness _systemBrightness = Theme.of(context).brightness;
-    Brightness _statusBarBrightness = _systemBrightness == Brightness.light
-      ? Brightness.dark
-      : Brightness.light;
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        statusBarBrightness: _statusBarBrightness,
-        statusBarIconBrightness: _statusBarBrightness,
-        systemNavigationBarColor: Theme.of(context).cardColor,
-        systemNavigationBarIconBrightness: _statusBarBrightness,
-      ),
-    );
-    manager.downloadInfoSetList.forEach((element) {
-      if (!element.currentAction.isClosed) {
-        element.currentAction.stream.listen((event) {
-          if (event == "Completed") {
-            manager.getDatabase();
-            setState(() {});
-          }
-          if (event == "Access Denied") {
-            setState(() {});
-          }
-        });
-      }
-    });
-    manager.snackBar = new AppSnack(
-      scaffoldKey: manager.libraryScaffoldKey,
-      context: context
-    );
-    return Material(
-      child: Stack(
-        children: [
-          library(context),
-          SlidingPlayerPanel()
-        ],
-      )
-    );
-  }
+  
 }

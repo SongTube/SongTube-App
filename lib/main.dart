@@ -65,7 +65,7 @@ class Main extends StatelessWidget {
             ? 'introScreen'
             : 'homeScreen',
           routes: {
-            'homeScreen':  (context) => AudioServiceWidget(child: Library()),
+            'homeScreen':  (context) => AudioServiceWidget(child: MainLibrary()),
             'introScreen': (context) => IntroScreen()
           },
         );
