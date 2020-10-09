@@ -9,12 +9,13 @@ import 'package:flutter/services.dart';
 // Packages
 import 'package:flutter_audio_query/flutter_audio_query.dart';
 import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
+import 'package:palette_generator/palette_generator.dart';
 import 'package:path_provider/path_provider.dart';
 
 class ArtworkGenerator {
 
   // Automatically decides which Method use to generate Artwork
-  static Future<File> generateArtwork(File song, String id) async {
+  static Future<List<dynamic>> generateArtwork(File song, String id) async {
     if (!await Directory((await getApplicationDocumentsDirectory()).path + "/Artworks/").exists())
       await Directory((await getApplicationDocumentsDirectory()).path + "/Artworks/").create();
     File artwork = File((await getApplicationDocumentsDirectory()).path +
@@ -40,7 +41,9 @@ class ArtworkGenerator {
         }
       }
     }
-    return artwork;
+    PaletteGenerator color = await PaletteGenerator.fromImageProvider(FileImage(artwork));
+    Color dominantColor = color.dominantColor.color;
+    return [artwork, dominantColor];
   }
 
   // Use FFmpeg method to generate Artwork
