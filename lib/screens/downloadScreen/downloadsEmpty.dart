@@ -17,7 +17,7 @@ class NoDownloads extends StatelessWidget {
       forward: true,
       child: Container(
         padding: EdgeInsets.all(8),
-        height: 240,
+        height: 300,
         width: MediaQuery.of(context).size.width*0.6,
         child: Padding(
           padding: const EdgeInsets.all(24.0),

@@ -29,10 +29,7 @@ class Library extends StatefulWidget {
   _LibraryState createState() => _LibraryState();
 }
 
-class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerProviderStateMixin {
-
-  // TabBar Controller
-  TabController tabController;
+class _LibraryState extends State<Library> with WidgetsBindingObserver {
 
   @override
   void initState() {
@@ -41,11 +38,6 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
     KeyboardVisibility.onChange.listen((bool visible) {
         if (visible == false) FocusScope.of(context).unfocus();
       }
-    );
-    tabController = new TabController(
-      initialIndex: 0,
-      length: 5,
-      vsync: this
     );
     Provider.of<MediaProvider>(context, listen: false).loadSongList();
     Provider.of<MediaProvider>(context, listen: false).loadVideoList();
@@ -72,22 +64,13 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
         resizeToAvoidBottomInset: false,
         body: SafeArea(
           child: WillPopScope(
-            onWillPop: () => manager.handlePop(tabController.index),
+            onWillPop: () => manager.handlePop(manager.screenIndex),
             child: Column(
               children: [
                 Expanded(
-                  child: TabBarView(
-                    physics: NeverScrollableScrollPhysics(),
-                    controller: tabController,
-                    children: [
-                      HomeScreen(),
-                      DownloadTab(),
-                      MediaScreen(),
-                      Navigate(
-                        searchQuery: manager.navigateIntent,
-                      ),
-                      MoreScreen()
-                    ],
+                  child: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 250),
+                    child: currentScreen(manager)
                   ),
                 ),
                 MusicPlayerPadding()
@@ -96,12 +79,28 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
           ),
         ),
         bottomNavigationBar: AppBottomNavigationBar(
-          onItemTap: (int index) => manager.screenIndex.add(index),
+          onItemTap: (int index) => manager.screenIndex = index,
           navigationItems: BottomNavigationItems.items,
-          controller: tabController
+          currentIndex: manager.screenIndex
         ),
       ),
     );
+  }
+
+  Widget currentScreen(ManagerProvider manager) {
+    if (manager.screenIndex == 0) {
+      return HomeScreen();
+    } else if (manager.screenIndex == 1) {
+      return DownloadTab();
+    } else if (manager.screenIndex == 2) {
+      return MediaScreen();
+    } else if (manager.screenIndex == 3) {
+      return Navigate(
+        searchQuery: manager.navigateIntent,
+      );
+    } else {
+      return Container();
+    }
   }
 
   @override
@@ -120,11 +119,6 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver, TickerPr
         systemNavigationBarIconBrightness: _statusBarBrightness,
       ),
     );
-    manager.screenIndex.stream.listen((value) {
-      setState(() {
-        tabController.index = value;
-      });
-    });
     manager.downloadInfoSetList.forEach((element) {
       if (!element.currentAction.isClosed) {
         element.currentAction.stream.listen((event) {

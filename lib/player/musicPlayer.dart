@@ -40,7 +40,7 @@ class SlidingPlayerPanel extends StatelessWidget {
             ),
             builder: (context, AsyncSnapshot<List<dynamic>> list) {
               Color dominantColor = list.data[1] == null ? Colors.white : list.data[1];
-              Color textColor = dominantColor.computeLuminance() > 0.6 ? Colors.black : Colors.white;
+              Color textColor = dominantColor.computeLuminance() > 0.5 ? Colors.black : Colors.white;
               SystemChrome.setSystemUIOverlayStyle(
                 SystemUiOverlayStyle(
                   statusBarIconBrightness: textColor == Colors.black ? Brightness.dark : Brightness.light,

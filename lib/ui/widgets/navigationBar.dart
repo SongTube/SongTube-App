@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class AppBottomNavigationBar extends StatelessWidget {
   final List<BottomNavigationBarItem> navigationItems;
-  final TabController controller;
+  final int currentIndex;
   final Function(int) onItemTap;
   AppBottomNavigationBar({
     @required this.navigationItems,
-    @required this.controller,
+    @required this.currentIndex,
     @required this.onItemTap
   });
   @override
@@ -23,7 +23,7 @@ class AppBottomNavigationBar extends StatelessWidget {
       ), 
       child: BottomNavigationBar(
         backgroundColor: Theme.of(context).cardColor,
-        currentIndex: controller.index,
+        currentIndex: currentIndex,
         selectedFontSize: 14,
         elevation: 8,
         selectedItemColor: Theme.of(context).accentColor,

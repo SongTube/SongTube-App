@@ -56,11 +56,11 @@ class ExpandedPlayer extends StatelessWidget {
               ),
             ),
             Container(
-              color: Colors.black.withOpacity(0.2),
+              color: dominantColor.withOpacity(0.4),
               child: BackdropFilter(
                 filter: ImageFilter.blur(
-                  sigmaX: 25.0,
-                  sigmaY: 25.0,
+                  sigmaX: 22.0,
+                  sigmaY: 22.0,
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -100,35 +100,32 @@ class ExpandedPlayer extends StatelessWidget {
                       ),
                     ),
                     Expanded(
-                      child: FadeInTransition(
-                        delay: Duration(milliseconds: 100),
-                        duration: Duration(milliseconds: 200),
-                        child: Container(
-                          height: 320,
-                          width: 320,
-                          margin: EdgeInsets.all(20),
-                          decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black87.withOpacity(0.2),
-                                offset: Offset(0,0), //(x,y)
-                                blurRadius: 10.0,
-                                spreadRadius: 2.0 
-                              )
-                            ],
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: FadeInImage(
-                              fadeOutDuration: Duration(milliseconds: 300),
-                              fadeInDuration: Duration(milliseconds: 300),
-                              placeholder: MemoryImage(kTransparentImage),
-                              image: snapshot.hasData
-                                ? FileImage(image)
-                                : MemoryImage(kTransparentImage),
-                              fit: BoxFit.cover,
-                            ),
+                      child: Container(
+                        height: 320,
+                        width: 320,
+                        margin: EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black87.withOpacity(0.2),
+                              offset: Offset(0,0), //(x,y)
+                              blurRadius: 14.0,
+                              spreadRadius: 2.0 
+                            )
+                          ],
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: FadeInImage(
+                            fadeOutDuration: Duration(milliseconds: 300),
+                            fadeInDuration: Duration(milliseconds: 300),
+                            placeholder: MemoryImage(kTransparentImage),
+                            image: snapshot.hasData
+                              ? FileImage(image)
+                              : MemoryImage(kTransparentImage),
+                            fit: BoxFit.cover,
                           ),
                         ),
                       ),
@@ -161,7 +158,7 @@ class ExpandedPlayer extends StatelessWidget {
                             child: Text(
                               mediaItem.artist,
                               style: TextStyle(
-                                color: textColor,
+                                color: textColor.withOpacity(0.6),
                                 fontFamily: "YTSans",
                                 fontSize: 16
                               ),
@@ -259,7 +256,10 @@ class ExpandedPlayer extends StatelessWidget {
                                 Container(
                                   margin: EdgeInsets.only(left: 20),
                                   child: IconButton(
-                                    icon: Icon(EvaIcons.settingsOutline, color: textColor),
+                                    icon: Icon(
+                                      EvaIcons.dropletOutline,
+                                      color: textColor.withOpacity(0.6)
+                                    ),
                                     onPressed: () {
                                       // TODO: Show Player Settings
                                     },
@@ -270,7 +270,10 @@ class ExpandedPlayer extends StatelessWidget {
                                 Container(
                                   margin: EdgeInsets.only(right: 20),
                                   child: IconButton(
-                                    icon: Icon(EvaIcons.heartOutline, color: textColor),
+                                    icon: Icon(
+                                      EvaIcons.heartOutline,
+                                      color: textColor.withOpacity(0.6)
+                                    ),
                                     onPressed: () {
                                       // TODO: Add to Favorites Playlist
                                     },
@@ -319,7 +322,7 @@ class ExpandedPlayer extends StatelessWidget {
                   ),
                   child: Slider(
                     activeColor: dominantColor.withOpacity(0.7),
-                    inactiveColor: Colors.black12.withOpacity(0.2),
+                    inactiveColor: Colors.black12.withOpacity(0.1),
                     min: 0.0,
                     max: duration.inMilliseconds?.toDouble(),
                     value: seekPos ?? max(0.0, min(
