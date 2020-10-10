@@ -243,6 +243,7 @@ class ExpandedPlayer extends StatelessWidget {
                             padding: EdgeInsets.only(top: 16),
                             child: Row(
                               children: [
+                                Spacer(),
                                 Container(
                                   margin: EdgeInsets.only(left: 20),
                                   child: IconButton(
@@ -258,20 +259,6 @@ class ExpandedPlayer extends StatelessWidget {
                                     },
                                   ),
                                 ),
-                                Spacer(),
-                                // Add Song to Favorites Playlist
-                                Container(
-                                  margin: EdgeInsets.only(right: 20),
-                                  child: IconButton(
-                                    icon: Icon(
-                                      EvaIcons.heartOutline,
-                                      color: textColor.withOpacity(0.6)
-                                    ),
-                                    onPressed: () {
-                                      // TODO: Add to Favorites Playlist
-                                    },
-                                  ),
-                                )
                               ],
                             ),
                           )
