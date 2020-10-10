@@ -49,15 +49,19 @@ class SlidingPlayerPanel extends StatelessWidget {
                   ),
                 );
               }
-              return ShowUpTransition(
-                duration: Duration(milliseconds: 400),
-                slideSide: SlideFromSlide.BOTTOM,
-                forward: processingState != AudioProcessingState.none,
-                child: SlidingPlayer(
-                  snapshot: snapshot,
-                  uiElements: list
-                ),
-              );
+              if (list.data != null) {
+                return ShowUpTransition(
+                  duration: Duration(milliseconds: 400),
+                  slideSide: SlideFromSlide.BOTTOM,
+                  forward: processingState != AudioProcessingState.none,
+                  child: SlidingPlayer(
+                    snapshot: snapshot,
+                    uiElements: list
+                  ),
+                );
+              } else {
+                return Container();
+              }
             }
           );
         } else {
@@ -95,6 +99,8 @@ class _SlidingPlayerState extends State<SlidingPlayer> {
   @override
   Widget build(BuildContext context) {
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
+    Color dominantColor = widget.uiElements.data[1] == null ? Colors.white : widget.uiElements.data[1];
+    Color textColor = dominantColor.computeLuminance() > 0.6 ? Colors.black : Colors.white;
     return SlidingUpPanel(
       controller: controller,
       borderRadius: BorderRadius.circular(10),
@@ -107,8 +113,6 @@ class _SlidingPlayerState extends State<SlidingPlayer> {
       onPanelOpened: () => mediaProvider.slidingPanelOpen = true,
       onPanelSlide: (double position) {
         _percent = 1 - ((position*1000).toInt())/1000;
-        Color dominantColor = widget.uiElements.data[1] == null ? Colors.white : widget.uiElements.data[1];
-        Color textColor = dominantColor.computeLuminance() > 0.6 ? Colors.black : Colors.white;
         if (position > 0.95) {
           SystemChrome.setSystemUIOverlayStyle(
             SystemUiOverlayStyle(

@@ -21,17 +21,15 @@ class ArtworkGenerator {
     File artwork = File((await getApplicationDocumentsDirectory()).path +
       "/Artworks/${song.path.split("/").last.replaceAll("/", "_")}HQ.jpg");
     if (!await artwork.exists()) {
-      // If id is null use FFmpeg Method to extract Artwork
-      //if (id == null) {
-        await FlutterFFmpeg().executeWithArguments([
-          "-y", "-i", "${song.path}", "-filter:v", "scale=1000:1000", "-an",
-          "-q:v", "1", "${artwork.path}"
-        ]);
-      /*} else { // Else, use native Method from FlutterAudioQuery
+      int result = await FlutterFFmpeg().executeWithArguments([
+        "-y", "-i", "${song.path}", "-an",
+        "-q:v", "1", "${artwork.path}"
+      ]);
+      if (result == 255 || result == 1) {
         Uint8List bytes =  await FlutterAudioQuery().getArtwork(
-          type: ResourceType.SONG,
-          id: id,
-          size: Size(500,500)
+        type: ResourceType.SONG,
+        id: id,
+        size: Size(500,500)
         );
         if (bytes.isNotEmpty) {
           await artwork.writeAsBytes(bytes);
@@ -39,7 +37,7 @@ class ArtworkGenerator {
           var assetBytes = await rootBundle.load('assets/images/artworkPlaceholder_big.png');
           await artwork.writeAsBytes(assetBytes.buffer.asUint8List(assetBytes.offsetInBytes, assetBytes.lengthInBytes));
         }
-      }*/
+      }
     }
     PaletteGenerator color = await PaletteGenerator.fromImageProvider(FileImage(artwork));
     Color dominantColor = color.dominantColor.color;

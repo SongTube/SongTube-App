@@ -5,6 +5,7 @@ import 'dart:typed_data';
 // Flutter
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 
 // Internal
 import 'package:songtube/internal/models/folder.dart';
@@ -63,6 +64,7 @@ class MediaProvider extends ChangeNotifier {
       storagePermission = false;
       return;
     }
+    FlutterFFmpeg ffmpeg = FlutterFFmpeg();
     List<SongInfo> songInfoList = await audioQuery.getSongs();
     if (!await Directory((await getApplicationDocumentsDirectory()).path + "/Thumbnails/").exists())
       await Directory((await getApplicationDocumentsDirectory()).path + "/Thumbnails/").create();
@@ -70,16 +72,22 @@ class MediaProvider extends ChangeNotifier {
       File artworkFile = File((await getApplicationDocumentsDirectory()).path +
         "/Thumbnails/${song.title.replaceAll("/", "_")}MQ.jpg");
       if (!await artworkFile.exists()) {
-        Uint8List artwork = await audioQuery.getArtwork(
-          type: ResourceType.SONG,
-          id: song.id,
-          size: Size(128,128)
-        );
-        if (artwork.isNotEmpty) {
-          await artworkFile.writeAsBytes(artwork);
-        } else {
-          var bytes = await rootBundle.load('assets/images/artworkPlaceholder_small.png');
-          await artworkFile.writeAsBytes(bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes));
+        int result = await ffmpeg.executeWithArguments([
+          "-y", "-i", "${song.filePath}", "-filter:v", "scale=-1:250", "-an",
+          "${artworkFile.path}"
+        ]);
+        if (result == 255 || result == 1) {
+          Uint8List artwork = await audioQuery.getArtwork(
+            type: ResourceType.SONG,
+            id: song.id,
+            size: Size(128,128)
+          );
+          if (artwork.isNotEmpty) {
+            await artworkFile.writeAsBytes(artwork);
+          } else {
+            var bytes = await rootBundle.load('assets/images/artworkPlaceholder_small.png');
+            await artworkFile.writeAsBytes(bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes));
+          }
         }
       }
       listSongs.add(
