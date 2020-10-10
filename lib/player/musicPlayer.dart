@@ -11,7 +11,7 @@ import 'package:songtube/internal/services/playerService.dart';
 import 'package:songtube/player/widgets/musicPlayer/collapsedPanel.dart';
 import 'package:songtube/player/widgets/musicPlayer/expandedPanel.dart';
 import 'package:songtube/internal/screenStateStream.dart';
-import 'package:songtube/provider/app_provider.dart';
+import 'package:songtube/provider/mediaProvider.dart';
 import 'internal/artworkGenerator.dart';
 
 // Packages
@@ -24,6 +24,7 @@ import 'package:songtube/ui/animations/showUp.dart';
 class SlidingPlayerPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
     return StreamBuilder<ScreenState>(
       stream: screenStateStream,
       builder: (context, snapshot) {
@@ -39,13 +40,15 @@ class SlidingPlayerPanel extends StatelessWidget {
               mediaItem.extras["albumId"]
             ),
             builder: (context, AsyncSnapshot<List<dynamic>> list) {
-              Color dominantColor = list.data[1] == null ? Colors.white : list.data[1];
-              Color textColor = dominantColor.computeLuminance() > 0.5 ? Colors.black : Colors.white;
-              SystemChrome.setSystemUIOverlayStyle(
-                SystemUiOverlayStyle(
-                  statusBarIconBrightness: textColor == Colors.black ? Brightness.dark : Brightness.light,
-                ),
-              );
+              if (mediaProvider.slidingPanelOpen == true) {
+                Color dominantColor = list.data[1] == null ? Colors.white : list.data[1];
+                Color textColor = dominantColor.computeLuminance() > 0.6 ? Colors.black : Colors.white;
+                SystemChrome.setSystemUIOverlayStyle(
+                  SystemUiOverlayStyle(
+                    statusBarIconBrightness: textColor == Colors.black? Brightness.dark : Brightness.light,
+                  ),
+                );
+              }
               return ShowUpTransition(
                 duration: Duration(milliseconds: 400),
                 slideSide: SlideFromSlide.BOTTOM,
@@ -91,6 +94,7 @@ class _SlidingPlayerState extends State<SlidingPlayer> {
 
   @override
   Widget build(BuildContext context) {
+    MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
     return SlidingUpPanel(
       controller: controller,
       borderRadius: BorderRadius.circular(10),
@@ -99,6 +103,8 @@ class _SlidingPlayerState extends State<SlidingPlayer> {
       ),
       minHeight: kToolbarHeight * 1.15,
       maxHeight: MediaQuery.of(context).size.height,
+      onPanelClosed: () => mediaProvider.slidingPanelOpen = false,
+      onPanelOpened: () => mediaProvider.slidingPanelOpen = true,
       onPanelSlide: (double position) {
         _percent = 1 - ((position*1000).toInt())/1000;
         Color dominantColor = widget.uiElements.data[1] == null ? Colors.white : widget.uiElements.data[1];
@@ -112,8 +118,8 @@ class _SlidingPlayerState extends State<SlidingPlayer> {
         } else {
           SystemChrome.setSystemUIOverlayStyle(
             SystemUiOverlayStyle(
-              statusBarIconBrightness: Provider.of<AppDataProvider>(context, listen: false)
-                .darkThemeEnabled ? Brightness.light : Brightness.dark,
+              statusBarIconBrightness:
+                Theme.of(context).brightness == Brightness.dark ?  Brightness.light : Brightness.dark,
             ),
           );
         }

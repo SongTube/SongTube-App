@@ -36,6 +36,9 @@ class MediaProvider extends ChangeNotifier {
   // List Video Folders
   List<FolderItem> listFolders;
 
+  // SlidingPanel Open/Closed Status
+  bool slidingPanelOpen;
+
   // Do we have storage Permission?
   bool _storagePermission;
   bool get storagePermission => _storagePermission;
@@ -51,6 +54,7 @@ class MediaProvider extends ChangeNotifier {
     listVideos = new List<VideoFile>();
     listFolders = new List<FolderItem>();
     storagePermission = true;
+    slidingPanelOpen = false;
   }
 
   void loadSongList() async {
