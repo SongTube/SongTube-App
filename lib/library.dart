@@ -10,6 +10,7 @@ import 'package:songtube/provider/mediaProvider.dart';
 import 'package:songtube/screens/downloads.dart';
 import 'package:songtube/screens/home.dart';
 import 'package:songtube/screens/media.dart';
+import 'package:songtube/screens/more.dart';
 import 'package:songtube/screens/navigate.dart';
 import 'package:songtube/player/musicPlayer.dart';
 
@@ -142,6 +143,8 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver {
       return Navigate(
         searchQuery: manager.navigateIntent,
       );
+    } else if (manager.screenIndex == 4) {
+      return MoreScreen();
     } else {
       return Container();
     }
