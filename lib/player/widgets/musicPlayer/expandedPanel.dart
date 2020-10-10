@@ -94,6 +94,7 @@ class ExpandedPlayer extends StatelessWidget {
                       ),
                       title: RichText(
                         textAlign: TextAlign.center,
+                        maxLines: 2,
                         text: TextSpan(
                           children: [
                             TextSpan(
