@@ -47,7 +47,7 @@ class SlidingPlayerPanel extends StatelessWidget {
                   ? list.data[1] == null ? Colors.white : list.data[1]
                   : Theme.of(context).accentColor;
                 Color textColor = appData.useBlurBackground
-                  ? dominantColor.computeLuminance() > 0.6 ? Colors.black : Colors.white
+                  ? dominantColor.computeLuminance() > 0.5 ? Colors.black : Colors.white
                   : Theme.of(context).textTheme.bodyText1.color;
                 SystemChrome.setSystemUIOverlayStyle(
                   SystemUiOverlayStyle(
@@ -101,7 +101,7 @@ class _SlidingPlayerState extends State<SlidingPlayer> {
       ? widget.uiElements.data[1] == null ? Colors.white : widget.uiElements.data[1]
       : Theme.of(context).accentColor;
     Color textColor = appData.useBlurBackground
-      ? dominantColor.computeLuminance() > 0.6 ? Colors.black : Colors.white
+      ? dominantColor.computeLuminance() > 0.5 ? Colors.black : Colors.white
       : Theme.of(context).textTheme.bodyText1.color;
     return SlidingUpPanel(
       controller: mediaProvider.panelController,
