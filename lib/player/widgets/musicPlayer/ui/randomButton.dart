@@ -28,9 +28,9 @@ class _MusicPlayerRandomButtonState extends State<MusicPlayerRandomButton> {
         boxShadow: [
           if (enabled)
           BoxShadow(
-            color: widget.iconColor.withOpacity(0.5),
+            color: widget.iconColor.withOpacity(0.3),
             spreadRadius: 0.1,
-            blurRadius: 20
+            blurRadius: 15
           )
         ]
       ),
