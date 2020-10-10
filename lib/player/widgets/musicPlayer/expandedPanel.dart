@@ -16,9 +16,6 @@ import 'package:audio_service/audio_service.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:rxdart/rxdart.dart';
 
-// UI
-import 'package:songtube/ui/animations/fadeIn.dart';
-
 class ExpandedPlayer extends StatelessWidget {
   final PanelController controller;
   final AsyncSnapshot<ScreenState> snapshot;
