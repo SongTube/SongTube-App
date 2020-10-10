@@ -1,6 +1,11 @@
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+// Flutter
 import 'package:flutter/material.dart';
+
+// Internal
 import 'package:songtube/internal/models/folder.dart';
+
+// Packages
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 
 class FolderGridView extends StatelessWidget {
   final List<FolderItem> list;

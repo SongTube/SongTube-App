@@ -11,14 +11,13 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 // Internal
 import 'package:songtube/internal/services/playerService.dart';
-
-// Packages
-import 'package:audio_service/audio_service.dart';
+import 'package:songtube/provider/app_provider.dart';
 import 'package:songtube/player/widgets/musicPlayer/dialogs/settingsDialog.dart';
 import 'package:songtube/player/widgets/musicPlayer/ui/randomButton.dart';
 import 'package:songtube/player/widgets/musicPlayer/ui/repeatButton.dart';
-import 'package:songtube/provider/app_provider.dart';
-import 'package:songtube/provider/managerProvider.dart';
+
+// Packages
+import 'package:audio_service/audio_service.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:rxdart/rxdart.dart';
 

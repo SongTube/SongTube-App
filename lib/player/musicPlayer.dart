@@ -13,7 +13,7 @@ import 'package:songtube/player/widgets/musicPlayer/expandedPanel.dart';
 import 'package:songtube/internal/screenStateStream.dart';
 import 'package:songtube/provider/app_provider.dart';
 import 'package:songtube/provider/mediaProvider.dart';
-import 'internal/artworkGenerator.dart';
+import 'package:songtube/player/internal/artworkGenerator.dart';
 
 // Packages
 import 'package:sliding_up_panel/sliding_up_panel.dart';

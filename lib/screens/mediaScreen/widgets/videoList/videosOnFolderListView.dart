@@ -1,12 +1,18 @@
+// Dart
 import 'dart:io';
 
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+// Flutter
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+
+// Internal
 import 'package:songtube/internal/models/videoFile.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/ui/animations/showUp.dart';
+
+// Packages
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:provider/provider.dart';
 
 class VideosOnFolderListView extends StatelessWidget {
   final List<VideoFile> list;

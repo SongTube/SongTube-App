@@ -1,9 +1,15 @@
+// Dart
 import 'dart:io';
 
+// Flutter
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+
+// Internal
 import 'package:songtube/internal/models/songFile.dart';
 import 'package:songtube/screens/mediaScreen/dialogs/confirmDialog.dart';
+
+// Packages
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class MusicListView extends StatelessWidget {

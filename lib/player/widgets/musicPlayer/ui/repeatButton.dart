@@ -1,6 +1,9 @@
+// Flutter
+import 'package:flutter/material.dart';
+
+// Packages
 import 'package:audio_service/audio_service.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-import 'package:flutter/material.dart';
 
 class MusicPlayerRepeatButton extends StatefulWidget {
   final Color iconColor;
