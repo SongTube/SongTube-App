@@ -15,6 +15,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:ext_storage/ext_storage.dart';
 import 'package:provider/provider.dart';
+import 'package:circular_check_box/circular_check_box.dart';
 
 // UI
 import 'package:songtube/ui/dialogs/alertDialog.dart';
@@ -90,6 +91,25 @@ class DownloadSettings extends StatelessWidget {
               }
             )
           )
+        ),
+        ListTile(
+          title: Text(
+            "Album Folder",
+            style: TextStyle(
+              color: Theme.of(context).textTheme.bodyText1.color,
+              fontWeight: FontWeight.w500
+            ),
+          ),
+          subtitle: Text("Create a Folder for each Song Album",
+            style: TextStyle(fontSize: 12)
+          ),
+          trailing: CircularCheckBox(
+            activeColor: Theme.of(context).accentColor,
+            value: appData.enableAlbumFolder,
+            onChanged: (bool newValue) async {
+              appData.enableAlbumFolder = newValue;
+            },
+          ),
         ),
         ListTile(
           title: Text(

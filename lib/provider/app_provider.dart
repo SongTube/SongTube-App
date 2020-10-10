@@ -59,6 +59,7 @@ class AppDataProvider extends ChangeNotifier {
   // Download paths
   String _audioDownloadPath;
   String _videoDownloadPath;
+  bool _enableAlbumFolder;
   // Use Youtube Webview
   bool _useYoutubeWebview = false;
   Color get accentColor => _accentColor;
@@ -73,6 +74,8 @@ class AppDataProvider extends ChangeNotifier {
   // Download paths
   String get audioDownloadPath => _audioDownloadPath;
   String get videoDownloadPath => _videoDownloadPath;
+  // Album Folder
+  bool get enableAlbumFolder => _enableAlbumFolder;
   // Use Youtube Webview
   bool get useYoutubeWebview => _useYoutubeWebview;
 
@@ -131,6 +134,7 @@ class AppDataProvider extends ChangeNotifier {
     videoDownloadPath = preferences.getVideoDownloadPath();
     useBlurBackground = preferences.getBlurBackground();
     useExpandedArtwork = preferences.getExpandedArtwork();
+    enableAlbumFolder = preferences.getEnableAlbumFolder();
   }
 
   // Converting audio format
@@ -149,6 +153,13 @@ class AppDataProvider extends ChangeNotifier {
   set videoDownloadPath(String path) {
     _videoDownloadPath = path;
     preferences.saveVideoDownloadPath(path);
+    notifyListeners();
+  }
+
+  // Album Folder
+  set enableAlbumFolder(bool value) {
+    _enableAlbumFolder = value;
+    preferences.saveEnableAlbumFolder(value);
     notifyListeners();
   }
 

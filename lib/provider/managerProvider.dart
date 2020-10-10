@@ -387,6 +387,7 @@ class ManagerProvider extends ChangeNotifier {
       downloadPath: downloadPath,
       convertFormat: convertFormat,
       audioModifiers: [double.parse(data[2]), int.parse(data[3]), int.parse(data[4])],
+      enableAlbumFolder: appData.enableAlbumFolder
     );
     addItemToDownloadList(infoset);
     screenIndex = 1;

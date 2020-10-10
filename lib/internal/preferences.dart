@@ -21,6 +21,7 @@ String videoDownloadPath = "video_download_path";
 String useYoutubeWebview = "use_youtube_webview";
 String appColor = "app_color";
 String showIntroduction = "show_introduction";
+String albumFolder = "album_folder";
 
 // Settings for the MusicPlayer
 String expandedArtwork = "expanded_artwork";
@@ -127,6 +128,14 @@ class Preferences {
 
   void saveShowIntroductionPages(bool value) {
     prefs.setBool(showIntroduction, value);
+  }
+
+  bool getEnableAlbumFolder() {
+    return prefs.getBool(albumFolder) ?? false;
+  }
+
+  void saveEnableAlbumFolder(bool value) {
+    prefs.setBool(albumFolder, value);
   }
 
   //

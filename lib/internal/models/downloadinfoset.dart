@@ -45,6 +45,7 @@ class DownloadInfoSet {
   List audioModifiers;
   bool downloaderClosed;
   bool _cancelDownload;
+  bool enableAlbumFolder;
   bool get cancelDownload => _cancelDownload;
   set cancelDownload(bool value) {
     _cancelDownload = value;
@@ -63,13 +64,24 @@ class DownloadInfoSet {
     @required this.audioModifiers,
     @required this.audioStreamInfo,
     @required this.videoDetails,
-    this.videoStreamInfo
+    this.videoStreamInfo,
+    this.enableAlbumFolder = false
   }) {
     converter = new Converter();
     currentAction = new BehaviorSubject();
     dataProgress = new BehaviorSubject();
     progressBar = new BehaviorSubject();
     cancelDownload = false;
+    if (enableAlbumFolder) {
+      Permission.storage.request().then((status) {
+        if (status == PermissionStatus.granted) {
+          if (!Directory(downloadPath + "/${metadata.album}").existsSync()) {
+            Directory(downloadPath + "/${metadata.album}").createSync();
+          }
+        }
+      });
+      downloadPath = downloadPath + "/${metadata.album}";
+    }
   }
   
   // ---------------------------------------------
