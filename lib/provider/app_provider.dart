@@ -129,6 +129,8 @@ class AppDataProvider extends ChangeNotifier {
     audioConvertFormat = preferences.getAudioConvertingFormat();
     audioDownloadPath = preferences.getAudioDownloadPath();
     videoDownloadPath = preferences.getVideoDownloadPath();
+    useBlurBackground = preferences.getBlurBackground();
+    useExpandedArtwork = preferences.getExpandedArtwork();
   }
 
   // Converting audio format
@@ -149,5 +151,26 @@ class AppDataProvider extends ChangeNotifier {
     preferences.saveVideoDownloadPath(path);
     notifyListeners();
   }
+
+  //
+  // Settings for the MusicPlayer are found bellow this
+  //
+
+  bool _useBlurBackground;
+  bool _useExpandedArtwork;
+
+  bool get useBlurBackground => _useBlurBackground;
+  set useBlurBackground(bool value) {
+    _useBlurBackground = value;
+    preferences.saveBlurBackground(value);
+    notifyListeners();
+  } 
+
+  bool get useExpandedArtwork => _useExpandedArtwork;
+  set useExpandedArtwork(bool value) {
+    _useExpandedArtwork = value;
+    preferences.saveExpandedArtwork(value);
+    notifyListeners();
+  } 
 
 }

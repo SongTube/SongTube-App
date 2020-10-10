@@ -6,6 +6,7 @@ import 'dart:ui';
 // Flutter
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 // Internal
@@ -13,6 +14,8 @@ import 'package:songtube/internal/services/playerService.dart';
 
 // Packages
 import 'package:audio_service/audio_service.dart';
+import 'package:songtube/player/widgets/musicPlayer/dialogs/settingsDialog.dart';
+import 'package:songtube/provider/app_provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -34,26 +37,40 @@ class ExpandedPlayer extends StatelessWidget {
     final state = screenState?.playbackState;
     final playing = state?.playing ?? false;
     File image = uiElements[0];
-    Color dominantColor = uiElements[1] == null ? Colors.white : uiElements[1];
-    Color textColor = dominantColor.computeLuminance() > 0.5 ? Colors.black : Colors.white;
+    AppDataProvider appData = Provider.of<AppDataProvider>(context);
+    Color dominantColor = appData.useBlurBackground
+      ? uiElements[1] == null ? Colors.white : uiElements[1]
+      : Theme.of(context).accentColor;
+    Color textColor = appData.useBlurBackground
+      ? dominantColor.computeLuminance() > 0.5 ? Colors.black : Colors.white
+      : Theme.of(context).textTheme.bodyText1.color;
     return Scaffold(
       body: Container(
         height: double.infinity,
         width: double.infinity,
         child: Stack(
           children: [
-            Container(
-              width: double.infinity,
-              height: double.infinity,
-              child: FadeInImage(
-                image: FileImage(image),
-                placeholder: MemoryImage(kTransparentImage),
-                fadeInDuration: Duration(milliseconds: 200),  
-                fit: BoxFit.cover,
-              ),
+            AnimatedSwitcher(
+              duration: Duration(milliseconds: 400),
+              child: appData.useBlurBackground
+                ? Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    child: FadeInImage(
+                      image: FileImage(image),
+                      placeholder: MemoryImage(kTransparentImage),
+                      fadeInDuration: Duration(milliseconds: 200),  
+                      fit: BoxFit.cover,
+                    ),
+                  )
+                : Container(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                  )
             ),
             Container(
-              color: dominantColor.withOpacity(0.4),
+              color: appData.useBlurBackground
+                ? dominantColor.withOpacity(0.4)
+                : Theme.of(context).scaffoldBackgroundColor,
               child: BackdropFilter(
                 filter: ImageFilter.blur(
                   sigmaX: 22.0,
@@ -96,37 +113,11 @@ class ExpandedPlayer extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: Container(
-                        height: 320,
-                        width: 320,
-                        margin: EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black87.withOpacity(0.2),
-                              offset: Offset(0,0), //(x,y)
-                              blurRadius: 14.0,
-                              spreadRadius: 2.0 
-                            )
-                          ],
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: FadeInImage(
-                            fadeOutDuration: Duration(milliseconds: 300),
-                            fadeInDuration: Duration(milliseconds: 300),
-                            placeholder: MemoryImage(kTransparentImage),
-                            image: snapshot.hasData
-                              ? FileImage(image)
-                              : MemoryImage(kTransparentImage),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    ),
+                    appData.useExpandedArtwork
+                      ? Expanded(
+                          child: artworkWidget(image),
+                        )
+                      : artworkWidget(image),
                     Container(
                       margin: EdgeInsets.only(left: 16, right: 16, bottom: 20),
                       child: Column(
@@ -216,9 +207,15 @@ class ExpandedPlayer extends StatelessWidget {
                                   ),
                                   child: playing
                                     ? Icon(Icons.pause, size: 25, 
-                                        color: textColor)
+                                        color: appData.useBlurBackground
+                                          ? textColor
+                                          : Colors.white
+                                      )
                                     : Icon(Icons.play_arrow, size: 25,
-                                        color: textColor),
+                                        color: appData.useBlurBackground
+                                          ? textColor
+                                          : Colors.white
+                                      )
                                 ),
                               ),
                               // Padding
@@ -258,7 +255,10 @@ class ExpandedPlayer extends StatelessWidget {
                                       color: textColor.withOpacity(0.6)
                                     ),
                                     onPressed: () {
-                                      // TODO: Show Player Settings
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) => MusicPlayerSettingsDialog(),
+                                      );
                                     },
                                   ),
                                 ),
@@ -289,6 +289,38 @@ class ExpandedPlayer extends StatelessWidget {
           ],
         ),
       )
+    );
+  }
+
+  Widget artworkWidget(File image) {
+    return Container(
+      height: 320,
+      width: 320,
+      margin: EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black87.withOpacity(0.2),
+            offset: Offset(0,0), //(x,y)
+            blurRadius: 14.0,
+            spreadRadius: 2.0 
+          )
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: FadeInImage(
+          fadeOutDuration: Duration(milliseconds: 300),
+          fadeInDuration: Duration(milliseconds: 300),
+          placeholder: MemoryImage(kTransparentImage),
+          image: snapshot.hasData
+            ? FileImage(image)
+            : MemoryImage(kTransparentImage),
+          fit: BoxFit.cover,
+        ),
+      ),
     );
   }
 

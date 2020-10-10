@@ -22,6 +22,10 @@ String useYoutubeWebview = "use_youtube_webview";
 String appColor = "app_color";
 String showIntroduction = "show_introduction";
 
+// Settings for the MusicPlayer
+String expandedArtwork = "expanded_artwork";
+String blurBackground = "blur_background";
+
 class Preferences {
   
   SharedPreferences prefs;
@@ -125,4 +129,20 @@ class Preferences {
     prefs.setBool(showIntroduction, value);
   }
 
+  //
+  // Settings for the MusicPlayer are found bellow this
+  //
+
+  bool getExpandedArtwork() {
+    return prefs.getBool(expandedArtwork) ?? true;
+  }
+  void saveExpandedArtwork(bool value) {
+    prefs.setBool(expandedArtwork, value);
+  }
+  bool getBlurBackground() {
+    return prefs.getBool(blurBackground) ?? true;
+  }
+  void saveBlurBackground(bool value) {
+    prefs.setBool(blurBackground, value);
+  }
 }

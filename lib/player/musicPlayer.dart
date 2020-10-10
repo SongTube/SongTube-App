@@ -11,6 +11,7 @@ import 'package:songtube/internal/services/playerService.dart';
 import 'package:songtube/player/widgets/musicPlayer/collapsedPanel.dart';
 import 'package:songtube/player/widgets/musicPlayer/expandedPanel.dart';
 import 'package:songtube/internal/screenStateStream.dart';
+import 'package:songtube/provider/app_provider.dart';
 import 'package:songtube/provider/mediaProvider.dart';
 import 'internal/artworkGenerator.dart';
 
@@ -25,6 +26,7 @@ class SlidingPlayerPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
+    AppDataProvider appData = Provider.of<AppDataProvider>(context);
     return StreamBuilder<ScreenState>(
       stream: screenStateStream,
       builder: (context, snapshot) {
@@ -41,8 +43,12 @@ class SlidingPlayerPanel extends StatelessWidget {
             ),
             builder: (context, AsyncSnapshot<List<dynamic>> list) {
               if (mediaProvider.slidingPanelOpen == true) {
-                Color dominantColor = list.data[1] == null ? Colors.white : list.data[1];
-                Color textColor = dominantColor.computeLuminance() > 0.6 ? Colors.black : Colors.white;
+                Color dominantColor = appData.useBlurBackground
+                  ? list.data[1] == null ? Colors.white : list.data[1]
+                  : Theme.of(context).accentColor;
+                Color textColor = appData.useBlurBackground
+                  ? dominantColor.computeLuminance() > 0.6 ? Colors.black : Colors.white
+                  : Theme.of(context).textTheme.bodyText1.color;
                 SystemChrome.setSystemUIOverlayStyle(
                   SystemUiOverlayStyle(
                     statusBarIconBrightness: textColor == Colors.black? Brightness.dark : Brightness.light,
@@ -99,8 +105,13 @@ class _SlidingPlayerState extends State<SlidingPlayer> {
   @override
   Widget build(BuildContext context) {
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
-    Color dominantColor = widget.uiElements.data[1] == null ? Colors.white : widget.uiElements.data[1];
-    Color textColor = dominantColor.computeLuminance() > 0.6 ? Colors.black : Colors.white;
+    AppDataProvider appData = Provider.of<AppDataProvider>(context);
+    Color dominantColor = appData.useBlurBackground
+      ? widget.uiElements.data[1] == null ? Colors.white : widget.uiElements.data[1]
+      : Theme.of(context).accentColor;
+    Color textColor = appData.useBlurBackground
+      ? dominantColor.computeLuminance() > 0.6 ? Colors.black : Colors.white
+      : Theme.of(context).textTheme.bodyText1.color;
     return SlidingUpPanel(
       controller: controller,
       borderRadius: BorderRadius.circular(10),
