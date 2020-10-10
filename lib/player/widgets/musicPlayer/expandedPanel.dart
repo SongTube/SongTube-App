@@ -11,6 +11,7 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 // Internal
 import 'package:songtube/internal/services/playerService.dart';
+import 'package:songtube/player/widgets/musicPlayer/ui/marqueeWidget.dart';
 import 'package:songtube/provider/app_provider.dart';
 import 'package:songtube/player/widgets/musicPlayer/dialogs/settingsDialog.dart';
 import 'package:songtube/player/widgets/musicPlayer/ui/randomButton.dart';
@@ -130,17 +131,23 @@ class ExpandedPlayer extends StatelessWidget {
                           // Title
                           Padding(
                             padding: const EdgeInsets.only(left: 20, right: 20),
-                            child: Text(
-                              mediaItem.title,
-                              style: TextStyle(
-                                fontSize: 26,
-                                fontWeight: FontWeight.w500,
-                                fontFamily: "YTSans",
-                                color: textColor
+                            child: MarqueeWidget(
+                              animationDuration: Duration(seconds: 10),
+                              backDuration: Duration(seconds: 5),
+                              pauseDuration: Duration(seconds: 2),
+                              direction: Axis.horizontal,
+                              child: Text(
+                                mediaItem.title,
+                                style: TextStyle(
+                                  fontSize: 26,
+                                  fontWeight: FontWeight.w500,
+                                  fontFamily: "YTSans",
+                                  color: textColor
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.fade,
+                                softWrap: false,
                               ),
-                              maxLines: 1,
-                              overflow: TextOverflow.fade,
-                              softWrap: false,
                             ),
                           ),
                           // Artist
