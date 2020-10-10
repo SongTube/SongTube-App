@@ -27,7 +27,7 @@ class SongFile {
     @required this.path,
     @required this.fileSize,
     @required this.coverUrl,
-    this.coverPath
+    this.coverPath,
   });
 
   SongFile.toDatabase({
@@ -38,7 +38,7 @@ class SongFile {
     @required this.downloadType,
     @required this.path,
     @required this.fileSize,
-    @required this.coverUrl
+    @required this.coverUrl,
   });
 
   SongFile.fromMap(Map<String, dynamic> map) {
@@ -62,7 +62,7 @@ class SongFile {
       "downloadType": this.downloadType,
       "path": this.path,
       "fileSize": this.fileSize,
-      "coverUrl": this.coverUrl
+      "coverUrl": this.coverUrl,
     };
   }
 }

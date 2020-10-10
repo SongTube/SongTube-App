@@ -15,7 +15,10 @@ import 'package:songtube/internal/services/playerService.dart';
 // Packages
 import 'package:audio_service/audio_service.dart';
 import 'package:songtube/player/widgets/musicPlayer/dialogs/settingsDialog.dart';
+import 'package:songtube/player/widgets/musicPlayer/ui/randomButton.dart';
+import 'package:songtube/player/widgets/musicPlayer/ui/repeatButton.dart';
 import 'package:songtube/provider/app_provider.dart';
+import 'package:songtube/provider/managerProvider.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -162,16 +165,9 @@ class ExpandedPlayer extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               // Random Button
-                              Container(
-                                margin: EdgeInsets.only(right: 8),
-                                child: IconButton(
-                                  icon: Icon(
-                                    EvaIcons.shuffle2Outline,
-                                    size: 16,
-                                    color: textColor.withOpacity(0.7)
-                                  ),
-                                  onPressed: () => AudioService.customAction("enableRandom")
-                                ),
+                              MusicPlayerRandomButton(
+                                iconColor: textColor,
+                                enabledColor: dominantColor
                               ),
                               // Previous button
                               IconButton(
@@ -230,17 +226,10 @@ class ExpandedPlayer extends StatelessWidget {
                                 onPressed: () => AudioService.skipToNext(),
                               ),
                               // Repeat Button
-                              Container(
-                                margin: EdgeInsets.only(left: 8),
-                                child: IconButton(
-                                  icon: Icon(
-                                    EvaIcons.repeatOutline,
-                                    size: 16,
-                                    color: textColor.withOpacity(0.7)
-                                  ),
-                                  onPressed: () => AudioService.customAction("enableRepeat")
-                                ),
-                              ),
+                              MusicPlayerRepeatButton(
+                                iconColor: textColor,
+                                enabledColor: dominantColor
+                              )
                             ],
                           ),
                           Container(
