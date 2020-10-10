@@ -6,6 +6,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 // Internal
 import 'package:songtube/internal/models/folder.dart';
@@ -37,6 +38,9 @@ class MediaProvider extends ChangeNotifier {
   // List Video Folders
   List<FolderItem> listFolders;
 
+  // Panel Controller
+  PanelController panelController;
+
   // SlidingPanel Open/Closed Status
   bool slidingPanelOpen;
 
@@ -55,6 +59,7 @@ class MediaProvider extends ChangeNotifier {
     listVideos = new List<VideoFile>();
     listFolders = new List<FolderItem>();
     storagePermission = true;
+    panelController = new PanelController();
     slidingPanelOpen = false;
   }
 

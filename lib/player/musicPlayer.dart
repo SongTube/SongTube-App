@@ -93,15 +93,6 @@ class _SlidingPlayerState extends State<SlidingPlayer> {
 
   double _percent = 1;
 
-  // Panel Controller
-  PanelController controller;
-
-  @override
-  void initState() {
-    controller = new PanelController();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
@@ -113,7 +104,7 @@ class _SlidingPlayerState extends State<SlidingPlayer> {
       ? dominantColor.computeLuminance() > 0.6 ? Colors.black : Colors.white
       : Theme.of(context).textTheme.bodyText1.color;
     return SlidingUpPanel(
-      controller: controller,
+      controller: mediaProvider.panelController,
       borderRadius: BorderRadius.circular(10),
       margin: EdgeInsets.only(
         bottom: kBottomNavigationBarHeight * _percent,
@@ -149,7 +140,7 @@ class _SlidingPlayerState extends State<SlidingPlayer> {
       ],
       color: Theme.of(context).cardColor,
       panel: ExpandedPlayer(
-        controller: controller,
+        controller: mediaProvider.panelController,
         snapshot: widget.snapshot,
         uiElements: widget.uiElements.data,
       ),

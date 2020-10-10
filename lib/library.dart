@@ -71,6 +71,7 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
+    MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
     Brightness _systemBrightness = Theme.of(context).brightness;
     Brightness _statusBarBrightness = _systemBrightness == Brightness.light
       ? Brightness.dark
@@ -109,7 +110,15 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver {
         resizeToAvoidBottomInset: false,
         body: SafeArea(
           child: WillPopScope(
-            onWillPop: () => manager.handlePop(manager.screenIndex),
+            onWillPop: () {
+              if (mediaProvider.slidingPanelOpen) {
+                mediaProvider.slidingPanelOpen = false;
+                mediaProvider.panelController.close();
+                return Future.value(false);
+              } else {
+                return manager.handlePop(manager.screenIndex);
+              }
+            },
             child: Column(
               children: [
                 Expanded(
