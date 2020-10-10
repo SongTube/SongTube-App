@@ -250,11 +250,11 @@ class ManagerProvider extends ChangeNotifier {
     }
   }
   // Move to Navigate Screen with a Search Intent
-  void pushYoutubePage(String searchQuery) {
+  void pushYoutubePage(String searchQuery) async {
     navigateIntent = searchQuery;
-    Future.delayed((Duration(milliseconds: 200)), () => screenIndex = 3);
-    Future.delayed((Duration(milliseconds: 200)), () => navigateIntent = null);
+    await Future.delayed((Duration(milliseconds: 50)), () => screenIndex = 3);
     notifyListeners();
+    await Future.delayed((Duration(milliseconds: 200)), () => navigateIntent = null);
   }
   // Gets video thumbnail of any Video Format
   Future<File> getVideoThumbnail(File videoFile) async {
