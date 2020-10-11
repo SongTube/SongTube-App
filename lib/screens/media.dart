@@ -63,63 +63,39 @@ class MediaScreen extends StatelessWidget {
             indicatorSize: TabBarIndicatorSize.label,
             indicatorColor: Theme.of(context).accentColor,
             tabs: [
-              ShowUpTransition(
-                forward: true,
-                delay: Duration(milliseconds: 200),
-                duration: Duration(milliseconds: 200),
-                slideSide: SlideFromSlide.BOTTOM,
-                child: Tab(child: Text(
-                  "Downloads",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontFamily: 'Varela',
-                    color: Theme.of(context).iconTheme.color
-                  ),
-                )),
-              ),
-              ShowUpTransition(
-                forward: true,
-                delay: Duration(milliseconds: 200),
-                duration: Duration(milliseconds: 200),
-                slideSide: SlideFromSlide.BOTTOM,
-                child: Tab(child: Text(
-                  "Music",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontFamily: 'Varela',
-                    color: Theme.of(context).iconTheme.color
-                  ),
-                )),
-              ),
-              ShowUpTransition(
-                forward: true,
-                delay: Duration(milliseconds: 200),
-                duration: Duration(milliseconds: 200),
-                slideSide: SlideFromSlide.BOTTOM,
-                child: Tab(child: Text(
-                  "Videos",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontFamily: 'Varela',
-                    color: Theme.of(context).iconTheme.color
-                  ),
-                )),
-              )
+              Tab(child: Text(
+                "Downloads",
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Varela',
+                  color: Theme.of(context).iconTheme.color
+                ),
+              )),
+              Tab(child: Text(
+                "Music",
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Varela',
+                  color: Theme.of(context).iconTheme.color
+                ),
+              )),
+              Tab(child: Text(
+                "Videos",
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Varela',
+                  color: Theme.of(context).iconTheme.color
+                ),
+              ))
             ],
           ),
         ),
-        body: ShowUpTransition(
-          forward: true,
-          delay: Duration(milliseconds: 300),
-          duration: Duration(milliseconds: 300),
-          slideSide: SlideFromSlide.BOTTOM,
-          child: TabBarView(
-            children: [
-              MediaDownloadTab(),
-              MediaMusicTab(),
-              MediaVideoTab()
-            ],
-          ),
+        body: TabBarView(
+          children: [
+            MediaDownloadTab(),
+            MediaMusicTab(),
+            MediaVideoTab()
+          ],
         ),
       ),
     );
