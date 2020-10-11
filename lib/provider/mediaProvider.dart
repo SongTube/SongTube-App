@@ -6,6 +6,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
+import 'package:palette_generator/palette_generator.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 // Internal
@@ -20,6 +21,7 @@ import 'package:flutter_audio_query/flutter_audio_query.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:songtube/player/internal/artworkGenerator.dart';
 
 class MediaProvider extends ChangeNotifier {
 
@@ -43,6 +45,32 @@ class MediaProvider extends ChangeNotifier {
 
   // SlidingPanel Open/Closed Status
   bool slidingPanelOpen;
+
+  // MusicPlayer Current Values
+  MediaItem _mediaItem;
+  File artwork;
+  Color dominantColor;
+  Color vibrantColor;
+
+  MediaItem get mediaItem => _mediaItem;
+  set mediaItem(MediaItem newMediaItem) {
+    _mediaItem = newMediaItem;
+    updateUIElements();
+  }
+
+  Future<void> updateUIElements() async {
+    String currentAlbumId = await AudioService.customAction('getCurrentAlbumId');
+    artwork = await ArtworkGenerator.generateArtwork(
+      File(mediaItem.id),
+      currentAlbumId
+    );
+    PaletteGenerator palette = await PaletteGenerator.fromImageProvider(FileImage(artwork));
+    dominantColor = palette.dominantColor.color;
+    if (palette.vibrantColor == null) {
+      vibrantColor = dominantColor;
+    } else { vibrantColor = palette.vibrantColor.color; }
+    notifyListeners();
+  }
 
   // Do we have storage Permission?
   bool _storagePermission;

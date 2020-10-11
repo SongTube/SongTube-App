@@ -48,6 +48,11 @@ class MediaMusicTab extends StatelessWidget {
               androidEnableQueue: true,
             );
           }
+          var albumsId = [];
+          mediaProvider.listSongs.forEach((song) {
+            albumsId.add(song.id);
+          });
+          await AudioService.customAction('updateAlbumsId', albumsId);
           await AudioService.updateQueue(mediaProvider.listMediaItems);
           await AudioService.playFromMediaId(index.toString());
         },

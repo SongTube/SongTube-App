@@ -19,17 +19,16 @@ import 'package:songtube/player/widgets/musicPlayer/ui/repeatButton.dart';
 
 // Packages
 import 'package:audio_service/audio_service.dart';
+import 'package:songtube/provider/mediaProvider.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ExpandedPlayer extends StatelessWidget {
   final PanelController controller;
   final AsyncSnapshot<ScreenState> snapshot;
-  final List<dynamic> uiElements;
   ExpandedPlayer({
     this.controller,
     this.snapshot,
-    this.uiElements
   });
   final BehaviorSubject<double> _dragPositionSubject =
       BehaviorSubject.seeded(null);
@@ -39,14 +38,18 @@ class ExpandedPlayer extends StatelessWidget {
     final mediaItem = screenState?.mediaItem;
     final state = screenState?.playbackState;
     final playing = state?.playing ?? false;
-    File image = uiElements[0];
     AppDataProvider appData = Provider.of<AppDataProvider>(context);
+    MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
+    File image = mediaProvider.artwork;
     Color dominantColor = appData.useBlurBackground
-      ? uiElements[1] == null ? Colors.white : uiElements[1]
+      ? mediaProvider.dominantColor == null ? Colors.white : mediaProvider.dominantColor
       : Theme.of(context).accentColor;
     Color textColor = appData.useBlurBackground
       ? dominantColor.computeLuminance() > 0.5 ? Colors.black : Colors.white
       : Theme.of(context).textTheme.bodyText1.color;
+    Color vibrantColor = appData.useBlurBackground
+      ? mediaProvider.vibrantColor == null ? Colors.white : mediaProvider.vibrantColor
+      : Theme.of(context).accentColor;
     return Scaffold(
       body: Container(
         height: double.infinity,
@@ -60,9 +63,10 @@ class ExpandedPlayer extends StatelessWidget {
                     width: double.infinity,
                     height: double.infinity,
                     child: FadeInImage(
+                      fadeOutDuration: Duration.zero,
                       image: FileImage(image),
                       placeholder: MemoryImage(kTransparentImage),
-                      fadeInDuration: Duration(milliseconds: 200),  
+                      fadeInDuration: Duration(milliseconds: 400),  
                       fit: BoxFit.cover,
                     ),
                   )
@@ -70,7 +74,8 @@ class ExpandedPlayer extends StatelessWidget {
                     color: Theme.of(context).scaffoldBackgroundColor,
                   )
             ),
-            Container(
+            AnimatedContainer(
+              duration: Duration(milliseconds: 200),
               color: appData.useBlurBackground
                 ? dominantColor.withOpacity(0.4)
                 : Theme.of(context).scaffoldBackgroundColor,
@@ -165,7 +170,7 @@ class ExpandedPlayer extends StatelessWidget {
                           // Progress Indicator
                           Container(
                             margin: EdgeInsets.only(bottom: 8),
-                            child: positionIndicator(mediaItem, state, dominantColor)
+                            child: positionIndicator(mediaItem, state, vibrantColor, textColor)
                           ),
                           // MediaControls
                           Row(
@@ -294,21 +299,15 @@ class ExpandedPlayer extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
-        child: FadeInImage(
-          fadeOutDuration: Duration(milliseconds: 300),
-          fadeInDuration: Duration(milliseconds: 300),
-          placeholder: MemoryImage(kTransparentImage),
-          image: snapshot.hasData
-            ? FileImage(image)
-            : MemoryImage(kTransparentImage),
+        child: Image.file(
+          image,
           fit: BoxFit.cover,
         ),
       ),
     );
   }
 
-  Widget positionIndicator(MediaItem mediaItem, PlaybackState state, Color dominantColor) {
-    Color textColor = dominantColor.computeLuminance() > 0.5 ? Colors.black : Colors.white;
+  Widget positionIndicator(MediaItem mediaItem, PlaybackState state, Color dominantColor, Color textColor) {
     double seekPos;
     return StreamBuilder(
       stream: Rx.combineLatest2<double, double, double>(

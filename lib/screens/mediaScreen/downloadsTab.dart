@@ -88,6 +88,7 @@ class MediaDownloadTab extends StatelessWidget {
                         androidEnableQueue: true,
                       );
                     }
+                    await AudioService.customAction('updateCurrentAlbumsId', []);
                     await AudioService.updateQueue(manager.getCurrentMediaItemList());
                     await AudioService.playFromMediaId(index.toString());
                   } else {

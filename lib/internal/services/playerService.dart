@@ -48,6 +48,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
   int timesPositionChanged = 0;
   int _index = 0;
   int lastPlayerPosition = 0;
+  List listAlbumsId;
 
   bool enableRepeat = false;
   bool enableRandom = false;
@@ -176,6 +177,16 @@ class AudioPlayerTask extends BackgroundAudioTask {
     if (action == "enableRandom") {
       enableRandom = !enableRandom;
       return enableRandom;
+    }
+    if (action == "updateAlbumsId") {
+      listAlbumsId = extra;
+    }
+    if (action == "getCurrentAlbumId") {
+      if (listAlbumsId.isEmpty) {
+        return null;
+      } else {
+        return listAlbumsId[_index];
+      }
     }
   }
 

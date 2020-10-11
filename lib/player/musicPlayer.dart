@@ -35,41 +35,37 @@ class SlidingPlayerPanel extends StatelessWidget {
         final processingState =
           state?.processingState ?? AudioProcessingState.none;
         final mediaItem = screenState?.mediaItem;
+        AudioService.currentMediaItemStream.listen((newMediaItem) {
+          if (newMediaItem != mediaProvider.mediaItem) {
+            mediaProvider.mediaItem = newMediaItem;
+          }
+        });
         if (mediaItem != null) {
-          return FutureBuilder(
-            future: ArtworkGenerator.generateArtwork(
-              File(mediaItem.id),
-              mediaItem.extras["albumId"]
-            ),
-            builder: (context, AsyncSnapshot<List<dynamic>> list) {
-              if (mediaProvider.slidingPanelOpen == true) {
-                Color dominantColor = appData.useBlurBackground
-                  ? list.data[1] == null ? Colors.white : list.data[1]
-                  : Theme.of(context).accentColor;
-                Color textColor = appData.useBlurBackground
-                  ? dominantColor.computeLuminance() > 0.5 ? Colors.black : Colors.white
-                  : Theme.of(context).textTheme.bodyText1.color;
-                SystemChrome.setSystemUIOverlayStyle(
-                  SystemUiOverlayStyle(
-                    statusBarIconBrightness: textColor == Colors.black? Brightness.dark : Brightness.light,
-                  ),
-                );
-              }
-              if (list.data != null) {
-                return ShowUpTransition(
-                  duration: Duration(milliseconds: 400),
-                  slideSide: SlideFromSlide.BOTTOM,
-                  forward: processingState != AudioProcessingState.none,
-                  child: SlidingPlayer(
-                    snapshot: snapshot,
-                    uiElements: list
-                  ),
-                );
-              } else {
-                return Container();
-              }
-            }
-          );
+          if (mediaProvider.slidingPanelOpen == true) {
+            Color dominantColor = appData.useBlurBackground
+              ? mediaProvider.dominantColor == null ? Colors.white : mediaProvider.dominantColor
+              : Theme.of(context).accentColor;
+            Color textColor = appData.useBlurBackground
+              ? dominantColor.computeLuminance() > 0.5 ? Colors.black : Colors.white
+              : Theme.of(context).textTheme.bodyText1.color;
+            SystemChrome.setSystemUIOverlayStyle(
+              SystemUiOverlayStyle(
+                statusBarIconBrightness: textColor == Colors.black? Brightness.dark : Brightness.light,
+              ),
+            );
+          }
+          if (mediaProvider.artwork != null) {
+            return ShowUpTransition(
+              duration: Duration(milliseconds: 400),
+              slideSide: SlideFromSlide.BOTTOM,
+              forward: processingState != AudioProcessingState.none,
+              child: SlidingPlayer(
+                snapshot: snapshot,
+              ),
+            );
+          } else {
+            return Container();
+          }
         } else {
           return Container();
         }
@@ -80,10 +76,8 @@ class SlidingPlayerPanel extends StatelessWidget {
 
 class SlidingPlayer extends StatefulWidget {
   final AsyncSnapshot<ScreenState> snapshot;
-  final AsyncSnapshot<List<dynamic>> uiElements;
   SlidingPlayer({
     this.snapshot,
-    this.uiElements
   });
   @override
   _SlidingPlayerState createState() => _SlidingPlayerState();
@@ -98,7 +92,7 @@ class _SlidingPlayerState extends State<SlidingPlayer> {
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
     AppDataProvider appData = Provider.of<AppDataProvider>(context);
     Color dominantColor = appData.useBlurBackground
-      ? widget.uiElements.data[1] == null ? Colors.white : widget.uiElements.data[1]
+      ? mediaProvider.dominantColor == null ? Colors.white : mediaProvider.dominantColor
       : Theme.of(context).accentColor;
     Color textColor = appData.useBlurBackground
       ? dominantColor.computeLuminance() > 0.5 ? Colors.black : Colors.white
@@ -142,7 +136,6 @@ class _SlidingPlayerState extends State<SlidingPlayer> {
       panel: ExpandedPlayer(
         controller: mediaProvider.panelController,
         snapshot: widget.snapshot,
-        uiElements: widget.uiElements.data,
       ),
       collapsed: CollapsedPanel(widget.snapshot),
     );
