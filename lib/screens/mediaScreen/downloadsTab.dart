@@ -7,12 +7,14 @@ import 'package:flutter/material.dart';
 // Internal
 import 'package:songtube/internal/models/songFile.dart';
 import 'package:songtube/internal/models/videoFile.dart';
+import 'package:songtube/internal/nativeMethods.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/internal/services/playerService.dart';
 import 'package:songtube/player/videoPlayer.dart';
 
 // Packages
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:songtube/screens/mediaScreen/dialogs/confirmDialog.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:provider/provider.dart';
@@ -69,10 +71,53 @@ class MediaDownloadTab extends StatelessWidget {
                     )
                   ),
                 ),
-                trailing: IconButton(
+                trailing: PopupMenuButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)
+                  ),
                   icon: Icon(MdiIcons.dotsVertical, size: 18),
-                  onPressed: () {
-
+                  itemBuilder: (context) {
+                    return [
+                      PopupMenuItem(
+                        value: "Delete",
+                        child: Text(
+                          "Delete",
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme.bodyText1.color
+                          ),
+                        ),
+                      )
+                    ];
+                  },
+                  onSelected: (String value) {
+                    switch (value) {
+                      case "Delete":
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return ConfirmDialog(
+                              onConfirm: () async {
+                                Navigator.pop(context);
+                                if (AudioService.playbackState.playing) {
+                                  if (AudioService.currentMediaItem.id == song.path) {
+                                    AudioService.stop();
+                                  }
+                                }
+                                manager.songFileList.removeAt(index);
+                                await File(song.path).delete();
+                                NativeMethod.registerFile(song.path);
+                              },
+                              onCancel: () {
+                                Navigator.pop(context);
+                                return null;
+                              },
+                            );
+                          }
+                        );
+                        break;
+                      default:
+                        break;
+                    }
                   },
                 ),
                 onTap: () async {
