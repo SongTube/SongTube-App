@@ -45,6 +45,7 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        resValue "string", "app_name", "SongTube"
     }
 
     signingConfigs {
@@ -60,6 +61,10 @@ android {
         release {
             signingConfig signingConfigs.release
             shrinkResources false
+        }
+        debug{
+            applicationIdSuffix ".dev"
+            resValue "string", "app_name", "SongDebug"
         }
     }
 }
