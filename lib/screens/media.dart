@@ -21,7 +21,8 @@ class MediaScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           titleSpacing: 0,
-          elevation: 0,
+          elevation: 12,
+          shadowColor: Colors.black.withOpacity(0.15),
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           title: ShowUpTransition(
             forward: true,
