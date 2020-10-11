@@ -48,8 +48,8 @@ class _SearchBarState extends State<SearchBar> {
         color: Theme.of(context).scaffoldBackgroundColor,
         boxShadow: [
           BoxShadow(
-            color: Colors.black12.withOpacity(0.08),
-            offset: Offset(0.0, 1.5), //(x,y)
+            color: Colors.black12.withOpacity(0.04),
+            offset: Offset(0.0, 4), //(x,y)
             blurRadius: 7.0,
             spreadRadius: 0.1
           ),
