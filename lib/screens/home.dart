@@ -136,12 +136,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   duration: Duration(milliseconds: 300),
                   opacity: manager.showFloatingActionButtom ? 1.0 : 0.0,
                   child: FloatingActionButton(
-                    child: manager.streamManifest == null
-                      ? CircularProgressIndicator(
-                          backgroundColor: Theme.of(context).accentColor,
-                          valueColor: AlwaysStoppedAnimation(Colors.white),
-                        )
-                      : Icon(Icons.file_download),
+                    child: AnimatedSwitcher(
+                      duration: Duration(milliseconds: 400),
+                      child: manager.streamManifest == null
+                        ? CircularProgressIndicator(
+                            backgroundColor: Theme.of(context).accentColor,
+                            valueColor: AlwaysStoppedAnimation(Colors.white),
+                          )
+                        : Icon(Icons.file_download),
+                    ),
                     backgroundColor: Theme.of(context).accentColor,
                     foregroundColor: Colors.white,
                     onPressed: () async {
