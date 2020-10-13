@@ -52,9 +52,10 @@ class MediaMusicTab extends StatelessWidget {
           mediaProvider.listSongs.forEach((song) {
             albumsId.add(song.id);
           });
-          await AudioService.customAction('updateAlbumsId', albumsId);
-          await AudioService.updateQueue(mediaProvider.listMediaItems);
-          await AudioService.playFromMediaId(index.toString());
+          if (listEquals(mediaProvider.listMediaItems, AudioService.queue) == false) {
+            await AudioService.updateQueue(mediaProvider.listMediaItems);
+          }
+          await AudioService.playMediaItem(mediaProvider.listMediaItems[index]);
         },
       ),
       loadingWidget: MediaLoadingWidget(),
