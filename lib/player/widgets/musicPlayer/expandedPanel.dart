@@ -5,16 +5,16 @@ import 'dart:ui';
 // Flutter
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 // Internal
 import 'package:songtube/internal/services/playerService.dart';
 import 'package:songtube/player/widgets/musicPlayer/ui/playerBackground.dart';
 import 'package:songtube/player/widgets/musicPlayer/ui/playerBody.dart';
 import 'package:songtube/provider/app_provider.dart';
+import 'package:songtube/provider/mediaProvider.dart';
 
 // Packages
-import 'package:songtube/provider/mediaProvider.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class ExpandedPlayer extends StatelessWidget {
   final PanelController controller;

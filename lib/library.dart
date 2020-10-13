@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 
 // Internal
 import 'package:songtube/internal/nativeMethods.dart';
+import 'package:songtube/internal/services/playerService.dart';
 import 'package:songtube/player/widgets/musicPlayer/playerPadding.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/provider/mediaProvider.dart';
@@ -20,6 +21,7 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:songtube/ui/widgets/navigationBar.dart';
 import 'package:songtube/ui/widgets/navigationItems.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
+import 'package:audio_service/audio_service.dart';
 
 // UI
 import 'package:songtube/ui/internal/snackbar.dart';
@@ -55,6 +57,17 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver {
     );
     Provider.of<MediaProvider>(context, listen: false).loadSongList();
     Provider.of<MediaProvider>(context, listen: false).loadVideoList();
+    if (!AudioService.running) {
+      AudioService.start(
+        backgroundTaskEntrypoint: songtubePlayer,
+        androidNotificationChannelName: 'SongTube',
+        // Enable this if you want the Android service to exit the foreground state on pause.
+        //androidStopForegroundOnPause: true,
+        androidNotificationColor: 0xFF2196f3,
+        androidNotificationIcon: 'drawable/ic_stat_music_note',
+        androidEnableQueue: true,
+      );
+    }
   }
 
   @override

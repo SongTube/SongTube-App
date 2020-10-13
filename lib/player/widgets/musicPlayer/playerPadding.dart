@@ -19,9 +19,10 @@ class MusicPlayerPadding extends StatelessWidget {
         final processingState =
           state?.processingState ?? AudioProcessingState.none;
         return Container(
-          height: processingState != AudioProcessingState.none
-            ? kToolbarHeight * 1.15
-            : 0
+          height: processingState == AudioProcessingState.stopped ||
+            processingState == AudioProcessingState.none
+              ? 0
+              : kToolbarHeight * 1.15
         );
       }
     );
