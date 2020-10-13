@@ -2,6 +2,7 @@
 import 'dart:io';
 
 // Flutter
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // Internal
