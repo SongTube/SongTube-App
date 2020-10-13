@@ -31,7 +31,7 @@ dependencies:
       ref: master
   flutter_audio_query: ^0.3.5+6
   video_player: ^0.10.12+2
-  audioplayers: ^0.16.0
+  just_audio: ^0.5.4
   audio_service: ^0.15.1
   sliding_up_panel: ^1.0.2
 
