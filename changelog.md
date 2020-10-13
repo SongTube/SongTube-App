@@ -1,3 +1,14 @@
+# SongTube 3.3.0:
+
+- Reworked MusicPlayer with Customization Options
+- Improved Songs Thumbnail and Artwork Quality
+- Fixed some Songs not using the correct Thumbnail/Artwork
+- Added a new "Album Folder" that organizes your song downloads by song album name in your download path.
+- Fixed Artwork flickering in the MusicPlayer Notification
+- UI Look/Animations Improvements
+- Updated YoutubeExplode Library (A few videos that weren't loading now loads)
+- Improved Video loading Speed
+
 # SongTube 3.0.0:
 
 - Fixed Restore/Backup Options
