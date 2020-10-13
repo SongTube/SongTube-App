@@ -59,7 +59,7 @@ class MediaProvider extends ChangeNotifier {
   }
 
   Future<void> updateUIElements() async {
-    String currentAlbumId = await AudioService.customAction('getCurrentAlbumId');
+    String currentAlbumId = await AudioService.currentMediaItem.extras["albumId"];
     artwork = await ArtworkGenerator.generateArtwork(
       File(mediaItem.id),
       currentAlbumId
