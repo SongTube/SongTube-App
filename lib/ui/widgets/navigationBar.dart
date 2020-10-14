@@ -24,7 +24,9 @@ class AppBottomNavigationBar extends StatelessWidget {
       child: BottomNavigationBar(
         backgroundColor: Theme.of(context).cardColor,
         currentIndex: currentIndex,
-        selectedFontSize: 14,
+        iconSize: 22,
+        selectedFontSize: 12,
+        unselectedFontSize: 10,
         elevation: 8,
         selectedItemColor: Theme.of(context).accentColor,
         unselectedItemColor: Theme.of(context).iconTheme.color,

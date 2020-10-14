@@ -29,7 +29,7 @@ class BottomNavigationItems {
       )),
     ),
     BottomNavigationBarItem(
-      icon: Icon(EvaIcons.browserOutline),
+      icon: Icon(EvaIcons.videoOutline),
       title: Text("YouTube", style: TextStyle(
         fontFamily: "Varela",
         fontWeight: FontWeight.w600
