@@ -6,15 +6,19 @@ import 'package:flutter/material.dart';
 
 // Internal
 import 'package:songtube/internal/services/playerService.dart';
+import 'package:songtube/player/widgets/musicPlayer/ui/marqueeWidget.dart';
 
 // Packages
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:rxdart/rxdart.dart';
 
 class CollapsedPanel extends StatelessWidget {
   final AsyncSnapshot<ScreenState> snapshot;
   CollapsedPanel(this.snapshot);
+  final BehaviorSubject<double> _dragPositionSubject =
+    BehaviorSubject.seeded(null);
   @override
   Widget build(BuildContext context) {
     final screenState = snapshot.data;
@@ -47,25 +51,34 @@ class CollapsedPanel extends StatelessWidget {
                   ),
                   Expanded(
                     child: Container(
-                      margin: EdgeInsets.only(left: 8),
+                      margin: EdgeInsets.only(left: 12),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            "${mediaItem.title}",
-                            style: TextStyle(
-                              fontFamily: 'Varela'
+                          MarqueeWidget(
+                            animationDuration: Duration(seconds: 8),
+                            backDuration: Duration(seconds: 3),
+                            pauseDuration: Duration(seconds: 2),
+                            direction: Axis.horizontal,
+                            child: Text(
+                              "${mediaItem.title}",
+                              style: TextStyle(
+                                fontFamily: 'YTSans',
+                                fontSize: 16
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.fade,
+                              softWrap: false,
                             ),
-                            overflow: TextOverflow.fade,
-                            softWrap: false,
-                            maxLines: 1,
                           ),
+                          SizedBox(height: 2),
                           Text(
                             "${mediaItem.album}",
                             style: TextStyle(
-                              fontFamily: 'Varela',
-                              fontSize: 10
+                              fontFamily: 'YTSans',
+                              fontSize: 11,
+                              color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6)
                             ),
                             overflow: TextOverflow.fade,
                             softWrap: false,
@@ -78,29 +91,38 @@ class CollapsedPanel extends StatelessWidget {
                 ],
               ),
             ),
-            // Playback Controls
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.end,
+            // Play/Pause
+            SizedBox(width: 8),
+            Stack(
+              alignment: Alignment.center,
               children: [
-                IconButton(
-                  icon: Icon(MdiIcons.skipPreviousOutline),
-                  onPressed: () => AudioService.skipToPrevious(),
+                StreamBuilder(
+                  stream: Rx.combineLatest2<double, double, double>(
+                    _dragPositionSubject.stream,
+                    Stream.periodic(Duration(milliseconds: 1000)),
+                    (dragPosition, _) => dragPosition),
+                  builder: (context, snapshot) {
+                    Duration position = state.currentPosition;
+                    Duration duration = mediaItem?.duration;
+                    return CircularProgressIndicator(
+                      strokeWidth: 3,
+                      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                      valueColor: AlwaysStoppedAnimation(Theme.of(context).accentColor),
+                      value: (position.inMilliseconds/duration.inMilliseconds),
+                    );
+                  }
                 ),
                 IconButton(
                   icon: playing
-                    ? Icon(MdiIcons.pause, size: 25)
-                    : Icon(MdiIcons.play, size: 25),
+                    ? Icon(MdiIcons.pause, size: 22)
+                    : Icon(MdiIcons.play, size: 22),
                   onPressed: playing
                     ? () => AudioService.pause()
                     : () => AudioService.play(),
                 ),
-                IconButton(
-                  icon: Icon(MdiIcons.skipNextOutline),
-                  onPressed: () => AudioService.skipToNext(),
-                )
               ],
-            )
+            ),
+            SizedBox(width: 16)
           ],
         ),
       );
