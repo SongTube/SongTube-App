@@ -27,7 +27,11 @@ class MediaMusicTab extends StatelessWidget {
       songs = mediaProvider.listMediaItems;
     } else {
       mediaProvider.listMediaItems.forEach((item) {
-        if (item.title.toLowerCase().contains(searchQuery.toLowerCase())) {
+        if (item.title.toLowerCase()
+          .replaceAll(RegExp("[^0-9a-zA-Z]+"), "")
+          .contains(searchQuery.toLowerCase()
+          .replaceAll(RegExp("[^0-9a-zA-Z]+"), ""))
+        ) {
           songs.add(item);
         }
       });
