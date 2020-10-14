@@ -28,9 +28,6 @@ class MediaProvider extends ChangeNotifier {
   // Flutter Audio Query
   FlutterAudioQuery audioQuery;
 
-  // List all Songs in Device
-  List<SongFile> listSongs;
-
   // List MediaItems for AudioService
   List<MediaItem> listMediaItems;
 
@@ -82,7 +79,6 @@ class MediaProvider extends ChangeNotifier {
 
   MediaProvider() {
     audioQuery = new FlutterAudioQuery();
-    listSongs = new List<SongFile>();
     listMediaItems = new List<MediaItem>();
     listVideos = new List<VideoFile>();
     listFolders = new List<FolderItem>();
@@ -123,20 +119,6 @@ class MediaProvider extends ChangeNotifier {
           }
         }
       }
-      listSongs.add(
-        SongFile(
-          title:        song.title,
-          album:        song.album,
-          author:       song.artist,
-          coverPath:    artworkFile.path,
-          path:         song.filePath,
-          fileSize:     song.fileSize,
-          duration:     song.duration,
-          id:           song.id,
-          downloadType: null,
-          coverUrl:     null,
-        )
-      );
       listMediaItems.add(
         MediaItem(
           id:       song.filePath,

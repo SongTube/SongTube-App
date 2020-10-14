@@ -195,36 +195,37 @@ class ManagerProvider extends ChangeNotifier {
   List<MediaItem> getCurrentMediaItemList() {
     List<MediaItem> list = [];
     _songFileList.forEach((SongFile element) {
-      if (element.downloadType == "Audio") {
-        int hours = 0;
-        int minutes = 0;
-        int micros;
-        List<String> parts = element.duration.split(':');
-        if (parts.length > 2) {
-          hours = int.parse(parts[parts.length - 3]);
-        }
-        if (parts.length > 1) {
-          minutes = int.parse(parts[parts.length - 2]);
-        }
-        micros = (double.parse(parts[parts.length - 1]) * 1000000).round();
-        Duration duration = Duration(
-          milliseconds: Duration(
-            hours: hours,
-            minutes: minutes,
-            microseconds: micros
-          ).inMilliseconds
-        );
-        list.add(
-          new MediaItem(
-            id: element.path,
-            title: element.title,
-            album: element.album,
-            artist: element.author,
-            artUri: "file://${element.coverPath}",
-            duration: duration
-          )
-        );
+      int hours = 0;
+      int minutes = 0;
+      int micros;
+      List<String> parts = element.duration.split(':');
+      if (parts.length > 2) {
+        hours = int.parse(parts[parts.length - 3]);
       }
+      if (parts.length > 1) {
+        minutes = int.parse(parts[parts.length - 2]);
+      }
+      micros = (double.parse(parts[parts.length - 1]) * 1000000).round();
+      Duration duration = Duration(
+        milliseconds: Duration(
+          hours: hours,
+          minutes: minutes,
+          microseconds: micros
+        ).inMilliseconds
+      );
+      list.add(
+        new MediaItem(
+          id: element.path,
+          title: element.title,
+          album: element.album,
+          artist: element.author,
+          artUri: "file://${element.coverPath}",
+          duration: duration,
+          extras: {
+            "downloadType": element.downloadType
+          }
+        )
+      );
     });
     return list;
   }

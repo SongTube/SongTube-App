@@ -4,19 +4,24 @@ import 'package:audio_service/audio_service.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/internal/models/songFile.dart';
 import 'package:songtube/internal/nativeMethods.dart';
 import 'package:songtube/provider/managerProvider.dart';
+import 'package:songtube/provider/mediaProvider.dart';
+
+enum DeleteFrom { downloads, music }
 
 class MediaOptionsMenuDialog extends StatelessWidget {
-  final int songIndex;
-  final String songPath;
+  final MediaItem song;
+  final DeleteFrom deleteFrom;
   MediaOptionsMenuDialog({
-    @required this.songIndex,
-    @required this.songPath
+    @required this.song,
+    @required this.deleteFrom
   });
   @override
   Widget build(BuildContext context) {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
+    MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
     return AlertDialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20)
@@ -36,13 +41,21 @@ class MediaOptionsMenuDialog extends StatelessWidget {
             onTap: () async {
               Navigator.pop(context);
               if (AudioService.playbackState.playing) {
-                if (AudioService.currentMediaItem.id == songPath) {
+                if (AudioService.currentMediaItem.id == song.id) {
                   AudioService.stop();
                 }
               }
-              manager.songFileList.removeAt(songIndex);
-              await File(songPath).delete();
-              NativeMethod.registerFile(songPath);
+              if (deleteFrom == DeleteFrom.downloads) {
+                manager.getCurrentMediaItemList().removeAt(
+                  manager.getCurrentMediaItemList().indexWhere((file) => file == song)
+                );
+              } else if (deleteFrom == DeleteFrom.music) {
+                mediaProvider.listMediaItems.removeAt(
+                  mediaProvider.listMediaItems.indexWhere((file) => file == song)
+                );
+              }
+              await File(song.id).delete();
+              NativeMethod.registerFile(song.id);
             },
           ),
         ],

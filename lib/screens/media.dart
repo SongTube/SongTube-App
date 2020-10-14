@@ -1,5 +1,6 @@
 // Flutter
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 // Internal
 import 'package:songtube/screens/mediaScreen/tabs/downloadsTab.dart';
@@ -8,17 +9,49 @@ import 'package:songtube/screens/mediaScreen/tabs/videosTab.dart';
 
 // Packages
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:songtube/screens/mediaScreen/widgets/mediaSearchBar.dart';
 
 // UI
 import 'package:songtube/ui/animations/showUp.dart';
 
-class MediaScreen extends StatelessWidget {
+class MediaScreen extends StatefulWidget {
+  @override
+  _MediaScreenState createState() => _MediaScreenState();
+}
+
+class _MediaScreenState extends State<MediaScreen> {
+
+  // Show SearchBar
+  bool showSearchBar;
+
+  // Search Controller and FocusNode
+  TextEditingController searchController;
+  FocusNode searchNode;
+
+  // Current Search Query
+  String searchQuery = "";
+
+  @override
+  void initState() {
+    showSearchBar = false;
+    searchController = new TextEditingController();
+    searchNode = new FocusNode();
+    KeyboardVisibility.onChange.listen((bool visible) {
+        if (visible == false) {
+          searchNode.unfocus();
+        }
+      }
+    );
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       initialIndex: 1,
       length: 3,
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           titleSpacing: 0,
           elevation: 12,
@@ -28,40 +61,49 @@ class MediaScreen extends StatelessWidget {
             forward: true,
             duration: Duration(milliseconds: 400),
             slideSide: SlideFromSlide.TOP,
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: Container(
-                margin: EdgeInsets.all(18),
-                child: Row(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(right: 8),
-                      child: Icon(
-                        EvaIcons.musicOutline,
-                        color: Theme.of(context).accentColor,
-                      ),
+            child: AnimatedSwitcher(
+              duration: Duration(milliseconds: 250),
+              child: !showSearchBar ? Row(
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(right: 8, left: 16),
+                    child: Icon(
+                      EvaIcons.musicOutline,
+                      color: Theme.of(context).accentColor,
                     ),
-                    Text(
-                      "Media",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontFamily: "YTSans",
-                        color: Theme.of(context).textTheme.bodyText1.color
-                      ),
+                  ),
+                  Text(
+                    "Media",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontFamily: "YTSans",
+                      color: Theme.of(context).textTheme.bodyText1.color
                     ),
-                    Spacer(),
-                    IconButton(
-                      icon: Icon(
-                        EvaIcons.searchOutline,
-                        color: Theme.of(context).iconTheme.color,
-                      ),
-                      onPressed: () {
-
-                      },
+                  ),
+                  Spacer(),
+                  IconButton(
+                    icon: Icon(
+                      EvaIcons.searchOutline,
+                      color: Theme.of(context).iconTheme.color,
                     ),
-                  ],
-                ),
-              ),
+                    onPressed: () {
+                      setState(() {
+                        showSearchBar = !showSearchBar;
+                        if (showSearchBar == true) searchNode.requestFocus();
+                      });
+                    },
+                  ),
+                  SizedBox(width: 16)
+                ],
+              ) : MediaSearchBar(
+                textController: searchController,
+                onClear: () => setState(() {
+                  searchController.clear();
+                  searchQuery = "";
+                }),
+                focusNode: searchNode,
+                onChanged: (String search) => setState(() => searchQuery = search),
+              )
             ),
           ),
           bottom: TabBar(
@@ -69,6 +111,7 @@ class MediaScreen extends StatelessWidget {
             unselectedLabelColor: Theme.of(context).textTheme.bodyText1.color,
             indicatorSize: TabBarIndicatorSize.label,
             indicatorColor: Theme.of(context).accentColor,
+            onTap: (_) => setState(() => showSearchBar = false),
             tabs: [
               Tab(child: Text(
                 "Downloads",
@@ -93,9 +136,9 @@ class MediaScreen extends StatelessWidget {
         ),
         body: TabBarView(
           children: [
-            MediaDownloadTab(),
-            MediaMusicTab(),
-            MediaVideoTab()
+            MediaDownloadTab(searchQuery),
+            MediaMusicTab(searchQuery),
+            MediaVideoTab(searchQuery)
           ],
         ),
       ),

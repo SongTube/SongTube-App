@@ -19,6 +19,8 @@ import 'package:songtube/screens/mediaScreen/widgets/videoList/folderGridView.da
 import 'package:songtube/screens/mediaScreen/widgets/videoList/videosOnFolderListView.dart';
 
 class MediaVideoTab extends StatefulWidget {
+  final String searchQuery;
+  MediaVideoTab(this.searchQuery);
   @override
   _MediaVideoTabState createState() => _MediaVideoTabState();
 }
