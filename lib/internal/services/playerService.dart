@@ -171,9 +171,15 @@ class SongTubePlayerService extends BackgroundAudioTask {
   // Handle a request to stop audio and finish the task.
   @override
   Future<void> onStop() async {
-    _player.stop();
+    await _player.pause();
+    await _player.dispose();
     _eventSubscription.cancel();
-    super.onStop();
+    // It is important to wait for this state to be broadcast before we shut
+    // down the task. If we don't, the background task will be destroyed before
+    // the message gets sent to the UI.
+    await _broadcastState();
+    // Shut down this task
+    await super.onStop();
   }
 
   // Handle a request to play audio.

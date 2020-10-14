@@ -6,10 +6,9 @@ import 'package:flutter/material.dart';
 
 // Internal
 import 'package:songtube/internal/models/songFile.dart';
-import 'package:songtube/screens/mediaScreen/dialogs/confirmDialog.dart';
+import 'package:songtube/screens/mediaScreen/widgets/dialogs/optionsMenuDialog.dart';
 
 // Packages
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class MusicListView extends StatelessWidget {
@@ -24,8 +23,9 @@ class MusicListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      physics: BouncingScrollPhysics(),
       itemCount: listSongs.length,
+      itemExtent: 66,
+      key: PageStorageKey('musicList'),
       itemBuilder: (context, index) { 
         SongFile song = listSongs[index];
         return ListTile(
@@ -35,7 +35,7 @@ class MusicListView extends StatelessWidget {
             overflow: TextOverflow.fade,
             softWrap: false,
             style: TextStyle(
-              color: Theme.of(context).textTheme.bodyText1.color
+              color: Theme.of(context).textTheme.bodyText1.color,
             ),
           ),
           subtitle: Text(
@@ -57,53 +57,24 @@ class MusicListView extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: FadeInImage(
-                fadeInDuration: Duration(milliseconds: 200),
+                fadeInDuration: Duration(milliseconds: 250),
                 placeholder: MemoryImage(kTransparentImage),
                 image: FileImage(File(song.coverPath)),
                 fit: BoxFit.cover,
               )
             ),
           ),
-          trailing: PopupMenuButton(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10)
-            ),
-            icon: Icon(MdiIcons.dotsVertical, size: 18),
-            itemBuilder: (context) {
-              return [
-                PopupMenuItem(
-                  value: "Delete",
-                  child: Text(
-                    "Delete",
-                    style: TextStyle(
-                      color: Theme.of(context).textTheme.bodyText1.color
-                    ),
-                  ),
+          trailing: IconButton(
+            icon: Icon(Icons.more_vert),
+            iconSize: 18,
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => MediaOptionsMenuDialog(
+                  songIndex: index,
+                  songPath: song.path
                 )
-              ];
-            },
-            onSelected: (String value) {
-              switch (value) {
-                case "Delete":
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return ConfirmDialog(
-                        onConfirm: () async {
-                          Navigator.pop(context);
-                          onSongDelete(index);
-                        },
-                        onCancel: () {
-                          Navigator.pop(context);
-                          return null;
-                        },
-                      );
-                    }
-                  );
-                  break;
-                default:
-                  break;
-              }
+              );
             },
           ),
           onTap: () => onSongPlay(index)
