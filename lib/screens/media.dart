@@ -2,9 +2,9 @@
 import 'package:flutter/material.dart';
 
 // Internal
-import 'package:songtube/screens/mediaScreen/downloadsTab.dart';
-import 'package:songtube/screens/mediaScreen/musicTab.dart';
-import 'package:songtube/screens/mediaScreen/videosTab.dart';
+import 'package:songtube/screens/mediaScreen/tabs/downloadsTab.dart';
+import 'package:songtube/screens/mediaScreen/tabs/musicTab.dart';
+import 'package:songtube/screens/mediaScreen/tabs/videosTab.dart';
 
 // Packages
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
@@ -48,6 +48,16 @@ class MediaScreen extends StatelessWidget {
                         fontFamily: "YTSans",
                         color: Theme.of(context).textTheme.bodyText1.color
                       ),
+                    ),
+                    Spacer(),
+                    IconButton(
+                      icon: Icon(
+                        EvaIcons.searchOutline,
+                        color: Theme.of(context).iconTheme.color,
+                      ),
+                      onPressed: () {
+
+                      },
                     ),
                   ],
                 ),
