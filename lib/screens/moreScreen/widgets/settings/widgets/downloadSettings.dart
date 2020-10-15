@@ -4,6 +4,7 @@ import 'dart:io';
 // Flutter
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 // Internal
@@ -131,8 +132,15 @@ class DownloadSettings extends StatelessWidget {
               icon: Icon(EvaIcons.trashOutline, color: Theme.of(context).iconTheme.color),
               onPressed: () async {
                 double totalSize = 0;
-                String tmpPath = await ExtStorage.getExternalStorageDirectory() + "/SongTube/tmp";
-                if (!await Directory(tmpPath).exists()) {
+                String tmpPath = (await getTemporaryDirectory()).path;
+                List<FileSystemEntity> listFiles = Directory(tmpPath).listSync();
+                listFiles.forEach((element) {
+                  if (element is File) {
+                    totalSize += element.statSync().size;
+                  }
+                });
+                totalSize = totalSize * 0.000001;
+                if (totalSize < 1) {
                   await showDialog(
                     context: context,
                     builder: (context) {
@@ -153,13 +161,6 @@ class DownloadSettings extends StatelessWidget {
                   );
                   return;
                 }
-                List<FileSystemEntity> listFiles = Directory(tmpPath).listSync();
-                listFiles.forEach((element) {
-                  if (element is File) {
-                    totalSize += element.statSync().size;
-                  }
-                });
-                totalSize = totalSize * 0.000001;
                 showDialog(
                   context: context,
                   builder: (context) {
