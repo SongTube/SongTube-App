@@ -385,10 +385,11 @@ class ManagerProvider extends ChangeNotifier {
       videoDetails: videoDetails,
       metadata: metadata,
       downloadType: downloadType,
-      downloadPath: downloadPath,
+      downloadPath: appData.enableAlbumFolder
+        ? downloadPath + "/${metadata.album}"
+        : downloadPath,
       convertFormat: convertFormat,
       audioModifiers: [double.parse(data[2]), int.parse(data[3]), int.parse(data[4])],
-      enableAlbumFolder: appData.enableAlbumFolder
     );
     addItemToDownloadList(infoset);
     screenIndex = 1;

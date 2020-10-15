@@ -28,8 +28,8 @@ class DownloadInfoSet {
 
   // Streams
   BehaviorSubject<String> currentAction;
-  BehaviorSubject dataProgress;
-  BehaviorSubject progressBar;
+  BehaviorSubject<String> dataProgress;
+  BehaviorSubject<double> progressBar;
 
   // Classes
   MediaMetaData metadata;
@@ -45,12 +45,10 @@ class DownloadInfoSet {
   List audioModifiers;
   bool downloaderClosed;
   bool _cancelDownload;
-  bool enableAlbumFolder;
   bool get cancelDownload => _cancelDownload;
   set cancelDownload(bool value) {
     _cancelDownload = value;
     if (value == true) { 
-      currentAction.add("Cancelled");
       dataProgress.add("Incompleted");
       progressBar.add(0.0);
     }
@@ -65,23 +63,12 @@ class DownloadInfoSet {
     @required this.audioStreamInfo,
     @required this.videoDetails,
     this.videoStreamInfo,
-    this.enableAlbumFolder = false
   }) {
     converter = new Converter();
-    currentAction = new BehaviorSubject();
-    dataProgress = new BehaviorSubject();
-    progressBar = new BehaviorSubject();
+    currentAction = new BehaviorSubject<String>();
+    dataProgress = new BehaviorSubject<String>();
+    progressBar = new BehaviorSubject<double>();
     cancelDownload = false;
-    if (enableAlbumFolder) {
-      Permission.storage.request().then((status) {
-        if (status == PermissionStatus.granted) {
-          if (!Directory(downloadPath + "/${metadata.album}").existsSync()) {
-            Directory(downloadPath + "/${metadata.album}").createSync();
-          }
-        }
-      });
-      downloadPath = downloadPath + "/${metadata.album}";
-    }
   }
   
   // ---------------------------------------------
@@ -89,24 +76,25 @@ class DownloadInfoSet {
   // Download, Convert, Write Metadata and Save
   // ---------------------------------------------
   Future<void> downloadMedia() async {
+    // Check Storage Permissions
     var status = await Permission.storage.request();
     if (status != PermissionStatus.granted) {
-      cancelDownload = true;
       currentAction.add("Access Denied");
       dataProgress.add("Can't Download");
-      progressBar.add(0.0);
+      cancelDownload = true;
       return;
     }
+    // Reset to Default values
     cancelDownload = false;
     currentAction.add("Downloading...");
     currentAction.add(" ");
     // Check our Download Folder
     if (!await Directory(downloadPath).exists()) {
-      await Directory(downloadPath).create();
+      await Directory(downloadPath).create(recursive: true);
     }
     // Download File
     File downloadedFile = await downloadStream();
-    if (downloadedFile == null) return;
+    if (downloadedFile == null) cancelDownload = true;
     // Rename File
     downloadedFile = await renameFile(downloadedFile, metadata.title);
     // Write All Metadata if its Audio
@@ -127,6 +115,189 @@ class DownloadInfoSet {
     });
   }
 
+  // Start Downloading our Stream, this function
+  // automatically converts the downloaded File
+  Future<File> downloadStream() async { 
+    // Download
+    File file = File(
+      (await getTemporaryDirectory()).path +
+      "/" + RandomString.getRandomString(10)
+    );
+    // YoutubeExplode Instance
+    YoutubeExplode yt = new YoutubeExplode();
+    // StreamData
+    Stream<List<int>> streamData;
+    if (videoStreamInfo == null) {
+      streamData = yt.videos.streamsClient.get(audioStreamInfo);
+      currentAction.add("Downloading Audio...");
+    } else {
+      streamData = yt.videos.streamsClient.get(videoStreamInfo);
+      currentAction.add("Downloading Video...");
+    }
+    // Update Streams
+    dataProgress.add("Starting...");
+    progressBar.add(0.0);
+    // Open the file in write.
+    var _output = file.openWrite(mode: FileMode.write);
+    // Local variables for File Download Status
+    var _count = 0;
+    var _len;
+    if (videoStreamInfo == null) {
+      _len = audioStreamInfo.size.totalBytes;
+    } else {
+      _len = videoStreamInfo.size.totalBytes + audioStreamInfo.size.totalBytes;
+    }
+    // Start stream download while updating internal
+    // BehaviorSubject for external access
+    await for (var data in streamData) {
+      if (cancelDownload == true) {
+        _output.close();
+        currentAction.add("Download cancelled...");
+        return null;
+      }
+      _count += data.length;
+      dataProgress.add("${(_count * 0.000001).toStringAsFixed(2)} MB / ${(_len * 0.000001).toStringAsFixed(2)} MB");
+      progressBar.add((_count / _len).toDouble());
+      print("Downloading: " + _count.toString());
+      _output.add(data);
+    }
+    await _output.flush();
+    await _output.close();
+    // Download and Paste Audio if the Previous Download was a Video
+    if (downloadType == DownloadType.VIDEO) {
+      currentAction.add("Downloading Audio...");
+      _count = 0;
+      // Audio Download
+      File audioFile = File(
+        (await getTemporaryDirectory()).path +
+        "/" + RandomString.getRandomString(10)
+      );
+      // Open Write on our Audio File
+      var _outputAudio = audioFile.openWrite(mode: FileMode.write);
+      // StreamData
+      Stream<List<int>> audioStreamData = yt.videos.streamsClient.get(audioStreamInfo);
+      // Start stream download while once again updating
+      // internal BehaviorSubject for external access
+      await for (var data in audioStreamData) {
+        if (cancelDownload == true) {
+          _outputAudio.close();
+          currentAction.add("Download cancelled...");
+          return null;
+        }
+        _count += data.length;
+        dataProgress.add(
+          "${((_count + videoStreamInfo.size.totalBytes) * 0.000001).toStringAsFixed(2)} MB" +
+          " / ${(_len * 0.000001).toStringAsFixed(2)} MB"
+        );
+        progressBar.add(((_count + videoStreamInfo.size.totalBytes)/_len).toDouble());
+        print("Downloading: " + _count.toString());
+        _outputAudio.add(data);
+      }
+      await _outputAudio.flush();
+      await _outputAudio.close();
+      progressBar.add(null);
+      // Write our Audio File downloaded to the
+      // previously downloaded Video File
+      currentAction.add("Patching Audio...");
+      File finalFile = await converter.writeAudioToVideo(
+        saveFormat: await converter.getMediaFormat(file.path),
+        videoPath: file.path,
+        audioPath: audioFile.path,
+      );
+      // If convertion failed notify the User
+      if (finalFile == null) {
+        currentAction.add("An issue ocurred with the Converter");
+        return null;
+      }
+      file = finalFile;
+    }
+    // Convert Audio if enabled to Requested Format
+    if (downloadType == DownloadType.AUDIO) {
+      if (convertFormat != AudioConvert.NONE) {
+        progressBar.add(null);
+        currentAction.add("Converting...");
+        File finalFile = await converter.convertAudio(
+          audioPath: file.path,
+          format: convertFormat,
+          filters: audioModifiers
+        );
+        if (finalFile == null) {
+          currentAction.add("An issue ocurred with the Converter");
+          return null;
+        }
+        file = finalFile;
+      }
+    }
+    return file;
+  }
+
+  // Rename File to a new provided FileName this function
+  // preserves the file path and file extension.
+  Future<File> renameFile(File file, String newName) async {
+    String filePath = file.path
+      .replaceAll("/${file.path.split('/').last}", '');
+    String fileFormat = file.path.split('.').last;
+    return await file.rename("$filePath/$newName.$fileFormat");
+  }
+
+  // Write Tags & Artwork
+  Future<void> writeAllMetadata(String filePath) async {
+    try {
+      await TagsManager.writeAllTags(
+        songPath: filePath,
+        title: metadata.title,
+        album: metadata.album,
+        artist: metadata.artist,
+        genre: metadata.genre,
+        year: metadata.date,
+        disc: metadata.disk,
+        track: metadata.track
+      );
+      File croppedImage;
+      if (isURL(metadata.coverurl)) {
+        http.Response response;
+        File artwork = new File(
+          (await getTemporaryDirectory()).path +
+          "/${RandomString.getRandomString(5)}"
+        );
+        if (metadata.coverurl == videoDetails.thumbnails.mediumResUrl) {
+          // Try getting FullQuality Artwork
+          try {
+            response = await http.get(videoDetails.thumbnails.maxResUrl)
+              .timeout(Duration(seconds: 10));
+            await artwork.writeAsBytes(response.bodyBytes);
+          } catch (_) {}
+          // If it doesnt exist try Getting MediumQuality Artwork
+          if (response == null || response.bodyBytes == null) {
+            try {
+              response = await http.get(videoDetails.thumbnails.mediumResUrl)
+                .timeout(Duration(seconds: 10));
+              await artwork.writeAsBytes(response.bodyBytes);
+            } catch (_) {}
+          }
+        } else {
+          try {
+            response = await http.get(metadata.coverurl)
+              .timeout(Duration(seconds: 10));
+            await artwork.writeAsBytes(response.bodyBytes);
+          } catch (_) {}
+        }
+        croppedImage = await NativeMethod.cropToSquare(artwork);
+      } else {
+        croppedImage = await NativeMethod.cropToSquare(File(metadata.coverurl));
+      }
+      await TagsManager.writeArtwork(
+        songPath: filePath,
+        artworkPath: croppedImage.path
+      );
+      // Copy our CoverArt to default folder
+      await croppedImage.copy((await getApplicationDocumentsDirectory()).path +
+        "${metadata.title}.jpg");
+    } on Exception catch (_) {}
+  }
+
+  // Finish download by inserting it to the Database
+  // and updating Android MediaStore
   Future<void> finishDownload(File finalFile) async {
     final dbHelper = DatabaseService.instance;
     await dbHelper.insertDownload(new SongFile.toDatabase(
@@ -149,155 +320,4 @@ class DownloadInfoSet {
     progressBar.close();
     dataProgress.close();
   }
-
-  Future<File> downloadStream() async { 
-
-    // Download
-    File file = File((await getTemporaryDirectory()).path + "/" + RandomString.getRandomString(10));
-
-    // StreamData
-    YoutubeExplode yt = new YoutubeExplode();
-    Stream<List<int>> streamData;
-    if (videoStreamInfo == null) {
-      streamData = yt.videos.streamsClient.get(audioStreamInfo);
-      currentAction.add("Downloading Audio...");
-    } else {
-      streamData = yt.videos.streamsClient.get(videoStreamInfo);
-      currentAction.add("Downloading Video...");
-    }
-
-    // Update Streams
-    dataProgress.add("Starting...");
-    progressBar.add(0.0);
-
-    // Open the file in write.
-    var _output = file.openWrite(mode: FileMode.write);
-
-    // Local variables for file status
-    var _count = 0;
-    var _len;
-    if (videoStreamInfo == null) {
-      _len = audioStreamInfo.size.totalBytes;
-    } else {
-      _len = videoStreamInfo.size.totalBytes + audioStreamInfo.size.totalBytes;
-    }
-
-    // Start stream download, also update internal public
-    // BehaviorSubject for external access
-    await for (var data in streamData) {
-      if (cancelDownload == true) {
-        _output.close(); return null;
-      }
-      _count += data.length;
-      dataProgress.add("${(_count * 0.000001).toStringAsFixed(2)} MB / ${(_len * 0.000001).toStringAsFixed(2)} MB");
-      progressBar.add((_count / _len).toDouble());
-      print("Downloading: " + _count.toString());
-      _output.add(data);
-    }
-    await _output.flush();
-    await _output.close();
-    // Download and Paste Audio if the Previous Download was a Video
-    if (downloadType == DownloadType.VIDEO) {
-      _count = 0;
-      currentAction.add("Downloading Audio...");
-      File audioFile = File((await getTemporaryDirectory()).path + "/" + RandomString.getRandomString(10));
-      var _outputAudio = audioFile.openWrite(mode: FileMode.write);
-      Stream<List<int>> audioStreamData = yt.videos.streamsClient.get(audioStreamInfo);
-      await for (var data in audioStreamData) {
-        if (cancelDownload == true) {
-          _outputAudio.close(); return null;
-        }
-        _count += data.length;
-        dataProgress.add(
-          "${((_count + videoStreamInfo.size.totalBytes) * 0.000001).toStringAsFixed(2)} MB" +
-          " / ${(_len * 0.000001).toStringAsFixed(2)} MB"
-        );
-        progressBar.add(((_count + videoStreamInfo.size.totalBytes)/_len).toDouble());
-        print("Downloading: " + _count.toString());
-        _outputAudio.add(data);
-      }
-      await _outputAudio.flush();
-      await _outputAudio.close();
-      progressBar.add(null);
-      currentAction.add("Patching Audio...");
-      File finalFile = await converter.writeAudioToVideo(
-        saveFormat: await converter.getMediaFormat(file.path),
-        videoPath: file.path,
-        audioPath: audioFile.path,
-      );
-      if (finalFile != null) file = finalFile;
-    }
-    // Convert Audio if enabled to Requested Format
-    if (downloadType == DownloadType.AUDIO) {
-      if (convertFormat != AudioConvert.NONE) {
-        progressBar.add(null);
-        currentAction.add("Converting...");
-        File finalFile = await converter.convertAudio(
-          audioPath: file.path,
-          format: convertFormat,
-          filters: audioModifiers
-        );
-        if (finalFile != null) file = finalFile;
-      }
-    }
-    return file;
-  }
-
-  // Write Tags & Artwork
-  Future<void> writeAllMetadata(String filePath) async {
-    try {
-      await TagsManager.writeAllTags(
-        songPath: filePath,
-        title: metadata.title,
-        album: metadata.album,
-        artist: metadata.artist,
-        genre: metadata.genre,
-        year: metadata.date,
-        disc: metadata.disk,
-        track: metadata.track
-      );
-      File croppedImage;
-      if (isURL(metadata.coverurl)) {
-        var response;
-        File artwork = new File((await getTemporaryDirectory()).path +
-          "/${RandomString.getRandomString(5)}");
-        if (metadata.coverurl == videoDetails.thumbnails.mediumResUrl) {
-          try {
-            response = await http.get(videoDetails.thumbnails.maxResUrl);
-            await artwork.writeAsBytes(response.bodyBytes);
-          } catch (_) {
-            response = await http.get(videoDetails.thumbnails.mediumResUrl);
-            await artwork.writeAsBytes(response.bodyBytes);
-          }
-        } else {
-          try {
-            response = await http.get(metadata.coverurl);
-            await artwork.writeAsBytes(response.bodyBytes);
-          } catch (_) {}
-        }
-        croppedImage = await NativeMethod.cropToSquare(artwork);
-      } else {
-        croppedImage = await NativeMethod.cropToSquare(File(metadata.coverurl));
-      }
-      await TagsManager.writeArtwork(
-        songPath: filePath,
-        artworkPath: croppedImage.path
-      );
-      // Copy our CoverArt to default folder
-      await croppedImage.copy((await getApplicationDocumentsDirectory()).path +
-        "${metadata.title}.jpg");
-    } on Exception catch (e) {
-      print(e);
-    }
-  }
-
-  // Rename File to a new provided FileName this function
-  // preserves the file path and file extension.
-  Future<File> renameFile(File file, String newName) async {
-    String filePath = file.path
-      .replaceAll("/${file.path.split('/').last}", '');
-    String fileFormat = file.path.split('.').last;
-    return await file.rename("$filePath/$newName.$fileFormat");
-  }
-
 }
