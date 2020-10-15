@@ -53,7 +53,6 @@ class ManagerProvider extends ChangeNotifier {
     dateController   = new TextEditingController();
     discController   = new TextEditingController();
     trackController  = new TextEditingController();
-    homeScrollController  = new ScrollController();
     // YouTube Explode
     yt = new YoutubeInfo();
     // Database
@@ -73,7 +72,6 @@ class ManagerProvider extends ChangeNotifier {
   bool _loadingVideo;
   bool mediaStreamReady;
   bool showFloatingActionButtom;
-  ScrollController homeScrollController;
   // Downloads Screen
   List<DownloadInfoSet> _downloadInfoSetList = [];
   List<SongFile> _songFileList = [];
