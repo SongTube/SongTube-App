@@ -11,7 +11,6 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 // Internal
 import 'package:songtube/internal/models/folder.dart';
-import 'package:songtube/internal/models/songFile.dart';
 import 'package:songtube/internal/models/videoFile.dart';
 
 // Packages

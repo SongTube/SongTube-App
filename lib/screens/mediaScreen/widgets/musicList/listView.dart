@@ -6,7 +6,6 @@ import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 
 // Internal
-import 'package:songtube/internal/models/songFile.dart';
 import 'package:songtube/screens/mediaScreen/dialogs/optionsMenuDialog.dart';
 
 // Packages

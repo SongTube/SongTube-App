@@ -1,7 +1,6 @@
 // Flutter
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:songtube/internal/models/songFile.dart';
 
 // Internal
 import 'package:songtube/internal/services/playerService.dart';
