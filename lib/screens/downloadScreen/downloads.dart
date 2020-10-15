@@ -9,10 +9,10 @@ import 'package:songtube/provider/managerProvider.dart';
 
 // Packages
 import 'package:provider/provider.dart';
+import 'package:songtube/screens/downloadScreen/widgets/downloadTile.dart';
 
 // UI
-import 'package:songtube/screens/downloadScreen/downloadsEmpty.dart';
-import 'package:songtube/ui/widgets/downloadTile.dart';
+import 'package:songtube/screens/downloadScreen/widgets/downloadsEmpty.dart';
 
 class DownloadingPage extends StatefulWidget {
   @override
@@ -38,9 +38,8 @@ class _DownloadingPageState extends State<DownloadingPage> {
                     dataProgress: infoset.dataProgress.stream,
                     progressBar: infoset.progressBar.stream,
                     currentAction: infoset.currentAction.stream,
-                    title: infoset.metadata.title,
-                    author: infoset.metadata.artist,
-                    coverUrl: infoset.metadata.coverurl,
+                    metadata: infoset.metadata,
+                    downloadType: infoset.downloadType,
                     onDownloadCancel: infoset.downloaderClosed != true
                       ? infoset.cancelDownload == false
                           ? () {
