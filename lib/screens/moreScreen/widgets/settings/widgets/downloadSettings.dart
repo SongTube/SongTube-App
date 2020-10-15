@@ -2,10 +2,7 @@
 import 'dart:io';
 
 // Flutter
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 // Internal
 import 'package:songtube/provider/app_provider.dart';
@@ -14,9 +11,11 @@ import 'package:songtube/screens/moreScreen/widgets/settings/columnTile.dart';
 // Packages
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-import 'package:ext_storage/ext_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:circular_check_box/circular_check_box.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:file_picker/file_picker.dart';
 
 // UI
 import 'package:songtube/ui/dialogs/alertDialog.dart';
