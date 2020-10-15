@@ -8,9 +8,11 @@ import 'package:youtube_explode_dart/youtube_explode_dart.dart' as youtube;
 class VideoDownloadMenu extends StatelessWidget {
   final List<youtube.VideoStreamInfo> videoList;
   final Function(List<dynamic>) onOptionSelect;
+  final double audioSize;
   VideoDownloadMenu({
     @required this.videoList,
-    @required this.onOptionSelect
+    @required this.onOptionSelect,
+    @required this.audioSize
   });
   void _onOptionSelect(youtube.VideoStreamInfo video) {
     List<dynamic> list = [
@@ -72,7 +74,7 @@ class VideoDownloadMenu extends StatelessWidget {
                       ),
                     ) : Container(),
                     Text(
-                      (((videoList[index].size.totalBytes)/1024)/1024).toStringAsFixed(2) +
+                      ((((videoList[index].size.totalBytes)/1024)/1024) + audioSize).toStringAsFixed(2) +
                       "MB", style: TextStyle(fontSize: 12, fontFamily: "Varela"),
                     ),
                     Spacer(),

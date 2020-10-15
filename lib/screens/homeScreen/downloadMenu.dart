@@ -12,9 +12,11 @@ import 'package:youtube_explode_dart/youtube_explode_dart.dart' as youtube;
 class DownloadMenu extends StatefulWidget {
   final List<youtube.VideoStreamInfo> videoList;
   final Function onSettingsPressed;
+  final double audioSize;
   DownloadMenu({
     @required this.videoList,
-    @required this.onSettingsPressed
+    @required this.onSettingsPressed,
+    @required this.audioSize
   });
   @override
   _DownloadMenuState createState() => _DownloadMenuState();
@@ -203,6 +205,7 @@ class _DownloadMenuState extends State<DownloadMenu> {
                           }
                           Navigator.pop(context, list);
                         },
+                        audioSize: widget.audioSize
                       ),
                 ),
               ],

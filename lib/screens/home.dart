@@ -184,6 +184,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   }
                                 );
                               },
+                              audioSize: manager.streamManifest.audioOnly
+                                .withHighestBitrate().size.totalMegaBytes,
                             );
                           }
                         );
