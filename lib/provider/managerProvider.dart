@@ -25,7 +25,7 @@ import 'package:audio_service/audio_service.dart';
 // UI
 import 'package:songtube/ui/internal/snackbar.dart';
 
-enum LoadingStatus {Success, Loading, Failed}
+enum LoadingStatus {Success, Loading, Unload}
 
 class ManagerProvider extends ChangeNotifier {
 
@@ -151,7 +151,7 @@ class ManagerProvider extends ChangeNotifier {
   void loadHome(LoadingStatus status) {
     switch(status) {
       // Failed to get mediaStream
-      case LoadingStatus.Failed:
+      case LoadingStatus.Unload:
         showEmptyScreenWidget    = true;
         openWebviewPlayer        = false;
         loadingVideo             = false;
@@ -309,7 +309,7 @@ class ManagerProvider extends ChangeNotifier {
       videoDetails = await yt.getVideoDetails(url).timeout(Duration(seconds: 20));
       streamManifest = null;
     } catch (e) {
-      loadHome(LoadingStatus.Failed);
+      loadHome(LoadingStatus.Unload);
       return null;
     }
     updateTextControllers();

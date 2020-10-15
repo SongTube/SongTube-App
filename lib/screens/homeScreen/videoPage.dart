@@ -47,7 +47,7 @@ class _VideoPageState extends State<VideoPage> {
       key: key,
       direction: DismissDirection.startToEnd,
       onDismissed: (direction) {
-        manager.loadHome(LoadingStatus.Failed);
+        manager.loadHome(LoadingStatus.Unload);
       },
       child: FadeInTransition(
         duration: Duration(milliseconds: 400),
