@@ -17,6 +17,7 @@ import 'package:rxdart/rxdart.dart';
 class CollapsedPanel extends StatelessWidget {
   final AsyncSnapshot<ScreenState> snapshot;
   CollapsedPanel(this.snapshot);
+  //ignore: close_sinks
   final BehaviorSubject<double> _dragPositionSubject =
     BehaviorSubject.seeded(null);
   @override
