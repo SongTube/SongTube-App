@@ -31,26 +31,17 @@ class VideoPage extends StatefulWidget {
 }
 
 class _VideoPageState extends State<VideoPage> {
-
-  GlobalKey key;
-
-  @override
-  void initState() {
-    key = new GlobalKey();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
-    return Dismissible(
-      key: key,
-      direction: DismissDirection.startToEnd,
-      onDismissed: (direction) {
-        manager.loadHome(LoadingStatus.Unload);
-      },
-      child: FadeInTransition(
-        duration: Duration(milliseconds: 400),
+    return FadeInTransition(
+      duration: Duration(milliseconds: 400),
+      child: Dismissible(
+        key: GlobalKey(),
+        direction: DismissDirection.startToEnd,
+        onDismissed: (direction) {
+          manager.updateHomeScreen(LoadingStatus.Unload);
+        },
         child: ListView(
           padding: EdgeInsets.zero,
           physics: BouncingScrollPhysics(),
