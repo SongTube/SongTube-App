@@ -175,7 +175,8 @@ class ManagerProvider extends ChangeNotifier {
   // Move to Navigate Screen with a Search Intent
   void pushYoutubePage(String searchQuery) async {
     navigateIntent = searchQuery;
-    await Future.delayed((Duration(milliseconds: 50)), () => _screenIndex = 3);
+    await Future.delayed((Duration(milliseconds: 50)), () 
+      => navigateToScreen(LibraryScreen.Youtube));
     notifyListeners();
     await Future.delayed((Duration(milliseconds: 200)), () => navigateIntent = null);
   }
@@ -195,7 +196,7 @@ class ManagerProvider extends ChangeNotifier {
     if (loadingStatus == LoadingStatus.Loading) return null;
     if (PlaylistId.parsePlaylistId(url) == null) return null;
     playlistVideos = [];
-    _screenIndex = 0;
+    navigateToScreen(LibraryScreen.Home);
     updateHomeScreen(LoadingStatus.Loading, CurrentLoad.Playlist);
     try {
       playlistDetails = await youtubeInfo.getPlaylistDetails(url)
@@ -212,7 +213,7 @@ class ManagerProvider extends ChangeNotifier {
   Future<void> getVideoDetails(String url) async {
     if (loadingStatus == LoadingStatus.Loading) return null;
     if (VideoId.parseVideoId(url) == null) return null;
-    _screenIndex = 0;
+    navigateToScreen(LibraryScreen.Home);
     updateHomeScreen(LoadingStatus.Loading, CurrentLoad.SingleVideo);
     try {
       videoDetails = await youtubeInfo.getVideoDetails(url)
