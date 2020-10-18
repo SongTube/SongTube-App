@@ -41,7 +41,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     clipboardHasLink = false;
     clipboardLink = "";
-    checkClipboard();
     WidgetsBinding.instance.addObserver(
       new LifecycleEventHandler(resumeCallBack: () {
         Provider.of<ManagerProvider>(context, listen: false).handleIntent();
@@ -74,6 +73,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
+    checkClipboard();
     return Scaffold(
       body: GestureDetector(
         onTap: () {
