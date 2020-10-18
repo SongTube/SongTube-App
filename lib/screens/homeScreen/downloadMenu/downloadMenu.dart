@@ -2,8 +2,8 @@
 import 'package:flutter/material.dart';
 
 // Internal
-import 'package:songtube/screens/homeScreen/downloadMenu/videoMenu.dart';
-import 'package:songtube/screens/homeScreen/downloadMenu/audioMenu.dart';
+import 'package:songtube/screens/homeScreen/downloadMenu/components/videoMenu.dart';
+import 'package:songtube/screens/homeScreen/downloadMenu/components/audioMenu.dart';
 
 // Packages
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
@@ -11,11 +11,9 @@ import 'package:youtube_explode_dart/youtube_explode_dart.dart' as youtube;
 
 class DownloadMenu extends StatefulWidget {
   final List<youtube.VideoStreamInfo> videoList;
-  final Function onSettingsPressed;
   final double audioSize;
   DownloadMenu({
     @required this.videoList,
-    @required this.onSettingsPressed,
     @required this.audioSize
   });
   @override

@@ -3,9 +3,7 @@ import 'dart:io';
 
 // Flutter
 import 'package:flutter/material.dart';
-
-// Internal
-import 'package:songtube/provider/managerProvider.dart';
+import 'package:songtube/provider/downloadsProvider.dart';
 
 // Packages
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
@@ -15,7 +13,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 // UI
-import 'package:songtube/screens/moreScreen/widgets/settings/columnTile.dart';
+import 'package:songtube/screens/moreScreen/components/settings/columnTile.dart';
 import 'package:songtube/ui/internal/snackbar.dart';
 
 class BackupSettings extends StatelessWidget {
@@ -26,7 +24,7 @@ class BackupSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AppSnack snackbar = new AppSnack(scaffoldKey: scaffoldKey, context: context, addPadding: false);
-    ManagerProvider manager = Provider.of<ManagerProvider>(context);
+    DownloadsProvider downloadsProvider = Provider.of<DownloadsProvider>(context);
     return SettingsColumnTile(
       title: "Backup",
       icon: EvaIcons.saveOutline,
@@ -108,7 +106,7 @@ class BackupSettings extends StatelessWidget {
                     title: "Restore Completed",
                     duration: Duration(seconds: 2)
                   );
-                manager.getDatabase();
+                downloadsProvider.getDatabase();
               }
             )
           )

@@ -1,31 +1,22 @@
 // Dart
 import 'dart:async';
-import 'dart:io';
 
 // Flutter
 import 'package:flutter/material.dart';
 
 // Internal
-import 'package:songtube/internal/services/databaseService.dart';
-import 'package:songtube/internal/models/songFile.dart';
-import 'package:songtube/internal/ffmpeg/converter.dart';
-import 'package:songtube/internal/models/downloadinfoset.dart';
-import 'package:songtube/internal/models/metadata.dart';
 import 'package:songtube/internal/nativeMethods.dart';
 import 'package:songtube/internal/youtube/youtubeInfo.dart';
-import 'package:songtube/provider/app_provider.dart';
 
 // Packages
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:audio_service/audio_service.dart';
 
 // UI
 import 'package:songtube/ui/internal/snackbar.dart';
 
-enum LoadingStatus {Success, Loading, Unload}
+enum LoadingStatus { Success, Loading, Unload }
+enum CurrentLoad { None, SingleVideo, Playlist }
+enum LibraryScreen { Home, Downloads, Media, Youtube, More }
 
 class ManagerProvider extends ChangeNotifier {
 
@@ -36,27 +27,15 @@ class ManagerProvider extends ChangeNotifier {
   ManagerProvider() {
     // Variables
     showEmptyScreenWidget    = true;
-    openWebviewPlayer        = false;
-    loadingVideo             = false;
+    currentLoad              = CurrentLoad.None;
     mediaStreamReady         = false;
     showFloatingActionButtom = false;
-    showDownloadTabsStatus   = false;
+    urlController = new TextEditingController();
     // Library Scaffold Key
     _libraryScaffoldKey = new GlobalKey<ScaffoldState>();
-    screenIndex         = 0;
-    // Controllers
-    urlController    = new TextEditingController();
-    titleController  = new TextEditingController();
-    albumController  = new TextEditingController();
-    artistController = new TextEditingController();
-    genreController  = new TextEditingController();
-    dateController   = new TextEditingController();
-    discController   = new TextEditingController();
-    trackController  = new TextEditingController();
-    // YouTube Explode
-    yt = new YoutubeInfo();
-    // Database
-    getDatabase();
+    _screenIndex        = 0;
+    // YouTube Info
+    youtubeInfo = new YoutubeInfo();
   }
 
   // -------------
@@ -68,17 +47,34 @@ class ManagerProvider extends ChangeNotifier {
   int _screenIndex;
   // Home Screen
   bool showEmptyScreenWidget;
-  bool _openWebviewPlayer;
-  bool _loadingVideo;
+  CurrentLoad _currentLoad;
+  LoadingStatus loadingStatus;
   bool mediaStreamReady;
   bool showFloatingActionButtom;
-  // Downloads Screen
-  List<DownloadInfoSet> _downloadInfoSetList = [];
-  List<SongFile> _songFileList = [];
-  bool showDownloadTabsStatus;
   // Navitate Screen
   String navigateIntent;
-  // AudioService
+
+  // Change current Screen
+  void navigateToScreen(LibraryScreen screen) {
+    switch (screen) {
+      case LibraryScreen.Home:
+        _screenIndex = 0;
+        break;
+      case LibraryScreen.Downloads:
+        _screenIndex = 1;
+        break;
+      case LibraryScreen.Media:
+        _screenIndex = 2;
+        break;
+      case LibraryScreen.Youtube:
+        _screenIndex = 3;
+        break;
+      case LibraryScreen.More:
+        _screenIndex = 4;
+        break;
+    }
+    notifyListeners();
+  }  
 
   // --------------------------------
   // Current Video and StreamManifest
@@ -88,88 +84,53 @@ class ManagerProvider extends ChangeNotifier {
   // Current Channel
   Channel channelDetails;
 
+  // ----------------
+  // Current Playlist
+  // ----------------
+  Playlist playlistDetails;
+  List<Video> playlistVideos = [];
+
   // --------
   // SnackBar
   // --------
   AppSnack snackBar;
 
-  // --------
-  // Database
-  // --------
-  final dbHelper = DatabaseService.instance;
-  Future<void> getDatabase() async {
-    _songFileList = await dbHelper.getDownloadList();
-    notifyListeners();
-  }
-
   // ---------------
-  // TextControllers
+  // URL Controller
   //
   TextEditingController urlController;
-  TextEditingController titleController;
-  TextEditingController albumController;
-  TextEditingController artistController;
-  TextEditingController genreController;
-  TextEditingController dateController;
-  TextEditingController discController;
-  TextEditingController trackController;
-  String artworkController;
-  //
-  // Update TextControllers Information
-  //  
-  void updateTextControllers() {
-    titleController.text  = videoDetails.title;
-    albumController.text  = "YouTube";
-    artistController.text = videoDetails.author;
-    genreController.text  = "Any";
-    dateController.text   = "${videoDetails.uploadDate.year}/"
-                            + "${videoDetails.uploadDate.month}/"
-                            + "${videoDetails.uploadDate.day}";
-    discController.text   = "1";
-    trackController.text  = "1";
-    artworkController     = videoDetails.thumbnails.mediumResUrl;
-    notifyListeners();
-  }
-  void updateArtworkController(String artwork) {
-    artworkController = artwork;
-    notifyListeners();
-  }
   // ----------------------------------
 
   // -------------------------
   // Other Functions & Helpers
   // -------------------------
   //
-  // Add Item to Download List
-  void addItemToDownloadList(DownloadInfoSet newItem) {
-    _downloadInfoSetList.add(newItem);
-    notifyListeners();
-  }
   // Unload HomeScreen Data
-  void loadHome(LoadingStatus status) {
+  void updateHomeScreen(LoadingStatus status, [CurrentLoad type]) {
+    CurrentLoad loadingType = type == null ? CurrentLoad.None : type;
     switch(status) {
       // Failed to get mediaStream
       case LoadingStatus.Unload:
         showEmptyScreenWidget    = true;
-        openWebviewPlayer        = false;
-        loadingVideo             = false;
+        currentLoad              = loadingType;
+        loadingStatus            = LoadingStatus.Unload;
         showFloatingActionButtom = false;
         mediaStreamReady         = false;
         channelDetails           = null;
         break;
-      // Is loading mediaStream
+      // Is loading
       case LoadingStatus.Loading:
         showEmptyScreenWidget    = false;
-        openWebviewPlayer        = false;
-        loadingVideo             = true;
+        currentLoad              = loadingType;
+        loadingStatus            = LoadingStatus.Loading;
         showFloatingActionButtom = false;
         mediaStreamReady         = false;
         channelDetails           = null;
         break;
-      // mediaStream is loaded
+      // Is loaded
       case LoadingStatus.Success:
-        openWebviewPlayer        = false;
-        loadingVideo             = false;
+        currentLoad              = loadingType;
+        loadingStatus            = LoadingStatus.Success;
         showFloatingActionButtom = true;
         mediaStreamReady         = true;
         break;
@@ -179,7 +140,7 @@ class ManagerProvider extends ChangeNotifier {
   // Handle incoming intents (Links via share)
   Future<void> handleIntent() async {
     // Return if the a mediaStream is beign loaded
-    if (loadingVideo == true) return;
+    if (loadingStatus == LoadingStatus.Loading) return;
     // Handle Intent
     String url; String id;
     url = await NativeMethod.handleIntent();
@@ -189,49 +150,12 @@ class ManagerProvider extends ChangeNotifier {
     urlController.text = url; notifyListeners();
     await getVideoDetails(url);
   }
-  // Get Current MediaItem List from our SongFile List
-  List<MediaItem> getCurrentMediaItemList() {
-    List<MediaItem> list = [];
-    _songFileList.forEach((SongFile element) {
-      int hours = 0;
-      int minutes = 0;
-      int micros;
-      List<String> parts = element.duration.split(':');
-      if (parts.length > 2) {
-        hours = int.parse(parts[parts.length - 3]);
-      }
-      if (parts.length > 1) {
-        minutes = int.parse(parts[parts.length - 2]);
-      }
-      micros = (double.parse(parts[parts.length - 1]) * 1000000).round();
-      Duration duration = Duration(
-        milliseconds: Duration(
-          hours: hours,
-          minutes: minutes,
-          microseconds: micros
-        ).inMilliseconds
-      );
-      list.add(
-        new MediaItem(
-          id: element.path,
-          title: element.title,
-          album: element.album,
-          artist: element.author,
-          artUri: "file://${element.coverPath}",
-          duration: duration,
-          extras: {
-            "downloadType": element.downloadType
-          }
-        )
-      );
-    });
-    return list;
-  }
   // Handle Library WillPop
   DateTime _currentBackPressTime;
   Future<bool> handlePop(index) async {
     if (index != 0) {
-      screenIndex = 0;
+      _screenIndex = 0;
+      notifyListeners();
       return false;
     } else {
       DateTime now = DateTime.now();
@@ -251,147 +175,78 @@ class ManagerProvider extends ChangeNotifier {
   // Move to Navigate Screen with a Search Intent
   void pushYoutubePage(String searchQuery) async {
     navigateIntent = searchQuery;
-    await Future.delayed((Duration(milliseconds: 50)), () => screenIndex = 3);
+    await Future.delayed((Duration(milliseconds: 50)), () => _screenIndex = 3);
     notifyListeners();
     await Future.delayed((Duration(milliseconds: 200)), () => navigateIntent = null);
-  }
-  // Gets video thumbnail of any Video Format
-  Future<File> getVideoThumbnail(File videoFile) async {
-    String videoTitle = videoFile.path.substring(videoFile.path.lastIndexOf('/')).substring(1)
-      .replaceAll(".webm", '')
-      .replaceAll(".mp4", '')
-      .replaceAll(".avi", '')
-      .replaceAll(".3gpp", '')
-      .replaceAll(".flv", '')
-      .replaceAll(".mkv", '');
-    Directory appDir = await getApplicationDocumentsDirectory();
-    String dir = appDir.path + "/Thumbnails/";
-    if (!await Directory(dir).exists()) await Directory(dir).create(recursive: true);
-    String coverPath;
-    coverPath = dir + videoTitle
-      .replaceAll(" ", '_')
-      .replaceAll("'", '_')
-      .replaceAll("\"", '_')+ ".png";
-    if (await File(coverPath).exists()) {
-      return File(coverPath);
-    }
-    List<String> ffmpegArgs = [
-      "-y", "-i", "${videoFile.path}", "-ss", "00:00:01.000", "-vframes", "1", "$coverPath"
-    ];
-    await FlutterFFmpeg().executeWithArguments(ffmpegArgs);
-    return File(coverPath);
-  }
-  // Get Video Duration
-  Future<int> getVideoDuration(File video) async {
-    var json = await FlutterFFprobe().getMediaInformation(video.path);
-    return json['duration'];
   }
 
   // -------------------------------------
   // Info & Downloads Management Functions
   // -------------------------------------
   //
-  // YouTube Explode
-  YoutubeInfo yt;
+  // YouTube Info
+  YoutubeInfo youtubeInfo;
   // Get Channel Link
   Future<Channel> getChannel() async {
-    return await yt.getChannel(urlController.text);
+    return await youtubeInfo.getChannel(urlController.text);
+  }
+  // Get Playlist Details
+  Future<void> getPlaylistDetails(String url) async {
+    if (loadingStatus == LoadingStatus.Loading) return null;
+    if (PlaylistId.parsePlaylistId(url) == null) return null;
+    playlistVideos = [];
+    _screenIndex = 0;
+    updateHomeScreen(LoadingStatus.Loading, CurrentLoad.Playlist);
+    try {
+      playlistDetails = await youtubeInfo.getPlaylistDetails(url)
+        .timeout(Duration(seconds: 20));
+    } catch (_) {
+      updateHomeScreen(LoadingStatus.Unload);
+      return;
+    }
+    updateHomeScreen(LoadingStatus.Success, CurrentLoad.Playlist);
+    notifyListeners();
+    getPlaylistVideos(url);
   }
   // Get Video MediaStreamInfo from Id
-  Future<int> getVideoDetails(String url) async {
-    if (loadingVideo == true) return null;
+  Future<void> getVideoDetails(String url) async {
+    if (loadingStatus == LoadingStatus.Loading) return null;
     if (VideoId.parseVideoId(url) == null) return null;
-    screenIndex = 0;
-    loadHome(LoadingStatus.Loading);
+    _screenIndex = 0;
+    updateHomeScreen(LoadingStatus.Loading, CurrentLoad.SingleVideo);
     try {
-      videoDetails = await yt.getVideoDetails(url).timeout(Duration(seconds: 20));
+      videoDetails = await youtubeInfo.getVideoDetails(url)
+        .timeout(Duration(seconds: 20));
       streamManifest = null;
     } catch (e) {
-      loadHome(LoadingStatus.Unload);
-      return null;
+      updateHomeScreen(LoadingStatus.Unload);
     }
-    updateTextControllers();
-    loadHome(LoadingStatus.Success);
+    updateHomeScreen(LoadingStatus.Success, CurrentLoad.SingleVideo);
     notifyListeners();
     await Future.delayed(Duration(milliseconds: 400));
     getChannelDetails(url);
     getStreamManifest(url);
-    return 0;
   }
   // Get StreamManifest
   void getStreamManifest(String url) async {
     while (streamManifest == null) {
       try {
-        streamManifest = await yt.getVideoManifest(url).timeout(Duration(seconds: 30));
+        streamManifest =
+          await youtubeInfo.getVideoManifest(url)
+            .timeout(Duration(seconds: 30));
         notifyListeners();
       } catch (_) {}
     }
   }
   // Get Channel Details
   void getChannelDetails(String url) async {
-    channelDetails = await yt.getChannel(url);
+    channelDetails = await youtubeInfo.getChannel(url);
     notifyListeners();
   }
-  // Handle Downloads
-  void handleDownload(BuildContext context, List data) {
-    AppDataProvider appData = Provider.of<AppDataProvider>(context, listen: false);
-    DownloadType downloadType;
-    AudioConvert convertFormat;
-    MediaMetaData metadata = new MediaMetaData(
-      titleController.text
-        .replaceAll('Container.', '')
-        .replaceAll(r'\', '')
-        .replaceAll('/', '')
-        .replaceAll('*', '')
-        .replaceAll('?', '')
-        .replaceAll('"', '')
-        .replaceAll('<', '')
-        .replaceAll('>', '')
-        .replaceAll('|', ''),
-      albumController.text,
-      artistController.text,
-      genreController.text,
-      artworkController,
-      dateController.text,
-      discController.text,
-      trackController.text,
-    );
-    if (appData.audioConvertFormat == "AAC") convertFormat = AudioConvert.ToAAC;
-    if (appData.audioConvertFormat == "OGG Vorbis") convertFormat = AudioConvert.ToOGGVorbis;
-    if (appData.audioConvertFormat == "MP3") convertFormat = AudioConvert.ToMP3;
-    if (appData.enableAudioConvertion == false) convertFormat = AudioConvert.NONE;
-    String downloadPath;
-    StreamInfo audioStreamInfo;
-    StreamInfo videoStreamInfo;
-    switch (data[0]) {
-      case "Audio":
-        downloadType = DownloadType.AUDIO;
-        downloadPath = appData.audioDownloadPath;
-        audioStreamInfo = streamManifest.audioOnly.withHighestBitrate();
-        break;
-      case "Video":
-        downloadType = DownloadType.VIDEO;
-        videoStreamInfo = data[1];
-        audioStreamInfo = streamManifest.audioOnly.withHighestBitrate();
-        downloadPath = appData.videoDownloadPath;
-        convertFormat = AudioConvert.WriteAudio;
-        break;
-    }
-    DownloadInfoSet infoset = new DownloadInfoSet(
-      audioStreamInfo: audioStreamInfo,
-      videoStreamInfo: videoStreamInfo,
-      videoDetails: videoDetails,
-      metadata: metadata,
-      downloadType: downloadType,
-      downloadPath: appData.enableAlbumFolder
-        ? downloadPath + "/${metadata.album}"
-        : downloadPath,
-      convertFormat: convertFormat,
-      audioModifiers: [double.parse(data[2]), int.parse(data[3]), int.parse(data[4])],
-    );
-    addItemToDownloadList(infoset);
-    screenIndex = 1;
-    infoset.downloadMedia();
+  // Playlist Details
+  void getPlaylistVideos(String url) async {
+    playlistVideos = await youtubeInfo.getPlaylistVideos(url);
+    notifyListeners();
   }
 
   // -------------------
@@ -406,25 +261,9 @@ class ManagerProvider extends ChangeNotifier {
     notifyListeners();
   }
   // Loading Video
-  bool get loadingVideo => _loadingVideo;
-  set loadingVideo(bool value) {
-    _loadingVideo = value;
-    notifyListeners();
-  }
-  // Open WebView Player
-  bool get openWebviewPlayer => _openWebviewPlayer;
-  set openWebviewPlayer(bool value) {
-    _openWebviewPlayer = value;
-    notifyListeners();
-  }
-  List<DownloadInfoSet> get downloadInfoSetList => _downloadInfoSetList;
-  List<SongFile> get songFileList => _songFileList;
-  set downloadInfoSetList(List<DownloadInfoSet> newList) {
-    _downloadInfoSetList = newList;
-    notifyListeners();
-  }
-  set songFileList(List<SongFile> newList) {
-    _songFileList = newList;
+  CurrentLoad get currentLoad => _currentLoad;
+  set currentLoad(CurrentLoad value) {
+    _currentLoad = value;
     notifyListeners();
   }
 }

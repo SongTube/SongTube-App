@@ -7,16 +7,16 @@ import 'package:flutter/material.dart';
 // Internal
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/screens/navigateScreen/searchPage.dart';
-import 'package:songtube/screens/navigateScreen/widgets/shimmer/shimmerSearchPage.dart';
+import 'package:songtube/screens/navigateScreen/components/shimmer/shimmerSearchPage.dart';
 
 // Packages
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 import 'package:provider/provider.dart';
 
 // UI
-import 'package:songtube/ui/widgets/appBar.dart';
+import 'package:songtube/ui/components/appBar.dart';
 
-List<SearchVideo> searchResults = new List<SearchVideo>();
+List<dynamic> searchResults = new List<SearchVideo>();
 
 class Navigate extends StatefulWidget {
   final String searchQuery;
@@ -63,9 +63,7 @@ class _NavigateState extends State<Navigate> {
           return;
         }
       );
-    search.content.whereType<SearchVideo>().forEach((element) {
-      searchResults.add(element);
-    });
+    searchResults = search.content;
     if (mounted) {
       setState((){});
     }

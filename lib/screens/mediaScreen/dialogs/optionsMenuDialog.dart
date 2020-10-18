@@ -5,7 +5,7 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/nativeMethods.dart';
-import 'package:songtube/provider/managerProvider.dart';
+import 'package:songtube/provider/downloadsProvider.dart';
 import 'package:songtube/provider/mediaProvider.dart';
 
 enum DeleteFrom { downloads, music }
@@ -19,8 +19,8 @@ class MediaOptionsMenuDialog extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
-    ManagerProvider manager = Provider.of<ManagerProvider>(context);
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
+    DownloadsProvider downloadsProvider = Provider.of<DownloadsProvider>(context);
     return AlertDialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20)
@@ -44,9 +44,11 @@ class MediaOptionsMenuDialog extends StatelessWidget {
                   AudioService.stop();
                 }
               }
+              // Get List<MediaItem> from Database Songs
+              List<MediaItem> list = downloadsProvider.databaseSongs;
               if (deleteFrom == DeleteFrom.downloads) {
-                manager.getCurrentMediaItemList().removeAt(
-                  manager.getCurrentMediaItemList().indexWhere((file) => file == song)
+                list.removeAt(
+                  list.indexWhere((file) => file == song)
                 );
               } else if (deleteFrom == DeleteFrom.music) {
                 mediaProvider.listMediaItems.removeAt(

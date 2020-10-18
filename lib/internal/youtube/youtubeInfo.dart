@@ -24,6 +24,28 @@ class YoutubeInfo {
     return video;
   }
 
+  // Get playlist information by URL
+  Future<Playlist> getPlaylistDetails(String url) async {
+
+    // Playlist Details
+    Playlist playlist;
+
+    // Try get information from URL
+    try {
+      playlist = await yt.playlists.get(url);
+    } catch (_) {}
+
+    // Return Playlist Details
+    return playlist;
+  }
+
+  // Get playlist videos
+  Future<List<Video>> getPlaylistVideos(url) async {
+    return await yt.playlists
+      .getVideos(PlaylistId.parsePlaylistId(url))
+      .take(50).toList();
+  }
+
   // Get video Manifest by URL
   Future<StreamManifest> getVideoManifest(String url) async {
     StreamManifest manifest;

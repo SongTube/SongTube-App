@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:songtube/screens/navigateScreen/widgets/videoTile.dart';
+import 'package:songtube/screens/navigateScreen/components/videoTile.dart';
 
 class SearchPage extends StatelessWidget {
-  final List results;
+  final List<dynamic> results;
   SearchPage({
     @required this.results,
   });
@@ -21,7 +21,7 @@ class SearchPage extends StatelessWidget {
                 left: 12,
               ),
               child: VideoTile(
-                video: results[index],
+                searchItem: results[index],
               ),
             ),
           ],

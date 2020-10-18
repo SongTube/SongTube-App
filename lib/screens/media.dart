@@ -1,6 +1,8 @@
 // Flutter
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:provider/provider.dart';
+import 'package:songtube/provider/downloadsProvider.dart';
 
 // Internal
 import 'package:songtube/screens/mediaScreen/tabs/downloadsTab.dart';
@@ -9,7 +11,7 @@ import 'package:songtube/screens/mediaScreen/tabs/videosTab.dart';
 
 // Packages
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-import 'package:songtube/screens/mediaScreen/widgets/mediaSearchBar.dart';
+import 'package:songtube/screens/mediaScreen/components/mediaSearchBar.dart';
 
 // UI
 import 'package:songtube/ui/animations/showUp.dart';
@@ -42,6 +44,7 @@ class _MediaScreenState extends State<MediaScreen> {
         }
       }
     );
+    Provider.of<DownloadsProvider>(context, listen: false).getDatabase();
     super.initState();
   }
 

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 // Internal
 import 'package:songtube/internal/services/playerService.dart';
-import 'package:songtube/player/widgets/musicPlayer/ui/marqueeWidget.dart';
+import 'package:songtube/player/components/musicPlayer/ui/marqueeWidget.dart';
 
 // Packages
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';

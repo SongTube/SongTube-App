@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:songtube/player/widgets/musicPlayer/ui/playerArtwork.dart';
-import 'package:songtube/player/widgets/musicPlayer/ui/playerControls.dart';
+import 'package:songtube/player/components/musicPlayer/ui/playerArtwork.dart';
+import 'package:songtube/player/components/musicPlayer/ui/playerControls.dart';
 
 class PlayerBody extends StatelessWidget {
   final File artworkFile;

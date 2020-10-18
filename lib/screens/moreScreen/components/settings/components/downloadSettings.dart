@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 // Internal
 import 'package:songtube/provider/app_provider.dart';
-import 'package:songtube/screens/moreScreen/widgets/settings/columnTile.dart';
+import 'package:songtube/screens/moreScreen/components/settings/columnTile.dart';
 
 // Packages
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';

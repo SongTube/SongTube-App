@@ -10,8 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:songtube/internal/models/videoFile.dart';
 
 // Packages
-import 'package:songtube/player/widgets/videoPlayer/controls.dart';
-import 'package:songtube/player/widgets/videoPlayer/progressBar.dart';
+import 'package:songtube/player/components/videoPlayer/controls.dart';
+import 'package:songtube/player/components/videoPlayer/progressBar.dart';
 import 'package:video_player/video_player.dart';
 import 'package:wakelock/wakelock.dart';
 

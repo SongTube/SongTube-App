@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 // Internal
-import 'package:songtube/intro/widgets/introPermissions.dart';
-import 'package:songtube/intro/widgets/introReady.dart';
-import 'package:songtube/intro/widgets/introTheme.dart';
-import 'package:songtube/intro/widgets/introWelcome.dart';
+import 'package:songtube/intro/components/introPermissions.dart';
+import 'package:songtube/intro/components/introReady.dart';
+import 'package:songtube/intro/components/introTheme.dart';
+import 'package:songtube/intro/components/introWelcome.dart';
 import 'package:songtube/provider/app_provider.dart';
 
 // Packages

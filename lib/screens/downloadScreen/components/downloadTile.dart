@@ -11,7 +11,7 @@ class DownloadTile extends StatelessWidget {
   final Stream dataProgress;
   final Stream currentAction;
   final Stream progressBar;
-  final MediaMetaData metadata;
+  final DownloadMetaData metadata;
   final DownloadType downloadType;
   final Function onDownloadCancel;
   final Widget cancelDownloadIcon;

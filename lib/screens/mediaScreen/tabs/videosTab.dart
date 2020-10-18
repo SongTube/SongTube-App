@@ -10,13 +10,13 @@ import 'package:songtube/player/videoPlayer.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:songtube/provider/mediaProvider.dart';
 import 'package:provider/provider.dart';
-import 'package:songtube/screens/mediaScreen/widgets/loadingListWidget.dart';
-import 'package:songtube/screens/mediaScreen/widgets/mediaListBase.dart';
-import 'package:songtube/screens/mediaScreen/widgets/noPermissionWidget.dart';
+import 'package:songtube/screens/mediaScreen/components/loadingListWidget.dart';
+import 'package:songtube/screens/mediaScreen/components/mediaListBase.dart';
+import 'package:songtube/screens/mediaScreen/components/noPermissionWidget.dart';
 
 // UI
-import 'package:songtube/screens/mediaScreen/widgets/videoList/folderGridView.dart';
-import 'package:songtube/screens/mediaScreen/widgets/videoList/videosOnFolderListView.dart';
+import 'package:songtube/screens/mediaScreen/components/videoList/folderGridView.dart';
+import 'package:songtube/screens/mediaScreen/components/videoList/videosOnFolderListView.dart';
 
 class MediaVideoTab extends StatefulWidget {
   final String searchQuery;

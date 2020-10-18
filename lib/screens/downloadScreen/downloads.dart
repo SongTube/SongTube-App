@@ -5,14 +5,14 @@ import 'package:permission_handler/permission_handler.dart';
 
 // Internal
 import 'package:songtube/internal/models/downloadinfoset.dart';
-import 'package:songtube/provider/managerProvider.dart';
+import 'package:songtube/provider/downloadsProvider.dart';
 
 // Packages
 import 'package:provider/provider.dart';
-import 'package:songtube/screens/downloadScreen/widgets/downloadTile.dart';
+import 'package:songtube/screens/downloadScreen/components/downloadTile.dart';
 
 // UI
-import 'package:songtube/screens/downloadScreen/widgets/downloadsEmpty.dart';
+import 'package:songtube/screens/downloadScreen/components/downloadsEmpty.dart';
 
 class DownloadingPage extends StatefulWidget {
   @override
@@ -22,15 +22,16 @@ class DownloadingPage extends StatefulWidget {
 class _DownloadingPageState extends State<DownloadingPage> {
   @override
   Widget build(BuildContext context) {
-    ManagerProvider manager = Provider.of<ManagerProvider>(context);
+    DownloadsProvider downloadsProvider = Provider.of<DownloadsProvider>(context);
     return AnimatedSwitcher(
       duration: Duration(milliseconds: 200),
-      child: manager.downloadInfoSetList.isNotEmpty 
+      child: downloadsProvider.listDownloads.isNotEmpty 
         ? ListView.builder(
             physics: BouncingScrollPhysics(),
-            itemCount: manager.downloadInfoSetList.length,
+            itemCount: downloadsProvider.listDownloads.length,
             itemBuilder: (context, index) {
-              List<DownloadInfoSet> reversedList = manager.downloadInfoSetList.reversed.toList();
+              List<DownloadInfoSet> reversedList =
+                downloadsProvider.listDownloads.reversed.toList();
               DownloadInfoSet infoset = reversedList[index];
               return Padding(
                 padding: EdgeInsets.only(left: 16, right: 16, bottom: 8),
@@ -40,26 +41,25 @@ class _DownloadingPageState extends State<DownloadingPage> {
                     currentAction: infoset.currentAction.stream,
                     metadata: infoset.metadata,
                     downloadType: infoset.downloadType,
-                    onDownloadCancel: infoset.downloaderClosed != true
-                      ? infoset.cancelDownload == false
-                          ? () {
-                              infoset.cancelDownload = true;
-                              setState(() {});
-                            }
-                          : () {
-                              Permission.storage.request().then((value) {
-                                if (value == PermissionStatus.granted) {
-                                  infoset.downloadMedia();
-                                  setState((){});
-                                }
-                              });
-                            }
-                      : null,
-                    cancelDownloadIcon: infoset.downloaderClosed != true
-                    ? infoset.cancelDownload == false
-                        ? Icon(Icons.clear, size: 18)
-                        : Icon(Icons.refresh, size: 18)
-                    : Icon(Icons.clear, size: 18, color: Theme.of(context).cardColor)
+                    onDownloadCancel: infoset.downloadStatus == DownloadStatus.Completed
+                      ? null : infoset.downloadStatus == DownloadStatus.Cancelled
+                        ? () {
+                            Permission.storage.request().then((value) {
+                              if (value == PermissionStatus.granted) {
+                                infoset.downloadMedia();
+                                setState((){});
+                              }
+                            });
+                          }
+                        : () {
+                            infoset.downloadStatus = DownloadStatus.Cancelled;
+                            setState(() {});
+                          },
+                    cancelDownloadIcon: infoset.downloadStatus == DownloadStatus.Completed
+                    ? Icon(Icons.clear, size: 18, color: Theme.of(context).cardColor)
+                    : infoset.downloadStatus == DownloadStatus.Cancelled
+                      ? Icon(Icons.refresh, size: 18)
+                      : Icon(Icons.clear, size: 18)
                   )
                 );
               },

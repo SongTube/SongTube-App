@@ -2,10 +2,10 @@
 import 'package:flutter/material.dart';
 
 // Internal
-import 'package:songtube/screens/moreScreen/widgets/settings/widgets/backupSettings.dart';
-import 'package:songtube/screens/moreScreen/widgets/settings/widgets/converterSettings.dart';
-import 'package:songtube/screens/moreScreen/widgets/settings/widgets/downloadSettings.dart';
-import 'package:songtube/screens/moreScreen/widgets/settings/widgets/themeSettings.dart';
+import 'package:songtube/screens/moreScreen/components/settings/components/backupSettings.dart';
+import 'package:songtube/screens/moreScreen/components/settings/components/converterSettings.dart';
+import 'package:songtube/screens/moreScreen/components/settings/components/downloadSettings.dart';
+import 'package:songtube/screens/moreScreen/components/settings/components/themeSettings.dart';
 
 class SettingsTab extends StatefulWidget {
   

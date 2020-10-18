@@ -1,4 +1,4 @@
-class MediaMetaData {
+class DownloadMetaData {
 
   String title;
   String album;
@@ -6,10 +6,10 @@ class MediaMetaData {
   String genre;
   String coverurl;
   String date;
-  String disk;
+  String disc;
   String track;
 
-  MediaMetaData(this.title, this.album, this.artist, this.genre,
-    this.coverurl, this.date, this.disk, this.track);
+  DownloadMetaData({this.title, this.album, this.artist, this.genre,
+    this.coverurl, this.date, this.disc, this.track});
 
 }

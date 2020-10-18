@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:io';
 
 // Internal
+import 'package:songtube/internal/models/audioModifiers.dart';
 import 'package:songtube/internal/randomString.dart';
 
 // Packages
@@ -80,7 +81,7 @@ class Converter {
   Future<File> convertAudio({
     String audioPath,
     AudioConvert format,
-    List filters
+    AudioModifiers audioModifiers
   }) async {
     List<String> _argsList;
     String outDir = (await getTemporaryDirectory()).path + "/";
@@ -91,7 +92,9 @@ class Converter {
         "$audioPath",
         "-c:a", "aac",
         "-b:a", "256k",
-        "-af", "volume=${filters[0]}, bass=g=${filters[1]}, treble=g=${filters[2]}",
+        "-af", "volume=${audioModifiers.volume}, "+
+        "bass=g=${audioModifiers.bassGain}, " +
+        "treble=g=${audioModifiers.trebleGain}",
         "${output.path}.m4a",
       ];
       output = File(output.path + ".m4a");
@@ -108,7 +111,9 @@ class Converter {
       _argsList = [
         "-y", "-i", "$audioPath",
         "-c:a", "libvorbis", "-b:a", "256k",
-        "-af", "volume=${filters[0]}, bass=g=${filters[1]}, treble=g=${filters[2]}",
+        "-af", "volume=${audioModifiers.volume}, "+
+        "bass=g=${audioModifiers.bassGain}, " +
+        "treble=g=${audioModifiers.trebleGain}",
         "${output.path}.ogg"
       ];
       output = File(output.path + ".ogg");
@@ -117,7 +122,9 @@ class Converter {
       _argsList = [
         "-y", "-i", "$audioPath",
         "-c:a", "libmp3lame", "-b:a", "256k",
-        "-af", "volume=${filters[0]}, bass=g=${filters[1]}, treble=g=${filters[2]}",
+        "-af", "volume=${audioModifiers.volume}, "+
+        "bass=g=${audioModifiers.bassGain}, " +
+        "treble=g=${audioModifiers.trebleGain}",
         "${output.path}.mp3"
       ];
       output = File(output.path + ".mp3");

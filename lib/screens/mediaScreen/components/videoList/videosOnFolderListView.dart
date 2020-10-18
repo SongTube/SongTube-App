@@ -3,16 +3,15 @@ import 'dart:io';
 
 // Flutter
 import 'package:flutter/material.dart';
+import 'package:songtube/internal/ffmpeg/extractor.dart';
 
 // Internal
 import 'package:songtube/internal/models/videoFile.dart';
-import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/ui/animations/showUp.dart';
 
 // Packages
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:transparent_image/transparent_image.dart';
-import 'package:provider/provider.dart';
 
 class VideosOnFolderListView extends StatelessWidget {
   final List<VideoFile> list;
@@ -25,7 +24,6 @@ class VideosOnFolderListView extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
-    ManagerProvider manager = Provider.of<ManagerProvider>(context);
     return Scaffold(
       body: ListView.builder(
         itemCount: list.length,
@@ -52,7 +50,7 @@ class VideosOnFolderListView extends StatelessWidget {
                       child: AspectRatio(
                         aspectRatio: 16/9,
                         child: FutureBuilder<File>(
-                          future: manager.getVideoThumbnail(File(video.path)),
+                          future: FFmpegExtractor.getVideoThumbnail(File(video.path)),
                           builder: (context, AsyncSnapshot<File> thumbnail) {
                             return ClipRRect(
                               borderRadius: BorderRadius.circular(10),
@@ -76,7 +74,7 @@ class VideosOnFolderListView extends StatelessWidget {
                                         borderRadius: BorderRadius.circular(20)
                                       ),
                                       child: FutureBuilder(
-                                        future: manager.getVideoDuration(File(video.path)),
+                                        future: FFmpegExtractor.getVideoDuration(File(video.path)),
                                         builder: (context, AsyncSnapshot<int> videoDuration) {
                                           return Text(
                                             videoDuration.hasData

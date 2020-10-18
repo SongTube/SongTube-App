@@ -5,7 +5,8 @@ import 'package:flutter/services.dart';
 // Internal
 import 'package:songtube/internal/nativeMethods.dart';
 import 'package:songtube/internal/services/playerService.dart';
-import 'package:songtube/player/widgets/musicPlayer/playerPadding.dart';
+import 'package:songtube/player/components/musicPlayer/playerPadding.dart';
+import 'package:songtube/provider/downloadsProvider.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/provider/mediaProvider.dart';
 import 'package:songtube/screens/downloads.dart';
@@ -18,8 +19,8 @@ import 'package:songtube/player/musicPlayer.dart';
 // Packages
 import 'package:provider/provider.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:songtube/ui/widgets/navigationBar.dart';
-import 'package:songtube/ui/widgets/navigationItems.dart';
+import 'package:songtube/ui/components/navigationBar.dart';
+import 'package:songtube/ui/components/navigationItems.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 import 'package:audio_service/audio_service.dart';
 
@@ -85,6 +86,7 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
+    DownloadsProvider downloadsProvider = Provider.of<DownloadsProvider>(context);
     Brightness _systemBrightness = Theme.of(context).brightness;
     Brightness _statusBarBrightness = _systemBrightness == Brightness.light
       ? Brightness.dark
@@ -98,19 +100,6 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver {
         systemNavigationBarIconBrightness: _statusBarBrightness,
       ),
     );
-    manager.downloadInfoSetList.forEach((element) {
-      if (!element.currentAction.isClosed) {
-        element.currentAction.stream.listen((event) {
-          if (event == "Completed") {
-            manager.getDatabase();
-            setState(() {});
-          }
-          if (event == "Access Denied") {
-            setState(() {});
-          }
-        });
-      }
-    });
     manager.snackBar = new AppSnack(
       scaffoldKey: manager.libraryScaffoldKey,
       context: context
@@ -137,7 +126,7 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver {
                 Expanded(
                   child: AnimatedSwitcher(
                     duration: Duration(milliseconds: 250),
-                    child: currentScreen(manager)
+                    child: _currentScreen(manager)
                   ),
                 ),
                 MusicPlayerPadding()
@@ -154,7 +143,7 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver {
     );
   }
 
-  Widget currentScreen(ManagerProvider manager) {
+  Widget _currentScreen(manager) {
     if (manager.screenIndex == 0) {
       return HomeScreen();
     } else if (manager.screenIndex == 1) {

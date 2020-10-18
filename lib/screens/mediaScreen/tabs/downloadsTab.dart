@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 
 // Internal
 import 'package:songtube/internal/models/videoFile.dart';
-import 'package:songtube/provider/managerProvider.dart';
+import 'package:songtube/provider/downloadsProvider.dart';
 import 'package:songtube/internal/services/playerService.dart';
 import 'package:songtube/player/videoPlayer.dart';
 
@@ -18,23 +18,23 @@ import 'package:audio_service/audio_service.dart';
 import 'package:provider/provider.dart';
 
 // UI
-import 'package:songtube/screens/mediaScreen/widgets/downloads/downloadsEmpty.dart';
+import 'package:songtube/screens/mediaScreen/components/downloads/downloadsEmpty.dart';
 
 class MediaDownloadTab extends StatelessWidget {
   final String searchQuery;
   MediaDownloadTab(this.searchQuery);
   @override
   Widget build(BuildContext context) {
-    ManagerProvider manager = Provider.of<ManagerProvider>(context);
+    DownloadsProvider downloadsProvider = Provider.of<DownloadsProvider>(context);
     return AnimatedSwitcher(
       duration: Duration(milliseconds: 400),
-      child: manager.songFileList.isEmpty
+      child: downloadsProvider.databaseSongs.isEmpty
         ? const MediaDownloadsEmpty()
         : ListView.builder(
             physics: const AlwaysScrollableScrollPhysics(),
-            itemCount: manager.getCurrentMediaItemList().length,
+            itemCount: downloadsProvider.databaseSongs.length,
             itemBuilder: (context, index) {
-              MediaItem song = manager.getCurrentMediaItemList()[index];
+              MediaItem song = downloadsProvider.databaseSongs[index];
               if (searchQuery == "") {
                 return downloadTile(context, song, index);
               } else {
@@ -50,7 +50,7 @@ class MediaDownloadTab extends StatelessWidget {
   }
 
   Widget downloadTile(BuildContext context, MediaItem song, int index) {
-    ManagerProvider manager = Provider.of<ManagerProvider>(context);
+    DownloadsProvider downloadsProvider = Provider.of<DownloadsProvider>(context);
     return ListTile(
       title: Text(
         song.title,
@@ -113,10 +113,10 @@ class MediaDownloadTab extends StatelessWidget {
               androidEnableQueue: true,
             );
           }
-          if (listEquals(manager.getCurrentMediaItemList(), AudioService.queue) == false) {
-            await AudioService.updateQueue(manager.getCurrentMediaItemList());
+          if (listEquals(downloadsProvider.databaseSongs, AudioService.queue) == false) {
+            await AudioService.updateQueue(downloadsProvider.databaseSongs);
           }
-          await AudioService.playMediaItem(manager.getCurrentMediaItemList()[index]);
+          await AudioService.playMediaItem(downloadsProvider.databaseSongs[index]);
         } else {
           Navigator.push(
             context,

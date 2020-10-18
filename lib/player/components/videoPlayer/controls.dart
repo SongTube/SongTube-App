@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 // Internal
-import 'package:songtube/player/widgets/videoPlayer/progressBar.dart';
+import 'package:songtube/player/components/videoPlayer/progressBar.dart';
 
 // Packages
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';

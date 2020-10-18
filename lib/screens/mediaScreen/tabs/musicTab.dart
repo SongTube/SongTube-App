@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 // Internal
 import 'package:songtube/internal/services/playerService.dart';
 import 'package:songtube/provider/mediaProvider.dart';
-import 'package:songtube/screens/mediaScreen/widgets/loadingListWidget.dart';
-import 'package:songtube/screens/mediaScreen/widgets/mediaListBase.dart';
-import 'package:songtube/screens/mediaScreen/widgets/musicList/listView.dart';
-import 'package:songtube/screens/mediaScreen/widgets/noPermissionWidget.dart';
+import 'package:songtube/screens/mediaScreen/components/loadingListWidget.dart';
+import 'package:songtube/screens/mediaScreen/components/mediaListBase.dart';
+import 'package:songtube/screens/mediaScreen/components/musicList/listView.dart';
+import 'package:songtube/screens/mediaScreen/components/noPermissionWidget.dart';
 
 // Packages
 import 'package:permission_handler/permission_handler.dart';

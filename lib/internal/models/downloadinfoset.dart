@@ -4,6 +4,7 @@ import 'dart:io';
 
 // Flutter
 import 'package:flutter/material.dart';
+import 'package:songtube/internal/models/audioModifiers.dart';
 
 // Internal
 import 'package:songtube/internal/services/databaseService.dart';
@@ -23,36 +24,20 @@ import 'package:rxdart/rxdart.dart';
 import 'package:string_validator/string_validator.dart';
 
 enum DownloadType { AUDIO, VIDEO }
+enum DownloadStatus { Loading, Downloading, Converting, WrittingTags, Completed, Cancelled }
 
 class DownloadInfoSet {
 
-  // Streams
-  BehaviorSubject<String> currentAction;
-  BehaviorSubject<String> dataProgress;
-  BehaviorSubject<double> progressBar;
-
-  // Classes
-  MediaMetaData metadata;
+  // Class Initializers
+  DownloadMetaData metadata;
+  DownloadType downloadType;
+  AudioConvert convertFormat;
+  String downloadPath;
+  AudioModifiers audioModifiers;
   StreamInfo audioStreamInfo;
   StreamInfo videoStreamInfo;
   Video videoDetails;
-  Converter converter;
-
-  // Variables
-  String downloadPath;
-  DownloadType downloadType;
-  AudioConvert convertFormat;
-  List audioModifiers;
-  bool downloaderClosed;
-  bool _cancelDownload;
-  bool get cancelDownload => _cancelDownload;
-  set cancelDownload(bool value) {
-    _cancelDownload = value;
-    if (value == true) { 
-      dataProgress.add("Incompleted");
-      progressBar.add(0.0);
-    }
-  }
+  String downloadGroup;
 
   DownloadInfoSet({
     @required this.metadata,
@@ -62,39 +47,79 @@ class DownloadInfoSet {
     @required this.audioModifiers,
     @required this.audioStreamInfo,
     @required this.videoDetails,
+    @required this.downloadGroup,
     this.videoStreamInfo,
   }) {
     converter = new Converter();
     currentAction = new BehaviorSubject<String>();
     dataProgress = new BehaviorSubject<String>();
     progressBar = new BehaviorSubject<double>();
-    cancelDownload = false;
   }
-  
+
+  // Streams
+  BehaviorSubject<String> currentAction;
+  BehaviorSubject<String> dataProgress;
+  BehaviorSubject<double> progressBar;
+
+  // FFmpeg Converter
+  Converter converter;
+
+  // Variables
+  DownloadStatus downloadStatus;
+
+  // Interrupt Download
+  void _interruptDownload(String reason) {
+    currentAction.add(reason);
+    dataProgress.add("");
+    progressBar.add(0.0);
+  } 
+
+  // Check for Storage Permissions
+  Future<bool> _appHasPermissions() async {
+    var status = await Permission.storage.request();
+    if (status == PermissionStatus.granted)
+      return true;
+    else
+      return false;
+  }
+
+  // Reset Streams Values
+  void _resetStreams() {
+    currentAction.add("");
+    dataProgress.add("");
+    progressBar.add(0.0);
+  }
+
+  // Close Streams
+  void _closeStreams() {
+    currentAction.close();
+    dataProgress.close();
+    progressBar.close();
+  }
+
+  // Check our Download Path
+  Future<void> _checkDownloadPath() async {
+    Directory path = Directory(downloadPath);
+    if (!await path.exists())
+      await path.create(recursive: true);
+  }
+
   // ---------------------------------------------
   // Initialize this Media Download, automatically
   // Download, Convert, Write Metadata and Save
   // ---------------------------------------------
   Future<void> downloadMedia() async {
     // Check Storage Permissions
-    var status = await Permission.storage.request();
-    if (status != PermissionStatus.granted) {
-      currentAction.add("Access Denied");
-      dataProgress.add("Can't Download");
-      cancelDownload = true;
-      return;
-    }
+    if (!await _appHasPermissions())
+      { _interruptDownload("Access Denied"); return; }
     // Reset to Default values
-    cancelDownload = false;
-    currentAction.add("Downloading...");
-    currentAction.add(" ");
+    _resetStreams();
     // Check our Download Folder
-    if (!await Directory(downloadPath).exists()) {
-      await Directory(downloadPath).create(recursive: true);
-    }
+    await _checkDownloadPath();
     // Download File
     File downloadedFile = await downloadStream();
-    if (downloadedFile == null) cancelDownload = true;
+    if (downloadedFile == null) 
+      { downloadStatus = DownloadStatus.Cancelled; return; }
     // Rename File
     downloadedFile = await renameFile(downloadedFile, metadata.title);
     // Write All Metadata if its Audio
@@ -125,10 +150,25 @@ class DownloadInfoSet {
     );
     // YoutubeExplode Instance
     YoutubeExplode yt = new YoutubeExplode();
+    downloadStatus = DownloadStatus.Loading;
     // StreamData
     Stream<List<int>> streamData;
     if (videoStreamInfo == null) {
-      streamData = yt.videos.streamsClient.get(audioStreamInfo);
+      if (audioStreamInfo == null) {
+        currentAction.add("Getting Audio Stream...");
+        StreamManifest audioManifest;
+        try {
+          audioManifest = await yt.videos.streamsClient.getManifest(videoDetails.id)
+            .timeout(Duration(seconds: 30));
+        } catch (_) {
+          currentAction.add("Error, check your Internet");
+          return null;
+        }
+        StreamInfo audioStream = audioManifest.audioOnly.withHighestBitrate();
+        streamData = yt.videos.streamsClient.get(audioStream);
+      } else {
+        streamData = yt.videos.streamsClient.get(audioStreamInfo);
+      }
       currentAction.add("Downloading Audio...");
     } else {
       streamData = yt.videos.streamsClient.get(videoStreamInfo);
@@ -147,12 +187,13 @@ class DownloadInfoSet {
     } else {
       _len = videoStreamInfo.size.totalBytes + audioStreamInfo.size.totalBytes;
     }
+    downloadStatus = DownloadStatus.Downloading;
     // Start stream download while updating internal
     // BehaviorSubject for external access
     await for (var data in streamData) {
-      if (cancelDownload == true) {
+      if (downloadStatus == DownloadStatus.Cancelled) {
         _output.close();
-        currentAction.add("Download cancelled...");
+        _interruptDownload("Download cancelled...");
         return null;
       }
       _count += data.length;
@@ -179,9 +220,9 @@ class DownloadInfoSet {
       // Start stream download while once again updating
       // internal BehaviorSubject for external access
       await for (var data in audioStreamData) {
-        if (cancelDownload == true) {
+        if (downloadStatus == DownloadStatus.Cancelled) {
           _outputAudio.close();
-          currentAction.add("Download cancelled...");
+          _interruptDownload("Download cancelled...");
           return null;
         }
         _count += data.length;
@@ -206,7 +247,7 @@ class DownloadInfoSet {
       );
       // If convertion failed notify the User
       if (finalFile == null) {
-        currentAction.add("An issue ocurred with the Converter");
+        _interruptDownload("An issue ocurred with the Converter");
         return null;
       }
       file = finalFile;
@@ -214,15 +255,16 @@ class DownloadInfoSet {
     // Convert Audio if enabled to Requested Format
     if (downloadType == DownloadType.AUDIO) {
       if (convertFormat != AudioConvert.NONE) {
+        downloadStatus = DownloadStatus.Converting;
         progressBar.add(null);
         currentAction.add("Converting...");
         File finalFile = await converter.convertAudio(
           audioPath: file.path,
           format: convertFormat,
-          filters: audioModifiers
+          audioModifiers: audioModifiers
         );
         if (finalFile == null) {
-          currentAction.add("An issue ocurred with the Converter");
+          _interruptDownload("An issue ocurred with the Converter");
           return null;
         }
         file = finalFile;
@@ -242,6 +284,7 @@ class DownloadInfoSet {
 
   // Write Tags & Artwork
   Future<void> writeAllMetadata(String filePath) async {
+    downloadStatus = DownloadStatus.WrittingTags;
     try {
       await TagsManager.writeAllTags(
         songPath: filePath,
@@ -250,7 +293,7 @@ class DownloadInfoSet {
         artist: metadata.artist,
         genre: metadata.genre,
         year: metadata.date,
-        disc: metadata.disk,
+        disc: metadata.disc,
         track: metadata.track
       );
       File croppedImage;
@@ -312,12 +355,10 @@ class DownloadInfoSet {
       coverUrl: metadata.coverurl,
       path: finalFile.path
     ));
+    downloadStatus = DownloadStatus.Completed;
     currentAction.add("Completed");
     progressBar.add(1.0);
-    downloaderClosed = true;
     NativeMethod.registerFile(finalFile.path);
-    currentAction.close();
-    progressBar.close();
-    dataProgress.close();
+    _closeStreams();
   }
 }

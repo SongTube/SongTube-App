@@ -2,11 +2,11 @@
 import 'package:flutter/material.dart';
 
 // Internal
-import 'package:songtube/player/widgets/musicPlayer/dialogs/settingsDialog.dart';
-import 'package:songtube/player/widgets/musicPlayer/ui/marqueeWidget.dart';
-import 'package:songtube/player/widgets/musicPlayer/ui/playerSlider.dart';
-import 'package:songtube/player/widgets/musicPlayer/ui/randomButton.dart';
-import 'package:songtube/player/widgets/musicPlayer/ui/repeatButton.dart';
+import 'package:songtube/player/components/musicPlayer/dialogs/settingsDialog.dart';
+import 'package:songtube/player/components/musicPlayer/ui/marqueeWidget.dart';
+import 'package:songtube/player/components/musicPlayer/ui/playerSlider.dart';
+import 'package:songtube/player/components/musicPlayer/ui/randomButton.dart';
+import 'package:songtube/player/components/musicPlayer/ui/repeatButton.dart';
 
 // Packages
 import 'package:audio_service/audio_service.dart';

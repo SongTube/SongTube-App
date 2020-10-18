@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Internal
 import 'package:songtube/intro/introduction.dart';
+import 'package:songtube/provider/downloadsProvider.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/provider/app_provider.dart';
 import 'package:songtube/library.dart';
@@ -34,11 +35,18 @@ class Main extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<AppDataProvider>(create: (context) => AppDataProvider(
-          preferences: preloadedFs
-        )),
-        ChangeNotifierProvider<ManagerProvider>(create: (context) => ManagerProvider()),
-        ChangeNotifierProvider<MediaProvider>(create: (context) => MediaProvider())
+        ChangeNotifierProvider<AppDataProvider>(
+          create: (context) => AppDataProvider(preferences: preloadedFs)
+        ),
+        ChangeNotifierProvider<ManagerProvider>(
+          create: (context) => ManagerProvider()
+        ),
+        ChangeNotifierProvider<DownloadsProvider>(
+          create: (context) => DownloadsProvider()
+        ),
+        ChangeNotifierProvider<MediaProvider>(
+          create: (context) => MediaProvider()
+        )
       ],
       child: Builder( builder: (context) {
         AppDataProvider appData = Provider.of<AppDataProvider>(context);        
