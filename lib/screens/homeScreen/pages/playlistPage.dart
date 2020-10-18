@@ -1,19 +1,22 @@
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+// Flutter
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:provider/provider.dart';
+
+// Internal
 import 'package:songtube/provider/app_provider.dart';
 import 'package:songtube/provider/downloadsProvider.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/screens/homeScreen/components/youtubeVideoPlayer.dart';
 import 'package:songtube/screens/homeScreen/pages/components/playlistPage/pageDetails.dart';
 import 'package:songtube/screens/homeScreen/pages/components/playlistPage/videosListview.dart';
-import 'package:songtube/ui/animations/fadeIn.dart';
-import 'package:songtube/ui/components/textfieldTile.dart';
-import 'package:transparent_image/transparent_image.dart';
+
+// Packages
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+
+// UI
+import 'package:songtube/ui/animations/fadeIn.dart';
 
 class PlaylistPage extends StatelessWidget {
   @override
