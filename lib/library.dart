@@ -86,7 +86,6 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
-    DownloadsProvider downloadsProvider = Provider.of<DownloadsProvider>(context);
     Brightness _systemBrightness = Theme.of(context).brightness;
     Brightness _statusBarBrightness = _systemBrightness == Brightness.light
       ? Brightness.dark
