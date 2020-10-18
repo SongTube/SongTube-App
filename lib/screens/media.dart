@@ -44,7 +44,8 @@ class _MediaScreenState extends State<MediaScreen> {
         }
       }
     );
-    Provider.of<DownloadsProvider>(context, listen: false).getDatabase();
+    Provider.of<DownloadsProvider>
+      (context, listen: false).getDatabase();
     super.initState();
   }
 
