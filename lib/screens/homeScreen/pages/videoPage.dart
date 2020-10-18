@@ -13,7 +13,7 @@ import 'package:songtube/provider/downloadsProvider.dart';
 // Internal
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/screens/homeScreen/components/roundTile.dart';
-import 'package:songtube/screens/homeScreen/components/videoPage/videoPageFAB.dart';
+import 'package:songtube/screens/homeScreen/pages/components/videoPage/videoPageFAB.dart';
 import 'package:songtube/screens/homeScreen/downloadMenu/downloadMenu.dart';
 
 // Packages
