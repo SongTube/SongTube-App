@@ -3,6 +3,7 @@ import 'dart:async';
 
 // Flutter
 import 'package:flutter/material.dart';
+import 'package:songtube/internal/models/tagsControllers.dart';
 
 // Internal
 import 'package:songtube/internal/nativeMethods.dart';
@@ -31,6 +32,7 @@ class ManagerProvider extends ChangeNotifier {
     mediaStreamReady         = false;
     showFloatingActionButtom = false;
     urlController = new TextEditingController();
+    tagsControllers = new TagsControllers();
     // Library Scaffold Key
     _libraryScaffoldKey = new GlobalKey<ScaffoldState>();
     _screenIndex        = 0;
@@ -81,6 +83,7 @@ class ManagerProvider extends ChangeNotifier {
   // --------------------------------
   StreamManifest streamManifest;
   Video videoDetails;
+  TagsControllers tagsControllers;
   // Current Channel
   Channel channelDetails;
 
@@ -222,6 +225,7 @@ class ManagerProvider extends ChangeNotifier {
     } catch (e) {
       updateHomeScreen(LoadingStatus.Unload);
     }
+    tagsControllers.updateTextControllers(videoDetails);
     updateHomeScreen(LoadingStatus.Success, CurrentLoad.SingleVideo);
     notifyListeners();
     await Future.delayed(Duration(milliseconds: 400));
