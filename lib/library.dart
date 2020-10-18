@@ -108,7 +108,6 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver {
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         key: manager.libraryScaffoldKey,
-        resizeToAvoidBottomInset: false,
         body: SafeArea(
           child: WillPopScope(
             onWillPop: () {
