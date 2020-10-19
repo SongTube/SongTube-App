@@ -88,7 +88,7 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           title: ShowUpTransition(
             forward: true,
-            duration: Duration(milliseconds: 400),
+            duration: Duration(milliseconds: 300),
             slideSide: SlideFromSlide.TOP,
             child: HomePageSearchBar(
               showQuickSearch: manager.showSearchBar,
@@ -100,26 +100,29 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
-        body: AnimatedSwitcher(
-          duration: Duration(milliseconds: 400),
-          child: manager.showSearchBar
-            ? SearchHistoryList(
+        body: Stack(
+          children: [
+            AnimatedSwitcher(
+              duration: Duration(milliseconds: 400),
+              child: manager.showSearchBar ? SearchHistoryList(
                 onItemTap: (String searchQuery) =>
                   widget.onQuickSearch(searchQuery),
+              ) : Container(),
+            ),
+            ShowUpTransition(
+              forward: !manager.showSearchBar,
+              duration: Duration(milliseconds: 400),
+              slideSide: SlideFromSlide.BOTTOM,
+              child: HomePageBody(
+                onQuickSearchTap: () {
+                  setState(() {
+                    manager.showSearchBar = true;
+                  });
+                  quickSearchFocusNode.requestFocus();
+                },
               )
-            : ShowUpTransition(
-                forward: true,
-                duration: Duration(milliseconds: 400),
-                slideSide: SlideFromSlide.BOTTOM,
-                child: HomePageBody(
-                  onQuickSearchTap: () {
-                    setState(() {
-                      manager.showSearchBar = true;
-                    });
-                    quickSearchFocusNode.requestFocus();
-                  },
-                )
-              ),
+            ),
+          ],
         ),
         floatingActionButton: ShowUpTransition(
           forward: clipboardHasLink ? true : false,
