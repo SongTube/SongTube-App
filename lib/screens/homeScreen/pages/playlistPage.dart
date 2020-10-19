@@ -184,7 +184,7 @@ class _PlayerListBodyState extends State<PlayerListBody> {
           children: [
             Icon(EvaIcons.musicOutline, color: Colors.white),
             SizedBox(width: 8),
-            Text("Download All")
+            Text("Download All", style: TextStyle(color: Colors.white))
           ],
         ) 
       ),
