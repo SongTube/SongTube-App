@@ -51,8 +51,7 @@ class HomePageSearchBar extends StatelessWidget {
           Container(
             margin: EdgeInsets.only(right: 8, left: 16),
             child: Icon(
-              MdiIcons.youtube,
-              size: 32,
+              EvaIcons.homeOutline,
               color: Theme.of(context).accentColor
             ),
           ),
