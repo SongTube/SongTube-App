@@ -1,4 +1,6 @@
 // Flutter
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 // Internal
@@ -62,6 +64,8 @@ class AppDataProvider extends ChangeNotifier {
   bool _enableAlbumFolder;
   // Use Youtube Webview
   bool _useYoutubeWebview = false;
+  // Search History
+  List<String> _searchHistory;
   Color get accentColor => _accentColor;
   bool get systemThemeAvailable => _systemThemeAvailable;
   bool get systemThemeEnabled => _systemThemeEnabled;
@@ -135,6 +139,8 @@ class AppDataProvider extends ChangeNotifier {
     useBlurBackground = preferences.getBlurBackground();
     useExpandedArtwork = preferences.getExpandedArtwork();
     enableAlbumFolder = preferences.getEnableAlbumFolder();
+    _searchHistory = (jsonDecode(preferences.getSearchHistory())
+      as List<dynamic>).cast<String>();
   }
 
   // Converting audio format
@@ -160,6 +166,24 @@ class AppDataProvider extends ChangeNotifier {
   set enableAlbumFolder(bool value) {
     _enableAlbumFolder = value;
     preferences.saveEnableAlbumFolder(value);
+    notifyListeners();
+  }
+
+  // Search History
+  List<String> getSearchHistory() => _searchHistory;
+  void addStringtoSearchHistory(String searchQuery) {
+    if (_searchHistory.contains(searchQuery)) {
+      _searchHistory.removeWhere((element) => element == searchQuery);
+      _searchHistory.insert(0, searchQuery);
+    } else {
+      _searchHistory.insert(0, searchQuery);
+    }
+    preferences.saveSearchHistory(jsonEncode(_searchHistory));
+    notifyListeners();
+  }
+  void removeStringfromSearchHistory(int index) {
+    _searchHistory.removeAt(index);
+    preferences.saveSearchHistory(jsonEncode(_searchHistory));
     notifyListeners();
   }
 

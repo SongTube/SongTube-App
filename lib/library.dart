@@ -115,6 +115,8 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver {
                 mediaProvider.slidingPanelOpen = false;
                 mediaProvider.panelController.close();
                 return Future.value(false);
+              } else if (manager.showSearchBar) {
+                manager.showSearchBar = false;
               } else {
                 return manager.handlePop(manager.screenIndex);
               }

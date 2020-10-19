@@ -23,6 +23,9 @@ String appColor = "app_color";
 String showIntroduction = "show_introduction";
 String albumFolder = "album_folder";
 
+// Search History
+String searchHistory = "search_history";
+
 // Settings for the MusicPlayer
 String expandedArtwork = "expanded_artwork";
 String blurBackground = "blur_background";
@@ -136,6 +139,14 @@ class Preferences {
 
   void saveEnableAlbumFolder(bool value) {
     prefs.setBool(albumFolder, value);
+  }
+
+  // Search History
+  String getSearchHistory() {
+    return prefs.getString(searchHistory) ?? "[]";
+  }
+  void saveSearchHistory(String history) {
+    prefs.setString(searchHistory, history);
   }
 
   //

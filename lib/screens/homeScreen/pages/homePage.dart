@@ -6,9 +6,11 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/services.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/provider/app_provider.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/screens/homeScreen/pages/components/homePage/pageBody.dart';
 import 'package:songtube/screens/homeScreen/pages/components/homePage/searchBar.dart';
+import 'package:songtube/ui/components/searchHistory.dart';
 
 // UI
 import 'package:songtube/ui/animations/showUp.dart';
@@ -28,9 +30,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  
-  // Show QuickSearch
-  bool showQuickSearch;
 
   // TextController & FocusNode
   FocusNode quickSearchFocusNode;
@@ -52,7 +51,6 @@ class _HomePageState extends State<HomePage> {
     );
     checkClipboard();
     quickSearchFocusNode = new FocusNode();
-    showQuickSearch = false;
     super.initState();
   }
 
@@ -80,7 +78,7 @@ class _HomePageState extends State<HomePage> {
         FocusScope.of(context).unfocus();
         Future.delayed(
           Duration(milliseconds: 200), () =>
-          setState(() => showQuickSearch = false)
+          setState(() => manager.showSearchBar = false)
         );
       },
       child: Scaffold(
@@ -93,25 +91,35 @@ class _HomePageState extends State<HomePage> {
             duration: Duration(milliseconds: 400),
             slideSide: SlideFromSlide.TOP,
             child: HomePageSearchBar(
-              showQuickSearch: showQuickSearch,
+              showQuickSearch: manager.showSearchBar,
               controller: widget.controller,
               quickSearchFocusNode: quickSearchFocusNode,
-              onSearch: (String searchQuery) => widget.onQuickSearch(searchQuery),
+              onSearch: (String searchQuery) {
+                widget.onQuickSearch(searchQuery);
+              }
             ),
           ),
         ),
-        body: ShowUpTransition(
-          forward: !showQuickSearch,
+        body: AnimatedSwitcher(
           duration: Duration(milliseconds: 400),
-          slideSide: SlideFromSlide.BOTTOM,
-          child: HomePageBody(
-            onQuickSearchTap: () {
-              setState(() {
-                showQuickSearch = true;
-              });
-              quickSearchFocusNode.requestFocus();
-            },
-          )
+          child: manager.showSearchBar
+            ? SearchHistoryList(
+                onItemTap: (String searchQuery) =>
+                  widget.onQuickSearch(searchQuery),
+              )
+            : ShowUpTransition(
+                forward: true,
+                duration: Duration(milliseconds: 400),
+                slideSide: SlideFromSlide.BOTTOM,
+                child: HomePageBody(
+                  onQuickSearchTap: () {
+                    setState(() {
+                      manager.showSearchBar = true;
+                    });
+                    quickSearchFocusNode.requestFocus();
+                  },
+                )
+              ),
         ),
         floatingActionButton: ShowUpTransition(
           forward: clipboardHasLink ? true : false,

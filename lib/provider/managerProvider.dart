@@ -31,6 +31,7 @@ class ManagerProvider extends ChangeNotifier {
     currentLoad              = CurrentLoad.None;
     mediaStreamReady         = false;
     showFloatingActionButtom = false;
+    showSearchBar            = false;
     urlController = new TextEditingController();
     tagsControllers = new TagsControllers();
     // Library Scaffold Key
@@ -55,6 +56,8 @@ class ManagerProvider extends ChangeNotifier {
   bool showFloatingActionButtom;
   // Navitate Screen
   String navigateIntent;
+  // SearchBar
+  bool _showSearchBar;
 
   // Change current Screen
   void navigateToScreen(LibraryScreen screen) {
@@ -75,6 +78,7 @@ class ManagerProvider extends ChangeNotifier {
         _screenIndex = 4;
         break;
     }
+    _showSearchBar = false;
     notifyListeners();
   }  
 
@@ -263,12 +267,18 @@ class ManagerProvider extends ChangeNotifier {
   int get screenIndex => _screenIndex;
   set screenIndex(int value) {
     _screenIndex = value;
+    _showSearchBar = false;
     notifyListeners();
   }
   // Loading Video
   CurrentLoad get currentLoad => _currentLoad;
   set currentLoad(CurrentLoad value) {
     _currentLoad = value;
+    notifyListeners();
+  }
+  bool get showSearchBar => _showSearchBar;
+  set showSearchBar(bool value) {
+    _showSearchBar = value;
     notifyListeners();
   }
 }
