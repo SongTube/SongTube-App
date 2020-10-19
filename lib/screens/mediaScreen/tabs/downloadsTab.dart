@@ -2,6 +2,7 @@
 import 'dart:io';
 
 // Flutter
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -71,21 +72,42 @@ class MediaDownloadTab extends StatelessWidget {
           color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6)
         ),
       ),
-      leading: Container(
-        height: 50,
-        width: 50,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: FadeInImage(
-            fadeInDuration: Duration(milliseconds: 200),
-            placeholder: MemoryImage(kTransparentImage),
-            image: FileImage(File(song.artUri.replaceAll("file://", ""))),
-            fit: BoxFit.cover,
-          )
-        ),
+      leading: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            height: 30,
+            width: 30,
+            margin: EdgeInsets.only(right: 16),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.black12.withOpacity(0.04)
+            ),
+            child: Icon(
+              song.extras["downloadType"] == "Audio"
+                ? EvaIcons.musicOutline
+                : EvaIcons.videoOutline,
+              color: Theme.of(context).iconTheme.color,
+              size: 20,
+            ),
+          ),
+          Container(
+            height: 50,
+            width: 50,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: FadeInImage(
+                fadeInDuration: Duration(milliseconds: 200),
+                placeholder: MemoryImage(kTransparentImage),
+                image: FileImage(File(song.artUri.replaceAll("file://", ""))),
+                fit: BoxFit.cover,
+              )
+            ),
+          ),
+        ],
       ),
       trailing: IconButton(
         icon: Icon(Icons.more_vert),
