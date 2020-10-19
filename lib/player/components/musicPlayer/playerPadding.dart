@@ -9,6 +9,8 @@ import 'package:songtube/internal/services/playerService.dart';
 import 'package:audio_service/audio_service.dart';
 
 class MusicPlayerPadding extends StatelessWidget {
+  final bool searchBarOpen;
+  MusicPlayerPadding(this.searchBarOpen);
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<ScreenState>(
@@ -19,10 +21,11 @@ class MusicPlayerPadding extends StatelessWidget {
         final processingState =
           state?.processingState ?? AudioProcessingState.none;
         return Container(
-          height: processingState == AudioProcessingState.stopped ||
-            processingState == AudioProcessingState.none
-              ? 0
-              : kToolbarHeight * 1.15
+          height: searchBarOpen
+            ? 0 : processingState == AudioProcessingState.stopped ||
+              processingState == AudioProcessingState.none
+                ? 0
+                : kToolbarHeight * 1.15
         );
       }
     );

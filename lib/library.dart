@@ -117,6 +117,7 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver {
                 return Future.value(false);
               } else if (manager.showSearchBar) {
                 manager.showSearchBar = false;
+                return Future.value(false);
               } else {
                 return manager.handlePop(manager.screenIndex);
               }
@@ -129,7 +130,7 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver {
                     child: _currentScreen(manager)
                   ),
                 ),
-                MusicPlayerPadding()
+                MusicPlayerPadding(manager.showSearchBar)
               ],
             ),
           ),
