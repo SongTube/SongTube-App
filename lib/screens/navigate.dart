@@ -103,6 +103,8 @@ class _NavigateState extends State<Navigate> {
             setState(() => manager.showSearchBar = !manager.showSearchBar);
             if (manager.showSearchBar == true)
               searchNode.requestFocus();
+            else
+              searchNode.unfocus();
           },
           openSearch: manager.showSearchBar,
           onBack: () {
