@@ -14,11 +14,7 @@ class SongTubeBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(
-        left: 28,
-        right: 28,
-        top: 14
-      ),
+      padding: const EdgeInsets.all(28),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
