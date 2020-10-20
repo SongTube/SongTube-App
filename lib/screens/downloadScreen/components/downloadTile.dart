@@ -43,6 +43,7 @@ class DownloadTile extends StatelessWidget {
                 height: 90,
                 width: 160,
                 child: Stack(
+                  fit: StackFit.expand,
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(10),
