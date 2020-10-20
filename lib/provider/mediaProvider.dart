@@ -126,7 +126,10 @@ class MediaProvider extends ChangeNotifier {
           artist:   song.artist,
           duration: Duration(milliseconds: int.parse(song.duration)),
           artUri:   "file://${artworkFile.path}",
-          extras:   { "albumId": song.id }
+          extras:   {
+            "albumId": song.id,
+            "artwork": artworkFile.path
+          }
         )
       );
     }

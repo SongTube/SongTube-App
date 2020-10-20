@@ -102,7 +102,7 @@ class MediaDownloadTab extends StatelessWidget {
               child: FadeInImage(
                 fadeInDuration: Duration(milliseconds: 200),
                 placeholder: MemoryImage(kTransparentImage),
-                image: FileImage(File(song.artUri.replaceAll("file://", ""))),
+                image: FileImage(File(song.extras["artwork"])),
                 fit: BoxFit.cover,
               )
             ),

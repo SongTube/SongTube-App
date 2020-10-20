@@ -177,7 +177,8 @@ class DownloadsProvider extends ChangeNotifier {
           artUri: "file://${element.coverPath}",
           duration: duration,
           extras: {
-            "downloadType": element.downloadType
+            "downloadType": element.downloadType,
+            "artwork": element.coverPath
           }
         )
       );

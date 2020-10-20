@@ -45,7 +45,7 @@ class CollapsedPanel extends StatelessWidget {
                         width: 50,
                         fadeInDuration: Duration(milliseconds: 400),
                         placeholder: MemoryImage(kTransparentImage),
-                        image: FileImage(File(mediaItem.artUri.replaceFirst("file://", ""))),
+                        image: FileImage(File(mediaItem.extras["artwork"])),
                         fit: BoxFit.cover,
                       ),
                     ),

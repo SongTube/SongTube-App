@@ -57,7 +57,7 @@ class MusicListView extends StatelessWidget {
               child: FadeInImage(
                 fadeInDuration: Duration(milliseconds: 250),
                 placeholder: MemoryImage(kTransparentImage),
-                image: FileImage(File(song.artUri.replaceAll("file://", ""))),
+                image: FileImage(File(song.extras["artwork"])),
                 fit: BoxFit.cover,
               )
             ),
