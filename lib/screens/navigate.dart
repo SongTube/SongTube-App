@@ -74,7 +74,7 @@ class _NavigateState extends State<Navigate> {
     if (mounted) {
       if (searchQuery != null) {
         Provider.of<AppDataProvider>(context, listen: false)
-          .addStringtoSearchHistory(searchQuery);
+          .addStringtoSearchHistory(searchQuery.trim());
       }
       setState((){});
     }
