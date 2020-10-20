@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/provider/downloadsProvider.dart';
+import 'package:songtube/provider/managerProvider.dart';
 
 // Internal
 import 'package:songtube/screens/mediaScreen/tabs/downloadsTab.dart';
@@ -23,9 +24,6 @@ class MediaScreen extends StatefulWidget {
 
 class _MediaScreenState extends State<MediaScreen> {
 
-  // Show SearchBar
-  bool showSearchBar;
-
   // Search Controller and FocusNode
   TextEditingController searchController;
   FocusNode searchNode;
@@ -35,7 +33,6 @@ class _MediaScreenState extends State<MediaScreen> {
 
   @override
   void initState() {
-    showSearchBar = false;
     searchController = new TextEditingController();
     searchNode = new FocusNode();
     KeyboardVisibility.onChange.listen((bool visible) {
@@ -51,6 +48,7 @@ class _MediaScreenState extends State<MediaScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ManagerProvider manager = Provider.of<ManagerProvider>(context);
     return DefaultTabController(
       initialIndex: 1,
       length: 3,
@@ -67,7 +65,7 @@ class _MediaScreenState extends State<MediaScreen> {
             slideSide: SlideFromSlide.TOP,
             child: AnimatedSwitcher(
               duration: Duration(milliseconds: 250),
-              child: !showSearchBar ? Row(
+              child: !manager.showSearchBar ? Row(
                 children: [
                   Container(
                     margin: EdgeInsets.only(right: 8, left: 16),
@@ -92,8 +90,9 @@ class _MediaScreenState extends State<MediaScreen> {
                     ),
                     onPressed: () {
                       setState(() {
-                        showSearchBar = !showSearchBar;
-                        if (showSearchBar == true) searchNode.requestFocus();
+                        manager.showSearchBar = true;
+                        if (manager.showSearchBar == true)
+                          searchNode.requestFocus();
                       });
                     },
                   ),
@@ -115,7 +114,6 @@ class _MediaScreenState extends State<MediaScreen> {
             unselectedLabelColor: Theme.of(context).textTheme.bodyText1.color,
             indicatorSize: TabBarIndicatorSize.label,
             indicatorColor: Theme.of(context).accentColor,
-            onTap: (_) => setState(() => showSearchBar = false),
             tabs: [
               Tab(child: Text(
                 "Downloads",
