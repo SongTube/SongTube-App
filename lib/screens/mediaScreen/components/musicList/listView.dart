@@ -51,9 +51,11 @@ class _MusicListViewState extends State<MusicListView> {
       physics: AlwaysScrollableScrollPhysics(),
       initialItemCount: widget.listSongs.length,
       key: listState,
-      itemBuilder: (context, index, animator) { 
-        MediaItem song = widget.listSongs[index];
-        return songTile(animator, song, index);
+      itemBuilder: (context, index, animator) {
+        if (index+1 <= widget.listSongs.length) {
+          MediaItem song = widget.listSongs[index];
+          return songTile(animator, song, index);
+        } else {return Container();}
       },
     );
   }
