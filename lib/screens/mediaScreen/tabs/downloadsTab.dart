@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 
 // Internal
 import 'package:songtube/internal/models/videoFile.dart';
+import 'package:songtube/internal/nativeMethods.dart';
 import 'package:songtube/provider/downloadsProvider.dart';
 import 'package:songtube/internal/services/playerService.dart';
 import 'package:songtube/player/videoPlayer.dart';
@@ -117,7 +118,20 @@ class MediaDownloadTab extends StatelessWidget {
             context: context,
             builder: (context) => MediaOptionsMenuDialog(
               song: song,
-              deleteFrom: DeleteFrom.downloads,
+              onDelete: () async {
+                Navigator.pop(context);
+                if (AudioService.playbackState.playing) {
+                  if (AudioService.currentMediaItem.id == song.id) {
+                    AudioService.stop();
+                  }
+                }
+                // Get List<MediaItem> from Database Songs
+                downloadsProvider.databaseSongs.removeAt(
+                  downloadsProvider.databaseSongs.indexWhere((file) => file == song)
+                );
+                await File(song.id).delete();
+                NativeMethod.registerFile(song.id);
+              },
             )
           );
         },
