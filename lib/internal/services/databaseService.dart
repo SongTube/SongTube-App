@@ -2,6 +2,7 @@
 import 'dart:io';
 
 // Internal
+import 'package:songtube/internal/ffmpeg/artworkGenerator.dart';
 import 'package:songtube/internal/models/songFile.dart';
 import 'package:songtube/internal/tagsManager.dart';
 
@@ -88,10 +89,14 @@ class DatabaseService {
       SongFile songFile = SongFile.fromMap(element);
       if (await File(songFile.path).exists()) {
         File coverPath = File((await getApplicationDocumentsDirectory()).path +
-          "${songFile.title}.jpg");
+          "/${songFile.title}.jpg");
         if (!await coverPath.exists()) {
-          File croppedImage = await TagsManager.generateCover(songFile.coverUrl);
-          await croppedImage.copy(coverPath.path);
+          File coverImage =
+            await ArtworkGenerator.generateThumbnailWithFFmpeg(File(songFile.path));
+          if (!await coverImage.exists()) {
+            coverImage = await TagsManager.generateCover(songFile.coverUrl);
+          }
+          await coverImage.copy(coverPath.path);
         }
         songFile.coverPath = coverPath.path;
         list.add(songFile);

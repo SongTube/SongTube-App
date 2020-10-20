@@ -352,7 +352,7 @@ class DownloadInfoSet {
         ? "Audio"
         : "Video",
       fileSize: ((await finalFile.length()) * 0.000001).toStringAsFixed(2),
-      coverUrl: metadata.coverurl,
+      coverUrl: videoDetails.thumbnails.mediumResUrl,
       path: finalFile.path
     ));
     downloadStatus = DownloadStatus.Completed;
