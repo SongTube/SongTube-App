@@ -11,14 +11,11 @@ class SearchPage extends StatelessWidget {
     return ListView.builder(
       itemCount: results.length,
       itemBuilder: (context, index) {
-        var video = results[index];
         return Column(
           children: [
             Padding(
               padding: EdgeInsets.only(
-                top: video == results.first ? 10 : 5,
-                bottom: video == results.last ? 10 : 5,
-                left: 12,
+                bottom: index+1 == results.length ? 10 : 0,
               ),
               child: VideoTile(
                 searchItem: results[index],

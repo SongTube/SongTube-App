@@ -26,6 +26,9 @@ String albumFolder = "album_folder";
 // Search History
 String searchHistory = "search_history";
 
+// Navigate ChannelLogo Cache
+String channelLogo = "channel_logo";
+
 // Settings for the MusicPlayer
 String expandedArtwork = "expanded_artwork";
 String blurBackground = "blur_background";
@@ -147,6 +150,14 @@ class Preferences {
   }
   void saveSearchHistory(String history) {
     prefs.setString(searchHistory, history);
+  }
+
+  // Navigate ChannelLogo Cache
+  String getChannelLogos() {
+    return prefs.getString(channelLogo) ?? "{}";
+  }
+  void saveChannelLogos(String json) {
+    prefs.setString(channelLogo, json);
   }
 
   //

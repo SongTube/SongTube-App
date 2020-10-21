@@ -55,22 +55,16 @@ class _NavigateState extends State<Navigate> {
     errorSearching = false;
     searchResults.clear();
     setState(() {});
-    SearchQuery search = await yt.search
-      .queryFromPage(
+    var search = await yt.search
+      .getVideosFromPage(
         searchQuery == null
           ? String.fromCharCodes(Iterable.generate(
               1, (_) => 'qwertyuiopasdfghjlcvbnm'
               .codeUnitAt(Random().nextInt('qwertyuiopasdfgjlcvbnm'.length))
             ))
           : searchQuery
-      ).timeout(
-        Duration(seconds: 20),
-        onTimeout: () {
-          setState(() => errorSearching = true);
-          return;
-        }
-      );
-    searchResults = search.content;
+      ).take(20).toList();
+    searchResults = search;
     if (mounted) {
       if (searchQuery != null) {
         Provider.of<AppDataProvider>(context, listen: false)

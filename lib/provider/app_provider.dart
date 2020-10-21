@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:songtube/internal/models/channelLogo.dart';
 
 // Internal
 import 'package:songtube/internal/preferences.dart';
@@ -82,6 +83,8 @@ class AppDataProvider extends ChangeNotifier {
   bool get enableAlbumFolder => _enableAlbumFolder;
   // Use Youtube Webview
   bool get useYoutubeWebview => _useYoutubeWebview;
+  // Navigate ChannelLogo Cache
+  List<ChannelLogo> _channelLogos;
 
   set systemThemeAvailable(bool value){
     _systemThemeAvailable = value;
@@ -141,6 +144,7 @@ class AppDataProvider extends ChangeNotifier {
     enableAlbumFolder = preferences.getEnableAlbumFolder();
     _searchHistory = (jsonDecode(preferences.getSearchHistory())
       as List<dynamic>).cast<String>();
+    _channelLogos = ChannelLogo.fromJsonArray(preferences.getChannelLogos());
   }
 
   // Converting audio format
@@ -185,6 +189,18 @@ class AppDataProvider extends ChangeNotifier {
     _searchHistory.removeAt(index);
     preferences.saveSearchHistory(jsonEncode(_searchHistory));
     notifyListeners();
+  }
+
+  // Navigate ChannelLogo Cache
+  List<ChannelLogo> get channelLogos => _channelLogos;
+  set channelLogos(List<ChannelLogo> newList) {
+    _channelLogos = newList;
+    preferences.saveChannelLogos(ChannelLogo.listToJson(newList));
+    notifyListeners();
+  }
+  void addItemtoChannelLogoList(ChannelLogo item) {
+    _channelLogos.add(item);
+    preferences.saveChannelLogos(ChannelLogo.listToJson(_channelLogos));
   }
 
   //
