@@ -1,6 +1,7 @@
 // Flutter
 import 'dart:isolate';
 
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:songtube/internal/models/channelLogo.dart';
@@ -67,22 +68,45 @@ class _VideoTileState extends State<VideoTile> {
                   ? getVideoThumbnailLink()
                   : getPlaylistThumbnailLink(widget.searchItem),
                 builder: (context, snapshot) {
-                  return Container(
-                    margin: EdgeInsets.only(
-                      left: 12,
-                      right: 12,
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: FadeInImage(
-                        fadeInDuration: Duration(milliseconds: 200),
-                        placeholder: MemoryImage(kTransparentImage),
-                        image: snapshot.hasData
-                          ? NetworkImage(snapshot.data)
-                          : MemoryImage(kTransparentImage),
-                        fit: BoxFit.cover,
+                  return Stack(
+                    alignment: Alignment.bottomCenter,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(
+                          left: 12,
+                          right: 12,
+                        ),
+                        height: double.infinity,
+                        width: double.infinity,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(5),
+                          child: FadeInImage(
+                            fadeInDuration: Duration(milliseconds: 200),
+                            placeholder: MemoryImage(kTransparentImage),
+                            image: snapshot.hasData
+                              ? NetworkImage(snapshot.data)
+                              : MemoryImage(kTransparentImage),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                       ),
-                    ),
+                      if (widget.searchItem is SearchPlaylist)
+                      Container(
+                          height: 25,
+                            margin: EdgeInsets.only(
+                            left: 12,
+                            right: 12,
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: Colors.black.withOpacity(0.4),
+                          ),
+                          child: Center(
+                            child: Icon(EvaIcons.musicOutline,
+                              color: Colors.white, size: 20),
+                          ),
+                        )
+                    ],
                   );
                 }
               ),
