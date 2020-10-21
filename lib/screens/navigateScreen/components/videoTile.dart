@@ -29,7 +29,13 @@ class VideoTile extends StatefulWidget {
     await for (var message in childReceivePort) {
       String videoId = message[0];
       SendPort replyPort = message[1];
-      Channel channel = await YoutubeExplode().channels.getByVideo(videoId);
+      Channel channel;
+      try {
+        channel = await YoutubeExplode().channels.getByVideo(videoId);
+      } catch (_) {
+        replyPort.send("");
+        break;
+      }
       replyPort.send(channel.logoUrl);
       break;
     }
@@ -178,6 +184,7 @@ class _VideoTileState extends State<VideoTile> {
       ReceivePort responsePort = ReceivePort();
       childSendPort.send(["${video.videoId}", responsePort.sendPort]);
       String url = await responsePort.first;
+      if (url == "") return null;
       if ((appData.channelLogos.singleWhere((it) => it.name == video.videoAuthor,
           orElse: () => null)) != null) {
         print("logo Exist");
