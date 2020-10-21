@@ -69,7 +69,6 @@ class _VideoTileState extends State<VideoTile> {
                 builder: (context, snapshot) {
                   return Container(
                     margin: EdgeInsets.only(
-                      top: 16,
                       left: 12,
                       right: 12,
                     ),

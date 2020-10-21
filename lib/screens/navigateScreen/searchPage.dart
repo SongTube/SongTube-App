@@ -10,16 +10,12 @@ class SearchPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: results.length,
+      itemExtent: 310,
       itemBuilder: (context, index) {
         return Column(
           children: [
-            Padding(
-              padding: EdgeInsets.only(
-                bottom: index+1 == results.length ? 10 : 0,
-              ),
-              child: VideoTile(
-                searchItem: results[index],
-              ),
+            VideoTile(
+              searchItem: results[index],
             ),
           ],
         );
