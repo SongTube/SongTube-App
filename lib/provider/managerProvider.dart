@@ -18,6 +18,7 @@ import 'package:songtube/ui/internal/snackbar.dart';
 enum LoadingStatus { Success, Loading, Unload }
 enum CurrentLoad { None, SingleVideo, Playlist }
 enum LibraryScreen { Home, Downloads, Media, Youtube, More }
+enum LinkType { Video, Playlist }
 
 class ManagerProvider extends ChangeNotifier {
 
@@ -149,13 +150,18 @@ class ManagerProvider extends ChangeNotifier {
     // Return if the a mediaStream is beign loaded
     if (loadingStatus == LoadingStatus.Loading) return;
     // Handle Intent
-    String url; String id;
-    url = await NativeMethod.handleIntent();
+    String url = await NativeMethod.handleIntent();
     if (url == null) return;
-    id = VideoId.parseVideoId(url);
-    if (id == null) return;
-    urlController.text = url; notifyListeners();
-    await getVideoDetails(url);
+    if (PlaylistId.parsePlaylistId(url) != null) {
+      urlController.text = url;
+      notifyListeners();
+      await getPlaylistDetails(url);
+    }
+    if (VideoId.parseVideoId(url) != null) {
+      urlController.text = url;
+      notifyListeners();
+      await getVideoDetails(url);
+    }
   }
   // Handle Library WillPop
   DateTime _currentBackPressTime;

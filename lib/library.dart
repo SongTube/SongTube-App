@@ -3,10 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 // Internal
-import 'package:songtube/internal/nativeMethods.dart';
 import 'package:songtube/internal/services/playerService.dart';
 import 'package:songtube/player/components/musicPlayer/playerPadding.dart';
-import 'package:songtube/provider/downloadsProvider.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/provider/mediaProvider.dart';
 import 'package:songtube/screens/downloads.dart';
@@ -21,8 +19,8 @@ import 'package:provider/provider.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:songtube/ui/components/navigationBar.dart';
 import 'package:songtube/ui/components/navigationItems.dart';
-import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 import 'package:audio_service/audio_service.dart';
+import 'package:songtube/ui/internal/lifecycleEvents.dart';
 
 // UI
 import 'package:songtube/ui/internal/snackbar.dart';
@@ -46,7 +44,7 @@ class Library extends StatefulWidget {
   _LibraryState createState() => _LibraryState();
 }
 
-class _LibraryState extends State<Library> with WidgetsBindingObserver {
+class _LibraryState extends State<Library> {
 
   @override
   void initState() {
@@ -55,6 +53,12 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver {
     KeyboardVisibility.onChange.listen((bool visible) {
         if (visible == false) FocusScope.of(context).unfocus();
       }
+    );
+    WidgetsBinding.instance.addObserver(
+      new LifecycleEventHandler(resumeCallBack: () {
+        Provider.of<ManagerProvider>(context, listen: false).handleIntent();
+        return;
+      })
     );
     Provider.of<MediaProvider>(context, listen: false).loadSongList();
     Provider.of<MediaProvider>(context, listen: false).loadVideoList();
@@ -68,17 +72,6 @@ class _LibraryState extends State<Library> with WidgetsBindingObserver {
         androidNotificationIcon: 'drawable/ic_stat_music_note',
         androidEnableQueue: true,
       );
-    }
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) async {
-    if (state == AppLifecycleState.resumed) {
-      String _url; String _id;
-      await NativeMethod.handleIntent().then((resultText) => _url = resultText);
-      if (_url == null) return;
-      _id = VideoId.parseVideoId(_url);
-      if (_id == null) return;
     }
   }
 

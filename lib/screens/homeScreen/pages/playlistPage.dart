@@ -178,6 +178,7 @@ class _PlayerListBodyState extends State<PlayerListBody> {
             album: albumController.text,
             artist: artistController.text
           );
+          manager.navigateToScreen(LibraryScreen.Downloads);
         },
         backgroundColor: Theme.of(context).accentColor,
         label: Row(

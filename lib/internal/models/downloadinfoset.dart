@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:io';
 
 // Flutter
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:songtube/internal/models/audioModifiers.dart';
 
@@ -37,7 +38,9 @@ class DownloadInfoSet {
   StreamInfo audioStreamInfo;
   StreamInfo videoStreamInfo;
   Video videoDetails;
-  String downloadGroup;
+  String downloadId;
+  Function(String) completedCallback;
+  Function(String) cancelledCallback;
 
   DownloadInfoSet({
     @required this.metadata,
@@ -47,16 +50,24 @@ class DownloadInfoSet {
     @required this.audioModifiers,
     @required this.audioStreamInfo,
     @required this.videoDetails,
-    @required this.downloadGroup,
+    @required this.downloadId,
+    @required this.completedCallback,
+    @required this.cancelledCallback,
     this.videoStreamInfo,
   }) {
     converter = new Converter();
+    downloadStatus = new BehaviorSubject<DownloadStatus>();
     currentAction = new BehaviorSubject<String>();
     dataProgress = new BehaviorSubject<String>();
     progressBar = new BehaviorSubject<double>();
+    cancelDownload = false;
+    downloadStatus.add(DownloadStatus.Loading);
+    currentAction.add("Queued");
+    progressBar.add(0.0);
   }
 
   // Streams
+  BehaviorSubject<DownloadStatus> downloadStatus;
   BehaviorSubject<String> currentAction;
   BehaviorSubject<String> dataProgress;
   BehaviorSubject<double> progressBar;
@@ -64,8 +75,8 @@ class DownloadInfoSet {
   // FFmpeg Converter
   Converter converter;
 
-  // Variables
-  DownloadStatus downloadStatus;
+  // Cancel Download
+  bool cancelDownload;
 
   // Interrupt Download
   void _interruptDownload(String reason) {
@@ -88,10 +99,12 @@ class DownloadInfoSet {
     currentAction.add("");
     dataProgress.add("");
     progressBar.add(0.0);
+    cancelDownload = false;
   }
 
   // Close Streams
   void _closeStreams() {
+    downloadStatus.close();
     currentAction.close();
     dataProgress.close();
     progressBar.close();
@@ -110,16 +123,22 @@ class DownloadInfoSet {
   // ---------------------------------------------
   Future<void> downloadMedia() async {
     // Check Storage Permissions
-    if (!await _appHasPermissions())
-      { _interruptDownload("Access Denied"); return; }
+    if (!await _appHasPermissions()) {
+      _interruptDownload("Access Denied");
+      cancelledCallback(downloadId);
+      return;
+    }
     // Reset to Default values
     _resetStreams();
     // Check our Download Folder
     await _checkDownloadPath();
     // Download File
     File downloadedFile = await downloadStream();
-    if (downloadedFile == null) 
-      { downloadStatus = DownloadStatus.Cancelled; return; }
+    if (downloadedFile == null) {
+      downloadStatus.add(DownloadStatus.Cancelled);
+      cancelledCallback(downloadId);
+      return;
+    }
     // Rename File
     downloadedFile = await renameFile(downloadedFile, metadata.title);
     // Write All Metadata if its Audio
@@ -136,6 +155,7 @@ class DownloadInfoSet {
         String fileName = downloadedFile.path.split("/").last;
         File finalFile = await downloadedFile.copy("$downloadPath/$fileName");
         await finishDownload(finalFile);
+        completedCallback(downloadId);
       }
     });
   }
@@ -150,7 +170,7 @@ class DownloadInfoSet {
     );
     // YoutubeExplode Instance
     YoutubeExplode yt = new YoutubeExplode();
-    downloadStatus = DownloadStatus.Loading;
+    downloadStatus.add(DownloadStatus.Loading);
     // StreamData
     Stream<List<int>> streamData;
     if (videoStreamInfo == null) {
@@ -164,8 +184,8 @@ class DownloadInfoSet {
           currentAction.add("Error, check your Internet");
           return null;
         }
-        StreamInfo audioStream = audioManifest.audioOnly.withHighestBitrate();
-        streamData = yt.videos.streamsClient.get(audioStream);
+        audioStreamInfo = audioManifest.audioOnly.withHighestBitrate();
+        streamData = yt.videos.streamsClient.get(audioStreamInfo);
       } else {
         streamData = yt.videos.streamsClient.get(audioStreamInfo);
       }
@@ -187,12 +207,13 @@ class DownloadInfoSet {
     } else {
       _len = videoStreamInfo.size.totalBytes + audioStreamInfo.size.totalBytes;
     }
-    downloadStatus = DownloadStatus.Downloading;
+    downloadStatus.add(DownloadStatus.Downloading);
     // Start stream download while updating internal
     // BehaviorSubject for external access
     await for (var data in streamData) {
-      if (downloadStatus == DownloadStatus.Cancelled) {
+      if (cancelDownload == true) {
         _output.close();
+        downloadStatus.add(DownloadStatus.Cancelled);
         _interruptDownload("Download cancelled...");
         return null;
       }
@@ -220,8 +241,9 @@ class DownloadInfoSet {
       // Start stream download while once again updating
       // internal BehaviorSubject for external access
       await for (var data in audioStreamData) {
-        if (downloadStatus == DownloadStatus.Cancelled) {
+        if (cancelDownload == true) {
           _outputAudio.close();
+          downloadStatus.add(DownloadStatus.Cancelled);
           _interruptDownload("Download cancelled...");
           return null;
         }
@@ -255,7 +277,7 @@ class DownloadInfoSet {
     // Convert Audio if enabled to Requested Format
     if (downloadType == DownloadType.AUDIO) {
       if (convertFormat != AudioConvert.NONE) {
-        downloadStatus = DownloadStatus.Converting;
+        downloadStatus.add(DownloadStatus.Converting);
         progressBar.add(null);
         currentAction.add("Converting...");
         File finalFile = await converter.convertAudio(
@@ -284,7 +306,7 @@ class DownloadInfoSet {
 
   // Write Tags & Artwork
   Future<void> writeAllMetadata(String filePath) async {
-    downloadStatus = DownloadStatus.WrittingTags;
+    downloadStatus.add(DownloadStatus.WrittingTags);
     try {
       await TagsManager.writeAllTags(
         songPath: filePath,
@@ -355,7 +377,7 @@ class DownloadInfoSet {
       coverUrl: videoDetails.thumbnails.mediumResUrl,
       path: finalFile.path
     ));
-    downloadStatus = DownloadStatus.Completed;
+    downloadStatus.add(DownloadStatus.Completed);
     currentAction.add("Completed");
     progressBar.add(1.0);
     NativeMethod.registerFile(finalFile.path);

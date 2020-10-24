@@ -1,12 +1,9 @@
 // Dart
 import 'dart:io';
 
-import 'package:intl/intl.dart';
-
 // Flutter
 import 'package:flutter/material.dart';
 import 'package:songtube/internal/models/metadata.dart';
-import 'package:songtube/internal/models/tagsControllers.dart';
 import 'package:songtube/provider/app_provider.dart';
 import 'package:songtube/provider/downloadsProvider.dart';
 

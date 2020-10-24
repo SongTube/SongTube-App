@@ -37,6 +37,7 @@ class _HomePageState extends State<HomePage> {
   // ClipBoard Data
   bool clipboardHasLink;
   String clipboardLink;
+  LinkType linkType;
 
   @override
   void initState() {
@@ -44,7 +45,6 @@ class _HomePageState extends State<HomePage> {
     clipboardLink = "";
     WidgetsBinding.instance.addObserver(
       new LifecycleEventHandler(resumeCallBack: () {
-        Provider.of<ManagerProvider>(context, listen: false).handleIntent();
         checkClipboard();
         return;
       })
@@ -61,11 +61,17 @@ class _HomePageState extends State<HomePage> {
       setState(() => clipboardHasLink = false);
       return;
     }
-    if (VideoId.parseVideoId(data.text) == null) {
-      clipboardLink = "";
-      setState(() => clipboardHasLink = false);
+    if (PlaylistId.parsePlaylistId(data.text) != null) {
+      clipboardLink = PlaylistId.parsePlaylistId(data.text);
+      linkType = LinkType.Playlist;
+      setState(() => clipboardHasLink = true);
+    } else if (VideoId.parseVideoId(data.text) != null) {
+      clipboardLink = VideoId.parseVideoId(data.text);
+      linkType = LinkType.Video;
+      setState(() => clipboardHasLink = true);
     } else {
-      clipboardLink = data.text;
+      clipboardLink = "";
+      linkType = null;
       setState(() => clipboardHasLink = true);
     }
   }
@@ -135,7 +141,9 @@ class _HomePageState extends State<HomePage> {
               color: Theme.of(context).accentColor
             ),
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            onPressed: () => manager.getVideoDetails(clipboardLink)
+            onPressed: () => linkType == LinkType.Playlist
+              ? manager.getPlaylistDetails(clipboardLink)
+              : manager.getVideoDetails(clipboardLink),
           ),
         ),
       ),

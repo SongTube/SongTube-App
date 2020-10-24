@@ -13,7 +13,10 @@ import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 class DownloadsProvider extends ChangeNotifier {
 
   DownloadsProvider() {
-    listDownloads = new List<DownloadInfoSet>();
+    queueList = new List<DownloadInfoSet>();
+    downloadingList = new List<DownloadInfoSet>();
+    completedList = new List<DownloadInfoSet>();
+    cancelledList = new List<DownloadInfoSet>();
     databaseSongs = new List<MediaItem>();
     getDatabase();
   }
@@ -21,8 +24,17 @@ class DownloadsProvider extends ChangeNotifier {
   // List Songs on Database
   List<MediaItem> databaseSongs;
 
-  // List Current Downloads
-  List<DownloadInfoSet> listDownloads;
+  // Queue List
+  List<DownloadInfoSet> queueList;
+
+  // Downloading List
+  List<DownloadInfoSet> downloadingList;
+
+  // Completed List
+  List<DownloadInfoSet> completedList;
+
+  // Cancelled List
+  List<DownloadInfoSet> cancelledList;
 
   // --------
   // Database
@@ -31,13 +43,6 @@ class DownloadsProvider extends ChangeNotifier {
   Future<void> getDatabase() async {
     List<SongFile> tmp = await dbHelper.getDownloadList();
     databaseSongs = convertToMediaItem(tmp);
-    notifyListeners();
-  }
-
-  // Add new Download to List and Start Downloading
-  void addNewDownload(DownloadInfoSet download) {
-    listDownloads.add(download);
-    listDownloads.last.downloadMedia();
     notifyListeners();
   }
 
@@ -88,9 +93,20 @@ class DownloadsProvider extends ChangeNotifier {
         bassGain: int.parse(data[3]),
         trebleGain: int.parse(data[4])
       ),
-      downloadGroup: RandomString.getRandomString(6)
+      downloadId: RandomString.getRandomString(6),
+      completedCallback: (String downloadId) {
+        moveToCompleted(downloadId);
+        checkQueue();
+      },
+      cancelledCallback: (String downloadId) {
+        moveToCancelled(downloadId);
+      }
     );
-    addNewDownload(download);
+    downloadingList.add(download);
+    int index = downloadingList.indexWhere((element)
+      => element.downloadId == download.downloadId);
+    downloadingList[index].downloadMedia();
+    notifyListeners();
   }
 
   // Handle Playlist Downloads
@@ -105,9 +121,8 @@ class DownloadsProvider extends ChangeNotifier {
     if (currentAppData.audioConvertFormat == "OGG Vorbis") convertFormat = AudioConvert.ToOGGVorbis;
     if (currentAppData.audioConvertFormat == "MP3") convertFormat = AudioConvert.ToMP3;
     if (currentAppData.enableAudioConvertion == false) convertFormat = AudioConvert.NONE;
-    String downloadGroup = RandomString.getRandomString(10);
     listVideos.forEach((video) {
-      addNewDownload(
+      queueList.add(
         new DownloadInfoSet(
           audioStreamInfo: null,
           videoDetails: video,
@@ -126,11 +141,77 @@ class DownloadsProvider extends ChangeNotifier {
             : currentAppData.audioDownloadPath,
           convertFormat: convertFormat,
           audioModifiers: AudioModifiers(),
-          downloadGroup: downloadGroup
-        )
+          downloadId: RandomString.getRandomString(6),
+          completedCallback: (String downloadId) {
+            moveToCompleted(downloadId);
+            checkQueue();
+          },
+          cancelledCallback: (String downloadId) {
+            moveToCancelled(downloadId);
+          }
+        ),
       );
       track++;
     });
+    checkQueue();
+  }
+
+  void checkQueue() {
+    if (queueList.isNotEmpty && downloadingList.length < 2) {
+      DownloadInfoSet download = queueList[0];
+      downloadingList.add(download);
+      int index = downloadingList.indexWhere((element)
+        => element.downloadId == download.downloadId);
+      downloadingList[index].downloadMedia();
+      queueList.remove(queueList[0]);
+      checkQueue();
+    }
+    notifyListeners();
+  }
+
+  void addNewItem() {
+    if (queueList.isNotEmpty) {
+      DownloadInfoSet download = queueList[0];
+      downloadingList.add(download);
+      int index = downloadingList.indexWhere((element)
+        => element.downloadId == download.downloadId);
+      downloadingList[index].downloadMedia();
+      notifyListeners();
+    }
+  }
+
+  void moveToCompleted(String id) {
+    int index = downloadingList.indexWhere((element)
+      => element.downloadId == id);
+    completedList.add(downloadingList[index]);
+    downloadingList.removeAt(index);
+    checkQueue();
+  }
+
+  void moveToCancelled(String id) {
+    int index = downloadingList.indexWhere((element)
+      => element.downloadId == id);
+    cancelledList.add(downloadingList[index]);
+    downloadingList.removeAt(index);
+    checkQueue();
+  }
+
+  void retryDownload(String id) {
+    int index = cancelledList.indexWhere((element)
+      => element.downloadId == id);
+    queueList.add(cancelledList[index]);
+    cancelledList.removeAt(index);
+    checkQueue();
+  }
+
+  void cancelDownload(String id) async {
+    int index = downloadingList.indexWhere((element)
+      => element.downloadId == id);
+    downloadingList[index].cancelDownload = true;
+    await Future.delayed(Duration(seconds: 2));
+    cancelledList.add(downloadingList[index]);
+    downloadingList.removeAt(index);
+    checkQueue();
   }
 
   String removeToxicSymbols(String string) {
