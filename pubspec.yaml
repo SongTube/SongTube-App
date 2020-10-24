@@ -32,7 +32,7 @@ dependencies:
   sliding_up_panel: ^1.0.2
 
   # Youtube Explode
-  youtube_explode_dart: ^1.5.2
+  youtube_explode_dart: ^1.6.1+1
 
   # Device Providers
   shared_preferences: ^0.5.10
