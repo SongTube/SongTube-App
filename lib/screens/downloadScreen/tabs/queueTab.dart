@@ -28,7 +28,7 @@ class _DownloadsQueueTabState extends State<DownloadsQueueTab> {
           children: [
             AnimatedSwitcher(
               duration: Duration(milliseconds: 400),
-              child: Column(
+              child: downloadsProvider.downloadingList.isNotEmpty ? Column(
                 children: [
                   Align(
                     alignment: Alignment.centerLeft,
@@ -74,16 +74,16 @@ class _DownloadsQueueTabState extends State<DownloadsQueueTab> {
                     },
                   ),
                 ],
-              ),
+              ) : Container(),
             ),
             AnimatedSwitcher(
               duration: Duration(milliseconds: 400),
-              child: Column(
+              child: downloadsProvider.queueList.isNotEmpty ? Column(
                 children: [
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Container(
-                      margin: EdgeInsets.only(left: 16, bottom: 16),
+                      margin: EdgeInsets.only(left: 16, bottom: 16, top: 8),
                       child: Text(
                         "Queued",
                         style: TextStyle(
@@ -114,7 +114,7 @@ class _DownloadsQueueTabState extends State<DownloadsQueueTab> {
                     },
                   ),
                 ],
-              ),
+              ) : Container(),
             ),
           ]
         ),
