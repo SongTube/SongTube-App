@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 // Internal
 import 'package:songtube/internal/services/playerService.dart';
 import 'package:songtube/player/components/musicPlayer/playerPadding.dart';
+import 'package:songtube/provider/app_provider.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/provider/mediaProvider.dart';
 import 'package:songtube/screens/downloads.dart';
@@ -20,6 +21,7 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:songtube/ui/components/navigationBar.dart';
 import 'package:songtube/ui/components/navigationItems.dart';
 import 'package:audio_service/audio_service.dart';
+import 'package:songtube/ui/internal/disclaimerDialog.dart';
 import 'package:songtube/ui/internal/lifecycleEvents.dart';
 
 // UI
@@ -73,6 +75,16 @@ class _LibraryState extends State<Library> {
         androidEnableQueue: true,
       );
     }
+    // Disclaimer
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Show Disclaimer
+      if (!Provider.of<AppDataProvider>(context, listen: false).disclaimerAccepted) {
+        showDialog(
+          context: context,
+          builder: (context) => DisclaimerDialog()
+        );
+      }
+    });
   }
 
   @override

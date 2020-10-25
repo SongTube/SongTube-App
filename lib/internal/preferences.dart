@@ -33,6 +33,9 @@ String channelLogo = "channel_logo";
 String expandedArtwork = "expanded_artwork";
 String blurBackground = "blur_background";
 
+// Disclaimer Status
+String disclaimerKey = "disclaimer_key";
+
 class Preferences {
   
   SharedPreferences prefs;
@@ -175,5 +178,13 @@ class Preferences {
   }
   void saveBlurBackground(bool value) {
     prefs.setBool(blurBackground, value);
+  }
+
+  // Disclaimer Status
+  bool getDisclaimerStatus() {
+    return prefs.getBool(disclaimerKey) ?? false;
+  }
+  void saveDisclaimerStatus(bool value) {
+    prefs.setBool(disclaimerKey, value);
   }
 }

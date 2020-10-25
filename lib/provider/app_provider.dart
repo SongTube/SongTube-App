@@ -86,6 +86,9 @@ class AppDataProvider extends ChangeNotifier {
   // Navigate ChannelLogo Cache
   List<ChannelLogo> _channelLogos;
 
+  // Disclaimer Status
+  bool _disclaimerAccepted;
+
   set systemThemeAvailable(bool value){
     _systemThemeAvailable = value;
     if (value)
@@ -145,6 +148,8 @@ class AppDataProvider extends ChangeNotifier {
     _searchHistory = (jsonDecode(preferences.getSearchHistory())
       as List<dynamic>).cast<String>();
     _channelLogos = ChannelLogo.fromJsonArray(preferences.getChannelLogos());
+    // Load Disclaimer Status
+    _disclaimerAccepted = preferences.getDisclaimerStatus();
   }
 
   // Converting audio format
@@ -223,5 +228,13 @@ class AppDataProvider extends ChangeNotifier {
     preferences.saveExpandedArtwork(value);
     notifyListeners();
   } 
+
+  // Disclaimer Status
+  bool get disclaimerAccepted => _disclaimerAccepted;
+  set disclaimerAccepted(bool value) {
+    _disclaimerAccepted = value;
+    preferences.saveDisclaimerStatus(value);
+    notifyListeners();
+  }
 
 }
