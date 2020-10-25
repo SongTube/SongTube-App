@@ -11,7 +11,7 @@ class DownloadsQueueTab extends StatefulWidget {
   _DownloadsQueueTabState createState() => _DownloadsQueueTabState();
 }
 
-class _DownloadsQueueTabState extends State<DownloadsQueueTab> {
+class _DownloadsQueueTabState extends State<DownloadsQueueTab> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
@@ -32,135 +32,147 @@ class _DownloadsQueueTabState extends State<DownloadsQueueTab> {
         child: ListView(
           physics: BouncingScrollPhysics(),
           children: [
-            AnimatedSwitcher(
+            AnimatedSize(
+              vsync: this,
               duration: Duration(milliseconds: 400),
-              child: downloadsProvider.convertingList.isNotEmpty ? Column(
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Container(
-                      margin: EdgeInsets.only(left: 16, bottom: 16),
-                      child: Text(
-                        "Converting",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontFamily: 'YTSans'
-                        ),
-                      )
-                    ),
-                  ),
-                  AutoList<DownloadInfoSet>(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    items: downloadsProvider.convertingList,
-                    duration: Duration(milliseconds: 400),
-                    itemBuilder: (context, infoset) {
-                      return Padding(
-                        padding: EdgeInsets.only(left: 16, right: 16, bottom: 8),
-                        child: DownloadTile(
-                          dataProgress: infoset.dataProgress.stream,
-                          progressBar: infoset.progressBar.stream,
-                          currentAction: infoset.currentAction.stream,
-                          metadata: infoset.metadata,
-                          downloadType: infoset.downloadType,
-                          onDownloadCancel: null,
-                          cancelDownloadIcon: Container()
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ) : Container(),
-            ),
-            AnimatedSwitcher(
-              duration: Duration(milliseconds: 400),
-              child: downloadsProvider.downloadingList.isNotEmpty ? Column(
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Container(
-                      margin: EdgeInsets.only(left: 16, bottom: 16, top: 8),
-                      child: Text(
-                        "Downloading",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontFamily: 'YTSans'
-                        ),
-                      )
-                    ),
-                  ),
-                  AutoList<DownloadInfoSet>(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    items: downloadsProvider.downloadingList,
-                    duration: Duration(milliseconds: 400),
-                    itemBuilder: (context, infoset) {
-                      return Padding(
-                        padding: EdgeInsets.only(left: 16, right: 16, bottom: 8),
-                        child: StreamBuilder<Object>(
-                          stream: infoset.downloadStatus.stream,
-                          builder: (context, snapshot) {
-                            return DownloadTile(
-                              dataProgress: infoset.dataProgress.stream,
-                              progressBar: infoset.progressBar.stream,
-                              currentAction: infoset.currentAction.stream,
-                              metadata: infoset.metadata,
-                              downloadType: infoset.downloadType,
-                              onDownloadCancel: snapshot.data == DownloadStatus.Downloading
-                                ? () {
-                                  infoset.cancelDownload = true;
-                                } : null,
-                              cancelDownloadIcon: snapshot.data == DownloadStatus.Downloading
-                                ? Icon(Icons.clear, size: 18)
-                                : Container()
-                            );
-                          }
+              child: AnimatedSwitcher(
+                duration: Duration(milliseconds: 400),
+                child: downloadsProvider.convertingList.isNotEmpty ? Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        margin: EdgeInsets.only(left: 16, bottom: 16),
+                        child: Text(
+                          "Converting",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: 'YTSans'
+                          ),
                         )
-                      );
-                    },
-                  ),
-                ],
-              ) : Container(),
-            ),
-            AnimatedSwitcher(
-              duration: Duration(milliseconds: 400),
-              child: downloadsProvider.queueList.isNotEmpty ? Column(
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Container(
-                      margin: EdgeInsets.only(left: 16, bottom: 16, top: 8),
-                      child: Text(
-                        "Queued",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontFamily: 'YTSans'
-                        ),
-                      )
+                      ),
                     ),
-                  ),
-                  AutoList<DownloadInfoSet>(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    items: downloadsProvider.queueList,
-                    duration: Duration(milliseconds: 400),
-                    itemBuilder: (context, infoset) {
-                      return Padding(
-                        padding: EdgeInsets.only(left: 16, right: 16, bottom: 8),
-                        child: DownloadTile(
-                          dataProgress: infoset.dataProgress.stream,
-                          progressBar: infoset.progressBar.stream,
-                          currentAction: infoset.currentAction.stream,
-                          metadata: infoset.metadata,
-                          downloadType: infoset.downloadType,
-                          onDownloadCancel: null,
-                          cancelDownloadIcon: Container()
+                    AutoList<DownloadInfoSet>(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      items: downloadsProvider.convertingList,
+                      duration: Duration(milliseconds: 400),
+                      itemBuilder: (context, infoset) {
+                        return Padding(
+                          padding: EdgeInsets.only(left: 16, right: 16, bottom: 8),
+                          child: DownloadTile(
+                            dataProgress: infoset.dataProgress.stream,
+                            progressBar: infoset.progressBar.stream,
+                            currentAction: infoset.currentAction.stream,
+                            metadata: infoset.metadata,
+                            downloadType: infoset.downloadType,
+                            onDownloadCancel: null,
+                            cancelDownloadIcon: Container()
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ) : Container(),
+              ),
+            ),
+            AnimatedSize(
+              vsync: this,
+              duration: Duration(milliseconds: 400),
+              child: AnimatedSwitcher(
+                duration: Duration(milliseconds: 400),
+                child: downloadsProvider.downloadingList.isNotEmpty ? Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        margin: EdgeInsets.only(left: 16, bottom: 16, top: 8),
+                        child: Text(
+                          "Downloading",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: 'YTSans'
+                          ),
                         )
-                      );
-                    },
-                  ),
-                ],
-              ) : Container(),
+                      ),
+                    ),
+                    AutoList<DownloadInfoSet>(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      items: downloadsProvider.downloadingList,
+                      duration: Duration(milliseconds: 400),
+                      itemBuilder: (context, infoset) {
+                        return Padding(
+                          padding: EdgeInsets.only(left: 16, right: 16, bottom: 8),
+                          child: StreamBuilder<Object>(
+                            stream: infoset.downloadStatus.stream,
+                            builder: (context, snapshot) {
+                              return DownloadTile(
+                                dataProgress: infoset.dataProgress.stream,
+                                progressBar: infoset.progressBar.stream,
+                                currentAction: infoset.currentAction.stream,
+                                metadata: infoset.metadata,
+                                downloadType: infoset.downloadType,
+                                onDownloadCancel: snapshot.data == DownloadStatus.Downloading
+                                  ? () {
+                                    infoset.cancelDownload = true;
+                                  } : null,
+                                cancelDownloadIcon: snapshot.data == DownloadStatus.Downloading
+                                  ? Icon(Icons.clear, size: 18)
+                                  : Container()
+                              );
+                            }
+                          )
+                        );
+                      },
+                    ),
+                  ],
+                ) : Container(),
+              ),
+            ),
+            AnimatedSize(
+              vsync: this,
+              duration: Duration(milliseconds: 400),
+              child: AnimatedSwitcher(
+                duration: Duration(milliseconds: 400),
+                child: downloadsProvider.queueList.isNotEmpty ? Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        margin: EdgeInsets.only(left: 16, bottom: 16, top: 8),
+                        child: Text(
+                          "Queued",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: 'YTSans'
+                          ),
+                        )
+                      ),
+                    ),
+                    AutoList<DownloadInfoSet>(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      items: downloadsProvider.queueList,
+                      duration: Duration(milliseconds: 400),
+                      itemBuilder: (context, infoset) {
+                        return Padding(
+                          padding: EdgeInsets.only(left: 16, right: 16, bottom: 8),
+                          child: DownloadTile(
+                            dataProgress: infoset.dataProgress.stream,
+                            progressBar: infoset.progressBar.stream,
+                            currentAction: infoset.currentAction.stream,
+                            metadata: infoset.metadata,
+                            downloadType: infoset.downloadType,
+                            onDownloadCancel: null,
+                            cancelDownloadIcon: Container()
+                          )
+                        );
+                      },
+                    ),
+                  ],
+                ) : Container(),
+              ),
             ),
           ]
         ),

@@ -1,6 +1,6 @@
-import 'package:autolist/autolist.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:autolist/autolist.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/models/downloadinfoset.dart';
 import 'package:songtube/provider/downloadsProvider.dart';
