@@ -179,12 +179,19 @@ class DownloadInfoSet {
     Stream<List<int>> streamData;
     if (videoStreamInfo == null) {
       if (audioStreamInfo == null) {
+        int retryCount = 0;
         currentAction.add("Getting Audio Stream...");
         StreamManifest audioManifest;
-        try {
-          audioManifest = await yt.videos.streamsClient.getManifest(videoDetails.id)
-            .timeout(Duration(seconds: 30));
-        } catch (_) {
+        while (retryCount < 3) {
+          try {
+            audioManifest = await yt.videos.streamsClient.getManifest(videoDetails.id)
+              .timeout(Duration(seconds: 30));
+            break;
+          } catch (_) {
+            retryCount++;
+          }
+        }
+        if (audioManifest == null) {
           currentAction.add("Error, check your Internet");
           return null;
         }
