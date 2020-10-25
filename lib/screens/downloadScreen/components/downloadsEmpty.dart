@@ -7,14 +7,26 @@ class NoDownloads extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ShowUpTransition(
-      duration: Duration(milliseconds: 400),
-      delay: Duration(milliseconds: 200),
+      duration: Duration(milliseconds: 600),
+      delay: Duration(milliseconds: 400),
       forward: true,
       slideSide: SlideFromSlide.BOTTOM,
       child: Container(
         height: 30,
+        margin: EdgeInsets.all(16),
         width: double.infinity,
-        color: Theme.of(context).accentColor,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Theme.of(context).accentColor,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              offset: Offset(3,3),
+              blurRadius: 8,
+              spreadRadius: 1
+            )
+          ]
+        ),
         child: Center(
           child: Text(
             "Empty",
