@@ -4,6 +4,7 @@ import 'package:songtube/internal/models/downloadinfoset.dart';
 import 'package:songtube/provider/downloadsProvider.dart';
 import 'package:songtube/screens/downloadScreen/components/downloadTile.dart';
 import 'package:songtube/screens/downloadScreen/components/downloadsEmpty.dart';
+import 'package:autolist/autolist.dart';
 
 class DownloadsQueueTab extends StatefulWidget {
   @override
@@ -48,11 +49,12 @@ class _DownloadsQueueTabState extends State<DownloadsQueueTab> {
                       )
                     ),
                   ),
-                  ListView.builder(
+                  AutoList<DownloadInfoSet>(
                     shrinkWrap: true,
-                    itemCount: downloadsProvider.convertingList.length,
-                    itemBuilder: (context, index) {
-                      DownloadInfoSet infoset = downloadsProvider.convertingList[index];
+                    physics: NeverScrollableScrollPhysics(),
+                    items: downloadsProvider.convertingList,
+                    duration: Duration(milliseconds: 400),
+                    itemBuilder: (context, infoset) {
                       return Padding(
                         padding: EdgeInsets.only(left: 16, right: 16, bottom: 8),
                         child: DownloadTile(
@@ -87,11 +89,12 @@ class _DownloadsQueueTabState extends State<DownloadsQueueTab> {
                       )
                     ),
                   ),
-                  ListView.builder(
+                  AutoList<DownloadInfoSet>(
                     shrinkWrap: true,
-                    itemCount: downloadsProvider.downloadingList.length,
-                    itemBuilder: (context, index) {
-                      DownloadInfoSet infoset = downloadsProvider.downloadingList[index];
+                    physics: NeverScrollableScrollPhysics(),
+                    items: downloadsProvider.downloadingList,
+                    duration: Duration(milliseconds: 400),
+                    itemBuilder: (context, infoset) {
                       return Padding(
                         padding: EdgeInsets.only(left: 16, right: 16, bottom: 8),
                         child: StreamBuilder<Object>(
@@ -136,11 +139,12 @@ class _DownloadsQueueTabState extends State<DownloadsQueueTab> {
                       )
                     ),
                   ),
-                  ListView.builder(
+                  AutoList<DownloadInfoSet>(
                     shrinkWrap: true,
-                    itemCount: downloadsProvider.queueList.length,
-                    itemBuilder: (context, index) {
-                      DownloadInfoSet infoset = downloadsProvider.queueList[index];
+                    physics: NeverScrollableScrollPhysics(),
+                    items: downloadsProvider.queueList,
+                    duration: Duration(milliseconds: 400),
+                    itemBuilder: (context, infoset) {
                       return Padding(
                         padding: EdgeInsets.only(left: 16, right: 16, bottom: 8),
                         child: DownloadTile(

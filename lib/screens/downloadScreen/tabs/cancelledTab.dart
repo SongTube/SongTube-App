@@ -1,3 +1,4 @@
+import 'package:autolist/autolist.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -25,10 +26,11 @@ class _DownloadsCancelledTabState extends State<DownloadsCancelledTab> {
     if (downloadsProvider.cancelledList.isNotEmpty) {
       return Padding(
         padding: EdgeInsets.only(top: 8),
-        child: ListView.builder(
-          itemCount: downloadsProvider.cancelledList.length,
-          itemBuilder: (context, index) {
-            DownloadInfoSet infoset = downloadsProvider.cancelledList[index];
+        child: AutoList<DownloadInfoSet>(
+          physics: BouncingScrollPhysics(),
+          items: downloadsProvider.cancelledList,
+          duration: Duration(milliseconds: 400),
+          itemBuilder: (context, infoset) {
             return Padding(
               padding: EdgeInsets.only(left: 16, right: 16, bottom: 8),
               child: DownloadTile(

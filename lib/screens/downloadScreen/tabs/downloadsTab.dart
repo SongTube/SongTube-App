@@ -9,6 +9,7 @@ import 'package:songtube/provider/downloadsProvider.dart';
 // Packages
 import 'package:provider/provider.dart';
 import 'package:songtube/screens/downloadScreen/components/downloadTile.dart';
+import 'package:autolist/autolist.dart';
 
 // UI
 import 'package:songtube/screens/downloadScreen/components/downloadsEmpty.dart';
@@ -27,11 +28,11 @@ class DownloadsTab extends StatelessWidget {
     if (downloadsProvider.completedList.isNotEmpty) {
       return Padding(
         padding: EdgeInsets.only(top: 8),
-        child: ListView.builder(
+        child: AutoList<DownloadInfoSet>(
           physics: BouncingScrollPhysics(),
-          itemCount: downloadsProvider.completedList.length,
-          itemBuilder: (context, index) {
-            DownloadInfoSet infoset = downloadsProvider.completedList[index];
+          items: downloadsProvider.completedList,
+          duration: Duration(milliseconds: 400),
+          itemBuilder: (context, infoset) {
             return Padding(
               padding: EdgeInsets.only(left: 16, right: 16, bottom: 8),
               child: DownloadTile(
