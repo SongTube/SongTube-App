@@ -109,11 +109,8 @@ class DownloadsProvider extends ChangeNotifier {
         moveToCancelled(downloadId);
       }
     );
-    downloadingList.add(download);
-    int index = downloadingList.indexWhere((element)
-      => element.downloadId == download.downloadId);
-    downloadingList[index].downloadMedia();
-    notifyListeners();
+    queueList.add(download);
+    checkQueue();
   }
 
   // Handle Playlist Downloads
