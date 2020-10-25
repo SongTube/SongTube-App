@@ -29,6 +29,7 @@ class _DownloadsQueueTabState extends State<DownloadsQueueTab> {
       return Padding(
         padding: EdgeInsets.only(top: 16),
         child: ListView(
+          physics: BouncingScrollPhysics(),
           children: [
             AnimatedSwitcher(
               duration: Duration(milliseconds: 400),
@@ -49,7 +50,6 @@ class _DownloadsQueueTabState extends State<DownloadsQueueTab> {
                   ),
                   ListView.builder(
                     shrinkWrap: true,
-                    physics: BouncingScrollPhysics(),
                     itemCount: downloadsProvider.convertingList.length,
                     itemBuilder: (context, index) {
                       DownloadInfoSet infoset = downloadsProvider.convertingList[index];
@@ -89,7 +89,6 @@ class _DownloadsQueueTabState extends State<DownloadsQueueTab> {
                   ),
                   ListView.builder(
                     shrinkWrap: true,
-                    physics: BouncingScrollPhysics(),
                     itemCount: downloadsProvider.downloadingList.length,
                     itemBuilder: (context, index) {
                       DownloadInfoSet infoset = downloadsProvider.downloadingList[index];
@@ -139,7 +138,6 @@ class _DownloadsQueueTabState extends State<DownloadsQueueTab> {
                   ),
                   ListView.builder(
                     shrinkWrap: true,
-                    physics: BouncingScrollPhysics(),
                     itemCount: downloadsProvider.queueList.length,
                     itemBuilder: (context, index) {
                       DownloadInfoSet infoset = downloadsProvider.queueList[index];
