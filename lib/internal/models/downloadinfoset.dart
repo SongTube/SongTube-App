@@ -39,8 +39,9 @@ class DownloadInfoSet {
   StreamInfo videoStreamInfo;
   Video videoDetails;
   String downloadId;
-  Function(String) completedCallback;
+  Function(String, bool) completedCallback;
   Function(String) cancelledCallback;
+  Function(String) convertingCallback;
 
   DownloadInfoSet({
     @required this.metadata,
@@ -53,6 +54,7 @@ class DownloadInfoSet {
     @required this.downloadId,
     @required this.completedCallback,
     @required this.cancelledCallback,
+    @required this.convertingCallback,
     this.videoStreamInfo,
   }) {
     converter = new Converter();
@@ -73,6 +75,7 @@ class DownloadInfoSet {
   BehaviorSubject<double> progressBar;
 
   // FFmpeg Converter
+  bool converted = false;
   Converter converter;
 
   // Cancel Download
@@ -100,6 +103,7 @@ class DownloadInfoSet {
     dataProgress.add("");
     progressBar.add(0.0);
     cancelDownload = false;
+    converted = false;
   }
 
   // Close Streams
@@ -155,7 +159,7 @@ class DownloadInfoSet {
         String fileName = downloadedFile.path.split("/").last;
         File finalFile = await downloadedFile.copy("$downloadPath/$fileName");
         await finishDownload(finalFile);
-        completedCallback(downloadId);
+        completedCallback(downloadId, converted);
       }
     });
   }
@@ -262,6 +266,8 @@ class DownloadInfoSet {
       // Write our Audio File downloaded to the
       // previously downloaded Video File
       currentAction.add("Patching Audio...");
+      convertingCallback(downloadId);
+      converted = true;
       File finalFile = await converter.writeAudioToVideo(
         saveFormat: await converter.getMediaFormat(file.path),
         videoPath: file.path,
@@ -280,6 +286,8 @@ class DownloadInfoSet {
         downloadStatus.add(DownloadStatus.Converting);
         progressBar.add(null);
         currentAction.add("Converting...");
+        convertingCallback(downloadId);
+        converted = true;
         File finalFile = await converter.convertAudio(
           audioPath: file.path,
           format: convertFormat,

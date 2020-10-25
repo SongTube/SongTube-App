@@ -21,11 +21,55 @@ class _DownloadsQueueTabState extends State<DownloadsQueueTab> {
 
   Widget downloadsBody(BuildContext context) {
     DownloadsProvider downloadsProvider = Provider.of<DownloadsProvider>(context);
-    if (downloadsProvider.downloadingList.isNotEmpty) {
+    if (
+      downloadsProvider.downloadingList.isNotEmpty ||
+      downloadsProvider.convertingList.isNotEmpty ||
+      downloadsProvider.queueList.isNotEmpty
+    ) {
       return Padding(
         padding: EdgeInsets.only(top: 16),
         child: ListView(
           children: [
+            AnimatedSwitcher(
+              duration: Duration(milliseconds: 400),
+              child: downloadsProvider.convertingList.isNotEmpty ? Column(
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      margin: EdgeInsets.only(left: 16, bottom: 16),
+                      child: Text(
+                        "Converting",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontFamily: 'YTSans'
+                        ),
+                      )
+                    ),
+                  ),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: BouncingScrollPhysics(),
+                    itemCount: downloadsProvider.convertingList.length,
+                    itemBuilder: (context, index) {
+                      DownloadInfoSet infoset = downloadsProvider.convertingList[index];
+                      return Padding(
+                        padding: EdgeInsets.only(left: 16, right: 16, bottom: 8),
+                        child: DownloadTile(
+                          dataProgress: infoset.dataProgress.stream,
+                          progressBar: infoset.progressBar.stream,
+                          currentAction: infoset.currentAction.stream,
+                          metadata: infoset.metadata,
+                          downloadType: infoset.downloadType,
+                          onDownloadCancel: null,
+                          cancelDownloadIcon: Container()
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ) : Container(),
+            ),
             AnimatedSwitcher(
               duration: Duration(milliseconds: 400),
               child: downloadsProvider.downloadingList.isNotEmpty ? Column(
@@ -33,7 +77,7 @@ class _DownloadsQueueTabState extends State<DownloadsQueueTab> {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Container(
-                      margin: EdgeInsets.only(left: 16, bottom: 16),
+                      margin: EdgeInsets.only(left: 16, bottom: 16, top: 8),
                       child: Text(
                         "Downloading",
                         style: TextStyle(

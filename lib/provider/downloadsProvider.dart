@@ -15,6 +15,7 @@ class DownloadsProvider extends ChangeNotifier {
   DownloadsProvider() {
     queueList = new List<DownloadInfoSet>();
     downloadingList = new List<DownloadInfoSet>();
+    convertingList = new List<DownloadInfoSet>();
     completedList = new List<DownloadInfoSet>();
     cancelledList = new List<DownloadInfoSet>();
     databaseSongs = new List<MediaItem>();
@@ -29,6 +30,9 @@ class DownloadsProvider extends ChangeNotifier {
 
   // Downloading List
   List<DownloadInfoSet> downloadingList;
+
+  // Converting List
+  List<DownloadInfoSet> convertingList;
 
   // Completed List
   List<DownloadInfoSet> completedList;
@@ -94,8 +98,11 @@ class DownloadsProvider extends ChangeNotifier {
         trebleGain: int.parse(data[4])
       ),
       downloadId: RandomString.getRandomString(6),
-      completedCallback: (String downloadId) {
-        moveToCompleted(downloadId);
+      convertingCallback: (String downloadId) {
+        moveToConverting(downloadId);
+      },
+      completedCallback: (String downloadId, bool converted) {
+        moveToCompleted(downloadId, converted);
         checkQueue();
       },
       cancelledCallback: (String downloadId) {
@@ -142,8 +149,11 @@ class DownloadsProvider extends ChangeNotifier {
           convertFormat: convertFormat,
           audioModifiers: AudioModifiers(),
           downloadId: RandomString.getRandomString(6),
-          completedCallback: (String downloadId) {
-            moveToCompleted(downloadId);
+          convertingCallback: (String downloadId) {
+            moveToConverting(downloadId);
+          },
+          completedCallback: (String downloadId, bool converted) {
+            moveToCompleted(downloadId, converted);
             checkQueue();
           },
           cancelledCallback: (String downloadId) {
@@ -180,11 +190,26 @@ class DownloadsProvider extends ChangeNotifier {
     }
   }
 
-  void moveToCompleted(String id) {
+  void moveToConverting(String id) {
     int index = downloadingList.indexWhere((element)
       => element.downloadId == id);
-    completedList.add(downloadingList[index]);
+    convertingList.add(downloadingList[index]);
     downloadingList.removeAt(index);
+    checkQueue();
+  }
+
+  void moveToCompleted(String id, bool converted) {
+    if (converted) {
+      int index = convertingList.indexWhere((element)
+        => element.downloadId == id);
+      completedList.add(convertingList[index]);
+      convertingList.removeAt(index);
+    } else {
+      int index = downloadingList.indexWhere((element)
+        => element.downloadId == id);
+      completedList.add(downloadingList[index]);
+      downloadingList.removeAt(index);
+    }
     checkQueue();
   }
 
