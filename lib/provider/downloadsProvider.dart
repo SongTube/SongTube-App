@@ -176,17 +176,6 @@ class DownloadsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addNewItem() {
-    if (queueList.isNotEmpty) {
-      DownloadInfoSet download = queueList[0];
-      downloadingList.add(download);
-      int index = downloadingList.indexWhere((element)
-        => element.downloadId == download.downloadId);
-      downloadingList[index].downloadMedia();
-      notifyListeners();
-    }
-  }
-
   void moveToConverting(String id) {
     int index = downloadingList.indexWhere((element)
       => element.downloadId == id);
