@@ -156,6 +156,7 @@ class SongTubePlayerService extends BackgroundAudioTask {
 
   Future<void> _handlePlaybackCompleted() async {
     if (enableRepeat) {
+      await _player.setUrl(mediaItem.id);
       onPlay();
       return;
     }
