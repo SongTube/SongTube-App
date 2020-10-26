@@ -1,5 +1,6 @@
 // Dart
 import 'dart:async';
+import 'dart:math';
 
 // Packages
 import 'package:audio_service/audio_service.dart';
@@ -48,6 +49,10 @@ class SongTubePlayerService extends BackgroundAudioTask {
   int _index = 0;
   int lastPlayerPosition = 0;
 
+  // Enable Repeat & Random
+  bool enableRepeat = false;
+  bool enableRandom = false;
+
   // Audio Session
   AudioSession session;
 
@@ -64,6 +69,13 @@ class SongTubePlayerService extends BackgroundAudioTask {
   }
   @override
   Future<void> onSkipToNext() async {
+    if (enableRandom) {
+      _index = Random().nextInt(_queue.length);
+      await AudioServiceBackground.setMediaItem(_queue[_index]);
+      await _player.setUrl(mediaItem.id);
+      onPlay();
+      return;
+    } 
     _skipState = AudioProcessingState.skippingToNext;
     _skip(1);
   }
@@ -143,6 +155,17 @@ class SongTubePlayerService extends BackgroundAudioTask {
   }
 
   Future<void> _handlePlaybackCompleted() async {
+    if (enableRepeat) {
+      onPlay();
+      return;
+    }
+    if (enableRandom) {
+      _index = Random().nextInt(_queue.length);
+      await AudioServiceBackground.setMediaItem(_queue[_index]);
+      await _player.setUrl(mediaItem.id);
+      onPlay();
+      return;
+    } 
     if (hasNext) {
       onSkipToNext();
     } else {
@@ -208,6 +231,19 @@ class SongTubePlayerService extends BackgroundAudioTask {
   @override
   Future<void> onSeekTo(Duration position) async {
     _player.seek(position);
+  }
+
+  @override
+  Future<dynamic> onCustomAction(String action, dynamic object) async {
+    if (action == "enableRepeat") {
+      enableRepeat = !enableRepeat;
+      return enableRepeat;
+    }
+    if (action == "enableRandom") {
+      enableRandom = !enableRandom;
+      return enableRandom;
+    }
+    return null;
   }
 
   /// Get MediaPlayer Controls
