@@ -87,7 +87,7 @@ class PlayerControls extends StatelessWidget {
               // Random Button
               MusicPlayerRandomButton(
                 iconColor: textColor,
-                enabledColor: dominantColor
+                enabledColor: vibrantColor
               ),
               // Previous button
               IconButton(
@@ -147,7 +147,7 @@ class PlayerControls extends StatelessWidget {
               // Repeat Button
               MusicPlayerRepeatButton(
                 iconColor: textColor,
-                enabledColor: dominantColor
+                enabledColor: vibrantColor
               )
             ],
           ),
