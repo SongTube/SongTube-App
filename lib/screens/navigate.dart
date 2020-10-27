@@ -199,7 +199,6 @@ class _NavigateState extends State<Navigate> with TickerProviderStateMixin {
             if (notification is ScrollUpdateNotification) {
               if (scrollController.position.pixels > scrollController.position.maxScrollExtent-400) {
                 if (isSearching == false) {
-                  setState(() => isSearching = true);
                   fillSearchResults();
                 }
               }
