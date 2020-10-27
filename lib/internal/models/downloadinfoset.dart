@@ -151,6 +151,7 @@ class DownloadInfoSet {
       await writeAllMetadata(downloadedFile.path);
     }
     // Move file to its Predefined Directory
+    currentAction.add("Saving file...");
     Permission.storage.request().then((value) async {
       if (value == PermissionStatus.granted) {
         if (!await Directory(downloadPath).exists()) {
