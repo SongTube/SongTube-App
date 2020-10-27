@@ -177,6 +177,7 @@ class _PlayerListBodyState extends State<PlayerListBody> {
             listVideos: manager.playlistVideos,
             album: albumController.text,
             artist: artistController.text
+              .replaceAll("- Topic", "").trim()
           );
           manager.navigateToScreen(LibraryScreen.Downloads);
         },

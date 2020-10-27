@@ -145,7 +145,8 @@ class _VideoPageState extends State<VideoPage> {
             metadata: DownloadMetaData(
               title: manager.tagsControllers.titleController.text,
               album: manager.tagsControllers.albumController.text,
-              artist: manager.tagsControllers.artistController.text,
+              artist: manager.tagsControllers.artistController.text
+                .replaceAll("- Topic", "").trim(),
               genre: manager.tagsControllers.genreController.text,
               coverurl: manager.tagsControllers.artworkController,
               date: manager.tagsControllers.dateController.text,
