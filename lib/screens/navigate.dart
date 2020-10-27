@@ -29,7 +29,7 @@ class Navigate extends StatefulWidget {
   _NavigateState createState() => _NavigateState();
 }
 
-class _NavigateState extends State<Navigate> with SingleTickerProviderStateMixin {
+class _NavigateState extends State<Navigate> with TickerProviderStateMixin {
 
   // YT Explode Instance
   YoutubeExplode yt;
