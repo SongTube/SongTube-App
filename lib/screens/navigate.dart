@@ -65,6 +65,7 @@ class _NavigateState extends State<Navigate> with SingleTickerProviderStateMixin
     }
     if (currentStateSearchQuery == null || currentStateSearchQuery != manager.navigateQuery) {
       manager.navigateSearchResults = new List<dynamic>();
+      if (searchStream != null) searchStream.cancel();
       setState(() {});
       resultsCounter = 0;
       currentStateSearchQuery = manager.navigateQuery;
