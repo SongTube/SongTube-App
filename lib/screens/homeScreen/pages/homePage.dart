@@ -82,10 +82,7 @@ class _HomePageState extends State<HomePage> {
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
-        Future.delayed(
-          Duration(milliseconds: 200), () =>
-          setState(() => manager.showSearchBar = false)
-        );
+        setState(() => manager.showSearchBar = false);
       },
       child: Scaffold(
         appBar: AppBar(
@@ -94,7 +91,7 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           title: ShowUpTransition(
             forward: true,
-            duration: Duration(milliseconds: 300),
+            duration: Duration(milliseconds: 400),
             slideSide: SlideFromSlide.TOP,
             child: HomePageSearchBar(
               showQuickSearch: manager.showSearchBar,
@@ -109,7 +106,7 @@ class _HomePageState extends State<HomePage> {
         body: Stack(
           children: [
             AnimatedSwitcher(
-              duration: Duration(milliseconds: 400),
+              duration: Duration(milliseconds: 300),
               child: manager.showSearchBar ? SearchHistoryList(
                 onItemTap: (String searchQuery) =>
                   widget.onQuickSearch(searchQuery),
