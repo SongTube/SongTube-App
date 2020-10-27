@@ -28,7 +28,9 @@ class TagsControllers {
   void updateTextControllers(Video videoDetails) {
     titleController.text  = videoDetails.title;
     albumController.text  = "YouTube";
-    artistController.text = videoDetails.author;
+    artistController.text = videoDetails.author
+                              .replaceAll("- Topic", "")
+                              .trim();
     genreController.text  = "Any";
     dateController.text   = "${videoDetails.uploadDate.year}/"
                             + "${videoDetails.uploadDate.month}/"
