@@ -53,6 +53,8 @@ class _NavigateState extends State<Navigate> with SingleTickerProviderStateMixin
   bool isSearching;
 
   void fillSearchResults() {
+    if (isSearching) return;
+    setState(() => isSearching = true);
     ManagerProvider manager = Provider.of<ManagerProvider>
       (context, listen: false);
     if (manager.navigateQuery == null) {
@@ -93,9 +95,9 @@ class _NavigateState extends State<Navigate> with SingleTickerProviderStateMixin
     super.initState();
     searchNode = new FocusNode();
     yt = new YoutubeExplode();
+    isSearching = false;
     fillSearchResults();
     scrollController = new ScrollController();
-    isSearching = false;
   }
 
   @override
