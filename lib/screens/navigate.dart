@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/screens/navigateScreen/components/shimmer/shimmerSearchPage.dart';
 import 'package:songtube/ui/components/searchHistory.dart';
+import 'package:songtube/provider/app_provider.dart';
 
 // Packages
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
@@ -65,6 +66,12 @@ class _NavigateState extends State<Navigate> with SingleTickerProviderStateMixin
       setState(() {});
       resultsCounter = 0;
       currentStateSearchQuery = manager.navigateQuery;
+      if (currentStateSearchQuery.length > 1) {
+        Future.delayed(Duration(milliseconds: 400), () =>
+          Provider.of<AppDataProvider>(context, listen: false)
+            .addStringtoSearchHistory(currentStateSearchQuery.trim()
+        ));
+      }
       searchStream = yt.search.getVideosFromPage(manager.navigateQuery)
         .listen((event) {
           manager.navigateSearchResults.add(event);
