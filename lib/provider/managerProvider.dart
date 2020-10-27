@@ -40,6 +40,8 @@ class ManagerProvider extends ChangeNotifier {
     _screenIndex        = 0;
     // YouTube Info
     youtubeInfo = new YoutubeInfo();
+    // Navigate
+    navigateSearchResults = new List<dynamic>();
   }
 
   // -------------
@@ -56,7 +58,8 @@ class ManagerProvider extends ChangeNotifier {
   bool mediaStreamReady;
   bool showFloatingActionButtom;
   // Navitate Screen
-  String navigateIntent;
+  String navigateQuery;
+  List<dynamic> navigateSearchResults;
   // SearchBar
   bool _showSearchBar;
 
@@ -187,11 +190,10 @@ class ManagerProvider extends ChangeNotifier {
   }
   // Move to Navigate Screen with a Search Intent
   void pushYoutubePage(String searchQuery) async {
-    navigateIntent = searchQuery;
+    navigateQuery = searchQuery;
     await Future.delayed((Duration(milliseconds: 50)), () 
       => navigateToScreen(LibraryScreen.Youtube));
     notifyListeners();
-    await Future.delayed((Duration(milliseconds: 200)), () => navigateIntent = null);
   }
 
   // -------------------------------------

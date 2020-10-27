@@ -1,13 +1,12 @@
 // Dart
+import 'dart:async';
 import 'dart:math';
 
 // Flutter
 import 'package:flutter/material.dart';
-import 'package:songtube/provider/app_provider.dart';
 
 // Internal
 import 'package:songtube/provider/managerProvider.dart';
-import 'package:songtube/screens/navigateScreen/searchPage.dart';
 import 'package:songtube/screens/navigateScreen/components/shimmer/shimmerSearchPage.dart';
 import 'package:songtube/ui/components/searchHistory.dart';
 
@@ -18,7 +17,7 @@ import 'package:provider/provider.dart';
 // UI
 import 'package:songtube/screens/navigateScreen/components/searchBar.dart';
 
-List<dynamic> searchResults = new List<SearchVideo>();
+import 'navigateScreen/components/videoTile.dart';
 
 class Navigate extends StatefulWidget {
   final String searchQuery;
@@ -29,49 +28,74 @@ class Navigate extends StatefulWidget {
   _NavigateState createState() => _NavigateState();
 }
 
-class _NavigateState extends State<Navigate> {
+class _NavigateState extends State<Navigate> with SingleTickerProviderStateMixin {
 
   // YT Explode Instance
   YoutubeExplode yt;
 
-  // No Internet
-  bool errorSearching;
-
   // Focus Node
   FocusNode searchNode;
+
+  // Current Search Query
+  String currentStateSearchQuery;
+
+  // Results Counter
+  int resultsCounter = 0;
+
+  // Search Stream
+  StreamSubscription searchStream;
+
+  // ListView Scroll Controller
+  ScrollController scrollController;
+
+  // Searching Status
+  bool isSearching;
+
+  void fillSearchResults() {
+    ManagerProvider manager = Provider.of<ManagerProvider>
+      (context, listen: false);
+    if (manager.navigateQuery == null) {
+      manager.navigateQuery = String.fromCharCodes(Iterable.generate(
+        1, (_) => 'qwertyuiopasdfghjlcvbnm'
+        .codeUnitAt(Random().nextInt('qwertyuiopasdfgjlcvbnm'.length))
+      ));
+    }
+    if (currentStateSearchQuery == null || currentStateSearchQuery != manager.navigateQuery) {
+      manager.navigateSearchResults = new List<dynamic>();
+      setState(() {});
+      resultsCounter = 0;
+      currentStateSearchQuery = manager.navigateQuery;
+      searchStream = yt.search.getVideosFromPage(manager.navigateQuery)
+        .listen((event) {
+          manager.navigateSearchResults.add(event);
+          resultsCounter++;
+          if (resultsCounter >= 20) {
+            searchStream.pause();
+            isSearching = false;
+            setState(() {});
+          }
+        });
+    } else {
+      resultsCounter = 0;
+      searchStream.resume();
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-    errorSearching = false;
     searchNode = new FocusNode();
     yt = new YoutubeExplode();
-    if (searchResults.isEmpty || widget.searchQuery != null) {
-      search(widget.searchQuery);
-    }
+    fillSearchResults();
+    scrollController = new ScrollController();
+    isSearching = false;
   }
 
-  Future<void> search([String searchQuery]) async {
-    errorSearching = false;
-    searchResults.clear();
-    setState(() {});
-    var search = await yt.search
-      .getVideosFromPage(
-        searchQuery == null
-          ? String.fromCharCodes(Iterable.generate(
-              1, (_) => 'qwertyuiopasdfghjlcvbnm'
-              .codeUnitAt(Random().nextInt('qwertyuiopasdfgjlcvbnm'.length))
-            ))
-          : searchQuery
-      ).take(20).toList();
-    searchResults = search;
-    if (mounted) {
-      if (searchQuery != null) {
-        Provider.of<AppDataProvider>(context, listen: false)
-          .addStringtoSearchHistory(searchQuery.trim());
-      }
-      setState((){});
-    }
+  @override
+  void dispose() {
+    super.dispose();
+    searchStream.cancel();
+    yt.close();
   }
 
   @override
@@ -91,7 +115,8 @@ class _NavigateState extends State<Navigate> {
           onSearch: (String searchQuery) async {
             searchNode.unfocus();
             manager.showSearchBar = false;
-            search(manager.urlController.text);
+            manager.navigateQuery = manager.urlController.text;
+            fillSearchResults();
           },
           onSearchTap: () {
             setState(() => manager.showSearchBar = !manager.showSearchBar);
@@ -123,25 +148,57 @@ class _NavigateState extends State<Navigate> {
         onItemTap: (String item) {
           searchNode.unfocus();
           manager.showSearchBar = false;
-          search(item);
+          manager.navigateQuery = item;
+          fillSearchResults();
         }
       );
     } else {
-      if (errorSearching) {
-        return Center(
-          child: IconButton(
-            icon: Icon(Icons.refresh),
-            onPressed: () => search(widget.searchQuery),
+      if (manager.navigateSearchResults.isNotEmpty) {
+        List<dynamic> results = manager.navigateSearchResults;
+        return NotificationListener(
+          child: ListView.builder(
+            controller: scrollController,
+            itemCount: results.length,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: EdgeInsets.only(
+                  top: 16,
+                  bottom: results.length-1 == index ? 16 : 0
+                ),
+                child: Column(
+                  children: [
+                    VideoTile(
+                      searchItem: results[index],
+                    ),
+                    if (results.length-1 == index)
+                    AnimatedSize(
+                      vsync: this,
+                      duration: Duration(milliseconds: 400),
+                      child: isSearching
+                        ? CircularProgressIndicator(
+                            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                          )
+                        : Container(),
+                    )
+                  ],
+                ),
+              );
+            }
           ),
+          onNotification: (notification) {
+            if (notification is ScrollUpdateNotification) {
+              if (scrollController.position.pixels > scrollController.position.maxScrollExtent-400) {
+                if (isSearching == false) {
+                  setState(() => isSearching = true);
+                  fillSearchResults();
+                }
+              }
+            }
+            return true;
+          },
         );
       } else {
-        if (searchResults.isNotEmpty) {
-          return SearchPage(
-            results: searchResults,
-          );
-        } else {
-          return const ShimmerSearchPage();
-        }
+        return const ShimmerSearchPage();
       }
     }
   }

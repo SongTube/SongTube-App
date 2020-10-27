@@ -158,7 +158,7 @@ class _LibraryState extends State<Library> {
       return MediaScreen();
     } else if (manager.screenIndex == 3) {
       return Navigate(
-        searchQuery: manager.navigateIntent,
+        searchQuery: manager.navigateQuery,
       );
     } else if (manager.screenIndex == 4) {
       return MoreScreen();
