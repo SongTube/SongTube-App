@@ -34,9 +34,9 @@ class _DownloadsQueueTabState extends State<DownloadsQueueTab> with TickerProvid
           children: [
             AnimatedSize(
               vsync: this,
-              duration: Duration(milliseconds: 250),
+              duration: Duration(milliseconds: 400),
               child: AnimatedSwitcher(
-                duration: Duration(milliseconds: 250),
+                duration: Duration(milliseconds: 400),
                 child: downloadsProvider.convertingList.isNotEmpty ? Column(
                   children: [
                     Align(
@@ -56,7 +56,7 @@ class _DownloadsQueueTabState extends State<DownloadsQueueTab> with TickerProvid
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
                       items: downloadsProvider.convertingList,
-                      duration: Duration(milliseconds: 250),
+                      duration: Duration(milliseconds: 400),
                       itemBuilder: (context, infoset) {
                         return Padding(
                           padding: EdgeInsets.only(left: 16, right: 16, bottom: 8),
@@ -78,9 +78,9 @@ class _DownloadsQueueTabState extends State<DownloadsQueueTab> with TickerProvid
             ),
             AnimatedSize(
               vsync: this,
-              duration: Duration(milliseconds: 250),
+              duration: Duration(milliseconds: 400),
               child: AnimatedSwitcher(
-                duration: Duration(milliseconds: 250),
+                duration: Duration(milliseconds: 400),
                 child: downloadsProvider.downloadingList.isNotEmpty ? Column(
                   children: [
                     Align(
@@ -100,7 +100,7 @@ class _DownloadsQueueTabState extends State<DownloadsQueueTab> with TickerProvid
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
                       items: downloadsProvider.downloadingList,
-                      duration: Duration(milliseconds: 250),
+                      duration: Duration(milliseconds: 400),
                       itemBuilder: (context, infoset) {
                         return Padding(
                           padding: EdgeInsets.only(left: 16, right: 16, bottom: 8),
@@ -132,9 +132,9 @@ class _DownloadsQueueTabState extends State<DownloadsQueueTab> with TickerProvid
             ),
             AnimatedSize(
               vsync: this,
-              duration: Duration(milliseconds: 250),
+              duration: Duration(milliseconds: 400),
               child: AnimatedSwitcher(
-                duration: Duration(milliseconds: 250),
+                duration: Duration(milliseconds: 400),
                 child: downloadsProvider.queueList.isNotEmpty ? Column(
                   children: [
                     Align(
@@ -154,7 +154,7 @@ class _DownloadsQueueTabState extends State<DownloadsQueueTab> with TickerProvid
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
                       items: downloadsProvider.queueList,
-                      duration: Duration(milliseconds: 250),
+                      duration: Duration(milliseconds: 400),
                       itemBuilder: (context, infoset) {
                         return Padding(
                           padding: EdgeInsets.only(left: 16, right: 16, bottom: 8),
