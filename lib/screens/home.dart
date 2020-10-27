@@ -5,6 +5,7 @@ import 'package:songtube/screens/homeScreen/pages/playlistPage.dart';
 // Internal
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/screens/homeScreen/components/shimmer/shimmerVideoPage.dart';
+import 'package:songtube/screens/homeScreen/components/shimmer/shimmerPlaylistPage.dart';
 import 'package:songtube/screens/homeScreen/pages/videoPage.dart';
 
 // Packages
@@ -77,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
         return const ShimmerVideoPage();
       } else {
         // Return Shimmer Playlist Page
-        return const ShimmerVideoPage();
+        return const ShimmerPlaylistPage();
       }
     }
   }
