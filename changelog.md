@@ -1,3 +1,36 @@
+# SongTube 4.0.0>
+
+- Reverted from audioplayers to just_audio on a better implementation
+- AudioService is not Pre-Loaded on App lunch
+- Current queue is now not updated innecessarily when tapping a Song
+- Re-designed the Music Player collapsed Panel
+- Reduced BottomNavigationBar Icons & Text Size by a little
+- Media default tab is now Music Tab
+- Added a new OptionsMenuDialog for MusicTab and DownloadsTab three dots Menu
+- Implement a Search Bar in Media Screen that works on Music and Downloads TAb
+- Download Object and Process has been improved
+- Small UI Touch to Settings
+- Fixed Setting's "Delete Cache" option
+- Removed Youtube Player ability to reproduce videos on background (To be better implemented later)
+- Fixed Link sharing to SongTube from other Apps
+- Implemented Search History for Youtube Search Bars
+- Added Audio/Video leading icon in Downloads from Downloads Screen and Media DownloadsTab
+- Improved SearchBar design from Navigate Screen
+- DatabaseService will now try extract the Artwork from downloads with FFmpeg
+- Fixed Downloads backup restore on cases where the Download has modified Artwork
+- Converted ListView from Media MusicTab with an AnimatedList
+- Redesigned Navigate Screen with channel icon bellow Video Thumbnail
+- Navigate Screen now has "infinite" scrolling, it will likely never run out of results
+- Navigate Screen now shows Playlists
+- Implemented Full support for Playlist Download
+- Fixed issue causing Download Button to keep loading on forever
+- Redesigned Downloads Screen with Queue, Completed & Cancelled Tabs
+- Divided Download Screen QueueTab in 3 Lists, "Queued", "Downloading" and "Converting" lists
+- Download Screen Lists are now Animated
+- Improved Shimmers Pages effect
+- Removed "- Topic" string from Channels name
+- Improved some Fonts
+
 # SongTube 3.3.0:
 
 - Reworked MusicPlayer with Customization Options
