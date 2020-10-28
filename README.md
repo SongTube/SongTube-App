@@ -12,6 +12,7 @@ SongTube is a new beautiful and fast application made in flutter, it supports Yo
 + Audio Tags & Artwork Editor
 + Audio Filters (Volume, Bass, Treble)
 + Audio Conversion (AAC, OGG and MP3) (optional)
++ Full Playlist Downloads (Only Audio)
 + Set custom path for Audio/Video download
 + Music Player built-in
 + Video Player built-in
