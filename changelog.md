@@ -1,7 +1,7 @@
-# SongTube 4.0.0>
+# SongTube 4.0.0:
 
 - Reverted from audioplayers to just_audio on a better implementation
-- AudioService is not Pre-Loaded on App lunch
+- AudioService is now Pre-Loaded on App lunch
 - Current queue is now not updated innecessarily when tapping a Song
 - Re-designed the Music Player collapsed Panel
 - Reduced BottomNavigationBar Icons & Text Size by a little
