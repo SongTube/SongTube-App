@@ -134,4 +134,15 @@ class Converter {
     return output;
   }
 
+  // Check if audio needs Conversion
+  Future<bool> audioConversionRequired(AudioConvert convertFormat, String audioPath) async {
+    String format = await getMediaFormat(audioPath);
+    if (convertFormat == AudioConvert.ToAAC)
+      return format == "aac" ? false : true;
+    else if (convertFormat == AudioConvert.ToOGGVorbis)
+      return format == "opus" ? false : true;
+    else
+      return true;
+  }
+
 }
