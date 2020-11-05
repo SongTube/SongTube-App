@@ -43,6 +43,7 @@ class Converter {
     _codec = "${streamsInfoArray[0]['codec']}";
     if (_codec == "aac") return _codec;
     if (_codec == "opus") return _codec;
+    if (_codec == "mp3") return _codec;
     _info = "${_info['format']}";
     return _info;
   }
