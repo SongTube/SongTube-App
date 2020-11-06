@@ -139,11 +139,25 @@ class Converter {
   Future<bool> audioConversionRequired(AudioConvert convertFormat, String audioPath) async {
     String format = await getMediaFormat(audioPath);
     if (convertFormat == AudioConvert.ToAAC)
-      return format == "aac" ? false : true;
+      return format == "m4a" ? false : true;
     else if (convertFormat == AudioConvert.ToOGGVorbis)
-      return format == "opus" ? false : true;
+      return format == "ogg" ? false : true;
     else
       return true;
+  }
+
+  // Clear all Metadata
+  Future<File> clearFileMetadata(String path) async {
+    String outDir = (await getTemporaryDirectory()).path + "/";
+    String fileFormat = await getMediaFormat(path);
+    File output = File(outDir + RandomString.getRandomString(10) + ".$fileFormat");
+    int _result = await flutterFFmpeg.executeWithArguments([
+      "-i", "$path", "-map", "0:a", "-codec:a", "copy", "-map_metadata", "-1", "${output.path}",
+    ]);
+    if (_result == 1) return null;
+    await File(path).delete();
+    output = await output.rename(path);
+    return output;
   }
 
 }
