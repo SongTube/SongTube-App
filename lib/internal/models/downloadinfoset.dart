@@ -86,6 +86,8 @@ class DownloadInfoSet {
     currentAction.add(reason);
     dataProgress.add("");
     progressBar.add(0.0);
+    downloadStatus.add(DownloadStatus.Cancelled);
+    cancelledCallback(downloadId);
   } 
 
   // Check for Storage Permissions
@@ -136,15 +138,37 @@ class DownloadInfoSet {
     _resetStreams();
     // Check our Download Folder
     await _checkDownloadPath();
-    // Download File
-    File downloadedFile = await downloadStream();
-    if (downloadedFile == null) {
-      downloadStatus.add(DownloadStatus.Cancelled);
-      cancelledCallback(downloadId);
-      return;
+    // Download File by DownloadType
+    File downloadedFile;
+    // Our download is a Video
+    if (downloadType == DownloadType.VIDEO) {
+      // Download specified VideoStream
+      downloadedFile = await _downloadStream(videoStreamInfo, downloadType);
+      // Download best Audio file and slam
+      // it into the video using FFmpeg
+      File audioFile = await _downloadStream(audioStreamInfo, DownloadType.AUDIO);
+      if (audioFile == null) return;
+      // Path downloaded Audio file to our Video
+      downloadedFile = await _pathAudioToVideo(downloadedFile.path, audioFile.path);
+      if (downloadedFile == null) return;
+    // Our Download is an Audio
+    } else if (downloadType == DownloadType.AUDIO) {
+      // Download specified AudioStream
+      downloadedFile = await _downloadStream(audioStreamInfo, downloadType);
+      // Remove Existing Metadata
+      currentAction.add("Clearing existing Metadata...");
+      downloadedFile = await converter.clearFileMetadata(downloadedFile.path);
+      if (downloadedFile == null) return;
+      // Check if Conversion is needed
+      if (await converter.audioConversionRequired(convertFormat, downloadedFile.path)) {
+        downloadedFile = await _convertAudio(convertFormat, downloadedFile.path);
+        if (downloadedFile == null) return;
+      }
     }
     // Rename File
     downloadedFile = await renameFile(downloadedFile, metadata.title);
+    downloadedFile = await converter.clearFileMetadata(downloadedFile.path);
+    if (downloadedFile == null) return;
     // Write All Metadata if its Audio
     if (downloadType == DownloadType.AUDIO) {
       currentAction.add("Writting Tags & Artwork...");
@@ -165,11 +189,10 @@ class DownloadInfoSet {
     });
   }
 
-  // Start Downloading our Stream, this function
-  // automatically converts the downloaded File
-  Future<File> downloadStream() async { 
+  // Start Downloading our Stream
+  Future<File> _downloadStream(StreamInfo streamToDownload, DownloadType type) async {
     // Download
-    File file = File(
+    File download = File(
       (await getTemporaryDirectory()).path +
       "/" + RandomString.getRandomString(10)
     );
@@ -178,39 +201,38 @@ class DownloadInfoSet {
     downloadStatus.add(DownloadStatus.Loading);
     // StreamData
     Stream<List<int>> streamData;
-    if (videoStreamInfo == null) {
-      if (audioStreamInfo == null) {
-        int retryCount = 0;
-        currentAction.add("Getting Audio Stream...");
-        StreamManifest audioManifest;
-        while (retryCount < 3) {
-          try {
-            audioManifest = await yt.videos.streamsClient.getManifest(videoDetails.id)
-              .timeout(Duration(seconds: 30));
-            break;
-          } catch (_) {
-            retryCount++;
-          }
-        }
-        if (audioManifest == null) {
-          currentAction.add("Error, check your Internet");
-          return null;
-        }
-        audioStreamInfo = audioManifest.audioOnly.withHighestBitrate();
-        streamData = yt.videos.streamsClient.get(audioStreamInfo);
-      } else {
-        streamData = yt.videos.streamsClient.get(audioStreamInfo);
-      }
-      currentAction.add("Downloading Audio...");
+    if (streamToDownload != null) {
+      streamData = yt.videos.streamsClient.get(streamToDownload);
+      if (type == DownloadType.VIDEO)
+        currentAction.add("Downloading Video...");
+      else
+        currentAction.add("Downloading Audio...");
     } else {
-      streamData = yt.videos.streamsClient.get(videoStreamInfo);
-      currentAction.add("Downloading Video...");
+      int retryCount = 0;
+      currentAction.add("Getting Audio Stream...");
+      StreamManifest audioManifest;
+      while (retryCount < 3) {
+        try {
+          audioManifest = await yt.videos.streamsClient.getManifest(videoDetails.id)
+            .timeout(Duration(seconds: 30));
+          break;
+        } catch (_) {
+          retryCount++;
+        }
+      }
+      if (audioManifest == null) {
+        currentAction.add("Audio: no data recieved, check your internet");
+        return null;
+      }
+      audioStreamInfo = audioManifest.audioOnly.withHighestBitrate();
+      streamData = yt.videos.streamsClient.get(audioStreamInfo);
+      currentAction.add("Downloading Audio...");
     }
     // Update Streams
     dataProgress.add("Starting...");
     progressBar.add(0.0);
     // Open the file in write.
-    var _output = file.openWrite(mode: FileMode.write);
+    var _output = download.openWrite(mode: FileMode.write);
     // Local variables for File Download Status
     var _count = 0;
     var _len;
@@ -237,78 +259,44 @@ class DownloadInfoSet {
     }
     await _output.flush();
     await _output.close();
-    // Download and Paste Audio if the Previous Download was a Video
-    if (downloadType == DownloadType.VIDEO) {
-      currentAction.add("Downloading Audio...");
-      _count = 0;
-      // Audio Download
-      File audioFile = File(
-        (await getTemporaryDirectory()).path +
-        "/" + RandomString.getRandomString(10)
-      );
-      // Open Write on our Audio File
-      var _outputAudio = audioFile.openWrite(mode: FileMode.write);
-      // StreamData
-      Stream<List<int>> audioStreamData = yt.videos.streamsClient.get(audioStreamInfo);
-      // Start stream download while once again updating
-      // internal BehaviorSubject for external access
-      await for (var data in audioStreamData) {
-        if (cancelDownload == true) {
-          _outputAudio.close();
-          downloadStatus.add(DownloadStatus.Cancelled);
-          _interruptDownload("Download cancelled...");
-          return null;
-        }
-        _count += data.length;
-        dataProgress.add(
-          "${((_count + videoStreamInfo.size.totalBytes) * 0.000001).toStringAsFixed(2)} MB" +
-          " / ${(_len * 0.000001).toStringAsFixed(2)} MB"
-        );
-        progressBar.add(((_count + videoStreamInfo.size.totalBytes)/_len).toDouble());
-        print("Downloading: " + _count.toString());
-        _outputAudio.add(data);
-      }
-      await _outputAudio.flush();
-      await _outputAudio.close();
-      progressBar.add(null);
-      // Write our Audio File downloaded to the
-      // previously downloaded Video File
-      currentAction.add("Patching Audio...");
-      convertingCallback(downloadId);
-      converted = true;
-      File finalFile = await converter.writeAudioToVideo(
-        saveFormat: await converter.getMediaFormat(file.path),
-        videoPath: file.path,
-        audioPath: audioFile.path,
-      );
-      // If convertion failed notify the User
-      if (finalFile == null) {
-        _interruptDownload("An issue ocurred with the Converter");
-        return null;
-      }
-      file = finalFile;
+    return download;
+  }
+
+  // Convert Audio with FFmpeg
+  Future<File> _convertAudio(AudioConvert format, String path) async {
+    downloadStatus.add(DownloadStatus.Converting);
+    progressBar.add(null);
+    currentAction.add("Converting...");
+    convertingCallback(downloadId);
+    converted = true;
+    File convertedAudio = await converter.convertAudio(
+      audioPath: path,
+      format: convertFormat,
+      audioModifiers: audioModifiers
+    );
+    if (convertedAudio == null) {
+      _interruptDownload("An issue ocurred while converting Audio");
+      return null;
     }
-    // Convert Audio if enabled to Requested Format
-    if (downloadType == DownloadType.AUDIO) {
-      if (convertFormat != AudioConvert.NONE) {
-        downloadStatus.add(DownloadStatus.Converting);
-        progressBar.add(null);
-        currentAction.add("Converting...");
-        convertingCallback(downloadId);
-        converted = true;
-        File finalFile = await converter.convertAudio(
-          audioPath: file.path,
-          format: convertFormat,
-          audioModifiers: audioModifiers
-        );
-        if (finalFile == null) {
-          _interruptDownload("An issue ocurred with the Converter");
-          return null;
-        }
-        file = finalFile;
-      }
+    return convertedAudio;
+  }
+
+  // Path Audio to video
+  Future<File> _pathAudioToVideo(String videoPath, String audioPath) async {
+    currentAction.add("Patching Audio...");
+    convertingCallback(downloadId);
+    converted = true;
+    File patchedVideo = await converter.writeAudioToVideo(
+      saveFormat: await converter.getMediaFormat(videoPath),
+      videoPath: videoPath,
+      audioPath: audioPath,
+    );
+    // If convertion failed notify the User
+    if (patchedVideo == null) {
+      _interruptDownload("An issue ocurred patching Audio");
+      return null;
     }
-    return file;
+    return patchedVideo;
   }
 
   // Rename File to a new provided FileName this function
@@ -316,7 +304,7 @@ class DownloadInfoSet {
   Future<File> renameFile(File file, String newName) async {
     String filePath = file.path
       .replaceAll("/${file.path.split('/').last}", '');
-    String fileFormat = file.path.split('.').last;
+    String fileFormat = await converter.getMediaFormat(file.path);
     return await file.rename("$filePath/$newName.$fileFormat");
   }
 
@@ -334,46 +322,49 @@ class DownloadInfoSet {
         disc: metadata.disc,
         track: metadata.track
       );
-      File croppedImage;
-      if (isURL(metadata.coverurl)) {
-        http.Response response;
-        File artwork = new File(
-          (await getTemporaryDirectory()).path +
-          "/${RandomString.getRandomString(5)}"
-        );
-        if (metadata.coverurl == videoDetails.thumbnails.mediumResUrl) {
-          // Try getting FullQuality Artwork
-          try {
-            response = await http.get(videoDetails.thumbnails.maxResUrl)
-              .timeout(Duration(seconds: 10));
-            await artwork.writeAsBytes(response.bodyBytes);
-          } catch (_) {}
-          // If it doesnt exist try Getting MediumQuality Artwork
-          if (response == null || response.bodyBytes == null) {
+      // Only add Artwork if song is in AAC Format
+      if (convertFormat == AudioConvert.ToAAC) {
+        File croppedImage;
+        if (isURL(metadata.coverurl)) {
+          http.Response response;
+          File artwork = new File(
+            (await getTemporaryDirectory()).path +
+            "/${RandomString.getRandomString(5)}"
+          );
+          if (metadata.coverurl == videoDetails.thumbnails.mediumResUrl) {
+            // Try getting FullQuality Artwork
             try {
-              response = await http.get(videoDetails.thumbnails.mediumResUrl)
+              response = await http.get(videoDetails.thumbnails.maxResUrl)
+                .timeout(Duration(seconds: 10));
+              await artwork.writeAsBytes(response.bodyBytes);
+            } catch (_) {}
+            // If it doesnt exist try Getting MediumQuality Artwork
+            if (response == null || response.bodyBytes == null) {
+              try {
+                response = await http.get(videoDetails.thumbnails.mediumResUrl)
+                  .timeout(Duration(seconds: 10));
+                await artwork.writeAsBytes(response.bodyBytes);
+              } catch (_) {}
+            }
+          } else {
+            try {
+              response = await http.get(metadata.coverurl)
                 .timeout(Duration(seconds: 10));
               await artwork.writeAsBytes(response.bodyBytes);
             } catch (_) {}
           }
+          croppedImage = await NativeMethod.cropToSquare(artwork);
         } else {
-          try {
-            response = await http.get(metadata.coverurl)
-              .timeout(Duration(seconds: 10));
-            await artwork.writeAsBytes(response.bodyBytes);
-          } catch (_) {}
+          croppedImage = await NativeMethod.cropToSquare(File(metadata.coverurl));
         }
-        croppedImage = await NativeMethod.cropToSquare(artwork);
-      } else {
-        croppedImage = await NativeMethod.cropToSquare(File(metadata.coverurl));
+        await TagsManager.writeArtwork(
+          songPath: filePath,
+          artworkPath: croppedImage.path
+        );
+        // Copy our CoverArt to default folder
+        await croppedImage.copy((await getApplicationDocumentsDirectory()).path +
+          "${metadata.title}.jpg");
       }
-      await TagsManager.writeArtwork(
-        songPath: filePath,
-        artworkPath: croppedImage.path
-      );
-      // Copy our CoverArt to default folder
-      await croppedImage.copy((await getApplicationDocumentsDirectory()).path +
-        "${metadata.title}.jpg");
     } on Exception catch (_) {}
   }
 
