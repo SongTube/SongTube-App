@@ -41,10 +41,12 @@ class Converter {
     _info = await flutterFFprobe.getMediaInformation(videoPath);
     final streamsInfoArray = _info['streams'];
     _codec = "${streamsInfoArray[0]['codec']}";
-    if (_codec == "aac") return _codec;
-    if (_codec == "opus") return _codec;
-    if (_codec == "mp3") return _codec;
     _info = "${_info['format']}";
+    if (_codec == "aac") return "m4a";
+    if (_codec == "opus") return "ogg";
+    if (_codec == "mp3") return "mp3";
+    if (_info == "matroska,webm") return "webm";
+    if (_info == "mov,mp4,m4a,3gp,3g2,mj2") return "mp4";
     return _info;
   }
 
