@@ -121,20 +121,28 @@ class _VideoPageState extends State<VideoPage> {
         readyToDownload: manager.streamManifest == null ? false : true,
         onDownload: () async {
           FocusScope.of(context).requestFocus(new FocusNode());
-          List<dynamic> response = await showModalBottomSheet(
+          List<dynamic> response = await showModalBottomSheet<dynamic>(
+            isScrollControlled: true,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(30),
                 topRight: Radius.circular(30)
               ),
             ),
+            clipBehavior: Clip.antiAlias,
             context: context,
             builder: (context) {
-              return DownloadMenu(
-                videoList: manager.streamManifest.videoOnly
-                  .sortByVideoQuality(),
-                audioSize: manager.streamManifest.audioOnly
-                  .withHighestBitrate().size.totalMegaBytes,
+              return Wrap(
+                children: [
+                  DownloadMenu(
+                    videoList: manager.streamManifest.videoOnly
+                      .sortByVideoQuality(),
+                    audioList: manager.streamManifest.audioOnly
+                      .sortByBitrate(),
+                    audioSize: manager.streamManifest.audioOnly
+                      .withHighestBitrate().size.totalMegaBytes,
+                  ),
+                ],
               );
             }
           );

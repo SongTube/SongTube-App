@@ -3,44 +3,208 @@ import 'package:flutter/material.dart';
 
 // Packages
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-import 'package:youtube_explode_dart/youtube_explode_dart.dart' as youtube;
+import 'package:grouped_list/grouped_list.dart';
+import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
-class VideoDownloadMenu extends StatelessWidget {
-  final List<youtube.VideoStreamInfo> videoList;
+class VideoDownloadMenu extends StatefulWidget {
+  final List<VideoStreamInfo> videoList;
   final Function(List<dynamic>) onOptionSelect;
+  final Function onBack;
   final double audioSize;
   VideoDownloadMenu({
     @required this.videoList,
     @required this.onOptionSelect,
-    @required this.audioSize
+    @required this.audioSize,
+    @required this.onBack
   });
-  void _onOptionSelect(youtube.VideoStreamInfo video) {
+
+  @override
+  _VideoDownloadMenuState createState() => _VideoDownloadMenuState();
+}
+
+class _VideoDownloadMenuState extends State<VideoDownloadMenu> {
+
+
+
+  void _onOptionSelect(VideoStreamInfo video) {
     List<dynamic> list = [
       "Video",
-      video, 
+      video,
       "1.0", "0", "0"
     ];
-    onOptionSelect(list);
+    widget.onOptionSelect(list);
   }
+
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      physics: BouncingScrollPhysics(),
+    return Column(
       children: <Widget>[
-        SizedBox(height: 8),
-        Padding(
-          padding: EdgeInsets.only(left: 22, right: MediaQuery.of(context).size.width*0.2),
-          child: ListTile(
-            leading: Icon(EvaIcons.videoOutline, color: Theme.of(context).accentColor),
-            title: Text("Video", style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color, fontWeight: FontWeight.w600)),
-            subtitle: Text("Download video at selected quality bellow"),
-            onTap: () {},
+        // Menu Title
+        Container(
+          margin: EdgeInsets.only(
+            top: 8,
+            left: 8,
+            right: 8
+          ),
+          child: Row(
+            children: [
+              IconButton(
+                icon: Icon(EvaIcons.arrowBackOutline),
+                onPressed: widget.onBack
+              ),
+              SizedBox(width: 4),
+              Text("Select Video", style: TextStyle(
+                fontSize: 20,
+                fontFamily: "YTSans"
+              )),
+            ],
           ),
         ),
+        Expanded(
+          child: GroupedListView<VideoStreamInfo, String>(
+            physics: BouncingScrollPhysics(),
+            elements: widget.videoList,
+            groupBy: (element) =>
+              (element.videoQualityLabel.split("p").first+"p"),
+            groupSeparatorBuilder: (String groupByValue) =>
+              Container(
+                padding: EdgeInsets.only(
+                  top: 8, bottom: 8,
+                  left: 16, right: 16
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  boxShadow: [
+                    BoxShadow(
+                      blurRadius: 16,
+                      color: Colors.black.withOpacity(0.06),
+                      offset: Offset(0,12)
+                    )
+                  ]
+                ),
+                child: Row(
+                  children: [
+                    Icon(EvaIcons.monitorOutline,
+                      color: Theme.of(context).accentColor),
+                    SizedBox(width: 8),
+                    Text(
+                      groupByValue,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontFamily: 'YTSans',
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            useStickyGroupSeparators: true,
+            order: GroupedListOrder.DESC,
+            groupComparator: (item1, item2) =>
+              int.parse(item1.split("p").first)
+              .compareTo(int.parse(item2.split("p").first)),
+            itemComparator: (item1, item2) =>
+              (item1.size.totalMegaBytes)
+              .compareTo((item2.size.totalMegaBytes)),
+            itemBuilder: (context, VideoStreamInfo element) {
+              return GestureDetector(
+                onTap: () {
+                  _onOptionSelect(element);
+                },
+                child: Container(
+                  margin: EdgeInsets.only(
+                    left: 12,
+                    right: 12
+                  ),
+                  height: 100,
+                  color: Colors.transparent,
+                  child: Row(
+                    children: [
+                      SizedBox(width: 24),
+                      Icon(EvaIcons.videoOutline, size: 36),
+                      SizedBox(width: 24),
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "${element.container.name.toUpperCase()}",
+                              overflow: TextOverflow.fade,
+                              textAlign: TextAlign.left,
+                              softWrap: false,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 16
+                              ),
+                            ),
+                            Text(
+                              "${element.bitrate.kiloBitsPerSecond.toStringAsFixed(0)} Kbit/s",
+                              overflow: TextOverflow.fade,
+                              textAlign: TextAlign.left,
+                              softWrap: false,
+                              style: TextStyle(
+                                fontSize: 12
+                              ),
+                            ),
+                            Text(
+                              "${element.size.totalMegaBytes.toStringAsFixed(2)} MB",
+                              overflow: TextOverflow.fade,
+                              textAlign: TextAlign.left,
+                              softWrap: false,
+                              style: TextStyle(
+                                fontSize: 12
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 16, right: 16),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            element.framerate.framesPerSecond > 50
+                            ? Text(
+                                "${element.framerate.framesPerSecond} FPS",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontFamily: 'YTSans',
+                                ),
+                              ) : Container(),
+                            element.videoQualityLabel.contains("HDR")
+                            ? Container(
+                                padding: EdgeInsets.all(6),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: Theme.of(context).accentColor
+                                ),
+                                child: Text(
+                                  "HDR",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w700,
+                                    letterSpacing: 1.5
+                                  ),
+                                ),
+                              ) : Container()
+                          ],
+                        ),
+                      )
+                    ],
+                  )
+                ),
+              );
+            }
+          ),
+        ),
+        /*
         ListView.builder(
           physics: BouncingScrollPhysics(),
           shrinkWrap: true,
-          itemCount: videoList.length,
+          itemCount: widget.videoList.length,
           itemBuilder: (context, index) {
             return Padding(
               padding: const EdgeInsets.all(8.0),
@@ -61,11 +225,11 @@ class VideoDownloadMenu extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      videoList[index].videoResolution.toString() + " " +
-                      videoList[index].framerate.toString() + "fps ",
+                      widget.videoList[index].videoResolution.toString() + " " +
+                      widget.videoList[index].framerate.toString() + "fps ",
                       style: TextStyle(fontFamily: "Varela"),
                     ),
-                    videoList[index].videoQualityLabel.contains(new RegExp(r'HDR'))
+                    widget.videoList[index].videoQualityLabel.contains(new RegExp(r'HDR'))
                     ? Text(
                       "HDR ", style: TextStyle(
                         fontWeight: FontWeight.w600,
@@ -74,7 +238,7 @@ class VideoDownloadMenu extends StatelessWidget {
                       ),
                     ) : Container(),
                     Text(
-                      ((((videoList[index].size.totalBytes)/1024)/1024) + audioSize).toStringAsFixed(2) +
+                      ((((widget.videoList[index].size.totalBytes)/1024)/1024) + widget.audioSize).toStringAsFixed(2) +
                       "MB", style: TextStyle(fontSize: 12, fontFamily: "Varela"),
                     ),
                     Spacer(),
@@ -89,7 +253,7 @@ class VideoDownloadMenu extends StatelessWidget {
                           child: Icon(EvaIcons.downloadOutline, color: Colors.white),
                         ),
                       ),
-                      onTap: () => _onOptionSelect(videoList[index])
+                      onTap: () => _onOptionSelect(widget.videoList[index])
                     ),
                     SizedBox(width: 18)
                   ],
@@ -98,6 +262,7 @@ class VideoDownloadMenu extends StatelessWidget {
             );
           },
         )
+        */
       ],
     );
   }

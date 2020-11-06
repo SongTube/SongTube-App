@@ -71,7 +71,7 @@ class DownloadsProvider extends ChangeNotifier {
       case "Audio":
         downloadType = DownloadType.AUDIO;
         downloadPath = currentAppData.audioDownloadPath;
-        audioStreamInfo = manifest.audioOnly.withHighestBitrate();
+        audioStreamInfo = data[1];
         break;
       case "Video":
         downloadType = DownloadType.VIDEO;
