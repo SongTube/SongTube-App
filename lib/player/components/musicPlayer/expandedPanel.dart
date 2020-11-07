@@ -52,7 +52,7 @@ class ExpandedPlayer extends StatelessWidget {
         backdropOpacity: 0.4,
         child: PlayerBody(
           controller: controller,
-          playingFrom: mediaItem.artist,
+          playingFrom: mediaItem.album,
           textColor: textColor,
           artworkFile: image,
           vibrantColor: vibrantColor,
