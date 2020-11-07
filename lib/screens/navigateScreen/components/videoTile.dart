@@ -44,6 +44,27 @@ class VideoTile extends StatefulWidget {
 }
 
 class _VideoTileState extends State<VideoTile> {
+
+  Isolate isolate;
+
+  String channelLogo;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.searchItem is SearchVideo)
+        getChannelLogoUrl(widget.searchItem);
+    });
+  }
+
+  @override
+  void dispose() {
+    if (isolate != null)
+      isolate.kill(priority: Isolate.immediate);
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
@@ -115,34 +136,27 @@ class _VideoTileState extends State<VideoTile> {
               margin: EdgeInsets.only(left: 12, right: 12, top: 12, bottom: 4),
               child: Row(
                 children: [
-                  FutureBuilder(
-                    future: widget.searchItem is SearchVideo
-                      ? getChannelLogoUrl(widget.searchItem)
-                      : null,
-                    builder: (context, AsyncSnapshot<String> snapshot) {
-                      return Container(
-                        height: 60,
-                        width: 60,
-                        margin: EdgeInsets.only(right: 8),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          color: Colors.black.withOpacity(0.05)
-                        ),
-                        child: widget.searchItem is SearchVideo
-                          ? ClipRRect(
-                            borderRadius: BorderRadius.circular(100),
-                              child: FadeInImage(
-                                fadeInDuration: Duration(milliseconds: 200),
-                                placeholder: MemoryImage(kTransparentImage),
-                                image: snapshot.hasData
-                                  ? NetworkImage(snapshot.data)
-                                  : MemoryImage(kTransparentImage),
-                              ),
-                            )
-                          : Icon(MdiIcons.playlistMusicOutline,
-                              color: Theme.of(context).iconTheme.color),
-                      );
-                    }
+                  Container(
+                    height: 60,
+                    width: 60,
+                    margin: EdgeInsets.only(right: 8),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100),
+                      color: Colors.black.withOpacity(0.05)
+                    ),
+                    child: widget.searchItem is SearchVideo
+                      ? ClipRRect(
+                        borderRadius: BorderRadius.circular(100),
+                          child: FadeInImage(
+                            fadeInDuration: Duration(milliseconds: 200),
+                            placeholder: MemoryImage(kTransparentImage),
+                            image: channelLogo != null
+                              ? NetworkImage(channelLogo)
+                              : MemoryImage(kTransparentImage),
+                          ),
+                        )
+                      : Icon(MdiIcons.playlistMusicOutline,
+                          color: Theme.of(context).iconTheme.color),
                   ),
                   Expanded(
                     child: Column(
@@ -194,15 +208,16 @@ class _VideoTileState extends State<VideoTile> {
     return playlist.thumbnails.mediumResUrl;
   }
 
-  Future<String> getChannelLogoUrl(SearchVideo video) async {
-    AppDataProvider appData = Provider.of<AppDataProvider>(context);
+  Future<void> getChannelLogoUrl(SearchVideo video) async {
+    if (context == null) return;
+    AppDataProvider appData = Provider.of<AppDataProvider>(context, listen: false);
     if ((appData.channelLogos.singleWhere((it) => it.name == video.videoAuthor,
           orElse: () => null)) != null) {
       return appData.channelLogos[appData.channelLogos
         .indexWhere((element) => element.name == video.videoAuthor)].logoUrl;
     } else {
       ReceivePort receivePort = ReceivePort();
-      Isolate.spawn(VideoTile.getChannelLogoUrlIsolate, receivePort.sendPort);
+      isolate = await Isolate.spawn(VideoTile.getChannelLogoUrlIsolate, receivePort.sendPort);
       SendPort childSendPort = await receivePort.first;
       ReceivePort responsePort = ReceivePort();
       childSendPort.send(["${video.videoId}", responsePort.sendPort]);
@@ -217,7 +232,8 @@ class _VideoTileState extends State<VideoTile> {
           logoUrl: url
         ));
       }
-      return url;
+      if (mounted)
+        setState(() => channelLogo = url);
     }
   }
 }
