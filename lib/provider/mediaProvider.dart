@@ -118,20 +118,24 @@ class MediaProvider extends ChangeNotifier {
           }
         }
       }
-      listMediaItems.add(
-        MediaItem(
-          id:       song.filePath,
-          album:    song.album,
-          title:    song.title,
-          artist:   song.artist,
-          duration: Duration(milliseconds: int.parse(song.duration)),
-          artUri:   "file://${artworkFile.path}",
-          extras:   {
-            "albumId": song.id,
-            "artwork": artworkFile.path
-          }
-        )
-      );
+      // Avoid this Method from stopping this function on
+      // exception (Most probably because a corrupted audio)
+      try {
+        listMediaItems.add(
+          MediaItem(
+            id:       song.filePath,
+            album:    song.album,
+            title:    song.title,
+            artist:   song.artist,
+            duration: Duration(milliseconds: int.parse(song.duration)),
+            artUri:   "file://${artworkFile.path}",
+            extras:   {
+              "albumId": song.id,
+              "artwork": artworkFile.path
+            }
+          )
+        );
+      } catch (_) {}
     }
     notifyListeners();
   }
