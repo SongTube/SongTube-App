@@ -41,10 +41,7 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
       vsync: this,
       curve: Curves.easeInOut,
       duration: Duration(milliseconds: 200),
-      child: AnimatedSwitcher(
-        duration: Duration(milliseconds: 200),
-        child: _currentDownloadMenuWidget()
-      ),
+      child: _currentDownloadMenuWidget(),
     );
   }
 
