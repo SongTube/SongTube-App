@@ -79,7 +79,7 @@ class _NavigateState extends State<Navigate> with TickerProviderStateMixin {
         .listen((event) {
           manager.navigateSearchResults.add(event);
           resultsCounter++;
-          if (resultsCounter >= 20) {
+          if (resultsCounter >= 10) {
             searchStream.pause();
             isSearching = false;
             setState(() {});
