@@ -107,6 +107,9 @@ class DownloadsProvider extends ChangeNotifier {
       },
       cancelledCallback: (String downloadId) {
         moveToCancelled(downloadId);
+      },
+      saveErrorCallback: (String downloadId) {
+        moveToCancelled(downloadId);
       }
     );
     queueList.add(download);
@@ -154,6 +157,9 @@ class DownloadsProvider extends ChangeNotifier {
             checkQueue();
           },
           cancelledCallback: (String downloadId) {
+            moveToCancelled(downloadId);
+          },
+          saveErrorCallback: (String downloadId) {
             moveToCancelled(downloadId);
           }
         ),
