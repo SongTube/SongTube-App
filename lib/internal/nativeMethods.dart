@@ -43,4 +43,9 @@ class NativeMethod {
     return null;
   }
 
+  // (TEMP FIX) Request All Files Access to The App
+  // to fix Downloads on Android 11
+  static void requestAllFilesPermission() {
+    intentPlatform.invokeListMethod('requestAllFilesPermission');
+  }
 }

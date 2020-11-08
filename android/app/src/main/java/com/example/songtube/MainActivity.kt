@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.provider.Settings
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
@@ -68,6 +69,9 @@ class MainActivity : FlutterActivity() {
                         intent.setDataAndType(Uri.parse(videoPath), "video/*")
                         startActivity(intent)
                         result.success(0)
+                    }
+                    if (call.method == "requestAllFilesPermission") {
+                        startActivityForResult(Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION), 1)
                     }
                 }
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, TAGS_CHANNEL)
