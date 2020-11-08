@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:io';
 
 // Flutter
+import 'package:device_info/device_info.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:songtube/internal/models/audioModifiers.dart';
@@ -42,6 +43,7 @@ class DownloadInfoSet {
   Function(String, bool) completedCallback;
   Function(String) cancelledCallback;
   Function(String) convertingCallback;
+  Function(String) saveErrorCallback;
 
   DownloadInfoSet({
     @required this.metadata,
@@ -55,6 +57,7 @@ class DownloadInfoSet {
     @required this.completedCallback,
     @required this.cancelledCallback,
     @required this.convertingCallback,
+    @required this.saveErrorCallback,
     this.videoStreamInfo,
   }) {
     converter = new Converter();
@@ -182,7 +185,20 @@ class DownloadInfoSet {
           await Directory(downloadPath).create(recursive: true);
         }
         String fileName = downloadedFile.path.split("/").last;
-        File finalFile = await downloadedFile.copy("$downloadPath/$fileName");
+        File finalFile;
+        try {
+          finalFile = await downloadedFile.copy("$downloadPath/$fileName");
+        } on Exception catch (_) {
+          AndroidDeviceInfo deviceInfo = await DeviceInfoPlugin().androidInfo;
+          int sdkNumber = deviceInfo.version.sdkInt;
+          if (sdkNumber > 28) {
+            _interruptDownload("Android 11 Fix needed, check Settings");
+          } else {
+            _interruptDownload("Error saving download, check your download Path");
+          }
+          saveErrorCallback(downloadId);
+          return;
+        }
         await finishDownload(finalFile);
         completedCallback(downloadId, converted);
       }
