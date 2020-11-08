@@ -22,6 +22,7 @@ import 'package:songtube/ui/components/navigationBar.dart';
 import 'package:songtube/ui/components/navigationItems.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:songtube/ui/internal/disclaimerDialog.dart';
+import 'package:songtube/ui/internal/downloadFixDialog.dart';
 import 'package:songtube/ui/internal/lifecycleEvents.dart';
 
 // UI
@@ -76,12 +77,18 @@ class _LibraryState extends State<Library> {
       );
     }
     // Disclaimer
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       // Show Disclaimer
       if (!Provider.of<AppDataProvider>(context, listen: false).disclaimerAccepted) {
-        showDialog(
+        await showDialog(
           context: context,
           builder: (context) => DisclaimerDialog()
+        );
+      }
+      if (Provider.of<AppDataProvider>(context, listen: false).showDownloadFixDialog) {
+        await showDialog(
+          context: context,
+          builder: (context) => DownloadFixDialog()
         );
       }
     });

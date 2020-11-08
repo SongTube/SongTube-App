@@ -2,7 +2,9 @@
 import 'dart:io';
 
 // Flutter
+import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
+import 'package:songtube/internal/nativeMethods.dart';
 
 // Internal
 import 'package:songtube/provider/app_provider.dart';
@@ -189,6 +191,28 @@ class DownloadSettings extends StatelessWidget {
             ), 
           )
         ),
+        FutureBuilder(
+          future: DeviceInfoPlugin().androidInfo,
+          builder: (context, AsyncSnapshot<AndroidDeviceInfo> info) {
+            if (info.hasData && info.data.version.sdkInt > 28) {
+              return ListTile(
+                title: Text(
+                  "Android 11 Fix",
+                  style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyText1.color,
+                    fontWeight: FontWeight.w500
+                  ),
+                ),
+                subtitle: Text("Fixes Download issues on Android 10 & 11"),
+                onTap: () {
+                  NativeMethod.requestAllFilesPermission();
+                },
+              );
+            } else {
+              return Container();
+            }
+          }
+        )
       ],
     );
   }

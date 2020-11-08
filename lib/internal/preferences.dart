@@ -36,6 +36,9 @@ String blurBackground = "blur_background";
 // Disclaimer Status
 String disclaimerKey = "disclaimer_key";
 
+// Fix Downloads on Android 11 Status
+String fixStatus = "download_fix_status";
+
 class Preferences {
   
   SharedPreferences prefs;
@@ -186,5 +189,13 @@ class Preferences {
   }
   void saveDisclaimerStatus(bool value) {
     prefs.setBool(disclaimerKey, value);
+  }
+
+  // Fix Downloads on Android 11 Status
+  bool getShowDownloadFixDialog() {
+    return prefs.getBool(fixStatus) ?? true;
+  }
+  void saveShowDownloadFixDialog(bool value) {
+    prefs.setBool(fixStatus, value);
   }
 }

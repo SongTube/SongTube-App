@@ -89,6 +89,9 @@ class AppDataProvider extends ChangeNotifier {
   // Disclaimer Status
   bool _disclaimerAccepted;
 
+  // Fix Downloads Dialog Status
+  bool _showDownloadFixDialog;
+
   set systemThemeAvailable(bool value){
     _systemThemeAvailable = value;
     if (value)
@@ -150,6 +153,7 @@ class AppDataProvider extends ChangeNotifier {
     _channelLogos = ChannelLogo.fromJsonArray(preferences.getChannelLogos());
     // Load Disclaimer Status
     _disclaimerAccepted = preferences.getDisclaimerStatus();
+    _showDownloadFixDialog = preferences.getShowDownloadFixDialog();
   }
 
   // Converting audio format
@@ -234,6 +238,14 @@ class AppDataProvider extends ChangeNotifier {
   set disclaimerAccepted(bool value) {
     _disclaimerAccepted = value;
     preferences.saveDisclaimerStatus(value);
+    notifyListeners();
+  }
+
+  // Show Downloads Fix Dialog
+  bool get showDownloadFixDialog => _showDownloadFixDialog;
+  set showDownloadFixDialog(bool value) {
+    _showDownloadFixDialog = value;
+    preferences.saveShowDownloadFixDialog(value);
     notifyListeners();
   }
 
