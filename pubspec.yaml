@@ -24,7 +24,7 @@ dependencies:
     sdk: flutter
 
   # Media Playback Packages
-  youtube_player_flutter: 7.0.0+7
+  youtube_player_iframe: ^1.1.0
   flutter_audio_query: ^0.3.5+6
   video_player: ^0.10.12+2
   just_audio: ^0.5.4
