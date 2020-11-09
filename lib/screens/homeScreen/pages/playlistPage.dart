@@ -14,7 +14,6 @@ import 'package:songtube/screens/homeScreen/pages/components/playlistPage/videos
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
-import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 // UI
 import 'package:songtube/ui/animations/fadeIn.dart';
@@ -28,7 +27,7 @@ class PlaylistPage extends StatelessWidget {
     return FadeInTransition(
       duration: Duration(milliseconds: 400),
       child: Dismissible(
-        key: dismissKey,
+        key: PageStorageKey('playlistPageKey'),
         direction: DismissDirection.startToEnd,
         onDismissed: (direction) {
           manager.updateHomeScreen(LoadingStatus.Unload);
@@ -50,9 +49,6 @@ class _PlayerListBodyState extends State<PlayerListBody> {
   TextEditingController albumController;
   TextEditingController artistController;
 
-  // Player Controller
-  YoutubePlayerController playerController;
-
   @override
   void initState() {
     ManagerProvider manager =
@@ -63,12 +59,6 @@ class _PlayerListBodyState extends State<PlayerListBody> {
       .replaceAll("Mix -", "").trim();
     albumController.text = manager.playlistDetails.author ?? "Youtube";
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    playerController.close();
-    super.dispose();
   }
 
   @override
@@ -124,14 +114,7 @@ class _PlayerListBodyState extends State<PlayerListBody> {
                     color: Colors.transparent,
                     child: PlaylistVideosListView(
                       playlistVideos: manager.playlistVideos,
-                      playerController: playerController,
                       onDismiss: (int index) {
-                        if (
-                          playerController != null &&
-                          playerController.metadata.videoId == manager.playlistVideos[index].id.value
-                        ) {
-                          playerController = null;
-                        }
                         manager.playlistVideos.removeAt(index);
                         setState(() {});
                       },
