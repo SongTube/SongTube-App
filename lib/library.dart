@@ -111,6 +111,10 @@ class _LibraryState extends State<Library> {
         systemNavigationBarIconBrightness: _statusBarBrightness,
       ),
     );
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.portraitUp,
+    ]);
     manager.snackBar = new AppSnack(
       scaffoldKey: manager.libraryScaffoldKey,
       context: context
