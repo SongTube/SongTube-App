@@ -65,17 +65,6 @@ class _LibraryState extends State<Library> {
     );
     Provider.of<MediaProvider>(context, listen: false).loadSongList();
     Provider.of<MediaProvider>(context, listen: false).loadVideoList();
-    if (!AudioService.running) {
-      AudioService.start(
-        backgroundTaskEntrypoint: songtubePlayer,
-        androidNotificationChannelName: 'SongTube',
-        // Enable this if you want the Android service to exit the foreground state on pause.
-        //androidStopForegroundOnPause: true,
-        androidNotificationColor: 0xFF2196f3,
-        androidNotificationIcon: 'drawable/ic_stat_music_note',
-        androidEnableQueue: true,
-      );
-    }
     // Disclaimer
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       // Show Disclaimer
