@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 // Packages
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/services.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:songtube/provider/app_provider.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/screens/homeScreen/pages/components/homePage/pageBody.dart';
 import 'package:songtube/screens/homeScreen/pages/components/homePage/searchBar.dart';
