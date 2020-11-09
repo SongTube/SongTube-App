@@ -49,27 +49,6 @@ class _VideoPageState extends State<VideoPage> {
   Widget build(BuildContext context) {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
     DownloadsProvider downloadsProvider = Provider.of<DownloadsProvider>(context);
-    if (playerController == null) {
-      playerController = YoutubePlayerController(
-        initialVideoId: manager.videoDetails.id.value,
-        params: YoutubePlayerParams(
-          autoPlay: true,
-          showFullscreenButton: true
-        )
-      );
-      playerController.onEnterFullscreen = () {
-        SystemChrome.setPreferredOrientations([
-          DeviceOrientation.landscapeLeft,
-          DeviceOrientation.landscapeRight,
-        ]);
-      };
-      playerController.onExitFullscreen = () {
-        SystemChrome.setPreferredOrientations([
-          DeviceOrientation.portraitDown,
-          DeviceOrientation.portraitUp,
-        ]);
-      };
-    }
     return Scaffold(
       body: FadeInTransition(
         duration: Duration(milliseconds: 400),
@@ -85,7 +64,7 @@ class _VideoPageState extends State<VideoPage> {
             children: <Widget> [
               // Mini-Player
               HomeScreenYoutubeVideoPlayer(
-                playerController: playerController,
+                playerController: manager.youtubePlayerController,
                 playerThumbnailUrl: manager.videoDetails.thumbnails.mediumResUrl,
               ),
               // Video Details

@@ -19,6 +19,8 @@ import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 // UI
 import 'package:songtube/ui/animations/fadeIn.dart';
 
+final dismissKey = GlobalKey();
+
 class PlaylistPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -26,7 +28,7 @@ class PlaylistPage extends StatelessWidget {
     return FadeInTransition(
       duration: Duration(milliseconds: 400),
       child: Dismissible(
-        key: GlobalKey(),
+        key: dismissKey,
         direction: DismissDirection.startToEnd,
         onDismissed: (direction) {
           manager.updateHomeScreen(LoadingStatus.Unload);
@@ -74,34 +76,14 @@ class _PlayerListBodyState extends State<PlayerListBody> {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
     DownloadsProvider downloadsProvider = Provider.of<DownloadsProvider>(context);
     Playlist playlist = manager.playlistDetails;
-    if (playerController == null && manager.playlistVideos.isNotEmpty) {
-      playerController = new YoutubePlayerController(
-        initialVideoId: VideoId.parseVideoId(manager.playlistVideos[0].url),
-        params: YoutubePlayerParams(
-          autoPlay: true,
-          showFullscreenButton: true,
-        )
-      );
-      playerController.onEnterFullscreen = () {
-        SystemChrome.setPreferredOrientations([
-          DeviceOrientation.landscapeLeft,
-          DeviceOrientation.landscapeRight,
-        ]);
-      };
-      playerController.onExitFullscreen = () {
-        SystemChrome.setPreferredOrientations([
-          DeviceOrientation.portraitDown,
-          DeviceOrientation.portraitUp,
-        ]);
-      };
-    }
     return Scaffold(
       body: Column(
         children: [
           // Youtube Player
           HomeScreenYoutubeVideoPlayer(
-            openPlayer: manager.playlistVideos.isEmpty ? false : true,
-            playerController: playerController,
+            openPlayer: manager.youtubePlayerController == null
+              ? false : true,
+            playerController: manager.youtubePlayerController,
             playerThumbnailUrl: manager.playlistDetails.thumbnails.mediumResUrl
           ),
           // Playlist Icon, Title & Author
@@ -155,8 +137,8 @@ class _PlayerListBodyState extends State<PlayerListBody> {
                       },
                       onVideoTap: (int index) {
                         String url = manager.playlistVideos[index].url;
-                        playerController.load(VideoId.parseVideoId(url));
-                        setState(() {});
+                        manager.updateYoutubePlayerController(
+                          VideoId.parseVideoId(url), true);
                       }
                     )
                   )

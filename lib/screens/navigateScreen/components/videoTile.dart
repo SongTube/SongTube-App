@@ -204,7 +204,9 @@ class _VideoTileState extends State<VideoTile> {
   }
 
   Future<String> getPlaylistThumbnailLink(SearchPlaylist searchPlaylist) async {
-    Playlist playlist = await YoutubeExplode().playlists.get(searchPlaylist.playlistId);
+    YoutubeExplode yt = YoutubeExplode();
+    Playlist playlist = await yt.playlists.get(searchPlaylist.playlistId);
+    yt.close();
     return playlist.thumbnails.mediumResUrl;
   }
 

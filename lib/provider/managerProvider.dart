@@ -3,6 +3,7 @@ import 'dart:async';
 
 // Flutter
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:songtube/internal/models/tagsControllers.dart';
 
 // Internal
@@ -14,6 +15,7 @@ import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 // UI
 import 'package:songtube/ui/internal/snackbar.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 enum LoadingStatus { Success, Loading, Unload }
 enum CurrentLoad { None, SingleVideo, Playlist }
@@ -101,6 +103,11 @@ class ManagerProvider extends ChangeNotifier {
   Playlist playlistDetails;
   List<Video> playlistVideos = [];
 
+  // -------------------------
+  // Youtube Player Controller
+  // -------------------------
+  YoutubePlayerController youtubePlayerController;
+
   // --------
   // SnackBar
   // --------
@@ -116,6 +123,33 @@ class ManagerProvider extends ChangeNotifier {
   // Other Functions & Helpers
   // -------------------------
   //
+  // Update Video Player Controller
+  void updateYoutubePlayerController(String id, bool useLoad) {
+    if (useLoad) {
+      youtubePlayerController.load(id);
+    } else {
+      youtubePlayerController = new YoutubePlayerController(
+        initialVideoId: id,
+        params: YoutubePlayerParams(
+          autoPlay: true,
+          showFullscreenButton: true,
+        )
+      );
+      youtubePlayerController.onEnterFullscreen = () {
+        SystemChrome.setPreferredOrientations([
+          DeviceOrientation.landscapeLeft,
+          DeviceOrientation.landscapeRight,
+        ]);
+      };
+      youtubePlayerController.onExitFullscreen = () {
+        SystemChrome.setPreferredOrientations([
+          DeviceOrientation.portraitDown,
+          DeviceOrientation.portraitUp,
+        ]);
+      };
+    }
+    notifyListeners();
+  }
   // Unload HomeScreen Data
   void updateHomeScreen(LoadingStatus status, [CurrentLoad type]) {
     CurrentLoad loadingType = type == null ? CurrentLoad.None : type;
@@ -128,6 +162,7 @@ class ManagerProvider extends ChangeNotifier {
         showFloatingActionButtom = false;
         mediaStreamReady         = false;
         channelDetails           = null;
+        youtubePlayerController  = null;
         break;
       // Is loading
       case LoadingStatus.Loading:
@@ -239,6 +274,7 @@ class ManagerProvider extends ChangeNotifier {
     }
     tagsControllers.updateTextControllers(videoDetails);
     updateHomeScreen(LoadingStatus.Success, CurrentLoad.SingleVideo);
+    updateYoutubePlayerController(videoDetails.id.value, false);
     notifyListeners();
     await Future.delayed(Duration(milliseconds: 400));
     getChannelDetails(url);
@@ -263,6 +299,7 @@ class ManagerProvider extends ChangeNotifier {
   // Playlist Details
   void getPlaylistVideos(String url) async {
     playlistVideos = await youtubeInfo.getPlaylistVideos(url);
+    updateYoutubePlayerController(playlistVideos[0].id.value, false);
     notifyListeners();
   }
 
