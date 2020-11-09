@@ -1,5 +1,6 @@
 // Flutter
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 // Internal
 import 'package:songtube/provider/app_provider.dart';
@@ -13,7 +14,7 @@ import 'package:songtube/screens/homeScreen/pages/components/playlistPage/videos
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 // UI
 import 'package:songtube/ui/animations/fadeIn.dart';
@@ -50,12 +51,6 @@ class _PlayerListBodyState extends State<PlayerListBody> {
   // Player Controller
   YoutubePlayerController playerController;
 
-  // Open WebView Player
-  bool openPlayer;
-
-  // Current Video on Player
-  String currentVideoUrl;
-
   @override
   void initState() {
     ManagerProvider manager =
@@ -64,18 +59,14 @@ class _PlayerListBodyState extends State<PlayerListBody> {
     artistController = new TextEditingController();
     artistController.text = manager.playlistDetails.title
       .replaceAll("Mix -", "").trim();
-    albumController.text = manager.playlistDetails.author ?? "Youtube"; 
-    openPlayer = false;
+    albumController.text = manager.playlistDetails.author ?? "Youtube";
     super.initState();
   }
 
-  void checkPlayer(String url) {
-    playerController = new YoutubePlayerController(
-      initialVideoId: YoutubePlayer.convertUrlToId(url),
-      flags: YoutubePlayerFlags(
-        autoPlay: true,
-      ),
-    );
+  @override
+  void dispose() {
+    playerController.close();
+    super.dispose();
   }
 
   @override
@@ -83,26 +74,35 @@ class _PlayerListBodyState extends State<PlayerListBody> {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
     DownloadsProvider downloadsProvider = Provider.of<DownloadsProvider>(context);
     Playlist playlist = manager.playlistDetails;
+    if (playerController == null && manager.playlistVideos.isNotEmpty) {
+      playerController = new YoutubePlayerController(
+        initialVideoId: VideoId.parseVideoId(manager.playlistVideos[0].url),
+        params: YoutubePlayerParams(
+          autoPlay: true,
+          showFullscreenButton: true,
+        )
+      );
+      playerController.onEnterFullscreen = () {
+        SystemChrome.setPreferredOrientations([
+          DeviceOrientation.landscapeLeft,
+          DeviceOrientation.landscapeRight,
+        ]);
+      };
+      playerController.onExitFullscreen = () {
+        SystemChrome.setPreferredOrientations([
+          DeviceOrientation.portraitDown,
+          DeviceOrientation.portraitUp,
+        ]);
+      };
+    }
     return Scaffold(
       body: Column(
         children: [
           // Youtube Player
           HomeScreenYoutubeVideoPlayer(
-            openPlayer: openPlayer,
+            openPlayer: manager.playlistVideos.isEmpty ? false : true,
             playerController: playerController,
-            playerThumbnailUrl: manager.playlistDetails.thumbnails.mediumResUrl,
-            onPlayPressed: () {
-              if (manager.playlistVideos.isNotEmpty) {
-                String url = manager.playlistVideos[0].url;
-                if (playerController == null)
-                  checkPlayer(url);
-                else
-                  playerController.load(YoutubePlayer.convertUrlToId(url));
-                setState(() {
-                  openPlayer = true;
-                });
-              }
-            },
+            playerThumbnailUrl: manager.playlistDetails.thumbnails.mediumResUrl
           ),
           // Playlist Icon, Title & Author
           PlaylistPageDetails(
@@ -148,7 +148,6 @@ class _PlayerListBodyState extends State<PlayerListBody> {
                           playerController != null &&
                           playerController.metadata.videoId == manager.playlistVideos[index].id.value
                         ) {
-                          openPlayer = false;
                           playerController = null;
                         }
                         manager.playlistVideos.removeAt(index);
@@ -156,13 +155,8 @@ class _PlayerListBodyState extends State<PlayerListBody> {
                       },
                       onVideoTap: (int index) {
                         String url = manager.playlistVideos[index].url;
-                        if (playerController == null)
-                          checkPlayer(url);
-                        else
-                          playerController.load(YoutubePlayer.convertUrlToId(url));
-                        setState(() {
-                          openPlayer = true;
-                        });
+                        playerController.load(VideoId.parseVideoId(url));
+                        setState(() {});
                       }
                     )
                   )

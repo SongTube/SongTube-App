@@ -3,6 +3,7 @@ import 'dart:io';
 
 // Flutter
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:songtube/internal/models/metadata.dart';
 import 'package:songtube/provider/app_provider.dart';
 import 'package:songtube/provider/downloadsProvider.dart';
@@ -19,7 +20,7 @@ import 'package:songtube/screens/homeScreen/downloadMenu/downloadMenu.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/screens/homeScreen/pages/components/videoPage/tagsTextFields.dart';
 import 'package:songtube/screens/homeScreen/pages/components/videoPage/videoDetails.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
@@ -35,19 +36,40 @@ class _VideoPageState extends State<VideoPage> {
   
   final dismissKey = GlobalKey();
 
-  // Open Player
-  bool openPlayer;
+  // Player Controller
+  YoutubePlayerController playerController;
 
   @override
-  void initState() {
-    openPlayer = false;
-    super.initState();
+  void dispose() {
+    playerController.close();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
     DownloadsProvider downloadsProvider = Provider.of<DownloadsProvider>(context);
+    if (playerController == null) {
+      playerController = YoutubePlayerController(
+        initialVideoId: manager.videoDetails.id.value,
+        params: YoutubePlayerParams(
+          autoPlay: true,
+          showFullscreenButton: true
+        )
+      );
+      playerController.onEnterFullscreen = () {
+        SystemChrome.setPreferredOrientations([
+          DeviceOrientation.landscapeLeft,
+          DeviceOrientation.landscapeRight,
+        ]);
+      };
+      playerController.onExitFullscreen = () {
+        SystemChrome.setPreferredOrientations([
+          DeviceOrientation.portraitDown,
+          DeviceOrientation.portraitUp,
+        ]);
+      };
+    }
     return Scaffold(
       body: FadeInTransition(
         duration: Duration(milliseconds: 400),
@@ -63,15 +85,8 @@ class _VideoPageState extends State<VideoPage> {
             children: <Widget> [
               // Mini-Player
               HomeScreenYoutubeVideoPlayer(
-                openPlayer: openPlayer,
-                playerController: YoutubePlayerController(
-                  initialVideoId: manager.videoDetails.id.value,
-                  flags: YoutubePlayerFlags(
-                    autoPlay: true
-                  )
-                ),
+                playerController: playerController,
                 playerThumbnailUrl: manager.videoDetails.thumbnails.mediumResUrl,
-                onPlayPressed: () => setState(() => openPlayer = true)
               ),
               // Video Details
               VideoPageDetails(
