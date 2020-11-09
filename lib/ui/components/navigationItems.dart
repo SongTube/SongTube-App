@@ -9,38 +9,23 @@ class BottomNavigationItems {
   static List<BottomNavigationBarItem> items = [
     BottomNavigationBarItem(
       icon: Icon(EvaIcons.homeOutline),
-      title: Text("Home", style: TextStyle(
-        fontFamily: "Varela",
-        fontWeight: FontWeight.w600
-      )),
+      label: "Home"
     ),
     BottomNavigationBarItem(
       icon: Icon(EvaIcons.cloudDownloadOutline),
-      title: Text("Downloads", style: TextStyle(
-        fontFamily: "Varela",
-        fontWeight: FontWeight.w600
-      )),
+      label: "Downloads"
     ),
     BottomNavigationBarItem(
       icon: Icon(EvaIcons.musicOutline),
-      title: Text("Media", style: TextStyle(
-        fontFamily: "Varela",
-        fontWeight: FontWeight.w600
-      )),
+      label: "Media"
     ),
     BottomNavigationBarItem(
       icon: Icon(EvaIcons.videoOutline),
-      title: Text("YouTube", style: TextStyle(
-        fontFamily: "Varela",
-        fontWeight: FontWeight.w600
-      )),
+      label: "YouTube"
     ),
     BottomNavigationBarItem(
       icon: Icon(MdiIcons.dotsHorizontal),
-      title: Text("More", style: TextStyle(
-        fontFamily: "Varela",
-        fontWeight: FontWeight.w600
-      )),
+      label: "More"
     )
   ];
 }
