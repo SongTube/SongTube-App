@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
-import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 class PlaylistVideosListView extends StatelessWidget {
   final List<Video> playlistVideos;
-  final YoutubePlayerController playerController;
   final Function(int) onDismiss;
   final Function(int) onVideoTap;
   PlaylistVideosListView({
     @required this.playlistVideos,
-    @required this.playerController,
     @required this.onDismiss,
     @required this.onVideoTap
   });
