@@ -353,6 +353,9 @@ class DownloadInfoSet {
               response = await http.get(videoDetails.thumbnails.maxResUrl)
                 .timeout(Duration(seconds: 10));
               await artwork.writeAsBytes(response.bodyBytes);
+              var decodedImage = await decodeImageFromList(artwork.readAsBytesSync());
+              if (decodedImage.width == 120 && decodedImage.height == 90)
+                response = null;
             } catch (_) {}
             // If it doesnt exist try Getting MediumQuality Artwork
             if (response == null || response.bodyBytes == null) {
