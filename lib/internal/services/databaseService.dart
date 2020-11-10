@@ -55,7 +55,6 @@ class DatabaseService {
   Future<void> insertDownload(SongFile download) async {
     Database db = await database;
     await db.insert(table, download.toMap());
-    print("Database: data inserted correctly");
   }
 
   Future<SongFile> getDownload(String id) async {
@@ -65,7 +64,6 @@ class DatabaseService {
       whereArgs: [id]
     );
     if (data.length > 0) {
-      print("Database: data retrieved correctly");
       return SongFile.fromMap(data.first);
     }
     return null;

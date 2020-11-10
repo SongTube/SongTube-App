@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/internal/languages.dart';
 import 'package:songtube/provider/downloadsProvider.dart';
 import 'package:songtube/provider/managerProvider.dart';
 
@@ -75,7 +76,7 @@ class _MediaScreenState extends State<MediaScreen> {
                     ),
                   ),
                   Text(
-                    "Media",
+                    Languages.of(context).labelMedia,
                     style: TextStyle(
                       fontSize: 24,
                       fontFamily: "YTSans",
@@ -116,19 +117,19 @@ class _MediaScreenState extends State<MediaScreen> {
             indicatorColor: Theme.of(context).accentColor,
             tabs: [
               Tab(child: Text(
-                "Downloads",
+                Languages.of(context).labelDownloads,
                 style: TextStyle(
                   fontFamily: 'YTSans',
                 ),
               )),
               Tab(child: Text(
-                "Music",
+                Languages.of(context).labelMusic,
                 style: TextStyle(
                   fontFamily: 'YTSans',
                 ),
               )),
               Tab(child: Text(
-                "Videos",
+                Languages.of(context).labelVideos,
                 style: TextStyle(
                   fontFamily: 'YTSans',
                 ),
