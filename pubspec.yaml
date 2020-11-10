@@ -85,6 +85,7 @@ dependencies:
   wakelock: ^0.1.4+2
   flutter_staggered_grid_view: ^0.3.2
   palette_generator: ^0.2.3
+  flutter_markdown: ^0.5.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
