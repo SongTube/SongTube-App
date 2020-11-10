@@ -120,7 +120,7 @@ class _MainState extends State<Main> {
           darkTheme: appData.systemThemeEnabled
                      ? darkTheme
                      : customTheme,
-          initialRoute: !appData.preferences.showIntroductionPages()
+          initialRoute: appData.preferences.showIntroductionPages()
             ? 'introScreen'
             : 'homeScreen',
           routes: {
