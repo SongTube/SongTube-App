@@ -1,5 +1,6 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:songtube/internal/languages.dart';
 
 class DownloadMenuHome extends StatelessWidget {
   final Function onBack;
@@ -24,7 +25,7 @@ class DownloadMenuHome extends StatelessWidget {
                 onPressed: onBack
               ),
               SizedBox(width: 16),
-              Text("Download", style: TextStyle(
+              Text(Languages.of(context).labelDownload, style: TextStyle(
                 fontSize: 20,
                 fontFamily: "YTSans"
               )),
@@ -70,7 +71,7 @@ class DownloadMenuHome extends StatelessWidget {
                          color: Theme.of(context).accentColor),
                         SizedBox(width: 16),
                         Text(
-                          "Audio",
+                          Languages.of(context).labelAudio,
                           style: TextStyle(
                             fontSize: 15,
                             color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.9),
@@ -111,7 +112,7 @@ class DownloadMenuHome extends StatelessWidget {
                           color: Theme.of(context).accentColor),
                         SizedBox(width: 16),
                         Text(
-                          "Video",
+                          Languages.of(context).labelVideo,
                           style: TextStyle(
                             fontSize: 15,
                             color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.9),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 // Packages
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:songtube/internal/languages.dart';
 
 // UI
 import '../../../ui/animations/fadeIn.dart';
@@ -78,7 +79,7 @@ class SearchBar extends StatelessWidget {
                                 decoration: InputDecoration(
                                   contentPadding: EdgeInsets.all(14.0),
                                   prefixIcon: Icon(MdiIcons.youtube, size: 32, color: Colors.red),
-                                  hintText: 'Search Youtube...',
+                                  hintText: Languages.of(context).labelSearchYoutube,
                                   hintStyle: TextStyle(
                                     color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.4),
                                     fontSize: 14

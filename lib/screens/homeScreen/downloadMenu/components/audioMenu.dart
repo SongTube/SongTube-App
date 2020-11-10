@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter_xlider/flutter_xlider.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/internal/languages.dart';
 import 'package:songtube/provider/app_provider.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
@@ -83,7 +84,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                   onPressed: widget.onBack
                 ),
                 SizedBox(width: 4),
-                Text("Select Audio", style: TextStyle(
+                Text(Languages.of(context).labelSelectAudio, style: TextStyle(
                   fontSize: 20,
                   fontFamily: "YTSans"
                 )),
@@ -136,7 +137,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                               )
                             ),
                             child: Text(
-                              "Best ",
+                              Languages.of(context).labelBest,
                               style: TextStyle(
                                 fontSize: 10,
                                 color: Colors.white
@@ -211,7 +212,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                         onChanged: (_) {}
                       ),
                       Text(
-                        "Enable Audio Conversion",
+                        Languages.of(context).labelEnableAudioConversion,
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w500
@@ -268,7 +269,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
               children: [
                 Icon(EvaIcons.barChartOutline, color: Theme.of(context).accentColor),
                 SizedBox(width: 8),
-                Text("Gain Controls", style: TextStyle(
+                Text(Languages.of(context).labelGainControls, style: TextStyle(
                   fontSize: 20,
                   fontFamily: "YTSans"
                 )),
@@ -281,7 +282,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
             children: <Widget>[
               SizedBox(width: 16),
               Text(
-                "Volume: ",
+                Languages.of(context).labelVolume+": ",
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500
@@ -351,7 +352,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                       children: <Widget>[
                         SizedBox(width: 16),
                         Text(
-                          "Bass Gain: ",
+                          Languages.of(context).labelBassGain+": ",
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w500
@@ -418,7 +419,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                       children: <Widget>[
                         SizedBox(width: 16),
                         Text(
-                          "Treble Gain: ",
+                          Languages.of(context).labelTrebleGain+": ",
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w500

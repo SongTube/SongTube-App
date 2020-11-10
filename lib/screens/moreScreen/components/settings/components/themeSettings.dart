@@ -1,6 +1,7 @@
 // Flutter
 import 'package:circular_check_box/circular_check_box.dart';
 import 'package:flutter/material.dart';
+import 'package:songtube/internal/languages.dart';
 
 // Internal
 import 'package:songtube/provider/app_provider.dart';
@@ -20,19 +21,20 @@ class _ThemeSettingsState extends State<ThemeSettings> with TickerProviderStateM
   Widget build(BuildContext context) {
     AppDataProvider appData = Provider.of<AppDataProvider>(context);
     return SettingsColumnTile(
-      title: "Theme",
+      title: Languages.of(context).labelTheme,
       icon: Icons.color_lens,
       children: <Widget>[
         ListTile(
           onTap: () => appData.systemThemeEnabled = !appData.systemThemeEnabled,
           title: Text(
-            "Use System Theme",
+            Languages.of(context).labelUseSystemTheme,
             style: TextStyle(
               color: Theme.of(context).textTheme.bodyText1.color,
               fontWeight: FontWeight.w500
             ),
           ),
-          subtitle: Text("Enable/Disable automatic theme", style: TextStyle(fontSize: 12),),
+          subtitle: Text(Languages.of(context).labelUseSystemThemeJustification,
+            style: TextStyle(fontSize: 12),),
           trailing: CircularCheckBox(
             activeColor: Theme.of(context).accentColor,
             value: appData.systemThemeEnabled,
@@ -50,13 +52,14 @@ class _ThemeSettingsState extends State<ThemeSettings> with TickerProviderStateM
           ? ListTile(
               onTap: () => appData.darkThemeEnabled = !appData.darkThemeEnabled,
               title: Text(
-                "Enable Dark Theme",
+                Languages.of(context).labelEnableDarkTheme,
                 style: TextStyle(
                   color: Theme.of(context).textTheme.bodyText1.color,
                   fontWeight: FontWeight.w500
                 ),
               ),
-              subtitle: Text("Use dark theme by default", style: TextStyle(fontSize: 12),),
+              subtitle: Text(Languages.of(context).labelEnableDarkThemeJustification,
+                style: TextStyle(fontSize: 12),),
               trailing: CircularCheckBox(
                 activeColor: Theme.of(context).accentColor,
                 value: appData.darkThemeEnabled,
@@ -71,13 +74,14 @@ class _ThemeSettingsState extends State<ThemeSettings> with TickerProviderStateM
         ListTile(
           onTap: () => appData.blackThemeEnabled = !appData.blackThemeEnabled,
           title: Text(
-            "Enable Black Theme",
+            Languages.of(context).labelEnableBlackTheme,
             style: TextStyle(
               color: Theme.of(context).textTheme.bodyText1.color,
               fontWeight: FontWeight.w500
             ),
           ),
-          subtitle: Text("Pure black theme", style: TextStyle(fontSize: 12),),
+          subtitle: Text(Languages.of(context).labelEnableBlackThemeJustification,
+            style: TextStyle(fontSize: 12),),
           trailing: CircularCheckBox(
             activeColor: Theme.of(context).accentColor,
             value: appData.blackThemeEnabled,
@@ -90,13 +94,14 @@ class _ThemeSettingsState extends State<ThemeSettings> with TickerProviderStateM
         ListTile(
           onTap: () => appData.systemThemeEnabled = !appData.systemThemeEnabled,
           title: Text(
-            "Accent Color",
+            Languages.of(context).labelAccentColor,
             style: TextStyle(
               color: Theme.of(context).textTheme.bodyText1.color,
               fontWeight: FontWeight.w500
             ),
           ),
-          subtitle: Text("Customize accent color", style: TextStyle(fontSize: 12),),
+          subtitle: Text(Languages.of(context).labelAccentColorJustification,
+            style: TextStyle(fontSize: 12),),
           trailing: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(50),

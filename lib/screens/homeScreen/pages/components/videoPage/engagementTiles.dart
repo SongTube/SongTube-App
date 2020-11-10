@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:share/share.dart';
+import 'package:songtube/internal/languages.dart';
 import 'package:songtube/screens/homeScreen/components/roundTile.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -62,7 +63,7 @@ class VideoPageEngagementTiles extends StatelessWidget {
         RoundTile(
           icon: Icon(MdiIcons.youtube, color: Theme.of(context).iconTheme.color),
           text: Text(
-            "Channel",
+            Languages.of(context).labelChannel,
             style: TextStyle(
               fontFamily: "Varela",
               fontSize: 10
@@ -77,7 +78,7 @@ class VideoPageEngagementTiles extends StatelessWidget {
         RoundTile(
           icon: Icon(EvaIcons.share, color: Theme.of(context).iconTheme.color),
           text: Text(
-            "Share",
+            Languages.of(context).labelShare,
             style: TextStyle(
               fontFamily: "Varela",
               fontSize: 10

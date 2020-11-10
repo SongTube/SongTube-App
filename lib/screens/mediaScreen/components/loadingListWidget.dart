@@ -1,5 +1,6 @@
 // Flutter
 import 'package:flutter/material.dart';
+import 'package:songtube/internal/languages.dart';
 
 class MediaLoadingWidget extends StatelessWidget {
   const MediaLoadingWidget();
@@ -15,7 +16,7 @@ class MediaLoadingWidget extends StatelessWidget {
           Container(
             margin: EdgeInsets.only(top: 16),
             child: Text(
-              "Getting your Media...",
+              Languages.of(context).labelGettingYourMedia,
               style: TextStyle(
                 fontFamily: 'YTSans',
                 fontSize: 20

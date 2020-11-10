@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/models/audioModifiers.dart';
 
 // Internal
@@ -31,6 +32,7 @@ enum DownloadStatus { Loading, Downloading, Converting, WrittingTags, Completed,
 class DownloadInfoSet {
 
   // Class Initializers
+  Languages language;
   DownloadMetaData metadata;
   DownloadType downloadType;
   AudioConvert convertFormat;
@@ -46,6 +48,7 @@ class DownloadInfoSet {
   Function(String) saveErrorCallback;
 
   DownloadInfoSet({
+    @required this.language,
     @required this.metadata,
     @required this.downloadType,
     @required this.convertFormat,
@@ -67,7 +70,7 @@ class DownloadInfoSet {
     progressBar = new BehaviorSubject<double>();
     cancelDownload = false;
     downloadStatus.add(DownloadStatus.Loading);
-    currentAction.add("Queued");
+    currentAction.add(language.labelQueued);
     progressBar.add(0.0);
   }
 
@@ -133,7 +136,7 @@ class DownloadInfoSet {
   Future<void> downloadMedia() async {
     // Check Storage Permissions
     if (!await _appHasPermissions()) {
-      _interruptDownload("Access Denied");
+      _interruptDownload(language.labelDownloadAcesssDenied);
       cancelledCallback(downloadId);
       return;
     }
@@ -159,7 +162,7 @@ class DownloadInfoSet {
       // Download specified AudioStream
       downloadedFile = await _downloadStream(audioStreamInfo, downloadType);
       // Remove Existing Metadata
-      currentAction.add("Clearing existing Metadata...");
+      currentAction.add(language.labelClearingExistingMetadata);
       downloadedFile = await converter.clearFileMetadata(downloadedFile.path);
       if (downloadedFile == null) return;
       // Check if Conversion is needed
@@ -174,11 +177,11 @@ class DownloadInfoSet {
     if (downloadedFile == null) return;
     // Write All Metadata if its Audio
     if (downloadType == DownloadType.AUDIO) {
-      currentAction.add("Writting Tags & Artwork...");
+      currentAction.add(language.labelWrittingTagsAndArtwork);
       await writeAllMetadata(downloadedFile.path);
     }
     // Move file to its Predefined Directory
-    currentAction.add("Saving file...");
+    currentAction.add(language.labelSavingFile);
     Permission.storage.request().then((value) async {
       if (value == PermissionStatus.granted) {
         if (!await Directory(downloadPath).exists()) {
@@ -192,9 +195,9 @@ class DownloadInfoSet {
           AndroidDeviceInfo deviceInfo = await DeviceInfoPlugin().androidInfo;
           int sdkNumber = deviceInfo.version.sdkInt;
           if (sdkNumber > 28) {
-            _interruptDownload("Android 11 Fix needed, check Settings");
+            _interruptDownload(language.labelAndroid11FixNeeded);
           } else {
-            _interruptDownload("Error saving download, check your download Path");
+            _interruptDownload(language.labelErrorSavingDownload);
           }
           saveErrorCallback(downloadId);
           return;
@@ -220,12 +223,12 @@ class DownloadInfoSet {
     if (streamToDownload != null) {
       streamData = yt.videos.streamsClient.get(streamToDownload);
       if (type == DownloadType.VIDEO)
-        currentAction.add("Downloading Video...");
+        currentAction.add(language.labelDownloadingVideo);
       else
-        currentAction.add("Downloading Audio...");
+        currentAction.add(language.labelDownloadingAudio);
     } else {
       int retryCount = 0;
-      currentAction.add("Getting Audio Stream...");
+      currentAction.add(language.labelGettingAudioStream);
       StreamManifest audioManifest;
       while (retryCount < 3) {
         try {
@@ -237,15 +240,15 @@ class DownloadInfoSet {
         }
       }
       if (audioManifest == null) {
-        currentAction.add("Audio: no data recieved, check your internet");
+        currentAction.add(language.labelAudioNoDataRecieved);
         return null;
       }
       audioStreamInfo = audioManifest.audioOnly.withHighestBitrate();
       streamData = yt.videos.streamsClient.get(audioStreamInfo);
-      currentAction.add("Downloading Audio...");
+      currentAction.add(language.labelDownloadingAudio);
     }
     // Update Streams
-    dataProgress.add("Starting...");
+    dataProgress.add(language.labelDownloadStarting);
     progressBar.add(0.0);
     // Open the file in write.
     var _output = download.openWrite(mode: FileMode.write);
@@ -264,13 +267,13 @@ class DownloadInfoSet {
       if (cancelDownload == true) {
         _output.close();
         downloadStatus.add(DownloadStatus.Cancelled);
-        _interruptDownload("Download cancelled...");
+        _interruptDownload(language.labelDownloadCancelled);
         return null;
       }
       _count += data.length;
       dataProgress.add("${(_count * 0.000001).toStringAsFixed(2)} MB / ${(_len * 0.000001).toStringAsFixed(2)} MB");
       progressBar.add((_count / _len).toDouble());
-      print("Downloading: " + _count.toString());
+      print(language.labelDownloading+": " + _count.toString());
       _output.add(data);
     }
     await _output.flush();
@@ -282,7 +285,7 @@ class DownloadInfoSet {
   Future<File> _convertAudio(AudioConvert format, String path) async {
     downloadStatus.add(DownloadStatus.Converting);
     progressBar.add(null);
-    currentAction.add("Converting...");
+    currentAction.add(language.labelConverting);
     convertingCallback(downloadId);
     converted = true;
     File convertedAudio = await converter.convertAudio(
@@ -291,7 +294,7 @@ class DownloadInfoSet {
       audioModifiers: audioModifiers
     );
     if (convertedAudio == null) {
-      _interruptDownload("An issue ocurred while converting Audio");
+      _interruptDownload(language.labelAnIssueOcurredConvertingAudio);
       return null;
     }
     return convertedAudio;
@@ -299,7 +302,7 @@ class DownloadInfoSet {
 
   // Path Audio to video
   Future<File> _pathAudioToVideo(String videoPath, String audioPath) async {
-    currentAction.add("Patching Audio...");
+    currentAction.add(language.labelPatchingAudio);
     convertingCallback(downloadId);
     converted = true;
     File patchedVideo = await converter.writeAudioToVideo(
@@ -309,7 +312,7 @@ class DownloadInfoSet {
     );
     // If convertion failed notify the User
     if (patchedVideo == null) {
-      _interruptDownload("An issue ocurred patching Audio");
+      _interruptDownload(language.labelAnIssueOcurredConvertingAudio);
       return null;
     }
     return patchedVideo;
@@ -404,7 +407,7 @@ class DownloadInfoSet {
       path: finalFile.path
     ));
     downloadStatus.add(DownloadStatus.Completed);
-    currentAction.add("Completed");
+    currentAction.add(language.labelCompleted);
     progressBar.add(1.0);
     NativeMethod.registerFile(finalFile.path);
     _closeStreams();

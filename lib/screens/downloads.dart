@@ -1,5 +1,6 @@
 // Flutter
 import 'package:flutter/material.dart';
+import 'package:songtube/internal/languages.dart';
 import 'package:songtube/screens/downloadScreen/tabs/cancelledTab.dart';
 
 // Internal
@@ -42,7 +43,7 @@ class DownloadTab extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "Downloads",
+                      Languages.of(context).labelDownloads,
                       style: TextStyle(
                         fontSize: 24,
                         fontFamily: "YTSans",
@@ -61,19 +62,19 @@ class DownloadTab extends StatelessWidget {
             indicatorColor: Theme.of(context).accentColor,
             tabs: [
               Tab(child: Text(
-                "Queue",
+                Languages.of(context).labelQueued,
                 style: TextStyle(
                   fontFamily: 'YTSans',
                 ),
               )),
               Tab(child: Text(
-                "Completed",
+                Languages.of(context).labelCompleted,
                 style: TextStyle(
                   fontFamily: 'YTSans',
                 ),
               )),
               Tab(child: Text(
-                "Cancelled",
+                Languages.of(context).labelCancelled,
                 style: TextStyle(
                   fontFamily: 'YTSans',
                 ),

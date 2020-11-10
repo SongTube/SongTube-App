@@ -1,6 +1,7 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:songtube/internal/languages.dart';
 
 class HomePageBody extends StatelessWidget {
   final Function onQuickSearchTap;
@@ -51,7 +52,7 @@ class HomePageBody extends StatelessWidget {
                             color: Theme.of(context).textTheme.bodyText1.color
                           ),
                           decoration: InputDecoration(
-                            hintText: 'Quick Search...',
+                            hintText: Languages.of(context).labelQuickSearch,
                             border: InputBorder.none,
                             icon: Icon(EvaIcons.searchOutline),
                           ),

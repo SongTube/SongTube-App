@@ -1,5 +1,6 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:songtube/internal/languages.dart';
 
 class MediaSearchBar extends StatelessWidget {
   final TextEditingController textController;
@@ -44,7 +45,7 @@ class MediaSearchBar extends StatelessWidget {
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.all(14.0),
                   prefixIcon: Icon(EvaIcons.searchOutline, size: 22, color: Colors.red),
-                  hintText: 'Search Media...',
+                  hintText: Languages.of(context).labelSearchMedia,
                   hintStyle: TextStyle(
                     color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.4),
                     fontSize: 14

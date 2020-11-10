@@ -1,5 +1,6 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/models/tagsControllers.dart';
 import 'package:songtube/ui/components/textfieldTile.dart';
 
@@ -19,7 +20,7 @@ class VideoPageTagsTextFields extends StatelessWidget {
               child: TextFieldTile(
                 textController: tagsControllers.titleController,
                 inputType: TextInputType.text,
-                labelText: "Title",
+                labelText: Languages.of(context).labelEditorTitle,
                 icon: EvaIcons.textOutline,
               ),
             ),
@@ -34,7 +35,7 @@ class VideoPageTagsTextFields extends StatelessWidget {
               child: TextFieldTile(
                 textController: tagsControllers.albumController,
                 inputType: TextInputType.text,
-                labelText: "Album",
+                labelText: Languages.of(context).labelEditorAlbum,
                 icon: EvaIcons.bookOpenOutline,
               ),
             ),
@@ -44,7 +45,7 @@ class VideoPageTagsTextFields extends StatelessWidget {
               child: TextFieldTile(
                 textController: tagsControllers.artistController,
                 inputType: TextInputType.text,
-                labelText: "Artist",
+                labelText: Languages.of(context).labelEditorArtist,
                 icon: EvaIcons.personOutline,
               ),
             ),
@@ -59,7 +60,7 @@ class VideoPageTagsTextFields extends StatelessWidget {
               child: TextFieldTile(
                 textController: tagsControllers.genreController,
                 inputType: TextInputType.text,
-                labelText: "Genre",
+                labelText: Languages.of(context).labelEditorGenre,
                 icon: EvaIcons.bookOutline,
               ),
             ),
@@ -69,7 +70,7 @@ class VideoPageTagsTextFields extends StatelessWidget {
               child: TextFieldTile(
                 textController: tagsControllers.dateController,
                 inputType: TextInputType.datetime,
-                labelText: "Date",
+                labelText: Languages.of(context).labelEditorDate,
                 icon: EvaIcons.calendarOutline,
               ),
             ),
@@ -84,7 +85,7 @@ class VideoPageTagsTextFields extends StatelessWidget {
               child: TextFieldTile(
                 textController: tagsControllers.discController,
                 inputType: TextInputType.number,
-                labelText: "Disc",
+                labelText: Languages.of(context).labelEditorDisc,
                 icon: EvaIcons.playCircleOutline
               ),
             ),
@@ -94,7 +95,7 @@ class VideoPageTagsTextFields extends StatelessWidget {
               child: TextFieldTile(
                 textController: tagsControllers.trackController,
                 inputType: TextInputType.number,
-                labelText: "Track",
+                labelText: Languages.of(context).labelEditorTrack,
                 icon: EvaIcons.musicOutline,
               ),
             ),

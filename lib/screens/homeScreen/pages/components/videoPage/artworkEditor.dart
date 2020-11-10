@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:songtube/internal/languages.dart';
 import 'package:string_validator/string_validator.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -45,7 +46,7 @@ class VideoPageArtworkEditor extends StatelessWidget {
                 width: 50,
                 margin: EdgeInsets.only(left: 8),
                 child: Text(
-                  "Tags\nEditor",
+                  Languages.of(context).labelTagsEditor,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 12
@@ -76,7 +77,7 @@ class VideoPageArtworkEditor extends StatelessWidget {
                   width: 50,
                   margin: EdgeInsets.only(right: 8),
                   child: Text(
-                    "Edit\nArtwork",
+                    Languages.of(context).labelEditArtwork,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 12

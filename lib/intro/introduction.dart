@@ -1,6 +1,7 @@
 // Flutter
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:songtube/internal/languages.dart';
 
 // Internal
 import 'package:songtube/intro/components/introPermissions.dart';
@@ -98,7 +99,7 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
                         borderRadius: BorderRadius.circular(50)
                       ),
                       child: Text(
-                        "Skip",
+                        Languages.of(context).labelSkip,
                         style: TextStyle(
                           fontFamily: 'YTSans',
                           fontSize: 15,
@@ -145,7 +146,7 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
                           borderRadius: BorderRadius.circular(50)
                         ),
                         child: Text(
-                          "Next",
+                          Languages.of(context).labelNext,
                           style: TextStyle(
                             fontFamily: 'YTSans',
                             fontSize: 15,

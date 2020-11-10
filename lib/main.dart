@@ -1,5 +1,7 @@
 // Flutter
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:songtube/internal/languages.dart';
 
 // Internal
 import 'package:songtube/intro/introduction.dart';
@@ -24,7 +26,12 @@ void main() async {
   runApp(Main(preloadedFs: preferences));
 }
 
-class Main extends StatelessWidget {
+class Main extends StatefulWidget {
+
+  static void setLocale(BuildContext context, Locale newLocale) {
+    var state = context.findAncestorStateOfType<_MainState>();
+    state.setLocale(newLocale);
+  }
 
   final Preferences preloadedFs;
   Main({
@@ -32,11 +39,35 @@ class Main extends StatelessWidget {
   });
 
   @override
+  _MainState createState() => _MainState();
+}
+
+class _MainState extends State<Main> {
+
+  // Language
+  Locale _locale;
+  void setLocale(Locale locale) {
+    setState(() {
+      _locale = locale;
+    });
+  }
+
+  @override
+  void didChangeDependencies() async {
+    getLocale().then((locale) {
+      setState(() {
+        _locale = locale;
+      });
+    });
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<AppDataProvider>(
-          create: (context) => AppDataProvider(preferences: preloadedFs)
+          create: (context) => AppDataProvider(preferences: widget.preloadedFs)
         ),
         ChangeNotifierProvider<ManagerProvider>(
           create: (context) => ManagerProvider()
@@ -62,6 +93,26 @@ class Main extends StatelessWidget {
                       : AppTheme.white(appData.accentColor);
 
         return MaterialApp(
+          locale: _locale,
+          supportedLocales: [
+            Locale('en', ''),
+            Locale('es', ''),
+          ],
+          localizationsDelegates: [
+            AppLocalizationsDelegate(),
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          localeResolutionCallback: (locale, supportedLocales) {
+            for (var supportedLocale in supportedLocales) {
+              if (supportedLocale?.languageCode == locale?.languageCode &&
+                  supportedLocale?.countryCode == locale?.countryCode) {
+                return supportedLocale;
+              }
+            }
+            return supportedLocales?.first;
+          },
           title: "SongTube",
           theme: appData.systemThemeEnabled
                  ? AppTheme.white(appData.accentColor)
@@ -69,7 +120,7 @@ class Main extends StatelessWidget {
           darkTheme: appData.systemThemeEnabled
                      ? darkTheme
                      : customTheme,
-          initialRoute: appData.preferences.showIntroductionPages()
+          initialRoute: !appData.preferences.showIntroductionPages()
             ? 'introScreen'
             : 'homeScreen',
           routes: {
@@ -77,9 +128,8 @@ class Main extends StatelessWidget {
             'introScreen': (context) => IntroScreen()
           },
         );
-      }, ),
+      }),
     );
-
   }
 }
 

@@ -1,6 +1,6 @@
 // Flutter
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:songtube/internal/languages.dart';
 
 // Internal
 import 'package:songtube/provider/app_provider.dart';
@@ -99,7 +99,7 @@ class _PlayerListBodyState extends State<PlayerListBody> {
                       Container(
                         margin: EdgeInsets.only(top: 16),
                         child: Text(
-                          "Loading Videos...",
+                          Languages.of(context).labelLoadingVideos,
                           style: TextStyle(
                             fontFamily: 'YTSans',
                             fontSize: 16
@@ -132,6 +132,7 @@ class _PlayerListBodyState extends State<PlayerListBody> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           downloadsProvider.handlePlaylistDownload(
+            language: Languages.of(context),
             currentAppData: Provider.of<AppDataProvider>(context, listen: false),
             listVideos: manager.playlistVideos,
             album: albumController.text,
@@ -145,7 +146,8 @@ class _PlayerListBodyState extends State<PlayerListBody> {
           children: [
             Icon(EvaIcons.musicOutline, color: Colors.white),
             SizedBox(width: 8),
-            Text("Download All", style: TextStyle(color: Colors.white))
+            Text(Languages.of(context).labelDownloadAll,
+              style: TextStyle(color: Colors.white))
           ],
         ) 
       ),

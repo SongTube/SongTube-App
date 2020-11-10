@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Packages
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:songtube/internal/languages.dart';
 
 class NoPermissionWidget extends StatelessWidget {
   final Function onPermissionRequest;
@@ -19,7 +20,7 @@ class NoPermissionWidget extends StatelessWidget {
           Container(
             margin: EdgeInsets.only(top: 16, bottom: 16),
             child: Text(
-              "View your Videos by\nGranting Storage Permission",
+              Languages.of(context).labelNoPermissionJustification,
               style: TextStyle(
                 fontFamily: 'YTSans',
                 fontSize: 20
@@ -28,15 +29,7 @@ class NoPermissionWidget extends StatelessWidget {
             ),
           ),
           GestureDetector(
-            onTap: () {
-              onPermissionRequest();
-              /*Permission.storage.request().then((value) {
-                if (value == PermissionStatus.granted) {
-                  mediaProvider.storagePermission = true;
-                  mediaProvider.loadVideoList();
-                }
-              });*/
-            },
+            onTap: () => onPermissionRequest(),
             child: Container(
               margin: EdgeInsets.only(bottom: 32),
               height: 50,
@@ -50,7 +43,8 @@ class NoPermissionWidget extends StatelessWidget {
                   Container(
                     margin: EdgeInsets.only(left: 16, right: 8),
                     child: Text(
-                      "Allow Access",
+                      Languages.of(context).labelAllow + " " +
+                      Languages.of(context).labelAccess,
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.white,

@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:package_info/package_info.dart';
 
 // Internal
-import 'package:songtube/internal/services/playerService.dart';
 import 'package:songtube/internal/updateChecker.dart';
 import 'package:songtube/player/components/musicPlayer/playerPadding.dart';
 import 'package:songtube/provider/app_provider.dart';
@@ -21,7 +20,6 @@ import 'package:songtube/player/musicPlayer.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:songtube/ui/components/navigationBar.dart';
-import 'package:songtube/ui/components/navigationItems.dart';
 import 'package:songtube/ui/dialogs/appUpdateDialog.dart';
 import 'package:songtube/ui/internal/disclaimerDialog.dart';
 import 'package:songtube/ui/internal/downloadFixDialog.dart';
@@ -158,7 +156,6 @@ class _LibraryState extends State<Library> {
         ),
         bottomNavigationBar: AppBottomNavigationBar(
           onItemTap: (int index) => manager.screenIndex = index,
-          navigationItems: BottomNavigationItems.items,
           currentIndex: manager.screenIndex
         ),
       ),

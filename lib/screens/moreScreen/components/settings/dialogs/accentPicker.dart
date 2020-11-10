@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Packages
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
+import 'package:songtube/internal/languages.dart';
 
 // UI
 import 'package:songtube/ui/animations/fadeIn.dart';
@@ -53,7 +54,7 @@ class _AccentPickerState extends State<AccentPicker> {
                   delay: Duration(milliseconds: 100),
                   duration: Duration(milliseconds: 200),
                   child: Text(
-                    "Choose Color",
+                    Languages.of(context).labelChooseColor,
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
                       fontSize: 22,

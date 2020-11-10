@@ -4,6 +4,7 @@ import 'dart:io';
 // Flutter
 import 'package:flutter/material.dart';
 import 'package:songtube/internal/ffmpeg/extractor.dart';
+import 'package:songtube/internal/languages.dart';
 
 // Internal
 import 'package:songtube/internal/models/videoFile.dart';
@@ -79,7 +80,7 @@ class VideosOnFolderListView extends StatelessWidget {
                                           return Text(
                                             videoDuration.hasData
                                               ? "${Duration(milliseconds: videoDuration.data).inMinutes}min"
-                                              : "Calculating...",
+                                              : Languages.of(context).labelCalculating,
                                             style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 12

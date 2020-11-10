@@ -1,5 +1,6 @@
 // Flutter
 import 'package:flutter/material.dart';
+import 'package:songtube/internal/languages.dart';
 import 'package:songtube/ui/animations/showUp.dart';
 
 class NoDownloads extends StatelessWidget {
@@ -29,7 +30,7 @@ class NoDownloads extends StatelessWidget {
         ),
         child: Center(
           child: Text(
-            "Empty",
+            Languages.of(context).labelEmpty,
             style: TextStyle(
               color: Colors.white,
               fontFamily: 'YTSans'

@@ -3,6 +3,7 @@ import 'dart:io';
 
 // Flutter
 import 'package:flutter/material.dart';
+import 'package:songtube/internal/languages.dart';
 import 'package:songtube/provider/downloadsProvider.dart';
 
 // Packages
@@ -26,18 +27,18 @@ class BackupSettings extends StatelessWidget {
     AppSnack snackbar = new AppSnack(scaffoldKey: scaffoldKey, context: context, addPadding: false);
     DownloadsProvider downloadsProvider = Provider.of<DownloadsProvider>(context);
     return SettingsColumnTile(
-      title: "Backup",
+      title: Languages.of(context).labelBackup,
       icon: EvaIcons.saveOutline,
       children: <Widget>[
         ListTile(
           title: Text(
-            "Backup",
+            Languages.of(context).labelBackup,
             style: TextStyle(
               color: Theme.of(context).textTheme.bodyText1.color,
               fontWeight: FontWeight.w500
             ),
           ),
-          subtitle: Text("Backup your media library",
+          subtitle: Text(Languages.of(context).labelBackupJustification,
             style: TextStyle(fontSize: 12)
           ),
           trailing: Container(
@@ -55,7 +56,7 @@ class BackupSettings extends StatelessWidget {
                 if (!await File(path).exists()) {
                   snackbar.showSnackBar(
                     icon: Icons.warning,
-                    title: "Your Library is Empty",
+                    title: Languages.of(context).labelBackupLibraryEmpty,
                     duration: Duration(seconds: 2)
                   );
                   return;
@@ -63,7 +64,7 @@ class BackupSettings extends StatelessWidget {
                 await File(path).copy(backupPath + 'MediaItems.db');
                 snackbar.showSnackBar(
                   icon: Icons.backup,
-                  title: "Backup Completed",
+                  title: Languages.of(context).labelBackupCompleted,
                   duration: Duration(seconds: 2)
                 );
               }
@@ -72,13 +73,13 @@ class BackupSettings extends StatelessWidget {
         ),
         ListTile(
           title: Text(
-            "Restore",
+            Languages.of(context).labelRestore,
             style: TextStyle(
               color: Theme.of(context).textTheme.bodyText1.color,
               fontWeight: FontWeight.w500
             ),
           ),
-          subtitle: Text("Restore your media library",
+          subtitle: Text(Languages.of(context).labelRestoreJustification,
             style: TextStyle(fontSize: 12)
           ),
           trailing: Container(
@@ -95,7 +96,7 @@ class BackupSettings extends StatelessWidget {
                 if (!await File(backupPath + 'MediaItems.db').exists()) {
                   snackbar.showSnackBar(
                     icon: Icons.warning,
-                    title: "You have no Backup",
+                    title: Languages.of(context).labelRestoreNotFound,
                     duration: Duration(seconds: 2)
                   );
                   return;
@@ -103,7 +104,7 @@ class BackupSettings extends StatelessWidget {
                 await File(backupPath + 'MediaItems.db').copy(path);
                 snackbar.showSnackBar(
                     icon: Icons.restore,
-                    title: "Restore Completed",
+                    title: Languages.of(context).labelRestoreCompleted,
                     duration: Duration(seconds: 2)
                   );
                 downloadsProvider.getDatabase();

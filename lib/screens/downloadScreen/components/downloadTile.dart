@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/models/downloadinfoset.dart';
 import 'package:songtube/internal/models/metadata.dart';
 import 'package:string_validator/string_validator.dart';
@@ -164,7 +165,7 @@ class DownloadTile extends StatelessWidget {
                     builder: (context, snapshot) {
                       return snapshot.data == null 
                       ? Text(
-                        "Downloading...",
+                        Languages.of(context).labelDownloading,
                         style: TextStyle(
                           fontSize: 12,
                         ),

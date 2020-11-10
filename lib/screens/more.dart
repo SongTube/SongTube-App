@@ -1,5 +1,6 @@
 // Flutter
 import 'package:flutter/material.dart';
+import 'package:songtube/internal/languages.dart';
 
 // Internal
 import 'package:songtube/provider/app_provider.dart';
@@ -29,7 +30,7 @@ class MoreScreen extends StatelessWidget {
           // Settings
           QuickAccessTile(
             tileIcon: Icon(EvaIcons.settingsOutline, color: Colors.redAccent),
-            title: "Settings",
+            title: Languages.of(context).labelSettings,
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsTab()));
             }
@@ -53,7 +54,7 @@ class MoreScreen extends StatelessWidget {
           // Licenses
           QuickAccessTile(
             tileIcon: Icon(EvaIcons.heartOutline, color: Colors.redAccent),
-            title: "Donate",
+            title: Languages.of(context).labelDonate,
             onTap: () {
               launch("https://paypal.me/artixo");
             },
@@ -61,7 +62,7 @@ class MoreScreen extends StatelessWidget {
           // Licenses
           QuickAccessTile(
             tileIcon: Icon(MdiIcons.license, color: Colors.green),
-            title: "Licenses",
+            title: Languages.of(context).labelLicenses,
             onTap: () {
               showLicensePage(
                 applicationName: appData.appName,

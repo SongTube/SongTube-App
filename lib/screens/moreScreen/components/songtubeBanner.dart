@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Packages
 import 'package:avatar_glow/avatar_glow.dart';
+import 'package:songtube/internal/languages.dart';
 
 class SongTubeBanner extends StatelessWidget {
   final String appName;
@@ -71,7 +72,7 @@ class SongTubeBanner extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           Text(
-                            "Version: ",
+                            Languages.of(context).labelVersion+": ",
                             style: TextStyle(
                               fontSize: 15,
                               fontFamily: "YTSans",

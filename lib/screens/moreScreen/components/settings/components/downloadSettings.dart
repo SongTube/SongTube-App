@@ -4,6 +4,7 @@ import 'dart:io';
 // Flutter
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
+import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/nativeMethods.dart';
 
 // Internal
@@ -27,18 +28,18 @@ class DownloadSettings extends StatelessWidget {
   Widget build(BuildContext context) {
     AppDataProvider appData = Provider.of<AppDataProvider>(context);
     return SettingsColumnTile(
-      title: "Downloads",
+      title: Languages.of(context).labelDownloads,
       icon: EvaIcons.downloadOutline,
       children: <Widget>[
         ListTile(
           title: Text(
-            "Audio Folder",
+            Languages.of(context).labelAudioFolder,
             style: TextStyle(
               color: Theme.of(context).textTheme.bodyText1.color,
               fontWeight: FontWeight.w500
             ),
           ),
-          subtitle: Text("Choose a Folder for Audio downloads",
+          subtitle: Text(Languages.of(context).labelAudioFolderJustification,
             style: TextStyle(fontSize: 12)
           ),
           trailing: Container(
@@ -64,13 +65,13 @@ class DownloadSettings extends StatelessWidget {
         ),
         ListTile(
           title: Text(
-            "Video Folder",
+            Languages.of(context).labelVideoFolder,
             style: TextStyle(
               color: Theme.of(context).textTheme.bodyText1.color,
               fontWeight: FontWeight.w500
             ),
           ),
-          subtitle: Text("Choose a Folder for Video downloads",
+          subtitle: Text(Languages.of(context).labelVideoFolderJustification,
             style: TextStyle(fontSize: 12)
           ),
           trailing: Container(
@@ -96,13 +97,13 @@ class DownloadSettings extends StatelessWidget {
         ),
         ListTile(
           title: Text(
-            "Album Folder",
+            Languages.of(context).labelAlbumFolder,
             style: TextStyle(
               color: Theme.of(context).textTheme.bodyText1.color,
               fontWeight: FontWeight.w500
             ),
           ),
-          subtitle: Text("Create a Folder for each Song Album",
+          subtitle: Text(Languages.of(context).labelAlbumFolderJustification,
             style: TextStyle(fontSize: 12)
           ),
           trailing: CircularCheckBox(
@@ -115,13 +116,13 @@ class DownloadSettings extends StatelessWidget {
         ),
         ListTile(
           title: Text(
-            "Delete Cache",
+            Languages.of(context).labelDeleteCache,
             style: TextStyle(
               color: Theme.of(context).textTheme.bodyText1.color,
               fontWeight: FontWeight.w500
             ),
           ),
-          subtitle: Text("Clear SongTube Cache",
+          subtitle: Text(Languages.of(context).labelDeleteCacheJustification,
             style: TextStyle(fontSize: 12)
           ),
           trailing: Container(
@@ -147,8 +148,8 @@ class DownloadSettings extends StatelessWidget {
                     builder: (context) {
                       return CustomAlert(
                         leadingIcon: Icon(MdiIcons.trashCan),
-                        title: "Cleaning",
-                        content: "Temporal folder is empty!",
+                        title: Languages.of(context).labelCleaning,
+                        content: Languages.of(context).labelCacheIsEmpty,
                         actions: <Widget>[
                           FlatButton(
                             onPressed: () {
@@ -167,8 +168,9 @@ class DownloadSettings extends StatelessWidget {
                   builder: (context) {
                     return CustomAlert(
                       leadingIcon: Icon(MdiIcons.trashCan),
-                      title: "Cleaning",
-                      content: "You're about to clear: " + totalSize.toStringAsFixed(2) + "MB",
+                      title: Languages.of(context).labelCleaning,
+                      content: Languages.of(context).labelYouAreAboutToClear +
+                        ": " + totalSize.toStringAsFixed(2) + "MB",
                       actions: <Widget>[
                         FlatButton(
                           onPressed: () async {
@@ -181,7 +183,7 @@ class DownloadSettings extends StatelessWidget {
                           onPressed: () {
                             Navigator.pop(context);
                           },
-                          child: Text("Cancel"),
+                          child: Text(Languages.of(context).labelCancel),
                         )
                       ],
                     );
@@ -197,13 +199,13 @@ class DownloadSettings extends StatelessWidget {
             if (info.hasData && info.data.version.sdkInt > 28) {
               return ListTile(
                 title: Text(
-                  "Android 11 Fix",
+                  Languages.of(context).labelAndroid11Fix,
                   style: TextStyle(
                     color: Theme.of(context).textTheme.bodyText1.color,
                     fontWeight: FontWeight.w500
                   ),
                 ),
-                subtitle: Text("Fixes Download issues on Android 10 & 11"),
+                subtitle: Text(Languages.of(context).labelAndroid11FixJustification),
                 onTap: () {
                   NativeMethod.requestAllFilesPermission();
                 },

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Packages
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:songtube/internal/languages.dart';
 
 // UI
 import 'package:songtube/ui/animations/showUp.dart';
@@ -51,14 +52,7 @@ class IntroReady extends StatelessWidget {
                           ),
                           children: [
                             TextSpan(
-                              text: "Config "
-                            ),
-                            TextSpan(
-                              text: "Ready",
-                              style: TextStyle(
-                                color: Theme.of(context).accentColor,
-                                fontWeight: FontWeight.w600
-                              )
+                              text: Languages.of(context).labelConfigReady
                             )
                           ]
                         ),
@@ -90,7 +84,10 @@ class IntroReady extends StatelessWidget {
                           ),
                           children: [
                             TextSpan(
-                              text: "Introduction is over\n Enjoy "
+                              text: 
+                                Languages.of(context).labelIntroductionIsOver
+                                + "\n" +
+                                Languages.of(context).labelEnjoy + " "
                             ),
                             TextSpan(
                               text: "SongTube!",
@@ -119,7 +116,7 @@ class IntroReady extends StatelessWidget {
             child: FloatingActionButton.extended(
               backgroundColor: Colors.red,
               label: Text(
-                "Go Home",
+                Languages.of(context).labelGoHome,
                 style: TextStyle(
                   color: Colors.white,
                   fontFamily: 'YTSans',

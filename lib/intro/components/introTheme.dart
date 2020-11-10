@@ -1,5 +1,6 @@
 // Flutter
 import 'package:flutter/material.dart';
+import 'package:songtube/internal/languages.dart';
 
 // Internal
 import 'package:songtube/provider/app_provider.dart';
@@ -84,7 +85,7 @@ class _IntroThemeState extends State<IntroTheme> {
                             text: "App "
                           ),
                           TextSpan(
-                            text: "Customization",
+                            text: Languages.of(context).labelAppCustomization,
                             style: TextStyle(
                               color: Theme.of(context).accentColor,
                               fontWeight: FontWeight.w600
@@ -120,10 +121,10 @@ class _IntroThemeState extends State<IntroTheme> {
                         ),
                         children: [
                           TextSpan(
-                            text: "Select your preferred\n"
+                            text: Languages.of(context).labelSelectPreferred + "\n"
                           ),
                           TextSpan(
-                            text: "Theme!",
+                            text: Languages.of(context).labelTheme + "!",
                             style: TextStyle(
                               color: Theme.of(context).accentColor,
                               fontWeight: FontWeight.w600
@@ -174,7 +175,7 @@ class _IntroThemeState extends State<IntroTheme> {
                       ),
                       child: Center(
                         child: Text(
-                          "System",
+                          Languages.of(context).labelSystem,
                           style: TextStyle(
                             fontSize: 16,
                             color: theme == ThemeSelected.System

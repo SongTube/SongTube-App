@@ -1,6 +1,7 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:songtube/internal/ffmpeg/converter.dart';
+import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/models/audioModifiers.dart';
 import 'package:songtube/internal/models/downloadinfoset.dart';
 import 'package:songtube/internal/models/metadata.dart';
@@ -52,6 +53,7 @@ class DownloadsProvider extends ChangeNotifier {
 
   // Handle Single Video Download
   void handleVideoDownload({
+    @required Languages language,
     AppDataProvider currentAppData,
     DownloadMetaData metadata,
     StreamManifest manifest,
@@ -83,6 +85,7 @@ class DownloadsProvider extends ChangeNotifier {
     }
     metadata.title = removeToxicSymbols(metadata.title);
     DownloadInfoSet download = new DownloadInfoSet(
+      language: language,
       audioStreamInfo: audioStreamInfo,
       videoStreamInfo: videoStreamInfo,
       videoDetails: videoDetails,
@@ -118,6 +121,7 @@ class DownloadsProvider extends ChangeNotifier {
 
   // Handle Playlist Downloads
   void handlePlaylistDownload({
+    @required Languages language,
     AppDataProvider currentAppData,
     List<Video> listVideos,
     String album, String artist
@@ -131,6 +135,7 @@ class DownloadsProvider extends ChangeNotifier {
     listVideos.forEach((video) {
       queueList.add(
         new DownloadInfoSet(
+          language: language,
           audioStreamInfo: null,
           videoDetails: video,
           metadata: DownloadMetaData(

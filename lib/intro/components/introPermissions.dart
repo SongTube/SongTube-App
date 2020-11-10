@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:songtube/internal/languages.dart';
 
 // UI
 import 'package:songtube/ui/animations/showUp.dart';
@@ -76,10 +77,10 @@ class _IntroPermissionsState extends State<IntroPermissions> {
                         ),
                         children: [
                           TextSpan(
-                            text: "Grant "
+                            text: Languages.of(context).labelGrant + " "
                           ),
                           TextSpan(
-                            text: "Access",
+                            text: Languages.of(context).labelAccess,
                             style: TextStyle(
                               color: Theme.of(context).accentColor,
                               fontWeight: FontWeight.w600
@@ -122,7 +123,7 @@ class _IntroPermissionsState extends State<IntroPermissions> {
                             )
                           ),
                           TextSpan(
-                            text: "Needs Access to your External Storage to save all your Videos and Music",
+                            text: Languages.of(context).labelExternalAccessJustification,
                           )
                         ]
                       ),

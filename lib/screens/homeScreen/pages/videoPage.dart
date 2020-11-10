@@ -3,7 +3,7 @@ import 'dart:io';
 
 // Flutter
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/models/metadata.dart';
 import 'package:songtube/provider/app_provider.dart';
 import 'package:songtube/provider/downloadsProvider.dart';
@@ -143,6 +143,7 @@ class _VideoPageState extends State<VideoPage> {
           if (response == null) return;
           manager.navigateToScreen(LibraryScreen.Downloads);
           downloadsProvider.handleVideoDownload(
+            language: Languages.of(context),
             currentAppData: Provider.of<AppDataProvider>(context, listen: false),
             metadata: DownloadMetaData(
               title: manager.tagsControllers.titleController.text,

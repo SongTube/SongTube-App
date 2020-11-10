@@ -1,5 +1,6 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:songtube/internal/languages.dart';
 import 'package:songtube/ui/animations/showUp.dart';
 
 class MediaDownloadsEmpty extends StatelessWidget {
@@ -22,14 +23,15 @@ class MediaDownloadsEmpty extends StatelessWidget {
               Icon(EvaIcons.cloudDownloadOutline, size: 100, color: Theme.of(context).accentColor),
               SizedBox(height: 8),
               Text(
-                "No Media yet",
+                Languages.of(context).labelNoMediaYet,
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontFamily: 'Varela'
                 ),
               ),
               SizedBox(height: 4),
-              Text("All your Downloaded Media\n will be shown here", textAlign: TextAlign.center),
+              Text(Languages.of(context).labelNoMediaYetJustification,
+                textAlign: TextAlign.center),
             ],
           ),
         ),

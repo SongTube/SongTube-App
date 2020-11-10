@@ -1,9 +1,10 @@
 // Flutter
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:songtube/internal/languages.dart';
 
 // Internal
 import 'package:songtube/screens/moreScreen/components/settings/components/backupSettings.dart';
-import 'package:songtube/screens/moreScreen/components/settings/components/converterSettings.dart';
 import 'package:songtube/screens/moreScreen/components/settings/components/downloadSettings.dart';
 import 'package:songtube/screens/moreScreen/components/settings/components/themeSettings.dart';
 
@@ -46,12 +47,15 @@ class _SettingsTabState extends State<SettingsTab> {
             elevation: 0,
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             title: Text(
-              "Settings",
+              Languages.of(context).labelSettings,
               style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
             ),
             iconTheme: IconThemeData(
               color: Theme.of(context).iconTheme.color
             ),
+            actions: [
+              _createLanguageDropDown(context)
+            ],
           ),
         ),
       ),
@@ -64,8 +68,6 @@ class _SettingsTabState extends State<SettingsTab> {
             ThemeSettings(),
             // Downloads Settings
             DownloadSettings(),
-            // Converter Settings
-            ConverterSettings(),
             // Backup Options
             BackupSettings(scaffoldKey: scaffoldState),
           ],
@@ -73,4 +75,42 @@ class _SettingsTabState extends State<SettingsTab> {
       ),
     );
   }
+
+  _createLanguageDropDown(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(right: 16),
+      child: DropdownButton<LanguageData>(
+        iconSize: 30,
+        icon: Icon(EvaIcons.globe2Outline,
+          color: Theme.of(context).iconTheme.color),
+        onChanged: (LanguageData language) {
+          changeLanguage(context, language.languageCode);
+        },
+        underline: DropdownButtonHideUnderline(child: Container()),
+        items: LanguageData.languageList()
+          .map<DropdownMenuItem<LanguageData>>(
+            (e) =>
+            DropdownMenuItem<LanguageData>(
+              value: e,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Text(
+                    e.name,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontFamily: 'YTSans',
+                      fontWeight: FontWeight.w400,
+                      color: Theme.of(context).textTheme.bodyText1.color
+                    ),
+                  )
+                ],
+              ),
+            ),
+          )
+          .toList(),
+      ),
+    );
+  }
+
 }

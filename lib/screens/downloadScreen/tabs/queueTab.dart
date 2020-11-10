@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/models/downloadinfoset.dart';
 import 'package:songtube/provider/downloadsProvider.dart';
 import 'package:songtube/screens/downloadScreen/components/downloadTile.dart';
@@ -44,7 +45,7 @@ class _DownloadsQueueTabState extends State<DownloadsQueueTab> with TickerProvid
                       child: Container(
                         margin: EdgeInsets.only(left: 16, bottom: 16),
                         child: Text(
-                          "Converting",
+                          Languages.of(context).labelConverting,
                           style: TextStyle(
                             fontSize: 18,
                             fontFamily: 'YTSans'
@@ -88,7 +89,7 @@ class _DownloadsQueueTabState extends State<DownloadsQueueTab> with TickerProvid
                       child: Container(
                         margin: EdgeInsets.only(left: 16, bottom: 16, top: 8),
                         child: Text(
-                          "Downloading",
+                          Languages.of(context).labelDownloading,
                           style: TextStyle(
                             fontSize: 18,
                             fontFamily: 'YTSans'
@@ -142,7 +143,7 @@ class _DownloadsQueueTabState extends State<DownloadsQueueTab> with TickerProvid
                       child: Container(
                         margin: EdgeInsets.only(left: 16, bottom: 16, top: 8),
                         child: Text(
-                          "Queued",
+                          Languages.of(context).labelQueued,
                           style: TextStyle(
                             fontSize: 18,
                             fontFamily: 'YTSans'

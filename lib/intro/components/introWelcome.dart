@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:avatar_glow/avatar_glow.dart';
+import 'package:songtube/internal/languages.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // UI
@@ -66,7 +67,7 @@ class IntroWelcome extends StatelessWidget {
                         ),
                         children: [
                           TextSpan(
-                            text: "Welcome to\n"
+                            text: Languages.of(context).labelAppWelcome + "\n"
                           ),
                           TextSpan(
                             text: "SongTube",
@@ -132,6 +133,15 @@ class IntroWelcome extends StatelessWidget {
                 ),
               ),
             ),
+            ShowUpTransition(
+              forward: true,
+              slideSide: SlideFromSlide.LEFT,
+              duration: Duration(milliseconds: 600),
+              child: Align(
+                alignment: Alignment.topRight,
+                child: _createLanguageDropDown(context)
+              ),
+            )
           ],
         ),
         floatingActionButton: ShowUpTransition(
@@ -144,7 +154,7 @@ class IntroWelcome extends StatelessWidget {
             child: FloatingActionButton.extended(
               backgroundColor: Colors.red,
               label: Text(
-                "Start",
+                Languages.of(context).labelStart,
                 style: TextStyle(
                   color: Colors.white,
                   fontFamily: 'YTSans',
@@ -159,4 +169,54 @@ class IntroWelcome extends StatelessWidget {
       ),
     );
   }
+
+  _createLanguageDropDown(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(16),
+      child: DropdownButton<LanguageData>(
+        iconSize: 30,
+        hint: Padding(
+          padding: EdgeInsets.only(right: 8.0),
+          child: Text(
+            Languages.of(context).labelLanguage,
+            style: TextStyle(
+              fontSize: 16,
+              fontFamily: 'YTSans',
+              fontWeight: FontWeight.w400,
+              color: Theme.of(context).textTheme.bodyText1.color
+            ),
+          ),
+        ),
+        icon: Icon(EvaIcons.globe2Outline,
+          color: Theme.of(context).iconTheme.color),
+        onChanged: (LanguageData language) {
+          changeLanguage(context, language.languageCode);
+        },
+        underline: DropdownButtonHideUnderline(child: Container()),
+        items: LanguageData.languageList()
+          .map<DropdownMenuItem<LanguageData>>(
+            (e) =>
+            DropdownMenuItem<LanguageData>(
+              value: e,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Text(
+                    e.name,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontFamily: 'YTSans',
+                      fontWeight: FontWeight.w400,
+                      color: Theme.of(context).textTheme.bodyText1.color
+                    ),
+                  )
+                ],
+              ),
+            ),
+          )
+          .toList(),
+      ),
+    );
+  }
+  
 }
