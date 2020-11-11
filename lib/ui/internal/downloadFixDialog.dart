@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/nativeMethods.dart';
 import 'package:songtube/provider/app_provider.dart';
 
@@ -11,15 +12,13 @@ class DownloadFixDialog extends StatelessWidget {
         borderRadius: BorderRadius.circular(20)
       ),
       title: Text(
-        "Android 10 or 11 Detected",
+        Languages.of(context).labelAndroid11Detected,
         style: TextStyle(
           color: Theme.of(context).textTheme.bodyText1.color,
         ),
       ),
       content: Text(
-        "To ensure the correct functioning of this app Downloads, on Android 10 and 11, " +
-        "access to all Files permission might be needed, this will be temporal and not required " +
-        "on future updates. You can also apply this fix in Settings.",
+        Languages.of(context).labelAndroid11DetectedJustification,
         style: TextStyle(
           color: Theme.of(context).textTheme.bodyText1.color,
         ),

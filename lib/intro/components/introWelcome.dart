@@ -174,13 +174,13 @@ class IntroWelcome extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.all(16),
       child: DropdownButton<LanguageData>(
-        iconSize: 30,
+        iconSize: 26,
         hint: Padding(
           padding: EdgeInsets.only(right: 8.0),
           child: Text(
             Languages.of(context).labelLanguage,
             style: TextStyle(
-              fontSize: 16,
+              fontSize: 14,
               fontFamily: 'YTSans',
               fontWeight: FontWeight.w400,
               color: Theme.of(context).textTheme.bodyText1.color
@@ -188,7 +188,7 @@ class IntroWelcome extends StatelessWidget {
           ),
         ),
         icon: Icon(EvaIcons.globe2Outline,
-          color: Theme.of(context).iconTheme.color),
+          color: Theme.of(context).accentColor),
         onChanged: (LanguageData language) {
           changeLanguage(context, language.languageCode);
         },

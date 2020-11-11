@@ -226,6 +226,15 @@ class LanguageEn extends Languages {
   @override
   String get labelEditorAlbum => "Album";
 
+  // Android 10 or 11 Detected Dialog
+  @override
+  String get labelAndroid11Detected => "Android 10 or 11 Detected";
+  @override
+  String get labelAndroid11DetectedJustification => "To ensure the correct " +
+    "functioning of this app Downloads, on Android 10 and 11, access to all " +
+    "Files permission might be needed, this will be temporal and not required " +
+    "on future updates. You can also apply this fix in Settings.";
+
   // Common Words (One word labels)
   @override
   String get labelExit => "Exit";

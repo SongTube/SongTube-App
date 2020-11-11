@@ -2,11 +2,42 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:songtube/main.dart';
 
+// Language Files
 import 'languages/languageEn.dart';
 import 'languages/languageEs.dart';
 
-const String prefSelectedLanguageCode = "SelectedLanguageCode";
+/// Multi-Language Support for SongTube, for new Languages to be supported
+/// a new [File] in this project [internal/languages] folder needs to be
+/// created named: [language<Code>.dart], you can then copy the contents
+/// of any other already supported Language and adapt/translate it to your
+/// new one.
+/// 
+/// To finish your new Language implementation you would only need to add
+/// a new [LanguageData] to the [_supportedLanguages] list bellow and a new
+/// switch case to your Language File in [_loadLocale] also bellow this.
+final _supportedLanguages = <LanguageData>[
+  // English (US)
+  LanguageData("🇺🇸", "English", 'en'),
+  // Spanish (VE)
+  LanguageData("ve", "Español", "es"),
+];
+Future<Languages> _loadLocale(Locale locale) async {
+  switch (locale.languageCode) {
+    // English (US)
+    case 'en':
+      return LanguageEn();
+    // Spanish (VE)
+    case 'es':
+      return LanguageEs();
+    // Default Language (English)
+    default:
+      return LanguageEn();
+  }
+}
 
+// -------------------
+// Language Data Class
+// -------------------
 class LanguageData {
   final String flag;
   final String name;
@@ -27,22 +58,15 @@ class AppLocalizationsDelegate extends LocalizationsDelegate<Languages> {
   const AppLocalizationsDelegate();
 
   @override
-  bool isSupported(Locale locale) =>
-      ['en', 'es'].contains(locale.languageCode);
+  bool isSupported(Locale locale) {
+    List<String> supportedLanguageCodes = [];
+    _supportedLanguages.forEach((element) =>
+      supportedLanguageCodes.add(element.languageCode));
+    return supportedLanguageCodes.contains(locale.languageCode);
+  }
 
   @override
-  Future<Languages> load(Locale locale) => _load(locale);
-
-  static Future<Languages> _load(Locale locale) async {
-    switch (locale.languageCode) {
-      case 'en':
-        return LanguageEn();
-      case 'es':
-        return LanguageEs();
-      default:
-        return LanguageEn();
-    }
-  }
+  Future<Languages> load(Locale locale) => _loadLocale(locale);
 
   @override
   bool shouldReload(LocalizationsDelegate<Languages> old) => false;
@@ -172,6 +196,10 @@ abstract class Languages {
   String get labelEditorDate;
   String get labelEditorAlbum;
 
+  // Android 10 or 11 Detected Dialog
+  String get labelAndroid11Detected;
+  String get labelAndroid11DetectedJustification;
+
   // Common Words (One word labels)
   String get labelExit;
   String get labelSystem;
@@ -193,6 +221,12 @@ abstract class Languages {
   String get labelCancel;
 
 }
+
+// ----------------------------------------
+// Methods To Get, Set an Save App Language
+// ----------------------------------------
+
+const String prefSelectedLanguageCode = "SelectedLanguageCode";
 
 Future<Locale> setLocale(String languageCode) async {
   SharedPreferences _prefs = await SharedPreferences.getInstance();

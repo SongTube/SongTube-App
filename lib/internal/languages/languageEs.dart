@@ -120,7 +120,7 @@ class LanguageEs extends Languages {
   @override
   String get labelNoMediaYet => "Colección vacía";
   @override
-  String get labelNoMediaYetJustification => "Toda tu Colección" +
+  String get labelNoMediaYetJustification => "Toda tu Colección " +
     "se mostrará aquí";
   @override
   String get labelSearchMedia => "Buscar en Colección...";
@@ -197,7 +197,7 @@ class LanguageEs extends Languages {
   @override
   String get labelRestore => "Restaurar";
   @override
-  String get labelRestoreJustification => "Retaura tu colección de Descargas";
+  String get labelRestoreJustification => "Restaura tu colección de Descargas";
   @override
   String get labelBackupLibraryEmpty => "Tu libraría esta vacía";
   @override
@@ -226,6 +226,16 @@ class LanguageEs extends Languages {
   String get labelEditorDate => "Fecha";
   @override
   String get labelEditorAlbum => "Album";
+
+  // Android 10 or 11 Detected Dialog
+  @override
+  String get labelAndroid11Detected => "Android 11 Detectado";
+  @override
+  String get labelAndroid11DetectedJustification => "Para asegurar el buen " +
+    "funcionamiento de las Descargas, en Android 10 y 11, el permiso para " +
+    "todos los Archivos del dispositivo puede ser necesario, este permiso va " +
+    "a ser temporal y no será requerido en futuras actualizaciones. Puedes" +
+    "también dar el permiso luego en la Configuracion de esta aplicación.";
 
   // Common Words (One word labels)
   @override
