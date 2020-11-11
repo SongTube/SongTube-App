@@ -22,6 +22,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
 
   # Media Playback Packages
   youtube_player_iframe: ^1.1.0
