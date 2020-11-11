@@ -36,6 +36,45 @@ Other SongTube download sites:
 
 ---
 
+## Contribute
+
+You can contribute on anything you want from new features fixes, etc... But most importantly if the app doesn't support
+your native Language you can contribute by implementing it! It's really easy:
+
+**1st Step:** Create a new Language File by creating it under this project's **internal/languages** folder, the file needs to be named: "language**Code**.dart" (**Code** is the LanguageCode of the Language you are implementing, for example: **En** or **Es**), you can then copy the contents of any other already supported Language and adapt/translate it to your new one (Remember to change the class name to "Language**Code**").
+
+**2nd Step:** To finish your implementation, open this file: [languages.dart](https://github.com/SongTube/SongTube-App/blob/master/lib/internal/languages.dart)
+
+Inside that file you will find at the first code lines:
+
+```dart
+final _supportedLanguages = <LanguageData>[
+  // English (US)
+  LanguageData("🇺🇸", "English", 'en'),
+  // Spanish (VE)
+  LanguageData("ve", "Español", "es"),
+];
+Future<Languages> _loadLocale(Locale locale) async {
+  switch (locale.languageCode) {
+    // English (US)
+    case 'en':
+      return LanguageEn();
+    // Spanish (VE)
+    case 'es':
+      return LanguageEs();
+    // Default Language (English)
+    default:
+      return LanguageEn();
+  }
+}
+```
+
+Where for your new Language you have to add a new LanguageData(flag, name, languageCode) into the **_supportedLanguages** list, then, a new switch case in **_loadLocale()** function with your languageCode and return your new language File, open a Pull Request and after checking I will merge it!.
+
+*If you don't feel like doing this last step, you can still send me your new Language File via PullRequest and I will do it.*
+
+---
+
 ## Screenshots
 
 ![](https://i.imgur.com/20DZtPI.jpg) ![](https://i.imgur.com/MMsTOqH.jpg)
