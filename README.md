@@ -73,6 +73,12 @@ Where for your new Language you have to add a new LanguageData(flag, name, langu
 
 *If you don't feel like doing this last step, you can still send me your new Language File via PullRequest and I will do it.*
 
+**Current list of Languages Supported:**
+
+- English
+- Español
+- Português (Thanks to [@RickyM7](https://github.com/RickyM7))
+
 ---
 
 ## Screenshots
