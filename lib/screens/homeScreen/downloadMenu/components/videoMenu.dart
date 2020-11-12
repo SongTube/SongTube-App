@@ -25,8 +25,6 @@ class VideoDownloadMenu extends StatefulWidget {
 
 class _VideoDownloadMenuState extends State<VideoDownloadMenu> {
 
-
-
   void _onOptionSelect(VideoStreamInfo video) {
     List<dynamic> list = [
       "Video",
@@ -151,7 +149,7 @@ class _VideoDownloadMenuState extends State<VideoDownloadMenu> {
                               ),
                             ),
                             Text(
-                              "${element.size.totalMegaBytes.toStringAsFixed(2)} MB",
+                              "${(element.size.totalMegaBytes + widget.audioSize).toStringAsFixed(2)} MB",
                               overflow: TextOverflow.fade,
                               textAlign: TextAlign.left,
                               softWrap: false,
