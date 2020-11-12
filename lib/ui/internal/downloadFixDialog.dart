@@ -33,7 +33,6 @@ class DownloadFixDialog extends StatelessWidget {
           ),
           onPressed: () {
             NativeMethod.requestAllFilesPermission();
-            Provider.of<AppDataProvider>(context, listen: false).showDownloadFixDialog = false;
             Navigator.pop(context);
           },
         ),

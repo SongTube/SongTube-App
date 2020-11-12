@@ -79,6 +79,8 @@ class _LibraryState extends State<Library> {
           context: context,
           builder: (context) => DownloadFixDialog()
         );
+        Provider.of<AppDataProvider>(context, listen: false)
+          .showDownloadFixDialog = false;
       }
       // Check for Updates
       PackageInfo.fromPlatform().then((android) {
