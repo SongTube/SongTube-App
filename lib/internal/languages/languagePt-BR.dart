@@ -1,6 +1,6 @@
 import 'package:songtube/internal/languages.dart';
 
-class LanguageEs extends Languages {
+class LanguagePtBr extends Languages {
 
   // Introduction Screens
   @override
