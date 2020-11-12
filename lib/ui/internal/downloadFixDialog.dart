@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/nativeMethods.dart';
-import 'package:songtube/provider/app_provider.dart';
 
 class DownloadFixDialog extends StatelessWidget {
   @override

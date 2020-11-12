@@ -1,6 +1,5 @@
 // Dart
 import 'dart:async';
-import 'dart:math';
 
 // Flutter
 import 'package:flutter/material.dart';
@@ -12,7 +11,6 @@ import 'package:songtube/ui/components/searchHistory.dart';
 import 'package:songtube/provider/app_provider.dart';
 
 // Packages
-import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 import 'package:provider/provider.dart';
 
 // UI
