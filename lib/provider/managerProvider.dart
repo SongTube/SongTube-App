@@ -266,8 +266,8 @@ class ManagerProvider extends ChangeNotifier {
   // Move to Navigate Screen with a Search Intent
   void pushYoutubePage(String searchQuery) async {
     navigateQuery = searchQuery;
-    await Future.delayed((Duration(milliseconds: 50)), () 
-      => navigateToScreen(LibraryScreen.Youtube));
+    updateYoutubeSearchResults(updateResults: true);
+    navigateToScreen(LibraryScreen.Youtube);
     notifyListeners();
   }
 
