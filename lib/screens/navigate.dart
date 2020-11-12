@@ -107,6 +107,7 @@ class _NavigateState extends State<Navigate> with TickerProviderStateMixin {
         List<dynamic> results = manager.youtubeSearchResults;
         return NotificationListener(
           child: ListView.builder(
+            key: PageStorageKey('youtubeSearchResults'),
             controller: scrollController,
             itemCount: results.length,
             itemBuilder: (context, index) {
