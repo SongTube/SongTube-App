@@ -16,7 +16,7 @@ import 'languages/languagePt-BR.dart';
 /// To finish your new Language implementation you would only need to add
 /// a new [LanguageData] to the [_supportedLanguages] list bellow and a new
 /// switch case to your Language File in [_loadLocale] also bellow this.
-final _supportedLanguages = <LanguageData>[
+final supportedLanguages = <LanguageData>[
   // English (US)
   LanguageData("🇺🇸", "English", 'en'),
   // Spanish (VE)
@@ -45,18 +45,13 @@ Future<Languages> _loadLocale(Locale locale) async {
 // Language Data Class
 // -------------------
 class LanguageData {
+
   final String flag;
   final String name;
   final String languageCode;
 
   LanguageData(this.flag, this.name, this.languageCode);
 
-  static List<LanguageData> languageList() {
-    return <LanguageData>[
-      LanguageData("🇺🇸", "English", 'en'),
-      LanguageData("ve", "Español", "es"),
-    ];
-  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<Languages> {
@@ -66,7 +61,7 @@ class AppLocalizationsDelegate extends LocalizationsDelegate<Languages> {
   @override
   bool isSupported(Locale locale) {
     List<String> supportedLanguageCodes = [];
-    _supportedLanguages.forEach((element) =>
+    supportedLanguages.forEach((element) =>
       supportedLanguageCodes.add(element.languageCode));
     return supportedLanguageCodes.contains(locale.languageCode);
   }

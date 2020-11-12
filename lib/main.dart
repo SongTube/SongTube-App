@@ -92,12 +92,13 @@ class _MainState extends State<Main> {
                       ? darkTheme
                       : AppTheme.white(appData.accentColor);
 
+        List<Locale> supportedLocales = [];
+        supportedLanguages.forEach((element) =>
+          supportedLocales.add(Locale(element.languageCode, '')));
+
         return MaterialApp(
           locale: _locale,
-          supportedLocales: [
-            Locale('en', ''),
-            Locale('es', ''),
-          ],
+          supportedLocales: supportedLocales,
           localizationsDelegates: [
             AppLocalizationsDelegate(),
             GlobalMaterialLocalizations.delegate,

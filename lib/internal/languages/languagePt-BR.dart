@@ -234,7 +234,7 @@ class LanguagePtBr extends Languages {
   String get labelAndroid11DetectedJustification => "Para assegurar o bom " +
     "funcionamento dos Downloads, no Android 10 e 11, a permissão para " +
     "acessar todos os Arquivos pode ser necessária, isso será " +
-    "temporário e não será necessário em futuras atualizações. Você" +
+    "temporário e não será necessário em futuras atualizações. Você " +
     "também pode aplicar esta correção nas Configurações.";
 
   // Common Words (One word labels)

@@ -87,7 +87,7 @@ class _SettingsTabState extends State<SettingsTab> {
           changeLanguage(context, language.languageCode);
         },
         underline: DropdownButtonHideUnderline(child: Container()),
-        items: LanguageData.languageList()
+        items: supportedLanguages
           .map<DropdownMenuItem<LanguageData>>(
             (e) =>
             DropdownMenuItem<LanguageData>(
