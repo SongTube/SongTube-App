@@ -41,20 +41,24 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     clipboardHasLink = false;
     clipboardLink = "";
-    WidgetsBinding.instance.addObserver(
-      new LifecycleEventHandler(resumeCallBack: () {
-        checkClipboard();
-        return;
-      })
-    );
-    checkClipboard();
     quickSearchFocusNode = new FocusNode();
     super.initState();
+    if (mounted) {
+      WidgetsBinding.instance.addObserver(
+        new LifecycleEventHandler(resumeCallBack: () {
+          WidgetsBinding.instance
+            .addPostFrameCallback((timeStamp) {
+              checkClipboard();
+          });
+          return;
+        })
+      );
+    }
   }
 
   Future<void> checkClipboard() async {
     ClipboardData data = await Clipboard.getData('text/plain');
-    if (data == null && mounted) {
+    if (data == null) {
       clipboardLink = "";
       setState(() => clipboardHasLink = false);
       return;
@@ -70,7 +74,7 @@ class _HomePageState extends State<HomePage> {
     } else {
       clipboardLink = "";
       linkType = null;
-      setState(() => clipboardHasLink = true);
+      setState(() => clipboardHasLink = false);
     }
   }
 
