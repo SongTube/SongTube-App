@@ -56,6 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget currentHome(BuildContext context) {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
+    AppDataProvider appData = Provider.of<AppDataProvider>(context);
     if (manager.mediaStreamReady && manager.currentLoad == CurrentLoad.SingleVideo) {
       // Return Single Video Page
       return VideoPage();
@@ -73,8 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
               manager.pushYoutubePage(searchQuery);
               if (searchQuery.length > 1) {
                 Future.delayed(Duration(milliseconds: 400), () =>
-                  Provider.of<AppDataProvider>(context, listen: false)
-                    .addStringtoSearchHistory(searchQuery.trim()
+                  appData.addStringtoSearchHistory(searchQuery.trim()
                 ));
               }
             },
