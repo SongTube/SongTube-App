@@ -31,81 +31,21 @@ class Navigate extends StatefulWidget {
 
 class _NavigateState extends State<Navigate> with TickerProviderStateMixin {
 
-  // YT Explode Instance
-  YoutubeExplode yt;
-
   // Focus Node
   FocusNode searchNode;
 
-  // Current Search Query
-  String currentStateSearchQuery;
-
-  // Results Counter
-  int resultsCounter = 0;
-
-  // Search Stream
-  StreamSubscription searchStream;
-
   // ListView Scroll Controller
   ScrollController scrollController;
-
-  // Searching Status
-  bool isSearching;
-
-  void fillSearchResults() {
-    if (isSearching) return;
-    setState(() => isSearching = true);
-    ManagerProvider manager = Provider.of<ManagerProvider>
-      (context, listen: false);
-    if (manager.navigateQuery == null) {
-      manager.navigateQuery = String.fromCharCodes(Iterable.generate(
-        1, (_) => 'qwertyuiopasdfghjlcvbnm'
-        .codeUnitAt(Random().nextInt('qwertyuiopasdfgjlcvbnm'.length))
-      ));
-    }
-    if (currentStateSearchQuery == null || currentStateSearchQuery != manager.navigateQuery) {
-      manager.navigateSearchResults = new List<dynamic>();
-      if (searchStream != null) searchStream.cancel();
-      setState(() {});
-      resultsCounter = 0;
-      currentStateSearchQuery = manager.navigateQuery;
-      if (currentStateSearchQuery.length > 1) {
-        Future.delayed(Duration(milliseconds: 400), () =>
-          Provider.of<AppDataProvider>(context, listen: false)
-            .addStringtoSearchHistory(currentStateSearchQuery.trim()
-        ));
-      }
-      searchStream = yt.search.getVideosFromPage(manager.navigateQuery)
-        .listen((event) {
-          manager.navigateSearchResults.add(event);
-          resultsCounter++;
-          if (resultsCounter >= 10) {
-            searchStream.pause();
-            isSearching = false;
-            setState(() {});
-          }
-        });
-    } else {
-      resultsCounter = 0;
-      searchStream.resume();
-    }
-  }
 
   @override
   void initState() {
     super.initState();
     searchNode = new FocusNode();
-    yt = new YoutubeExplode();
-    isSearching = false;
-    fillSearchResults();
     scrollController = new ScrollController();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    searchStream.cancel();
-    yt.close();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<ManagerProvider>(context, listen: false)
+        .updateYoutubeSearchResults();
+    });
   }
 
   @override
@@ -126,7 +66,7 @@ class _NavigateState extends State<Navigate> with TickerProviderStateMixin {
             searchNode.unfocus();
             manager.showSearchBar = false;
             manager.navigateQuery = manager.urlController.text;
-            fillSearchResults();
+            manager.updateYoutubeSearchResults(updateResults: true);
           },
           onSearchTap: () {
             setState(() => manager.showSearchBar = !manager.showSearchBar);
@@ -159,12 +99,12 @@ class _NavigateState extends State<Navigate> with TickerProviderStateMixin {
           searchNode.unfocus();
           manager.showSearchBar = false;
           manager.navigateQuery = item;
-          fillSearchResults();
+          manager.updateYoutubeSearchResults();
         }
       );
     } else {
-      if (manager.navigateSearchResults.isNotEmpty) {
-        List<dynamic> results = manager.navigateSearchResults;
+      if (manager.youtubeSearchResults.isNotEmpty) {
+        List<dynamic> results = manager.youtubeSearchResults;
         return NotificationListener(
           child: ListView.builder(
             controller: scrollController,
@@ -184,7 +124,7 @@ class _NavigateState extends State<Navigate> with TickerProviderStateMixin {
                     AnimatedSize(
                       vsync: this,
                       duration: Duration(milliseconds: 400),
-                      child: isSearching
+                      child: manager.searchStreamRunning
                         ? CircularProgressIndicator(
                             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                           )
@@ -198,8 +138,8 @@ class _NavigateState extends State<Navigate> with TickerProviderStateMixin {
           onNotification: (notification) {
             if (notification is ScrollUpdateNotification) {
               if (scrollController.position.pixels > scrollController.position.maxScrollExtent-400) {
-                if (isSearching == false) {
-                  fillSearchResults();
+                if (manager.searchStreamRunning == false) {
+                  manager.updateYoutubeSearchResults();
                 }
               }
             }

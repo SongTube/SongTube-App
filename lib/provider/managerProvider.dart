@@ -8,6 +8,7 @@ import 'package:songtube/internal/models/tagsControllers.dart';
 
 // Internal
 import 'package:songtube/internal/nativeMethods.dart';
+import 'package:songtube/internal/randomString.dart';
 import 'package:songtube/internal/youtube/youtubeInfo.dart';
 
 // Packages
@@ -43,7 +44,7 @@ class ManagerProvider extends ChangeNotifier {
     // YouTube Info
     youtubeInfo = new YoutubeInfo();
     // Navigate
-    navigateSearchResults = new List<dynamic>();
+    searchStreamRunning = false;
   }
 
   // -------------
@@ -60,8 +61,13 @@ class ManagerProvider extends ChangeNotifier {
   bool mediaStreamReady;
   bool showFloatingActionButtom;
   // Navitate Screen
-  String navigateQuery;
-  List<dynamic> navigateSearchResults;
+  String _navigateQuery;
+  String get navigateQuery => _navigateQuery == null
+    ? RandomString.getRandomLetter()
+    : _navigateQuery;
+  set navigateQuery(String searchQuery) {
+    _navigateQuery = searchQuery;
+  }
   // SearchBar
   bool _showSearchBar;
 
@@ -108,6 +114,13 @@ class ManagerProvider extends ChangeNotifier {
   // -------------------------
   YoutubePlayerController youtubePlayerController;
 
+  // ---------------
+  // Navigate Screen
+  // ---------------
+  bool searchStreamRunning;
+  StreamSubscription youtubeSearchStream;
+  List<dynamic> youtubeSearchResults = [];
+
   // --------
   // SnackBar
   // --------
@@ -123,6 +136,33 @@ class ManagerProvider extends ChangeNotifier {
   // Other Functions & Helpers
   // -------------------------
   //
+  // Search for Videos on Youtube
+  void updateYoutubeSearchResults({bool updateResults = false}) async {
+    int resultsCounter = 0;
+    if (updateResults || youtubeSearchStream == null) {
+      searchStreamRunning = true;
+      youtubeSearchResults.clear();
+      if (youtubeSearchStream != null) {
+        await youtubeSearchStream.cancel();
+        youtubeSearchStream = null;
+      }
+      notifyListeners();
+      youtubeSearchStream = youtubeInfo.yt.search
+        .getVideosFromPage(navigateQuery)
+        .listen((event) {
+          youtubeSearchResults.add(event);
+          resultsCounter++;
+          if (resultsCounter >= 10) {
+            youtubeSearchStream.pause();
+            searchStreamRunning = false;
+            notifyListeners();
+          }
+        }, cancelOnError: true);
+    } else {
+      resultsCounter = 0;
+      youtubeSearchStream.resume();
+    }
+  }
   // Update Video Player Controller
   void updateYoutubePlayerController(String id, bool useLoad) {
     if (useLoad) {
