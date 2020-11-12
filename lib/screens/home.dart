@@ -1,5 +1,6 @@
 // Flutter
 import 'package:flutter/material.dart';
+import 'package:songtube/provider/app_provider.dart';
 import 'package:songtube/screens/homeScreen/pages/playlistPage.dart';
 
 // Internal
@@ -70,6 +71,12 @@ class _HomeScreenState extends State<HomeScreen> {
             onQuickSearch: (String searchQuery) {
               quickSearchController.clear();
               manager.pushYoutubePage(searchQuery);
+              if (searchQuery.length > 1) {
+                Future.delayed(Duration(milliseconds: 400), () =>
+                  Provider.of<AppDataProvider>(context, listen: false)
+                    .addStringtoSearchHistory(searchQuery.trim()
+                ));
+              }
             },
           )
         );

@@ -67,6 +67,12 @@ class _NavigateState extends State<Navigate> with TickerProviderStateMixin {
             manager.showSearchBar = false;
             manager.navigateQuery = manager.urlController.text;
             manager.updateYoutubeSearchResults(updateResults: true);
+            if (searchQuery.length > 1) {
+              Future.delayed(Duration(milliseconds: 400), () =>
+                Provider.of<AppDataProvider>(context, listen: false)
+                  .addStringtoSearchHistory(searchQuery.trim()
+              ));
+            }
           },
           onSearchTap: () {
             setState(() => manager.showSearchBar = !manager.showSearchBar);
@@ -100,6 +106,12 @@ class _NavigateState extends State<Navigate> with TickerProviderStateMixin {
           manager.showSearchBar = false;
           manager.navigateQuery = item;
           manager.updateYoutubeSearchResults(updateResults: true);
+          if (item.length > 1) {
+            Future.delayed(Duration(milliseconds: 400), () =>
+              Provider.of<AppDataProvider>(context, listen: false)
+                .addStringtoSearchHistory(item.trim()
+            ));
+          }
         }
       );
     } else {
