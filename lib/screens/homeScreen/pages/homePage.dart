@@ -44,14 +44,16 @@ class _HomePageState extends State<HomePage> {
     quickSearchFocusNode = new FocusNode();
     super.initState();
     if (mounted) {
+      WidgetsBinding.instance
+        .addPostFrameCallback((timeStamp) {
+          checkClipboard();
+      });
       WidgetsBinding.instance.addObserver(
         new LifecycleEventHandler(resumeCallBack: () {
-          WidgetsBinding.instance
-            .addPostFrameCallback((timeStamp) {
-              checkClipboard();
-          });
+          Future.delayed(Duration(milliseconds: 500), () =>
+            checkClipboard());
           return;
-        })
+        }, )
       );
     }
   }
@@ -60,21 +62,25 @@ class _HomePageState extends State<HomePage> {
     ClipboardData data = await Clipboard.getData('text/plain');
     if (data == null) {
       clipboardLink = "";
-      setState(() => clipboardHasLink = false);
+      if (mounted)
+        setState(() => clipboardHasLink = false);
       return;
     }
     if (PlaylistId.parsePlaylistId(data.text) != null) {
       clipboardLink = PlaylistId.parsePlaylistId(data.text);
       linkType = LinkType.Playlist;
-      setState(() => clipboardHasLink = true);
+      if (mounted)
+        setState(() => clipboardHasLink = true);
     } else if (VideoId.parseVideoId(data.text) != null) {
       clipboardLink = VideoId.parseVideoId(data.text);
       linkType = LinkType.Video;
-      setState(() => clipboardHasLink = true);
+      if (mounted)
+        setState(() => clipboardHasLink = true);
     } else {
       clipboardLink = "";
       linkType = null;
-      setState(() => clipboardHasLink = false);
+      if (mounted)
+        setState(() => clipboardHasLink = false);
     }
   }
 
