@@ -99,7 +99,7 @@ class _NavigateState extends State<Navigate> with TickerProviderStateMixin {
           searchNode.unfocus();
           manager.showSearchBar = false;
           manager.navigateQuery = item;
-          manager.updateYoutubeSearchResults();
+          manager.updateYoutubeSearchResults(updateResults: true);
         }
       );
     } else {
