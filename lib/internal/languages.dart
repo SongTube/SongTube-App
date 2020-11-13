@@ -6,6 +6,7 @@ import 'package:songtube/main.dart';
 import 'languages/languageEn.dart';
 import 'languages/languageEs.dart';
 import 'languages/languagePt-BR.dart';
+import 'languages/languageIgbo-NG.dart';
 
 /// Multi-Language Support for SongTube, for new Languages to be supported
 /// a new [File] in this project [internal/languages] folder needs to be
@@ -22,7 +23,9 @@ final supportedLanguages = <LanguageData>[
   // Spanish (VE)
   LanguageData("ve", "Español", "es"),
   // Portuguese (BR)
-  LanguageData("br", "Português", "pt")
+  LanguageData("br", "Português", "pt"),
+  // Igbo (Igbo)
+  LanguageData("ng", "Igbo", "Igbo"),
 ];
 Future<Languages> _loadLocale(Locale locale) async {
   switch (locale.languageCode) {
@@ -35,6 +38,9 @@ Future<Languages> _loadLocale(Locale locale) async {
     // Portuguese (BR)
     case 'pt':
       return LanguagePtBr();
+    // Igbo (Igbo)
+    case 'Igbo':
+      return LanguageIgboNG();
     // Default Language (English)
     default:
       return LanguageEn();
