@@ -24,8 +24,8 @@ final supportedLanguages = <LanguageData>[
   LanguageData("ve", "Español", "es"),
   // Portuguese (BR)
   LanguageData("br", "Português", "pt"),
-  // Igbo (Igbo)
-  LanguageData("ng", "Igbo", "Igbo"),
+  // Igbo (NG)
+  LanguageData("ng", "Igbo", "ig"),
 ];
 Future<Languages> _loadLocale(Locale locale) async {
   switch (locale.languageCode) {
@@ -38,9 +38,9 @@ Future<Languages> _loadLocale(Locale locale) async {
     // Portuguese (BR)
     case 'pt':
       return LanguagePtBr();
-    // Igbo (Igbo)
-    case 'Igbo':
-      return LanguageIgboNG();
+    // Igbo (NG)
+    case 'ig':
+      return LanguageIgbo();
     // Default Language (English)
     default:
       return LanguageEn();
