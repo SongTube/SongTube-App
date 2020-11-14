@@ -100,6 +100,7 @@ class _MainState extends State<Main> {
           locale: _locale,
           supportedLocales: supportedLocales,
           localizationsDelegates: [
+            FallbackLocalizationDelegate(),
             AppLocalizationsDelegate(),
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,

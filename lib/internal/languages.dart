@@ -80,6 +80,15 @@ class AppLocalizationsDelegate extends LocalizationsDelegate<Languages> {
   
 }
 
+class FallbackLocalizationDelegate extends LocalizationsDelegate<MaterialLocalizations> {
+  @override
+  bool isSupported(Locale locale) => true;
+  @override
+  Future<MaterialLocalizations> load(Locale locale) async => DefaultMaterialLocalizations();
+  @override
+  bool shouldReload(_) => false;
+}
+
 abstract class Languages {
   
   static Languages of(BuildContext context) {
