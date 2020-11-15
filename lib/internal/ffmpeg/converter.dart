@@ -89,7 +89,15 @@ class FFmpegConverter {
       output = File(output.path + ".mp4");
     }
     int _result = await flutterFFmpeg.executeWithArguments(_argsList);
-    if (_result == 1) return null;
+    if (_result == 1)
+      throw Exception(
+        "An issue ocurred trying to convert audio File\n" +
+        "videoFile: $videoPath\n"
+        "audioFile: $audioPath\n" +
+        "format: $videoFormat\n" +
+        "argument list: $_argsList" +
+        "output path: $output"
+      );
     return output;
   }
 
@@ -147,7 +155,14 @@ class FFmpegConverter {
       output = File(output.path + ".mp3");
     }
     int _result = await flutterFFmpeg.executeWithArguments(_argsList);
-    if (_result == 1) return null;
+    if (_result == 1)
+      throw Exception(
+        "An issue ocurred trying to convert audio File\n" +
+        "audioFile: $audioPath\n" +
+        "format: $format\n" +
+        "argument list: $_argsList\n" +
+        "output path: $output"
+      );
     return output;
   }
 
@@ -177,7 +192,15 @@ class FFmpegConverter {
       "${output.path}",
     ];
     int _result = await flutterFFmpeg.executeWithArguments(_argsList);
-    if (_result == 1) return null;
+    if (_result == 1)
+      throw Exception(
+        "Cannot apply AudioModifiers\n" +
+        "audioFile: $audioPath\n" +
+        "audioModifiers: v=${audioModifiers.volume} " +
+        "b=${audioModifiers.bassGain} t=${audioModifiers.trebleGain}\n" +
+        "argument list: $_argsList\n" +
+        "output: $output",
+      );
     return output;
   }
 
@@ -205,11 +228,18 @@ class FFmpegConverter {
     String outDir = (await getTemporaryDirectory()).path + "/";
     String fileFormat = await getMediaFormat(audioFile);
     File output = File(outDir + RandomString.getRandomString(10) + ".$fileFormat");
-    int _result = await flutterFFmpeg.executeWithArguments([
+    List<String> _argsList = [
       "-i", "$audioFile", "-map", "0:a", "-codec:a",
       "copy", "-map_metadata", "-1", "${output.path}",
-    ]);
-    if (_result == 1) return null;
+    ];
+    int _result = await flutterFFmpeg.executeWithArguments(_argsList);
+    if (_result == 1)
+      throw Exception(
+        "Cannot apply AudioModifiers\n" +
+        "audioFile: $audioFile\n" +
+        "argument list: $_argsList\n" +
+        "output: $output",
+      );
     await File(audioFile).delete();
     output = await output.rename(audioFile);
     return output;
