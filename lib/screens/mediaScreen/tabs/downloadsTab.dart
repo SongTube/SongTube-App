@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:songtube/internal/models/videoFile.dart';
 import 'package:songtube/internal/nativeMethods.dart';
 import 'package:songtube/provider/downloadsProvider.dart';
-import 'package:songtube/internal/services/playerService.dart';
+import 'package:songtube/player/service/playerService.dart';
 import 'package:songtube/player/videoPlayer.dart';
 
 // Packages

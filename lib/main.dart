@@ -66,8 +66,8 @@ class _MainState extends State<Main> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<AppDataProvider>(
-          create: (context) => AppDataProvider(preferences: widget.preloadedFs)
+        ChangeNotifierProvider<ConfigurationProvider>(
+          create: (context) => ConfigurationProvider(preferences: widget.preloadedFs)
         ),
         ChangeNotifierProvider<ManagerProvider>(
           create: (context) => ManagerProvider()
@@ -80,7 +80,7 @@ class _MainState extends State<Main> {
         )
       ],
       child: Builder( builder: (context) {
-        AppDataProvider appData = Provider.of<AppDataProvider>(context);        
+        ConfigurationProvider appData = Provider.of<ConfigurationProvider>(context);        
         ThemeData customTheme;
         ThemeData darkTheme;
 

@@ -212,7 +212,7 @@ class _VideoTileState extends State<VideoTile> {
 
   Future<void> getChannelLogoUrl(SearchVideo video) async {
     if (context == null) return;
-    AppDataProvider appData = Provider.of<AppDataProvider>(context, listen: false);
+    ConfigurationProvider appData = Provider.of<ConfigurationProvider>(context, listen: false);
     if ((appData.channelLogos.singleWhere((it) => it.name == video.videoAuthor,
           orElse: () => null)) != null) {
       return appData.channelLogos[appData.channelLogos

@@ -19,7 +19,7 @@ class ThemeSettings extends StatefulWidget {
 class _ThemeSettingsState extends State<ThemeSettings> with TickerProviderStateMixin{
   @override
   Widget build(BuildContext context) {
-    AppDataProvider appData = Provider.of<AppDataProvider>(context);
+    ConfigurationProvider appData = Provider.of<ConfigurationProvider>(context);
     return SettingsColumnTile(
       title: Languages.of(context).labelTheme,
       icon: Icons.color_lens,

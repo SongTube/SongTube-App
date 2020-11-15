@@ -7,7 +7,7 @@ import 'package:songtube/provider/app_provider.dart';
 class MusicPlayerSettingsDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    AppDataProvider appData = Provider.of<AppDataProvider>(context);
+    ConfigurationProvider appData = Provider.of<ConfigurationProvider>(context);
     return AlertDialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10)

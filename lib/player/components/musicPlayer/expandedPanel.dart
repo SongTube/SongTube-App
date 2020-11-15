@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 // Internal
-import 'package:songtube/internal/services/playerService.dart';
+import 'package:songtube/player/service/playerService.dart';
 import 'package:songtube/player/components/musicPlayer/ui/playerBackground.dart';
 import 'package:songtube/player/components/musicPlayer/ui/playerBody.dart';
 import 'package:songtube/provider/app_provider.dart';
@@ -29,7 +29,7 @@ class ExpandedPlayer extends StatelessWidget {
     final mediaItem = screenState?.mediaItem;
     final state = screenState?.playbackState;
     final playing = state?.playing ?? false;
-    AppDataProvider appData = Provider.of<AppDataProvider>(context);
+    ConfigurationProvider appData = Provider.of<ConfigurationProvider>(context);
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
     File image = mediaProvider.artwork;
     Color dominantColor = appData.useBlurBackground

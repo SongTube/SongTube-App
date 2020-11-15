@@ -17,7 +17,7 @@ import 'package:provider/provider.dart';
 class MoreScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    AppDataProvider appData = Provider.of<AppDataProvider>(context);
+    ConfigurationProvider appData = Provider.of<ConfigurationProvider>(context);
     return Scaffold(
       body: ListView(
         physics: BouncingScrollPhysics(),

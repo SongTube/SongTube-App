@@ -68,18 +68,18 @@ class _LibraryState extends State<Library> {
     // Disclaimer
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       // Show Disclaimer
-      if (!Provider.of<AppDataProvider>(context, listen: false).disclaimerAccepted) {
+      if (!Provider.of<ConfigurationProvider>(context, listen: false).disclaimerAccepted) {
         await showDialog(
           context: context,
           builder: (context) => DisclaimerDialog()
         );
       }
-      if (Provider.of<AppDataProvider>(context, listen: false).showDownloadFixDialog) {
+      if (Provider.of<ConfigurationProvider>(context, listen: false).showDownloadFixDialog) {
         await showDialog(
           context: context,
           builder: (context) => DownloadFixDialog()
         );
-        Provider.of<AppDataProvider>(context, listen: false)
+        Provider.of<ConfigurationProvider>(context, listen: false)
           .showDownloadFixDialog = false;
       }
       // Check for Updates

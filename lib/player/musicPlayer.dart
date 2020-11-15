@@ -4,10 +4,10 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 // Internal
-import 'package:songtube/internal/services/playerService.dart';
+import 'package:songtube/player/service/playerService.dart';
 import 'package:songtube/player/components/musicPlayer/collapsedPanel.dart';
 import 'package:songtube/player/components/musicPlayer/expandedPanel.dart';
-import 'package:songtube/internal/screenStateStream.dart';
+import 'package:songtube/player/service/screenStateStream.dart';
 import 'package:songtube/provider/app_provider.dart';
 import 'package:songtube/provider/mediaProvider.dart';
 
@@ -22,7 +22,7 @@ class SlidingPlayerPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
-    AppDataProvider appData = Provider.of<AppDataProvider>(context);
+    ConfigurationProvider appData = Provider.of<ConfigurationProvider>(context);
     return StreamBuilder<ScreenState>(
       stream: screenStateStream,
       builder: (context, snapshot) {
@@ -86,7 +86,7 @@ class _SlidingPlayerState extends State<SlidingPlayer> {
   @override
   Widget build(BuildContext context) {
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
-    AppDataProvider appData = Provider.of<AppDataProvider>(context);
+    ConfigurationProvider appData = Provider.of<ConfigurationProvider>(context);
     Color dominantColor = appData.useBlurBackground
       ? mediaProvider.dominantColor == null ? Colors.white : mediaProvider.dominantColor
       : Theme.of(context).accentColor;

@@ -32,7 +32,7 @@ class _IntroThemeState extends State<IntroTheme> {
 
   @override
   Widget build(BuildContext context) {
-    AppDataProvider appData = Provider.of<AppDataProvider>(context);
+    ConfigurationProvider appData = Provider.of<ConfigurationProvider>(context);
     void checkTheme() {
       if (appData.preferences.getSystemThemeEnabled() == true) {
         theme = ThemeSelected.System;

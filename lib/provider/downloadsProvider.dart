@@ -54,7 +54,7 @@ class DownloadsProvider extends ChangeNotifier {
   // Handle Single Video Download
   void handleVideoDownload({
     @required Languages language,
-    AppDataProvider currentAppData,
+    ConfigurationProvider currentAppData,
     DownloadMetaData metadata,
     StreamManifest manifest,
     Video videoDetails,
@@ -122,7 +122,7 @@ class DownloadsProvider extends ChangeNotifier {
   // Handle Playlist Downloads
   void handlePlaylistDownload({
     @required Languages language,
-    AppDataProvider currentAppData,
+    ConfigurationProvider currentAppData,
     List<Video> listVideos,
     String album, String artist
   }) {

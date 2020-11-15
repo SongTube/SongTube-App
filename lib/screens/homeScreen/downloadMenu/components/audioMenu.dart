@@ -65,7 +65,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
 
   @override
   Widget build(BuildContext context) {
-    AppDataProvider appData = Provider.of<AppDataProvider>(context);
+    ConfigurationProvider appData = Provider.of<ConfigurationProvider>(context);
     return SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.min,

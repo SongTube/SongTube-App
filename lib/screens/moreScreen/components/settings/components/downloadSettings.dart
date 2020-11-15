@@ -26,7 +26,7 @@ import 'package:songtube/ui/dialogs/alertDialog.dart';
 class DownloadSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    AppDataProvider appData = Provider.of<AppDataProvider>(context);
+    ConfigurationProvider appData = Provider.of<ConfigurationProvider>(context);
     return SettingsColumnTile(
       title: Languages.of(context).labelDownloads,
       icon: EvaIcons.downloadOutline,

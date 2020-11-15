@@ -146,7 +146,7 @@ class _VideoPageState extends State<VideoPage> {
           manager.navigateToScreen(LibraryScreen.Downloads);
           downloadsProvider.handleVideoDownload(
             language: Languages.of(context),
-            currentAppData: Provider.of<AppDataProvider>(context, listen: false),
+            currentAppData: Provider.of<ConfigurationProvider>(context, listen: false),
             metadata: DownloadMetaData(
               title: manager.tagsControllers.titleController.text,
               album: manager.tagsControllers.albumController.text,

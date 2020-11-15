@@ -42,7 +42,7 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
       IntroTheme(),
       IntroReady(
         onEnd: () {
-          Provider.of<AppDataProvider>(context, listen: false).preferences.saveShowIntroductionPages(false);
+          Provider.of<ConfigurationProvider>(context, listen: false).preferences.saveShowIntroductionPages(false);
           Navigator.pushReplacementNamed(context, 'homeScreen');
         },
       )
@@ -107,7 +107,7 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
                         ),
                       ),
                       onPressed: () {
-                        Provider.of<AppDataProvider>(context, listen: false).preferences.saveShowIntroductionPages(false);
+                        Provider.of<ConfigurationProvider>(context, listen: false).preferences.saveShowIntroductionPages(false);
                         Navigator.pushReplacementNamed(context, 'homeScreen');
                       },
                     ),

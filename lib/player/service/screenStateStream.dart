@@ -1,5 +1,5 @@
 // Internal
-import 'package:songtube/internal/services/playerService.dart';
+import 'package:songtube/player/service/playerService.dart';
 
 // Packages
 import 'package:audio_service/audio_service.dart';

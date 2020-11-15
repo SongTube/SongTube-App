@@ -133,7 +133,7 @@ class _PlayerListBodyState extends State<PlayerListBody> {
         onPressed: () {
           downloadsProvider.handlePlaylistDownload(
             language: Languages.of(context),
-            currentAppData: Provider.of<AppDataProvider>(context, listen: false),
+            currentAppData: Provider.of<ConfigurationProvider>(context, listen: false),
             listVideos: manager.playlistVideos,
             album: albumController.text,
             artist: artistController.text

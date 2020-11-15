@@ -56,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget currentHome(BuildContext context) {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
-    AppDataProvider appData = Provider.of<AppDataProvider>(context);
+    ConfigurationProvider appData = Provider.of<ConfigurationProvider>(context);
     if (manager.mediaStreamReady && manager.currentLoad == CurrentLoad.SingleVideo) {
       // Return Single Video Page
       return VideoPage();

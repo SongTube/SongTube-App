@@ -11,10 +11,10 @@ import 'package:songtube/internal/preferences.dart';
 import 'package:ext_storage/ext_storage.dart';
 import 'package:package_info/package_info.dart';
 
-class AppDataProvider extends ChangeNotifier {
+class ConfigurationProvider extends ChangeNotifier {
 
   Preferences preferences;
-  AppDataProvider({
+  ConfigurationProvider({
     @required this.preferences
   }){
     preferences = this.preferences;

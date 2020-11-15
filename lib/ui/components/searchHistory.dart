@@ -13,7 +13,7 @@ class SearchHistoryList extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
-    AppDataProvider appData = Provider.of<AppDataProvider>(context);
+    ConfigurationProvider appData = Provider.of<ConfigurationProvider>(context);
     List<String> searchHistory = appData.getSearchHistory();
     return Container(
       margin: margin,

@@ -49,7 +49,7 @@ class _NavigateState extends State<Navigate> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
-    AppDataProvider appData = Provider.of<AppDataProvider>(context);
+    ConfigurationProvider appData = Provider.of<ConfigurationProvider>(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -106,7 +106,7 @@ class _NavigateState extends State<Navigate> with TickerProviderStateMixin {
           manager.updateYoutubeSearchResults(updateResults: true);
           if (item.length > 1) {
             Future.delayed(Duration(milliseconds: 400), () =>
-              Provider.of<AppDataProvider>(context, listen: false)
+              Provider.of<ConfigurationProvider>(context, listen: false)
                 .addStringtoSearchHistory(item.trim()
             ));
           }
