@@ -28,16 +28,19 @@ class VideoTile extends StatefulWidget {
     ReceivePort childReceivePort = ReceivePort();
     mainSendPort.send(childReceivePort.sendPort);
     await for (var message in childReceivePort) {
+      YoutubeExplode yt = YoutubeExplode();
       String videoId = message[0];
       SendPort replyPort = message[1];
       Channel channel;
       try {
-        channel = await YoutubeExplode().channels.getByVideo(videoId);
+        channel = await yt.channels.getByVideo(videoId);
       } catch (_) {
         replyPort.send("");
+        yt.close();
         break;
       }
       replyPort.send(channel.logoUrl);
+      yt.close();
       break;
     }
   }

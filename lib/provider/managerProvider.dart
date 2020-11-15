@@ -147,7 +147,7 @@ class ManagerProvider extends ChangeNotifier {
         youtubeSearchStream = null;
       }
       notifyListeners();
-      youtubeSearchStream = youtubeInfo.yt.search
+      youtubeSearchStream = YoutubeExplode().search
         .getVideosFromPage(navigateQuery)
         .listen((event) {
           youtubeSearchResults.add(event);

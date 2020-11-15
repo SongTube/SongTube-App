@@ -241,6 +241,7 @@ class DownloadInfoSet {
       }
       if (audioManifest == null) {
         currentAction.add(language.labelAudioNoDataRecieved);
+        yt.close();
         return null;
       }
       audioStreamInfo = audioManifest.audioOnly.withHighestBitrate();
@@ -268,6 +269,7 @@ class DownloadInfoSet {
         _output.close();
         downloadStatus.add(DownloadStatus.Cancelled);
         _interruptDownload(language.labelDownloadCancelled);
+        yt.close();
         return null;
       }
       _count += data.length;
@@ -278,6 +280,7 @@ class DownloadInfoSet {
     }
     await _output.flush();
     await _output.close();
+    yt.close();
     return download;
   }
 
@@ -291,7 +294,6 @@ class DownloadInfoSet {
     File convertedAudio = await ffmpegConverter.convertAudio(
       audioPath: path,
       format: convertFormat,
-      audioModifiers: audioModifiers
     );
     if (convertedAudio == null) {
       _interruptDownload(language.labelAnIssueOcurredConvertingAudio);
