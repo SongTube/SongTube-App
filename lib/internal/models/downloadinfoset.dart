@@ -10,7 +10,7 @@ import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/models/audioModifiers.dart';
 
 // Internal
-import 'package:songtube/internal/services/databaseService.dart';
+import 'package:songtube/internal/database/databaseService.dart';
 import 'package:songtube/internal/models/songFile.dart';
 import 'package:songtube/internal/models/metadata.dart';
 import 'package:songtube/internal/ffmpeg/converter.dart';

@@ -7,7 +7,7 @@ import 'package:songtube/internal/models/downloadinfoset.dart';
 import 'package:songtube/internal/models/metadata.dart';
 import 'package:songtube/internal/models/songFile.dart';
 import 'package:songtube/internal/randomString.dart';
-import 'package:songtube/internal/services/databaseService.dart';
+import 'package:songtube/internal/database/databaseService.dart';
 import 'package:songtube/provider/configurationProvider.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
