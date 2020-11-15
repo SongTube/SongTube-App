@@ -2,8 +2,8 @@
 import 'package:flutter/material.dart';
 
 // Internal
-import 'package:songtube/internal/services/playerService.dart';
-import 'package:songtube/internal/screenStateStream.dart';
+import 'package:songtube/player/service/playerService.dart';
+import 'package:songtube/player/service/screenStateStream.dart';
 
 // Packages
 import 'package:audio_service/audio_service.dart';
