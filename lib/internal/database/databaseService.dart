@@ -2,7 +2,7 @@
 import 'dart:io';
 
 // Internal
-import 'package:songtube/internal/ffmpeg/artworkGenerator.dart';
+import 'package:songtube/internal/ffmpeg/extractor.dart';
 import 'package:songtube/internal/models/songFile.dart';
 import 'package:songtube/internal/tagsManager.dart';
 
@@ -90,7 +90,11 @@ class DatabaseService {
           "/${songFile.title}.jpg");
         if (!await coverPath.exists()) {
           File coverImage =
-            await ArtworkGenerator.generateThumbnailWithFFmpeg(File(songFile.path));
+            await FFmpegExtractor.generateArtwork(
+              audioFile: songFile.path,
+              imageType: ExtractImageType.Thumbnail,
+              extractionMethod: ArtworkExtractMethod.FFmpeg
+            );
           if (!await coverImage.exists()) {
             coverImage = await TagsManager.generateCover(songFile.coverUrl);
           }

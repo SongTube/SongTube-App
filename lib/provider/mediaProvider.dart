@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:songtube/internal/ffmpeg/extractor.dart';
 
 // Internal
 import 'package:songtube/internal/models/folder.dart';
@@ -20,7 +21,6 @@ import 'package:flutter_audio_query/flutter_audio_query.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:songtube/internal/ffmpeg/artworkGenerator.dart';
 
 class MediaProvider extends ChangeNotifier {
 
@@ -56,9 +56,9 @@ class MediaProvider extends ChangeNotifier {
 
   Future<void> updateUIElements() async {
     String currentAlbumId = await AudioService.currentMediaItem.extras["albumId"];
-    artwork = await ArtworkGenerator.generateArtwork(
-      File(mediaItem.id),
-      currentAlbumId
+    artwork = await FFmpegExtractor.generateArtwork(
+      audioFile: mediaItem.id,
+      audioId: currentAlbumId
     );
     PaletteGenerator palette = await PaletteGenerator.fromImageProvider(FileImage(artwork));
     dominantColor = palette.dominantColor.color;
