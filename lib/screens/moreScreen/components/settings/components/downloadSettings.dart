@@ -52,7 +52,7 @@ class DownloadSettings extends StatelessWidget {
               onPressed: () {
                 Permission.storage.request().then((status) {
                   if (status == PermissionStatus.granted) {
-                    FilePicker.getDirectoryPath().then((path) {
+                    FilePicker.platform.getDirectoryPath().then((path) {
                       if (path != null) {
                         appData.audioDownloadPath = path;
                       }
@@ -84,7 +84,7 @@ class DownloadSettings extends StatelessWidget {
               onPressed: () {
                 Permission.storage.request().then((status) {
                   if (status == PermissionStatus.granted) {
-                    FilePicker.getDirectoryPath().then((path) {
+                    FilePicker.platform.getDirectoryPath().then((path) {
                       if (path != null) {
                         appData.videoDownloadPath = path;
                       }

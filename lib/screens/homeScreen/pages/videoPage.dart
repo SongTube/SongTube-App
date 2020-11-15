@@ -95,7 +95,9 @@ class _VideoPageState extends State<VideoPage> {
                 padding: const EdgeInsets.only(left: 8, right: 8, top: 4),
                 child: VideoPageArtworkEditor(
                   onArtworkTap: () async {
-                    File image = await FilePicker.getFile(type: FileType.image);
+                    File image = File((await FilePicker.platform
+                      .pickFiles(type: FileType.image))
+                      .paths[0]);
                     if (image == null) return;
                     setState(() {
                       manager.tagsControllers.artworkController = image.path;
