@@ -199,7 +199,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
             children: [
               InkWell(
                 onTap: () {
-                  appData.enableAudioConvertion = !appData.enableAudioConvertion;
+                  appData.enableFFmpegActionType = !appData.enableFFmpegActionType;
                   setState(() {});
                 },
                 borderRadius: BorderRadius.circular(20),
@@ -208,7 +208,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                   child: Row(
                     children: [
                       CircularCheckBox(
-                        value: appData.enableAudioConvertion,
+                        value: appData.enableFFmpegActionType,
                         onChanged: (_) {}
                       ),
                       Text(
@@ -225,7 +225,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
               Spacer(),
               AnimatedSwitcher(
                 duration: Duration(milliseconds: 400),
-                child: appData.enableAudioConvertion ? DropdownButtonHideUnderline(
+                child: appData.enableFFmpegActionType ? DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
                     items: [
                       DropdownMenuItem<String>(
@@ -251,9 +251,9 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                       ),
                     ],
                     onChanged: (String value) {
-                      appData.audioConvertFormat = value;
+                      appData.ffmpegActionTypeFormat = value;
                     },
-                    value: appData.audioConvertFormat,
+                    value: appData.ffmpegActionTypeFormat,
                     elevation: 1,
                     dropdownColor: Theme.of(context).cardColor,
                   ),

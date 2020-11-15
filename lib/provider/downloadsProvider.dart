@@ -61,11 +61,15 @@ class DownloadsProvider extends ChangeNotifier {
     List data,
   }) {
     DownloadType downloadType;
-    AudioConvert convertFormat;
-    if (currentAppData.audioConvertFormat == "AAC") convertFormat = AudioConvert.ToAAC;
-    if (currentAppData.audioConvertFormat == "OGG Vorbis") convertFormat = AudioConvert.ToOGGVorbis;
-    if (currentAppData.audioConvertFormat == "MP3") convertFormat = AudioConvert.ToMP3;
-    if (currentAppData.enableAudioConvertion == false) convertFormat = AudioConvert.NONE;
+    FFmpegActionType convertFormat;
+    if (currentAppData.ffmpegActionTypeFormat == "AAC")
+      convertFormat = FFmpegActionType.ConvertToAAC;
+    if (currentAppData.ffmpegActionTypeFormat == "OGG Vorbis")
+      convertFormat = FFmpegActionType.ConvertToOGGVorbis;
+    if (currentAppData.ffmpegActionTypeFormat == "MP3")
+      convertFormat = FFmpegActionType.ConvertToMP3;
+    if (currentAppData.enableFFmpegActionType == false)
+      convertFormat = FFmpegActionType.NONE;
     String downloadPath;
     StreamInfo audioStreamInfo;
     StreamInfo videoStreamInfo;
@@ -80,7 +84,7 @@ class DownloadsProvider extends ChangeNotifier {
         videoStreamInfo = data[1];
         audioStreamInfo = manifest.audioOnly.withHighestBitrate();
         downloadPath = currentAppData.videoDownloadPath;
-        convertFormat = AudioConvert.WriteAudio;
+        convertFormat = FFmpegActionType.AppendAudioOnVideo;
         break;
     }
     metadata.title = removeToxicSymbols(metadata.title);
@@ -127,11 +131,15 @@ class DownloadsProvider extends ChangeNotifier {
     String album, String artist
   }) {
     int track = 1;
-    AudioConvert convertFormat;
-    if (currentAppData.audioConvertFormat == "AAC") convertFormat = AudioConvert.ToAAC;
-    if (currentAppData.audioConvertFormat == "OGG Vorbis") convertFormat = AudioConvert.ToOGGVorbis;
-    if (currentAppData.audioConvertFormat == "MP3") convertFormat = AudioConvert.ToMP3;
-    if (currentAppData.enableAudioConvertion == false) convertFormat = AudioConvert.NONE;
+    FFmpegActionType convertFormat;
+    if (currentAppData.ffmpegActionTypeFormat == "AAC")
+      convertFormat = FFmpegActionType.ConvertToAAC;
+    if (currentAppData.ffmpegActionTypeFormat == "OGG Vorbis")
+      convertFormat = FFmpegActionType.ConvertToOGGVorbis;
+    if (currentAppData.ffmpegActionTypeFormat == "MP3")
+      convertFormat = FFmpegActionType.ConvertToMP3;
+    if (currentAppData.enableFFmpegActionType == false)
+      convertFormat = FFmpegActionType.NONE;
     listVideos.forEach((video) {
       queueList.add(
         new DownloadInfoSet(

@@ -10,35 +10,41 @@ import 'package:songtube/internal/randomString.dart';
 import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 import 'package:path_provider/path_provider.dart';
 
-// Type of actions for FFmpegArgs and Converter
-enum AudioConvert { ToAAC, ToOGG, ToOGGVorbis, ToMP3, WriteAudio, NONE }
+/// Type of Actions that the [FFmpegConverter] can execute
+enum FFmpegActionType {
+  ConvertToAAC,
+  ConvertToOGG,
+  ConvertToOGGVorbis,
+  ConvertToMP3,
+  AppendAudioOnVideo,
+  NONE
+}
 
-class Converter {
+/// FFmpeg Converter which can convert any given Audio file to another desired
+/// format or append any given Audio file to a Video
+class FFmpegConverter {
   
   // Declare our FFmpeg instances
   FlutterFFmpeg flutterFFmpeg;
   FlutterFFprobe flutterFFprobe;
   FlutterFFmpegConfig ffconfig;
-  // Initialize Converter
-  Converter() {
+  // Initialize FFmpegConverter
+  FFmpegConverter() {
     flutterFFmpeg = new FlutterFFmpeg();
     flutterFFprobe = new FlutterFFprobe();
     ffconfig = new FlutterFFmpegConfig();
   }
 
-  String lastConvertedVideo;
-  String lastConvertedAudio;
-
-  // Get duration of the Media provided
+  /// Gets the [Duration] of the Audio file provided
   Future<String> getMediaDuration(String mediaPath) async {
     if (!await File(mediaPath).exists()) return null;
     return (await flutterFFprobe.getMediaInformation(mediaPath))["duration"];
   }
 
-  // Get the exact information about a provided Video file
-  Future<String> getMediaFormat(String videoPath) async {
+  /// Gets the file Extension of any Media [File]
+  Future<String> getMediaFormat(String mediaFile) async {
     var _info; String _codec;
-    _info = await flutterFFprobe.getMediaInformation(videoPath);
+    _info = await flutterFFprobe.getMediaInformation(mediaFile);
     final streamsInfoArray = _info['streams'];
     _codec = "${streamsInfoArray[0]['codec']}";
     _info = "${_info['format']}";
@@ -50,16 +56,18 @@ class Converter {
     return _info;
   }
 
-  // Encode Audio to Video
+  /// Append any [Audio] to any [Video], this Function automatically
+  /// converts the [Audio] to the compatible format of the [Video]
+  /// (only if it's needed)
   Future<File> writeAudioToVideo({
-    String saveFormat,
+    String videoFormat,
     String videoPath,
     String audioPath,
   }) async {
     List<String> _argsList;
     String outDir = (await getTemporaryDirectory()).path + "/";
     File output = File(outDir + RandomString.getRandomString(10));
-    if (saveFormat == "matroska,webm") {
+    if (videoFormat == "matroska,webm") {
       _argsList = [
         "-y", "-i", "$videoPath", "-i", "$audioPath",
         "-c:v", "copy", "-c:a", "libopus", "-map", "0:v:0", "-map", "1:a:0",
@@ -67,7 +75,7 @@ class Converter {
       ];
       output = File(output.path + ".webm");
     }
-    if (saveFormat == "mov,mp4,m4a,3gp,3g2,mj2") {
+    if (videoFormat == "mov,mp4,m4a,3gp,3g2,mj2") {
       _argsList = [
         "-y", "-i", "$videoPath", "-i", "$audioPath",
         "-c:v", "copy", "-c:a", "aac", "-map", "0:v:0", "-map", "1:a:0",
@@ -80,29 +88,35 @@ class Converter {
     return output;
   }
 
-  // Convert Audio
+  /// Converts [Audio] to any provided [FFmpegFormatType], if the [Audio] and
+  /// the [FFmpegFormatType] both have the same Format, no changes will be done
+  /// and the Function will return the same [audioPath] provided
+  /// 
+  /// Converting to anything provided will set the conversion bitrate to 256k
+  /// to avoid any quality loss
+  /// 
+  /// [AudioModifiers] are used to Equalize the [Audio] Volume, Bass or Treble,
+  /// if these are provided and the [Audio] and the [FFmpegFormatType] both
+  /// have the same Format, only these changes will be applied (Without converting)
   Future<File> convertAudio({
     String audioPath,
-    AudioConvert format,
+    FFmpegActionType format,
     AudioModifiers audioModifiers
   }) async {
     List<String> _argsList;
     String outDir = (await getTemporaryDirectory()).path + "/";
     File output = File(outDir + RandomString.getRandomString(10));
-    if (format == AudioConvert.ToAAC) {
+    if (format == FFmpegActionType.ConvertToAAC) {
       _argsList = [
         "-y", "-i",
         "$audioPath",
         "-c:a", "aac",
         "-b:a", "256k",
-        "-af", "volume=${audioModifiers.volume}, "+
-        "bass=g=${audioModifiers.bassGain}, " +
-        "treble=g=${audioModifiers.trebleGain}",
         "${output.path}.m4a",
       ];
       output = File(output.path + ".m4a");
     }
-    if (format == AudioConvert.ToOGG) {
+    if (format == FFmpegActionType.ConvertToOGG) {
       _argsList = [
         "-y", "-i", "$audioPath", "-c:a", "libopus",
         "-b:a", "256k", "-vbr", "on", "-compression_level", "10",
@@ -110,24 +124,18 @@ class Converter {
       ];
       output = File(output.path + ".ogg");
     }
-    if (format == AudioConvert.ToOGGVorbis) {
+    if (format == FFmpegActionType.ConvertToOGGVorbis) {
       _argsList = [
         "-y", "-i", "$audioPath",
         "-c:a", "libvorbis", "-b:a", "256k",
-        "-af", "volume=${audioModifiers.volume}, "+
-        "bass=g=${audioModifiers.bassGain}, " +
-        "treble=g=${audioModifiers.trebleGain}",
         "${output.path}.ogg"
       ];
       output = File(output.path + ".ogg");
     }
-    if (format == AudioConvert.ToMP3) {
+    if (format == FFmpegActionType.ConvertToMP3) {
       _argsList = [
         "-y", "-i", "$audioPath",
         "-c:a", "libmp3lame", "-b:a", "256k",
-        "-af", "volume=${audioModifiers.volume}, "+
-        "bass=g=${audioModifiers.bassGain}, " +
-        "treble=g=${audioModifiers.trebleGain}",
         "${output.path}.mp3"
       ];
       output = File(output.path + ".mp3");
@@ -137,18 +145,51 @@ class Converter {
     return output;
   }
 
-  // Check if audio needs Conversion
-  Future<bool> audioConversionRequired(AudioConvert convertFormat, String audioPath) async {
+  /// Apply the provided [AudioModifiers] to any provided [Audio] file,
+  /// these changes can be Volume, Bass or Treble, if the provided
+  /// [AudioModifiers] is null, no changes will be made and this
+  /// function will return the provided [AudioPath]
+  /// 
+  /// On failure this function will return [null]
+  Future<File> applyAudioModifiers(
+    String audioPath,
+    AudioModifiers audioModifiers
+  ) async {
+    if (audioModifiers == null) return File(audioPath);
+    String outDir = (await getTemporaryDirectory()).path + "/";
     String format = await getMediaFormat(audioPath);
-    if (convertFormat == AudioConvert.ToAAC)
+    File output = File(outDir +
+      RandomString.getRandomString(10) + ".$format");
+    List<String> _argsList = [
+      "-y", "-i",
+      "$audioPath",
+      "-af", "volume=${audioModifiers.volume}, "+
+      "bass=g=${audioModifiers.bassGain}, " +
+      "treble=g=${audioModifiers.trebleGain}",
+      "${output.path}",
+    ];
+    int _result = await flutterFFmpeg.executeWithArguments(_argsList);
+    if (_result == 1) return null;
+    return output;
+  }
+
+  /// Return a [bool] indicating if the provided [Audio] file needs Conversion
+  Future<bool> audioConversionRequired(
+    FFmpegActionType convertFormat,
+    String audioPath
+  ) async {
+    String format = await getMediaFormat(audioPath);
+    if (convertFormat == FFmpegActionType.ConvertToAAC)
       return format == "m4a" ? false : true;
-    else if (convertFormat == AudioConvert.ToOGGVorbis)
+    else if (convertFormat == FFmpegActionType.ConvertToOGGVorbis)
       return format == "ogg" ? false : true;
     else
       return true;
   }
 
-  // Clear all Metadata
+  /// Clear all [Metadata] of any provided [Audio] file, useful if you cannot
+  /// write your own [Metadata] because the [Audio] file already contains an
+  /// incompatible one
   Future<File> clearFileMetadata(String path) async {
     String outDir = (await getTemporaryDirectory()).path + "/";
     String fileFormat = await getMediaFormat(path);

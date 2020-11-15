@@ -13,9 +13,9 @@ String accentKey = "app_accent_color";
 String systemThemeKey = "use_system_theme";
 String darkThemeKey = "use_dark_theme";
 String blackThemeKey = "use_black_theme";
-String enableAudioConvertion= "enable_audio_convertion";
+String enableFFmpegActionTypeion= "enable_audio_convertion";
 String enableVideoConvertion= "enable_video_convertion";
-String audioConvertingFormat = "audio_converting_format";
+String ffmpegActionTypeingFormat = "audio_converting_format";
 String audioDownloadPath = "audio_download_path";
 String videoDownloadPath = "video_download_path";
 String useYoutubeWebview = "use_youtube_webview";
@@ -86,12 +86,12 @@ class Preferences {
     prefs.setBool(blackThemeKey, value);
   }
 
-  bool getEnableAudioConvertion() {
-    return prefs.getBool(enableAudioConvertion) ?? true;
+  bool getEnableFFmpegActionTypeion() {
+    return prefs.getBool(enableFFmpegActionTypeion) ?? true;
   }
 
-  void saveEnableAudioConvertion(bool value) {
-    prefs.setBool(enableAudioConvertion, value);
+  void saveEnableFFmpegActionTypeion(bool value) {
+    prefs.setBool(enableFFmpegActionTypeion, value);
   }
 
   bool getEnableVideoConvertion() {
@@ -102,12 +102,12 @@ class Preferences {
     prefs.setBool(enableVideoConvertion, value);
   }
 
-  void saveAudioConvertingFormat(String format) {
-    prefs.setString(audioConvertingFormat, format);
+  void saveFFmpegActionTypeingFormat(String format) {
+    prefs.setString(ffmpegActionTypeingFormat, format);
   }
 
-  String getAudioConvertingFormat() {
-    return prefs.getString(audioConvertingFormat) ?? "AAC";
+  String getFFmpegActionTypeingFormat() {
+    return prefs.getString(ffmpegActionTypeingFormat) ?? "AAC";
   }
 
   String getAudioDownloadPath() {

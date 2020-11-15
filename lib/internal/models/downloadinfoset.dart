@@ -35,7 +35,7 @@ class DownloadInfoSet {
   Languages language;
   DownloadMetaData metadata;
   DownloadType downloadType;
-  AudioConvert convertFormat;
+  FFmpegActionType convertFormat;
   String downloadPath;
   AudioModifiers audioModifiers;
   StreamInfo audioStreamInfo;
@@ -63,7 +63,7 @@ class DownloadInfoSet {
     @required this.saveErrorCallback,
     this.videoStreamInfo,
   }) {
-    converter = new Converter();
+    ffmpegConverter = new FFmpegConverter();
     downloadStatus = new BehaviorSubject<DownloadStatus>();
     currentAction = new BehaviorSubject<String>();
     dataProgress = new BehaviorSubject<String>();
@@ -80,9 +80,9 @@ class DownloadInfoSet {
   BehaviorSubject<String> dataProgress;
   BehaviorSubject<double> progressBar;
 
-  // FFmpeg Converter
+  // FFmpeg FFmpegConverter
   bool converted = false;
-  Converter converter;
+  FFmpegConverter ffmpegConverter;
 
   // Cancel Download
   bool cancelDownload;
@@ -163,17 +163,17 @@ class DownloadInfoSet {
       downloadedFile = await _downloadStream(audioStreamInfo, downloadType);
       // Remove Existing Metadata
       currentAction.add(language.labelClearingExistingMetadata);
-      downloadedFile = await converter.clearFileMetadata(downloadedFile.path);
+      downloadedFile = await ffmpegConverter.clearFileMetadata(downloadedFile.path);
       if (downloadedFile == null) return;
       // Check if Conversion is needed
-      if (await converter.audioConversionRequired(convertFormat, downloadedFile.path)) {
+      if (await ffmpegConverter.audioConversionRequired(convertFormat, downloadedFile.path)) {
         downloadedFile = await _convertAudio(convertFormat, downloadedFile.path);
         if (downloadedFile == null) return;
       }
     }
     // Rename File
     downloadedFile = await renameFile(downloadedFile, metadata.title);
-    downloadedFile = await converter.clearFileMetadata(downloadedFile.path);
+    downloadedFile = await ffmpegConverter.clearFileMetadata(downloadedFile.path);
     if (downloadedFile == null) return;
     // Write All Metadata if its Audio
     if (downloadType == DownloadType.AUDIO) {
@@ -282,13 +282,13 @@ class DownloadInfoSet {
   }
 
   // Convert Audio with FFmpeg
-  Future<File> _convertAudio(AudioConvert format, String path) async {
+  Future<File> _convertAudio(FFmpegActionType format, String path) async {
     downloadStatus.add(DownloadStatus.Converting);
     progressBar.add(null);
     currentAction.add(language.labelConverting);
     convertingCallback(downloadId);
     converted = true;
-    File convertedAudio = await converter.convertAudio(
+    File convertedAudio = await ffmpegConverter.convertAudio(
       audioPath: path,
       format: convertFormat,
       audioModifiers: audioModifiers
@@ -305,8 +305,8 @@ class DownloadInfoSet {
     currentAction.add(language.labelPatchingAudio);
     convertingCallback(downloadId);
     converted = true;
-    File patchedVideo = await converter.writeAudioToVideo(
-      saveFormat: await converter.getMediaFormat(videoPath),
+    File patchedVideo = await ffmpegConverter.writeAudioToVideo(
+      videoFormat: await ffmpegConverter.getMediaFormat(videoPath),
       videoPath: videoPath,
       audioPath: audioPath,
     );
@@ -323,7 +323,7 @@ class DownloadInfoSet {
   Future<File> renameFile(File file, String newName) async {
     String filePath = file.path
       .replaceAll("/${file.path.split('/').last}", '');
-    String fileFormat = await converter.getMediaFormat(file.path);
+    String fileFormat = await ffmpegConverter.getMediaFormat(file.path);
     return await file.rename("$filePath/$newName.$fileFormat");
   }
 
@@ -342,7 +342,7 @@ class DownloadInfoSet {
         track: metadata.track
       );
       // Only add Artwork if song is in AAC Format
-      if (convertFormat == AudioConvert.ToAAC) {
+      if (convertFormat == FFmpegActionType.ConvertToAAC) {
         File croppedImage;
         if (isURL(metadata.coverurl)) {
           http.Response response;

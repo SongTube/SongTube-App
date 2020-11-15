@@ -55,10 +55,10 @@ class ConfigurationProvider extends ChangeNotifier {
   bool _systemThemeEnabled = false;
   bool _darkThemeEnabled = false;
   bool _blackThemeEnabled = false;
-  bool _enableAudioConvertion = true;
+  bool _enableFFmpegActionType = true;
   bool _enableVideoConvertion = false;  
   // Converting audio format
-  String _audioConvertFormat = "AAC";
+  String _ffmpegActionTypeFormat = "AAC";
   // Download paths
   String _audioDownloadPath;
   String _videoDownloadPath;
@@ -72,10 +72,10 @@ class ConfigurationProvider extends ChangeNotifier {
   bool get systemThemeEnabled => _systemThemeEnabled;
   bool get darkThemeEnabled => _darkThemeEnabled;
   bool get blackThemeEnabled => _blackThemeEnabled;
-  bool get enableAudioConvertion => _enableAudioConvertion;
+  bool get enableFFmpegActionType => _enableFFmpegActionType;
   bool get enableVideoConvertion => _enableVideoConvertion;
   // Converting audio format
-  String get audioConvertFormat => _audioConvertFormat;
+  String get ffmpegActionTypeFormat => _ffmpegActionTypeFormat;
   // Download paths
   String get audioDownloadPath => _audioDownloadPath;
   String get videoDownloadPath => _videoDownloadPath;
@@ -125,9 +125,9 @@ class ConfigurationProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  set enableAudioConvertion(bool value) {
-    _enableAudioConvertion = value;
-    preferences.saveEnableAudioConvertion(value);
+  set enableFFmpegActionType(bool value) {
+    _enableFFmpegActionType = value;
+    preferences.saveEnableFFmpegActionTypeion(value);
     notifyListeners();
   }
 
@@ -142,7 +142,7 @@ class ConfigurationProvider extends ChangeNotifier {
     accentColor = preferences.getAccentColor();
     darkThemeEnabled = preferences.getDarkThemeEnabled();
     blackThemeEnabled = preferences.getBlackThemeEnabled();
-    audioConvertFormat = preferences.getAudioConvertingFormat();
+    ffmpegActionTypeFormat = preferences.getFFmpegActionTypeingFormat();
     audioDownloadPath = preferences.getAudioDownloadPath();
     videoDownloadPath = preferences.getVideoDownloadPath();
     useBlurBackground = preferences.getBlurBackground();
@@ -157,9 +157,9 @@ class ConfigurationProvider extends ChangeNotifier {
   }
 
   // Converting audio format
-  set audioConvertFormat(String format) {
-    _audioConvertFormat = format;
-    preferences.saveAudioConvertingFormat(format);
+  set ffmpegActionTypeFormat(String format) {
+    _ffmpegActionTypeFormat = format;
+    preferences.saveFFmpegActionTypeingFormat(format);
     notifyListeners();
   }
 
