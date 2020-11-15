@@ -50,6 +50,7 @@ class FFmpegExtractor {
       ArtworkExtractMethod.Automatic,
     bool forceExtraction = false
   }) async {
+    assert(audioFile != "" || audioFile != null);
     String artworkDir = (await getApplicationDocumentsDirectory()).path + "/Artworks/";
     if (!await Directory(artworkDir).exists())
       await Directory(artworkDir).create();
@@ -142,6 +143,7 @@ class FFmpegExtractor {
 
   /// Gets video thumbnail of any Video Format on a [File]
   static Future<File> getVideoThumbnail(File videoFile) async {
+    assert(videoFile.path != "" || videoFile != null);
     String videoTitle = videoFile.path.substring(videoFile.path.lastIndexOf('/')).substring(1)
       .replaceAll(".webm", '')
       .replaceAll(".mp4", '')
@@ -169,6 +171,7 @@ class FFmpegExtractor {
 
   /// Get Video Duration in [Milliseconds]
   static Future<int> getVideoDuration(File video) async {
+    assert(video.path != "" || video != null);
     var json = await FlutterFFprobe().getMediaInformation(video.path);
     return json['duration'];
   }

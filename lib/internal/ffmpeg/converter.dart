@@ -36,13 +36,15 @@ class FFmpegConverter {
   }
 
   /// Gets the [Duration] of the Audio file provided
-  Future<String> getMediaDuration(String mediaPath) async {
-    if (!await File(mediaPath).exists()) return null;
-    return (await flutterFFprobe.getMediaInformation(mediaPath))["duration"];
+  Future<String> getMediaDuration(String mediaFile) async {
+    assert(mediaFile != "" || mediaFile != null);
+    if (!await File(mediaFile).exists()) return null;
+    return (await flutterFFprobe.getMediaInformation(mediaFile))["duration"];
   }
 
   /// Gets the file Extension of any Media [File]
   Future<String> getMediaFormat(String mediaFile) async {
+    assert(mediaFile != "" || mediaFile != null);
     var _info; String _codec;
     _info = await flutterFFprobe.getMediaInformation(mediaFile);
     final streamsInfoArray = _info['streams'];
@@ -64,6 +66,9 @@ class FFmpegConverter {
     String videoPath,
     String audioPath,
   }) async {
+    assert(videoFormat != "" || videoFormat != null);
+    assert(videoPath != "" || videoPath != null);
+    assert(audioPath != "" || audioPath != null);
     List<String> _argsList;
     String outDir = (await getTemporaryDirectory()).path + "/";
     File output = File(outDir + RandomString.getRandomString(10));
@@ -101,8 +106,9 @@ class FFmpegConverter {
   Future<File> convertAudio({
     String audioPath,
     FFmpegActionType format,
-    AudioModifiers audioModifiers
   }) async {
+    assert(audioPath != "" || audioPath != null);
+    assert(format != null);
     List<String> _argsList;
     String outDir = (await getTemporaryDirectory()).path + "/";
     File output = File(outDir + RandomString.getRandomString(10));
@@ -155,6 +161,8 @@ class FFmpegConverter {
     String audioPath,
     AudioModifiers audioModifiers
   ) async {
+    assert(audioPath != "" || audioPath != null);
+    assert(audioModifiers != null);
     if (audioModifiers == null) return File(audioPath);
     String outDir = (await getTemporaryDirectory()).path + "/";
     String format = await getMediaFormat(audioPath);
@@ -176,9 +184,11 @@ class FFmpegConverter {
   /// Return a [bool] indicating if the provided [Audio] file needs Conversion
   Future<bool> audioConversionRequired(
     FFmpegActionType convertFormat,
-    String audioPath
+    String audioFile
   ) async {
-    String format = await getMediaFormat(audioPath);
+    assert(audioFile != "" || audioFile != null);
+    assert(convertFormat != null);
+    String format = await getMediaFormat(audioFile);
     if (convertFormat == FFmpegActionType.ConvertToAAC)
       return format == "m4a" ? false : true;
     else if (convertFormat == FFmpegActionType.ConvertToOGGVorbis)
@@ -190,16 +200,18 @@ class FFmpegConverter {
   /// Clear all [Metadata] of any provided [Audio] file, useful if you cannot
   /// write your own [Metadata] because the [Audio] file already contains an
   /// incompatible one
-  Future<File> clearFileMetadata(String path) async {
+  Future<File> clearFileMetadata(String audioFile) async {
+    assert(audioFile != "" || audioFile != null);
     String outDir = (await getTemporaryDirectory()).path + "/";
-    String fileFormat = await getMediaFormat(path);
+    String fileFormat = await getMediaFormat(audioFile);
     File output = File(outDir + RandomString.getRandomString(10) + ".$fileFormat");
     int _result = await flutterFFmpeg.executeWithArguments([
-      "-i", "$path", "-map", "0:a", "-codec:a", "copy", "-map_metadata", "-1", "${output.path}",
+      "-i", "$audioFile", "-map", "0:a", "-codec:a",
+      "copy", "-map_metadata", "-1", "${output.path}",
     ]);
     if (_result == 1) return null;
-    await File(path).delete();
-    output = await output.rename(path);
+    await File(audioFile).delete();
+    output = await output.rename(audioFile);
     return output;
   }
 
