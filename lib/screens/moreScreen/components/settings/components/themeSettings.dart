@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:songtube/internal/languages.dart';
 
 // Internal
-import 'package:songtube/provider/app_provider.dart';
+import 'package:songtube/provider/configurationProvider.dart';
 import 'package:songtube/screens/moreScreen/components/settings/dialogs/accentPicker.dart';
 import 'package:songtube/screens/moreScreen/components/settings/columnTile.dart';
 

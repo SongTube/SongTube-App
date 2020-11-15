@@ -5,7 +5,7 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:songtube/internal/models/channelLogo.dart';
-import 'package:songtube/provider/app_provider.dart';
+import 'package:songtube/provider/configurationProvider.dart';
 
 // Internal
 import 'package:songtube/provider/managerProvider.dart';

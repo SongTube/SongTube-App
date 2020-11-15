@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:songtube/player/service/playerService.dart';
 import 'package:songtube/player/components/musicPlayer/ui/playerBackground.dart';
 import 'package:songtube/player/components/musicPlayer/ui/playerBody.dart';
-import 'package:songtube/provider/app_provider.dart';
+import 'package:songtube/provider/configurationProvider.dart';
 import 'package:songtube/provider/mediaProvider.dart';
 
 // Packages

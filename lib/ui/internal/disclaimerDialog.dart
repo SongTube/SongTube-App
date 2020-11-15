@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:songtube/provider/app_provider.dart';
+import 'package:songtube/provider/configurationProvider.dart';
 import 'package:songtube/ui/internal/licenseDialog.dart';
 
 class DisclaimerDialog extends StatelessWidget {

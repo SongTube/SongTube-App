@@ -1,6 +1,6 @@
 // Flutter
 import 'package:flutter/material.dart';
-import 'package:songtube/provider/app_provider.dart';
+import 'package:songtube/provider/configurationProvider.dart';
 import 'package:songtube/screens/homeScreen/pages/playlistPage.dart';
 
 // Internal

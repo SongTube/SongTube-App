@@ -7,7 +7,7 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter_xlider/flutter_xlider.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/languages.dart';
-import 'package:songtube/provider/app_provider.dart';
+import 'package:songtube/provider/configurationProvider.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 class AudioDownloadMenu extends StatefulWidget {

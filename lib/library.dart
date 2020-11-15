@@ -6,7 +6,7 @@ import 'package:package_info/package_info.dart';
 // Internal
 import 'package:songtube/internal/updateChecker.dart';
 import 'package:songtube/player/components/musicPlayer/playerPadding.dart';
-import 'package:songtube/provider/app_provider.dart';
+import 'package:songtube/provider/configurationProvider.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/provider/mediaProvider.dart';
 import 'package:songtube/screens/downloads.dart';

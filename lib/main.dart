@@ -7,7 +7,7 @@ import 'package:songtube/internal/languages.dart';
 import 'package:songtube/intro/introduction.dart';
 import 'package:songtube/provider/downloadsProvider.dart';
 import 'package:songtube/provider/managerProvider.dart';
-import 'package:songtube/provider/app_provider.dart';
+import 'package:songtube/provider/configurationProvider.dart';
 import 'package:songtube/library.dart';
 import 'package:songtube/internal/preferences.dart';
 import 'package:songtube/provider/mediaProvider.dart';

@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/screens/navigateScreen/components/shimmer/shimmerSearchPage.dart';
 import 'package:songtube/ui/components/searchHistory.dart';
-import 'package:songtube/provider/app_provider.dart';
+import 'package:songtube/provider/configurationProvider.dart';
 
 // Packages
 import 'package:provider/provider.dart';

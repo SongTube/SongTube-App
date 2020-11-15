@@ -8,7 +8,7 @@ import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/nativeMethods.dart';
 
 // Internal
-import 'package:songtube/provider/app_provider.dart';
+import 'package:songtube/provider/configurationProvider.dart';
 import 'package:songtube/screens/moreScreen/components/settings/columnTile.dart';
 
 // Packages

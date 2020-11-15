@@ -8,7 +8,7 @@ import 'package:songtube/internal/models/metadata.dart';
 import 'package:songtube/internal/models/songFile.dart';
 import 'package:songtube/internal/randomString.dart';
 import 'package:songtube/internal/services/databaseService.dart';
-import 'package:songtube/provider/app_provider.dart';
+import 'package:songtube/provider/configurationProvider.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 class DownloadsProvider extends ChangeNotifier {
