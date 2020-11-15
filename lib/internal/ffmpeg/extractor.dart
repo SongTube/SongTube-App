@@ -5,9 +5,11 @@ import 'dart:io';
 import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 import 'package:path_provider/path_provider.dart';
 
+/// Set of static functions design to Extract information from a given
+/// media file, these functions can't modify the media file by any way
 class FFmpegExtractor {
 
-  // Gets video thumbnail of any Video Format
+  /// Gets video thumbnail of any Video Format on a [File]
   static Future<File> getVideoThumbnail(File videoFile) async {
     String videoTitle = videoFile.path.substring(videoFile.path.lastIndexOf('/')).substring(1)
       .replaceAll(".webm", '')
@@ -33,7 +35,8 @@ class FFmpegExtractor {
     await FlutterFFmpeg().executeWithArguments(ffmpegArgs);
     return File(coverPath);
   }
-  // Get Video Duration
+  
+  /// Get Video Duration in [Milliseconds]
   static Future<int> getVideoDuration(File video) async {
     var json = await FlutterFFprobe().getMediaInformation(video.path);
     return json['duration'];
