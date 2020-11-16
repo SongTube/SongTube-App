@@ -292,7 +292,7 @@ class DownloadInfoSet {
     convertingCallback(downloadId);
     converted = true;
     File convertedAudio = await ffmpegConverter.convertAudio(
-      audioPath: path,
+      audioFile: path,
       format: convertFormat,
     );
     if (convertedAudio == null) {

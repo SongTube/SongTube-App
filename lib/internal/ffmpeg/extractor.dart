@@ -55,7 +55,7 @@ class FFmpegExtractor {
     if (!await Directory(artworkDir).exists())
       await Directory(artworkDir).create();
     File artwork = File("$artworkDir${audioFile.split("/").last.replaceAll("/", "_")}HQ.jpg");
-    if (!await artwork.exists() && forceExtraction == false) return artwork;
+    if (await artwork.exists() && forceExtraction == false) return artwork;
     // FFmpeg Arguments
     List<String> _argsList;
     if (imageType == ExtractImageType.Artwork) {

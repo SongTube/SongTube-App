@@ -91,11 +91,11 @@ class FFmpegConverter {
     int _result = await flutterFFmpeg.executeWithArguments(_argsList);
     if (_result == 1)
       throw Exception(
-        "An issue ocurred trying to convert audio File\n" +
+        "An issue ocurred trying to append audio to video\n" +
         "videoFile: $videoPath\n"
         "audioFile: $audioPath\n" +
         "format: $videoFormat\n" +
-        "argument list: $_argsList" +
+        "argument list: $_argsList\n" +
         "output path: $output"
       );
     return output;
@@ -107,23 +107,22 @@ class FFmpegConverter {
   /// 
   /// Converting to anything provided will set the conversion bitrate to 256k
   /// to avoid any quality loss
-  /// 
-  /// [AudioModifiers] are used to Equalize the [Audio] Volume, Bass or Treble,
-  /// if these are provided and the [Audio] and the [FFmpegFormatType] both
-  /// have the same Format, only these changes will be applied (Without converting)
   Future<File> convertAudio({
-    String audioPath,
+    String audioFile,
     FFmpegActionType format,
   }) async {
-    assert(audioPath != "" || audioPath != null);
+    assert(audioFile != "" || audioFile != null);
     assert(format != null);
+    if (!await audioConversionRequired(format, audioFile)) {
+      return File(audioFile);
+    }
     List<String> _argsList;
     String outDir = (await getTemporaryDirectory()).path + "/";
     File output = File(outDir + RandomString.getRandomString(10));
     if (format == FFmpegActionType.ConvertToAAC) {
       _argsList = [
         "-y", "-i",
-        "$audioPath",
+        "$audioFile",
         "-c:a", "aac",
         "-b:a", "256k",
         "${output.path}.m4a",
@@ -132,7 +131,7 @@ class FFmpegConverter {
     }
     if (format == FFmpegActionType.ConvertToOGG) {
       _argsList = [
-        "-y", "-i", "$audioPath", "-c:a", "libopus",
+        "-y", "-i", "$audioFile", "-c:a", "libopus",
         "-b:a", "256k", "-vbr", "on", "-compression_level", "10",
         "${output.path}.ogg"
       ];
@@ -140,7 +139,7 @@ class FFmpegConverter {
     }
     if (format == FFmpegActionType.ConvertToOGGVorbis) {
       _argsList = [
-        "-y", "-i", "$audioPath",
+        "-y", "-i", "$audioFile",
         "-c:a", "libvorbis", "-b:a", "256k",
         "${output.path}.ogg"
       ];
@@ -148,7 +147,7 @@ class FFmpegConverter {
     }
     if (format == FFmpegActionType.ConvertToMP3) {
       _argsList = [
-        "-y", "-i", "$audioPath",
+        "-y", "-i", "$audioFile",
         "-c:a", "libmp3lame", "-b:a", "256k",
         "${output.path}.mp3"
       ];
@@ -158,7 +157,7 @@ class FFmpegConverter {
     if (_result == 1)
       throw Exception(
         "An issue ocurred trying to convert audio File\n" +
-        "audioFile: $audioPath\n" +
+        "audioFile: $audioFile\n" +
         "format: $format\n" +
         "argument list: $_argsList\n" +
         "output path: $output"
@@ -235,7 +234,7 @@ class FFmpegConverter {
     int _result = await flutterFFmpeg.executeWithArguments(_argsList);
     if (_result == 1)
       throw Exception(
-        "Cannot apply AudioModifiers\n" +
+        "Cannot Clear Metadata\n" +
         "audioFile: $audioFile\n" +
         "argument list: $_argsList\n" +
         "output: $output",
