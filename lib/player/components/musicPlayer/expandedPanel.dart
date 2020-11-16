@@ -43,7 +43,7 @@ class ExpandedPlayer extends StatelessWidget {
       : Theme.of(context).accentColor;
     return Scaffold(
       body: PlayerBackground(
-        backgroundImage: image,
+        backgroundImage: File(mediaItem.artUri.replaceAll("file://", "")),
         enableBlur: appData.useBlurBackground,
         blurIntensity: 50,
         backdropColor: appData.useBlurBackground
