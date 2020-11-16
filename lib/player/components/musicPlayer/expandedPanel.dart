@@ -42,6 +42,9 @@ class ExpandedPlayer extends StatelessWidget {
       ? mediaProvider.vibrantColor == null ? Colors.white : mediaProvider.vibrantColor
       : Theme.of(context).accentColor;
     return Scaffold(
+      backgroundColor: !appData.useBlurBackground
+        ? Theme.of(context).scaffoldBackgroundColor
+        : dominantColor,
       body: PlayerBackground(
         backgroundImage: File(mediaItem.artUri.replaceAll("file://", "")),
         enableBlur: appData.useBlurBackground,

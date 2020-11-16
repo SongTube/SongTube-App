@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 
 // Packages
 import 'package:transparent_image/transparent_image.dart';
+import 'package:image_fade/image_fade.dart';
 
 class PlayerBackground extends StatelessWidget {
   final File backgroundImage;
@@ -29,11 +30,8 @@ class PlayerBackground extends StatelessWidget {
       children: [
         AnimatedSwitcher(
           duration: Duration(milliseconds: 600),
-          child: enableBlur ? FadeInImage(
+          child: enableBlur ? ImageFade(
             image: FileImage(backgroundImage),
-            placeholder: MemoryImage(kTransparentImage),
-            fadeInDuration: Duration(milliseconds: 400),
-            fadeOutDuration: Duration(milliseconds: 200),
             height: double.infinity,
             width: double.infinity,
             fit: BoxFit.cover,
