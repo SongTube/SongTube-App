@@ -7,10 +7,10 @@ import 'package:songtube/ui/internal/licenseDialog.dart';
 class DisclaimerDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    ConfigurationProvider appData = Provider.of<ConfigurationProvider>(context);
+    ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
     return WillPopScope(
       onWillPop: () {
-        if (appData.disclaimerAccepted)
+        if (config.disclaimerAccepted)
           return Future.value(true);
         else
           return Future.value(false);
@@ -36,7 +36,7 @@ class DisclaimerDialog extends StatelessWidget {
         actions: [
           FlatButton(
             onPressed: () {
-              appData.disclaimerAccepted = true;
+              config.disclaimerAccepted = true;
               Navigator.pop(context);
             },
             child: Text("OK", style: TextStyle(

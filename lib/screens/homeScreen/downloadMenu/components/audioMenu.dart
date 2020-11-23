@@ -65,7 +65,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
 
   @override
   Widget build(BuildContext context) {
-    ConfigurationProvider appData = Provider.of<ConfigurationProvider>(context);
+    ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
     return SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -199,7 +199,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
             children: [
               InkWell(
                 onTap: () {
-                  appData.enableFFmpegActionType = !appData.enableFFmpegActionType;
+                  config.enableFFmpegActionType = !config.enableFFmpegActionType;
                   setState(() {});
                 },
                 borderRadius: BorderRadius.circular(20),
@@ -208,7 +208,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                   child: Row(
                     children: [
                       CircularCheckBox(
-                        value: appData.enableFFmpegActionType,
+                        value: config.enableFFmpegActionType,
                         onChanged: (_) {}
                       ),
                       Text(
@@ -225,7 +225,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
               Spacer(),
               AnimatedSwitcher(
                 duration: Duration(milliseconds: 400),
-                child: appData.enableFFmpegActionType ? DropdownButtonHideUnderline(
+                child: config.enableFFmpegActionType ? DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
                     items: [
                       DropdownMenuItem<String>(
@@ -251,9 +251,9 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                       ),
                     ],
                     onChanged: (String value) {
-                      appData.ffmpegActionTypeFormat = value;
+                      config.ffmpegActionTypeFormat = value;
                     },
-                    value: appData.ffmpegActionTypeFormat,
+                    value: config.ffmpegActionTypeFormat,
                     elevation: 1,
                     dropdownColor: Theme.of(context).cardColor,
                   ),

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 // Internal
-import 'package:songtube/internal/models/downloadinfoset.dart';
+import 'package:songtube/internal/models/infoSets/downloadinfoset.dart';
 import 'package:songtube/provider/downloadsProvider.dart';
 
 // Packages

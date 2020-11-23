@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 // Internal
 import 'package:songtube/internal/models/folder.dart';
 import 'package:songtube/internal/models/videoFile.dart';
-import 'package:songtube/player/videoPlayer.dart';
+import 'package:songtube/players/videoPlayer.dart';
 
 // Packages
 import 'package:permission_handler/permission_handler.dart';

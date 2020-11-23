@@ -192,7 +192,6 @@ class ConfigurationProvider extends ChangeNotifier {
       _searchHistory.insert(0, searchQuery);
     }
     preferences.saveSearchHistory(jsonEncode(_searchHistory));
-    notifyListeners();
   }
   void removeStringfromSearchHistory(int index) {
     _searchHistory.removeAt(index);

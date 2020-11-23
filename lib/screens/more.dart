@@ -17,15 +17,15 @@ import 'package:provider/provider.dart';
 class MoreScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    ConfigurationProvider appData = Provider.of<ConfigurationProvider>(context);
+    ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
     return Scaffold(
       body: ListView(
         physics: BouncingScrollPhysics(),
         children: <Widget>[
           // SongTube Banner
           SongTubeBanner(
-            appName: appData.appName,
-            appVersion: appData.appVersion,
+            appName: config.appName,
+            appVersion: config.appVersion,
           ),
           // Settings
           QuickAccessTile(
@@ -65,9 +65,9 @@ class MoreScreen extends StatelessWidget {
             title: Languages.of(context).labelLicenses,
             onTap: () {
               showLicensePage(
-                applicationName: appData.appName,
+                applicationName: config.appName,
                 applicationIcon: Image.asset('assets/images/ic_launcher.png', height: 50, width: 50),
-                applicationVersion: appData.appVersion,
+                applicationVersion: config.appVersion,
                 context: context
               );
             },

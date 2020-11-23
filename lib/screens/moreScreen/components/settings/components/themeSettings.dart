@@ -19,13 +19,13 @@ class ThemeSettings extends StatefulWidget {
 class _ThemeSettingsState extends State<ThemeSettings> with TickerProviderStateMixin{
   @override
   Widget build(BuildContext context) {
-    ConfigurationProvider appData = Provider.of<ConfigurationProvider>(context);
+    ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
     return SettingsColumnTile(
       title: Languages.of(context).labelTheme,
       icon: Icons.color_lens,
       children: <Widget>[
         ListTile(
-          onTap: () => appData.systemThemeEnabled = !appData.systemThemeEnabled,
+          onTap: () => config.systemThemeEnabled = !config.systemThemeEnabled,
           title: Text(
             Languages.of(context).labelUseSystemTheme,
             style: TextStyle(
@@ -37,9 +37,9 @@ class _ThemeSettingsState extends State<ThemeSettings> with TickerProviderStateM
             style: TextStyle(fontSize: 12),),
           trailing: CircularCheckBox(
             activeColor: Theme.of(context).accentColor,
-            value: appData.systemThemeEnabled,
+            value: config.systemThemeEnabled,
             onChanged: (bool newValue) {
-              appData.systemThemeEnabled = newValue;
+              config.systemThemeEnabled = newValue;
             },
           ),
         ),
@@ -48,9 +48,9 @@ class _ThemeSettingsState extends State<ThemeSettings> with TickerProviderStateM
           vsync: this,
           curve: Curves.easeInOutBack,
           duration: Duration(milliseconds: 500),
-          child: appData.systemThemeEnabled == false
+          child: config.systemThemeEnabled == false
           ? ListTile(
-              onTap: () => appData.darkThemeEnabled = !appData.darkThemeEnabled,
+              onTap: () => config.darkThemeEnabled = !config.darkThemeEnabled,
               title: Text(
                 Languages.of(context).labelEnableDarkTheme,
                 style: TextStyle(
@@ -62,9 +62,9 @@ class _ThemeSettingsState extends State<ThemeSettings> with TickerProviderStateM
                 style: TextStyle(fontSize: 12),),
               trailing: CircularCheckBox(
                 activeColor: Theme.of(context).accentColor,
-                value: appData.darkThemeEnabled,
+                value: config.darkThemeEnabled,
                 onChanged: (bool newValue) {
-                  appData.darkThemeEnabled = newValue;
+                  config.darkThemeEnabled = newValue;
                 },
               ),
             )
@@ -72,7 +72,7 @@ class _ThemeSettingsState extends State<ThemeSettings> with TickerProviderStateM
         ),
         // Enable/Disable Black Theme
         ListTile(
-          onTap: () => appData.blackThemeEnabled = !appData.blackThemeEnabled,
+          onTap: () => config.blackThemeEnabled = !config.blackThemeEnabled,
           title: Text(
             Languages.of(context).labelEnableBlackTheme,
             style: TextStyle(
@@ -84,15 +84,15 @@ class _ThemeSettingsState extends State<ThemeSettings> with TickerProviderStateM
             style: TextStyle(fontSize: 12),),
           trailing: CircularCheckBox(
             activeColor: Theme.of(context).accentColor,
-            value: appData.blackThemeEnabled,
+            value: config.blackThemeEnabled,
             onChanged: (bool newValue) {
-              appData.blackThemeEnabled = newValue;
+              config.blackThemeEnabled = newValue;
             },
           ),
         ),
         // App AccentColor Setting
         ListTile(
-          onTap: () => appData.systemThemeEnabled = !appData.systemThemeEnabled,
+          onTap: () => config.systemThemeEnabled = !config.systemThemeEnabled,
           title: Text(
             Languages.of(context).labelAccentColor,
             style: TextStyle(
@@ -115,7 +115,7 @@ class _ThemeSettingsState extends State<ThemeSettings> with TickerProviderStateM
                   builder: (context) {
                     return AccentPicker(
                       onColorChanged: (Color color) {
-                        appData.accentColor = color;
+                        config.accentColor = color;
                         Navigator.pop(context);
                       },
                     );

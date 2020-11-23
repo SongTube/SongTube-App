@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // Internal
-import 'package:songtube/player/service/playerService.dart';
+import 'package:songtube/players/service/playerService.dart';
 import 'package:songtube/provider/mediaProvider.dart';
 import 'package:songtube/screens/mediaScreen/components/loadingListWidget.dart';
 import 'package:songtube/screens/mediaScreen/components/mediaListBase.dart';

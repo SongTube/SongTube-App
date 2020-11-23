@@ -31,7 +31,10 @@ dependencies:
   video_player: ^0.10.12+2
   just_audio: ^0.5.4
   audio_service: ^0.15.1
-  sliding_up_panel: ^1.0.2
+  sliding_up_panel:
+    git:
+      url: git://github.com/SongTube/sliding_up_panel.git
+      ref: master
 
   # Youtube Explode
   youtube_explode_dart: ^1.7.1

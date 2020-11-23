@@ -55,10 +55,6 @@ class AppBottomNavigationBar extends StatelessWidget {
             label: Languages.of(context).labelMedia
           ),
           BottomNavigationBarItem(
-            icon: Icon(EvaIcons.videoOutline),
-            label: "YouTube"
-          ),
-          BottomNavigationBarItem(
             icon: Icon(MdiIcons.dotsHorizontal),
             label: Languages.of(context).labelMore
           )

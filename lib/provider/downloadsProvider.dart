@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:songtube/internal/ffmpeg/converter.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/models/audioModifiers.dart';
-import 'package:songtube/internal/models/downloadinfoset.dart';
+import 'package:songtube/internal/models/infoSets/downloadinfoset.dart';
 import 'package:songtube/internal/models/metadata.dart';
 import 'package:songtube/internal/models/songFile.dart';
 import 'package:songtube/internal/randomString.dart';
@@ -54,7 +54,7 @@ class DownloadsProvider extends ChangeNotifier {
   // Handle Single Video Download
   void handleVideoDownload({
     @required Languages language,
-    ConfigurationProvider currentAppData,
+    ConfigurationProvider config,
     DownloadMetaData metadata,
     StreamManifest manifest,
     Video videoDetails,
@@ -62,13 +62,13 @@ class DownloadsProvider extends ChangeNotifier {
   }) {
     DownloadType downloadType;
     FFmpegActionType convertFormat;
-    if (currentAppData.ffmpegActionTypeFormat == "AAC")
+    if (config.ffmpegActionTypeFormat == "AAC")
       convertFormat = FFmpegActionType.ConvertToAAC;
-    if (currentAppData.ffmpegActionTypeFormat == "OGG Vorbis")
+    if (config.ffmpegActionTypeFormat == "OGG Vorbis")
       convertFormat = FFmpegActionType.ConvertToOGGVorbis;
-    if (currentAppData.ffmpegActionTypeFormat == "MP3")
+    if (config.ffmpegActionTypeFormat == "MP3")
       convertFormat = FFmpegActionType.ConvertToMP3;
-    if (currentAppData.enableFFmpegActionType == false)
+    if (config.enableFFmpegActionType == false)
       convertFormat = FFmpegActionType.NONE;
     String downloadPath;
     StreamInfo audioStreamInfo;
@@ -76,14 +76,14 @@ class DownloadsProvider extends ChangeNotifier {
     switch (data[0]) {
       case "Audio":
         downloadType = DownloadType.AUDIO;
-        downloadPath = currentAppData.audioDownloadPath;
+        downloadPath = config.audioDownloadPath;
         audioStreamInfo = data[1];
         break;
       case "Video":
         downloadType = DownloadType.VIDEO;
         videoStreamInfo = data[1];
         audioStreamInfo = manifest.audioOnly.withHighestBitrate();
-        downloadPath = currentAppData.videoDownloadPath;
+        downloadPath = config.videoDownloadPath;
         convertFormat = FFmpegActionType.AppendAudioOnVideo;
         break;
     }
@@ -95,7 +95,7 @@ class DownloadsProvider extends ChangeNotifier {
       videoDetails: videoDetails,
       metadata: metadata,
       downloadType: downloadType,
-      downloadPath: currentAppData.enableAlbumFolder
+      downloadPath: config.enableAlbumFolder
         ? downloadPath + "/${metadata.album}"
         : downloadPath,
       convertFormat: convertFormat,
@@ -126,19 +126,19 @@ class DownloadsProvider extends ChangeNotifier {
   // Handle Playlist Downloads
   void handlePlaylistDownload({
     @required Languages language,
-    ConfigurationProvider currentAppData,
+    ConfigurationProvider config,
     List<Video> listVideos,
     String album, String artist
   }) {
     int track = 1;
     FFmpegActionType convertFormat;
-    if (currentAppData.ffmpegActionTypeFormat == "AAC")
+    if (config.ffmpegActionTypeFormat == "AAC")
       convertFormat = FFmpegActionType.ConvertToAAC;
-    if (currentAppData.ffmpegActionTypeFormat == "OGG Vorbis")
+    if (config.ffmpegActionTypeFormat == "OGG Vorbis")
       convertFormat = FFmpegActionType.ConvertToOGGVorbis;
-    if (currentAppData.ffmpegActionTypeFormat == "MP3")
+    if (config.ffmpegActionTypeFormat == "MP3")
       convertFormat = FFmpegActionType.ConvertToMP3;
-    if (currentAppData.enableFFmpegActionType == false)
+    if (config.enableFFmpegActionType == false)
       convertFormat = FFmpegActionType.NONE;
     listVideos.forEach((video) {
       queueList.add(
@@ -156,9 +156,9 @@ class DownloadsProvider extends ChangeNotifier {
             disc: "1", track: "$track"
           ),
           downloadType: DownloadType.AUDIO,
-          downloadPath: currentAppData.enableAlbumFolder
-            ? currentAppData.audioDownloadPath + "/$album"
-            : currentAppData.audioDownloadPath,
+          downloadPath: config.enableAlbumFolder
+            ? config.audioDownloadPath + "/$album"
+            : config.audioDownloadPath,
           convertFormat: convertFormat,
           audioModifiers: AudioModifiers(),
           downloadId: RandomString.getRandomString(6),

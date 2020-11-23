@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/languages.dart';
-import 'package:songtube/internal/models/downloadinfoset.dart';
+import 'package:songtube/internal/models/infoSets/downloadinfoset.dart';
 import 'package:songtube/provider/downloadsProvider.dart';
 import 'package:songtube/screens/downloadScreen/components/downloadTile.dart';
 import 'package:songtube/screens/downloadScreen/components/downloadsEmpty.dart';

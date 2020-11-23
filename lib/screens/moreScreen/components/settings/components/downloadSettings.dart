@@ -26,7 +26,7 @@ import 'package:songtube/ui/dialogs/alertDialog.dart';
 class DownloadSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    ConfigurationProvider appData = Provider.of<ConfigurationProvider>(context);
+    ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
     return SettingsColumnTile(
       title: Languages.of(context).labelDownloads,
       icon: EvaIcons.downloadOutline,
@@ -54,7 +54,7 @@ class DownloadSettings extends StatelessWidget {
                   if (status == PermissionStatus.granted) {
                     FilePicker.platform.getDirectoryPath().then((path) {
                       if (path != null) {
-                        appData.audioDownloadPath = path;
+                        config.audioDownloadPath = path;
                       }
                     });
                   }
@@ -86,7 +86,7 @@ class DownloadSettings extends StatelessWidget {
                   if (status == PermissionStatus.granted) {
                     FilePicker.platform.getDirectoryPath().then((path) {
                       if (path != null) {
-                        appData.videoDownloadPath = path;
+                        config.videoDownloadPath = path;
                       }
                     });
                   }
@@ -108,9 +108,9 @@ class DownloadSettings extends StatelessWidget {
           ),
           trailing: CircularCheckBox(
             activeColor: Theme.of(context).accentColor,
-            value: appData.enableAlbumFolder,
+            value: config.enableAlbumFolder,
             onChanged: (bool newValue) async {
-              appData.enableAlbumFolder = newValue;
+              config.enableAlbumFolder = newValue;
             },
           ),
         ),

@@ -1,7 +1,10 @@
 // Flutter
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:songtube/internal/languages.dart';
+import 'package:songtube/internal/randomString.dart';
 
 // Internal
 import 'package:songtube/intro/introduction.dart';
@@ -64,13 +67,19 @@ class _MainState extends State<Main> {
 
   @override
   Widget build(BuildContext context) {
+    List lastSearchQuery = (jsonDecode(widget.preloadedFs.getSearchHistory())
+      as List<dynamic>).cast<String>();
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<ConfigurationProvider>(
           create: (context) => ConfigurationProvider(preferences: widget.preloadedFs)
         ),
         ChangeNotifierProvider<ManagerProvider>(
-          create: (context) => ManagerProvider()
+          create: (context) => ManagerProvider(
+            lastSearchQuery.isNotEmpty
+              ? lastSearchQuery[0]
+              : RandomString.getRandomLetter()
+          )
         ),
         ChangeNotifierProvider<DownloadsProvider>(
           create: (context) => DownloadsProvider()
@@ -80,17 +89,17 @@ class _MainState extends State<Main> {
         )
       ],
       child: Builder( builder: (context) {
-        ConfigurationProvider appData = Provider.of<ConfigurationProvider>(context);        
+        ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
         ThemeData customTheme;
         ThemeData darkTheme;
 
-        darkTheme = appData.blackThemeEnabled 
-                    ? AppTheme.black(appData.accentColor)
-                    : AppTheme.dark(appData.accentColor);
+        darkTheme = config.blackThemeEnabled 
+                    ? AppTheme.black(config.accentColor)
+                    : AppTheme.dark(config.accentColor);
 
-        customTheme = appData.darkThemeEnabled
+        customTheme = config.darkThemeEnabled
                       ? darkTheme
-                      : AppTheme.white(appData.accentColor);
+                      : AppTheme.white(config.accentColor);
 
         List<Locale> supportedLocales = [];
         supportedLanguages.forEach((element) =>
@@ -116,13 +125,13 @@ class _MainState extends State<Main> {
             return supportedLocales?.first;
           },
           title: "SongTube",
-          theme: appData.systemThemeEnabled
-                 ? AppTheme.white(appData.accentColor)
+          theme: config.systemThemeEnabled
+                 ? AppTheme.white(config.accentColor)
                  : customTheme,
-          darkTheme: appData.systemThemeEnabled
+          darkTheme: config.systemThemeEnabled
                      ? darkTheme
                      : customTheme,
-          initialRoute: appData.preferences.showIntroductionPages()
+          initialRoute: config.preferences.showIntroductionPages()
             ? 'introScreen'
             : 'homeScreen',
           routes: {
