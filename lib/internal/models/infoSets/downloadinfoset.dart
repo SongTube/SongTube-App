@@ -173,10 +173,10 @@ class DownloadInfoSet {
     }
     // Rename File
     downloadedFile = await renameFile(downloadedFile, metadata.title);
-    downloadedFile = await ffmpegConverter.clearFileMetadata(downloadedFile.path);
-    if (downloadedFile == null) return;
     // Write All Metadata if its Audio
     if (downloadType == DownloadType.AUDIO) {
+      downloadedFile = await ffmpegConverter.clearFileMetadata(downloadedFile.path);
+      if (downloadedFile == null) return;
       currentAction.add(language.labelWrittingTagsAndArtwork);
       await writeAllMetadata(downloadedFile.path);
     }
