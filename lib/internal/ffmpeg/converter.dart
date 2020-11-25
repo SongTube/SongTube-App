@@ -69,21 +69,21 @@ class FFmpegConverter {
     assert(videoFormat != "" || videoFormat != null);
     assert(videoPath != "" || videoPath != null);
     assert(audioPath != "" || audioPath != null);
-    List<String> _argsList;
+    List<String> _argsList = List<String>();
     String outDir = (await getTemporaryDirectory()).path + "/";
     File output = File(outDir + RandomString.getRandomString(10));
-    if (videoFormat == "matroska,webm") {
+    if (videoFormat == "webm") {
       _argsList = [
         "-y", "-i", "$videoPath", "-i", "$audioPath",
-        "-c:v", "copy", "-c:a", "libopus", "-map", "0:v:0", "-map", "1:a:0",
+        "-c", "copy", "-c:a", "libopus",
         "${output.path}.webm"
       ];
       output = File(output.path + ".webm");
     }
-    if (videoFormat == "mov,mp4,m4a,3gp,3g2,mj2") {
+    if (videoFormat == "mp4") {
       _argsList = [
         "-y", "-i", "$videoPath", "-i", "$audioPath",
-        "-c:v", "copy", "-c:a", "aac", "-map", "0:v:0", "-map", "1:a:0",
+        "-c:v", "copy", "-c:a", "aac",
         "${output.path}.mp4"
       ];
       output = File(output.path + ".mp4");
