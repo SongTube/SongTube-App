@@ -1,12 +1,9 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-import 'package:eva_icons_flutter/icon_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/languages.dart';
-import 'package:songtube/internal/models/infoSets/mediaInfoSet.dart';
 import 'package:songtube/internal/models/metadata.dart';
-import 'package:songtube/internal/youtube/youtubeExtractor.dart';
 import 'package:songtube/players/components/youtubePlayer/components/videoPage/artworkEditor.dart';
 import 'package:songtube/players/components/youtubePlayer/components/videoPage/engagementTiles.dart';
 import 'package:songtube/players/components/youtubePlayer/components/videoPage/floatingActionButton.dart';

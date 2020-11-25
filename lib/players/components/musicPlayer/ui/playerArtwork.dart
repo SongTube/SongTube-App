@@ -4,7 +4,6 @@ import 'dart:io';
 // Flutter
 import 'package:flutter/material.dart';
 import 'package:image_fade/image_fade.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class PlayerArtwork extends StatelessWidget {
   final File image;

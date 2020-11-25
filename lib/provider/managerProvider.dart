@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:songtube/internal/models/infoSets/mediaInfoSet.dart';
-import 'package:songtube/internal/models/tagsControllers.dart';
 import 'package:songtube/internal/youtube/youtubeExtractor.dart';
 
 // Internal
@@ -16,7 +15,6 @@ import 'package:songtube/internal/youtube/youtubeInfo.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 // UI
-import 'package:songtube/ui/internal/snackbar.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 enum LoadingStatus { Success, Loading, Unload }

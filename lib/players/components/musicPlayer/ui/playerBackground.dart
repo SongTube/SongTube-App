@@ -6,7 +6,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 // Packages
-import 'package:transparent_image/transparent_image.dart';
 import 'package:image_fade/image_fade.dart';
 
 class PlayerBackground extends StatelessWidget {

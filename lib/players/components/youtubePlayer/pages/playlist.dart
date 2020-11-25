@@ -2,7 +2,6 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/languages.dart';
-import 'package:songtube/internal/models/infoSets/mediaInfoSet.dart';
 import 'package:songtube/players/components/youtubePlayer/components/playlistPage/pageDetails.dart';
 import 'package:songtube/players/components/youtubePlayer/components/playlistPage/videosListview.dart';
 import 'package:songtube/players/components/youtubePlayer/components/videoPage/youtubeVideoPlayer.dart';
