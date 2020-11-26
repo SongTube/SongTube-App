@@ -134,11 +134,12 @@ class _VideoTileState extends State<VideoTile> {
                 Container(
                   margin: EdgeInsets.only(left: 12, right: 12, top: 12, bottom: 4),
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        height: 60,
-                        width: 60,
-                        margin: EdgeInsets.only(right: 8),
+                        height: 50,
+                        width: 50,
+                        margin: EdgeInsets.only(right: 12),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(100),
                           color: Colors.black.withOpacity(0.05)
@@ -167,10 +168,10 @@ class _VideoTileState extends State<VideoTile> {
                                 ? "${widget.searchItem.videoTitle}"
                                 : "${widget.searchItem.playlistTitle}",
                               style: TextStyle(
-                                fontWeight: FontWeight.w500
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14
                               ),
                               overflow: TextOverflow.clip,
-                              maxLines: 2,
                             ),
                             SizedBox(height: 4),
                             Text(
@@ -183,7 +184,6 @@ class _VideoTileState extends State<VideoTile> {
                                 fontSize: 12
                               ),
                               overflow: TextOverflow.clip,
-                              maxLines: 1,
                             ),
                           ],
                         ),

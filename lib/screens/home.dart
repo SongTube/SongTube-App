@@ -86,7 +86,7 @@ class HomeScreen extends StatelessWidget {
     if (manager.youtubeSearchResults.isNotEmpty) {
       return Padding(
         padding: EdgeInsets.only(
-          top: index == 0 ? 0 : 8,
+          top: index == 0 ? 0 : 12,
           bottom: manager.youtubeSearchResults.length-1 == index ? 16 : 0
         ),
         child: VideoTile(
@@ -96,7 +96,7 @@ class HomeScreen extends StatelessWidget {
     } else {
       return Padding(
         padding: EdgeInsets.only(
-          top: index == 0 ? 0 : 8,
+          top: index == 0 ? 0 : 12,
           bottom: manager.youtubeSearchResults.length-1 == index ? 16 : 0
         ),
         child: ShimmerVideoTile(),
