@@ -1,4 +1,5 @@
 import 'package:songtube/internal/youtube/youtubeInfo.dart';
+import 'package:songtube/internal/youtube/youtubeIsolates.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 /// This class is designed to Extract all kind of information
@@ -12,7 +13,7 @@ class YoutubeExtractor {
   YoutubeInfo youtubeInfo;
 
   Future<Channel> getChannel(url) async {
-    return await youtubeInfo.getChannel(url);
+    return await YoutubeIsolates.getChannelByVideoId(url);
   }
 
   // Get Playlist Details
@@ -33,7 +34,7 @@ class YoutubeExtractor {
     while (streamManifest == null) {
       try {
         streamManifest =
-          await youtubeInfo.getVideoManifest(url)
+          await YoutubeIsolates.getStreamManifest(url)
             .timeout(Duration(seconds: 30));
       } catch (_) {}
     }
