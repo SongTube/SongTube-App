@@ -9,6 +9,7 @@ class BlurPageRoute<T> extends PageRoute<T> with MaterialRouteTransitionMixin<T>
   bool keepState;
   double blurStrength;
   Curve animationCurve;
+  Offset slideOffset;
 
   BlurPageRoute({
     this.duration = const Duration(milliseconds: 500),
@@ -18,11 +19,12 @@ class BlurPageRoute<T> extends PageRoute<T> with MaterialRouteTransitionMixin<T>
     RouteSettings settings,
     this.maintainState = true,
     bool fullscreenDialog = false,
-    this.animationCurve = Curves.easeOutQuart
+    this.animationCurve = Curves.easeOutQuart,
+    this.opaque = false,
+    this.slideOffset = const Offset(0.0, 10.0)
   }) : assert(builder != null),
        assert(maintainState != null),
        assert(fullscreenDialog != null),
-       assert(opaque),
        super(settings: settings, fullscreenDialog: fullscreenDialog) {
   }
 
@@ -42,7 +44,7 @@ class BlurPageRoute<T> extends PageRoute<T> with MaterialRouteTransitionMixin<T>
         curve: animationCurve,
       ).drive(
         Tween<Offset>(
-          begin: Offset(10.0, 0.0),
+          begin: slideOffset,
           end: Offset(0.0, 0.0),
         ),
       ),
@@ -61,5 +63,8 @@ class BlurPageRoute<T> extends PageRoute<T> with MaterialRouteTransitionMixin<T>
 
   @override
   Duration get transitionDuration => duration;
+
+  @override
+  bool opaque;
 
 }
