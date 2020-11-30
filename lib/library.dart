@@ -32,35 +32,7 @@ class MainLibrary extends StatelessWidget {
       child: Stack(
         children: [
           Library(),
-          // Players
-          Consumer<ManagerProvider>(
-            builder: (context, provider, child) {
-              return Stack(
-                children: [
-                  IgnorePointer(
-                    ignoring: provider.screenIndex == 2 ? false : true,
-                    child: AnimatedOpacity(
-                      opacity: provider.screenIndex == 2 ? 1.0 : 0.0,
-                      duration: Duration(milliseconds: 250),
-                      child: SlidingPlayerPanel()
-                    ),
-                  ),
-                  IgnorePointer(
-                    ignoring: provider.screenIndex == 0 ||
-                      provider.screenIndex == 1
-                        ? false : true,
-                    child: AnimatedOpacity(
-                      opacity: provider.screenIndex == 0 ||
-                        provider.screenIndex == 1
-                          ? 1.0 : 0.0,
-                      duration: Duration(milliseconds: 250),
-                      child: YoutubePlayer(),
-                    ),
-                  )
-                ],
-              );
-            },
-          )
+          SlidingPlayerPanel()
         ],
       )
     );
