@@ -5,10 +5,10 @@ import 'package:songtube/internal/languages.dart';
 import 'package:string_validator/string_validator.dart';
 import 'package:transparent_image/transparent_image.dart';
 
-class VideoPageArtworkEditor extends StatelessWidget {
+class VideoArtworkEditor extends StatelessWidget {
   final Function onArtworkTap;
   final String artworkUrl;
-  VideoPageArtworkEditor({
+  VideoArtworkEditor({
     @required this.onArtworkTap,
     @required this.artworkUrl
   });

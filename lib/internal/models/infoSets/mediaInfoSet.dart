@@ -14,6 +14,8 @@ class MediaInfoSet {
   Channel channelDetails;
   StreamManifest streamManifest;
   TagsControllers mediaTags;
+  List<Video> relatedVideos;
+  int autoPlayIndex;
 
   MediaInfoSet({
     this.videoFromSearch,
@@ -26,6 +28,8 @@ class MediaInfoSet {
   }) {
     mediaTags = TagsControllers();
     playlistVideos = List<Video>();
+    relatedVideos = List<Video>();
+    autoPlayIndex = 0;
   }
 
   void updateVideoDetails(Video video) {

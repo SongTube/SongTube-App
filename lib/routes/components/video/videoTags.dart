@@ -1,16 +1,100 @@
+import 'dart:io';
+
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/models/tagsControllers.dart';
 import 'package:songtube/ui/components/textfieldTile.dart';
+import 'package:string_validator/string_validator.dart';
+import 'package:transparent_image/transparent_image.dart';
 
-class VideoPageTagsTextFields extends StatelessWidget {
+class VideoTags extends StatelessWidget {
   final TagsControllers tagsControllers;
-  VideoPageTagsTextFields(this.tagsControllers);
+  final String artworkUrl;
+  final Function onArtworkTap;
+  VideoTags({
+    this.tagsControllers,
+    this.artworkUrl,
+    this.onArtworkTap
+  });
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [ 
+    return ExpansionTile(
+      tilePadding: EdgeInsets.zero,
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(width: 16),
+          Icon( 
+            EvaIcons.musicOutline,
+            color: Theme.of(context).iconTheme.color
+          ),
+          SizedBox(width: 8),
+          Text(
+            "Tags",
+            style: TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: 15,
+              color: Theme.of(context).textTheme.bodyText1.color
+            ),
+          ),
+        ],
+      ),
+      trailing: GestureDetector(
+        onTap: onArtworkTap,
+        child: Padding(
+          padding: EdgeInsets.only(right: 12),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                margin: EdgeInsets.only(right: 8),
+                child: Text(
+                  Languages.of(context).labelEditArtwork,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 12
+                  ),
+                ),
+              ),
+              Stack(
+                alignment: Alignment.bottomCenter,
+                children: [
+                  Container(
+                    height: 50,
+                    width: 50,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(50),
+                      child: FadeInImage(
+                        fadeInDuration: Duration(milliseconds: 300),
+                        placeholder: MemoryImage(kTransparentImage),
+                        image: isURL(artworkUrl)
+                          ? NetworkImage(artworkUrl)
+                          : FileImage(File(artworkUrl)),
+                        fit: BoxFit.cover,
+                      ),
+                    )
+                  ),
+                  Container(
+                    height: 20,
+                    width: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(bottomRight: Radius.circular(25)),
+                      color: Theme.of(context).cardColor.withOpacity(0.4)
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(bottom: 2),
+                    child: Icon(EvaIcons.editOutline, size: 18, color: Colors.white),
+                  )
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+      children: [
         // Title TextField
         Row(
           mainAxisAlignment: MainAxisAlignment.end,

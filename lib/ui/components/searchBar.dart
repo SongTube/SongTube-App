@@ -46,10 +46,11 @@ class STSearchBar extends StatelessWidget {
           Expanded(
             child: Container(
               height: 45,
+              margin: EdgeInsets.only(left: 8, right: 8),
               decoration: BoxDecoration(
                 color: Theme.of(context).scaffoldBackgroundColor
                   .withOpacity(0.6),
-                borderRadius: BorderRadius.circular(10)
+                borderRadius: BorderRadius.circular(15)
               ),
               child: Row(
                 children: [
@@ -104,7 +105,6 @@ class STSearchBar extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(width: 16)
         ],
       )
     );

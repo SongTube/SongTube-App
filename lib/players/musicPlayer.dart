@@ -97,13 +97,13 @@ class SlidingPlayer extends StatelessWidget {
       onPanelClosed: () => mediaProvider.slidingPanelOpen = false,
       onPanelOpened: () => mediaProvider.slidingPanelOpen = true,
       onPanelSlide: (double position) {
-        if (position > 0.95) {
+        if (position > 1) {
           SystemChrome.setSystemUIOverlayStyle(
             SystemUiOverlayStyle(
               statusBarIconBrightness: textColor == Colors.black ? Brightness.dark : Brightness.light,
             ),
           );
-        } else {
+        } else if (position == 0) {
           SystemChrome.setSystemUIOverlayStyle(
             SystemUiOverlayStyle(
               statusBarIconBrightness:

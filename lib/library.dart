@@ -2,14 +2,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:package_info/package_info.dart';
+import 'package:songtube/internal/nativeMethods.dart';
 
 // Internal
 import 'package:songtube/internal/updateChecker.dart';
+import 'package:songtube/internal/youtube/youtubeExtractor.dart';
 import 'package:songtube/players/components/musicPlayer/playerPadding.dart';
-import 'package:songtube/players/youtubePlayer.dart';
 import 'package:songtube/provider/configurationProvider.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/provider/mediaProvider.dart';
+import 'package:songtube/routes/playlist.dart';
+import 'package:songtube/routes/video.dart';
 import 'package:songtube/screens/downloads.dart';
 import 'package:songtube/screens/home.dart';
 import 'package:songtube/screens/media.dart';
@@ -19,11 +22,14 @@ import 'package:songtube/players/musicPlayer.dart';
 // Packages
 import 'package:provider/provider.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:songtube/ui/animations/blurPageRoute.dart';
 import 'package:songtube/ui/components/navigationBar.dart';
 import 'package:songtube/ui/dialogs/appUpdateDialog.dart';
+import 'package:songtube/ui/dialogs/loadingDialog.dart';
 import 'package:songtube/ui/internal/disclaimerDialog.dart';
 import 'package:songtube/ui/internal/downloadFixDialog.dart';
 import 'package:songtube/ui/internal/lifecycleEvents.dart';
+import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 class MainLibrary extends StatelessWidget {
   @override
@@ -55,8 +61,46 @@ class _LibraryState extends State<Library> {
       }
     );
     WidgetsBinding.instance.addObserver(
-      new LifecycleEventHandler(resumeCallBack: () {
-        //Provider.of<ManagerProvider>(context, listen: false).handleIntent();
+      new LifecycleEventHandler(resumeCallBack: () async {
+        String intent = await NativeMethod.handleIntent();
+        if (intent == null) return;
+        if (VideoId.parseVideoId(intent) != null) {
+          String id = VideoId.parseVideoId(intent);
+          showDialog(
+            context: context,
+            builder: (_) => LoadingDialog()
+          );
+          YoutubeExplode yt = YoutubeExplode();
+          Video video = await yt.videos.get(id);
+          Provider.of<ManagerProvider>(context, listen: false)
+            .updateMediaInfoSet(video);
+          Navigator.pop(context);
+          Navigator.push(context,
+            BlurPageRoute(
+              slideOffset: Offset(0.0, 10.0),
+              builder: (_) => YoutubePlayerVideoPage(
+                url: video.id.value,
+                thumbnailUrl: video.thumbnails.highResUrl,
+              )
+          ));
+        }
+        if (PlaylistId.parsePlaylistId(intent) != null) {
+          String id = PlaylistId.parsePlaylistId(intent);
+          showDialog(
+            context: context,
+            builder: (_) => LoadingDialog()
+          );
+          YoutubeExplode yt = YoutubeExplode();
+          Playlist playlist = await yt.playlists.get(id);
+          Provider.of<ManagerProvider>(context, listen: false)
+            .updateMediaInfoSet(playlist);
+          Navigator.pop(context);
+          Navigator.push(context,
+            BlurPageRoute(
+              slideOffset: Offset(0.0, 10.0),
+              builder: (_) => YoutubePlayerPlaylistPage()
+          ));
+        }
         return;
       })
     );

@@ -1,52 +1,204 @@
-import 'package:songtube/internal/youtube/youtubeInfo.dart';
-import 'package:songtube/internal/youtube/youtubeIsolates.dart';
+import 'dart:convert';
+import 'dart:isolate';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
-/// This class is designed to Extract all kind of information
-/// about any [Video] or [Playlist]
+/// This Class holds functions to retrieve data from Youtube using the
+/// youtube_explode_dart library, but, because those library functions are
+/// CPU expensive, these are implemented with Isolates to avoid lagging
+/// or blocking the App main Isolate
+/// 
+/// These will only work using a Fork of the original youtube_explode_dart
+/// library which has the methods to convert its objects into maps for json
+/// encode/decode. The fork can be found on [https://github.com/songtube]
 class YoutubeExtractor {
 
-  YoutubeExtractor() {
-    youtubeInfo = YoutubeInfo();
+  /// All Data returned by this isolate has to be on a String or Json Format
+  static void _youtubeExtractorIsolate(SendPort mainSendPort) async {
+    ReceivePort childReceivePort = ReceivePort();
+    mainSendPort.send(childReceivePort.sendPort);
+    await for (var message in childReceivePort) {
+      YoutubeExplode yt = YoutubeExplode();
+      String request = message[0]["request"];
+      SendPort replyPort = message[1];
+      // Get Channel Information
+      if (request == "getChannel") {
+        String videoId = message[0]["id"];
+        Channel channel;
+        try {
+          channel = await yt.channels.getByVideo(videoId);
+        } catch (_) {
+          replyPort.send("Failed");
+          yt.close();
+          break;
+        }
+        replyPort.send(jsonEncode(channel.toMap()));
+        yt.close();
+        break;
+      }
+      // Get Video Details
+      if (request == "getVideo") {
+        String videoId = message[0]["id"];
+        Video video;
+        try {
+          video = await yt.videos.get(videoId);
+        } catch (_) {
+          replyPort.send("Failed");
+          yt.close();
+          break;
+        }
+        replyPort.send(jsonEncode(video.toMap()));
+        yt.close();
+        break;
+      }
+      // Get StreamManifest
+      if (request == "getManifest") {
+        String videoId = message[0]["id"];
+        StreamManifest manifest;
+        try {
+          manifest = await yt.videos.streamsClient.getManifest(videoId);
+        } catch (_) {
+          replyPort.send("Failed");
+          yt.close();
+          break;
+        }
+        replyPort.send(jsonEncode(manifest.toMap()));
+        yt.close();
+        break;
+      }
+      // Get Channel Uploads
+      if (request == "getChannelUploads") {
+        String id = message[0]["id"];
+        String takeFrom = message[0]["takeFrom"];
+        List<Video> videos = List<Video>();
+        String channelId;
+        if (takeFrom == "videoId") {
+          channelId = (await yt.channels.getByVideo(id)).id.value;
+        } else if (takeFrom == "channelId"){
+          channelId = id;
+        }
+        try {
+          videos = await yt.channels
+          .getUploads(channelId).take(20).toList();
+        } catch (_) {
+          videos = await yt.channels
+          .getUploads(channelId).toList();
+        }
+        List<Map<String, dynamic>> videosMap = videos.map((e) {
+          return e.toMap();
+        }).toList();
+        replyPort.send(jsonEncode({
+          'channelUploads': videosMap
+        }));
+        yt.close();
+        break;
+      }
+    }
   }
 
-  YoutubeInfo youtubeInfo;
+  // Data Isolates
+  Isolate channelIsolate;
+  Isolate videoIsolate;
+  Isolate manifestIsolate;
+  Isolate channelUploadsIsolate;
+  void killIsolates() {
+    if (channelIsolate != null) {
+      channelIsolate.kill();
+      channelIsolate = null;
+    }
+    if (videoIsolate != null) {
+      videoIsolate.kill();
+      videoIsolate = null;
+    }
+    if (manifestIsolate != null) {
+      manifestIsolate.kill();
+      manifestIsolate = null;
+    }
+    if (channelUploadsIsolate != null) {
+      channelUploadsIsolate.kill();
+      channelUploadsIsolate = null;
+    }
+  }
+  
+  Future<Channel> getChannelByVideoId(VideoId id) async {
+    ReceivePort receivePort = ReceivePort();
+    channelIsolate = await Isolate.spawn(
+      _youtubeExtractorIsolate, receivePort.sendPort);
+    SendPort childSendPort = await receivePort.first;
+    ReceivePort responsePort = ReceivePort();
+    childSendPort.send([
+      {
+        "request": "getChannel",
+        "id": id.value,
+      },
+      responsePort.sendPort
+    ]);
+    String encodedChannel = await responsePort.first;
+    Map<String, dynamic> map = jsonDecode(encodedChannel);
+    Channel channel = Channel.fromMap(map);
+    return channel;
+  }
 
-  Future<Channel> getChannel(url) async {
-    return await YoutubeIsolates.getChannelByVideoId(url);
+  Future<StreamManifest> getStreamManifest(VideoId id) async {
+    ReceivePort receivePort = ReceivePort();
+    manifestIsolate = await Isolate.spawn(
+      _youtubeExtractorIsolate, receivePort.sendPort);
+    SendPort childSendPort = await receivePort.first;
+    ReceivePort responsePort = ReceivePort();
+    childSendPort.send([
+      {
+        "request": "getManifest",
+        "id": id.value,
+      },
+      responsePort.sendPort
+    ]);
+    String jsonManifest = await responsePort.first;
+    Map<String, dynamic> map = jsonDecode(jsonManifest);
+    return StreamManifest.fromMap(map);
+  }
+
+  // Get video information by URL
+  Future<Video> getVideoDetails(VideoId id) async {
+    ReceivePort receivePort = ReceivePort();
+    videoIsolate = await Isolate.spawn(
+      _youtubeExtractorIsolate, receivePort.sendPort);
+    SendPort childSendPort = await receivePort.first;
+    ReceivePort responsePort = ReceivePort();
+    childSendPort.send([
+      {
+        "request": "getVideo",
+        "id": id.value,
+      },
+      responsePort.sendPort
+    ]);
+    String videoJson = await responsePort.first;
+    return Video.fromMap(jsonDecode(videoJson));
   }
 
   // Get Playlist Details
-  Future<Playlist> getPlaylistDetails(String url) async {
-    if (PlaylistId.parsePlaylistId(url) == null) return null;
+  Future<Playlist> getPlaylistDetails(PlaylistId id) async {
     Playlist playlist;
     while (playlist == null) {
+      YoutubeExplode yt = YoutubeExplode();
       try {
-        playlist = await youtubeInfo.getPlaylistDetails(url)
-          .timeout(Duration(seconds: 20));
+        playlist = await yt.playlists.get(id);
       } catch (_) {}
+      yt.close();
+      return playlist;
     }
     return playlist;
   }
-  // Get StreamManifest
-  Future<StreamManifest> getStreamManifest(String url) async {
-    StreamManifest streamManifest;
-    while (streamManifest == null) {
-      try {
-        streamManifest =
-          await YoutubeIsolates.getStreamManifest(url)
-            .timeout(Duration(seconds: 30));
-      } catch (_) {}
-    }
-    return streamManifest;
-  }
   
   // Playlist Details
-  Future<List<Video>> getPlaylistVideos(String url) async {
+  Future<List<Video>> getPlaylistVideos(PlaylistId id) async {
     List<Video> videos;
     while (videos == null) {
       try {
-        videos = await youtubeInfo.getPlaylistVideos(url);
+        YoutubeExplode yt = YoutubeExplode();
+        videos = await yt.playlists
+          .getVideos(id)
+          .take(50).toList();
+        yt.close();
+        return videos;
       } catch (_) {}
     }
     return videos;
@@ -65,4 +217,34 @@ class YoutubeExtractor {
     return comments;
   }
 
+  Future<List<Video>> getChannelVideos(dynamic id) async {
+    ReceivePort receivePort = ReceivePort();
+    channelUploadsIsolate = await Isolate.spawn(
+      _youtubeExtractorIsolate, receivePort.sendPort);
+    SendPort childSendPort = await receivePort.first;
+    ReceivePort responsePort = ReceivePort();
+    String takeFrom;
+    if (id is VideoId) {
+      takeFrom = "videoId";
+    }
+    if (id is ChannelId) {
+      takeFrom = "channelId";
+    }
+    childSendPort.send([
+      {
+        "request": "getChannelUploads",
+        "id": id.value,
+        "takeFrom": takeFrom
+      },
+      responsePort.sendPort
+    ]);
+    String uploadsJson = await responsePort.first;
+    var uploadsMap = jsonDecode(uploadsJson);
+    print(uploadsMap);
+    List<Video> channelUploads = [];
+    uploadsMap['channelUploads'].forEach((element) {
+      channelUploads.add(Video.fromMap(element));
+    });
+    return channelUploads;
+  }
 }

@@ -1,15 +1,12 @@
 // Flutter
 import 'package:flutter/material.dart';
 
-// Internal
-import 'package:songtube/players/components/videoPlayer/progressBar.dart';
-
 // Packages
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class VideoPlayerControls extends StatelessWidget {
-  final VideoPlayerProgressBar progressBar;
+  final Widget progressBar;
   final Function onPlayPause;
   final Function onExit;
   final String videoTitle;
@@ -39,6 +36,7 @@ class VideoPlayerControls extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                if (videoTitle != null)
                 Row(
                   children: [
                     Container(

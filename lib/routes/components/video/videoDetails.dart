@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:songtube/routes/components/video/shimmer/shimmerChannelLogo.dart';
 import 'package:transparent_image/transparent_image.dart';
 
-class VideoPageDetails extends StatelessWidget {
+class VideoDetails extends StatelessWidget {
   final String title;
   final String author;
   final String duration;
   final String date;
   final String channelLogo;
-  VideoPageDetails({
+  VideoDetails({
     @required this.title,
     @required this.author,
     @required this.duration,
@@ -19,23 +20,35 @@ class VideoPageDetails extends StatelessWidget {
     return Column(
       children: [
         Container(
-          margin: EdgeInsets.all(12),
+          margin: EdgeInsets.only(
+            left: 12, right: 12, bottom: 12
+          ),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                height: 60,
-                width: 60,
-                margin: EdgeInsets.only(right: 12),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(50),
-                  child: FadeInImage(
-                    fadeInDuration: Duration(milliseconds: 400),
-                    placeholder: MemoryImage(kTransparentImage),
-                    image: channelLogo != null
-                      ? NetworkImage(channelLogo)
-                      : MemoryImage(kTransparentImage)
-                  ),
-                ),
+              AnimatedSwitcher(
+                duration: Duration(milliseconds: 300),
+                child: channelLogo != null
+                  ? Container(
+                      height: 60,
+                      width: 60,
+                      margin: EdgeInsets.only(right: 12),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(50),
+                        child: FadeInImage(
+                          fadeInDuration: Duration(milliseconds: 400),
+                          placeholder: MemoryImage(kTransparentImage),
+                          image: channelLogo != null
+                            ? NetworkImage(channelLogo)
+                            : MemoryImage(kTransparentImage)
+                        ),
+                      ),
+                    )
+                  : Container(
+                      margin: EdgeInsets.only(right: 12),
+                      child: const ShimmerChannelLogo()
+                    )
               ),
               Expanded(
                 child: Column(
@@ -77,7 +90,7 @@ class VideoPageDetails extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(left: 12, right: 12),
               child: Text(
-                duration,
+                duration ?? "  ",
                 style: TextStyle(
                   fontSize: 12,
                   color: Theme.of(context).iconTheme.color,
@@ -88,7 +101,7 @@ class VideoPageDetails extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(left: 16, right: 16),
               child: Text(
-                date,
+                date ?? "  ",
                 style: TextStyle(
                   fontSize: 12,
                   color: Theme.of(context).iconTheme.color,

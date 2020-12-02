@@ -2,10 +2,8 @@
 import 'dart:io';
 
 // Flutter
-import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:songtube/internal/languages.dart';
-import 'package:songtube/internal/nativeMethods.dart';
 
 // Internal
 import 'package:songtube/provider/configurationProvider.dart';
@@ -193,28 +191,6 @@ class DownloadSettings extends StatelessWidget {
             ), 
           )
         ),
-        FutureBuilder(
-          future: DeviceInfoPlugin().androidInfo,
-          builder: (context, AsyncSnapshot<AndroidDeviceInfo> info) {
-            if (info.hasData && info.data.version.sdkInt > 28) {
-              return ListTile(
-                title: Text(
-                  Languages.of(context).labelAndroid11Fix,
-                  style: TextStyle(
-                    color: Theme.of(context).textTheme.bodyText1.color,
-                    fontWeight: FontWeight.w500
-                  ),
-                ),
-                subtitle: Text(Languages.of(context).labelAndroid11FixJustification),
-                onTap: () {
-                  NativeMethod.requestAllFilesPermission();
-                },
-              );
-            } else {
-              return Container();
-            }
-          }
-        )
       ],
     );
   }

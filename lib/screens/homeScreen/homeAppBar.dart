@@ -4,7 +4,12 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:provider/provider.dart';
 import 'package:songtube/provider/configurationProvider.dart';
 import 'package:songtube/provider/managerProvider.dart';
+import 'package:songtube/routes/playlist.dart';
+import 'package:songtube/routes/video.dart';
+import 'package:songtube/ui/animations/blurPageRoute.dart';
 import 'package:songtube/ui/components/searchBar.dart';
+import 'package:songtube/ui/dialogs/loadingDialog.dart';
+import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 class HomePageAppBar extends StatefulWidget {
   final bool openSearch;
@@ -57,10 +62,47 @@ class _HomePageAppBarState extends State<HomePageAppBar> {
         ) : STSearchBar(
               controller: manager.urlController,
               focusNode: manager.searchBarFocusNode,
-              onSearch: (searchQuery) {
+              onSearch: (searchQuery) async {
                 manager.searchBarFocusNode.unfocus();
                 manager.showSearchBar = false;
-                manager.youtubeSearchQuery= manager.urlController.text;
+                if (VideoId.parseVideoId(searchQuery) != null) {
+                  String id = VideoId.parseVideoId(searchQuery);
+                  showDialog(
+                    context: context,
+                    builder: (_) => LoadingDialog()
+                  );
+                  YoutubeExplode yt = YoutubeExplode();
+                  Video video = await yt.videos.get(id);
+                  manager.updateMediaInfoSet(video);
+                  Navigator.pop(context);
+                  Navigator.push(context,
+                    BlurPageRoute(
+                      slideOffset: Offset(0.0, 10.0),
+                      builder: (_) => YoutubePlayerVideoPage(
+                        url: video.id.value,
+                        thumbnailUrl: video.thumbnails.highResUrl,
+                      )
+                  ));
+                  return;
+                }
+                if (PlaylistId.parsePlaylistId(searchQuery) != null) {
+                  String id = PlaylistId.parsePlaylistId(searchQuery);
+                  showDialog(
+                    context: context,
+                    builder: (_) => LoadingDialog()
+                  );
+                  YoutubeExplode yt = YoutubeExplode();
+                  Playlist playlist = await yt.playlists.get(id);
+                  manager.updateMediaInfoSet(playlist);
+                  Navigator.pop(context);
+                  Navigator.push(context,
+                    BlurPageRoute(
+                      slideOffset: Offset(0.0, 10.0),
+                      builder: (_) => YoutubePlayerPlaylistPage()
+                  ));
+                  return;
+                }
+                manager.youtubeSearchQuery = manager.urlController.text;
                 manager.updateYoutubeSearchResults(updateResults: true);
                 if (searchQuery.length > 1) {
                   Future.delayed(Duration(milliseconds: 400), () =>

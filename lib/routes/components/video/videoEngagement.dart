@@ -7,13 +7,13 @@ import 'package:songtube/internal/languages.dart';
 import 'package:songtube/screens/homeScreen/components/roundTile.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class VideoPageEngagementTiles extends StatelessWidget {
+class VideoEngagement extends StatelessWidget {
   final int likeCount;
   final int dislikeCount;
   final int viewCount;
   final String channelUrl;
   final String videoUrl;
-  VideoPageEngagementTiles({
+  VideoEngagement({
     @required this.likeCount,
     @required this.dislikeCount,
     @required this.viewCount,

@@ -3,19 +3,14 @@ import 'dart:async';
 
 // Flutter
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:songtube/internal/models/infoSets/mediaInfoSet.dart';
-import 'package:songtube/internal/youtube/youtubeExtractor.dart';
 
 // Internal
-import 'package:songtube/internal/youtube/youtubeInfo.dart';
+import 'package:songtube/internal/youtube/youtubeExtractor.dart';
 
 // Packages
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
-
-// UI
-import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 enum LoadingStatus { Success, Loading, Unload }
 enum LibraryScreen { Home, Downloads, Media, More }
@@ -38,13 +33,14 @@ class ManagerProvider extends ChangeNotifier {
     // Library Scaffold Key
     _libraryScaffoldKey = new GlobalKey<ScaffoldState>();
     _screenIndex        = 0;
-    // YouTube Info
-    youtubeInfo = new YoutubeInfo();
     // Navigate
     youtubeSearchQuery = lastSearchQuery;
     searchStreamRunning = false;
     searchResultsLength = 10;
     updateYoutubeSearchResults();
+    youtubePlayerAutoPlay = true;
+    // YoutubeExtractor
+    youtubeExtractor = YoutubeExtractor();
   }
 
   // -------------
@@ -67,12 +63,19 @@ class ManagerProvider extends ChangeNotifier {
   // for Playback, Tags and Downloads)
   MediaInfoSet mediaInfoSet;
 
-  // -------------------------
-  // Youtube Player Controller
-  // -------------------------
-  YoutubePlayerController youtubePlayerController;
-  PlayerState youtubePlayerState;
-  YoutubeMetaData youtubePlayerMetadata;
+  // YoutubeExtractor
+  YoutubeExtractor youtubeExtractor;
+
+  // ---------------------
+  // Stream Youtube Player
+  // ---------------------
+  StreamManifest playerStream;
+  bool _youtubePlayerAutoPlay;
+  bool get youtubePlayerAutoPlay => _youtubePlayerAutoPlay;
+  set youtubePlayerAutoPlay(bool value) {
+    _youtubePlayerAutoPlay = value;
+    notifyListeners();
+  }
 
   // ---------------
   // Navigate Screen
@@ -104,49 +107,121 @@ class ManagerProvider extends ChangeNotifier {
   // -------------------
   //
   // Get current Video or Playlist
-  void updateMediaInfoSet(dynamic searchMedia) async {
+  void updateMediaInfoSet(dynamic searchMedia) {
     mediaInfoSet = MediaInfoSet();
-    if (searchMedia is SearchVideo) {
-      // Get current Search Video and update the YoutubePlayerController
+    playerStream = null;
+    notifyListeners();
+    if (searchMedia is Video) {
+      Video video = searchMedia;
       mediaInfoSet.mediaType = MediaInfoSetType.Video;
-      mediaInfoSet.videoFromSearch = searchMedia;
-      String id = mediaInfoSet.videoFromSearch.videoId.value;
-      updateYoutubePlayerController(id, true);
-      notifyListeners();
-      // Get the Video Details from our Search
-      mediaInfoSet.updateVideoDetails(
-        await youtubeInfo.getVideoDetails(id)
+      mediaInfoSet.videoFromSearch = SearchVideo(
+        VideoId(video.id.value),
+        video.title, video.author,
+        null, null, null,
+        [
+          Thumbnail(Uri(
+            path: video.thumbnails.highResUrl
+              .replaceAll("https://i.ytimg.com", "")
+              .replaceAll("https://img.youtube.com", "")
+          ), null, null)
+        ]
       );
+      VideoId id = mediaInfoSet.videoFromSearch.videoId;
+      mediaInfoSet.updateVideoDetails(video);
       notifyListeners();
-      // Get the Channel Details without waiting for it's result
-      YoutubeExtractor().getChannel(id).then((value) {
+      // Get the Channel Details
+      youtubeExtractor.getChannelByVideoId(id).then((value) {
         mediaInfoSet.channelDetails = value;
         notifyListeners();
       });
+      // Get Related videos
+      youtubeExtractor.getChannelVideos(id)
+        .then((value) {
+          mediaInfoSet.relatedVideos = value;
+          notifyListeners();
+      });
       // Get the StreamManifest for Downloads
-      mediaInfoSet.streamManifest = await YoutubeExtractor()
-        .getStreamManifest(id);
+      youtubeExtractor.getStreamManifest(id).then((value) {
+        mediaInfoSet.streamManifest = value;
+        playerStream = value;
+        notifyListeners();
+      });
+    } else if (searchMedia is SearchVideo) {
+      // Get current Search Video and update the YoutubePlayerController
+      mediaInfoSet.mediaType = MediaInfoSetType.Video;
+      mediaInfoSet.videoFromSearch = searchMedia;
+      VideoId id = mediaInfoSet.videoFromSearch.videoId;
       notifyListeners();
+      // Get the Video Details from our Search
+      youtubeExtractor.getVideoDetails(id).then((value) {
+        mediaInfoSet.updateVideoDetails(value);
+        notifyListeners();
+      });
+      // Get the Channel Details without waiting for it's result
+      youtubeExtractor.getChannelByVideoId(id).then((value) {
+        mediaInfoSet.channelDetails = value;
+        notifyListeners();
+      });
+      // Get Related videos
+      youtubeExtractor.getChannelVideos(mediaInfoSet.videoFromSearch.videoId)
+        .then((value) {
+          mediaInfoSet.relatedVideos = value;
+          notifyListeners();
+      });
+      // Get the StreamManifest for Downloads
+      youtubeExtractor.getStreamManifest(id).then((value) {
+        mediaInfoSet.streamManifest = value;
+        playerStream = value;
+        notifyListeners();
+      });
+      notifyListeners();
+    } else if (searchMedia is Playlist) {
+      Playlist playlist = searchMedia;
+      mediaInfoSet.mediaType = MediaInfoSetType.Playlist;
+      mediaInfoSet.playlistFromSearch = SearchPlaylist(
+        playlist.id,
+        playlist.title,
+        null,
+      );
+      mediaInfoSet.updatePlaylistDetails(playlist);
+      notifyListeners();
+      // Get the Playlist Videos from our Details
+      youtubeExtractor.getPlaylistVideos(playlist.id).then((value) {
+        mediaInfoSet.playlistVideos = value;
+        updateStreamManifestPlayer(value[0].id);
+        notifyListeners();
+      });
     } else {
       // Get current Search Playlist
       mediaInfoSet.mediaType = MediaInfoSetType.Playlist;
       mediaInfoSet.playlistFromSearch = searchMedia;
-      String id = mediaInfoSet.playlistFromSearch.playlistId.value;
+      PlaylistId id = mediaInfoSet.playlistFromSearch.playlistId;
       notifyListeners();
       // Get the Playlist Details from our Search and update Thumbnail
-      mediaInfoSet.updatePlaylistDetails(
-        await youtubeInfo.getPlaylistDetails(id)
-      );
+      youtubeExtractor.getPlaylistDetails(id).then((value) {
+        mediaInfoSet.updatePlaylistDetails(value);
+        notifyListeners();
+      });
       notifyListeners();
       // Get the Playlist Videos from our Details
-      // and update the YoutubePlayerController
-      mediaInfoSet.playlistVideos = await youtubeInfo.getPlaylistVideos(id);
-      updateYoutubePlayerController(
-        mediaInfoSet.playlistVideos[0].id.value, true
-      );
-      notifyListeners();
+      youtubeExtractor.getPlaylistVideos(id).then((value) {
+        mediaInfoSet.playlistVideos = value;
+        updateStreamManifestPlayer(value[0].id);
+        notifyListeners();
+      });
     }
   }
+
+  // Manually update Stream Youtube Player
+  void updateStreamManifestPlayer(VideoId id) {
+    playerStream = null;
+    notifyListeners();
+    youtubeExtractor.getStreamManifest(id).then((value) {
+      playerStream = value;
+      notifyListeners();
+    });
+  }
+
   // Search for Videos on Youtube
   void updateYoutubeSearchResults({bool updateResults = false}) async {
     int resultsCounter = 0;
@@ -170,61 +245,26 @@ class ManagerProvider extends ChangeNotifier {
       youtubeSearchStream.resume();
     }
   }
-  // Update Video Player Controller
-  void updateYoutubePlayerController(String id, bool useLoad) {
-    if (useLoad && youtubePlayerController != null) {
-      youtubePlayerController.load(id);
+  // Update Stream Video Player
+  void streamPlayerAutoPlay() {
+    if (mediaInfoSet.mediaType == MediaInfoSetType.Video) {
+      int currentIndex = mediaInfoSet.autoPlayIndex;
+      if (currentIndex <= mediaInfoSet.relatedVideos.length-1) {
+        updateMediaInfoSet(mediaInfoSet.relatedVideos[currentIndex+1]);
+        mediaInfoSet.autoPlayIndex += 1;
+      }
     } else {
-      youtubePlayerController = new YoutubePlayerController(
-        initialVideoId: id,
-        params: YoutubePlayerParams(
-          autoPlay: true,
-          showFullscreenButton: true,
-          enableJavaScript: true,
-        )
-      );
-      StreamSubscription streamSubscription;
-      streamSubscription = youtubePlayerController.listen((event) {
-        if (event.isReady) {
-          youtubePlayerController.play();
-          streamSubscription.cancel();
-          notifyListeners();
-        }
-      });
-      youtubePlayerController.onEnterFullscreen = () {
-        SystemChrome.setPreferredOrientations([
-          DeviceOrientation.landscapeLeft,
-          DeviceOrientation.landscapeRight,
-        ]);
-      };
-      youtubePlayerController.onExitFullscreen = () {
-        SystemChrome.setPreferredOrientations([
-          DeviceOrientation.portraitDown,
-          DeviceOrientation.portraitUp,
-        ]);
-      };
-      youtubePlayerController.listen((event) {
-        if (youtubePlayerState != event.playerState) {
-          youtubePlayerState = event.playerState;
-          notifyListeners();
-        }
-        if (youtubePlayerMetadata != event.metaData) {
-          youtubePlayerMetadata = event.metaData;
-          notifyListeners();
-        }
-      });
+      int currentIndex = mediaInfoSet.autoPlayIndex;
+      if (currentIndex <= mediaInfoSet.playlistVideos.length-1) {
+        updateMediaInfoSet(mediaInfoSet.playlistVideos[currentIndex+1]);
+        mediaInfoSet.autoPlayIndex += 1;
+      }
     }
-    notifyListeners();
   }
 
-  // -------------------------------------
-  // Info & Downloads Management Functions
-  // -------------------------------------
-  //
-  // YouTube Info
-  YoutubeInfo youtubeInfo;
-  // Get Channel Link
-  
+  void setState() {
+    notifyListeners();
+  }
 
   // -------------------
   // Getters and Setters

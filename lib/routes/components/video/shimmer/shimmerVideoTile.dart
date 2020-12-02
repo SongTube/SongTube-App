@@ -3,6 +3,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:songtube/ui/animations/showUp.dart';
 
 class ShimmerVideoTile extends StatelessWidget {
+  const ShimmerVideoTile();
   @override
   Widget build(BuildContext context) {
     return ShowUpTransition(

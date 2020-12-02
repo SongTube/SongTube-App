@@ -19,15 +19,20 @@ class SearchHistoryList extends StatelessWidget {
       margin: margin,
       child: ListView.builder(
         itemExtent: 40,
-        physics: NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
         itemCount: searchHistory.length,
         itemBuilder: (context, index) {
           String item = searchHistory[index];
           return ListTile(
-            title: Text("$item", style: TextStyle(
-              color: Theme.of(context).textTheme.bodyText1.color,
-              fontSize: 14)),
+            title: Text(
+              "$item",
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodyText1.color,
+                fontSize: 14
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.fade,
+              softWrap: false,
+            ),
             leading: SizedBox(
               width: 40,
               height: 40,

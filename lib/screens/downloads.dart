@@ -24,7 +24,7 @@ class DownloadTab extends StatelessWidget {
           titleSpacing: 0,
           elevation: 12,
           shadowColor: Colors.black.withOpacity(0.15),
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          backgroundColor: Theme.of(context).cardColor,
           title: ShowUpTransition(
             forward: true,
             duration: Duration(milliseconds: 400),

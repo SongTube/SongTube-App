@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class VideoPageFloatingActionButton extends StatelessWidget {
+class VideoDownloadFab extends StatelessWidget {
   final bool readyToDownload;
   final Function onDownload;
-  VideoPageFloatingActionButton({
+  VideoDownloadFab({
     @required this.readyToDownload,
     @required this.onDownload
   });
