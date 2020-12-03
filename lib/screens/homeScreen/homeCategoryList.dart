@@ -60,7 +60,7 @@ class HomePageCategoryList extends SliverPersistentHeaderDelegate {
             
           }
         ),
-        // Recommended
+        // Trending
         categoryTile(
           context: context,
           title: "Trending",
@@ -68,7 +68,7 @@ class HomePageCategoryList extends SliverPersistentHeaderDelegate {
 
           }
         ),
-        // Recommended
+        // Music
         categoryTile(
           context: context,
           title: "Music",
@@ -76,7 +76,7 @@ class HomePageCategoryList extends SliverPersistentHeaderDelegate {
 
           }
         ),
-        // Recommended
+        // Favorites
         categoryTile(
           context: context,
           title: "Favorites",
@@ -84,7 +84,7 @@ class HomePageCategoryList extends SliverPersistentHeaderDelegate {
 
           }
         ),
-        // Recommended
+        // Playlists
         categoryTile(
           context: context,
           title: "Playlists",
