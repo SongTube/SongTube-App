@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/provider/managerProvider.dart';
+import 'package:songtube/routes/components/relatedVideosList.dart';
 import 'package:songtube/routes/video.dart';
 import 'package:songtube/ui/animations/blurPageRoute.dart';
 import 'package:songtube/ui/animations/fadeIn.dart';
@@ -104,117 +105,20 @@ class YoutubeChannelPage extends StatelessWidget {
                     return AnimatedSwitcher(
                       duration: Duration(milliseconds: 300),
                       child: snapshot.hasData
-                        ? ListView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: videos.length,
-                            itemBuilder: (context, index) {
-                              Video video = videos[index];
-                              return GestureDetector(
-                                onTap: () {
-                                  Navigator.pop(context);
-                                  manager.updateMediaInfoSet(video);
-                                  Navigator.push(context,
-                                  BlurPageRoute(
-                                    slideOffset: Offset(0.0, 10.0),
-                                    builder: (_) => 
-                                    YoutubePlayerVideoPage(
-                                      url: video.id.value,
-                                      thumbnailUrl: "${video.thumbnails.highResUrl}",
-                                  )));
-                                },
-                                child: Container(
-                                  margin: EdgeInsets.all(8),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        height: 80,
-                                        child: AspectRatio(
-                                          aspectRatio: 16/9,
-                                          child: Stack(
-                                            alignment: Alignment.center,
-                                            children: [
-                                              ClipRRect(
-                                                borderRadius: BorderRadius.circular(10),
-                                                child: FadeInImage(
-                                                  fadeInDuration: Duration(milliseconds: 300),
-                                                  placeholder: MemoryImage(kTransparentImage),
-                                                  image: NetworkImage(
-                                                    "https://img.youtube.com/vi/${video.id.value}/mqdefault.jpg"
-                                                  ),
-                                                ),
-                                              ),
-                                              Align(
-                                                alignment: Alignment.bottomRight,
-                                                child: Container(
-                                                  margin: EdgeInsets.all(6),
-                                                  padding: EdgeInsets.all(6),
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.black.withOpacity(0.6),
-                                                    borderRadius: BorderRadius.circular(20)
-                                                  ),
-                                                  child: Text(
-                                                    "${video.duration.inMinutes}:" +
-                                                    "${video.duration.inSeconds.remainder(60).toString().padRight(2, "0")}" +
-                                                    " min",
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 8
-                                                    ),
-                                                  ),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                              padding: EdgeInsets.only(
-                                                left: 8,
-                                                right: 8,
-                                                top: 4,
-                                                bottom: 4
-                                              ),
-                                              child: Text(
-                                                video.title,
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 14
-                                                ),
-                                                overflow: TextOverflow.clip,
-                                                maxLines: 2,
-                                              ),
-                                            ),
-                                            Container(
-                                              padding: EdgeInsets.only(left: 8),
-                                              child: Text(
-                                                video.author + " • " +
-                                                "${NumberFormat.compact().format(video.engagement.viewCount)}" +
-                                                " Views",
-                                                style: TextStyle(
-                                                  fontSize: 11,
-                                                  color: Theme.of(context).textTheme
-                                                    .bodyText1.color.withOpacity(0.8)
-                                                ),
-                                                overflow: TextOverflow.clip,
-                                                maxLines: 1,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
+                        ? RelatedVideosList(
+                            relatedVideos: videos,
+                            onVideoTap: (index) {
+                              Navigator.pop(context);
+                              manager.updateMediaInfoSet(videos[index]);
+                              Navigator.push(context,
+                              BlurPageRoute(
+                                slideOffset: Offset(0.0, 10.0),
+                                builder: (_) => 
+                                YoutubePlayerVideoPage(
+                                  url: videos[index].id.value,
+                                  thumbnailUrl: "${videos[index].thumbnails.highResUrl}",
+                              )));
+                            }
                           )
                         : Padding(
                             padding: EdgeInsets.only(top: 32),

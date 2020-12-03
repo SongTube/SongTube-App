@@ -14,6 +14,7 @@ import 'package:songtube/players/youtubePlayer.dart';
 import 'package:songtube/provider/configurationProvider.dart';
 import 'package:songtube/provider/downloadsProvider.dart';
 import 'package:songtube/provider/managerProvider.dart';
+import 'package:songtube/routes/components/relatedVideosList.dart';
 import 'package:songtube/routes/components/video/shimmer/shimmerArtworkEditor.dart';
 import 'package:songtube/routes/components/video/shimmer/shimmerVideoComments.dart';
 import 'package:songtube/routes/components/video/shimmer/shimmerVideoEngagement.dart';
@@ -270,109 +271,11 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> {
                                 AnimatedSwitcher(
                                   duration: Duration(milliseconds: 300),
                                   child: manager.mediaInfoSet.relatedVideos.isNotEmpty
-                                    ? ListView.builder(
-                                        shrinkWrap: true,
-                                        padding: EdgeInsets.zero,
-                                        physics: NeverScrollableScrollPhysics(),
-                                        itemCount: manager.mediaInfoSet.relatedVideos.length,
-                                        itemBuilder: (context, index) {
-                                          Video video =
-                                            manager.mediaInfoSet.relatedVideos[index];
-                                          return GestureDetector(
-                                            onTap: () {
-                                              manager.updateMediaInfoSet(
-                                                manager.mediaInfoSet.relatedVideos[index]);
-                                            },
-                                            child: Container(
-                                              margin: EdgeInsets.all(8),
-                                              child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Container(
-                                                    height: 80,
-                                                    child: AspectRatio(
-                                                      aspectRatio: 16/9,
-                                                      child: Stack(
-                                                        alignment: Alignment.center,
-                                                        children: [
-                                                          ClipRRect(
-                                                            borderRadius: BorderRadius.circular(10),
-                                                            child: FadeInImage(
-                                                              fadeInDuration: Duration(milliseconds: 300),
-                                                              placeholder: MemoryImage(kTransparentImage),
-                                                              image: NetworkImage(
-                                                                "https://img.youtube.com/vi/${video.id.value}/mqdefault.jpg"
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Align(
-                                                            alignment: Alignment.bottomRight,
-                                                            child: Container(
-                                                              margin: EdgeInsets.all(6),
-                                                              padding: EdgeInsets.all(6),
-                                                              decoration: BoxDecoration(
-                                                                color: Colors.black.withOpacity(0.6),
-                                                                borderRadius: BorderRadius.circular(20)
-                                                              ),
-                                                              child: Text(
-                                                                "${video.duration.inMinutes}:" +
-                                                                "${video.duration.inSeconds.remainder(60).toString().padRight(2, "0")}" +
-                                                                " min",
-                                                                style: TextStyle(
-                                                                  color: Colors.white,
-                                                                  fontSize: 8
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          )
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Expanded(
-                                                    child: Column(
-                                                      mainAxisAlignment: MainAxisAlignment.start,
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                      children: [
-                                                        Container(
-                                                          padding: EdgeInsets.only(
-                                                            left: 8,
-                                                            right: 8,
-                                                            top: 4,
-                                                            bottom: 4
-                                                          ),
-                                                          child: Text(
-                                                            video.title,
-                                                            style: TextStyle(
-                                                              fontWeight: FontWeight.w500,
-                                                              fontSize: 14
-                                                            ),
-                                                            overflow: TextOverflow.clip,
-                                                            maxLines: 2,
-                                                          ),
-                                                        ),
-                                                        Container(
-                                                          padding: EdgeInsets.only(left: 8),
-                                                          child: Text(
-                                                            video.author + " • " +
-                                                            "${NumberFormat.compact().format(video.engagement.viewCount)}" +
-                                                            " Views",
-                                                            style: TextStyle(
-                                                              fontSize: 11,
-                                                              color: Theme.of(context).textTheme
-                                                                .bodyText1.color.withOpacity(0.8)
-                                                            ),
-                                                            overflow: TextOverflow.clip,
-                                                            maxLines: 1,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            ),
+                                    ? RelatedVideosList(
+                                        relatedVideos: manager.mediaInfoSet.relatedVideos,
+                                        onVideoTap: (index) {
+                                          manager.updateMediaInfoSet(
+                                            manager.mediaInfoSet.relatedVideos[index]
                                           );
                                         },
                                       )
