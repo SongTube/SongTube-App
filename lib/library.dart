@@ -1,4 +1,5 @@
 // Flutter
+import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:package_info/package_info.dart';
@@ -116,10 +117,14 @@ class _LibraryState extends State<Library> {
         );
       }
       if (Provider.of<ConfigurationProvider>(context, listen: false).showDownloadFixDialog) {
-        await showDialog(
-          context: context,
-          builder: (context) => DownloadFixDialog()
-        );
+        AndroidDeviceInfo deviceInfo = await DeviceInfoPlugin().androidInfo;
+        int sdkNumber = deviceInfo.version.sdkInt;
+        if (sdkNumber >= 30) {
+          await showDialog(
+            context: context,
+            builder: (context) => DownloadFixDialog()
+          );
+        }
         Provider.of<ConfigurationProvider>(context, listen: false)
           .showDownloadFixDialog = false;
       }
