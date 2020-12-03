@@ -52,10 +52,10 @@ class HomePageCategoryList extends SliverPersistentHeaderDelegate {
       scrollDirection: Axis.horizontal,
       children: [
         SizedBox(width: 8),
-        // Recommended
+        // Home Page
         categoryTile(
           context: context,
-          title: "Recommended",
+          title: "Home Page",
           onTap: () {
             
           }
@@ -87,7 +87,7 @@ class HomePageCategoryList extends SliverPersistentHeaderDelegate {
         // Playlists
         categoryTile(
           context: context,
-          title: "Playlists",
+          title: "Watch Later",
           onTap: () {
 
           }
