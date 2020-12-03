@@ -10,23 +10,16 @@ import 'package:audio_service/audio_service.dart';
 
 class AppSnack {
 
-  GlobalKey<ScaffoldState> scaffoldKey;
-  BuildContext context;
-  bool addPadding;
-  AppSnack({
-    @required this.scaffoldKey,
-    @required this.context,
-    this.addPadding = true,
-  });
-
   // Show SnackBar with Icon, Title and Message
-  void showSnackBar({
+  static void showSnackBar({
     @required IconData icon,
     @required String title,
     String message,
-    Duration duration
+    Duration duration = const Duration(seconds: 2),
+    @required context,
+    @required ScaffoldState scaffoldKey
   }) {
-    scaffoldKey.currentState.removeCurrentSnackBar();
+    scaffoldKey.removeCurrentSnackBar();
     final snack = SnackBar(
       content: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -65,7 +58,6 @@ class AppSnack {
               ),
             ],
           ),
-          if (addPadding)
           StreamBuilder<ScreenState>(
             stream: screenStateStream,
             builder: (context, snapshot) {
@@ -91,6 +83,6 @@ class AppSnack {
       ),
       backgroundColor: Theme.of(context).canvasColor
     );
-    scaffoldKey.currentState.showSnackBar(snack);
+    scaffoldKey.showSnackBar(snack);
   }
 }
