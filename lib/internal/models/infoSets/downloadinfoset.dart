@@ -244,7 +244,13 @@ class DownloadInfoSet {
         yt.close();
         return null;
       }
-      audioStreamInfo = audioManifest.audioOnly.withHighestBitrate();
+      List<AudioStreamInfo> list = [];
+      audioManifest.audioOnly.forEach((element) {
+        if (element.audioCodec == "mp4a.40.2") {
+          list.add(element);
+        }
+      });
+      audioStreamInfo = list.withHighestBitrate();
       streamData = yt.videos.streamsClient.get(audioStreamInfo);
       currentAction.add(language.labelDownloadingAudio);
     }
