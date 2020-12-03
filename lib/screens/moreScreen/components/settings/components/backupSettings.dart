@@ -24,7 +24,6 @@ class BackupSettings extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
-    AppSnack snackbar = new AppSnack(scaffoldKey: scaffoldKey, context: context, addPadding: false);
     DownloadsProvider downloadsProvider = Provider.of<DownloadsProvider>(context);
     return SettingsColumnTile(
       title: Languages.of(context).labelBackup,
@@ -53,19 +52,25 @@ class BackupSettings extends StatelessWidget {
                 String backupPath = await ExtStorage.getExternalStorageDirectory() + "/SongTube/Backup/";
                 if (!await Directory(backupPath).exists()) await Directory(backupPath).create();
                 String path = join(documentsDirectory.path, 'MediaItems.db');
+                var scaffoldKey = Scaffold.of(context);
                 if (!await File(path).exists()) {
-                  snackbar.showSnackBar(
+                  
+                  AppSnack.showSnackBar(
                     icon: Icons.warning,
                     title: Languages.of(context).labelBackupLibraryEmpty,
-                    duration: Duration(seconds: 2)
+                    duration: Duration(seconds: 2),
+                    context: context,
+                    scaffoldKey: scaffoldKey
                   );
                   return;
                 }
                 await File(path).copy(backupPath + 'MediaItems.db');
-                snackbar.showSnackBar(
+                AppSnack.showSnackBar(
                   icon: Icons.backup,
                   title: Languages.of(context).labelBackupCompleted,
-                  duration: Duration(seconds: 2)
+                  duration: Duration(seconds: 2),
+                  context: context,
+                  scaffoldKey: scaffoldKey
                 );
               }
             )
@@ -93,20 +98,25 @@ class BackupSettings extends StatelessWidget {
                 Directory documentsDirectory = await getApplicationDocumentsDirectory();
                 String backupPath = await ExtStorage.getExternalStorageDirectory() + "/SongTube/Backup/";
                 String path = join(documentsDirectory.path, 'MediaItems.db');
+                var scaffoldKey = Scaffold.of(context);
                 if (!await File(backupPath + 'MediaItems.db').exists()) {
-                  snackbar.showSnackBar(
+                  AppSnack.showSnackBar(
                     icon: Icons.warning,
                     title: Languages.of(context).labelRestoreNotFound,
-                    duration: Duration(seconds: 2)
+                    duration: Duration(seconds: 2),
+                    context: context,
+                    scaffoldKey: scaffoldKey
                   );
                   return;
                 }
                 await File(backupPath + 'MediaItems.db').copy(path);
-                snackbar.showSnackBar(
-                    icon: Icons.restore,
-                    title: Languages.of(context).labelRestoreCompleted,
-                    duration: Duration(seconds: 2)
-                  );
+                AppSnack.showSnackBar(
+                  icon: Icons.restore,
+                  title: Languages.of(context).labelRestoreCompleted,
+                  duration: Duration(seconds: 2),
+                  context: context,
+                  scaffoldKey: scaffoldKey
+                );
                 downloadsProvider.getDatabase();
               }
             )
