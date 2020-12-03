@@ -33,12 +33,23 @@ class VideoTile extends StatelessWidget {
         Navigator.push(context,
         BlurPageRoute(
           slideOffset: Offset(0.0, 10.0),
-          builder: (_) => searchItem is SearchVideo
-            ? YoutubePlayerVideoPage(
+          builder: (_) {
+            if (searchItem is Video) {
+              return YoutubePlayerVideoPage(
+                url: searchItem.id.value,
+                thumbnailUrl: searchItem.thumbnails.highResUrl
+              );
+            } else if (searchItem is SearchVideo) {
+              return YoutubePlayerVideoPage(
                 url: searchItem.videoId.value,
                 thumbnailUrl: searchItem.videoThumbnails.last.url.toString(),
-              )
-            : YoutubePlayerPlaylistPage()
+              );
+            } else if (searchItem is SearchPlaylist) {
+              return YoutubePlayerPlaylistPage();
+            } else {
+              return Container();
+            }
+          }
         ));
       },
       child: Ink(
@@ -56,9 +67,11 @@ class VideoTile extends StatelessWidget {
                     alignment: Alignment.bottomCenter,
                     children: [
                       Hero(
-                        tag: searchItem is SearchVideo
-                          ? searchItem.videoId.value + "player"
-                          : searchItem.playlistId.value + "player",
+                        tag: searchItem is Video
+                          ? searchItem.id.value + "player"
+                          : searchItem is SearchVideo
+                            ? searchItem.videoId.value + "player"
+                            : searchItem.playlistId.value + "player",
                         child: Container(
                           height: double.infinity,
                           width: double.infinity,
@@ -98,7 +111,17 @@ class VideoTile extends StatelessWidget {
                         String channelLogo = snapshot.data;
                         return GestureDetector(
                           onTap: () {
-                            if (searchItem is SearchVideo) {
+                            if (searchItem is Video) {
+                              Video video = searchItem;
+                              Navigator.push(context,
+                                BlurPageRoute(
+                                  builder: (_) => 
+                                  YoutubeChannelPage(
+                                    id: video.id.value,
+                                    name: video.author,
+                                    logoUrl: channelLogo,
+                              )));
+                            } else if (searchItem is SearchVideo) {
                               SearchVideo video = searchItem;
                               Navigator.push(context,
                                 BlurPageRoute(
@@ -111,9 +134,11 @@ class VideoTile extends StatelessWidget {
                             }
                           },
                           child: Hero(
-                            tag: searchItem is SearchVideo
-                              ? searchItem.videoId.value
-                              : searchItem.playlistId.value,
+                            tag: searchItem is Video
+                              ? searchItem.id.value
+                              : searchItem is SearchVideo
+                                ? searchItem.videoId.value
+                                : searchItem.playlistId.value,
                             child: Container(
                               height: 50,
                               width: 50,
@@ -121,7 +146,7 @@ class VideoTile extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(100),
                                 color: Colors.black.withOpacity(0.05)
                               ),
-                              child: searchItem is SearchVideo
+                              child: searchItem is Video || searchItem is SearchVideo
                                 ? ClipRRect(
                                   borderRadius: BorderRadius.circular(100),
                                     child: ImageFade(
@@ -157,9 +182,11 @@ class VideoTile extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          searchItem is SearchVideo
-                            ? "${searchItem.videoTitle}"
-                            : "${searchItem.playlistTitle}",
+                          searchItem is Video
+                            ? "${searchItem.title}"
+                            : searchItem is SearchVideo
+                              ? "${searchItem.videoTitle}"
+                              : "${searchItem.playlistTitle}",
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 14
@@ -168,10 +195,12 @@ class VideoTile extends StatelessWidget {
                         ),
                         SizedBox(height: 4),
                         Text(
-                          searchItem is SearchVideo
-                            ? "${searchItem.videoAuthor} • " +
-                              "${NumberFormat.compact().format(searchItem.videoViewCount)} views"
-                            : "Playlist • ${searchItem.playlistVideoCount} videos",
+                          searchItem is Video
+                            ? "${searchItem.engagement.viewCount}"
+                            : searchItem is SearchVideo
+                              ? "${searchItem.videoAuthor} • " +
+                                "${NumberFormat.compact().format(searchItem.videoViewCount)} views"
+                              : "Playlist • ${searchItem.playlistVideoCount} videos",
                           style: TextStyle(
                             color: Colors.grey[600],
                             fontSize: 12
@@ -191,9 +220,11 @@ class VideoTile extends StatelessWidget {
   }
 
   Future<String> _getThumbnailLink() async {
-    if (searchItem is SearchVideo) {
-      String link = "https://i.ytimg.com" +
-        searchItem.videoThumbnails.last.url.path;
+    if (searchItem is Video) {
+      String link = searchItem.thumbnails.highResUrl;
+      return link;
+    } else if (searchItem is SearchVideo) {
+      String link = searchItem.videoThumbnails.last.url.toString();
       return link;
     } else {
       SearchPlaylist searchPlaylist = searchItem;
@@ -205,7 +236,13 @@ class VideoTile extends StatelessWidget {
   }
 
   Future<String> _getChannelLogoUrl(context) async {
-    if (searchItem is SearchVideo) {
+    ManagerProvider manager = Provider.of<ManagerProvider>(context);
+    if (searchItem is Video) {
+      Video video = searchItem;
+      Channel channel = await manager.youtubeExtractor
+        .getChannelByVideoId(video.id);
+      return channel.logoUrl;
+    } else if (searchItem is SearchVideo) {
       SearchVideo video = searchItem;
       return await ChannelLogo.getChannelLogoUrl(context, video);
     } else {
