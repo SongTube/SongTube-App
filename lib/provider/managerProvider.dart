@@ -15,6 +15,7 @@ import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 enum LoadingStatus { Success, Loading, Unload }
 enum LibraryScreen { Home, Downloads, Media, More }
 enum LinkType { Video, Playlist }
+enum HomeScreenCategories { Home, Trending, Music, Favorites, WatchLater }
 
 class ManagerProvider extends ChangeNotifier {
 
@@ -33,7 +34,8 @@ class ManagerProvider extends ChangeNotifier {
     // Library Scaffold Key
     _libraryScaffoldKey = new GlobalKey<ScaffoldState>();
     _screenIndex        = 0;
-    // Navigate
+    // Home Screen
+    currentHomeCategory = HomeScreenCategories.Home;
     youtubeSearchQuery = lastSearchQuery;
     searchStreamRunning = false;
     searchResultsLength = 10;
@@ -77,9 +79,9 @@ class ManagerProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // ---------------
-  // Navigate Screen
-  // ---------------
+  // -----------
+  // Home Screen
+  // -----------
   bool searchStreamRunning;
   StreamSubscription youtubeSearchStream;
   int searchResultsLength;
@@ -95,6 +97,7 @@ class ManagerProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+  HomeScreenCategories currentHomeCategory;
 
   // ---------------
   // URL Controller
