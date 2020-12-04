@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:songtube/internal/models/channelLogo.dart';
 
 // Internal
-import 'package:songtube/internal/preferences.dart';
+import 'package:songtube/internal/legacyPreferences.dart';
 
 // Packages
 import 'package:ext_storage/ext_storage.dart';
@@ -13,7 +13,7 @@ import 'package:package_info/package_info.dart';
 
 class ConfigurationProvider extends ChangeNotifier {
 
-  Preferences preferences;
+  LegacyPreferences preferences;
   ConfigurationProvider({
     @required this.preferences
   }){

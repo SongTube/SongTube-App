@@ -12,7 +12,7 @@ import 'package:songtube/provider/downloadsProvider.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/provider/configurationProvider.dart';
 import 'package:songtube/library.dart';
-import 'package:songtube/internal/preferences.dart';
+import 'package:songtube/internal/legacyPreferences.dart';
 import 'package:songtube/provider/mediaProvider.dart';
 
 // Packages
@@ -24,7 +24,7 @@ import 'package:songtube/ui/internal/themeValues.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Preferences preferences = new Preferences();
+  LegacyPreferences preferences = new LegacyPreferences();
   await preferences.initPreferences();
   runApp(Main(preloadedFs: preferences));
 }
@@ -36,7 +36,7 @@ class Main extends StatefulWidget {
     state.setLocale(newLocale);
   }
 
-  final Preferences preloadedFs;
+  final LegacyPreferences preloadedFs;
   Main({
     @required this.preloadedFs
   });
