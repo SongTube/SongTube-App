@@ -18,6 +18,7 @@ import 'package:songtube/provider/mediaProvider.dart';
 // Packages
 import 'package:audio_service/audio_service.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/provider/preferencesProvider.dart';
 
 // UI
 import 'package:songtube/ui/internal/themeValues.dart';
@@ -86,6 +87,9 @@ class _MainState extends State<Main> {
         ),
         ChangeNotifierProvider<MediaProvider>(
           create: (context) => MediaProvider()
+        ),
+        ChangeNotifierProvider<PreferencesProvider>(
+          create: (context) => PreferencesProvider(),
         )
       ],
       child: Builder( builder: (context) {
