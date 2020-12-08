@@ -12,8 +12,6 @@ import 'package:songtube/internal/youtube/youtubeExtractor.dart';
 // Packages
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
-enum LoadingStatus { Success, Loading, Unload }
-enum LinkType { Video, Playlist }
 enum HomeScreenTab { Home, Trending, Music, Favorites, WatchLater }
 
 class ManagerProvider extends ChangeNotifier {

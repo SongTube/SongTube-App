@@ -6,7 +6,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/models/metadata.dart';
@@ -21,12 +20,10 @@ import 'package:songtube/routes/components/video/shimmer/shimmerVideoComments.da
 import 'package:songtube/routes/components/video/shimmer/shimmerVideoEngagement.dart';
 import 'package:songtube/routes/components/video/videoDownloadFab.dart';
 import 'package:songtube/routes/components/video/videoTags.dart';
-import 'package:songtube/routes/components/video/videoComments.dart';
 import 'package:songtube/screens/homeScreen/downloadMenu/downloadMenu.dart';
 import 'package:songtube/ui/animations/fadeIn.dart';
 import 'package:songtube/ui/components/measureSize.dart';
 import 'package:songtube/ui/internal/snackbar.dart';
-import 'package:transparent_image/transparent_image.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 import 'components/video/videoDetails.dart';
