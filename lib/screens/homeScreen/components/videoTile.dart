@@ -14,22 +14,31 @@ import 'package:songtube/provider/managerProvider.dart';
 // Packages
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/provider/preferencesProvider.dart';
 import 'package:songtube/routes/channel.dart';
 import 'package:songtube/routes/playlist.dart';
 import 'package:songtube/routes/video.dart';
 import 'package:songtube/ui/animations/blurPageRoute.dart';
+import 'package:songtube/ui/dialogs/loadingDialog.dart';
 import 'package:songtube/ui/internal/snackbar.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 class VideoTile extends StatelessWidget {
   final searchItem;
+  final bool enableSaveToWatchLater;
+  final bool enableSaveToFavorites;
+  final Function() onDelete;
   VideoTile({
     @required this.searchItem,
+    this.enableSaveToFavorites = true,
+    this.enableSaveToWatchLater = true,
+    this.onDelete
   });
   @override
   Widget build(BuildContext context) {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
+    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     return InkWell(
       onTap: () async {
         manager.updateMediaInfoSet(searchItem);
@@ -214,6 +223,7 @@ class VideoTile extends StatelessWidget {
                     ),
                   ),
                 ),
+                if (searchItem is SearchVideo || searchItem is Video)
                 GestureDetector(
                   onTapDown: (TapDownDetails details) {
                     showMenu<String>(
@@ -232,12 +242,23 @@ class VideoTile extends StatelessWidget {
                           child: Text("Copy link"),
                           value: "Copy Link",
                         ),
+                        if (onDelete != null)
+                        PopupMenuItem<String>(
+                          child: Text("Remove"),
+                          value: "Remove",
+                        ),
+                        if (enableSaveToFavorites)
+                        PopupMenuItem<String>(
+                          child: Text("Add to Favorites"),
+                          value: "Favorites",
+                        ),
+                        if (enableSaveToWatchLater)
                         PopupMenuItem<String>(
                           child: Text("Add to Watch later"),
                           value: "Watch Later",
                         ),
                       ],
-                    ).then((value) {
+                    ).then((value) async {
                       switch(value) {
                         case "Share":
                           Share.share(
@@ -266,8 +287,60 @@ class VideoTile extends StatelessWidget {
                             scaffoldKey: scaffold
                           );
                           break;
+                        case "Remove":
+                          onDelete();
+                          break;
+                        case "Favorites":
+                          Video videoToSave;
+                          if (searchItem is SearchVideo) {
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (_) => LoadingDialog()
+                            );
+                            videoToSave = await manager.youtubeExtractor
+                              .getVideoDetails(
+                                searchItem.videoId
+                              );
+                            Navigator.pop(context);
+                          } else {
+                            videoToSave = searchItem;
+                          }
+                          List<Video> videos = prefs.favoriteVideos;
+                          videos.add(videoToSave);
+                          prefs.favoriteVideos = videos;
+                          AppSnack.showSnackBar(
+                            icon: EvaIcons.heartOutline,
+                            title: "Video added to Favorites",
+                            context: context,
+                            scaffoldKey: Scaffold.of(context)
+                          );
+                          break;
                         case "Watch Later":
-                          // TODO: Add to watch later
+                          Video videoToSave;
+                          if (searchItem is SearchVideo) {
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (_) => LoadingDialog()
+                            );
+                            videoToSave = await manager.youtubeExtractor
+                              .getVideoDetails(
+                                searchItem.videoId
+                              );
+                            Navigator.pop(context);
+                          } else {
+                            videoToSave = searchItem;
+                          }
+                          List<Video> videos = prefs.watchLaterVideos;
+                          videos.add(videoToSave);
+                          prefs.watchLaterVideos = videos;
+                          AppSnack.showSnackBar(
+                            icon: EvaIcons.clockOutline,
+                            title: "Video added to Watch Later",
+                            context: context,
+                            scaffoldKey: Scaffold.of(context)
+                          );
                           break;
                       }
                     });

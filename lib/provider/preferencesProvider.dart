@@ -34,9 +34,11 @@ class PreferencesProvider extends ChangeNotifier {
   set favoriteVideos(List<Video> videos) {
     var map = videos.map((e) {
       return e.toMap();
-    });
+    }).toList();
     String json = jsonEncode({ 'favoriteVideos': map });
-    prefs.setString('favoriteVideos', json);
+    prefs.setString('favoriteVideos', json).then((_) {
+      notifyListeners();
+    });
   }
 
   // Watch Later Videos
@@ -55,9 +57,11 @@ class PreferencesProvider extends ChangeNotifier {
   set watchLaterVideos(List<Video> videos) {
     var map = videos.map((e) {
       return e.toMap();
-    });
+    }).toList();
     String json = jsonEncode({ 'watchLaterList': map });
-    prefs.setString('watchLaterList', json);
+    prefs.setString('watchLaterList', json).then((_) {
+      notifyListeners();
+    });
   }
 
 
