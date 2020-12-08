@@ -68,7 +68,7 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
     manifest = await manager.youtubeExtractor.getStreamManifest(videoId);
     details = await manager.youtubeExtractor.getVideoDetails(videoId);
     tags = TagsControllers();
-    tags.updateTextControllers(details, details.thumbnails.highResUrl);
+    tags.updateTextControllers(details, details.thumbnails.mediumResUrl);
     setState(() => currentDownloadMenu = CurrentDownloadMenu.Home);
   }
 

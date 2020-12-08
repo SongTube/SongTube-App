@@ -35,15 +35,14 @@ class MediaInfoSet {
   void updateVideoDetails(Video video) {
     videoDetails = video;
     mediaTags.updateTextControllers(
-      video, "https://i.ytimg.com" +
-      videoFromSearch.videoThumbnails.last.url.path
+      video, video.thumbnails.mediumResUrl
     );
   }
 
   void updatePlaylistDetails(Playlist playlist) {
     playlistDetails = playlist;
     mediaTags.updateTextControllersFromPlaylist(
-      playlist, playlist.thumbnails.highResUrl
+      playlist, playlist.thumbnails.mediumResUrl
     );
   }
 
