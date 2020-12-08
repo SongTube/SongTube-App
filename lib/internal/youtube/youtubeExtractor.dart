@@ -207,9 +207,18 @@ class YoutubeExtractor {
   // Video Comments
   Future<List<Comment>> getVideoComments(Video video) async {
     YoutubeExplode yt = YoutubeExplode();
-    List<Comment> comments = await yt.videos.commentsClient
-      .getComments(video)
-      .take(30).toList();
+    List<Comment> comments;
+    Video watchPageVideo = await yt.videos
+      .get(video.id, forceWatchPage: true);
+    try {
+      comments = await yt.videos.commentsClient
+        .getComments(watchPageVideo)
+        .take(30).toList();
+    } catch (_) {
+      comments = await yt.videos.commentsClient
+        .getComments(watchPageVideo)
+        .toList();
+    }
     yt.close();
     if (comments == null || comments.isEmpty) {
       comments = null;
