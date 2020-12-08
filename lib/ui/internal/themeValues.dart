@@ -1,5 +1,6 @@
 // Flutter
 import 'package:flutter/material.dart';
+import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 
 class AppTheme {
   static ThemeData white(Color accent) {
@@ -40,8 +41,10 @@ class AppTheme {
   }
 
   static ThemeData dark(Color accent) {
+    HSVColor color = HSVColor.fromColor(accent);
+    HSVColor desaturated = HSVColor.fromAHSV(color.alpha, color.hue, 0.68, color.value);
     return ThemeData.dark().copyWith(
-      accentColor: accent,
+      accentColor: desaturated.toColor(),
       iconTheme: IconThemeData(
         color: Colors.white
       ),
@@ -74,9 +77,11 @@ class AppTheme {
   }
 
   static ThemeData black(Color accent) {
+    HSVColor color = HSVColor.fromColor(accent);
+    HSVColor desaturated = HSVColor.fromAHSV(color.alpha, color.hue, 0.68, color.value);
     return ThemeData.dark().copyWith(
       canvasColor: Colors.black,
-      accentColor: accent,
+      accentColor: desaturated.toColor(),
       iconTheme: IconThemeData(
         color: Colors.white
       ),
