@@ -14,7 +14,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 // UI
-import 'package:songtube/screens/moreScreen/components/settings/columnTile.dart';
+import 'package:songtube/screens/libraryScreen/components/settings/columnTile.dart';
 import 'package:songtube/ui/internal/snackbar.dart';
 
 class BackupSettings extends StatelessWidget {

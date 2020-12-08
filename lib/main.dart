@@ -11,7 +11,7 @@ import 'package:songtube/intro/introduction.dart';
 import 'package:songtube/provider/downloadsProvider.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/provider/configurationProvider.dart';
-import 'package:songtube/library.dart';
+import 'package:songtube/lib.dart';
 import 'package:songtube/internal/legacyPreferences.dart';
 import 'package:songtube/provider/mediaProvider.dart';
 
@@ -139,7 +139,7 @@ class _MainState extends State<Main> {
             ? 'introScreen'
             : 'homeScreen',
           routes: {
-            'homeScreen':  (context) => AudioServiceWidget(child: MainLibrary()),
+            'homeScreen':  (context) => AudioServiceWidget(child: MainLib()),
             'introScreen': (context) => IntroScreen()
           },
         );

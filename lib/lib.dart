@@ -7,7 +7,6 @@ import 'package:songtube/internal/nativeMethods.dart';
 
 // Internal
 import 'package:songtube/internal/updateChecker.dart';
-import 'package:songtube/internal/youtube/youtubeExtractor.dart';
 import 'package:songtube/players/components/musicPlayer/playerPadding.dart';
 import 'package:songtube/provider/configurationProvider.dart';
 import 'package:songtube/provider/managerProvider.dart';
@@ -17,7 +16,7 @@ import 'package:songtube/routes/video.dart';
 import 'package:songtube/screens/downloads.dart';
 import 'package:songtube/screens/home.dart';
 import 'package:songtube/screens/media.dart';
-import 'package:songtube/screens/more.dart';
+import 'package:songtube/screens/library.dart';
 import 'package:songtube/players/musicPlayer.dart';
 
 // Packages
@@ -32,13 +31,13 @@ import 'package:songtube/ui/internal/downloadFixDialog.dart';
 import 'package:songtube/ui/internal/lifecycleEvents.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
-class MainLibrary extends StatelessWidget {
+class MainLib extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
       child: Stack(
         children: [
-          Library(),
+          Lib(),
           SlidingPlayerPanel()
         ],
       )
@@ -46,12 +45,12 @@ class MainLibrary extends StatelessWidget {
   }
 }
 
-class Library extends StatefulWidget {
+class Lib extends StatefulWidget {
   @override
-  _LibraryState createState() => _LibraryState();
+  _LibState createState() => _LibState();
 }
 
-class _LibraryState extends State<Library> {
+class _LibState extends State<Lib> {
 
   @override
   void initState() {
@@ -231,11 +230,10 @@ class _LibraryState extends State<Library> {
     } else if (manager.screenIndex == 2) {
       return MediaScreen();
     } else if (manager.screenIndex == 3) {
-      return MoreScreen();
+      return LibraryScreen();
     } else {
       return Container();
     }
   }
-
   
 }

@@ -5,7 +5,7 @@ import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/nativeMethods.dart';
 
 // Internal
-import 'package:songtube/screens/moreScreen/components/settings/columnTile.dart';
+import 'package:songtube/screens/libraryScreen/components/settings/columnTile.dart';
 
 class GeneralSettings extends StatelessWidget {
   @override

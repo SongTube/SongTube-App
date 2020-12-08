@@ -13,7 +13,6 @@ import 'package:songtube/internal/youtube/youtubeExtractor.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 enum LoadingStatus { Success, Loading, Unload }
-enum LibraryScreen { Home, Downloads, Media, More }
 enum LinkType { Video, Playlist }
 enum HomeScreenTab { Home, Trending, Music, Favorites, WatchLater }
 

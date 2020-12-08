@@ -5,8 +5,8 @@ import 'package:songtube/internal/languages.dart';
 
 // Internal
 import 'package:songtube/provider/configurationProvider.dart';
-import 'package:songtube/screens/moreScreen/components/settings/dialogs/accentPicker.dart';
-import 'package:songtube/screens/moreScreen/components/settings/columnTile.dart';
+import 'package:songtube/screens/libraryScreen/components/settings/dialogs/accentPicker.dart';
+import 'package:songtube/screens/libraryScreen/components/settings/columnTile.dart';
 
 // Packages
 import 'package:provider/provider.dart';

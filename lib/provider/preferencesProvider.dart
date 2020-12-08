@@ -64,6 +64,29 @@ class PreferencesProvider extends ChangeNotifier {
     });
   }
 
-
+  // View History Videos
+  List<Video> get viewHistory {
+    var map = jsonDecode(prefs.getString('viewHistory') ?? "{}");
+    List<Video> videos = [];
+    if (map.isNotEmpty) {
+      if (map['viewHistory'].isNotEmpty) {
+        map['viewHistory'].forEach((v) {
+          videos.add(Video.fromMap(v));
+        });
+      }
+    }
+    return videos;
+  }
+  set addVideoToViewHistory(Video video) {
+    List<Video> videos = viewHistory;
+    videos.add(video);
+    var map = videos.map((e) {
+      return e.toMap();
+    }).toList();
+    String json = jsonEncode({ 'viewHistory': map });
+    prefs.setString('viewHistory', json).then((_) {
+      notifyListeners();
+    });
+  }
 
 }

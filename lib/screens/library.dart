@@ -4,17 +4,17 @@ import 'package:songtube/internal/languages.dart';
 
 // Internal
 import 'package:songtube/provider/configurationProvider.dart';
-import 'package:songtube/screens/moreScreen/settings.dart';
-import 'package:songtube/screens/moreScreen/components/quickAcessTile.dart';
+import 'package:songtube/screens/libraryScreen/settings.dart';
+import 'package:songtube/screens/libraryScreen/components/quickAcessTile.dart';
 
 // Packages
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-import 'package:songtube/screens/moreScreen/components/songtubeBanner.dart';
+import 'package:songtube/screens/libraryScreen/components/songtubeBanner.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:provider/provider.dart';
 
-class MoreScreen extends StatelessWidget {
+class LibraryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
