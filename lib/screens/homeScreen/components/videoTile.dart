@@ -119,7 +119,7 @@ class VideoTile extends StatelessWidget {
                   child: FutureBuilder<String>(
                     future: _getChannelLogoUrl(context),
                     builder: (context, AsyncSnapshot<String> snapshot) {
-                      if (snapshot.hasData) {
+                      if (snapshot.hasData || searchItem is SearchPlaylist) {
                         String channelLogo = snapshot.data;
                         return GestureDetector(
                           onTap: () {
