@@ -12,13 +12,9 @@ import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 enum CurrentDownloadMenu { Home, Audio, Video }
 
 class DownloadMenu extends StatefulWidget {
-  final List<VideoStreamInfo> videoList;
-  final List<AudioStreamInfo> audioList;
-  final double audioSize;
+  final StreamManifest streamManifest;
   DownloadMenu({
-    @required this.videoList,
-    @required this.audioList,
-    @required this.audioSize
+    @required this.streamManifest
   });
   @override
   _DownloadMenuState createState() => _DownloadMenuState();
@@ -60,7 +56,9 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
       case CurrentDownloadMenu.Audio:
         returnWidget = Container(
           child: AudioDownloadMenu(
-            audioList: widget.audioList.reversed.toList(),
+            audioList: widget.streamManifest.audioOnly
+              .sortByBitrate()
+              .reversed.toList(),
             onBack: () => setState(() => 
               currentDownloadMenu = CurrentDownloadMenu.Home),
             onDownload: (list) => Navigator.pop(context, list),
@@ -70,9 +68,12 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
         returnWidget = Container(
           height: MediaQuery.of(context).size.height*0.6,
           child: VideoDownloadMenu(
-            videoList: widget.videoList,
+            videoList: widget.streamManifest.videoOnly
+              .sortByVideoQuality(),
             onOptionSelect: (list) => Navigator.pop(context, list),
-            audioSize: widget.audioList.withHighestBitrate().size.totalMegaBytes,
+            audioSize: widget.streamManifest.audioOnly
+              .withHighestBitrate()
+              .size.totalMegaBytes,
             onBack: () => setState(() => 
               currentDownloadMenu = CurrentDownloadMenu.Home),
           ),

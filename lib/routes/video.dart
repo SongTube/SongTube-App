@@ -332,12 +332,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> {
                 return Wrap(
                   children: [
                     DownloadMenu(
-                      videoList: manager.mediaInfoSet.streamManifest.videoOnly
-                        .sortByVideoQuality(),
-                      audioList: manager.mediaInfoSet.streamManifest.audioOnly
-                        .sortByBitrate(),
-                      audioSize: manager.mediaInfoSet.streamManifest.audioOnly
-                        .withHighestBitrate().size.totalMegaBytes,
+                      streamManifest: manager.mediaInfoSet.streamManifest
                     ),
                   ],
                 );
