@@ -165,7 +165,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> {
                                   videoUrl: manager.mediaInfoSet.videoDetails.url,
                                 ),
                                 // Comments
-                                Divider(),
+                                /*Divider(),
                                 InkWell(
                                   onTap: () {
                                     double topPadding = MediaQuery.of(context).padding.top;
@@ -201,7 +201,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> {
                                       ],
                                     ),
                                   ),
-                                ),
+                                ),*/
                                 Divider(),
                                 // Tags Editor
                                 VideoTags(
