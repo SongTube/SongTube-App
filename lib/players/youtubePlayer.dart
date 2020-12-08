@@ -223,9 +223,11 @@ class __StreamManifestPlayerState extends State<_StreamManifestPlayer> {
           }
         }
         return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-              padding: EdgeInsets.only(right: 8, top: 4),
+              padding: const EdgeInsets.only(right: 8.0, left: 8),
               child: Text(
                 "${_controller.value.position.inMinutes.toString().padLeft(2, '0')}:" +
                 "${_controller.value.position.inSeconds.remainder(60).toString().padLeft(2, '0')}",
@@ -233,7 +235,7 @@ class __StreamManifestPlayerState extends State<_StreamManifestPlayer> {
                   fontSize: 12,
                   color: Colors.white
                 ),
-              )
+              ),
             ),
             Expanded(
               child: VideoProgressIndicator(
@@ -247,7 +249,7 @@ class __StreamManifestPlayerState extends State<_StreamManifestPlayer> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(left: 8, right: 8, top: 4),
+              padding: const EdgeInsets.only(left: 8.0),
               child: Text(
                 "${_controller.value.duration.inMinutes.toString().padLeft(2, '0')}:" +
                 "${_controller.value.duration.inSeconds.remainder(60).toString().padLeft(2, '0')}",

@@ -29,42 +29,45 @@ class VideoPlayerControls extends StatelessWidget {
         width: double.infinity,
         height: double.infinity,
         color: Colors.black.withOpacity(0.3),
-        child: Column(
+        child: Stack(
+          alignment: Alignment.center,
           children: <Widget>[
             // Video Title & Author
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                if (videoTitle != null)
-                Row(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(top: 8, left: 8, right: 8),
-                      child: Icon(EvaIcons.videoOutline, color: Theme.of(context).accentColor),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 8, left: 8),
-                      child: Text(
-                        videoTitle.replaceAll(".webm", '')
-                          .replaceAll(".mp4", '')
-                          .replaceAll(".avi", '')
-                          .replaceAll(".3gpp", '')
-                          .replaceAll(".flv", '')
-                          .replaceAll(".mkv", ''),
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white,
-                        ),
-                        maxLines: 2,
+            Align(
+              alignment: Alignment.topCenter,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  if (videoTitle != null)
+                  Row(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(top: 8, left: 8, right: 8),
+                        child: Icon(EvaIcons.videoOutline, color: Theme.of(context).accentColor),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                      Container(
+                        margin: EdgeInsets.only(top: 8, left: 8),
+                        child: Text(
+                          videoTitle.replaceAll(".webm", '')
+                            .replaceAll(".mp4", '')
+                            .replaceAll(".avi", '')
+                            .replaceAll(".3gpp", '')
+                            .replaceAll(".flv", '')
+                            .replaceAll(".mkv", ''),
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white,
+                          ),
+                          maxLines: 2,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-            Spacer(),
             Container(
               margin: EdgeInsets.all(8),
               child: Row(
@@ -87,9 +90,11 @@ class VideoPlayerControls extends StatelessWidget {
                 ],
               ),
             ),
-            Spacer(),
             // ProgressBar
-            progressBar
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: progressBar
+            )
           ],
         ),
       )
