@@ -1,10 +1,10 @@
 // Flutter
 import 'package:flutter/material.dart';
-import 'package:songtube/screens/homeScreen/downloadMenu/components/homeMenu.dart';
+import 'package:songtube/downloadMenu/components/homeMenu.dart';
 
 // Internal
-import 'package:songtube/screens/homeScreen/downloadMenu/components/videoMenu.dart';
-import 'package:songtube/screens/homeScreen/downloadMenu/components/audioMenu.dart';
+import 'package:songtube/downloadMenu/components/videoMenu.dart';
+import 'package:songtube/downloadMenu/components/audioMenu.dart';
 
 // Packages
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';

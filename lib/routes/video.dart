@@ -20,7 +20,7 @@ import 'package:songtube/routes/components/video/shimmer/shimmerVideoComments.da
 import 'package:songtube/routes/components/video/shimmer/shimmerVideoEngagement.dart';
 import 'package:songtube/routes/components/video/videoDownloadFab.dart';
 import 'package:songtube/routes/components/video/videoTags.dart';
-import 'package:songtube/screens/homeScreen/downloadMenu/downloadMenu.dart';
+import 'package:songtube/downloadMenu/downloadMenu.dart';
 import 'package:songtube/ui/animations/fadeIn.dart';
 import 'package:songtube/ui/components/measureSize.dart';
 import 'package:songtube/ui/internal/snackbar.dart';
