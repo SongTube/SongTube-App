@@ -19,6 +19,7 @@ class SearchHistoryList extends StatelessWidget {
       margin: margin,
       child: ListView.builder(
         itemExtent: 40,
+        physics: BouncingScrollPhysics(),
         itemCount: searchHistory.length,
         itemBuilder: (context, index) {
           String item = searchHistory[index];
