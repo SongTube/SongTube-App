@@ -11,14 +11,14 @@ class VideoEngagement extends StatelessWidget {
   final int likeCount;
   final int dislikeCount;
   final int viewCount;
-  final String channelUrl;
   final String videoUrl;
+  final Function onSaveToFavorite;
   VideoEngagement({
     @required this.likeCount,
     @required this.dislikeCount,
     @required this.viewCount,
-    @required this.channelUrl,
-    @required this.videoUrl
+    @required this.videoUrl,
+    @required this.onSaveToFavorite
   });
   @override
   Widget build(BuildContext context) {
@@ -61,18 +61,15 @@ class VideoEngagement extends StatelessWidget {
         ),
         // Channel Button
         RoundTile(
-          icon: Icon(MdiIcons.youtube, color: Theme.of(context).iconTheme.color),
+          icon: Icon(MdiIcons.heart, color: Theme.of(context).iconTheme.color),
           text: Text(
-            Languages.of(context).labelChannel,
+            "Favorite",
             style: TextStyle(
               fontFamily: "Varela",
               fontSize: 10
             ),
           ),
-          onPressed: () {
-            if (channelUrl != null)
-              launch(channelUrl);
-          },
+          onPressed: onSaveToFavorite
         ),
         // Share button
         RoundTile(

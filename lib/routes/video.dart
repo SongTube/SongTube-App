@@ -14,6 +14,7 @@ import 'package:songtube/players/youtubePlayer.dart';
 import 'package:songtube/provider/configurationProvider.dart';
 import 'package:songtube/provider/downloadsProvider.dart';
 import 'package:songtube/provider/managerProvider.dart';
+import 'package:songtube/provider/preferencesProvider.dart';
 import 'package:songtube/routes/components/relatedVideosList.dart';
 import 'package:songtube/routes/components/video/shimmer/shimmerArtworkEditor.dart';
 import 'package:songtube/routes/components/video/shimmer/shimmerVideoComments.dart';
@@ -24,6 +25,7 @@ import 'package:songtube/routes/components/video/videoComments.dart';
 import 'package:songtube/screens/homeScreen/downloadMenu/downloadMenu.dart';
 import 'package:songtube/ui/animations/fadeIn.dart';
 import 'package:songtube/ui/components/measureSize.dart';
+import 'package:songtube/ui/internal/snackbar.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
@@ -70,6 +72,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> {
   Widget build(BuildContext context) {
     DownloadsProvider downloadsProvider = Provider.of<DownloadsProvider>(context);
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
+    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     return WillPopScope(
       onWillPop: () {
         SystemChrome.setSystemUIOverlayStyle(
@@ -160,9 +163,18 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> {
                                   likeCount: manager.mediaInfoSet.videoDetails.engagement.likeCount,
                                   dislikeCount: manager.mediaInfoSet.videoDetails.engagement.dislikeCount,
                                   viewCount: manager.mediaInfoSet.videoDetails.engagement.viewCount,
-                                  channelUrl: manager.mediaInfoSet.channelDetails != null
-                                    ? manager.mediaInfoSet.channelDetails.url : null,
                                   videoUrl: manager.mediaInfoSet.videoDetails.url,
+                                  onSaveToFavorite: () {
+                                    List<Video> videos = prefs.favoriteVideos;
+                                    videos.add(manager.mediaInfoSet.videoDetails);
+                                    prefs.favoriteVideos = videos;
+                                    AppSnack.showSnackBar(
+                                      icon: EvaIcons.heartOutline,
+                                      title: "Video added to Favorites",
+                                      context: context,
+                                      scaffoldKey: scaffoldKey.currentState
+                                    );
+                                  },
                                 ),
                                 // Comments
                                 /*Divider(),
