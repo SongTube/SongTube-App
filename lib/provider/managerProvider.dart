@@ -15,7 +15,7 @@ import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 enum LoadingStatus { Success, Loading, Unload }
 enum LibraryScreen { Home, Downloads, Media, More }
 enum LinkType { Video, Playlist }
-enum HomeScreenCategories { Home, Trending, Music, Favorites, WatchLater }
+enum HomeScreenTab { Home, Trending, Music, Favorites, WatchLater }
 
 class ManagerProvider extends ChangeNotifier {
 
@@ -35,7 +35,9 @@ class ManagerProvider extends ChangeNotifier {
     _libraryScaffoldKey = new GlobalKey<ScaffoldState>();
     _screenIndex        = 0;
     // Home Screen
-    currentHomeCategory = HomeScreenCategories.Home;
+    currentHomeTab = HomeScreenTab.Home;
+    homeTrendingVideoList = [];
+    homeMusicVideoList = [];
     youtubeSearchQuery = lastSearchQuery;
     searchStreamRunning = false;
     searchResultsLength = 10;
@@ -97,7 +99,32 @@ class ManagerProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
-  HomeScreenCategories currentHomeCategory;
+  HomeScreenTab _currentHomeTab;
+  HomeScreenTab get currentHomeTab => _currentHomeTab;
+  set currentHomeTab(HomeScreenTab tab) {
+    _currentHomeTab = tab;
+    notifyListeners();
+    if (tab == HomeScreenTab.Trending && homeTrendingVideoList.isEmpty) {
+      youtubeExtractor.getPlaylistVideos(
+        PlaylistId('PLrEnWoR732-BHrPp_Pm8_VleD68f9s14-')
+      ).then((value) {
+        homeTrendingVideoList = value;
+        notifyListeners();
+      });
+    }
+    if (tab == HomeScreenTab.Music && homeMusicVideoList.isEmpty) {
+      youtubeExtractor.getPlaylistVideos(
+        PlaylistId('PLFgquLnL59akA2PflFpeQG9L01VFg90wS')
+      ).then((value) {
+        homeMusicVideoList = value;
+        notifyListeners();
+      });
+    }
+  }
+  // Trending Video List
+  List<Video> homeTrendingVideoList;
+  // Music Video List
+  List<Video> homeMusicVideoList;
 
   // ---------------
   // URL Controller
@@ -232,6 +259,7 @@ class ManagerProvider extends ChangeNotifier {
       searchResultsLength = 10;
       searchStreamRunning = true;
       youtubeSearchResults.clear();
+      currentHomeTab = HomeScreenTab.Home;
       if (youtubeSearchStream != null) {
         await youtubeSearchStream.cancel();
         youtubeSearchStream = null;

@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:songtube/provider/managerProvider.dart';
 
 class HomePageCategoryList extends SliverPersistentHeaderDelegate {
   
   HomePageCategoryList({
     @required this.minHeight,
     @required this.maxHeight,
+    @required this.onCategoryTap,
   });
 
   final double minHeight;
   final double maxHeight;
+  final Function(HomeScreenTab) onCategoryTap;
 
   @override
   double get minExtent => minHeight;
@@ -47,6 +51,7 @@ class HomePageCategoryList extends SliverPersistentHeaderDelegate {
   }
 
   Widget categoryList(BuildContext context) {
+    ManagerProvider manager = Provider.of<ManagerProvider>(context);
     return ListView(
       physics: BouncingScrollPhysics(),
       scrollDirection: Axis.horizontal,
@@ -55,42 +60,42 @@ class HomePageCategoryList extends SliverPersistentHeaderDelegate {
         // Home Page
         categoryTile(
           context: context,
+          selected: manager.currentHomeTab == HomeScreenTab.Home
+            ? true : false,
           title: "Home Page",
-          onTap: () {
-            
-          }
+          onTap: () => onCategoryTap(HomeScreenTab.Home)
         ),
         // Trending
         categoryTile(
           context: context,
+          selected: manager.currentHomeTab == HomeScreenTab.Trending
+            ? true : false,
           title: "Trending",
-          onTap: () {
-
-          }
+          onTap: () => onCategoryTap(HomeScreenTab.Trending)
         ),
         // Music
         categoryTile(
           context: context,
+          selected: manager.currentHomeTab == HomeScreenTab.Music
+            ? true : false,
           title: "Music",
-          onTap: () {
-
-          }
+          onTap: () => onCategoryTap(HomeScreenTab.Music)
         ),
         // Favorites
         categoryTile(
           context: context,
+          selected: manager.currentHomeTab == HomeScreenTab.Favorites
+            ? true : false,
           title: "Favorites",
-          onTap: () {
-
-          }
+          onTap: () => onCategoryTap(HomeScreenTab.Favorites)
         ),
-        // Playlists
+        // Watch Later
         categoryTile(
           context: context,
+          selected: manager.currentHomeTab == HomeScreenTab.WatchLater
+            ? true : false,
           title: "Watch Later",
-          onTap: () {
-
-          }
+          onTap: () => onCategoryTap(HomeScreenTab.WatchLater)
         ),
         SizedBox(width: 8)
       ],
@@ -100,24 +105,41 @@ class HomePageCategoryList extends SliverPersistentHeaderDelegate {
   Widget categoryTile({
     BuildContext context,
     String title,
+    bool selected,
     Function onTap
   }) {
     return Padding(
       padding: EdgeInsets.all(8.0),
       child: GestureDetector(
         onTap: onTap,
-        child: Container(
+        child: AnimatedContainer(
+          duration: Duration(milliseconds: 200),
           height: 60,
           decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
+            color: selected
+              ? Theme.of(context).scaffoldBackgroundColor
+              : Theme.of(context).scaffoldBackgroundColor.withOpacity(0.6),
             borderRadius: BorderRadius.circular(20)
           ),
-          padding: EdgeInsets.all(8),
+          padding: EdgeInsets.only(
+            bottom: 8,
+            top: 8,
+            left: 12,
+            right: 12
+          ),
           child: Center(
             child: Text(
               title,
               style: TextStyle(
-                fontSize: 12
+                letterSpacing: 0.3,
+                color: selected
+                  ? Theme.of(context).textTheme.bodyText1.color
+                  : Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6),
+                fontSize: 12,
+                fontFamily: 'YTSans',
+                fontWeight: selected
+                  ? FontWeight.w600
+                  : FontWeight.normal
               ),
             )
           ),

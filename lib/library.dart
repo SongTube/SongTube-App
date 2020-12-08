@@ -185,6 +185,9 @@ class _LibraryState extends State<Library> {
                 } else if (manager.showSearchBar) {
                   manager.showSearchBar = false;
                   return Future.value(false);
+                } else if (manager.screenIndex == 0 && manager.currentHomeTab != HomeScreenTab.Home) {
+                  manager.currentHomeTab = HomeScreenTab.Home;
+                  return Future.value(false);
                 } else {
                   return Future.value(true);
                 }

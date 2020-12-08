@@ -2,8 +2,10 @@
 import 'dart:async';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_fade/image_fade.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:share/share.dart';
 import 'package:songtube/internal/models/channelLogo.dart';
 
 // Internal
@@ -16,6 +18,7 @@ import 'package:songtube/routes/channel.dart';
 import 'package:songtube/routes/playlist.dart';
 import 'package:songtube/routes/video.dart';
 import 'package:songtube/ui/animations/blurPageRoute.dart';
+import 'package:songtube/ui/internal/snackbar.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
@@ -176,7 +179,7 @@ class VideoTile extends StatelessWidget {
                 ),
                 Expanded(
                   child: Container(
-                    margin: EdgeInsets.only(top: 12, right: 12),
+                    margin: EdgeInsets.only(top: 12),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -211,6 +214,71 @@ class VideoTile extends StatelessWidget {
                     ),
                   ),
                 ),
+                GestureDetector(
+                  onTapDown: (TapDownDetails details) {
+                    showMenu<String>(
+                      context: context,
+                      position: RelativeRect.fromLTRB(
+                        details.globalPosition.dx,
+                        details.globalPosition.dy,
+                        0, 0
+                      ),
+                      items: [
+                        PopupMenuItem<String>(
+                          child: Text("Share"),
+                          value: "Share",
+                        ),
+                        PopupMenuItem<String>(
+                          child: Text("Copy link"),
+                          value: "Copy Link",
+                        ),
+                        PopupMenuItem<String>(
+                          child: Text("Add to Watch later"),
+                          value: "Watch Later",
+                        ),
+                      ],
+                    ).then((value) {
+                      switch(value) {
+                        case "Share":
+                          Share.share(
+                            searchItem is Video
+                              ? "https://www.youtube.com/watch?v=${searchItem.id.value}"
+                              : searchItem is SearchVideo
+                                ? "https://www.youtube.com/watch?v=${searchItem.videoId.value}"
+                                : "https://www.youtube.com/playlist?list=${searchItem.PlaylistId.value}"
+                          );
+                          break;
+                        case "Copy Link":
+                          String link = searchItem is Video
+                            ? "https://www.youtube.com/watch?v=${searchItem.id.value}"
+                            : searchItem is SearchVideo
+                              ? "https://www.youtube.com/watch?v=${searchItem.videoId.value}"
+                              : "https://www.youtube.com/playlist?list=${searchItem.PlaylistId.value}";
+                          Clipboard.setData(ClipboardData(
+                            text: link
+                          ));
+                          final scaffold = Scaffold.of(context);
+                          AppSnack.showSnackBar(
+                            icon: Icons.copy,
+                            title: "Link copied to Clipboard",
+                            duration: Duration(seconds: 2),
+                            context: context,
+                            scaffoldKey: scaffold
+                          );
+                          break;
+                        case "Watch Later":
+                          // TODO: Add to watch later
+                          break;
+                      }
+                    });
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(12),
+                    color: Colors.transparent,
+                    child: Icon(Icons.more_vert_rounded,
+                      size: 18),
+                  ),
+                )
               ],
             ),
           ],

@@ -22,9 +22,13 @@ class PreferencesProvider extends ChangeNotifier {
   List<Video> get favoriteVideos {
     var map = jsonDecode(prefs.getString('favoriteVideos') ?? "{}");
     List<Video> videos = [];
-    map['favoriteVideos'].forEach((v) {
-      videos.add(Video.fromMap(v));
-    });
+    if (map.isNotEmpty) {
+      if (map['favoriteVideos'].isNotEmpty) {
+        map['favoriteVideos'].forEach((v) {
+          videos.add(Video.fromMap(v));
+        });
+      }
+    }
     return videos;
   }
   set favoriteVideos(List<Video> videos) {
@@ -39,9 +43,13 @@ class PreferencesProvider extends ChangeNotifier {
   List<Video> get watchLaterVideos {
     var map = jsonDecode(prefs.getString('watchLaterList') ?? "{}");
     List<Video> videos = [];
-    map['watchLaterList'].forEach((v) {
-      videos.add(Video.fromMap(v));
-    });
+    if (map.isNotEmpty) {
+      if (map['watchLaterList'].isNotEmpty) {
+        map['watchLaterList'].forEach((v) {
+          videos.add(Video.fromMap(v));
+        });
+      }
+    }
     return videos;
   }
   set watchLaterVideos(List<Video> videos) {
