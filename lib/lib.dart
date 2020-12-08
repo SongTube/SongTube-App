@@ -73,7 +73,7 @@ class _LibState extends State<Lib> {
           YoutubeExplode yt = YoutubeExplode();
           Video video = await yt.videos.get(id);
           Provider.of<ManagerProvider>(context, listen: false)
-            .updateMediaInfoSet(video);
+            .updateMediaInfoSet(video, null);
           Navigator.pop(context);
           Navigator.push(context,
             BlurPageRoute(
@@ -93,7 +93,7 @@ class _LibState extends State<Lib> {
           YoutubeExplode yt = YoutubeExplode();
           Playlist playlist = await yt.playlists.get(id);
           Provider.of<ManagerProvider>(context, listen: false)
-            .updateMediaInfoSet(playlist);
+            .updateMediaInfoSet(playlist, null);
           Navigator.pop(context);
           Navigator.push(context,
             BlurPageRoute(

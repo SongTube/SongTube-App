@@ -283,7 +283,8 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> {
                                         relatedVideos: manager.mediaInfoSet.relatedVideos,
                                         onVideoTap: (index) {
                                           manager.updateMediaInfoSet(
-                                            manager.mediaInfoSet.relatedVideos[index]
+                                            manager.mediaInfoSet.relatedVideos[index],
+                                            manager.mediaInfoSet.relatedVideos
                                           );
                                         },
                                       )

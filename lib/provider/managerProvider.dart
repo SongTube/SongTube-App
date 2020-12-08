@@ -134,7 +134,7 @@ class ManagerProvider extends ChangeNotifier {
   // -------------------
   //
   // Get current Video or Playlist
-  void updateMediaInfoSet(dynamic searchMedia) {
+  void updateMediaInfoSet(dynamic searchMedia, List<Video> relatedVideos) {
     mediaInfoSet = MediaInfoSet();
     playerStream = null;
     notifyListeners();
@@ -162,11 +162,16 @@ class ManagerProvider extends ChangeNotifier {
         notifyListeners();
       });
       // Get Related videos
-      youtubeExtractor.getChannelVideos(id)
-        .then((value) {
-          mediaInfoSet.relatedVideos = value;
-          notifyListeners();
-      });
+      if (relatedVideos == null) {
+        youtubeExtractor.getChannelVideos(id)
+          .then((value) {
+            mediaInfoSet.relatedVideos = value;
+            notifyListeners();
+        });
+      } else {
+        mediaInfoSet.relatedVideos = relatedVideos;
+        notifyListeners();
+      }
       // Get the StreamManifest for Downloads
       youtubeExtractor.getStreamManifest(id).then((value) {
         mediaInfoSet.streamManifest = value;
@@ -190,11 +195,16 @@ class ManagerProvider extends ChangeNotifier {
         notifyListeners();
       });
       // Get Related videos
-      youtubeExtractor.getChannelVideos(mediaInfoSet.videoFromSearch.videoId)
-        .then((value) {
-          mediaInfoSet.relatedVideos = value;
-          notifyListeners();
-      });
+      if (relatedVideos == null) {
+        youtubeExtractor.getChannelVideos(mediaInfoSet.videoFromSearch.videoId)
+          .then((value) {
+            mediaInfoSet.relatedVideos = value;
+            notifyListeners();
+        });
+      } else {
+        mediaInfoSet.relatedVideos = relatedVideos;
+        notifyListeners();
+      }
       // Get the StreamManifest for Downloads
       youtubeExtractor.getStreamManifest(id).then((value) {
         mediaInfoSet.streamManifest = value;
@@ -278,13 +288,19 @@ class ManagerProvider extends ChangeNotifier {
     if (mediaInfoSet.mediaType == MediaInfoSetType.Video) {
       int currentIndex = mediaInfoSet.autoPlayIndex;
       if (currentIndex <= mediaInfoSet.relatedVideos.length-1) {
-        updateMediaInfoSet(mediaInfoSet.relatedVideos[currentIndex+1]);
+        updateMediaInfoSet(
+          mediaInfoSet.relatedVideos[currentIndex+1],
+          mediaInfoSet.relatedVideos
+        );
         mediaInfoSet.autoPlayIndex += 1;
       }
     } else {
       int currentIndex = mediaInfoSet.autoPlayIndex;
       if (currentIndex <= mediaInfoSet.playlistVideos.length-1) {
-        updateMediaInfoSet(mediaInfoSet.playlistVideos[currentIndex+1]);
+        updateMediaInfoSet(
+          mediaInfoSet.playlistVideos[currentIndex+1],
+          mediaInfoSet.relatedVideos
+        );
         mediaInfoSet.autoPlayIndex += 1;
       }
     }

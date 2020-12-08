@@ -108,7 +108,7 @@ class YoutubeChannelPage extends StatelessWidget {
                             relatedVideos: videos,
                             onVideoTap: (index) {
                               Navigator.pop(context);
-                              manager.updateMediaInfoSet(videos[index]);
+                              manager.updateMediaInfoSet(videos[index], null);
                               Navigator.push(context,
                               BlurPageRoute(
                                 slideOffset: Offset(0.0, 10.0),

@@ -42,7 +42,16 @@ class VideoTile extends StatelessWidget {
     PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     return InkWell(
       onTap: () async {
-        manager.updateMediaInfoSet(searchItem);
+        List<Video> relatedVideos;
+        if (manager.currentHomeTab == HomeScreenTab.Favorites) {
+          relatedVideos = prefs.favoriteVideos;
+        } else if (manager.currentHomeTab == HomeScreenTab.WatchLater) {
+          relatedVideos = prefs.watchLaterVideos;
+        }
+        manager.updateMediaInfoSet(
+          searchItem,
+          relatedVideos
+        );
         Navigator.push(context,
         BlurPageRoute(
           slideOffset: Offset(0.0, 10.0),

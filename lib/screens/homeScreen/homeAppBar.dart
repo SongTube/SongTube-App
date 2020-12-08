@@ -73,7 +73,7 @@ class _HomePageAppBarState extends State<HomePageAppBar> {
                   );
                   YoutubeExplode yt = YoutubeExplode();
                   Video video = await yt.videos.get(id);
-                  manager.updateMediaInfoSet(video);
+                  manager.updateMediaInfoSet(video, null);
                   Navigator.pop(context);
                   Navigator.push(context,
                     BlurPageRoute(
@@ -93,7 +93,7 @@ class _HomePageAppBarState extends State<HomePageAppBar> {
                   );
                   YoutubeExplode yt = YoutubeExplode();
                   Playlist playlist = await yt.playlists.get(id);
-                  manager.updateMediaInfoSet(playlist);
+                  manager.updateMediaInfoSet(playlist, null);
                   Navigator.pop(context);
                   Navigator.push(context,
                     BlurPageRoute(

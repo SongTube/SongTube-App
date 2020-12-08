@@ -24,11 +24,12 @@ class MediaInfoSet {
     this.videoDetails,
     this.playlistDetails,
     this.streamManifest,
-    this.channelDetails
+    this.channelDetails,
+    this.relatedVideos
   }) {
     mediaTags = TagsControllers();
     playlistVideos = List<Video>();
-    relatedVideos = List<Video>();
+    relatedVideos = this.relatedVideos ?? List<Video>();
     autoPlayIndex = 0;
   }
 
