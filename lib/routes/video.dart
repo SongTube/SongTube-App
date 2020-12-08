@@ -67,7 +67,6 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> {
 
   @override
   Widget build(BuildContext context) {
-    DownloadsProvider downloadsProvider = Provider.of<DownloadsProvider>(context);
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
     PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     return WillPopScope(
@@ -316,9 +315,9 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> {
         ),
         floatingActionButton: VideoDownloadFab(
           readyToDownload: manager.mediaInfoSet.streamManifest == null ? false : true,
-          onDownload: () async {
+          onDownload: () {
             FocusScope.of(context).requestFocus(new FocusNode());
-            List<dynamic> response = await showModalBottomSheet<dynamic>(
+            showModalBottomSheet<dynamic>(
               isScrollControlled: true,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
@@ -332,34 +331,15 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> {
                 return Wrap(
                   children: [
                     DownloadMenu(
-                      streamManifest: manager.mediaInfoSet.streamManifest
+                      streamManifest: manager.mediaInfoSet.streamManifest,
+                      tags: manager.mediaInfoSet.mediaTags,
+                      videoDetails: manager.mediaInfoSet.videoDetails,
+                      scaffoldState: scaffoldKey.currentState,
                     ),
                   ],
                 );
               }
             );
-            if (response == null) return;
-            downloadsProvider.handleVideoDownload(
-              language: Languages.of(context),
-              config: Provider.of<ConfigurationProvider>(context, listen: false),
-              metadata: DownloadMetaData(
-                title: manager.mediaInfoSet.mediaTags.titleController.text,
-                album: manager.mediaInfoSet.mediaTags.albumController.text,
-                artist: manager.mediaInfoSet.mediaTags.artistController.text
-                  .replaceAll("- Topic", "").trim(),
-                genre: manager.mediaInfoSet.mediaTags.genreController.text,
-                coverurl: manager.mediaInfoSet.mediaTags.artworkController,
-                date: manager.mediaInfoSet.mediaTags.dateController.text,
-                disc: manager.mediaInfoSet.mediaTags.discController.text,
-                track: manager.mediaInfoSet.mediaTags.trackController.text
-              ),
-              manifest: manager.mediaInfoSet.streamManifest,
-              videoDetails: manager.mediaInfoSet.videoDetails,
-              data: response
-            );
-            Navigator.of(context).pop();
-            await Future.delayed(Duration(milliseconds: 400));
-            manager.screenIndex = 1;
           },
         ),
       ),

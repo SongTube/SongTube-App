@@ -26,6 +26,7 @@ class HomeScreen extends StatelessWidget {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
     ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
     return Scaffold(
+      key: PageStorageKey('this'),
       resizeToAvoidBottomInset: false,
       body: Stack(
         children: [

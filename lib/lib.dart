@@ -170,6 +170,8 @@ class _LibState extends State<Lib> {
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         resizeToAvoidBottomInset: false,
+        key: Provider.of<ManagerProvider>
+          (context, listen: false).libraryScaffoldKey,
         body: Container(
           color: Theme.of(context).cardColor,
           child: SafeArea(

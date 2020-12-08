@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:image_fade/image_fade.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:share/share.dart';
+import 'package:songtube/downloadMenu/downloadMenu.dart';
 import 'package:songtube/internal/models/channelLogo.dart';
 
 // Internal
@@ -242,6 +243,10 @@ class VideoTile extends StatelessWidget {
                           child: Text("Copy link"),
                           value: "Copy Link",
                         ),
+                        PopupMenuItem<String>(
+                          child: Text("Download"),
+                          value: "Download",
+                        ),
                         if (onDelete != null)
                         PopupMenuItem<String>(
                           child: Text("Remove"),
@@ -285,6 +290,33 @@ class VideoTile extends StatelessWidget {
                             duration: Duration(seconds: 2),
                             context: context,
                             scaffoldKey: scaffold
+                          );
+                          break;
+                        case "Download":
+                          showModalBottomSheet<dynamic>(
+                            isScrollControlled: true,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(30),
+                                topRight: Radius.circular(30)
+                              ),
+                            ),
+                            clipBehavior: Clip.antiAlias,
+                            context: context,
+                            builder: (context) {
+                              String url = searchItem is SearchVideo
+                                ? "http://youtube.com/watch?v=${searchItem.videoId.value}"
+                                : "http://youtube.com/watch?v=${searchItem.id.value}";
+                              return Wrap(
+                                children: [
+                                  DownloadMenu(
+                                    videoUrl: url,
+                                    scaffoldState: manager
+                                      .libraryScaffoldKey.currentState,
+                                  ),
+                                ],
+                              );
+                            }
                           );
                           break;
                         case "Remove":

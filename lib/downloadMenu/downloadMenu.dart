@@ -1,4 +1,5 @@
 // Flutter
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/downloadMenu/components/homeMenu.dart';
@@ -6,7 +7,13 @@ import 'package:songtube/downloadMenu/components/homeMenu.dart';
 // Internal
 import 'package:songtube/downloadMenu/components/videoMenu.dart';
 import 'package:songtube/downloadMenu/components/audioMenu.dart';
+import 'package:songtube/internal/languages.dart';
+import 'package:songtube/internal/models/metadata.dart';
+import 'package:songtube/internal/models/tagsControllers.dart';
+import 'package:songtube/provider/configurationProvider.dart';
+import 'package:songtube/provider/downloadsProvider.dart';
 import 'package:songtube/provider/managerProvider.dart';
+import 'package:songtube/ui/internal/snackbar.dart';
 
 // Packages
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
@@ -15,10 +22,16 @@ enum CurrentDownloadMenu { Home, Audio, Video, Loading }
 
 class DownloadMenu extends StatefulWidget {
   final StreamManifest streamManifest;
+  final TagsControllers tags;
+  final Video videoDetails;
   final String videoUrl;
+  final scaffoldState;
   DownloadMenu({
     this.streamManifest,
-    this.videoUrl
+    this.tags,
+    this.videoDetails,
+    this.videoUrl,
+    this.scaffoldState
   });
   @override
   _DownloadMenuState createState() => _DownloadMenuState();
@@ -31,6 +44,8 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
 
   // Download Menu StreamManifest
   StreamManifest manifest;
+  TagsControllers tags;
+  Video details;
 
   @override
   void initState() {
@@ -38,18 +53,23 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
       CurrentDownloadMenu.Loading;
     super.initState();
     if (widget.streamManifest == null) {
-      Provider.of<ManagerProvider>(context, listen: false)
-        .youtubeExtractor.getStreamManifest(
-          VideoId(VideoId.parseVideoId(widget.videoUrl))
-        ).then((value) {
-          manifest = value;
-          setState(() => currentDownloadMenu = CurrentDownloadMenu.Home);
-        });
+      initStreamManifest();
     } else {
       manifest = widget.streamManifest;
+      tags = widget.tags;
       setState(() => currentDownloadMenu = CurrentDownloadMenu.Home);
     }
     
+  }
+
+  void initStreamManifest() async {
+    ManagerProvider manager = Provider.of<ManagerProvider>(context, listen: false);
+    VideoId videoId = VideoId(VideoId.parseVideoId(widget.videoUrl));
+    manifest = await manager.youtubeExtractor.getStreamManifest(videoId);
+    details = await manager.youtubeExtractor.getVideoDetails(videoId);
+    tags = TagsControllers();
+    tags.updateTextControllers(details, details.thumbnails.maxResUrl);
+    setState(() => currentDownloadMenu = CurrentDownloadMenu.Home);
   }
 
   @override
@@ -88,7 +108,7 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
               .reversed.toList(),
             onBack: () => setState(() => 
               currentDownloadMenu = CurrentDownloadMenu.Home),
-            onDownload: (list) => Navigator.pop(context, list),
+            onDownload: (list) => _initializeDownload(list),
           ),
         ); break;
       case CurrentDownloadMenu.Video:
@@ -97,7 +117,7 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
           child: VideoDownloadMenu(
             videoList: manifest.videoOnly
               .sortByVideoQuality(),
-            onOptionSelect: (list) => Navigator.pop(context, list),
+            onOptionSelect: (list) => _initializeDownload(list),
             audioSize: manifest.audioOnly
               .withHighestBitrate()
               .size.totalMegaBytes,
@@ -107,7 +127,7 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
         ); break;
       case CurrentDownloadMenu.Loading:
         returnWidget = Container(
-          height: MediaQuery.of(context).size.height*0.6,
+          margin: EdgeInsets.only(top: 12, bottom: 12),
           child: Center(
             child: CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation(Theme.of(context).accentColor),
@@ -117,4 +137,36 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
     }
     return returnWidget;
   }
+
+  void _initializeDownload(dynamic configList) async {
+    DownloadsProvider downloadsProvider = Provider.of<DownloadsProvider>(context, listen: false);
+    downloadsProvider.handleVideoDownload(
+      language: Languages.of(context),
+      config: Provider.of<ConfigurationProvider>(context, listen: false),
+      metadata: DownloadMetaData(
+        title: tags.titleController.text,
+        album: tags.albumController.text,
+        artist: tags.artistController.text
+          .replaceAll("- Topic", "").trim(),
+        genre: tags.genreController.text,
+        coverurl: tags.artworkController,
+        date: tags.dateController.text,
+        disc: tags.discController.text,
+        track: tags.trackController.text
+      ),
+      manifest: manifest,
+      videoDetails: widget.videoDetails,
+      data: configList
+    );
+    Navigator.of(context).pop();
+    if (widget.scaffoldState != null) {
+      AppSnack.showSnackBar(
+        icon: EvaIcons.cloudDownloadOutline,
+        title: "Download started...",
+        context: context,
+        scaffoldKey: widget.scaffoldState
+      );
+    }
+  }
+
 }
