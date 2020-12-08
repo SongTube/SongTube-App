@@ -17,7 +17,7 @@ class DownloadMenu extends StatefulWidget {
   final StreamManifest streamManifest;
   final String videoUrl;
   DownloadMenu({
-    @required this.streamManifest,
+    this.streamManifest,
     this.videoUrl
   });
   @override
