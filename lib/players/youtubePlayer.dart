@@ -154,7 +154,7 @@ class __StreamManifestPlayerState extends State<_StreamManifestPlayer> {
         return Future.value(true);
       },
       child: Material(
-        color: Colors.transparent,
+        color: Colors.black,
         child: MediaQuery(
           data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
           child: Stack(
@@ -219,6 +219,12 @@ class __StreamManifestPlayerState extends State<_StreamManifestPlayer> {
           if (!widget.isFullScreen) {
             widget.onVideoEnded();
           } else {
+            SystemChrome.setPreferredOrientations([
+              DeviceOrientation.portraitUp,
+              DeviceOrientation.portraitDown,
+            ]);
+            SystemChrome.setEnabledSystemUIOverlays
+              ([SystemUiOverlay.top, SystemUiOverlay.bottom]);
             Navigator.pop(context);
           }
         }
