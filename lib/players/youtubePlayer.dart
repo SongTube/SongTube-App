@@ -268,19 +268,36 @@ class __StreamManifestPlayerState extends State<_StreamManifestPlayer> {
                 ),
               ),
             ),
-            if (!widget.isFullScreen)
-            IconButton(
-              icon: Icon(Icons.fullscreen_rounded),
-              onPressed: () async {
-                Navigator.push(context,
-                  BlurPageRoute(builder: (_) {
-                    return StreamManifestPlayer(
-                      manifest: widget.manifest,
-                      controller: _controller,
-                      isFullScreen: true,
-                    );
-                  }, blurStrength: prefs.enableBlurUI ? 20 : 0));
-              }
+            Padding(
+              padding: widget.isFullScreen
+                ? EdgeInsets.only(right: 16)
+                : EdgeInsets.zero,
+              child: IconButton(
+                icon: Icon(widget.isFullScreen
+                  ? Icons.fullscreen_exit_rounded
+                  : Icons.fullscreen_rounded
+                ),
+                onPressed: () async {
+                  if (!widget.isFullScreen) {
+                    Navigator.push(context,
+                      BlurPageRoute(builder: (_) {
+                        return StreamManifestPlayer(
+                          manifest: widget.manifest,
+                          controller: _controller,
+                          isFullScreen: true,
+                        );
+                      }, blurStrength: prefs.enableBlurUI ? 20 : 0));
+                  } else {
+                    SystemChrome.setPreferredOrientations([
+                      DeviceOrientation.portraitUp,
+                      DeviceOrientation.portraitDown,
+                    ]);
+                    SystemChrome.setEnabledSystemUIOverlays
+                      ([SystemUiOverlay.top, SystemUiOverlay.bottom]);
+                    Navigator.pop(context);
+                  }
+                }
+              ),
             )
           ],
         );
