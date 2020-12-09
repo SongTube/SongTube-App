@@ -1,4 +1,4 @@
-# SongTube
+![](https://i.imgur.com/UAUkZTJ.png)
 
 SongTube is a new beautiful and fast application made in flutter, it supports YouTube audio and video downloading at any quality, In-App YouTube Browser, audio conversion and an Audio tags editor.
 
@@ -83,8 +83,8 @@ Where for your new Language you have to add a new LanguageData(flag, name, langu
 
 ## Screenshots
 
-![](https://i.imgur.com/20DZtPI.jpg) ![](https://i.imgur.com/MMsTOqH.jpg)
-![](https://i.imgur.com/JGl6cmN.jpg) ![](https://i.imgur.com/vov3Zva.jpg)
-![](https://i.imgur.com/ZBcykbt.jpg) ![](https://i.imgur.com/GXs2hTi.jpg)
+![](https://i.imgur.com/xvxkEIa.png) ![](https://imgur.com/HJOv6im.jpg)
+![](https://imgur.com/bEuSeIe.jpg) ![](https://imgur.com/bTZftKU.jpg)
+![](https://imgur.com/6IoCL5V.jpg)
 
 ---
