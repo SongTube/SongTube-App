@@ -1,3 +1,52 @@
+# SongTube 5.0.0:
+
+- Fixed an issue where the device songs will not load if there a corrupt song
+- Deleted "Navigate" Screen
+- Home Screen will now show YouTube Videos
+- Home Screen now has Tabs for Trending, Music, Favorites and Watch Later
+- Implemented Favorites Videos
+- Implemented Watch Later Videos
+- Home Screen will now show last search results
+- Home Screen search results load time slightly improved
+- Added new Video Page with Related Videos
+- Replaced Youtube iFrame Player with a custom Video Player (Faster and responsive)
+- Added more Blur UI on pages transitions and Music Player
+- Added an option on Settings to disable Blur UI Style
+- You can now Tap on Channels to view latest Uploads
+- New smooth animations on Video/Channel Opening
+- Fixed download issues on Android 10 & 11
+- Fixed Audio/Video saving on SDCard (I hope)
+- Fixed low quality Artworks on Songs from Videos with higher quality artworks available
+- Music Player now has smoother animations on Song transition
+- Added a new Option in Settings to fix Android 11 Downloads
+- Added a new Dialog to invite the user to join Telegram Channel
+- Increased Bass & Treble gains at Download Menu
+- All videos from the Home Screen will have a menu (three dots menu) to:
+    * Share Video
+    * Copy Link
+    * Download
+    * Save to Favorites
+    * Save to Watch Later
+- Audio/Video can now be downloaded without opening the video (three dots menu)
+- Implemented new Downloads Menu which will has:
+    * All Audio Options
+    * More Details about each Audio Option
+    * Best Audio Suggestion
+    * Re-Organized Audio Filters Modifiers
+    * CheckBox to enable Conversion
+    * Menu to change Audio Conversion Format
+    * Re-Organized Video Download Menu
+    * More Details about each Video Option
+- Audios will now not be converted if it is not necesary
+- Implemented support for Updates check (Using Github REST API)
+- Added new Disclaimer for Liability
+- Implemented support for Multi-Languages:
+    * English
+    * Spanish
+    * Portuguese (Thanks to RickyM7)
+    * Igbo (Thanks to enweazudaniel)
+    * Indonesian (Thanks to Hafitz Setya)
+
 # SongTube 4.0.0:
 
 - Reverted from audioplayers to just_audio on a better implementation
