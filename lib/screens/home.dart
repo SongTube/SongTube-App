@@ -86,9 +86,11 @@ class HomeScreen extends StatelessWidget {
                         borderRadius: 0,
                         onItemTap: (String item) {
                           manager.searchBarFocusNode.unfocus();
-                          manager.showSearchBar = false;
                           manager.youtubeSearchQuery = item;
                           manager.updateYoutubeSearchResults(updateResults: true);
+                          Future.delayed(Duration(milliseconds: 100), () {
+                            manager.showSearchBar = false;
+                          });
                           if (item.length > 1) {
                             Future.delayed(Duration(milliseconds: 400), () =>
                               config.addStringtoSearchHistory(item.trim()
