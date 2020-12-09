@@ -371,16 +371,16 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                     SizedBox(
                       height: 50,
                       child: FlutterSlider(
-                        values: [bassGain.toDouble(), 5],
-                        min: -5,
-                        max: 5,
+                        values: [bassGain.toDouble(), 10],
+                        min: -10,
+                        max: 10,
                         onDragging: (value, currentValue, upperValue) {
                           setState(() => bassGain = currentValue.toInt());
                         },
                         step: FlutterSliderStep(
                           isPercentRange: true,
                           rangeList: [
-                            FlutterSliderRangeStep(from: -5, to: 5, step: 1),
+                            FlutterSliderRangeStep(from: -10, to: 10, step: 1),
                           ]
                         ),
                         trackBar: FlutterSliderTrackBar(
@@ -401,9 +401,9 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                     Row(
                       children: <Widget>[
                         SizedBox(width: 16),
-                        Text("-5", style: TextStyle(fontSize: 10)),
+                        Text("-10", style: TextStyle(fontSize: 10)),
                         Spacer(),
-                        Text("+5", style: TextStyle(fontSize: 10)),
+                        Text("+10", style: TextStyle(fontSize: 10)),
                         SizedBox(width: 16),
                       ],
                     ),
@@ -438,16 +438,16 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                     SizedBox(
                       height: 50,
                       child: FlutterSlider(
-                        values: [trebleGain.toDouble(), 5],
-                        min: -5,
-                        max: 5,
+                        values: [trebleGain.toDouble(), 10],
+                        min: -10,
+                        max: 10,
                         onDragging: (value, currentValue, upperValue) {
                           setState(() => trebleGain = currentValue.toInt());
                         },
                         step: FlutterSliderStep(
                           isPercentRange: true,
                           rangeList: [
-                            FlutterSliderRangeStep(from: -5, to: 5, step: 1),
+                            FlutterSliderRangeStep(from: -10, to: 10, step: 1),
                           ]
                         ),
                         trackBar: FlutterSliderTrackBar(
@@ -468,9 +468,9 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                     Row(
                       children: <Widget>[
                         SizedBox(width: 16),
-                        Text("-5", style: TextStyle(fontSize: 10)),
+                        Text("-10", style: TextStyle(fontSize: 10)),
                         Spacer(),
-                        Text("+5", style: TextStyle(fontSize: 10)),
+                        Text("+10", style: TextStyle(fontSize: 10)),
                         SizedBox(width: 16),
                       ],
                     ),

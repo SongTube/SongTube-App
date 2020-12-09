@@ -162,6 +162,7 @@ class FFmpegConverter {
         "argument list: $_argsList\n" +
         "output path: $output"
       );
+    await File(audioFile).delete();
     return output;
   }
 
@@ -185,10 +186,10 @@ class FFmpegConverter {
     List<String> _argsList = [
       "-y", "-i",
       "$audioPath",
-      "-af", "volume=${audioModifiers.volume}, "+
-      "bass=g=${audioModifiers.bassGain}, " +
-      "treble=g=${audioModifiers.trebleGain}",
-      "${output.path}",
+      "-filter_complex", "[0:a]volume=${audioModifiers.volume}[volume]; "+
+      "[volume]bass=g=${audioModifiers.bassGain}[bass]; " +
+      "[bass]treble=g=${audioModifiers.trebleGain}",
+       "${output.path}",
     ];
     int _result = await flutterFFmpeg.executeWithArguments(_argsList);
     if (_result == 1)
@@ -200,6 +201,7 @@ class FFmpegConverter {
         "argument list: $_argsList\n" +
         "output: $output",
       );
+    await File(audioPath).delete();
     return output;
   }
 
@@ -240,7 +242,6 @@ class FFmpegConverter {
         "output: $output",
       );
     await File(audioFile).delete();
-    output = await output.rename(audioFile);
     return output;
   }
 

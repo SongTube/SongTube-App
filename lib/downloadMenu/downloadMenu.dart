@@ -10,6 +10,7 @@ import 'package:songtube/downloadMenu/components/audioMenu.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/models/metadata.dart';
 import 'package:songtube/internal/models/tagsControllers.dart';
+import 'package:songtube/internal/youtube/youtubeExtractor.dart';
 import 'package:songtube/provider/configurationProvider.dart';
 import 'package:songtube/provider/downloadsProvider.dart';
 import 'package:songtube/provider/managerProvider.dart';
@@ -64,28 +65,27 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
   }
 
   void initStreamManifest() async {
-    ManagerProvider manager = Provider.of<ManagerProvider>(context, listen: false);
     VideoId videoId = VideoId(VideoId.parseVideoId(widget.videoUrl));
-    manifest = await manager.youtubeExtractor.getStreamManifest(videoId);
-    details = await manager.youtubeExtractor.getVideoDetails(videoId);
+    manifest = await YoutubeExtractor().getStreamManifest(videoId);
+    details = await YoutubeExtractor().getVideoDetails(videoId);
     tags = TagsControllers();
     tags.updateTextControllers(details, details.thumbnails.mediumResUrl);
     setState(() => currentDownloadMenu = CurrentDownloadMenu.Home);
   }
 
-  @override
-  void dispose() {
-    Provider.of<ManagerProvider>(context, listen: false)
-      .youtubeExtractor.killIsolates();
-    super.dispose();
-  }
-
   Widget build(BuildContext context) {
-    return AnimatedSize(
-      vsync: this,
-      curve: Curves.easeInOut,
-      duration: Duration(milliseconds: 200),
-      child: _currentDownloadMenuWidget(),
+    ManagerProvider manager = Provider.of<ManagerProvider>(context);
+    return WillPopScope(
+      onWillPop: () {
+        manager.youtubeExtractor.killIsolates();
+        return Future.value(true);
+      },
+      child: AnimatedSize(
+        vsync: this,
+        curve: Curves.easeInOut,
+        duration: Duration(milliseconds: 200),
+        child: _currentDownloadMenuWidget(),
+      ),
     );
   }
 
@@ -156,7 +156,7 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
         track: tags.trackController.text
       ),
       manifest: manifest,
-      videoDetails: widget.videoDetails,
+      videoDetails: details,
       data: configList
     );
     Navigator.of(context).pop();

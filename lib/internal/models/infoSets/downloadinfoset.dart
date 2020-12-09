@@ -164,8 +164,10 @@ class DownloadInfoSet {
       // Remove Existing Metadata
       currentAction.add(language.labelClearingExistingMetadata);
       downloadedFile = await ffmpegConverter.clearFileMetadata(downloadedFile.path);
-      currentAction.add(language.labelPatchingAudio);
-      downloadedFile = await ffmpegConverter.applyAudioModifiers(downloadedFile.path, audioModifiers);
+      if (audioModifiers.volume != 1.0 || audioModifiers.bassGain != 0 || audioModifiers.trebleGain != 0) {
+        currentAction.add(language.labelPatchingAudio);
+        downloadedFile = await ffmpegConverter.applyAudioModifiers(downloadedFile.path, audioModifiers);
+      }
       if (downloadedFile == null) return;
       // Check if Conversion is needed
       if (await ffmpegConverter.audioConversionRequired(convertFormat, downloadedFile.path)) {
