@@ -7,13 +7,14 @@ import 'package:songtube/internal/models/infoSets/downloadinfoset.dart';
 import 'package:songtube/internal/models/metadata.dart';
 import 'package:string_validator/string_validator.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 class DownloadTile extends StatelessWidget {
   final Stream dataProgress;
   final Stream currentAction;
   final Stream progressBar;
   final DownloadMetaData metadata;
-  final String defaultArtwork;
+  final Video videoDetails;
   final DownloadType downloadType;
   final Function onDownloadCancel;
   final Widget cancelDownloadIcon;
@@ -22,7 +23,7 @@ class DownloadTile extends StatelessWidget {
     @required this.currentAction,
     @required this.progressBar,
     @required this.metadata,
-    @required this.defaultArtwork,
+    @required this.videoDetails,
     @required this.downloadType,
     this.onDownloadCancel,
     this.cancelDownloadIcon,
@@ -50,20 +51,17 @@ class DownloadTile extends StatelessWidget {
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(10),
-                      child: FutureBuilder<String>(
-                        future: _getArtwork(),
-                        builder: (context, AsyncSnapshot<String> data) {
-                          return FadeInImage(
-                            fadeInDuration: Duration(milliseconds: 250),
-                            placeholder: MemoryImage(kTransparentImage),
-                            image: data.hasData
-                              ? isURL(data.data)
-                                ? NetworkImage(metadata.coverurl)
-                                : FileImage(File(metadata.coverurl))
-                              : MemoryImage(kTransparentImage),
-                            fit: BoxFit.fitWidth,
-                          );
-                        }
+                      child: FadeInImage(
+                        fadeInDuration: Duration(milliseconds: 250),
+                        placeholder: MemoryImage(kTransparentImage),
+                        image: isURL(metadata.coverurl)
+                          ? NetworkImage(
+                              metadata.coverurl == videoDetails.thumbnails.maxResUrl
+                                ? videoDetails.thumbnails.mediumResUrl
+                                : metadata.coverurl
+                            )
+                          : FileImage(File(metadata.coverurl)),
+                        fit: BoxFit.fitWidth,
                       ),
                     ),
                     Align(
@@ -194,24 +192,4 @@ class DownloadTile extends StatelessWidget {
       ),
     );
   }
-
-  Future<String> _getArtwork() async {
-    if (isURL(metadata.coverurl)) {
-      try {
-        var response = await http.get(metadata.coverurl)
-          .timeout(Duration(seconds: 10));
-        var decodedImage = await decodeImageFromList(response.bodyBytes);
-        if (decodedImage.width == 120 && decodedImage.height == 90) {
-          return defaultArtwork;
-        } else {
-          return metadata.coverurl;
-        }
-      } catch (_) {
-        return defaultArtwork;
-      }
-    } else {
-      return metadata.coverurl;
-    }
-  }
-
 }

@@ -66,7 +66,7 @@ class _DownloadsQueueTabState extends State<DownloadsQueueTab> with TickerProvid
                             progressBar: infoset.progressBar.stream,
                             currentAction: infoset.currentAction.stream,
                             metadata: infoset.metadata,
-                            defaultArtwork: infoset.videoDetails.thumbnails.highResUrl,
+                            videoDetails: infoset.videoDetails,
                             downloadType: infoset.downloadType,
                             onDownloadCancel: null,
                             cancelDownloadIcon: Container()
@@ -115,7 +115,7 @@ class _DownloadsQueueTabState extends State<DownloadsQueueTab> with TickerProvid
                                 currentAction: infoset.currentAction.stream,
                                 metadata: infoset.metadata,
                                 downloadType: infoset.downloadType,
-                                defaultArtwork: infoset.videoDetails.thumbnails.highResUrl,
+                                videoDetails: infoset.videoDetails,
                                 onDownloadCancel: snapshot.data == DownloadStatus.Downloading
                                   ? () {
                                     infoset.cancelDownload = true;
@@ -165,7 +165,7 @@ class _DownloadsQueueTabState extends State<DownloadsQueueTab> with TickerProvid
                             dataProgress: infoset.dataProgress.stream,
                             progressBar: infoset.progressBar.stream,
                             currentAction: infoset.currentAction.stream,
-                            defaultArtwork: infoset.videoDetails.thumbnails.highResUrl,
+                            videoDetails: infoset.videoDetails,
                             metadata: infoset.metadata,
                             downloadType: infoset.downloadType,
                             onDownloadCancel: null,

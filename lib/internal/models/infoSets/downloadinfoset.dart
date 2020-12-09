@@ -42,6 +42,7 @@ class DownloadInfoSet {
   StreamInfo videoStreamInfo;
   Video videoDetails;
   String downloadId;
+  int totalDownloaded = 0;
   Function(String, bool) completedCallback;
   Function(String) cancelledCallback;
   Function(String) convertingCallback;
@@ -264,7 +265,6 @@ class DownloadInfoSet {
     // Open the file in write.
     var _output = download.openWrite(mode: FileMode.write);
     // Local variables for File Download Status
-    var _count = 0;
     var _len;
     if (videoStreamInfo == null) {
       _len = audioStreamInfo.size.totalBytes;
@@ -282,9 +282,11 @@ class DownloadInfoSet {
         yt.close();
         return null;
       }
-      _count += data.length;
-      dataProgress.add("${(_count * 0.000001).toStringAsFixed(2)} MB / ${(_len * 0.000001).toStringAsFixed(2)} MB");
-      progressBar.add((_count / _len).toDouble());
+      totalDownloaded += data.length;
+      dataProgress.add(
+        "${(totalDownloaded * 0.000001).toStringAsFixed(2)} MB " + 
+        "/ ${(_len * 0.000001).toStringAsFixed(2)} MB");
+      progressBar.add((totalDownloaded / _len).toDouble());
       _output.add(data);
     }
     await _output.flush();

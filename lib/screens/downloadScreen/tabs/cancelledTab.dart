@@ -38,7 +38,7 @@ class _DownloadsCancelledTabState extends State<DownloadsCancelledTab> {
                 progressBar: infoset.progressBar.stream,
                 currentAction: infoset.currentAction.stream,
                 metadata: infoset.metadata,
-                defaultArtwork: infoset.videoDetails.thumbnails.highResUrl,
+                videoDetails: infoset.videoDetails,
                 downloadType: infoset.downloadType,
                 onDownloadCancel: () {
                   Permission.storage.request().then((value) {
