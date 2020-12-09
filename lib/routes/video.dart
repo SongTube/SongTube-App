@@ -312,7 +312,8 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> {
           ),
         ),
         floatingActionButton: VideoDownloadFab(
-          readyToDownload: manager.mediaInfoSet.streamManifest == null ? false : true,
+          readyToDownload: manager.mediaInfoSet.streamManifest == null ||
+            manager.mediaInfoSet.videoDetails == null ? false : true,
           onDownload: () {
             FocusScope.of(context).requestFocus(new FocusNode());
             showModalBottomSheet<dynamic>(
