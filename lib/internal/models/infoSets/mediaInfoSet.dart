@@ -36,14 +36,14 @@ class MediaInfoSet {
   void updateVideoDetails(Video video) {
     videoDetails = video;
     mediaTags.updateTextControllers(
-      video, video.thumbnails.mediumResUrl
+      video, video.thumbnails.maxResUrl
     );
   }
 
   void updatePlaylistDetails(Playlist playlist) {
     playlistDetails = playlist;
     mediaTags.updateTextControllersFromPlaylist(
-      playlist, playlist.thumbnails.mediumResUrl
+      playlist, playlist.thumbnails.maxResUrl
     );
   }
 

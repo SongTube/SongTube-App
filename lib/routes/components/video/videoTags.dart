@@ -7,14 +7,17 @@ import 'package:songtube/internal/models/tagsControllers.dart';
 import 'package:songtube/ui/components/textfieldTile.dart';
 import 'package:string_validator/string_validator.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 class VideoTags extends StatelessWidget {
   final TagsControllers tagsControllers;
+  final Video videoDetails;
   final String artworkUrl;
   final Function onArtworkTap;
   VideoTags({
     this.tagsControllers,
     this.artworkUrl,
+    @required this.videoDetails,
     this.onArtworkTap
   });
   @override
@@ -70,7 +73,11 @@ class VideoTags extends StatelessWidget {
                         fadeInDuration: Duration(milliseconds: 300),
                         placeholder: MemoryImage(kTransparentImage),
                         image: isURL(artworkUrl)
-                          ? NetworkImage(artworkUrl)
+                          ? NetworkImage(
+                              artworkUrl == videoDetails.thumbnails.maxResUrl
+                                ? videoDetails.thumbnails.mediumResUrl
+                                : artworkUrl
+                            )
                           : FileImage(File(artworkUrl)),
                         fit: BoxFit.cover,
                       ),
@@ -80,7 +87,10 @@ class VideoTags extends StatelessWidget {
                     height: 20,
                     width: 50,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(bottomRight: Radius.circular(25)),
+                      borderRadius: BorderRadius.only(
+                        bottomRight: Radius.circular(25),
+                        bottomLeft: Radius.circular(25)
+                      ),
                       color: Theme.of(context).cardColor.withOpacity(0.4)
                     ),
                   ),

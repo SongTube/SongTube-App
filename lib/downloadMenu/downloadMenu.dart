@@ -150,7 +150,7 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
         artist: tags.artistController.text
           .replaceAll("- Topic", "").trim(),
         genre: tags.genreController.text,
-        coverurl: details.thumbnails.maxResUrl,
+        coverurl: tags.artworkController,
         date: tags.dateController.text,
         disc: tags.discController.text,
         track: tags.trackController.text

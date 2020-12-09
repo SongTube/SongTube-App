@@ -209,6 +209,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> {
                                 Divider(),
                                 // Tags Editor
                                 VideoTags(
+                                  videoDetails: manager.mediaInfoSet.videoDetails,
                                   tagsControllers: manager.mediaInfoSet.mediaTags,
                                   onArtworkTap: () async {
                                     File image = File((await FilePicker.platform
