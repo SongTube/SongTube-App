@@ -11,6 +11,7 @@ import 'package:songtube/players/components/musicPlayer/playerPadding.dart';
 import 'package:songtube/provider/configurationProvider.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/provider/mediaProvider.dart';
+import 'package:songtube/provider/preferencesProvider.dart';
 import 'package:songtube/routes/playlist.dart';
 import 'package:songtube/routes/video.dart';
 import 'package:songtube/screens/downloads.dart';
@@ -77,6 +78,8 @@ class _LibState extends State<Lib> {
           Navigator.pop(context);
           Navigator.push(context,
             BlurPageRoute(
+              blurStrength: Provider.of<PreferencesProvider>(context, listen: false)
+                .enableBlurUI ? 20 : 0,
               slideOffset: Offset(0.0, 10.0),
               builder: (_) => YoutubePlayerVideoPage(
                 url: video.id.value,
@@ -97,6 +100,8 @@ class _LibState extends State<Lib> {
           Navigator.pop(context);
           Navigator.push(context,
             BlurPageRoute(
+              blurStrength: Provider.of<PreferencesProvider>(context, listen: false)
+                .enableBlurUI ? 20 : 0,
               slideOffset: Offset(0.0, 10.0),
               builder: (_) => YoutubePlayerPlaylistPage()
           ));

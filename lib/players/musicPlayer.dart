@@ -14,6 +14,7 @@ import 'package:songtube/provider/mediaProvider.dart';
 // Packages
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:audio_service/audio_service.dart';
+import 'package:songtube/provider/preferencesProvider.dart';
 
 // UI
 import 'package:songtube/ui/animations/showUp.dart';
@@ -22,7 +23,7 @@ class SlidingPlayerPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
-    ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
+    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     return StreamBuilder<ScreenState>(
       stream: screenStateStream,
       builder: (context, snapshot) {
@@ -38,10 +39,10 @@ class SlidingPlayerPanel extends StatelessWidget {
         });
         if (mediaItem != null) {
           if (mediaProvider.slidingPanelOpen == true) {
-            Color dominantColor = config.useBlurBackground
+            Color dominantColor = prefs.enableBlurUI
               ? mediaProvider.dominantColor == null ? Colors.white : mediaProvider.dominantColor
               : Theme.of(context).accentColor;
-            Color textColor = config.useBlurBackground
+            Color textColor = prefs.enableBlurUI
               ? dominantColor.computeLuminance() > 0.5 ? Colors.black : Colors.white
               : Theme.of(context).textTheme.bodyText1.color;
             SystemChrome.setSystemUIOverlayStyle(
@@ -78,32 +79,32 @@ class SlidingPlayer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
-    ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
-    Color dominantColor = config.useBlurBackground
+    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
+    Color dominantColor = prefs.enableBlurUI
       ? mediaProvider.dominantColor == null ? Colors.white : mediaProvider.dominantColor
       : Theme.of(context).accentColor;
-    Color textColor = config.useBlurBackground
+    Color textColor = prefs.enableBlurUI
       ? dominantColor.computeLuminance() > 0.5 ? Colors.black : Colors.white
       : Theme.of(context).textTheme.bodyText1.color;
     return SlidingUpPanel(
       controller: mediaProvider.panelController,
       borderRadius: BorderRadius.circular(10),
       minHeight: kToolbarHeight * 1.15,
-      backdropColor: dominantColor,
+      backdropColor: prefs.enableBlurUI ? dominantColor : Colors.black,
       backdropEnabled: true,
-      backdropBlurStrength: 15,
+      backdropBlurStrength: prefs.enableBlurUI ? 15 : 0,
       enableBottomNavigationBarMargin: true,
       maxHeight: MediaQuery.of(context).size.height,
       onPanelClosed: () => mediaProvider.slidingPanelOpen = false,
       onPanelOpened: () => mediaProvider.slidingPanelOpen = true,
       onPanelSlide: (double position) {
-        if (position > 1) {
+        if (position > 0.95) {
           SystemChrome.setSystemUIOverlayStyle(
             SystemUiOverlayStyle(
               statusBarIconBrightness: textColor == Colors.black ? Brightness.dark : Brightness.light,
             ),
           );
-        } else if (position == 0) {
+        } else if (position < 0.95) {
           SystemChrome.setSystemUIOverlayStyle(
             SystemUiOverlayStyle(
               statusBarIconBrightness:

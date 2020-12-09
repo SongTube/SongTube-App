@@ -4,6 +4,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:provider/provider.dart';
 import 'package:songtube/provider/configurationProvider.dart';
 import 'package:songtube/provider/managerProvider.dart';
+import 'package:songtube/provider/preferencesProvider.dart';
 import 'package:songtube/routes/playlist.dart';
 import 'package:songtube/routes/video.dart';
 import 'package:songtube/ui/animations/blurPageRoute.dart';
@@ -24,6 +25,7 @@ class _HomePageAppBarState extends State<HomePageAppBar> {
   Widget build(BuildContext context) {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
     ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
+    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     return SliverAppBar(
       titleSpacing: 0,
       elevation: 0,
@@ -78,6 +80,7 @@ class _HomePageAppBarState extends State<HomePageAppBar> {
                   Navigator.pop(context);
                   Navigator.push(context,
                     BlurPageRoute(
+                      blurStrength: prefs.enableBlurUI ? 20 : 0,
                       slideOffset: Offset(0.0, 10.0),
                       builder: (_) => YoutubePlayerVideoPage(
                         url: video.id.value,
@@ -98,6 +101,7 @@ class _HomePageAppBarState extends State<HomePageAppBar> {
                   Navigator.pop(context);
                   Navigator.push(context,
                     BlurPageRoute(
+                      blurStrength: prefs.enableBlurUI ? 20 : 0,
                       slideOffset: Offset(0.0, 10.0),
                       builder: (_) => YoutubePlayerPlaylistPage()
                   ));

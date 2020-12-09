@@ -54,6 +54,7 @@ class VideoTile extends StatelessWidget {
         );
         Navigator.push(context,
         BlurPageRoute(
+          blurStrength: prefs.enableBlurUI ? 20 : 0,
           slideOffset: Offset(0.0, 10.0),
           builder: (_) {
             if (searchItem is Video) {
@@ -137,6 +138,7 @@ class VideoTile extends StatelessWidget {
                               Video video = searchItem;
                               Navigator.push(context,
                                 BlurPageRoute(
+                                  blurStrength: prefs.enableBlurUI ? 20 : 0,
                                   builder: (_) => 
                                   YoutubeChannelPage(
                                     id: video.id.value,
@@ -147,6 +149,7 @@ class VideoTile extends StatelessWidget {
                               SearchVideo video = searchItem;
                               Navigator.push(context,
                                 BlurPageRoute(
+                                  blurStrength: prefs.enableBlurUI ? 20 : 0,
                                   builder: (_) => 
                                   YoutubeChannelPage(
                                     id: video.videoId.value,

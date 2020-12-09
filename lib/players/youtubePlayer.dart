@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:songtube/players/components/videoPlayer/controls.dart';
+import 'package:songtube/provider/preferencesProvider.dart';
 import 'package:songtube/ui/animations/blurPageRoute.dart';
 import 'package:video_player/video_player.dart';
 import 'package:wakelock/wakelock.dart';
@@ -208,6 +210,7 @@ class __StreamManifestPlayerState extends State<_StreamManifestPlayer> {
   }
 
   Widget videoPlayerProgressBar() {
+    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context, listen: false);
     return StreamBuilder(
       stream: Rx.combineLatest2<double, double, double>(
         _dragPositionSubject.stream,
@@ -276,7 +279,7 @@ class __StreamManifestPlayerState extends State<_StreamManifestPlayer> {
                       controller: _controller,
                       isFullScreen: true,
                     );
-                }));
+                  }, blurStrength: prefs.enableBlurUI ? 20 : 0));
               }
             )
           ],

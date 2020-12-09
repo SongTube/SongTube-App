@@ -15,6 +15,7 @@ import 'package:songtube/provider/mediaProvider.dart';
 
 // Packages
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:songtube/provider/preferencesProvider.dart';
 
 class ExpandedPlayer extends StatelessWidget {
   final PanelController controller;
@@ -29,27 +30,28 @@ class ExpandedPlayer extends StatelessWidget {
     final mediaItem = screenState?.mediaItem;
     final state = screenState?.playbackState;
     final playing = state?.playing ?? false;
+    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
     File image = mediaProvider.artwork;
-    Color dominantColor = config.useBlurBackground
+    Color dominantColor = prefs.enableBlurUI
       ? mediaProvider.dominantColor == null ? Colors.white : mediaProvider.dominantColor
       : Theme.of(context).accentColor;
-    Color textColor = config.useBlurBackground
+    Color textColor = prefs.enableBlurUI
       ? dominantColor.computeLuminance() > 0.5 ? Colors.black : Colors.white
       : Theme.of(context).textTheme.bodyText1.color;
-    Color vibrantColor = config.useBlurBackground
+    Color vibrantColor = prefs.enableBlurUI
       ? mediaProvider.vibrantColor == null ? Colors.white : mediaProvider.vibrantColor
       : Theme.of(context).accentColor;
     return Scaffold(
-      backgroundColor: !config.useBlurBackground
+      backgroundColor: !prefs.enableBlurUI
         ? Theme.of(context).scaffoldBackgroundColor
         : dominantColor,
       body: PlayerBackground(
         backgroundImage: File(mediaItem.artUri.replaceAll("file://", "")),
-        enableBlur: config.useBlurBackground,
+        enableBlur: prefs.enableBlurUI,
         blurIntensity: 50,
-        backdropColor: config.useBlurBackground
+        backdropColor: prefs.enableBlurUI
           ? dominantColor
           : Theme.of(context).scaffoldBackgroundColor,
         backdropOpacity: 0.4,

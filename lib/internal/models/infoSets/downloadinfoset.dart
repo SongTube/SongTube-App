@@ -192,10 +192,10 @@ class DownloadInfoSet {
         if (!await Directory(downloadPath).exists()) {
           await Directory(downloadPath).create(recursive: true);
         }
-        String fileName = downloadedFile.path.split("/").last;
+        String format = await ffmpegConverter.getMediaFormat(downloadedFile.path);
         File finalFile;
         try {
-          finalFile = await downloadedFile.copy("$downloadPath/$fileName");
+          finalFile = await downloadedFile.copy("$downloadPath/${metadata.title}.$format");
         } on Exception catch (_) {
           AndroidDeviceInfo deviceInfo = await DeviceInfoPlugin().androidInfo;
           int sdkNumber = deviceInfo.version.sdkInt;

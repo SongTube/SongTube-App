@@ -97,4 +97,13 @@ class PreferencesProvider extends ChangeNotifier {
     prefs.setBool('joinTelegramDialog', value);
   }
 
+  // Enable/Disable App's BlurUI
+  bool get enableBlurUI {
+    return prefs.getBool('enableBlurUI') ?? true;
+  }
+  set enableBlurUI(bool value) {
+    prefs.setBool('enableBlurUI', value);
+    notifyListeners();
+  }
+
 }

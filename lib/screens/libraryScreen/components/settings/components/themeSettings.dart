@@ -5,6 +5,7 @@ import 'package:songtube/internal/languages.dart';
 
 // Internal
 import 'package:songtube/provider/configurationProvider.dart';
+import 'package:songtube/provider/preferencesProvider.dart';
 import 'package:songtube/screens/libraryScreen/components/settings/dialogs/accentPicker.dart';
 import 'package:songtube/screens/libraryScreen/components/settings/columnTile.dart';
 
@@ -20,6 +21,7 @@ class _ThemeSettingsState extends State<ThemeSettings> with TickerProviderStateM
   @override
   Widget build(BuildContext context) {
     ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
+    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     return SettingsColumnTile(
       title: Languages.of(context).labelTheme,
       icon: Icons.color_lens,
@@ -125,6 +127,14 @@ class _ThemeSettingsState extends State<ThemeSettings> with TickerProviderStateM
             ),
           )
         ),
+        SwitchListTile(
+          title: Text("Blur UI"),
+          subtitle: Text("Enable/Disable Blur Style"),
+          value: prefs.enableBlurUI,
+          onChanged: (bool value) {
+            prefs.enableBlurUI = value;
+          }
+        )
       ],
     );
   }

@@ -31,23 +31,6 @@ class MusicPlayerSettingsDialog extends StatelessWidget {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Blurred Background
-          ListTile(
-            title: Text(
-              "Blur Background",
-              style: TextStyle(
-                fontFamily: 'YTSans',
-                color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6)
-              ),
-            ),
-            onTap: () {
-              config.useBlurBackground = !config.useBlurBackground;
-            },
-            trailing: CircularCheckBox(
-              value: config.useBlurBackground,
-              onChanged: (_) { config.useBlurBackground = !config.useBlurBackground; },
-            ),
-          ),
           // Expanded Artwork
           ListTile(
             title: Text(
