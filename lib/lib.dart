@@ -9,6 +9,7 @@ import 'package:songtube/internal/nativeMethods.dart';
 import 'package:songtube/internal/updateChecker.dart';
 import 'package:songtube/players/components/musicPlayer/playerPadding.dart';
 import 'package:songtube/provider/configurationProvider.dart';
+import 'package:songtube/provider/downloadsProvider.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/provider/mediaProvider.dart';
 import 'package:songtube/provider/preferencesProvider.dart';
@@ -26,6 +27,7 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:songtube/ui/animations/blurPageRoute.dart';
 import 'package:songtube/ui/components/navigationBar.dart';
 import 'package:songtube/ui/dialogs/appUpdateDialog.dart';
+import 'package:songtube/ui/dialogs/joinTelegramDialog.dart';
 import 'package:songtube/ui/dialogs/loadingDialog.dart';
 import 'package:songtube/ui/internal/disclaimerDialog.dart';
 import 'package:songtube/ui/internal/downloadFixDialog.dart';
@@ -63,6 +65,20 @@ class _LibState extends State<Lib> {
     );
     WidgetsBinding.instance.addObserver(
       new LifecycleEventHandler(resumeCallBack: () async {
+        PreferencesProvider prefs = Provider.of<PreferencesProvider>(context, listen: false);
+        DownloadsProvider downloads = Provider.of<DownloadsProvider>(context, listen: false);
+        if (downloads.queueList.isNotEmpty ||
+          downloads.downloadingList.isNotEmpty ||
+          downloads.convertingList.isNotEmpty ||
+          downloads.completedList.isNotEmpty
+        ) {
+          if (prefs.showJoinTelegramDialog && prefs.remindTelegramLater == false) {
+            showDialog<void>(
+              context: context,
+              builder: (_) => JoinTelegramDialog()
+            );
+          }
+        }
         String intent = await NativeMethod.handleIntent();
         if (intent == null) return;
         if (VideoId.parseVideoId(intent) != null) {

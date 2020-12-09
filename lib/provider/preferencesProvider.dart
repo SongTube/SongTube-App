@@ -96,6 +96,8 @@ class PreferencesProvider extends ChangeNotifier {
   set showJoinTelegramDialog(bool value) {
     prefs.setBool('joinTelegramDialog', value);
   }
+  // Remind Later
+  bool remindTelegramLater = false;
 
   // Enable/Disable App's BlurUI
   bool get enableBlurUI {
