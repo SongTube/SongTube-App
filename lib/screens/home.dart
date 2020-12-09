@@ -37,7 +37,7 @@ class HomeScreen extends StatelessWidget {
               slivers: <Widget>[
                 HomePageAppBar(manager.showSearchBar),
                 SliverPersistentHeader(
-                  floating: true,
+                  pinned: true,
                   delegate: HomePageCategoryList(
                     minHeight: 50, maxHeight: 50,
                     onCategoryTap: (tab) {

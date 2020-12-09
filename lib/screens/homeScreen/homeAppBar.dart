@@ -27,6 +27,7 @@ class _HomePageAppBarState extends State<HomePageAppBar> {
     return SliverAppBar(
       titleSpacing: 0,
       elevation: 0,
+      floating: true,
       backgroundColor: Theme.of(context).cardColor,
       title: AnimatedSwitcher(
         reverseDuration: Duration(milliseconds: 200),
