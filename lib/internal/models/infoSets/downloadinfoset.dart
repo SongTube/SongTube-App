@@ -164,6 +164,8 @@ class DownloadInfoSet {
       // Remove Existing Metadata
       currentAction.add(language.labelClearingExistingMetadata);
       downloadedFile = await ffmpegConverter.clearFileMetadata(downloadedFile.path);
+      currentAction.add(language.labelPatchingAudio);
+      downloadedFile = await ffmpegConverter.applyAudioModifiers(downloadedFile.path, audioModifiers);
       if (downloadedFile == null) return;
       // Check if Conversion is needed
       if (await ffmpegConverter.audioConversionRequired(convertFormat, downloadedFile.path)) {
@@ -281,7 +283,6 @@ class DownloadInfoSet {
       _count += data.length;
       dataProgress.add("${(_count * 0.000001).toStringAsFixed(2)} MB / ${(_len * 0.000001).toStringAsFixed(2)} MB");
       progressBar.add((_count / _len).toDouble());
-      print(language.labelDownloading+": " + _count.toString());
       _output.add(data);
     }
     await _output.flush();
@@ -358,29 +359,21 @@ class DownloadInfoSet {
             (await getTemporaryDirectory()).path +
             "/${RandomString.getRandomString(5)}"
           );
-          if (metadata.coverurl == videoDetails.thumbnails.mediumResUrl) {
-            // Try getting FullQuality Artwork
+          try {
+            response = await http.get(metadata.coverurl)
+              .timeout(Duration(seconds: 10));
+            await artwork.writeAsBytes(response.bodyBytes);
+            var decodedImage = await decodeImageFromList(artwork.readAsBytesSync());
+            if (decodedImage.width == 120 && decodedImage.height == 90)
+              response = null;
+          } catch (_) {}
+          // If it doesnt exist try Getting MediumQuality Artwork
+          if (response == null || response.bodyBytes == null) {
             try {
-              response = await http.get(videoDetails.thumbnails.maxResUrl)
+              response = await http.get(videoDetails.thumbnails.mediumResUrl)
                 .timeout(Duration(seconds: 10));
               await artwork.writeAsBytes(response.bodyBytes);
-              var decodedImage = await decodeImageFromList(artwork.readAsBytesSync());
-              if (decodedImage.width == 120 && decodedImage.height == 90)
-                response = null;
-            } catch (_) {}
-            // If it doesnt exist try Getting MediumQuality Artwork
-            if (response == null || response.bodyBytes == null) {
-              try {
-                response = await http.get(videoDetails.thumbnails.mediumResUrl)
-                  .timeout(Duration(seconds: 10));
-                await artwork.writeAsBytes(response.bodyBytes);
-              } catch (_) {}
-            }
-          } else {
-            try {
-              response = await http.get(metadata.coverurl)
-                .timeout(Duration(seconds: 10));
-              await artwork.writeAsBytes(response.bodyBytes);
+              metadata.coverurl = videoDetails.thumbnails.mediumResUrl;
             } catch (_) {}
           }
           croppedImage = await NativeMethod.cropToSquare(artwork);
@@ -411,7 +404,7 @@ class DownloadInfoSet {
         ? "Audio"
         : "Video",
       fileSize: ((await finalFile.length()) * 0.000001).toStringAsFixed(2),
-      coverUrl: videoDetails.thumbnails.mediumResUrl,
+      coverUrl: metadata.coverurl,
       path: finalFile.path
     ));
     downloadStatus.add(DownloadStatus.Completed);

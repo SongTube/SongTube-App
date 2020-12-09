@@ -62,7 +62,7 @@ class PlayerControls extends StatelessWidget {
           Container(
             margin: EdgeInsets.only(left: 20, right: 20, top: 4, bottom: 8),
             child: Text(
-              mediaItem.artist,
+              mediaItem.artist ?? "",
               style: TextStyle(
                 color: textColor.withOpacity(0.6),
                 fontFamily: "YTSans",

@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:http/http.dart' as http;
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:songtube/internal/languages.dart';
@@ -13,6 +13,7 @@ class DownloadTile extends StatelessWidget {
   final Stream currentAction;
   final Stream progressBar;
   final DownloadMetaData metadata;
+  final String defaultArtwork;
   final DownloadType downloadType;
   final Function onDownloadCancel;
   final Widget cancelDownloadIcon;
@@ -21,6 +22,7 @@ class DownloadTile extends StatelessWidget {
     @required this.currentAction,
     @required this.progressBar,
     @required this.metadata,
+    @required this.defaultArtwork,
     @required this.downloadType,
     this.onDownloadCancel,
     this.cancelDownloadIcon,
@@ -48,13 +50,20 @@ class DownloadTile extends StatelessWidget {
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(10),
-                      child: FadeInImage(
-                        fadeInDuration: Duration(milliseconds: 250),
-                        placeholder: MemoryImage(kTransparentImage),
-                        image: isURL(metadata.coverurl)
-                          ? NetworkImage(metadata.coverurl)
-                          : FileImage(File(metadata.coverurl)),
-                        fit: BoxFit.fitWidth,
+                      child: FutureBuilder<String>(
+                        future: _getArtwork(),
+                        builder: (context, AsyncSnapshot<String> data) {
+                          return FadeInImage(
+                            fadeInDuration: Duration(milliseconds: 250),
+                            placeholder: MemoryImage(kTransparentImage),
+                            image: data.hasData
+                              ? isURL(data.data)
+                                ? NetworkImage(metadata.coverurl)
+                                : FileImage(File(metadata.coverurl))
+                              : MemoryImage(kTransparentImage),
+                            fit: BoxFit.fitWidth,
+                          );
+                        }
                       ),
                     ),
                     Align(
@@ -185,4 +194,24 @@ class DownloadTile extends StatelessWidget {
       ),
     );
   }
+
+  Future<String> _getArtwork() async {
+    if (isURL(metadata.coverurl)) {
+      try {
+        var response = await http.get(metadata.coverurl)
+          .timeout(Duration(seconds: 10));
+        var decodedImage = await decodeImageFromList(response.bodyBytes);
+        if (decodedImage.width == 120 && decodedImage.height == 90) {
+          return defaultArtwork;
+        } else {
+          return metadata.coverurl;
+        }
+      } catch (_) {
+        return defaultArtwork;
+      }
+    } else {
+      return metadata.coverurl;
+    }
+  }
+
 }

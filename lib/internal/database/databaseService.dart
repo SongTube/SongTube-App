@@ -10,6 +10,7 @@ import 'package:songtube/internal/tagsManager.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:string_validator/string_validator.dart';
 
 const String table = "itemsTable";
 
@@ -86,8 +87,8 @@ class DatabaseService {
     await Future.forEach(result, (element) async {
       SongFile songFile = SongFile.fromMap(element);
       if (await File(songFile.path).exists()) {
-        File coverPath = File((await getApplicationDocumentsDirectory()).path +
-          "/${songFile.title}.jpg");
+        String thumbnailsPath = (await getApplicationDocumentsDirectory()).path + "/Thumbnails/";
+        File coverPath = File("$thumbnailsPath/${songFile.title.replaceAll("/", "_")}MQ.jpg");
         if (!await coverPath.exists()) {
           File coverImage =
             await FFmpegExtractor.generateArtwork(
@@ -96,7 +97,11 @@ class DatabaseService {
               extractionMethod: ArtworkExtractMethod.FFmpeg
             );
           if (!await coverImage.exists()) {
-            coverImage = await TagsManager.generateCover(songFile.coverUrl);
+            if (isURL(songFile.coverUrl)) {
+              coverImage = await TagsManager.generateCover(songFile.coverUrl);
+            } else {
+              coverImage = File(songFile.coverUrl);
+            }
           }
           await coverImage.copy(coverPath.path);
         }

@@ -57,6 +57,7 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
     } else {
       manifest = widget.streamManifest;
       tags = widget.tags;
+      details = widget.videoDetails;
       setState(() => currentDownloadMenu = CurrentDownloadMenu.Home);
     }
     
@@ -149,7 +150,7 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
         artist: tags.artistController.text
           .replaceAll("- Topic", "").trim(),
         genre: tags.genreController.text,
-        coverurl: tags.artworkController,
+        coverurl: details.thumbnails.maxResUrl,
         date: tags.dateController.text,
         disc: tags.discController.text,
         track: tags.trackController.text

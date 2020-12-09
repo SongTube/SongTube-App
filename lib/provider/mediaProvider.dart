@@ -58,7 +58,8 @@ class MediaProvider extends ChangeNotifier {
     String currentAlbumId = await AudioService.currentMediaItem.extras["albumId"];
     artwork = await FFmpegExtractor.generateArtwork(
       audioFile: mediaItem.id,
-      audioId: currentAlbumId
+      audioId: currentAlbumId,
+      forceExtraction: true
     );
     PaletteGenerator palette = await PaletteGenerator
       .fromImageProvider(
@@ -97,11 +98,11 @@ class MediaProvider extends ChangeNotifier {
     }
     FlutterFFmpeg ffmpeg = FlutterFFmpeg();
     List<SongInfo> songInfoList = await audioQuery.getSongs();
-    if (!await Directory((await getApplicationDocumentsDirectory()).path + "/Thumbnails/").exists())
-      await Directory((await getApplicationDocumentsDirectory()).path + "/Thumbnails/").create();
+    String thumbnailsPath = (await getApplicationDocumentsDirectory()).path + "/Thumbnails/";
+    if (!await Directory(thumbnailsPath).exists())
+      await Directory(thumbnailsPath).create();
     for (SongInfo song in songInfoList) {
-      File artworkFile = File((await getApplicationDocumentsDirectory()).path +
-        "/Thumbnails/${song.title.replaceAll("/", "_")}MQ.jpg");
+      File artworkFile = File("$thumbnailsPath${song.title.replaceAll("/", "_")}MQ.jpg");
       if (!await artworkFile.exists()) {
         int result = await ffmpeg.executeWithArguments([
           "-y", "-i", "${song.filePath}", "-filter:v", "scale=-1:250", "-an",
