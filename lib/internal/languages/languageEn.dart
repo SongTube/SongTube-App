@@ -46,7 +46,7 @@ class LanguageEn extends Languages {
   @override
   String get labelTagsEditor => "Tags\nEditor";
   @override
-  String get labelEditArtwork => "Edtir\nArtwork";
+  String get labelEditArtwork => "Edit\nArtwork";
   @override
   String get labelDownloadAll => "Download All";
   @override 
