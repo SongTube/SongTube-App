@@ -17,7 +17,7 @@ class GeneralSettings extends StatelessWidget {
         FutureBuilder(
           future: DeviceInfoPlugin().androidInfo,
           builder: (context, AsyncSnapshot<AndroidDeviceInfo> info) {
-            if (info.hasData && info.data.version.sdkInt > 28) {
+            if (info.hasData && info.data.version.sdkInt > 29) {
               return ListTile(
                 title: Text(
                   Languages.of(context).labelAndroid11Fix,
