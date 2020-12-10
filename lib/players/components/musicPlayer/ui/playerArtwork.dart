@@ -34,7 +34,7 @@ class PlayerArtwork extends StatelessWidget {
         borderRadius: BorderRadius.circular(roundedCorners),
         child: ImageFade(
           image: FileImage(image),
-          fadeDuration: Duration(milliseconds: 300),
+          fadeDuration: Duration(milliseconds: 150),
           height: double.infinity,
           width: double.infinity,
           fit: BoxFit.cover,
