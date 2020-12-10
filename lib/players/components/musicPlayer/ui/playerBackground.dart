@@ -28,7 +28,7 @@ class PlayerBackground extends StatelessWidget {
     return Stack(
       children: [
         AnimatedSwitcher(
-          duration: Duration(milliseconds: 600),
+          duration: Duration(milliseconds: 400),
           child: enableBlur ? ImageFade(
             image: FileImage(backgroundImage),
             height: double.infinity,
@@ -37,7 +37,7 @@ class PlayerBackground extends StatelessWidget {
           ) : Container()
         ),
         AnimatedContainer(
-          duration: Duration(milliseconds: 600),
+          duration: Duration(milliseconds: 400),
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
           color: backdropColor.withOpacity(backdropOpacity),
