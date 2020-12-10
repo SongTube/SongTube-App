@@ -46,6 +46,7 @@
     * Portuguese (Thanks to RickyM7)
     * Igbo (Thanks to enweazudaniel)
     * Indonesian (Thanks to Hafitz Setya)
+    * Turkish
 - Desaturated Accent Colors on Dark/Black Theme (a little)
 - MusicPlayer Artwork Rounded Corners is now customizable
 
