@@ -199,7 +199,14 @@ class YoutubeExtractor {
           .take(50).toList();
         yt.close();
         return videos;
-      } catch (_) {}
+      } catch (_) {
+        YoutubeExplode yt = YoutubeExplode();
+        videos = await yt.playlists
+          .getVideos(id)
+          .toList();
+        yt.close();
+        return videos;
+      }
     }
     return videos;
   }
