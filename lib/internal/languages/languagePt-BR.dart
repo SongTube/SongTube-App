@@ -265,7 +265,7 @@ class LanguagePtBr extends Languages {
   @override
   String get labelAllow => "Permitir";
   @override
-  String get labelAccess => "Acessar";
+  String get labelAccess => "Acesso";
   @override
   String get labelEmpty => "Vazio";
   @override
