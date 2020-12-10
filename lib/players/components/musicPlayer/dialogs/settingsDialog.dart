@@ -3,11 +3,13 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/provider/configurationProvider.dart';
+import 'package:songtube/provider/preferencesProvider.dart';
 
 class MusicPlayerSettingsDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
+    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     return AlertDialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10)
@@ -46,6 +48,37 @@ class MusicPlayerSettingsDialog extends StatelessWidget {
             trailing: CircularCheckBox(
               value: config.useExpandedArtwork,
               onChanged: (_) { config.useExpandedArtwork = !config.useExpandedArtwork; },
+            ),
+          ),
+          ListTile(
+            title: Text(
+              "Artwork Rounded Corners",
+              style: TextStyle(
+                fontFamily: 'YTSans',
+                color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6)
+              ),
+            ),
+            subtitle: Row(
+              children: [
+                Text(
+                  "0"
+                ),
+                Expanded(
+                  child: Slider(
+                    value: prefs.musicPlayerArtworkRoundCorners,
+                    min: 0,
+                    max: 30,
+                    onChanged: (double value) {
+                      prefs.musicPlayerArtworkRoundCorners = value;
+                    },
+                    activeColor: Theme.of(context).accentColor,
+                    inactiveColor: Colors.transparent,
+                  ),
+                ),
+                Text(
+                  "30"
+                )
+              ],
             ),
           )
         ],

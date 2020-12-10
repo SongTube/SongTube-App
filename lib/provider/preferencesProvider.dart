@@ -108,4 +108,13 @@ class PreferencesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // MusicPlayer Artwork Rounded Corners
+  double get musicPlayerArtworkRoundCorners {
+    return prefs.getDouble('musicPlayerArtworkRoundCorners') ?? 20;
+  }
+  set musicPlayerArtworkRoundCorners(double value) {
+    prefs.setDouble('musicPlayerArtworkRoundCorners', value);
+    notifyListeners();
+  }
+
 }
