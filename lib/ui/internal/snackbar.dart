@@ -31,30 +31,34 @@ class AppSnack {
             children: <Widget>[
               Icon(
                 icon,
-                color: Theme.of(context).iconTheme.color,
+                color: Theme.of(context).accentColor,
               ),
               SizedBox(width: 8),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(height: 4),
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      color: Theme.of(context).textTheme.bodyText1.color
-                    )
-                  ),
-                  if (message != null)
-                  Text(
-                    message,
-                    style: TextStyle(
-                      color: Theme.of(context).textTheme.bodyText1.color
-                    )
-                  ),
-                  SizedBox(height: 4),
-                ],
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    SizedBox(height: 4),
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        color: Theme.of(context).textTheme.bodyText1.color
+                      )
+                    ),
+                    if (message != null)
+                    Text(
+                      message,
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyText1.color
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.clip,
+                    ),
+                    SizedBox(height: 4),
+                  ],
+                ),
               ),
             ],
           ),

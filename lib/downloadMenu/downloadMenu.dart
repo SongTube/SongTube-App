@@ -164,6 +164,7 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
       AppSnack.showSnackBar(
         icon: EvaIcons.cloudDownloadOutline,
         title: "Download started...",
+        message: "${details.title}",
         context: context,
         scaffoldKey: widget.scaffoldState
       );
