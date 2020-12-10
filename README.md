@@ -80,6 +80,7 @@ Where for your new Language you have to add a new LanguageData(flag, name, langu
 - Português (Thanks to [@RickyM7](https://github.com/RickyM7))
 - Igbo (Thanks to [@enweazudaniel](https://github.com/enweazudaniel))
 - Indonesian (Thanks to [@breakdowns](https://github.com/breakdowns))
+- Turkish
 
 ---
 
