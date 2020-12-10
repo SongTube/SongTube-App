@@ -29,9 +29,10 @@ class _MusicPlayerRepeatButtonState extends State<MusicPlayerRepeatButton> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(50),
         boxShadow: [
-          if (enabled)
           BoxShadow(
-            color: widget.enabledColor.withOpacity(0.3),
+            color: enabled 
+              ? widget.enabledColor.withOpacity(0.3)
+              : Colors.transparent,
             spreadRadius: 0.1,
             blurRadius: 15
           )
