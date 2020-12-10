@@ -8,6 +8,7 @@ import 'languages/languageEs.dart';
 import 'languages/languagePt-BR.dart';
 import 'languages/languageIgbo-NG.dart';
 import 'languages/languageId.dart';
+import 'languages/languageTr.dart';
 
 /// Multi-Language Support for SongTube, for new Languages to be supported
 /// a new [File] in this project [internal/languages] folder needs to be
@@ -29,6 +30,8 @@ final supportedLanguages = <LanguageData>[
   LanguageData("ng", "Igbo", "ig"),
   // Indonesia (ID)
   LanguageData("🇮🇩", "Indonesia", "id"),
+  // Turkish (TR)
+  LanguageData("tr", "Turkey", "tr")
 ];
 Future<Languages> _loadLocale(Locale locale) async {
   switch (locale.languageCode) {
@@ -47,6 +50,9 @@ Future<Languages> _loadLocale(Locale locale) async {
     // Indonesia (ID)
     case 'id':
       return LanguageId();
+    // Turkish (TR)
+    case 'tr':
+      return LanguageTr();
     // Default Language (English)
     default:
       return LanguageEn();
