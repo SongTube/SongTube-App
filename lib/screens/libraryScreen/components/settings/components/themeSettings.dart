@@ -128,7 +128,13 @@ class _ThemeSettingsState extends State<ThemeSettings> with TickerProviderStateM
           )
         ),
         SwitchListTile(
-          title: Text("Blur UI"),
+          title: Text(
+            "Blur UI",
+            style: TextStyle(
+              color: Theme.of(context).textTheme.bodyText1.color,
+              fontWeight: FontWeight.w500
+            ),
+          ),
           subtitle: Text("Enable/Disable Blur Style"),
           value: prefs.enableBlurUI,
           onChanged: (bool value) {
