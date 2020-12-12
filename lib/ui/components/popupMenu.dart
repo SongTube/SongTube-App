@@ -21,7 +21,7 @@ class FlexiblePopupMenu extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: borderRadius == null
               ? BorderRadius.zero
-              : borderRadius,
+              : BorderRadius.circular(borderRadius),
           ),
           context: context,
           position: RelativeRect.fromLTRB(
