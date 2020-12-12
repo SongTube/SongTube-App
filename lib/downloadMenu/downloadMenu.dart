@@ -55,7 +55,7 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
       CurrentDownloadMenu.Loading;
     super.initState();
     if (widget.streamManifest == null) {
-      //initStreamManifest();
+      initStreamManifest();
     } else {
       manifest = widget.streamManifest;
       tags = widget.tags;
