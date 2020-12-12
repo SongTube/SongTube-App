@@ -20,6 +20,7 @@ import 'package:songtube/routes/channel.dart';
 import 'package:songtube/routes/playlist.dart';
 import 'package:songtube/routes/video.dart';
 import 'package:songtube/ui/animations/blurPageRoute.dart';
+import 'package:songtube/ui/components/popupMenu.dart';
 import 'package:songtube/ui/dialogs/loadingDialog.dart';
 import 'package:songtube/ui/internal/snackbar.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -237,157 +238,127 @@ class VideoTile extends StatelessWidget {
                   ),
                 ),
                 if (searchItem is SearchVideo || searchItem is Video)
-                GestureDetector(
-                  onTapDown: (TapDownDetails details) {
-                    showMenu<String>(
-                      context: context,
-                      position: RelativeRect.fromLTRB(
-                        details.globalPosition.dx,
-                        details.globalPosition.dy,
-                        0, 0
-                      ),
-                      items: [
-                        PopupMenuItem<String>(
-                          child: Text("Share"),
-                          value: "Share",
-                        ),
-                        PopupMenuItem<String>(
-                          child: Text("Copy link"),
-                          value: "Copy Link",
-                        ),
-                        PopupMenuItem<String>(
-                          child: Text("Download"),
-                          value: "Download",
-                        ),
-                        if (onDelete != null)
-                        PopupMenuItem<String>(
-                          child: Text("Remove"),
-                          value: "Remove",
-                        ),
-                        if (enableSaveToFavorites)
-                        PopupMenuItem<String>(
-                          child: Text("Add to Favorites"),
-                          value: "Favorites",
-                        ),
-                        if (enableSaveToWatchLater)
-                        PopupMenuItem<String>(
-                          child: Text("Add to Watch later"),
-                          value: "Watch Later",
-                        ),
-                      ],
-                    ).then((value) async {
-                      switch(value) {
-                        case "Share":
-                          Share.share(
-                            searchItem is Video
-                              ? "https://www.youtube.com/watch?v=${searchItem.id.value}"
-                              : searchItem is SearchVideo
-                                ? "https://www.youtube.com/watch?v=${searchItem.videoId.value}"
-                                : "https://www.youtube.com/playlist?list=${searchItem.PlaylistId.value}"
-                          );
-                          break;
-                        case "Copy Link":
-                          String link = searchItem is Video
+                FlexiblePopupMenu(
+                  items: [
+                    "Share",
+                    "Copy Link",
+                    "Download",
+                    onDelete != null ? "Remove":"",
+                    enableSaveToFavorites ? "Add to Favorites":"",
+                    enableSaveToWatchLater ? "Add to Watch Later":""
+                  ],
+                  onItemTap: (String value) async {
+                    switch(value) {
+                      case "Share":
+                        Share.share(
+                          searchItem is Video
                             ? "https://www.youtube.com/watch?v=${searchItem.id.value}"
                             : searchItem is SearchVideo
                               ? "https://www.youtube.com/watch?v=${searchItem.videoId.value}"
-                              : "https://www.youtube.com/playlist?list=${searchItem.PlaylistId.value}";
-                          Clipboard.setData(ClipboardData(
-                            text: link
-                          ));
-                          final scaffold = Scaffold.of(context);
-                          AppSnack.showSnackBar(
-                            icon: Icons.copy,
-                            title: "Link copied to Clipboard",
-                            duration: Duration(seconds: 2),
-                            context: context,
-                            scaffoldKey: scaffold
-                          );
-                          break;
-                        case "Download":
-                          showModalBottomSheet<dynamic>(
-                            isScrollControlled: true,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(30),
-                                topRight: Radius.circular(30)
-                              ),
+                              : "https://www.youtube.com/playlist?list=${searchItem.PlaylistId.value}"
+                        );
+                        break;
+                      case "Copy Link":
+                        String link = searchItem is Video
+                          ? "https://www.youtube.com/watch?v=${searchItem.id.value}"
+                          : searchItem is SearchVideo
+                            ? "https://www.youtube.com/watch?v=${searchItem.videoId.value}"
+                            : "https://www.youtube.com/playlist?list=${searchItem.PlaylistId.value}";
+                        Clipboard.setData(ClipboardData(
+                          text: link
+                        ));
+                        final scaffold = Scaffold.of(context);
+                        AppSnack.showSnackBar(
+                          icon: Icons.copy,
+                          title: "Link copied to Clipboard",
+                          duration: Duration(seconds: 2),
+                          context: context,
+                          scaffoldKey: scaffold
+                        );
+                        break;
+                      case "Download":
+                        showModalBottomSheet<dynamic>(
+                          isScrollControlled: true,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(30),
+                              topRight: Radius.circular(30)
                             ),
-                            clipBehavior: Clip.antiAlias,
-                            context: context,
-                            builder: (context) {
-                              String url = searchItem is SearchVideo
-                                ? "http://youtube.com/watch?v=${searchItem.videoId.value}"
-                                : "http://youtube.com/watch?v=${searchItem.id.value}";
-                              return Wrap(
-                                children: [
-                                  DownloadMenu(
-                                    videoUrl: url,
-                                    scaffoldState: manager
-                                      .libraryScaffoldKey.currentState,
-                                  ),
-                                ],
-                              );
-                            }
-                          );
-                          break;
-                        case "Remove":
-                          onDelete();
-                          break;
-                        case "Favorites":
-                          Video videoToSave;
-                          if (searchItem is SearchVideo) {
-                            showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (_) => LoadingDialog()
+                          ),
+                          clipBehavior: Clip.antiAlias,
+                          context: context,
+                          builder: (context) {
+                            String url = searchItem is SearchVideo
+                              ? "http://youtube.com/watch?v=${searchItem.videoId.value}"
+                              : "http://youtube.com/watch?v=${searchItem.id.value}";
+                            return Wrap(
+                              children: [
+                                DownloadMenu(
+                                  videoUrl: url,
+                                  scaffoldState: manager
+                                    .libraryScaffoldKey.currentState,
+                                ),
+                              ],
                             );
-                            videoToSave = await manager.youtubeExtractor
-                              .getVideoDetails(
-                                searchItem.videoId
-                              );
-                            Navigator.pop(context);
-                          } else {
-                            videoToSave = searchItem;
                           }
-                          List<Video> videos = prefs.favoriteVideos;
-                          videos.add(videoToSave);
-                          prefs.favoriteVideos = videos;
-                          AppSnack.showSnackBar(
-                            icon: EvaIcons.heartOutline,
-                            title: "Video added to Favorites",
+                        );
+                        break;
+                      case "Remove":
+                        onDelete();
+                        break;
+                      case "Favorites":
+                        Video videoToSave;
+                        if (searchItem is SearchVideo) {
+                          showDialog(
                             context: context,
-                            scaffoldKey: Scaffold.of(context)
+                            barrierDismissible: false,
+                            builder: (_) => LoadingDialog()
                           );
-                          break;
-                        case "Watch Later":
-                          Video videoToSave;
-                          if (searchItem is SearchVideo) {
-                            showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (_) => LoadingDialog()
+                          videoToSave = await manager.youtubeExtractor
+                            .getVideoDetails(
+                              searchItem.videoId
                             );
-                            videoToSave = await manager.youtubeExtractor
-                              .getVideoDetails(
-                                searchItem.videoId
-                              );
-                            Navigator.pop(context);
-                          } else {
-                            videoToSave = searchItem;
-                          }
-                          List<Video> videos = prefs.watchLaterVideos;
-                          videos.add(videoToSave);
-                          prefs.watchLaterVideos = videos;
-                          AppSnack.showSnackBar(
-                            icon: EvaIcons.clockOutline,
-                            title: "Video added to Watch Later",
+                          Navigator.pop(context);
+                        } else {
+                          videoToSave = searchItem;
+                        }
+                        List<Video> videos = prefs.favoriteVideos;
+                        videos.add(videoToSave);
+                        prefs.favoriteVideos = videos;
+                        AppSnack.showSnackBar(
+                          icon: EvaIcons.heartOutline,
+                          title: "Video added to Favorites",
+                          context: context,
+                          scaffoldKey: Scaffold.of(context)
+                        );
+                        break;
+                      case "Watch Later":
+                        Video videoToSave;
+                        if (searchItem is SearchVideo) {
+                          showDialog(
                             context: context,
-                            scaffoldKey: Scaffold.of(context)
+                            barrierDismissible: false,
+                            builder: (_) => LoadingDialog()
                           );
-                          break;
+                          videoToSave = await manager.youtubeExtractor
+                            .getVideoDetails(
+                              searchItem.videoId
+                            );
+                          Navigator.pop(context);
+                        } else {
+                          videoToSave = searchItem;
+                        }
+                        List<Video> videos = prefs.watchLaterVideos;
+                        videos.add(videoToSave);
+                        prefs.watchLaterVideos = videos;
+                        AppSnack.showSnackBar(
+                          icon: EvaIcons.clockOutline,
+                          title: "Video added to Watch Later",
+                          context: context,
+                          scaffoldKey: Scaffold.of(context)
+                        );
+                        break;
                       }
-                    });
                   },
                   child: Container(
                     padding: EdgeInsets.all(12),
