@@ -25,7 +25,7 @@ final supportedLanguages = <LanguageData>[
   // Spanish (VE)
   LanguageData("ve", "Español", "es"),
   // Portuguese (BR)
-  LanguageData("br", "Português", "pt"),
+  LanguageData("🇧🇷", "Português", "pt"),
   // Igbo (NG)
   LanguageData("ng", "Igbo", "ig"),
   // Indonesia (ID)
