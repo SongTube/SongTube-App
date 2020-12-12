@@ -360,6 +360,7 @@ class VideoTile extends StatelessWidget {
                         break;
                       }
                   },
+                  borderRadius: 10,
                   child: Container(
                     padding: EdgeInsets.all(12),
                     color: Colors.transparent,
