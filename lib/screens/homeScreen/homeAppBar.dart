@@ -31,6 +31,7 @@ class _HomePageAppBarState extends State<HomePageAppBar> {
       titleSpacing: 0,
       pinned: true,
       floating: true,
+      snap: true,
       backgroundColor: Theme.of(context).cardColor,
       title: AnimatedSwitcher(
         reverseDuration: Duration(milliseconds: 200),
