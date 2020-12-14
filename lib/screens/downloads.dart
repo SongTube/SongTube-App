@@ -1,5 +1,6 @@
 // Flutter
 import 'package:flutter/material.dart';
+import 'package:md2_tab_indicator/md2_tab_indicator.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/screens/downloadScreen/tabs/cancelledTab.dart';
 
@@ -45,8 +46,9 @@ class DownloadTab extends StatelessWidget {
                     Text(
                       Languages.of(context).labelDownloads,
                       style: TextStyle(
-                        fontSize: 24,
-                        fontFamily: "YTSans",
+                        fontFamily: 'Product Sans',
+                        fontWeight: FontWeight.w700,
+                        fontSize: 20,
                         color: Theme.of(context).textTheme.bodyText1.color
                       ),
                     ),
@@ -56,28 +58,36 @@ class DownloadTab extends StatelessWidget {
             ),
           ),
           bottom: TabBar(
+            physics: BouncingScrollPhysics(),
+            labelStyle: TextStyle(
+              fontSize: 13,
+              fontFamily: 'Product Sans',
+              fontWeight: FontWeight.w600,
+              letterSpacing: 0.3
+            ),
+            unselectedLabelStyle: TextStyle(
+                fontSize: 13,
+                fontFamily: 'Product Sans',
+                fontWeight: FontWeight.w600,
+                letterSpacing: 0.2
+            ),
             labelColor: Theme.of(context).accentColor,
-            unselectedLabelColor: Theme.of(context).textTheme.bodyText1.color,
-            indicatorSize: TabBarIndicatorSize.label,
-            indicatorColor: Theme.of(context).accentColor,
+            unselectedLabelColor: Theme.of(context).textTheme.bodyText1
+              .color.withOpacity(0.4),
+            indicator: MD2Indicator(
+              indicatorSize: MD2IndicatorSize.tiny,
+              indicatorHeight: 4,
+              indicatorColor: Theme.of(context).accentColor,
+            ),
             tabs: [
               Tab(child: Text(
-                Languages.of(context).labelQueued,
-                style: TextStyle(
-                  fontFamily: 'YTSans',
-                ),
+                Languages.of(context).labelQueued
               )),
               Tab(child: Text(
-                Languages.of(context).labelCompleted,
-                style: TextStyle(
-                  fontFamily: 'YTSans',
-                ),
+                Languages.of(context).labelCompleted
               )),
               Tab(child: Text(
-                Languages.of(context).labelCancelled,
-                style: TextStyle(
-                  fontFamily: 'YTSans',
-                ),
+                Languages.of(context).labelCancelled
               ))
             ],
           ),

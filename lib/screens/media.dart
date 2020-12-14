@@ -1,6 +1,7 @@
 // Flutter
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:md2_tab_indicator/md2_tab_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/provider/downloadsProvider.dart';
@@ -78,8 +79,9 @@ class _MediaScreenState extends State<MediaScreen> {
                   Text(
                     Languages.of(context).labelMedia,
                     style: TextStyle(
-                      fontSize: 24,
-                      fontFamily: "YTSans",
+                      fontFamily: 'Product Sans',
+                      fontWeight: FontWeight.w700,
+                      fontSize: 20,
                       color: Theme.of(context).textTheme.bodyText1.color
                     ),
                   ),
@@ -111,28 +113,36 @@ class _MediaScreenState extends State<MediaScreen> {
             ),
           ),
           bottom: TabBar(
+            physics: BouncingScrollPhysics(),
+            labelStyle: TextStyle(
+              fontSize: 13,
+              fontFamily: 'Product Sans',
+              fontWeight: FontWeight.w600,
+              letterSpacing: 0.3
+            ),
+            unselectedLabelStyle: TextStyle(
+                fontSize: 13,
+                fontFamily: 'Product Sans',
+                fontWeight: FontWeight.w600,
+                letterSpacing: 0.2
+            ),
             labelColor: Theme.of(context).accentColor,
-            unselectedLabelColor: Theme.of(context).textTheme.bodyText1.color,
-            indicatorSize: TabBarIndicatorSize.label,
-            indicatorColor: Theme.of(context).accentColor,
+            unselectedLabelColor: Theme.of(context).textTheme.bodyText1
+              .color.withOpacity(0.4),
+            indicator: MD2Indicator(
+              indicatorSize: MD2IndicatorSize.tiny,
+              indicatorHeight: 4,
+              indicatorColor: Theme.of(context).accentColor,
+            ),
             tabs: [
               Tab(child: Text(
-                Languages.of(context).labelDownloads,
-                style: TextStyle(
-                  fontFamily: 'YTSans',
-                ),
+                Languages.of(context).labelDownloads
               )),
               Tab(child: Text(
-                Languages.of(context).labelMusic,
-                style: TextStyle(
-                  fontFamily: 'YTSans',
-                ),
+                Languages.of(context).labelMusic
               )),
               Tab(child: Text(
-                Languages.of(context).labelVideos,
-                style: TextStyle(
-                  fontFamily: 'YTSans',
-                ),
+                Languages.of(context).labelVideos
               ))
             ],
           ),

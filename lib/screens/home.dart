@@ -28,47 +28,38 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       key: PageStorageKey('this'),
       resizeToAvoidBottomInset: false,
+      backgroundColor: Theme.of(context).cardColor,
       body: Stack(
         children: [
-          NotificationListener(
-            child: CustomScrollView(
-              controller: manager.homeScrollController,
+          DefaultTabController(
+            length: 5,
+            child: NestedScrollView(
               physics: BouncingScrollPhysics(),
-              slivers: <Widget>[
-                HomePageAppBar(manager.showSearchBar),
-                SliverPersistentHeader(
-                  pinned: true,
-                  delegate: HomePageCategoryList(
-                    minHeight: 50, maxHeight: 50,
-                    onCategoryTap: (tab) {
-                      manager.currentHomeTab = tab;
-                    }
-                  )
-                ),
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      return AnimatedSwitcher(
-                        duration: Duration(milliseconds: 300),
-                        child: _sliverListChild(context, index),
-                      );
-                    },
-                    childCount: _sliverListChildCount(context)
+              floatHeaderSlivers: true,
+              headerSliverBuilder: (context, value) {
+                return [ HomePageAppBar(manager.showSearchBar) ];
+              },
+              body: Column(
+                children: [
+                  Divider(
+                    height: 1,
+                    thickness: 1,
+                    color: Colors.grey[600].withOpacity(0.2)
                   ),
-                ),
-              ]
-            ),
-            onNotification: (notification) {
-              if (notification is ScrollUpdateNotification) {
-                if (manager.homeScrollController.position.pixels >
-                    manager.homeScrollController.position.maxScrollExtent-400) {
-                  if (manager.searchStreamRunning == false) {
-                    manager.updateYoutubeSearchResults();
-                  }
-                }
-              }
-              return true;
-            },
+                  Expanded(
+                    child: TabBarView(
+                      children: [
+                        HomePage(),
+                        HomePageTrending(1),
+                        HomePageMusic(1),
+                        HomePageFavorites(1),
+                        HomePageWatchLater(1)
+                      ]
+                    ),
+                  ),
+                ],
+              ),
+            )
           ),
           AnimatedSwitcher(
             duration: Duration(milliseconds: 300),
@@ -114,7 +105,7 @@ class HomeScreen extends StatelessWidget {
     PreferencesProvider preferences = Provider.of<PreferencesProvider>(context);
     if (manager.currentHomeTab == HomeScreenTab.Home) {
       if (manager.youtubeSearchResults.isNotEmpty)
-        return HomePage(index);
+        return HomePage();
       else 
         return ShimmerVideoTile();
     } else if (manager.currentHomeTab == HomeScreenTab.Trending) {

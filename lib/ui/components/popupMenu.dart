@@ -18,6 +18,7 @@ class FlexiblePopupMenu extends StatelessWidget {
     return GestureDetector(
       onTapDown: (details) {
         showMenu<String>(
+          color: Theme.of(context).popupMenuTheme.color,
           shape: RoundedRectangleBorder(
             borderRadius: borderRadius == null
               ? BorderRadius.zero
@@ -35,7 +36,8 @@ class FlexiblePopupMenu extends StatelessWidget {
                 child: Text(
                   e, style: TextStyle(
                     color: Theme.of(context)
-                      .textTheme.bodyText1.color
+                      .textTheme.bodyText1.color,
+                    fontSize: 14
                   ),
                 ),
                 value: "$e",

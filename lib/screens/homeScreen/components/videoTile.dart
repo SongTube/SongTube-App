@@ -78,7 +78,7 @@ class VideoTile extends StatelessWidget {
       },
       child: Ink(
         decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor
+          color: Theme.of(context).cardColor
         ),
         child: Column(
           children: <Widget>[
@@ -99,13 +99,17 @@ class VideoTile extends StatelessWidget {
                         child: Container(
                           height: double.infinity,
                           width: double.infinity,
-                          child: FadeInImage(
-                            fadeInDuration: Duration(milliseconds: 200),
-                            placeholder: MemoryImage(kTransparentImage),
-                            image: snapshot.hasData
-                              ? NetworkImage(snapshot.data)
-                              : MemoryImage(kTransparentImage),
-                            fit: BoxFit.cover,
+                          padding: EdgeInsets.only(left: 12, right: 12),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: FadeInImage(
+                              fadeInDuration: Duration(milliseconds: 200),
+                              placeholder: MemoryImage(kTransparentImage),
+                              image: snapshot.hasData
+                                ? NetworkImage(snapshot.data)
+                                : MemoryImage(kTransparentImage),
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ),
@@ -215,7 +219,7 @@ class VideoTile extends StatelessWidget {
                               : "${searchItem.playlistTitle}",
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
-                            fontSize: 14
+                            fontSize: 13
                           ),
                           overflow: TextOverflow.clip,
                         ),
@@ -229,7 +233,7 @@ class VideoTile extends StatelessWidget {
                               : "Playlist • ${searchItem.playlistVideoCount} videos",
                           style: TextStyle(
                             color: Colors.grey[600],
-                            fontSize: 12
+                            fontSize: 11
                           ),
                           overflow: TextOverflow.clip,
                         ),
@@ -365,7 +369,7 @@ class VideoTile extends StatelessWidget {
                     padding: EdgeInsets.all(12),
                     color: Colors.transparent,
                     child: Icon(Icons.more_vert_rounded,
-                      size: 18),
+                      size: 14),
                   ),
                 )
               ],

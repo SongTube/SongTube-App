@@ -14,20 +14,25 @@ class StreamManifestPlayer extends StatelessWidget {
   final VideoPlayerController controller;
   final bool isFullScreen;
   final Function onVideoEnded;
+  final BorderRadius borderRadius;
   StreamManifestPlayer({
     @required this.manifest,
     this.controller,
     this.isFullScreen = false,
-    this.onVideoEnded
+    this.onVideoEnded,
+    this.borderRadius
   });
   @override
   Widget build(BuildContext context) {
     if (manifest != null) {
-      return _StreamManifestPlayer(
-        manifest: manifest,
-        isFullScreen: isFullScreen,
-        controller: controller,
-        onVideoEnded: onVideoEnded,
+      return ClipRRect(
+        borderRadius: borderRadius,
+        child: _StreamManifestPlayer(
+          manifest: manifest,
+          isFullScreen: isFullScreen,
+          controller: controller,
+          onVideoEnded: onVideoEnded,
+        ),
       );
     } else {
       return Center(
@@ -48,7 +53,7 @@ class _StreamManifestPlayer extends StatefulWidget {
     @required this.manifest,
     this.controller,
     this.isFullScreen = false,
-    this.onVideoEnded
+    this.onVideoEnded,
   });
   @override
   __StreamManifestPlayerState createState() => __StreamManifestPlayerState();
@@ -157,53 +162,50 @@ class __StreamManifestPlayerState extends State<_StreamManifestPlayer> {
       },
       child: Material(
         color: Colors.black,
-        child: MediaQuery(
-          data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
-          child: Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
-              // Video Player
-              Container(
-                child: _controller.value.initialized
-                  ? AspectRatio(
-                      aspectRatio: _controller.value.aspectRatio,
-                      child: VideoPlayer(_controller),
-                    )
-                  : Container(),
-              ),
-              // Video PlayBack Controls & Progress Bar
-              GestureDetector(
-                onTap: () => setState(() => hideControls = !hideControls),
-                child: VideoPlayerControls(
-                  progressBar: Padding(
-                    padding: EdgeInsets.only(left: 8,
-                      bottom: widget.isFullScreen ? 8 : 0),
-                    child: _controller?.value?.duration?.inMinutes != null
-                      ? videoPlayerProgressBar() : Container()
-                  ),
-                  videoTitle: null,
-                  playing: _controller.value.isPlaying,
-                  onPlayPause: _controller.value.isPlaying
-                    ? () {
-                        _controller.pause();
-                        setState(() {});
-                        Future.delayed(Duration(seconds: 2), () {
-                          setState(() => hideControls = true);
-                        });
-                      }
-                    : () {
-                        _controller.play();
-                        setState(() {});
-                        Future.delayed(Duration(seconds: 2), () {
-                          setState(() => hideControls = true);
-                        });
-                      },
-                  onExit: () => Navigator.pop(context),
-                  showControls: hideControls,
+        child: Stack(
+          alignment: Alignment.center,
+          children: <Widget>[
+            // Video Player
+            Container(
+              child: _controller.value.initialized
+                ? AspectRatio(
+                    aspectRatio: _controller.value.aspectRatio,
+                    child: VideoPlayer(_controller),
+                  )
+                : Container(),
+            ),
+            // Video PlayBack Controls & Progress Bar
+            GestureDetector(
+              onTap: () => setState(() => hideControls = !hideControls),
+              child: VideoPlayerControls(
+                progressBar: Padding(
+                  padding: EdgeInsets.only(left: 8,
+                    bottom: widget.isFullScreen ? 8 : 0),
+                  child: _controller?.value?.duration?.inMinutes != null
+                    ? videoPlayerProgressBar() : Container()
                 ),
-              )
-            ],
-          ),
+                videoTitle: null,
+                playing: _controller.value.isPlaying,
+                onPlayPause: _controller.value.isPlaying
+                  ? () {
+                      _controller.pause();
+                      setState(() {});
+                      Future.delayed(Duration(seconds: 2), () {
+                        setState(() => hideControls = true);
+                      });
+                    }
+                  : () {
+                      _controller.play();
+                      setState(() {});
+                      Future.delayed(Duration(seconds: 2), () {
+                        setState(() => hideControls = true);
+                      });
+                    },
+                onExit: () => Navigator.pop(context),
+                showControls: hideControls,
+              ),
+            )
+          ],
         ),
       ),
     );
