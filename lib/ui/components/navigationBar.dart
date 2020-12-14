@@ -32,11 +32,13 @@ class AppBottomNavigationBar extends StatelessWidget {
         currentIndex: currentIndex,
         selectedLabelStyle: TextStyle(
           fontFamily: 'Product Sans',
-          fontWeight: FontWeight.w600
+          fontWeight: FontWeight.w600,
+          letterSpacing: 0.2
         ),
         unselectedLabelStyle: TextStyle(
           fontFamily: 'Product Sans',
-          fontWeight: FontWeight.w600
+          fontWeight: FontWeight.w600,
+          letterSpacing: 0.2
         ),
         iconSize: 22,
         selectedFontSize: 12,
