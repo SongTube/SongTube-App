@@ -37,24 +37,37 @@ class BlurPageRoute<T> extends PageRoute<T> with MaterialRouteTransitionMixin<T>
   Widget buildTransitions(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation, Widget child) {
     // Create transition from bottom to top, like bottom sheet
-    return SlideTransition(
-      position: CurvedAnimation(
-        parent: animation,
-        curve: animationCurve,
-      ).drive(
-        Tween<Offset>(
-          begin: slideOffset,
-          end: Offset(0.0, 0.0),
-        ),
-      ),
-      child: BackdropFilter(
+    if (animation.status == AnimationStatus.reverse) {
+      return BackdropFilter(
         filter: ImageFilter.blur(
           sigmaX: blurStrength*animation.value,
           sigmaY: blurStrength*animation.value
         ),
-        child: child
-      ),
-    );
+        child: FadeTransition(
+          opacity: animation,
+          child: child,
+        ),
+      );
+    } else {
+      return SlideTransition(
+        position: CurvedAnimation(
+          parent: animation,
+          curve: animationCurve,
+        ).drive(
+          Tween<Offset>(
+            begin: slideOffset,
+            end: Offset(0.0, 0.0),
+          ),
+        ),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(
+            sigmaX: blurStrength*animation.value,
+            sigmaY: blurStrength*animation.value
+          ),
+          child: child
+        ),
+      );
+    }
   }
 
   @override
