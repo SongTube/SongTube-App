@@ -1,6 +1,4 @@
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/provider/configurationProvider.dart';
 import 'package:songtube/provider/managerProvider.dart';
@@ -15,7 +13,11 @@ import 'package:md2_tab_indicator/md2_tab_indicator.dart';
 
 class HomePageAppBar extends StatefulWidget {
   final bool openSearch;
-  HomePageAppBar(this.openSearch);
+  final TabController tabController;
+  HomePageAppBar({
+    this.openSearch,
+    this.tabController
+  });
 
   @override
   _HomePageAppBarState createState() => _HomePageAppBarState();
@@ -106,7 +108,10 @@ class _HomePageAppBarState extends State<HomePageAppBar> {
               fit: BoxFit.cover,
             ),
           ),
-          searchHint: "SongTube"
+          searchHint: "SongTube",
+          onTap: () {
+            manager.showSearchBar = true;
+          }
         )
       ),
       bottom: PreferredSize(
@@ -117,6 +122,20 @@ class _HomePageAppBarState extends State<HomePageAppBar> {
         child: Padding(
           padding: EdgeInsets.only(left: 32),
           child: TabBar(
+            controller: widget.tabController,
+            onTap: (int tabIndex) {
+              if (tabIndex == 0) {
+                manager.currentHomeTab = HomeScreenTab.Home;
+              } else if (tabIndex == 1) {
+                manager.currentHomeTab = HomeScreenTab.Trending;
+              } else if (tabIndex == 2) {
+                manager.currentHomeTab = HomeScreenTab.Music;
+              } else if (tabIndex == 3) {
+                manager.currentHomeTab = HomeScreenTab.Favorites;
+              } else if (tabIndex == 4) {
+                manager.currentHomeTab = HomeScreenTab.WatchLater;
+              }
+            },
             physics: BouncingScrollPhysics(),
             isScrollable: true,
             labelStyle: TextStyle(

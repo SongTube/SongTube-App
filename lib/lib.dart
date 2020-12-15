@@ -26,6 +26,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:songtube/ui/animations/blurPageRoute.dart';
 import 'package:songtube/ui/components/navigationBar.dart';
+import 'package:songtube/ui/components/searchHistory.dart';
 import 'package:songtube/ui/dialogs/appUpdateDialog.dart';
 import 'package:songtube/ui/dialogs/joinTelegramDialog.dart';
 import 'package:songtube/ui/dialogs/loadingDialog.dart';

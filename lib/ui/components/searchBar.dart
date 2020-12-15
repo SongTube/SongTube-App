@@ -8,6 +8,7 @@ class STSearchBar extends StatelessWidget {
   final Function onBack;
   final Function onClear;
   final Function(String) onChanged;
+  final Function onTap;
   final Widget leadingIcon;
   final String searchHint;
   STSearchBar({
@@ -16,6 +17,7 @@ class STSearchBar extends StatelessWidget {
     @required this.onSearch,
     this.onBack,
     this.onClear,
+    this.onTap,
     this.leadingIcon,
     this.searchHint = "",
     this.onChanged
@@ -45,6 +47,7 @@ class STSearchBar extends StatelessWidget {
               child: Theme(
                 data: ThemeData(primaryColor: Theme.of(context).accentColor),
                 child: TextField(
+                  onTap: onTap,
                   focusNode: focusNode,
                   keyboardType: TextInputType.url,
                   style: TextStyle(

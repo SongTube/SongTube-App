@@ -20,46 +20,83 @@ import 'package:songtube/screens/homeScreen/pages/trending.dart';
 import 'package:songtube/screens/homeScreen/pages/watchLater.dart';
 import 'package:songtube/ui/components/searchHistory.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
+
+  TabController controller;
+
+  @override
+  void initState() {
+    ManagerProvider manager = Provider.of<ManagerProvider>(context, listen: false);
+    controller = TabController(length: 5, vsync: this);
+    controller.addListener(() {
+      int tabIndex = controller.index;
+      if (tabIndex == 0) {
+        manager.currentHomeTab = HomeScreenTab.Home;
+      } else if (tabIndex == 1) {
+        manager.currentHomeTab = HomeScreenTab.Trending;
+      } else if (tabIndex == 2) {
+        manager.currentHomeTab = HomeScreenTab.Music;
+      } else if (tabIndex == 3) {
+        manager.currentHomeTab = HomeScreenTab.Favorites;
+      } else if (tabIndex == 4) {
+        manager.currentHomeTab = HomeScreenTab.WatchLater;
+      } 
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
     ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
     return Scaffold(
-      key: PageStorageKey('this'),
       resizeToAvoidBottomInset: false,
       backgroundColor: Theme.of(context).cardColor,
       body: Stack(
         children: [
-          DefaultTabController(
-            length: 5,
-            child: NestedScrollView(
-              physics: BouncingScrollPhysics(),
-              floatHeaderSlivers: true,
-              headerSliverBuilder: (context, value) {
-                return [ HomePageAppBar(manager.showSearchBar) ];
-              },
-              body: Column(
-                children: [
-                  Divider(
-                    height: 1,
-                    thickness: 1,
-                    color: Colors.grey[600].withOpacity(0.2)
+          NestedScrollView(
+            physics: BouncingScrollPhysics(),
+            floatHeaderSlivers: true,
+            headerSliverBuilder: (context, value) {
+              return [
+                HomePageAppBar(
+                  openSearch: manager.showSearchBar,
+                  tabController: controller,
+                )
+              ];
+            },
+            body: Column(
+              children: [
+                Divider(
+                  height: 1,
+                  thickness: 1,
+                  color: Colors.grey[600].withOpacity(0.2)
+                ),
+                Expanded(
+                  child: TabBarView(
+                    controller: controller,
+                    children: [
+                      HomePage(),
+                      HomePageTrending(),
+                      HomePageMusic(),
+                      HomePageFavorites(),
+                      HomePageWatchLater()
+                    ]
                   ),
-                  Expanded(
-                    child: TabBarView(
-                      children: [
-                        HomePage(),
-                        HomePageTrending(1),
-                        HomePageMusic(1),
-                        HomePageFavorites(1),
-                        HomePageWatchLater(1)
-                      ]
-                    ),
-                  ),
-                ],
-              ),
-            )
+                ),
+              ],
+            ),
           ),
           AnimatedSwitcher(
             duration: Duration(milliseconds: 300),
@@ -99,71 +136,4 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
-
-  Widget _sliverListChild(BuildContext context, int index) {
-    ManagerProvider manager = Provider.of<ManagerProvider>(context);
-    PreferencesProvider preferences = Provider.of<PreferencesProvider>(context);
-    if (manager.currentHomeTab == HomeScreenTab.Home) {
-      if (manager.youtubeSearchResults.isNotEmpty)
-        return HomePage();
-      else 
-        return ShimmerVideoTile();
-    } else if (manager.currentHomeTab == HomeScreenTab.Trending) {
-      if (manager.homeTrendingVideoList.isNotEmpty)
-        return HomePageTrending(index);
-      else
-        return ShimmerVideoTile();
-    } else if (manager.currentHomeTab == HomeScreenTab.Music) {
-      if (manager.homeMusicVideoList.isNotEmpty)
-        return HomePageMusic(index);
-      else
-        return ShimmerVideoTile();
-    } else if (manager.currentHomeTab == HomeScreenTab.Favorites) {
-      if (preferences.favoriteVideos.isNotEmpty)
-        return HomePageFavorites(index);
-      else
-        return HomePageFavoritesEmpty();
-    } else if (manager.currentHomeTab == HomeScreenTab.WatchLater) {
-      if (preferences.watchLaterVideos.isNotEmpty)
-        return HomePageWatchLater(index);
-      else
-        return HomePageWatchLaterEmpty();
-    } else {
-      return Container();
-    }
-  }
-
-  int _sliverListChildCount(BuildContext context) {
-    ManagerProvider manager = Provider.of<ManagerProvider>(context);
-    PreferencesProvider provider = Provider.of<PreferencesProvider>(context);
-    if (manager.currentHomeTab == HomeScreenTab.Home) {
-      if (manager.youtubeSearchResults.isNotEmpty)
-        return manager.youtubeSearchResults.length;
-      else
-        return 20;
-    } else if (manager.currentHomeTab == HomeScreenTab.Trending) {
-      if (manager.homeTrendingVideoList.isNotEmpty)
-        return manager.homeTrendingVideoList.length;
-      else
-        return 20;
-    } else if (manager.currentHomeTab == HomeScreenTab.Music) {
-      if (manager.homeMusicVideoList.isNotEmpty)
-        return manager.homeMusicVideoList.length;
-      else
-        return 20;
-    } else if (manager.currentHomeTab == HomeScreenTab.Favorites) {
-      if (provider.favoriteVideos.isNotEmpty)
-        return provider.favoriteVideos.length;
-      else
-        return 1;
-    } else if (manager.currentHomeTab == HomeScreenTab.WatchLater) {
-      if (provider.watchLaterVideos.isNotEmpty)
-        return provider.watchLaterVideos.length;
-      else
-        return 1;
-    } else {
-      return 1;
-    }
-  }
-
 }
