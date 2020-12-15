@@ -4,7 +4,7 @@ class LanguageId extends Languages {
 
   // Introduction Screens
   @override
-  String get labelAppWelcome => "Selamat Datang di to";
+  String get labelAppWelcome => "Selamat Datang di";
   @override
   String get labelStart => "Mulai";
   @override
@@ -13,20 +13,20 @@ class LanguageId extends Languages {
   String get labelNext => "Berikutnya";
   @override
   String get labelExternalAccessJustification =>
-    "Membutuhkan Akses ke Penyimpanan Eksternal Anda untuk menyimpan semua " +
-    "Video dan Musik Anda";
+    "Membutuhkan Akses ke Penyimpanan Eksternal anda untuk menyimpan semua " +
+    "Video dan Musik anda";
   @override
   String get labelAppCustomization => "Kustomisasi";
   @override
-  String get labelSelectPreferred => "Pilih Pilihan Anda";
+  String get labelSelectPreferred => "Pilih keinginanmu";
   @override
   String get labelConfigReady => "Konfigurasi Siap";
   @override
-  String get labelIntroductionIsOver => "Pendahuluan sudah berakhir";
+  String get labelIntroductionIsOver => "Pengantar sudah berakhir";
   @override
   String get labelEnjoy => "Nikmati";
   @override 
-  String get labelGoHome => "Pergi ke rumah";
+  String get labelGoHome => "Pulang";
 
   // Bottom Navigation Bar
   @override
@@ -66,11 +66,11 @@ class LanguageId extends Languages {
 
   // Download Status/Error Messages
   @override
-  String get labelDownloadQueued => "Unduhan Dalam Antrean";
+  String get labelDownloadQueued => "Unduhan Dalam Antrian";
   @override
   String get labelDownloadAcesssDenied => "Akses ditolak";
   @override
-  String get labelClearingExistingMetadata => "Menghapus Metadata yang Ada...";
+  String get labelClearingExistingMetadata => "Menghapus Metadata Yang Ada...";
   @override
   String get labelWrittingTagsAndArtwork => "Menulis Tag & Artwork...";
   @override
@@ -78,7 +78,7 @@ class LanguageId extends Languages {
   @override
   String get labelAndroid11FixNeeded => "Kesalahan, Perlu Android 11 Fix, periksa Pengaturan";
   @override
-  String get labelErrorSavingDownload => "Tidak dapat menyimpan Unduhan Anda, periksa Izin";
+  String get labelErrorSavingDownload => "Tidak dapat menyimpan Unduhan anda, periksa Izin";
   @override
   String get labelDownloadingVideo => "Mengunduh Video...";
   @override
@@ -92,7 +92,7 @@ class LanguageId extends Languages {
   @override
   String get labelDownloadCancelled => "Unduhan Dibatalkan";
   @override
-  String get labelAnIssueOcurredConvertingAudio => "Proses yang Dikonversi Gagal";
+  String get labelAnIssueOcurredConvertingAudio => "Proses Yang Dikonversi Gagal";
   @override
   String get labelPatchingAudio => "Menambal Audio...";
 
@@ -120,17 +120,17 @@ class LanguageId extends Languages {
   @override
   String get labelNoMediaYet => "Belum Ada Media";
   @override
-  String get labelNoMediaYetJustification => "Semua Media Anda" +
+  String get labelNoMediaYetJustification => "Semua Media anda" +
     "akan ditampilkan di sini";
   @override
   String get labelSearchMedia => "Telusuri Media...";
   @override
   String get labelDeleteSong => "Hapus Lagu";
   @override
-  String get labelNoPermissionJustification => "Lihat Media Anda dengan" + "\n" +
+  String get labelNoPermissionJustification => "Lihat Media anda dengan" + "\n" +
     "Memberikan Izin Penyimpanan";
   @override
-  String get labelGettingYourMedia => "Mendapatkan Media Anda...";
+  String get labelGettingYourMedia => "Mendapatkan Media anda...";
 
   // Navigate Screen
   @override
@@ -156,7 +156,7 @@ class LanguageId extends Languages {
   String get labelEnableDarkTheme => "Aktifkan Tema Gelap";
   @override
   String get labelEnableDarkThemeJustification =>
-    "Gunakan Tema Gelap secara default";
+    "Gunakan Tema Gelap secara bawaan";
   @override
   String get labelEnableBlackTheme => "Aktifkan Tema Hitam";
   @override
@@ -192,13 +192,13 @@ class LanguageId extends Languages {
   @override
   String get labelBackup => "Cadangan";
   @override
-  String get labelBackupJustification => "Cadangkan perpustakaan media Anda";
+  String get labelBackupJustification => "Cadangkan perpustakaan media anda";
   @override
   String get labelRestore => "Pulihkan";
   @override
-  String get labelRestoreJustification => "Pulihkan perpustakaan media Anda";
+  String get labelRestoreJustification => "Pulihkan perpustakaan media anda";
   @override
-  String get labelBackupLibraryEmpty => "Perpustakaan Anda kosong";
+  String get labelBackupLibraryEmpty => "Perpustakaan anda kosong";
   @override
   String get labelBackupCompleted => "Pencadangan Selesai";
   @override
