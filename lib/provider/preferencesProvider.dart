@@ -117,4 +117,14 @@ class PreferencesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Youtube Auto-Play
+  bool get youtubeAutoPlay {
+    return prefs.getBool('youtubeAutoPlay') ?? true;
+  }
+
+  set youtubeAutoPlay(bool value) {
+    prefs.setBool('youtubeAutoPlay', value);
+    notifyListeners();
+  }
+
 }

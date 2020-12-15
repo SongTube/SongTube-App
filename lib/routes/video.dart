@@ -90,7 +90,9 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> {
                             borderRadius: BorderRadius.circular(10),
                             manifest: manager.mediaInfoSet.streamManifest,
                             onVideoEnded: () {
-                              manager.streamPlayerAutoPlay();
+                              if (prefs.youtubeAutoPlay) {
+                                manager.streamPlayerAutoPlay();
+                              }
                             },
                           )
                         : ClipRRect(
@@ -251,9 +253,9 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> {
                                     ),
                                     CircularCheckBox(
                                       activeColor: Theme.of(context).accentColor,
-                                      value: manager.youtubePlayerAutoPlay,
+                                      value: prefs.youtubeAutoPlay,
                                       onChanged: (bool value) {
-                                        manager.youtubePlayerAutoPlay = value;
+                                        prefs.youtubeAutoPlay = value;
                                       }
                                     ),
                                     SizedBox(width: 4)

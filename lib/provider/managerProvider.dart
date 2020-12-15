@@ -39,7 +39,6 @@ class ManagerProvider extends ChangeNotifier {
     searchStreamRunning = false;
     searchResultsLength = 10;
     updateYoutubeSearchResults();
-    youtubePlayerAutoPlay = true;
     // YoutubeExtractor
     youtubeExtractor = YoutubeExtractor();
   }
@@ -71,12 +70,6 @@ class ManagerProvider extends ChangeNotifier {
   // Stream Youtube Player
   // ---------------------
   StreamManifest playerStream;
-  bool _youtubePlayerAutoPlay;
-  bool get youtubePlayerAutoPlay => _youtubePlayerAutoPlay;
-  set youtubePlayerAutoPlay(bool value) {
-    _youtubePlayerAutoPlay = value;
-    notifyListeners();
-  }
 
   // -----------
   // Home Screen
