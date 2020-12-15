@@ -174,7 +174,11 @@ class PlayerControls extends StatelessWidget {
                           return MusicPlayerCurrentPlaylist(
                             blurUIEnabled: prefs.enableBlurUI,
                           );
-                        }, duration: Duration(milliseconds: 400)));
+                        },
+                          duration: Duration(milliseconds: 400),
+                          blurStrength: prefs.enableBlurUI
+                            ? 20 : 0,
+                        ));
                     },
                   ),
                 ),

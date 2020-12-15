@@ -19,6 +19,7 @@ class MusicPlayerCurrentPlaylist extends StatefulWidget {
 class _MusicPlayerCurrentPlaylistState extends State<MusicPlayerCurrentPlaylist> {
 
   ScrollController controller;
+  double bodyOpacity = 1.0;
 
   @override
   void initState() {
@@ -51,74 +52,106 @@ class _MusicPlayerCurrentPlaylistState extends State<MusicPlayerCurrentPlaylist>
     Color vibrantColor = widget.blurUIEnabled
       ? mediaProvider.vibrantColor == null ? Colors.white : mediaProvider.vibrantColor
       : Theme.of(context).accentColor;
-    return Scaffold(
-      backgroundColor: dominantColor
-        .withOpacity(0.4),
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: dominantColor
-          .withOpacity(0.2),
-        title: Text(
-          "Now Playing",
-          style: TextStyle(
-            fontFamily: 'Product Sans',
-            fontWeight: FontWeight.w700,
-            fontSize: 20,
+    return WillPopScope(
+      onWillPop: () {
+        setState(() => bodyOpacity = 0.0);
+        Future.delayed(Duration(milliseconds: 200), () {
+          Navigator.pop(context);
+        });
+      },
+      child: Scaffold(
+        backgroundColor: widget.blurUIEnabled
+          ? dominantColor.withOpacity(0.4)
+          : Theme.of(context).scaffoldBackgroundColor
+            .withOpacity(0.96),
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: widget.blurUIEnabled
+            ? dominantColor.withOpacity(0.2)
+            : Theme.of(context).scaffoldBackgroundColor
+              .withOpacity(0.96),
+          title: AnimatedOpacity(
+            duration: Duration(milliseconds: 200),
+            opacity: bodyOpacity,
+            child: Text(
+              "Now Playing",
+              style: TextStyle(
+                fontFamily: 'Product Sans',
+                fontWeight: FontWeight.w700,
+                fontSize: 20,
+                color: textColor
+              ),
+            ),
+          ),
+          leading: AnimatedOpacity(
+            duration: Duration(milliseconds: 200),
+            opacity: bodyOpacity,
+            child: IconButton(
+              icon: Icon(EvaIcons.arrowBackOutline),
+              color: Theme.of(context).iconTheme.color,
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ),
+          iconTheme: IconThemeData(
             color: textColor
           ),
         ),
-        iconTheme: IconThemeData(
-          color: textColor
-        ),
-      ),
-      body: ListView.builder(
-        controller: controller,
-        itemExtent: 75,
-        padding: EdgeInsets.only(top: 12, left: 12, right: 12),
-        itemCount: AudioService.queue.length,
-        itemBuilder: (context, index) {
-          MediaItem song = AudioService.queue[index];
-          return ListTile(
-            title: Text(
-              song.title,
-              style: TextStyle(
-                fontSize: 14,
-                color: textColor,
-                fontFamily: "Product Sans",
-                fontWeight: FontWeight.w600
-              ),
-            ),
-            subtitle: Text(
-              song.artist,
-              style: TextStyle(
-                fontSize: 12,
-                color: textColor,
-                fontFamily: "Product Sans",
-                fontWeight: FontWeight.w400
-              ),
-            ),
-            trailing: song == AudioService.currentMediaItem
-              ? Container(
-                  padding: EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: vibrantColor.withOpacity(0.05),
-                    borderRadius: BorderRadius.circular(50)
-                  ),
-                  child: Icon(
-                    EvaIcons.musicOutline,
+        body: AnimatedOpacity(
+          duration: Duration(milliseconds: 200),
+          opacity: bodyOpacity,
+          child: ListView.builder(
+            controller: controller,
+            physics: BouncingScrollPhysics(),
+            itemExtent: 75,
+            padding: EdgeInsets.only(top: 12, left: 12, right: 12),
+            itemCount: AudioService.queue.length,
+            itemBuilder: (context, index) {
+              MediaItem song = AudioService.queue[index];
+              return ListTile(
+                title: Text(
+                  song.title,
+                  style: TextStyle(
+                    fontSize: 14,
                     color: textColor,
+                    fontFamily: "Product Sans",
+                    fontWeight: FontWeight.w600
                   ),
-                )
-              : Container(
-                  height: 10, width: 10,
                 ),
-            onTap: () async {
-              await AudioService.playMediaItem(song);
-              animateToCurrentPlaying();
-              setState(() {});
+                subtitle: Text(
+                  song.artist,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: textColor,
+                    fontFamily: "Product Sans",
+                    fontWeight: FontWeight.w400
+                  ),
+                ),
+                trailing: song == AudioService.currentMediaItem
+                  ? Container(
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: vibrantColor.withOpacity(0.05),
+                        borderRadius: BorderRadius.circular(50)
+                      ),
+                      child: Icon(
+                        EvaIcons.musicOutline,
+                        color: textColor,
+                      ),
+                    )
+                  : Container(
+                      height: 10, width: 10,
+                    ),
+                onTap: () async {
+                  await AudioService.playMediaItem(song);
+                  animateToCurrentPlaying();
+                  setState(() {});
+                },
+              );
             },
-          );
-        },
+          ),
+        ),
       ),
     );
   }
