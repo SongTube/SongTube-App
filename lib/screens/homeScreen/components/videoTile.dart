@@ -232,7 +232,8 @@ class VideoTile extends StatelessWidget {
                                 "${NumberFormat.compact().format(searchItem.videoViewCount)} views"
                               : "Playlist • ${searchItem.playlistVideoCount} videos",
                           style: TextStyle(
-                            color: Colors.grey[600],
+                            color: Theme.of(context).textTheme
+                              .bodyText1.color.withOpacity(0.4),
                             fontSize: 11
                           ),
                           overflow: TextOverflow.clip,
