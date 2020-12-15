@@ -24,25 +24,26 @@ class StreamManifestPlayer extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
-    if (manifest != null) {
-      return ClipRRect(
-        borderRadius: borderRadius,
-        child: _StreamManifestPlayer(
-          manifest: manifest,
-          isFullScreen: isFullScreen,
-          controller: controller,
-          onVideoEnded: onVideoEnded,
-        ),
-      );
-    } else {
-      return Center(
-        child: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation(
-            Theme.of(context).iconTheme.color
+    return AnimatedSwitcher(
+      duration: Duration(milliseconds: 250),
+      child: manifest != null
+        ? ClipRRect(
+            borderRadius: borderRadius,
+            child: _StreamManifestPlayer(
+              manifest: manifest,
+              isFullScreen: isFullScreen,
+              controller: controller,
+              onVideoEnded: onVideoEnded,
+            ),
+          )
+        : Center(
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation(
+                Theme.of(context).iconTheme.color
+              ),
+            ),
           ),
-        ),
-      );
-    }
+    );
   }
 }
 
