@@ -13,6 +13,11 @@ class HomePage extends StatelessWidget {
         physics: BouncingScrollPhysics(),
         itemCount: manager.youtubeSearchResults.length,
         itemBuilder: (context, index) {
+          if (index == manager.youtubeSearchResults.length-2) {
+            if (manager.searchStreamRunning == false) {
+              manager.updateYoutubeSearchResults();
+            }
+          }
           return Padding(
             padding: EdgeInsets.only(bottom: 16, top: index == 0 ? 12 : 0),
             child: VideoTile(
