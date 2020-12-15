@@ -1,5 +1,8 @@
 // Flutter
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:songtube/players/components/musicPlayer/currentPlaylist.dart';
 
 // Internal
 import 'package:songtube/players/components/musicPlayer/dialogs/settingsDialog.dart';
@@ -11,6 +14,8 @@ import 'package:songtube/players/components/musicPlayer/ui/repeatButton.dart';
 // Packages
 import 'package:audio_service/audio_service.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:songtube/provider/preferencesProvider.dart';
+import 'package:songtube/ui/animations/blurPageRoute.dart';
 
 
 class PlayerControls extends StatelessWidget {
@@ -30,6 +35,7 @@ class PlayerControls extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
+    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     return Container(
       margin: EdgeInsets.only(left: 16, right: 16, bottom: 20),
       child: Column(
@@ -155,6 +161,23 @@ class PlayerControls extends StatelessWidget {
             padding: EdgeInsets.only(top: 16),
             child: Row(
               children: [
+                Container(
+                  margin: EdgeInsets.only(right: 20),
+                  child: IconButton(
+                    icon: Icon(
+                      MdiIcons.playlistMusicOutline,
+                      color: textColor.withOpacity(0.6)
+                    ),
+                    onPressed: () {
+                      Navigator.push(context, 
+                        BlurPageRoute(builder: (context) {
+                          return MusicPlayerCurrentPlaylist(
+                            blurUIEnabled: prefs.enableBlurUI,
+                          );
+                        }, duration: Duration(milliseconds: 400)));
+                    },
+                  ),
+                ),
                 Spacer(),
                 Container(
                   margin: EdgeInsets.only(left: 20),
