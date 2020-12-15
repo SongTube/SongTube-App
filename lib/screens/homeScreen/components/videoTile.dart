@@ -311,7 +311,7 @@ class VideoTile extends StatelessWidget {
                       case "Remove":
                         onDelete();
                         break;
-                      case "Favorites":
+                      case "Add to Favorites":
                         Video videoToSave;
                         if (searchItem is SearchVideo) {
                           showDialog(
@@ -337,7 +337,7 @@ class VideoTile extends StatelessWidget {
                           scaffoldKey: Scaffold.of(context)
                         );
                         break;
-                      case "Watch Later":
+                      case "Add to Watch Later":
                         Video videoToSave;
                         if (searchItem is SearchVideo) {
                           showDialog(
