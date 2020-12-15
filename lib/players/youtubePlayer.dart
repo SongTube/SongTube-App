@@ -37,7 +37,9 @@ class StreamManifestPlayer extends StatelessWidget {
     } else {
       return Center(
         child: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation(Colors.white),
+          valueColor: AlwaysStoppedAnimation(
+            Theme.of(context).iconTheme.color
+          ),
         ),
       );
     }
