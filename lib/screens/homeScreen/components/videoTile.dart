@@ -226,7 +226,8 @@ class VideoTile extends StatelessWidget {
                         SizedBox(height: 4),
                         Text(
                           searchItem is Video
-                            ? "${searchItem.engagement.viewCount}"
+                            ? "${searchItem.author} • " +
+                              "${NumberFormat.compact().format(searchItem.engagement.viewCount)} views"
                             : searchItem is SearchVideo
                               ? "${searchItem.videoAuthor} • " +
                                 "${NumberFormat.compact().format(searchItem.videoViewCount)} views"
