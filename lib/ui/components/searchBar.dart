@@ -94,15 +94,12 @@ class STSearchBar extends StatelessWidget {
                       size: 18),
                     onPressed: onClear
                   )
-                : IgnorePointer(
-                    ignoring: true,
-                    child: IconButton(
-                      splashColor: Colors.transparent,
-                      icon: Icon(EvaIcons.searchOutline,
-                        color: Theme.of(context).iconTheme.color
-                          .withOpacity(0.8)),
-                      onPressed: () {}
-                    ),
+                : IconButton(
+                    splashColor: Colors.transparent,
+                    icon: Icon(EvaIcons.searchOutline,
+                      color: Theme.of(context).iconTheme.color
+                        .withOpacity(0.8)),
+                    onPressed: onTap
                   )
             ),
             SizedBox(width: 4)
