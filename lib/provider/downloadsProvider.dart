@@ -8,6 +8,7 @@ import 'package:songtube/internal/models/metadata.dart';
 import 'package:songtube/internal/models/songFile.dart';
 import 'package:songtube/internal/randomString.dart';
 import 'package:songtube/internal/database/databaseService.dart';
+import 'package:songtube/internal/youtube/youtubeExtractor.dart';
 import 'package:songtube/provider/configurationProvider.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
@@ -82,7 +83,10 @@ class DownloadsProvider extends ChangeNotifier {
       case "Video":
         downloadType = DownloadType.VIDEO;
         videoStreamInfo = data[1];
-        audioStreamInfo = manifest.audioOnly.withHighestBitrate();
+        audioStreamInfo = YoutubeExtractor.getBestAudioStreamForVideo(
+          manifest,
+          videoStreamInfo.container.name
+        );
         downloadPath = config.videoDownloadPath;
         convertFormat = FFmpegActionType.AppendAudioOnVideo;
         break;

@@ -263,4 +263,27 @@ class YoutubeExtractor {
     });
     return channelUploads;
   }
+
+  static AudioOnlyStreamInfo getBestAudioStreamForVideo(StreamManifest manifest, String videoFormat) {
+    AudioOnlyStreamInfo audio;
+    if (videoFormat == "mp4") {
+      audio = manifest.audioOnly
+        .firstWhere((element) => element.audioCodec == "mp4a.40.2",
+        orElse: () {
+          return manifest.audioOnly
+            .firstWhere((element) => element.audioCodec == "opus");
+        });
+    } else if (videoFormat == "webm") {
+      audio = manifest.audioOnly
+        .firstWhere((element) => element.audioCodec == "opus",
+        orElse: () {
+          return manifest.audioOnly
+            .firstWhere((element) => element.audioCodec == "mp4a.40.2");
+        });
+    } else {
+      audio = manifest.audioOnly.withHighestBitrate();
+    }
+    return audio;
+  }
+
 }

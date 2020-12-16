@@ -72,21 +72,28 @@ class FFmpegConverter {
     List<String> _argsList = List<String>();
     String outDir = (await getTemporaryDirectory()).path + "/";
     File output = File(outDir + RandomString.getRandomString(10));
-    if (videoFormat == "webm") {
+    String audioFormat = await getMediaFormat(audioPath);
+    if (videoFormat == "webm" && audioFormat == "ogg" || videoFormat == "mp4" && audioFormat == "m4a") {
       _argsList = [
         "-y", "-i", "$videoPath", "-i", "$audioPath",
-        "-c", "copy", "-c:a", "libopus",
-        "${output.path}.webm"
+        "-c", "copy", "-map", "0:v:0", "-map", "1:a:0",
+        "${output.path}.$videoFormat"
       ];
-      output = File(output.path + ".webm");
-    }
-    if (videoFormat == "mp4") {
+      output = File(output.path + ".$videoFormat");
+    } else if (videoFormat == "mp4") {
       _argsList = [
         "-y", "-i", "$videoPath", "-i", "$audioPath",
-        "-c:v", "copy", "-c:a", "aac",
-        "${output.path}.mp4"
+        "-c", "copy", "-map", "0:v:0", "-map", "1:a:0",
+        "-c:a", "aac", "${output.path}.mp4"
       ];
       output = File(output.path + ".mp4");
+    } else if (videoFormat == "webm") {
+      _argsList = [
+        "-y", "-i", "$videoPath", "-i", "$audioPath",
+        "-c", "copy", "-map", "0:v:0", "-map", "1:a:0",
+        "-c:a", "libopus", "${output.path}.webm"
+      ];
+      output = File(output.path + ".webm");
     }
     int _result = await flutterFFmpeg.executeWithArguments(_argsList);
     if (_result == 1)
