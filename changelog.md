@@ -1,3 +1,16 @@
+# SongTube 5.2.0:
+
+- Small Home Screen re-design
+- Added real Tabs in the Home Screen
+- More roundness to the UI
+- Improved Video/Channel exit animation
+- Added Product Sans for some fonts
+- Added "Current Playlist" button to the Music Player
+- Video Page "AutoPlay" setting is now persistent
+- Video's audio writting is now done almost instantly
+- Youtube Stream Player small improvements
+- Fixed video's menu text color
+
 # SongTube 5.0.0:
 
 - Fixed an issue where the device songs will not load if there a corrupt song
