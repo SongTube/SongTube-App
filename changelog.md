@@ -3,6 +3,7 @@
 - Small Home Screen re-design
 - Added real Tabs in the Home Screen
 - More roundness to the UI
+- Improved Dark Theme
 - Improved Video/Channel exit animation
 - Added Product Sans for some fonts
 - Added "Current Playlist" button to the Music Player
