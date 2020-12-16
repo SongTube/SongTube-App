@@ -104,14 +104,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               ? Column(
                 children: [
                   Container(
-                    height: kToolbarHeight + 50,
+                    height: kToolbarHeight + 48,
                   ),
                   Expanded(
                     child: Container(
                       color: Theme.of(context).scaffoldBackgroundColor,
                       child: SearchHistoryList(
-                        margin: EdgeInsets.zero,
-                        borderRadius: 0,
                         onItemTap: (String item) {
                           manager.searchBarFocusNode.unfocus();
                           manager.youtubeSearchQuery = item;
