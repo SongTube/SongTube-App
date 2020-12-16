@@ -28,7 +28,9 @@ class StreamManifestPlayer extends StatelessWidget {
       duration: Duration(milliseconds: 250),
       child: manifest != null
         ? ClipRRect(
-            borderRadius: borderRadius,
+            borderRadius: borderRadius == null
+              ? BorderRadius.zero
+              : borderRadius,
             child: _StreamManifestPlayer(
               manifest: manifest,
               isFullScreen: isFullScreen,
@@ -255,10 +257,11 @@ class __StreamManifestPlayerState extends State<_StreamManifestPlayer> {
               child: VideoProgressIndicator(
                 _controller,
                 allowScrubbing: true,
+                padding: EdgeInsets.zero,
                 colors: VideoProgressColors(
                   playedColor: Theme.of(context).accentColor,
-                  bufferedColor: Colors.grey[500].withOpacity(0.6),
-                  backgroundColor: Colors.grey[600].withOpacity(0.6)
+                  bufferedColor: Colors.white,
+                  backgroundColor: Colors.white.withOpacity(0.4)
                 ),
               ),
             ),
@@ -280,7 +283,8 @@ class __StreamManifestPlayerState extends State<_StreamManifestPlayer> {
               child: IconButton(
                 icon: Icon(widget.isFullScreen
                   ? Icons.fullscreen_exit_rounded
-                  : Icons.fullscreen_rounded
+                  : Icons.fullscreen_rounded,
+                  color: Colors.white
                 ),
                 onPressed: () async {
                   if (!widget.isFullScreen) {
