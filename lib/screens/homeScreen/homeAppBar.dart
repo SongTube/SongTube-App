@@ -14,9 +14,11 @@ import 'package:md2_tab_indicator/md2_tab_indicator.dart';
 class HomePageAppBar extends StatefulWidget {
   final bool openSearch;
   final TabController tabController;
+  final Function onSearch;
   HomePageAppBar({
     this.openSearch,
-    this.tabController
+    this.tabController,
+    this.onSearch
   });
 
   @override
@@ -42,6 +44,7 @@ class _HomePageAppBarState extends State<HomePageAppBar> {
           controller: manager.urlController,
           focusNode: manager.searchBarFocusNode,
           onSearch: (searchQuery) async {
+            widget.onSearch();
             manager.searchBarFocusNode.unfocus();
             manager.showSearchBar = false;
             if (VideoId.parseVideoId(searchQuery) != null) {

@@ -120,13 +120,17 @@ class VideoTile extends StatelessWidget {
                     ),
                     if (searchItem is SearchPlaylist)
                     Container(
-                        height: 25,
+                      margin: EdgeInsets.only(left: 12, right: 12),
+                      decoration: BoxDecoration(
                         color: Colors.black.withOpacity(0.4),
-                        child: Center(
-                          child: Icon(EvaIcons.musicOutline,
-                            color: Colors.white, size: 20),
-                        ),
-                      )
+                        borderRadius: BorderRadius.circular(10)
+                      ),
+                      height: 25,
+                      child: Center(
+                        child: Icon(EvaIcons.musicOutline,
+                          color: Colors.white, size: 20),
+                      ),
+                    )
                   ],
                 );
               }

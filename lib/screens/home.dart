@@ -73,6 +73,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 HomePageAppBar(
                   openSearch: manager.showSearchBar,
                   tabController: controller,
+                  onSearch: () {
+                    controller.animateTo(0);
+                  }
                 )
               ];
             },
@@ -113,6 +116,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         onItemTap: (String item) {
                           manager.searchBarFocusNode.unfocus();
                           manager.youtubeSearchQuery = item;
+                          controller.animateTo(0);
                           manager.updateYoutubeSearchResults(updateResults: true);
                           Future.delayed(Duration(milliseconds: 100), () {
                             manager.showSearchBar = false;
