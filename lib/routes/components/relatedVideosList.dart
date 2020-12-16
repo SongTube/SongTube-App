@@ -25,7 +25,7 @@ class RelatedVideosList extends StatelessWidget {
           onTap: () => onVideoTap(index),
           child: Container(
             color: Colors.transparent,
-            margin: EdgeInsets.all(8),
+            margin: EdgeInsets.all(12),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,

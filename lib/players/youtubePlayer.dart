@@ -31,6 +31,7 @@ class StreamManifestPlayer extends StatelessWidget {
             borderRadius: borderRadius == null
               ? BorderRadius.zero
               : borderRadius,
+            clipBehavior: Clip.antiAliasWithSaveLayer,
             child: _StreamManifestPlayer(
               manifest: manifest,
               isFullScreen: isFullScreen,
