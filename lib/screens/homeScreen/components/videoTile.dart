@@ -82,50 +82,54 @@ class VideoTile extends StatelessWidget {
         ),
         child: Column(
           children: <Widget>[
-            AspectRatio(
-              aspectRatio: 16/9,
-              child: FutureBuilder<String>(
-                future: _getThumbnailLink(),
-                builder: (context, snapshot) {
-                  return Stack(
-                    alignment: Alignment.bottomCenter,
-                    children: [
-                      Hero(
-                        tag: searchItem is Video
-                          ? searchItem.id.value + "player"
-                          : searchItem is SearchVideo
-                            ? searchItem.videoId.value + "player"
-                            : searchItem.playlistId.value + "player",
+            FutureBuilder<String>(
+              future: _getThumbnailLink(),
+              builder: (context, snapshot) {
+                return Stack(
+                  alignment: Alignment.bottomCenter,
+                  children: [
+                    Hero(
+                      tag: searchItem is Video
+                        ? searchItem.id.value + "player"
+                        : searchItem is SearchVideo
+                          ? searchItem.videoId.value + "player"
+                          : searchItem.playlistId.value + "player",
+                      child: AspectRatio(
+                        aspectRatio: 16/9,
                         child: Container(
                           height: double.infinity,
                           width: double.infinity,
                           padding: EdgeInsets.only(left: 12, right: 12),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(10),
-                            child: FadeInImage(
-                              fadeInDuration: Duration(milliseconds: 200),
-                              placeholder: MemoryImage(kTransparentImage),
-                              image: snapshot.hasData
-                                ? NetworkImage(snapshot.data)
-                                : MemoryImage(kTransparentImage),
-                              fit: BoxFit.cover,
+                            child: Transform.scale(
+                              scale: searchItem is Video
+                                ? 1.1 : 1.0,
+                              child: FadeInImage(
+                                fadeInDuration: Duration(milliseconds: 200),
+                                placeholder: MemoryImage(kTransparentImage),
+                                image: snapshot.hasData
+                                  ? NetworkImage(snapshot.data)
+                                  : MemoryImage(kTransparentImage),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                      if (searchItem is SearchPlaylist)
-                      Container(
-                          height: 25,
-                          color: Colors.black.withOpacity(0.4),
-                          child: Center(
-                            child: Icon(EvaIcons.musicOutline,
-                              color: Colors.white, size: 20),
-                          ),
-                        )
-                    ],
-                  );
-                }
-              ),
+                    ),
+                    if (searchItem is SearchPlaylist)
+                    Container(
+                        height: 25,
+                        color: Colors.black.withOpacity(0.4),
+                        child: Center(
+                          child: Icon(EvaIcons.musicOutline,
+                            color: Colors.white, size: 20),
+                        ),
+                      )
+                  ],
+                );
+              }
             ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
