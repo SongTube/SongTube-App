@@ -16,7 +16,12 @@ class JoinTelegramDialog extends StatelessWidget {
         children: [
           Icon(MdiIcons.telegram, color: Colors.blue),
           SizedBox(width: 8),
-          Text("Join Telegram Channel!")
+          Text(
+            "Join Telegram Channel!",
+            style: TextStyle(
+              color: Theme.of(context).textTheme.bodyText1.color
+            )
+          )
         ],
       ),
       content: Text(
@@ -24,7 +29,10 @@ class JoinTelegramDialog extends StatelessWidget {
         "Updates, Information, Development, Group Link and other Social links." +
         "\n\nIn case you have an issue or a great recommentation in your mind, " +
         "please join the Group from the Channel and write it down! I will be " +
-        "happy to listen to anything you have to say."
+        "happy to listen to anything you have to say.",
+        style: TextStyle(
+          color: Theme.of(context).textTheme.bodyText1.color
+        ),
       ),
       actions: [
         FlatButton(
