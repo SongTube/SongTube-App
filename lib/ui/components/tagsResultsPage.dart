@@ -1,6 +1,12 @@
+import 'dart:ui';
+
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:songtube/internal/musicBrainzApi.dart';
+import 'package:songtube/provider/preferencesProvider.dart';
+import 'package:songtube/ui/animations/blurPageRoute.dart';
+import 'package:songtube/ui/components/popupMenu.dart';
 
 class TagsResultsPage extends StatefulWidget {
   final String title;
@@ -24,6 +30,7 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
   }
   @override
   Widget build(BuildContext context) {
+    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -97,27 +104,16 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
                         return GestureDetector(
                           onTap: () async {
                             var result = await Navigator.of(context).push(
-                              PageRouteBuilder(
-                                opaque: false,
-                                barrierDismissible:true,
-                                barrierColor: Colors.black.withOpacity(0.6),
-                                pageBuilder: (BuildContext context, _, __) {
+                              BlurPageRoute(
+                                blurStrength: prefs.enableBlurUI ? 20 : 0,
+                                builder: (BuildContext context) {
                                   return Center(
                                     child: Container(
                                       margin: EdgeInsets.all(20),
                                       child: Column(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          Container(
-                                            child: _artworkWidget(image, index),
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(10),
-                                                topRight: Radius.circular(10)
-                                              ),
-                                              color: Theme.of(context).scaffoldBackgroundColor
-                                            ),
-                                          ),
+                                          _artworkWidget(image, index, false),
                                           Container(
                                             padding: EdgeInsets.all(16),
                                             width: double.infinity,
@@ -272,7 +268,7 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
                                                             ),
                                                           ),
                                                           SizedBox(width: 8),
-                                                          Icon(EvaIcons.cloudDownloadOutline,
+                                                          Icon(EvaIcons.checkmarkOutline,
                                                             color: Theme.of(context).accentColor),
                                                         ],
                                                       ),
@@ -295,7 +291,7 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
                           child: Column(
                             children: [
                               Expanded(
-                                child: _artworkWidget(image, index)
+                                child: _artworkWidget(image, index, true)
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(left: 16, right: 8, top: 8),
@@ -395,7 +391,7 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
     );
   }
 
-  Widget _artworkWidget(AsyncSnapshot image, int index) {
+  Widget _artworkWidget(AsyncSnapshot image, int index, bool fullRound) {
     return AspectRatio(
       aspectRatio: 1,
       child: AnimatedSwitcher(
@@ -405,7 +401,12 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
               tag: "artwork$index",
               child: Container(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10),
+                    bottomLeft: fullRound ? Radius.circular(10) : Radius.zero,
+                    bottomRight: fullRound ? Radius.circular(10) : Radius.zero,
+                  ),
                   image: DecorationImage(
                     fit: BoxFit.cover,
                     image: NetworkImage(image.data)
