@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:songtube/internal/models/tagsControllers.dart';
 
+enum ArtworkQuality { Small, Normal, Large, Original }
+
 class MusicBrainzAPI {
 
   MusicBrainzAPI();
@@ -38,13 +40,16 @@ class MusicBrainzAPI {
     return jsonDecode(response.body)["recordings"];
   }
 
-  static Future<TagsControllers> getSongTags(parsedJson) async {
+  static Future<TagsControllers> getSongTags(parsedJson, {String artworkLink}) async {
     TagsControllers tagsControllers = TagsControllers();
     tagsControllers.titleController.text = getTitle(parsedJson);
     tagsControllers.artistController.text = getArtist(parsedJson);
     tagsControllers.albumController.text = getAlbum(parsedJson);
     tagsControllers.dateController.text = getDate(parsedJson);
-    tagsControllers.artworkController = await getArtwork(parsedJson["releases"][0]["id"]);
+    if (artworkLink == null)
+      tagsControllers.artworkController = await getArtwork(parsedJson["releases"][0]["id"]);
+    else
+      tagsControllers.artworkController = artworkLink;
     tagsControllers.discController.text = getDiscNumber(parsedJson);
     tagsControllers.trackController.text = getTrackNumber(parsedJson);
     tagsControllers.genreController.text = getGenre(parsedJson);
@@ -96,7 +101,8 @@ class MusicBrainzAPI {
     }
   }
 
-  static Future<String> getArtwork(mbid) async {
+  static Future<String> getArtwork(mbid, 
+  {ArtworkQuality quality = ArtworkQuality.Large}) async {
     http.Client client = new http.Client();
     var response = await client.get(
       "http://coverartarchive.org/release/$mbid"
@@ -106,6 +112,19 @@ class MusicBrainzAPI {
       return null;
     } else {
       var json = jsonDecode(response.body);
+      try {
+        if (quality == ArtworkQuality.Original) {
+          return json["images"][0]["image"];
+        } else if (quality == ArtworkQuality.Large) {
+          return json["images"][0]["thumbnails"]["1200"];
+        } else if (quality == ArtworkQuality.Normal) {
+          return json["images"][0]["thumbnails"]["large"];
+        } else if (quality == ArtworkQuality.Small) {
+          return json["images"][0]["thumbnails"]["small"];
+        }
+      } catch (_) {
+        return json["images"][0]["image"];
+      }
       return json["images"][0]["image"];
     }
   }
