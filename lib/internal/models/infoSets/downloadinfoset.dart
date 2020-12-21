@@ -365,7 +365,7 @@ class DownloadInfoSet {
           );
           try {
             response = await http.get(metadata.coverurl)
-              .timeout(Duration(seconds: 10));
+              .timeout(Duration(seconds: 30));
             await artwork.writeAsBytes(response.bodyBytes);
             var decodedImage = await decodeImageFromList(artwork.readAsBytesSync());
             if (decodedImage.width == 120 && decodedImage.height == 90)
@@ -375,7 +375,7 @@ class DownloadInfoSet {
           if (response == null || response.bodyBytes == null) {
             try {
               response = await http.get(videoDetails.thumbnails.mediumResUrl)
-                .timeout(Duration(seconds: 10));
+                .timeout(Duration(seconds: 30));
               await artwork.writeAsBytes(response.bodyBytes);
               metadata.coverurl = videoDetails.thumbnails.mediumResUrl;
             } catch (_) {}
