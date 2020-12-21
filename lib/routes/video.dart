@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/internal/musicBrainzApi.dart';
 import 'package:songtube/players/youtubePlayer.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/provider/preferencesProvider.dart';
@@ -17,8 +18,11 @@ import 'package:songtube/routes/components/video/shimmer/shimmerVideoEngagement.
 import 'package:songtube/routes/components/video/videoDownloadFab.dart';
 import 'package:songtube/routes/components/video/videoTags.dart';
 import 'package:songtube/downloadMenu/downloadMenu.dart';
+import 'package:songtube/ui/animations/blurPageRoute.dart';
 import 'package:songtube/ui/animations/fadeIn.dart';
 import 'package:songtube/ui/components/measureSize.dart';
+import 'package:songtube/ui/components/tagsResultsPage.dart';
+import 'package:songtube/ui/dialogs/loadingDialog.dart';
 import 'package:songtube/ui/internal/snackbar.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
@@ -200,6 +204,39 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> {
                               VideoTags(
                                 videoDetails: manager.mediaInfoSet.videoDetails,
                                 tagsControllers: manager.mediaInfoSet.mediaTags,
+                                onMBSearchTap: () async {
+                                  var record = await Navigator.push(context,
+                                    BlurPageRoute(builder: (context) => 
+                                      TagsResultsPage(
+                                        title: manager.mediaInfoSet.mediaTags.titleController.text,
+                                        artist: manager.mediaInfoSet.mediaTags.artistController.text
+                                      )));
+                                  if (record == null) return;
+                                  showDialog(
+                                    context: context,
+                                    builder: (_) => LoadingDialog()
+                                  );
+                                  String lastArtwork = manager.mediaInfoSet.mediaTags.artworkController;
+                                  manager.mediaInfoSet.mediaTags = await MusicBrainzAPI.getSongTags(record);
+                                  if (manager.mediaInfoSet.mediaTags.artworkController == null)
+                                    manager.mediaInfoSet.mediaTags.artworkController = lastArtwork;
+                                  Navigator.pop(context);
+                                  setState(() {});
+                                },
+                                onMBTap: () async {
+                                  showDialog(
+                                    context: context,
+                                    builder: (_) => LoadingDialog()
+                                  );
+                                  String lastArtwork = manager.mediaInfoSet.mediaTags.artworkController;
+                                  var record = await MusicBrainzAPI
+                                    .getFirstRecord(manager.mediaInfoSet.mediaTags.titleController.text);
+                                  manager.mediaInfoSet.mediaTags = await MusicBrainzAPI.getSongTags(record);
+                                  if (manager.mediaInfoSet.mediaTags.artworkController == null)
+                                    manager.mediaInfoSet.mediaTags.artworkController = lastArtwork;
+                                  Navigator.pop(context);
+                                  setState(() {});
+                                },
                                 onArtworkTap: () async {
                                   File image = File((await FilePicker.platform
                                     .pickFiles(type: FileType.image))

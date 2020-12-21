@@ -4,6 +4,8 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/models/tagsControllers.dart';
+import 'package:songtube/internal/musicBrainzApi.dart';
+import 'package:songtube/ui/components/popupMenu.dart';
 import 'package:songtube/ui/components/textfieldTile.dart';
 import 'package:string_validator/string_validator.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -14,11 +16,15 @@ class VideoTags extends StatelessWidget {
   final Video videoDetails;
   final String artworkUrl;
   final Function onArtworkTap;
+  final Function onMBTap;
+  final Function onMBSearchTap;
   VideoTags({
     this.tagsControllers,
     this.artworkUrl,
     @required this.videoDetails,
-    this.onArtworkTap
+    this.onArtworkTap,
+    this.onMBTap,
+    this.onMBSearchTap
   });
   @override
   Widget build(BuildContext context) {
@@ -44,8 +50,26 @@ class VideoTags extends StatelessWidget {
           ),
         ],
       ),
-      trailing: GestureDetector(
-        onTap: onArtworkTap,
+      trailing: FlexiblePopupMenu(
+        borderRadius: 15,
+        items: [
+          "Perform Automatic Tagging",
+          "Select Tags from MusicBrainz",
+          "Select Artwork from device"
+        ],
+        onItemTap: (value) {
+          switch (value) {
+            case "Perform Automatic Tagging":
+              onMBTap();
+              break;
+            case "Select Tags from MusicBrainz":
+              onMBSearchTap();
+              break;
+            case "Select Artwork from device":
+              onArtworkTap();
+              break;
+          }
+        },
         child: Padding(
           padding: EdgeInsets.only(right: 12),
           child: Row(
@@ -54,7 +78,7 @@ class VideoTags extends StatelessWidget {
               Container(
                 margin: EdgeInsets.only(right: 8),
                 child: Text(
-                  Languages.of(context).labelEditArtwork,
+                  " Tags\n  Editor  ",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 12
