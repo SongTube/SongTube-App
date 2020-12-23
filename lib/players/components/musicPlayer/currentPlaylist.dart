@@ -23,9 +23,9 @@ class _MusicPlayerCurrentPlaylistState extends State<MusicPlayerCurrentPlaylist>
 
   @override
   void initState() {
-    controller = ScrollController();
     super.initState();
-    Future.delayed(Duration(milliseconds: 400), () {
+    controller = ScrollController();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       animateToCurrentPlaying();
     });
   }
@@ -33,11 +33,7 @@ class _MusicPlayerCurrentPlaylistState extends State<MusicPlayerCurrentPlaylist>
   void animateToCurrentPlaying() {
     int index = AudioService.queue.indexOf(AudioService.currentMediaItem);
     double offset = index.toDouble()*75;
-    controller.animateTo(
-      offset,
-      curve: Curves.fastLinearToSlowEaseIn,
-      duration: Duration(milliseconds: 600)
-    );
+    controller.jumpTo(offset);
   }
 
   @override
@@ -58,6 +54,7 @@ class _MusicPlayerCurrentPlaylistState extends State<MusicPlayerCurrentPlaylist>
         Future.delayed(Duration(milliseconds: 200), () {
           Navigator.pop(context);
         });
+        return Future.value(false);
       },
       child: Scaffold(
         backgroundColor: widget.blurUIEnabled
@@ -145,7 +142,6 @@ class _MusicPlayerCurrentPlaylistState extends State<MusicPlayerCurrentPlaylist>
                     ),
                 onTap: () async {
                   await AudioService.playMediaItem(song);
-                  animateToCurrentPlaying();
                   setState(() {});
                 },
               );
