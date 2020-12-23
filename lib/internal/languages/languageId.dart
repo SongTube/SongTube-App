@@ -18,7 +18,7 @@ class LanguageId extends Languages {
   @override
   String get labelAppCustomization => "Kustomisasi";
   @override
-  String get labelSelectPreferred => "Pilih keinginanmu";
+  String get labelSelectPreferred => "Pilih kesukaan anda";
   @override
   String get labelConfigReady => "Konfigurasi Siap";
   @override
@@ -26,11 +26,11 @@ class LanguageId extends Languages {
   @override
   String get labelEnjoy => "Nikmati";
   @override 
-  String get labelGoHome => "Pulang";
+  String get labelGoHome => "Pergi Ke Beranda";
 
   // Bottom Navigation Bar
   @override
-  String get labelHome => "Rumah";
+  String get labelHome => "Beranda";
   @override
   String get labelDownloads => "Unduh";
   @override
@@ -46,7 +46,7 @@ class LanguageId extends Languages {
   @override
   String get labelTagsEditor => "Tag\nEditor";
   @override
-  String get labelEditArtwork => "Editor\nArtwork";
+  String get labelEditArtwork => "Edit\nArtwork";
   @override
   String get labelDownloadAll => "Unduh Semua";
   @override 
@@ -54,7 +54,7 @@ class LanguageId extends Languages {
 
   // Downloads Screen
   @override
-  String get labelQueued => "Dalam antrean";
+  String get labelQueued => "Dalam antrian";
   @override
   String get labelDownloading => "Mengunduh";
   @override
@@ -156,7 +156,7 @@ class LanguageId extends Languages {
   String get labelEnableDarkTheme => "Aktifkan Tema Gelap";
   @override
   String get labelEnableDarkThemeJustification =>
-    "Gunakan Tema Gelap secara bawaan";
+    "Gunakan Tema Gelap secara default";
   @override
   String get labelEnableBlackTheme => "Aktifkan Tema Hitam";
   @override
@@ -269,7 +269,7 @@ class LanguageId extends Languages {
   @override
   String get labelCalculating => "Menghitung";
   @override
-  String get labelCleaning => "Cleaning";
+  String get labelCleaning => "Pembersihan";
   @override
   String get labelCancel => "Batalkan";
 
