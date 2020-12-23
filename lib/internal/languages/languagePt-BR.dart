@@ -16,7 +16,7 @@ class LanguagePtBr extends Languages {
     "Precisa acessar sua Memória Externa para salvar " +
     "seus Vídeos e Músicas";
   @override
-  String get labelAppCustomization => "Personalização";
+  String get labelAppCustomization => "Personalizado";
   @override
   String get labelSelectPreferred => "Selecione seu favorito";
   @override
