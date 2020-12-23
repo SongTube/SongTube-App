@@ -1,12 +1,7 @@
 // Flutter
 import 'package:flutter/material.dart';
 import 'package:songtube/provider/configurationProvider.dart';
-import 'package:songtube/provider/preferencesProvider.dart';
-import 'package:songtube/screens/homeScreen/components/homePageFavoritesEmpty.dart';
-import 'package:songtube/screens/homeScreen/components/homePageWatchLaterEmpty.dart';
 import 'package:songtube/screens/homeScreen/homeAppBar.dart';
-import 'package:songtube/screens/homeScreen/homeCategoryList.dart';
-import 'package:songtube/routes/components/video/shimmer/shimmerVideoTile.dart';
 
 // Internal
 import 'package:songtube/provider/managerProvider.dart';

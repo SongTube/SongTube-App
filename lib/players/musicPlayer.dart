@@ -8,7 +8,6 @@ import 'package:songtube/players/service/playerService.dart';
 import 'package:songtube/players/components/musicPlayer/collapsedPanel.dart';
 import 'package:songtube/players/components/musicPlayer/expandedPanel.dart';
 import 'package:songtube/players/service/screenStateStream.dart';
-import 'package:songtube/provider/configurationProvider.dart';
 import 'package:songtube/provider/mediaProvider.dart';
 
 // Packages

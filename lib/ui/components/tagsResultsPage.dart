@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:songtube/internal/musicBrainzApi.dart';
 import 'package:songtube/provider/preferencesProvider.dart';
 import 'package:songtube/ui/animations/blurPageRoute.dart';
-import 'package:songtube/ui/components/popupMenu.dart';
 
 class TagsResultsPage extends StatefulWidget {
   final String title;

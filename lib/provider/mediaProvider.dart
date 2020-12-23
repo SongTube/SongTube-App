@@ -9,6 +9,7 @@ import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:songtube/internal/ffmpeg/extractor.dart';
+import 'package:songtube/internal/lyricsProviders.dart';
 
 // Internal
 import 'package:songtube/internal/models/folder.dart';
@@ -42,6 +43,32 @@ class MediaProvider extends ChangeNotifier {
   // SlidingPanel Open/Closed Status
   bool slidingPanelOpen;
 
+  // Show Current Song Lyrics
+  bool _showLyrics = false;
+  bool get showLyrics => _showLyrics;
+  set showLyrics(bool value) {
+    _showLyrics = value;
+    notifyListeners();
+    if (value == true && currentLyrics == null)
+      getLyrics();
+  }
+  var currentLyrics;
+
+  void getLyrics() async {
+    // First try use LyricsOvh
+    currentLyrics = await LyricsProviders.lyricsOvh(
+      author: mediaItem.artist,
+      title: mediaItem.title
+    );
+    // Second try use HappiDev
+    if (currentLyrics == "") {
+      currentLyrics = await LyricsProviders.lyricsHappiDev(
+        title: mediaItem.artist + mediaItem.title
+      );
+    }
+    notifyListeners();
+  }
+
   // MusicPlayer Current Values
   MediaItem _mediaItem;
   File artwork;
@@ -51,6 +78,7 @@ class MediaProvider extends ChangeNotifier {
   MediaItem get mediaItem => _mediaItem;
   set mediaItem(MediaItem newMediaItem) {
     _mediaItem = newMediaItem;
+    currentLyrics = null;    
     updateUIElements();
   }
 
@@ -69,6 +97,7 @@ class MediaProvider extends ChangeNotifier {
     if (palette.vibrantColor == null) {
       vibrantColor = dominantColor;
     } else { vibrantColor = palette.vibrantColor.color; }
+    showLyrics = false;
     notifyListeners();
   }
 

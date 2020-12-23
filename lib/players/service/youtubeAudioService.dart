@@ -41,7 +41,6 @@ void youtubeAudioService() async {
 class YoutubeAudioService extends BackgroundAudioTask {
   
   List<MediaItem> _queue;
-  @override
   List<MediaItem> get queue => _queue;
   AudioPlayer _player;
   StreamSubscription<PlaybackEvent> _eventSubscription;

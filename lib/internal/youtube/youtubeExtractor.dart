@@ -285,5 +285,4 @@ class YoutubeExtractor {
     }
     return audio;
   }
-
 }
