@@ -11,6 +11,7 @@ import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/models/tagsControllers.dart';
 import 'package:songtube/internal/musicBrainzApi.dart';
 import 'package:songtube/provider/mediaProvider.dart';
+import 'package:songtube/provider/preferencesProvider.dart';
 import 'package:songtube/ui/animations/blurPageRoute.dart';
 import 'package:songtube/ui/components/popupMenu.dart';
 import 'package:songtube/ui/components/tagsResultsPage.dart';
@@ -64,6 +65,7 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
   @override
   Widget build(BuildContext context) {
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
+    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
@@ -108,7 +110,7 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
                       TagsResultsPage(
                         title: tagsControllers.titleController.text,
                         artist: tagsControllers.artistController.text
-                      )));
+                      ), blurStrength: prefs.enableBlurUI ? 20 : 0));
                   if (record == null) return;
                   showDialog(
                     context: context,
