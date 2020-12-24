@@ -289,7 +289,14 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
         child: Icon(Icons.save_outlined,
           color: Colors.white),
         onPressed: () async {
+          showDialog(
+            context: context,
+            builder: (_) {
+              return LoadingDialog();
+            }
+          );
           await mediaProvider.replaceTags(widget.song, tagsControllers);
+          Navigator.pop(context);
           Navigator.pop(context);
         },
       ),
