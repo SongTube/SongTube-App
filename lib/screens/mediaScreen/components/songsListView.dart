@@ -6,11 +6,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/models/videoFile.dart';
-import 'package:songtube/internal/nativeMethods.dart';
 import 'package:songtube/players/service/playerService.dart';
 import 'package:songtube/players/videoPlayer.dart';
 import 'package:songtube/provider/mediaProvider.dart';
+import 'package:songtube/provider/preferencesProvider.dart';
+import 'package:songtube/ui/animations/blurPageRoute.dart';
 import 'package:songtube/ui/components/popupMenu.dart';
+import 'package:songtube/ui/components/tagsEditorPage.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class SongsListView extends StatelessWidget {
@@ -25,6 +27,7 @@ class SongsListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
+    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     return ListView.builder(
       physics: BouncingScrollPhysics(),
       itemCount: songs.length,
@@ -71,20 +74,23 @@ class SongsListView extends StatelessWidget {
                     size: 20,
                   ),
                 ),
-                Container(
-                  height: 50,
-                  width: 50,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: FadeInImage(
-                      fadeInDuration: Duration(milliseconds: 200),
-                      placeholder: MemoryImage(kTransparentImage),
-                      image: FileImage(File(song.extras["artwork"])),
-                      fit: BoxFit.cover,
-                    )
+                Hero(
+                  tag: song.title,
+                  child: Container(
+                    height: 50,
+                    width: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: FadeInImage(
+                        fadeInDuration: Duration(milliseconds: 200),
+                        placeholder: MemoryImage(kTransparentImage),
+                        image: FileImage(File(song.extras["artwork"])),
+                        fit: BoxFit.cover,
+                      )
+                    ),
                   ),
                 ),
               ],
@@ -98,7 +104,7 @@ class SongsListView extends StatelessWidget {
               ],
               onItemTap: (String value) async {
                 if (value != null) {
-                  if (AudioService.playbackState.playing) {
+                  if (AudioService.running && AudioService.playbackState.playing) {
                     if (AudioService.currentMediaItem.id == song.id) {
                       AudioService.stop();
                     }
@@ -108,7 +114,17 @@ class SongsListView extends StatelessWidget {
                       mediaProvider.deleteSong(song);
                       break;
                     case "Edit Tags":
-                      // TODO: Show Tags editor Page
+                      await Navigator.of(context).push(
+                        BlurPageRoute(
+                          builder: (_) {
+                            return TagsEditorPage(
+                              song: song,
+                            );
+                          },
+                          blurStrength: prefs.enableBlurUI
+                            ? 20 : 0
+                        )
+                      );
                       break;
                     case "Apply Filters":
                       // TODO: Allow Audio Filters application

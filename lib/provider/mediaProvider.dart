@@ -328,4 +328,76 @@ class MediaProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> replaceTags(MediaItem song, TagsControllers tags) async {
+    await TagsManager.writeAllTags(
+      songPath: song.id,
+      title: tags.titleController.text,
+      album: tags.albumController.text,
+      artist: tags.artistController.text,
+      genre: tags.genreController.text,
+      year: tags.dateController.text,
+      disc: tags.discController.text,
+      track: tags.trackController.text
+    );
+    // Only add Artwork if song is in AAC Format
+    File croppedImage;
+    if (isURL(tags.artworkController)) {
+      http.Response response;
+      File artwork = new File(
+        (await getTemporaryDirectory()).path +
+        "/${RandomString.getRandomString(5)}"
+      );
+      try {
+        response = await http.get(tags.artworkController)
+          .timeout(Duration(seconds: 30));
+        await artwork.writeAsBytes(response.bodyBytes);
+      } catch (_) {}
+      croppedImage = await NativeMethod.cropToSquare(artwork);
+    } else {
+      croppedImage = await NativeMethod
+        .cropToSquare(File(tags.artworkController));
+    }
+    await TagsManager.writeArtwork(
+      songPath: song.id,
+      artworkPath: croppedImage.path
+    );
+    // Create New Artwork
+    await FFmpegExtractor.getAudioArtwork(
+      audioFile: song.id,
+      audioId: song.extras["albumId"],
+      forceExtraction: true
+    );
+    File thumbnail = await FFmpegExtractor.getAudioThumbnail(
+      audioFile: song.id,
+      audioId: song.extras["albumId"],
+      forceExtraction: true
+    );
+    MediaItem newSong = MediaItem(
+      id: song.id,
+      title: tags.titleController.text,
+      album: tags.albumController.text,
+      artist: tags.artistController.text,
+      genre: tags.genreController.text,
+      duration: song.duration,
+      artUri: "file://" + thumbnail.path,
+      extras: {
+        "artwork": thumbnail.path,
+        "albumId": song.extras["albumId"]
+      }
+    );
+    if (databaseSongs.contains(song)) {
+      int index = databaseSongs.indexWhere((element) => element == song);
+      databaseSongs.removeAt(index);
+      databaseSongs.insert(index, newSong);
+    }
+    if (listMediaItems.contains(song)) {
+      int index = listMediaItems.indexWhere((element) => element == song);
+      listMediaItems.removeAt(index);
+      listMediaItems.insert(index, newSong);
+    }
+    imageCache.clear();
+    imageCache.clearLiveImages();
+    notifyListeners();
+  }
+
 }
