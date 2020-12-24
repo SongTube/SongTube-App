@@ -10,6 +10,7 @@ class BlurPageRoute<T> extends PageRoute<T> with MaterialRouteTransitionMixin<T>
   double blurStrength;
   Curve animationCurve;
   Offset slideOffset;
+  bool useCardExit;
 
   BlurPageRoute({
     this.duration = const Duration(milliseconds: 500),
@@ -21,7 +22,8 @@ class BlurPageRoute<T> extends PageRoute<T> with MaterialRouteTransitionMixin<T>
     bool fullscreenDialog = false,
     this.animationCurve = Curves.fastLinearToSlowEaseIn,
     this.opaque = false,
-    this.slideOffset = const Offset(0.0, 10.0)
+    this.slideOffset = const Offset(0.0, 10.0),
+    this.useCardExit = false
   }) : assert(builder != null),
        assert(maintainState != null),
        assert(fullscreenDialog != null),
@@ -37,7 +39,7 @@ class BlurPageRoute<T> extends PageRoute<T> with MaterialRouteTransitionMixin<T>
   Widget buildTransitions(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation, Widget child) {
     // Create transition from bottom to top, like bottom sheet
-    if (animation.status == AnimationStatus.reverse) {
+    if (animation.status == AnimationStatus.reverse && !useCardExit) {
       return BackdropFilter(
         filter: ImageFilter.blur(
           sigmaX: blurStrength*animation.value,
