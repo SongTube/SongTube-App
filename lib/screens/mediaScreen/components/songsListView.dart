@@ -98,9 +98,8 @@ class SongsListView extends StatelessWidget {
             trailing: FlexiblePopupMenu(
               borderRadius: 10,
               items: [
-                "Delete Song",
                 "Edit Tags",
-                "Apply Filters"
+                "Delete Song"
               ],
               onItemTap: (String value) async {
                 if (value != null) {
