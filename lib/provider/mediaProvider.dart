@@ -1,7 +1,7 @@
 // Dart
 import 'dart:io';
 import 'dart:typed_data';
-
+import 'package:http/http.dart' as http;
 // Flutter
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,6 +15,7 @@ import 'package:songtube/internal/lyricsProviders.dart';
 // Internal
 import 'package:songtube/internal/models/folder.dart';
 import 'package:songtube/internal/models/songFile.dart';
+import 'package:songtube/internal/models/tagsControllers.dart';
 import 'package:songtube/internal/models/videoFile.dart';
 
 // Packages
@@ -25,6 +26,9 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:songtube/internal/nativeMethods.dart';
+import 'package:songtube/internal/randomString.dart';
+import 'package:songtube/internal/tagsManager.dart';
+import 'package:string_validator/string_validator.dart';
 
 class MediaProvider extends ChangeNotifier {
 
@@ -158,7 +162,7 @@ class MediaProvider extends ChangeNotifier {
 
   Future<void> updateUIElements() async {
     String currentAlbumId = await AudioService.currentMediaItem.extras["albumId"];
-    artwork = await FFmpegExtractor.generateArtwork(
+    artwork = await FFmpegExtractor.getAudioArtwork(
       audioFile: mediaItem.id,
       audioId: currentAlbumId,
     );
@@ -179,11 +183,11 @@ class MediaProvider extends ChangeNotifier {
       // Next
       AudioService.queue.indexOf(AudioService.currentMediaItem)+1,
     ];
-    FFmpegExtractor.generateArtwork(
+    FFmpegExtractor.getAudioArtwork(
       audioFile: AudioService.queue[indexes[0]].id,
       audioId: AudioService.queue[indexes[0]].extras["albumId"],
     );
-    FFmpegExtractor.generateArtwork(
+    FFmpegExtractor.getAudioArtwork(
       audioFile: AudioService.queue[indexes[1]].id,
       audioId: AudioService.queue[indexes[1]].extras["albumId"],
     );
@@ -203,32 +207,12 @@ class MediaProvider extends ChangeNotifier {
       storagePermission = false;
       return;
     }
-    FlutterFFmpeg ffmpeg = FlutterFFmpeg();
     List<SongInfo> songInfoList = await audioQuery.getSongs();
-    String thumbnailsPath = (await getApplicationDocumentsDirectory()).path + "/Thumbnails/";
-    if (!await Directory(thumbnailsPath).exists())
-      await Directory(thumbnailsPath).create();
     for (SongInfo song in songInfoList) {
-      File artworkFile = File("$thumbnailsPath${song.title.replaceAll("/", "_")}.jpg");
-      if (!await artworkFile.exists()) {
-        int result = await ffmpeg.executeWithArguments([
-          "-y", "-i", "${song.filePath}", "-filter:v", "scale=-1:250", "-an",
-          "${artworkFile.path}"
-        ]);
-        if (result == 255 || result == 1) {
-          Uint8List artwork = await audioQuery.getArtwork(
-            type: ResourceType.SONG,
-            id: song.id,
-            size: Size(128,128)
-          );
-          if (artwork.isNotEmpty) {
-            await artworkFile.writeAsBytes(artwork);
-          } else {
-            var bytes = await rootBundle.load('assets/images/artworkPlaceholder_small.png');
-            await artworkFile.writeAsBytes(bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes));
-          }
-        }
-      }
+      File artworkFile = await FFmpegExtractor.getAudioThumbnail(
+        audioFile: song.filePath,
+        audioId: song.id
+      );
       // Avoid this Method from stopping this function on
       // exception (Most probably because a corrupted audio)
       try {

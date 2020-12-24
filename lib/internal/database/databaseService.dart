@@ -91,9 +91,8 @@ class DatabaseService {
         File coverPath = File("$thumbnailsPath/${songFile.title.replaceAll("/", "_")}.jpg");
         if (!await coverPath.exists()) {
           File coverImage =
-            await FFmpegExtractor.generateArtwork(
+            await FFmpegExtractor.getAudioThumbnail(
               audioFile: songFile.path,
-              imageType: ExtractImageType.Thumbnail,
               extractionMethod: ArtworkExtractMethod.FFmpeg
             );
           if (!await coverImage.exists()) {
