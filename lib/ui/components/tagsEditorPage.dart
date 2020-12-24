@@ -19,6 +19,7 @@ import 'package:songtube/ui/components/textfieldTile.dart';
 import 'package:songtube/ui/dialogs/loadingDialog.dart';
 import 'package:string_validator/string_validator.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:songtube/ui/internal/snackbar.dart';
 
 class TagsEditorPage extends StatefulWidget {
   final MediaItem song;
@@ -33,6 +34,7 @@ class TagsEditorPage extends StatefulWidget {
 class _TagsEditorPageState extends State<TagsEditorPage> {
 
   TagsControllers tagsControllers;
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -67,6 +69,7 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
     PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     return Scaffold(
+      key: scaffoldKey,
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         titleSpacing: 0,
@@ -295,7 +298,19 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
               return LoadingDialog();
             }
           );
-          await mediaProvider.replaceTags(widget.song, tagsControllers);
+          try {
+            await mediaProvider.replaceTags(widget.song, tagsControllers);
+          } catch (_) {
+            Navigator.pop(context);
+            AppSnack.showSnackBar(
+              icon: Icons.warning,
+              title: "Audio Format not Compatible",
+              duration: Duration(seconds: 2),
+              context: context,
+              scaffoldKey: scaffoldKey.currentState
+            );
+            return;
+          }
           Navigator.pop(context);
           Navigator.pop(context);
         },
