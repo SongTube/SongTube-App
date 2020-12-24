@@ -1,3 +1,14 @@
+# SongTube 5.3.0:
+
+- Fixed "Join Telegram" dialog text color
+- Implemented MusicBrainz for Music Tagging
+- Blur Background toggle is now back for Music Player
+- MusicPlayer now preloads previous and next songs Artworks (Which makes song skip smoother)
+- Replaced "Delete Song" dialog in Media's Songs with a better Popup Menu
+- You can now change Tags & Artwork on any song in your Media
+- Black theme is now fully black
+- Implemented Lyrics (One tap on the MusicPlayer Artwork to load it)
+
 # SongTube 5.2.0:
 
 - Small Home Screen re-design
