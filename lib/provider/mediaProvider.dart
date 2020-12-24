@@ -87,7 +87,6 @@ class MediaProvider extends ChangeNotifier {
     artwork = await FFmpegExtractor.generateArtwork(
       audioFile: mediaItem.id,
       audioId: currentAlbumId,
-      forceExtraction: true
     );
     PaletteGenerator palette = await PaletteGenerator
       .fromImageProvider(
@@ -99,6 +98,21 @@ class MediaProvider extends ChangeNotifier {
     } else { vibrantColor = palette.vibrantColor.color; }
     showLyrics = false;
     notifyListeners();
+    // Preload Previous and Next Artwork
+    List<int> indexes = [
+      // Previous
+      AudioService.queue.indexOf(AudioService.currentMediaItem)-1,
+      // Next
+      AudioService.queue.indexOf(AudioService.currentMediaItem)+1,
+    ];
+    FFmpegExtractor.generateArtwork(
+      audioFile: AudioService.queue[indexes[0]].id,
+      audioId: AudioService.queue[indexes[0]].extras["albumId"],
+    );
+    FFmpegExtractor.generateArtwork(
+      audioFile: AudioService.queue[indexes[1]].id,
+      audioId: AudioService.queue[indexes[1]].extras["albumId"],
+    );
   }
 
   // Do we have storage Permission?
@@ -231,4 +245,9 @@ class MediaProvider extends ChangeNotifier {
         }
       );
   }
+
+  void setState() {
+    notifyListeners();
+  }
+
 }
