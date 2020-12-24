@@ -107,8 +107,11 @@ class _HomePageAppBarState extends State<HomePageAppBar> {
           leadingIcon: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Image.asset(
-              'assets/images/ic_launcher.png',
+              DateTime.now().month == 12
+                ? 'assets/images/logo_christmas.png'
+                : 'assets/images/ic_launcher.png',
               fit: BoxFit.cover,
+              filterQuality: FilterQuality.high,
             ),
           ),
           searchHint: "SongTube",

@@ -50,7 +50,9 @@ class IntroWelcome extends StatelessWidget {
                             height: 140,
                             width: 140,
                             child: Image.asset(
-                              'assets/images/logo.png'
+                              DateTime.now().month == 12
+                                ? 'assets/images/logo_christmas.png'
+                                : 'assets/images/logo.png'
                             )
                           ),
                         ),

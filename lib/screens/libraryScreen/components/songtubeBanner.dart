@@ -41,7 +41,11 @@ class SongTubeBanner extends StatelessWidget {
                   ),
                 ],
               ),
-              child: Image.asset('assets/images/logo.png')
+              child: Image.asset(
+                DateTime.now().month == 12
+                  ? 'assets/images/logo_christmas.png'
+                  : 'assets/images/logo.png'
+              )
             ),
           ),
           // App Info
