@@ -52,7 +52,7 @@ class PlayerArtwork extends StatelessWidget {
                   ? 0.2 : 1.0,
                 child: ImageFade(
                   image: FileImage(image),
-                  fadeDuration: Duration(milliseconds: 150),
+                  fadeDuration: Duration(milliseconds: 400),
                   height: double.infinity,
                   width: double.infinity,
                   fit: BoxFit.cover,
