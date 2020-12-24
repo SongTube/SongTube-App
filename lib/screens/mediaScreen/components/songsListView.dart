@@ -97,21 +97,23 @@ class SongsListView extends StatelessWidget {
                 "Apply Filters"
               ],
               onItemTap: (String value) async {
-                if (AudioService.playbackState.playing) {
-                  if (AudioService.currentMediaItem.id == song.id) {
-                    AudioService.stop();
+                if (value != null) {
+                  if (AudioService.playbackState.playing) {
+                    if (AudioService.currentMediaItem.id == song.id) {
+                      AudioService.stop();
+                    }
                   }
-                }
-                switch (value) {
-                  case "Delete Song":
-                    mediaProvider.deleteSong(song);
-                    break;
-                  case "Edit Tags":
-                    // TODO: Show Tags editor Page
-                    break;
-                  case "Apply Filters":
-                    // TODO: Allow Audio Filters application
-                    break;
+                  switch (value) {
+                    case "Delete Song":
+                      mediaProvider.deleteSong(song);
+                      break;
+                    case "Edit Tags":
+                      // TODO: Show Tags editor Page
+                      break;
+                    case "Apply Filters":
+                      // TODO: Allow Audio Filters application
+                      break;
+                  }
                 }
               },
               child: Icon(Icons.more_vert, size: 18)
