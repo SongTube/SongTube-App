@@ -52,6 +52,22 @@ class MusicPlayerSettingsDialog extends StatelessWidget {
           ),
           ListTile(
             title: Text(
+              "Blur Background",
+              style: TextStyle(
+                fontFamily: 'YTSans',
+                color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6)
+              ),
+            ),
+            onTap: () {
+              prefs.enablePlayerBlurBackground = !prefs.enablePlayerBlurBackground;
+            },
+            trailing: CircularCheckBox(
+              value: prefs.enablePlayerBlurBackground,
+              onChanged: (_) { prefs.enablePlayerBlurBackground = !prefs.enablePlayerBlurBackground; },
+            ),
+          ),
+          ListTile(
+            title: Text(
               "Artwork Rounded Corners",
               style: TextStyle(
                 fontFamily: 'YTSans',

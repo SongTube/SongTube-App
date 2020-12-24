@@ -178,6 +178,7 @@ class PlayerControls extends StatelessWidget {
                           duration: Duration(milliseconds: 400),
                           blurStrength: prefs.enableBlurUI
                             ? 20 : 0,
+                          useCardExit: !prefs.enableBlurUI
                         ));
                     },
                   ),

@@ -108,6 +108,14 @@ class PreferencesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool get enablePlayerBlurBackground {
+    return prefs.getBool('enablePlayerBlurBackground') ?? true;
+  }
+  set enablePlayerBlurBackground(bool value) {
+    prefs.setBool('enablePlayerBlurBackground', value);
+    notifyListeners();
+  }
+
   // MusicPlayer Artwork Rounded Corners
   double get musicPlayerArtworkRoundCorners {
     return prefs.getDouble('musicPlayerArtworkRoundCorners') ?? 20;

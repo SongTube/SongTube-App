@@ -38,10 +38,10 @@ class SlidingPlayerPanel extends StatelessWidget {
         });
         if (mediaItem != null) {
           if (mediaProvider.slidingPanelOpen == true) {
-            Color dominantColor = prefs.enableBlurUI
+            Color dominantColor = prefs.enablePlayerBlurBackground
               ? mediaProvider.dominantColor == null ? Colors.white : mediaProvider.dominantColor
               : Theme.of(context).accentColor;
-            Color textColor = prefs.enableBlurUI
+            Color textColor = prefs.enablePlayerBlurBackground
               ? dominantColor.computeLuminance() > 0.5 ? Colors.black : Colors.white
               : Theme.of(context).textTheme.bodyText1.color;
             SystemChrome.setSystemUIOverlayStyle(
@@ -79,10 +79,10 @@ class SlidingPlayer extends StatelessWidget {
   Widget build(BuildContext context) {
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
     PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
-    Color dominantColor = prefs.enableBlurUI
+    Color dominantColor = prefs.enablePlayerBlurBackground
       ? mediaProvider.dominantColor == null ? Colors.white : mediaProvider.dominantColor
       : Theme.of(context).accentColor;
-    Color textColor = prefs.enableBlurUI
+    Color textColor = prefs.enablePlayerBlurBackground
       ? dominantColor.computeLuminance() > 0.5 ? Colors.black : Colors.white
       : Theme.of(context).textTheme.bodyText1.color;
     return SlidingUpPanel(

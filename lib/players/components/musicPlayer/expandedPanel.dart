@@ -34,24 +34,24 @@ class ExpandedPlayer extends StatelessWidget {
     ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
     File image = mediaProvider.artwork;
-    Color dominantColor = prefs.enableBlurUI
+    Color dominantColor = prefs.enablePlayerBlurBackground
       ? mediaProvider.dominantColor == null ? Colors.white : mediaProvider.dominantColor
       : Theme.of(context).accentColor;
-    Color textColor = prefs.enableBlurUI
+    Color textColor = prefs.enablePlayerBlurBackground
       ? dominantColor.computeLuminance() > 0.5 ? Colors.black : Colors.white
       : Theme.of(context).textTheme.bodyText1.color;
-    Color vibrantColor = prefs.enableBlurUI
+    Color vibrantColor = prefs.enablePlayerBlurBackground
       ? mediaProvider.vibrantColor == null ? Colors.white : mediaProvider.vibrantColor
       : Theme.of(context).accentColor;
     return Scaffold(
-      backgroundColor: !prefs.enableBlurUI
+      backgroundColor: !prefs.enablePlayerBlurBackground
         ? Theme.of(context).scaffoldBackgroundColor
         : dominantColor,
       body: PlayerBackground(
         backgroundImage: File(mediaItem.artUri.replaceAll("file://", "")),
-        enableBlur: prefs.enableBlurUI,
+        enableBlur: prefs.enablePlayerBlurBackground,
         blurIntensity: 50,
-        backdropColor: prefs.enableBlurUI
+        backdropColor: prefs.enablePlayerBlurBackground
           ? dominantColor
           : Theme.of(context).scaffoldBackgroundColor,
         backdropOpacity: 0.4,
