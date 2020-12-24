@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/provider/downloadsProvider.dart';
 import 'package:songtube/provider/managerProvider.dart';
+import 'package:songtube/provider/mediaProvider.dart';
 
 // Internal
 import 'package:songtube/screens/mediaScreen/tabs/downloadsTab.dart';
@@ -43,7 +44,7 @@ class _MediaScreenState extends State<MediaScreen> {
         }
       }
     );
-    Provider.of<DownloadsProvider>
+    Provider.of<MediaProvider>
       (context, listen: false).getDatabase();
     super.initState();
   }

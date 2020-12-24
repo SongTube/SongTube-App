@@ -20,12 +20,8 @@ class DownloadsProvider extends ChangeNotifier {
     convertingList = new List<DownloadInfoSet>();
     completedList = new List<DownloadInfoSet>();
     cancelledList = new List<DownloadInfoSet>();
-    databaseSongs = new List<MediaItem>();
-    getDatabase();
+    
   }
-
-  // List Songs on Database
-  List<MediaItem> databaseSongs;
 
   // Queue List
   List<DownloadInfoSet> queueList;
@@ -41,16 +37,6 @@ class DownloadsProvider extends ChangeNotifier {
 
   // Cancelled List
   List<DownloadInfoSet> cancelledList;
-
-  // --------
-  // Database
-  // --------
-  final dbHelper = DatabaseService.instance;
-  Future<void> getDatabase() async {
-    List<SongFile> tmp = await dbHelper.getDownloadList();
-    databaseSongs = convertToMediaItem(tmp);
-    notifyListeners();
-  }
 
   // Handle Single Video Download
   void handleVideoDownload({
@@ -260,45 +246,4 @@ class DownloadsProvider extends ChangeNotifier {
       .replaceAll('>', '')
       .replaceAll('|', '');
   }
-
-  // Convert any List<SongFile> to a List<MediaItem>
-  List<MediaItem> convertToMediaItem(List<SongFile> songList) {
-    List<MediaItem> list = [];
-    songList.forEach((SongFile element) {
-      int hours = 0;
-      int minutes = 0;
-      int micros;
-      List<String> parts = element.duration.split(':');
-      if (parts.length > 2) {
-        hours = int.parse(parts[parts.length - 3]);
-      }
-      if (parts.length > 1) {
-        minutes = int.parse(parts[parts.length - 2]);
-      }
-      micros = (double.parse(parts[parts.length - 1]) * 1000000).round();
-      Duration duration = Duration(
-        milliseconds: Duration(
-          hours: hours,
-          minutes: minutes,
-          microseconds: micros
-        ).inMilliseconds
-      );
-      list.add(
-        new MediaItem(
-          id: element.path,
-          title: element.title,
-          album: element.album,
-          artist: element.author,
-          artUri: "file://${element.coverPath}",
-          duration: duration,
-          extras: {
-            "downloadType": element.downloadType,
-            "artwork": element.coverPath
-          }
-        )
-      );
-    });
-    return list;
-  }
-
 }

@@ -1,19 +1,14 @@
 // Flutter
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // Internal
-import 'package:songtube/players/service/playerService.dart';
 import 'package:songtube/provider/mediaProvider.dart';
-import 'package:songtube/screens/mediaScreen/components/loadingListWidget.dart';
 import 'package:songtube/screens/mediaScreen/components/mediaListBase.dart';
-import 'package:songtube/screens/mediaScreen/components/musicList/listView.dart';
-import 'package:songtube/screens/mediaScreen/components/noPermissionWidget.dart';
 
 // Packages
-import 'package:permission_handler/permission_handler.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/screens/mediaScreen/components/songsListView.dart';
 
 class MediaMusicTab extends StatelessWidget {
   final String searchQuery;
@@ -36,41 +31,13 @@ class MediaMusicTab extends StatelessWidget {
       });
     }
     return MediaListBase(
-      baseWidget: MusicListView(
-        listSongs: songs,
-        onSongPlay: (MediaItem song) async {
-          if (!AudioService.running) {
-            await AudioService.start(
-              backgroundTaskEntrypoint: songtubePlayer,
-              androidNotificationChannelName: 'SongTube',
-              // Enable this if you want the Android service to exit the foreground state on pause.
-              //androidStopForegroundOnPause: true,
-              androidNotificationColor: 0xFF2196f3,
-              androidNotificationIcon: 'drawable/ic_stat_music_note',
-              androidEnableQueue: true,
-            );
-          }
-          if (listEquals(mediaProvider.listMediaItems, AudioService.queue) == false) {
-            await AudioService.updateQueue(mediaProvider.listMediaItems);
-          }
-          await AudioService.playMediaItem(mediaProvider.listMediaItems[
-            mediaProvider.listMediaItems.indexWhere((element) => element == song)
-          ]);
-        },
+      isLoading: mediaProvider.loadingMusic,
+      isEmpty: mediaProvider.listMediaItems.isEmpty,
+      listType: MediaListBaseType.Any,
+      child: SongsListView(
+        songs: songs,
+        searchQuery: searchQuery,
       ),
-      loadingWidget: MediaLoadingWidget(),
-      noPermissionWidget: NoPermissionWidget(
-        onPermissionRequest: () {
-          Permission.storage.request().then((value) {
-            if (value == PermissionStatus.granted) {
-              mediaProvider.storagePermission = true;
-              mediaProvider.loadSongList();
-            }
-          });
-        }
-      ),
-      permissionStatus: mediaProvider.storagePermission,
-      listStatus: mediaProvider.listMediaItems.isNotEmpty,
     );
   }
 }

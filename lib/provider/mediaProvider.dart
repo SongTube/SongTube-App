@@ -8,11 +8,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:songtube/internal/database/databaseService.dart';
 import 'package:songtube/internal/ffmpeg/extractor.dart';
 import 'package:songtube/internal/lyricsProviders.dart';
 
 // Internal
 import 'package:songtube/internal/models/folder.dart';
+import 'package:songtube/internal/models/songFile.dart';
 import 'package:songtube/internal/models/videoFile.dart';
 
 // Packages
@@ -22,14 +24,30 @@ import 'package:flutter_audio_query/flutter_audio_query.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:songtube/internal/nativeMethods.dart';
 
 class MediaProvider extends ChangeNotifier {
+
+  MediaProvider() {
+    audioQuery = new FlutterAudioQuery();
+    listMediaItems = new List<MediaItem>();
+    listVideos = new List<VideoFile>();
+    listFolders = new List<FolderItem>();
+    storagePermission = true;
+    panelController = new PanelController();
+    slidingPanelOpen = false;
+    databaseSongs = new List<MediaItem>();
+    getDatabase();
+  }
 
   // Flutter Audio Query
   FlutterAudioQuery audioQuery;
 
   // List MediaItems for AudioService
   List<MediaItem> listMediaItems;
+
+  // List Songs on Database
+  List<MediaItem> databaseSongs;
 
   // List all Videos
   List<VideoFile> listVideos;
@@ -42,6 +60,62 @@ class MediaProvider extends ChangeNotifier {
 
   // SlidingPanel Open/Closed Status
   bool slidingPanelOpen;
+
+  // Status for Music and Downloads
+  bool loadingMusic = true;
+  bool loadingDownloads = true;
+  bool loadingVideos = true;
+
+  // --------
+  // Database
+  // --------
+  final dbHelper = DatabaseService.instance;
+  Future<void> getDatabase() async {
+    List<SongFile> tmp = await dbHelper.getDownloadList();
+    databaseSongs = convertToMediaItem(tmp);
+    loadingDownloads = false;
+    notifyListeners();
+  }
+
+  // Convert any List<SongFile> to a List<MediaItem>
+  List<MediaItem> convertToMediaItem(List<SongFile> songList) {
+    List<MediaItem> list = [];
+    songList.forEach((SongFile element) {
+      int hours = 0;
+      int minutes = 0;
+      int micros;
+      List<String> parts = element.duration.split(':');
+      if (parts.length > 2) {
+        hours = int.parse(parts[parts.length - 3]);
+      }
+      if (parts.length > 1) {
+        minutes = int.parse(parts[parts.length - 2]);
+      }
+      micros = (double.parse(parts[parts.length - 1]) * 1000000).round();
+      Duration duration = Duration(
+        milliseconds: Duration(
+          hours: hours,
+          minutes: minutes,
+          microseconds: micros
+        ).inMilliseconds
+      );
+      list.add(
+        new MediaItem(
+          id: element.path,
+          title: element.title,
+          album: element.album,
+          artist: element.author,
+          artUri: "file://${element.coverPath}",
+          duration: duration,
+          extras: {
+            "downloadType": element.downloadType,
+            "artwork": element.coverPath
+          }
+        )
+      );
+    });
+    return list;
+  }
 
   // Show Current Song Lyrics
   bool _showLyrics = false;
@@ -123,16 +197,6 @@ class MediaProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  MediaProvider() {
-    audioQuery = new FlutterAudioQuery();
-    listMediaItems = new List<MediaItem>();
-    listVideos = new List<VideoFile>();
-    listFolders = new List<FolderItem>();
-    storagePermission = true;
-    panelController = new PanelController();
-    slidingPanelOpen = false;
-  }
-
   void loadSongList() async {
     var storageStatus = await Permission.storage.status;
     if (storageStatus != PermissionStatus.granted) {
@@ -184,6 +248,7 @@ class MediaProvider extends ChangeNotifier {
         );
       } catch (_) {}
     }
+    loadingMusic = false;
     notifyListeners();
   }
 
@@ -241,9 +306,22 @@ class MediaProvider extends ChangeNotifier {
           listFolders.forEach((element) {
             element.videos.sort((a,b) => a.name.compareTo(b.name));
           });
+          loadingVideos = false;
           notifyListeners();
         }
       );
+  }
+
+  Future<void> deleteSong(MediaItem song) async {
+    await File(song.id).delete();
+    NativeMethod.registerFile(song.id);
+    if (databaseSongs.contains(song)) {
+      databaseSongs.removeWhere((element) => element == song);
+    }
+    if (listMediaItems.contains(song)) {
+      listMediaItems.removeWhere((element) => element == song);
+    }
+    notifyListeners();
   }
 
   void setState() {

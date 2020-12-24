@@ -12,6 +12,7 @@ import 'package:ext_storage/ext_storage.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/provider/mediaProvider.dart';
 
 // UI
 import 'package:songtube/screens/libraryScreen/components/settings/columnTile.dart';
@@ -24,7 +25,7 @@ class BackupSettings extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
-    DownloadsProvider downloadsProvider = Provider.of<DownloadsProvider>(context);
+    MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
     return SettingsColumnTile(
       title: Languages.of(context).labelBackup,
       icon: EvaIcons.saveOutline,
@@ -117,7 +118,7 @@ class BackupSettings extends StatelessWidget {
                   context: context,
                   scaffoldKey: scaffoldKey
                 );
-                downloadsProvider.getDatabase();
+                mediaProvider.getDatabase();
               }
             )
           )
