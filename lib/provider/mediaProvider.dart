@@ -145,7 +145,7 @@ class MediaProvider extends ChangeNotifier {
     if (!await Directory(thumbnailsPath).exists())
       await Directory(thumbnailsPath).create();
     for (SongInfo song in songInfoList) {
-      File artworkFile = File("$thumbnailsPath${song.title.replaceAll("/", "_")}MQ.jpg");
+      File artworkFile = File("$thumbnailsPath${song.title.replaceAll("/", "_")}.jpg");
       if (!await artworkFile.exists()) {
         int result = await ffmpeg.executeWithArguments([
           "-y", "-i", "${song.filePath}", "-filter:v", "scale=-1:250", "-an",

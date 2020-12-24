@@ -88,7 +88,7 @@ class DatabaseService {
       SongFile songFile = SongFile.fromMap(element);
       if (await File(songFile.path).exists()) {
         String thumbnailsPath = (await getApplicationDocumentsDirectory()).path + "/Thumbnails/";
-        File coverPath = File("$thumbnailsPath/${songFile.title.replaceAll("/", "_")}MQ.jpg");
+        File coverPath = File("$thumbnailsPath/${songFile.title.replaceAll("/", "_")}.jpg");
         if (!await coverPath.exists()) {
           File coverImage =
             await FFmpegExtractor.generateArtwork(
