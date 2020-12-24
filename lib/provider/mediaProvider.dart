@@ -1,11 +1,9 @@
 // Dart
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:http/http.dart' as http;
+
 // Flutter
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:songtube/internal/database/databaseService.dart';

@@ -104,6 +104,7 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
                           onTap: () async {
                             var result = await Navigator.of(context).push(
                               BlurPageRoute(
+                                backdropColor: Colors.black.withOpacity(0.4),
                                 blurStrength: prefs.enableBlurUI ? 20 : 0,
                                 builder: (BuildContext context) {
                                   return Center(

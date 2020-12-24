@@ -11,6 +11,7 @@ class BlurPageRoute<T> extends PageRoute<T> with MaterialRouteTransitionMixin<T>
   Curve animationCurve;
   Offset slideOffset;
   bool useCardExit;
+  Color backdropColor;
 
   BlurPageRoute({
     this.duration = const Duration(milliseconds: 500),
@@ -23,7 +24,8 @@ class BlurPageRoute<T> extends PageRoute<T> with MaterialRouteTransitionMixin<T>
     this.animationCurve = Curves.fastLinearToSlowEaseIn,
     this.opaque = false,
     this.slideOffset = const Offset(0.0, 10.0),
-    this.useCardExit = false
+    this.useCardExit = false,
+    this.backdropColor = Colors.transparent
   }) : assert(builder != null),
        assert(maintainState != null),
        assert(fullscreenDialog != null),
@@ -77,6 +79,9 @@ class BlurPageRoute<T> extends PageRoute<T> with MaterialRouteTransitionMixin<T>
 
   @override
   Duration get transitionDuration => duration;
+
+  @override
+  Color get barrierColor => backdropColor;
 
   @override
   bool opaque;
