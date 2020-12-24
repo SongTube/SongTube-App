@@ -10,6 +10,7 @@ import 'package:songtube/provider/mediaProvider.dart';
 
 // Internal
 import 'package:songtube/screens/mediaScreen/dialogs/optionsMenuDialog.dart';
+import 'package:songtube/ui/components/popupMenu.dart';
 
 // Packages
 import 'package:transparent_image/transparent_image.dart';
@@ -66,28 +67,35 @@ class MusicListView extends StatelessWidget {
                 )
               ),
             ),
-            trailing: IconButton(
-              icon: Icon(Icons.more_vert),
-              iconSize: 18,
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => MediaOptionsMenuDialog(
-                    song: song,
-                    onDelete: () async {
-                      Navigator.pop(context);
-                      if (AudioService.playbackState.playing) {
-                        if (AudioService.currentMediaItem.id == song.id) {
-                          AudioService.stop();
-                        }
-                      }
-                      mediaProvider.listMediaItems.removeAt(index);
-                      await File(song.id).delete();
-                      NativeMethod.registerFile(song.id);
-                    },
-                  )
-                );
+            trailing: FlexiblePopupMenu(
+              borderRadius: 10,
+              items: [
+                "Delete Song",
+                "Edit Tags",
+                "Apply Filters"
+              ],
+              onItemTap: (String value) async {
+                if (AudioService.playbackState.playing) {
+                  if (AudioService.currentMediaItem.id == song.id) {
+                    AudioService.stop();
+                  }
+                }
+                switch (value) {
+                  case "Delete Song":
+                    mediaProvider.listMediaItems.removeAt(index);
+                    await File(song.id).delete();
+                    NativeMethod.registerFile(song.id);
+                    break;
+                  case "Edit Tags":
+                    // TODO: Show Tags editor Page
+                    break;
+                  case "Apply Filters":
+                    // TODO: Allow Audio Filters application
+                    break;
+                }
+                mediaProvider.setState();
               },
+              child: Icon(Icons.more_vert, size: 18)
             ),
             onTap: () => onSongPlay(song)
           );
