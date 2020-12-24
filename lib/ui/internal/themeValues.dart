@@ -101,7 +101,7 @@ class AppTheme {
       ),
       toggleableActiveColor: accent,
       scaffoldBackgroundColor: Colors.black,
-      cardColor: Color.fromARGB(255, 20, 20, 20),
+      cardColor: Colors.black,
       primaryColor: Colors.black,
       primaryColorLight: Colors.black,
       inputDecorationTheme: InputDecorationTheme(
