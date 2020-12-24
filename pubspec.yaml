@@ -141,6 +141,12 @@ flutter:
           weight: 300
         - asset: assets/fonts/youtube-sans-bold.ttf
           weight: 700
+    - family: Product Sans
+      fonts:
+        - asset: assets/fonts/productSans/bold.ttf
+          weight: 700
+        - asset: assets/fonts/productSans/regular.ttf
+          weight: 400
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
