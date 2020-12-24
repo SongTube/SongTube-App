@@ -112,20 +112,7 @@ class MusicBrainzAPI {
       return null;
     } else {
       var json = jsonDecode(response.body);
-      try {
-        if (quality == ArtworkQuality.Original) {
-          return json["images"][0]["image"];
-        } else if (quality == ArtworkQuality.Large) {
-          return json["images"][0]["thumbnails"]["1200"];
-        } else if (quality == ArtworkQuality.Normal) {
-          return json["images"][0]["thumbnails"]["large"];
-        } else if (quality == ArtworkQuality.Small) {
-          return json["images"][0]["thumbnails"]["small"];
-        }
-      } catch (_) {
-        return json["images"][0]["image"];
-      }
-      return json["images"][0]["image"];
+      return json["images"][0]["thumbnails"]["large"];
     }
   }
 
