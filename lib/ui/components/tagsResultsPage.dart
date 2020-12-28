@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/musicBrainzApi.dart';
 import 'package:songtube/provider/preferencesProvider.dart';
 import 'package:songtube/ui/animations/blurPageRoute.dart';
@@ -33,7 +34,7 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "MusicBrainz Search",
+          "MusicBrainz",
           style: TextStyle(
             color: Theme.of(context).textTheme.bodyText1.color
           ),
@@ -132,7 +133,7 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
                                                   text: TextSpan(
                                                     children: [
                                                       TextSpan(
-                                                        text: "Title: ",
+                                                        text: Languages.of(context).labelEditorTitle + ": ",
                                                         style: TextStyle(
                                                           fontWeight: FontWeight.w600,
                                                           fontFamily: 'Product Sans',
@@ -155,7 +156,7 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
                                                   text: TextSpan(
                                                     children: [
                                                       TextSpan(
-                                                        text: "Author: ",
+                                                        text: Languages.of(context).labelEditorArtist + ": ",
                                                         style: TextStyle(
                                                           fontWeight: FontWeight.w600,
                                                           fontFamily: 'Product Sans',
@@ -178,7 +179,7 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
                                                   text: TextSpan(
                                                     children: [
                                                       TextSpan(
-                                                        text: "Album: ",
+                                                        text: Languages.of(context).labelEditorAlbum + ": ",
                                                         style: TextStyle(
                                                           fontWeight: FontWeight.w600,
                                                           fontFamily: 'Product Sans',
@@ -201,7 +202,7 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
                                                   text: TextSpan(
                                                     children: [
                                                       TextSpan(
-                                                        text: "Date: ",
+                                                        text: Languages.of(context).labelEditorDate + ": ",
                                                         style: TextStyle(
                                                           fontWeight: FontWeight.w600,
                                                           fontFamily: 'Product Sans',
@@ -224,7 +225,7 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
                                                   text: TextSpan(
                                                     children: [
                                                       TextSpan(
-                                                        text: "Genre: ",
+                                                        text: Languages.of(context).labelEditorGenre + ": ",
                                                         style: TextStyle(
                                                           fontWeight: FontWeight.w600,
                                                           fontFamily: 'Product Sans',
@@ -235,7 +236,7 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
                                                       ),
                                                       TextSpan(
                                                         text: MusicBrainzAPI.getGenre(record) == "Any"
-                                                          ? "Not Specified"
+                                                          ? Languages.of(context).labelNotSpecified
                                                           : "${MusicBrainzAPI.getGenre(record)}",
                                                         style: TextStyle(
                                                           color: Theme.of(context).textTheme
@@ -306,7 +307,7 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
                                       text: TextSpan(
                                         children: [
                                           TextSpan(
-                                            text: "Title: ",
+                                            text: Languages.of(context).labelEditorTitle + ": ",
                                             style: TextStyle(
                                               fontWeight: FontWeight.w600,
                                               color: Theme.of(context).textTheme
@@ -330,7 +331,7 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
                                       text: TextSpan(
                                         children: [
                                           TextSpan(
-                                            text: "Author: ",
+                                            text: Languages.of(context).labelEditorArtist + ": ",
                                             style: TextStyle(
                                               fontWeight: FontWeight.w600,
                                               color: Theme.of(context).textTheme
@@ -354,7 +355,7 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
                                       text: TextSpan(
                                         children: [
                                           TextSpan(
-                                            text: "Album: ",
+                                            text: Languages.of(context).labelEditorAlbum + ": ",
                                             style: TextStyle(
                                               fontWeight: FontWeight.w600,
                                               color: Theme.of(context).textTheme

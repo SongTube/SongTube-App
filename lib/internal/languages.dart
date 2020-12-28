@@ -133,6 +133,15 @@ abstract class Languages {
   String get labelEditArtwork;
   String get labelDownloadAll;
   String get labelLoadingVideos;
+  String get labelHomePage;
+  String get labelTrending;
+  String get labelFavorites;
+  String get labelWatchLater;
+  
+  // Video Options Menu
+  String get labelCopyLink;
+  String get labelAddToFavorites;
+  String get labelAddToWatchLater;
 
   // Downloads Screen
   String get labelQueued;
@@ -176,6 +185,7 @@ abstract class Languages {
   String get labelDeleteSong;
   String get labelNoPermissionJustification;
   String get labelGettingYourMedia;
+  String get labelEditTags;
 
   // Navigate Screen
   String get labelSearchYoutube;
@@ -228,6 +238,30 @@ abstract class Languages {
   String get labelAndroid11Detected;
   String get labelAndroid11DetectedJustification;
 
+  // Music Player
+  String get labelPlayerSettings;
+  String get labelExpandArtwork;
+  String get labelArtworkRoundedCorners;
+  String get labelPlayingFrom;
+  String get labelBlurBackground;
+
+  // Video Page
+  String get labelTags;
+  String get labelRelated;
+  String get labelAutoPlay;
+
+  // Tags Pages
+  String get labelAudioFormatNotCompatible;
+  String get labelNotSpecified;
+  String get labelPerformAutomaticTagging;
+  String get labelSelectTagsfromMusicBrainz;
+  String get labelSelectArtworkFromDevice;
+
+  // Telegram Join Channel Dialog
+  String get labelJoinTelegramChannel;
+  String get labelJoinTelegramJustification;
+  String get labelRemindLater;
+
   // Common Words (One word labels)
   String get labelExit;
   String get labelSystem;
@@ -247,6 +281,10 @@ abstract class Languages {
   String get labelCalculating;
   String get labelCleaning;
   String get labelCancel;
+  String get labelGeneral;
+  String get labelRemove;
+  String get labelJoin;
+  String get labelNo;
 
 }
 

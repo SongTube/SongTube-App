@@ -6,6 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/musicBrainzApi.dart';
 import 'package:songtube/players/youtubePlayer.dart';
 import 'package:songtube/provider/managerProvider.dart';
@@ -256,7 +257,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> {
                                   children: [
                                     SizedBox(width: 16),
                                     Text(
-                                      "Related",
+                                      Languages.of(context).labelRelated,
                                       style: TextStyle(
                                         fontSize: 14,
                                         color: Theme.of(context).textTheme.bodyText1.color,
@@ -279,7 +280,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> {
                                     ),
                                     Spacer(),
                                     Text(
-                                      "AutoPlay",
+                                      Languages.of(context).labelAutoPlay,
                                       style: TextStyle(
                                         fontSize: 14,
                                         color: Theme.of(context).textTheme.bodyText1.color,

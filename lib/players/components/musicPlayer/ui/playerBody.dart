@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:songtube/internal/languages.dart';
 import 'package:songtube/players/components/musicPlayer/ui/playerArtwork.dart';
 import 'package:songtube/players/components/musicPlayer/ui/playerControls.dart';
 
@@ -52,7 +53,7 @@ class PlayerBody extends StatelessWidget {
             text: TextSpan(
               children: [
                 TextSpan(
-                  text: "Playing From\n",
+                  text: Languages.of(context).labelPlayingFrom+"\n",
                   style: TextStyle(
                     letterSpacing: 2,
                     color: textColor,

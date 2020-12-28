@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/internal/languages.dart';
 import 'package:songtube/provider/configurationProvider.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/provider/preferencesProvider.dart';
@@ -165,11 +166,11 @@ class _HomePageAppBarState extends State<HomePageAppBar> {
               indicatorColor: Theme.of(context).accentColor,
             ),
             tabs: [
-              Tab(text: "Home Page"),
-              Tab(text: "Trending"),
-              Tab(text: "Music"),
-              Tab(text: "Favorites"),
-              Tab(text: "Watch Later")
+              Tab(text: Languages.of(context).labelHomePage),
+              Tab(text: Languages.of(context).labelTrending),
+              Tab(text: Languages.of(context).labelMusic),
+              Tab(text: Languages.of(context).labelFavorites),
+              Tab(text: Languages.of(context).labelWatchLater)
             ],
           ),
         ),

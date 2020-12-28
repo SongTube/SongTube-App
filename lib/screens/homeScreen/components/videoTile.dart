@@ -7,6 +7,7 @@ import 'package:image_fade/image_fade.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:share/share.dart';
 import 'package:songtube/downloadMenu/downloadMenu.dart';
+import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/models/channelLogo.dart';
 
 // Internal
@@ -255,30 +256,30 @@ class VideoTile extends StatelessWidget {
                 FlexiblePopupMenu(
                   items: [
                     FlexiblePopupItem(
-                      title: "Share",
+                      title: Languages.of(context).labelShare,
                       value: "Share"
                     ),
                     FlexiblePopupItem(
-                      title: "Copy Link",
+                      title: Languages.of(context).labelCopyLink,
                       value: "CopyLink"
                     ),
                     FlexiblePopupItem(
-                      title: "Download",
+                      title: Languages.of(context).labelDownload,
                       value: "Download"
                     ),
                     if (onDelete != null)
                     FlexiblePopupItem(
-                      title: "Remove",
+                      title: Languages.of(context).labelRemove,
                       value: "Remove"
                     ),
                     if (enableSaveToFavorites)
                     FlexiblePopupItem(
-                      title: "Add to Favorites",
+                      title: Languages.of(context).labelAddToFavorites,
                       value: "AddFavorites"
                     ),
                     if (enableSaveToWatchLater)
                     FlexiblePopupItem(
-                      title: "Add to Watch Later",
+                      title: Languages.of(context).labelAddToWatchLater,
                       value: "AddWatchLater"
                     )
                   ],

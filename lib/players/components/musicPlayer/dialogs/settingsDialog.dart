@@ -2,6 +2,7 @@ import 'package:circular_check_box/circular_check_box.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/internal/languages.dart';
 import 'package:songtube/provider/configurationProvider.dart';
 import 'package:songtube/provider/preferencesProvider.dart';
 
@@ -22,7 +23,7 @@ class MusicPlayerSettingsDialog extends StatelessWidget {
           ),
           SizedBox(width: 8),
           Text(
-            "Player Settings",
+            Languages.of(context).labelPlayerSettings,
             style: TextStyle(
               fontFamily: 'YTSans',
               color: Theme.of(context).textTheme.bodyText1.color
@@ -36,7 +37,7 @@ class MusicPlayerSettingsDialog extends StatelessWidget {
           // Expanded Artwork
           ListTile(
             title: Text(
-              "Expand Artwork",
+              Languages.of(context).labelExpandArtwork,
               style: TextStyle(
                 fontFamily: 'YTSans',
                 color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6)
@@ -52,7 +53,7 @@ class MusicPlayerSettingsDialog extends StatelessWidget {
           ),
           ListTile(
             title: Text(
-              "Blur Background",
+              Languages.of(context).labelBlurBackground,
               style: TextStyle(
                 fontFamily: 'YTSans',
                 color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6)
@@ -68,7 +69,7 @@ class MusicPlayerSettingsDialog extends StatelessWidget {
           ),
           ListTile(
             title: Text(
-              "Artwork Rounded Corners",
+              Languages.of(context).labelArtworkRoundedCorners,
               style: TextStyle(
                 fontFamily: 'YTSans',
                 color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6)

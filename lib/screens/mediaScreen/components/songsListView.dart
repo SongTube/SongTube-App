@@ -5,6 +5,7 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/models/videoFile.dart';
 import 'package:songtube/players/service/playerService.dart';
 import 'package:songtube/players/videoPlayer.dart';
@@ -99,11 +100,11 @@ class SongsListView extends StatelessWidget {
               borderRadius: 10,
               items: [
                 FlexiblePopupItem(
-                  title: "Edit Tags",
+                  title: Languages.of(context).labelEditTags,
                   value: "Edit Tags"
                 ),
                 FlexiblePopupItem(
-                  title: "Delete Song",
+                  title: Languages.of(context).labelDeleteSong,
                   value: "Delete"
                 )
               ],

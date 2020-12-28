@@ -76,7 +76,7 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
         elevation: 0,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         title: Text(
-          "Tags Editor",
+          Languages.of(context).labelTagsEditor.replaceAll("\n", " "),
           style: TextStyle(
             color: Theme.of(context).textTheme.bodyText1.color
           ),
@@ -89,11 +89,11 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
             borderRadius: 15,
             items: [
               FlexiblePopupItem(
-                title: "Perform Automatic Tagging",
+                title: Languages.of(context).labelPerformAutomaticTagging,
                 value: "AutoTag"
               ),
               FlexiblePopupItem(
-                title: "Select Tags from MusicBrainz",
+                title: Languages.of(context).labelSelectTagsfromMusicBrainz,
                 value: "SearchMB"
               ),
             ],
@@ -310,7 +310,7 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
             Navigator.pop(context);
             AppSnack.showSnackBar(
               icon: Icons.warning,
-              title: "Audio Format not Compatible",
+              title: Languages.of(context).labelAudioFormatNotCompatible,
               duration: Duration(seconds: 2),
               context: context,
               scaffoldKey: scaffoldKey.currentState
