@@ -75,7 +75,7 @@ class CollapsedPanel extends StatelessWidget {
                           ),
                           SizedBox(height: 2),
                           Text(
-                            "${mediaItem.album}",
+                            "${mediaItem.artist}",
                             style: TextStyle(
                               fontFamily: 'YTSans',
                               fontSize: 11,
