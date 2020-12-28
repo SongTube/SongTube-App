@@ -11,7 +11,7 @@ class GeneralSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SettingsColumnTile(
-      title: "General",
+      title: Languages.of(context).labelGeneral,
       icon: Icons.architecture_rounded,
       children: <Widget>[
         FutureBuilder(
