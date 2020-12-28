@@ -98,8 +98,14 @@ class SongsListView extends StatelessWidget {
             trailing: FlexiblePopupMenu(
               borderRadius: 10,
               items: [
-                "Edit Tags",
-                "Delete Song"
+                FlexiblePopupItem(
+                  title: "Edit Tags",
+                  value: "Edit Tags"
+                ),
+                FlexiblePopupItem(
+                  title: "Delete Song",
+                  value: "Delete"
+                )
               ],
               onItemTap: (String value) async {
                 if (value != null) {
@@ -109,7 +115,7 @@ class SongsListView extends StatelessWidget {
                     }
                   }
                   switch (value) {
-                    case "Delete Song":
+                    case "Delete":
                       mediaProvider.deleteSong(song);
                       break;
                     case "Edit Tags":

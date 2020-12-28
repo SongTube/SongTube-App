@@ -88,12 +88,18 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
           FlexiblePopupMenu(
             borderRadius: 15,
             items: [
-              "Perform Automatic Tagging",
-              "Select Tags from MusicBrainz",
+              FlexiblePopupItem(
+                title: "Perform Automatic Tagging",
+                value: "AutoTag"
+              ),
+              FlexiblePopupItem(
+                title: "Select Tags from MusicBrainz",
+                value: "SearchMB"
+              ),
             ],
             onItemTap: (value) async {
               switch (value) {
-                case "Perform Automatic Tagging":
+                case "AutoTag":
                   showDialog(
                     context: context,
                     builder: (_) => LoadingDialog()
@@ -107,7 +113,7 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
                   Navigator.pop(context);
                   setState(() {});
                   break;
-                case "Select Tags from MusicBrainz":
+                case "SearchMB":
                   var record = await Navigator.push(context,
                     BlurPageRoute(builder: (context) => 
                       TagsResultsPage(

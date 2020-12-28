@@ -1,8 +1,20 @@
 import 'package:flutter/material.dart';
 
+class FlexiblePopupItem {
+
+  String title;
+  String value;
+
+  FlexiblePopupItem({
+    this.title,
+    this.value
+  });
+
+}
+
 class FlexiblePopupMenu extends StatelessWidget {
   final Widget child;
-  final List<String> items;
+  final List<FlexiblePopupItem> items;
   final Function(String) onItemTap;
   final double borderRadius;
   final EdgeInsetsGeometry padding;
@@ -31,18 +43,16 @@ class FlexiblePopupMenu extends StatelessWidget {
             0, 0
           ),
           items: items.map((e) {
-            if (e != "") {
-              return PopupMenuItem<String>(
-                child: Text(
-                  e, style: TextStyle(
-                    color: Theme.of(context)
-                      .textTheme.bodyText1.color,
-                    fontSize: 14
-                  ),
+            return PopupMenuItem<String>(
+              child: Text(
+                e.title, style: TextStyle(
+                  color: Theme.of(context)
+                    .textTheme.bodyText1.color,
+                  fontSize: 14
                 ),
-                value: "$e",
-              );
-            }
+              ),
+              value: "${e.value}",
+            );
           }).toList()
         ).then((value) {
           onItemTap(value);

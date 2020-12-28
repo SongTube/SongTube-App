@@ -254,12 +254,33 @@ class VideoTile extends StatelessWidget {
                 if (searchItem is SearchVideo || searchItem is Video)
                 FlexiblePopupMenu(
                   items: [
-                    "Share",
-                    "Copy Link",
-                    "Download",
-                    onDelete != null ? "Remove":"",
-                    enableSaveToFavorites ? "Add to Favorites":"",
-                    enableSaveToWatchLater ? "Add to Watch Later":""
+                    FlexiblePopupItem(
+                      title: "Share",
+                      value: "Share"
+                    ),
+                    FlexiblePopupItem(
+                      title: "Copy Link",
+                      value: "CopyLink"
+                    ),
+                    FlexiblePopupItem(
+                      title: "Download",
+                      value: "Download"
+                    ),
+                    if (onDelete != null)
+                    FlexiblePopupItem(
+                      title: "Remove",
+                      value: "Remove"
+                    ),
+                    if (enableSaveToFavorites)
+                    FlexiblePopupItem(
+                      title: "Add to Favorites",
+                      value: "AddFavorites"
+                    ),
+                    if (enableSaveToWatchLater)
+                    FlexiblePopupItem(
+                      title: "Add to Watch Later",
+                      value: "AddWatchLater"
+                    )
                   ],
                   onItemTap: (String value) async {
                     switch(value) {
@@ -272,7 +293,7 @@ class VideoTile extends StatelessWidget {
                               : "https://www.youtube.com/playlist?list=${searchItem.PlaylistId.value}"
                         );
                         break;
-                      case "Copy Link":
+                      case "CopyLink":
                         String link = searchItem is Video
                           ? "https://www.youtube.com/watch?v=${searchItem.id.value}"
                           : searchItem is SearchVideo
@@ -320,7 +341,7 @@ class VideoTile extends StatelessWidget {
                       case "Remove":
                         onDelete();
                         break;
-                      case "Add to Favorites":
+                      case "AddFavorites":
                         Video videoToSave;
                         if (searchItem is SearchVideo) {
                           showDialog(
@@ -346,7 +367,7 @@ class VideoTile extends StatelessWidget {
                           scaffoldKey: Scaffold.of(context)
                         );
                         break;
-                      case "Add to Watch Later":
+                      case "AddWatchLater":
                         Video videoToSave;
                         if (searchItem is SearchVideo) {
                           showDialog(

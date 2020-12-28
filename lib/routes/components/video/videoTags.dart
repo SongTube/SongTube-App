@@ -52,19 +52,28 @@ class VideoTags extends StatelessWidget {
       trailing: FlexiblePopupMenu(
         borderRadius: 15,
         items: [
-          "Perform Automatic Tagging",
-          "Select Tags from MusicBrainz",
-          "Select Artwork from device"
+          FlexiblePopupItem(
+            title: "Perform Automatic Tagging",
+            value: "AutoTag",
+          ),
+          FlexiblePopupItem(
+            title: "Select Tags from MusicBrainz",
+            value: "SearchMB",
+          ),
+          FlexiblePopupItem(
+            title: "Select Artwork from device",
+            value: "FromDevice",
+          )
         ],
         onItemTap: (value) {
           switch (value) {
-            case "Perform Automatic Tagging":
+            case "AutoTag":
               onMBTap();
               break;
-            case "Select Tags from MusicBrainz":
+            case "SearchMB":
               onMBSearchTap();
               break;
-            case "Select Artwork from device":
+            case "FromDevice":
               onArtworkTap();
               break;
           }
