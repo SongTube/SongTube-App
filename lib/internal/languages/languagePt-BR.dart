@@ -52,21 +52,21 @@ class LanguagePtBr extends Languages {
   @override 
   String get labelLoadingVideos => "Carregando Vídeos...";
   @override
-  String get labelHomePage => "Home Page";
+  String get labelHomePage => "Página Inicial";
   @override
-  String get labelTrending => "Trending";
+  String get labelTrending => "Em Alta";
   @override
-  String get labelFavorites => "Favorites";
+  String get labelFavorites => "Favoritos";
   @override
-  String get labelWatchLater => "Watch Later";
+  String get labelWatchLater => "Assistir Mais Tarde";
 
   // Video Options Menu
   @override
-  String get labelCopyLink => "Copy Link";
+  String get labelCopyLink => "Copiar Link";
   @override
-  String get labelAddToFavorites => "Add to Favorites";
+  String get labelAddToFavorites => "Adicionar aos Favoritos";
   @override
-  String get labelAddToWatchLater => "Add to Watch Later";
+  String get labelAddToWatchLater => "Adicionar em Assistir Mais Tarde";
 
   // Downloads Screen
   @override
@@ -148,7 +148,7 @@ class LanguagePtBr extends Languages {
   @override
   String get labelGettingYourMedia => "Obtendo Mídia...";
   @override
-  String get labelEditTags => "Edit Tags";
+  String get labelEditTags => "Editar Tags";
 
   // Navigate Screen
   @override
@@ -257,53 +257,53 @@ class LanguagePtBr extends Languages {
 
   // Music Player
   @override
-  String get labelPlayerSettings => "Player Settings";
+  String get labelPlayerSettings => "Configurações do Player";
   @override
-  String get labelExpandArtwork => "Expand Artwork";
+  String get labelExpandArtwork => "Expandir Artwork";
   @override
-  String get labelArtworkRoundedCorners => "Artwork Rounded Corners";
+  String get labelArtworkRoundedCorners => "Artwork com Cantos Arredondados";
   @override
-  String get labelPlayingFrom => "Playing From";
+  String get labelPlayingFrom => "Tocando a partir do";
   @override
-  String get labelBlurBackground => "Blur Background";
+  String get labelBlurBackground => "Desfocar Fundo";
 
   // Video Page
   @override
   String get labelTags => "Tags";
   @override
-  String get labelRelated => "Related";
+  String get labelRelated => "Relacionados";
   @override
-  String get labelAutoPlay => "AutoPlay";
+  String get labelAutoPlay => "Tocar Automaticamente";
 
   // Tags Pages
   @override
   String get labelAudioFormatNotCompatible =>
-    "Audio format not Compatible";
+    "Formato de Áudio Não Compatível";
   @override
-  String get labelNotSpecified => "Not Specified";
+  String get labelNotSpecified => "Não Especificado";
   @override
   String get labelPerformAutomaticTagging => 
-    "Perform Automatic Tagging";
+    "Colocar Tags automaticamente";
   @override
   String get labelSelectTagsfromMusicBrainz => 
-    "Select Tags from MusicBrainz";
+    "Selecionar Tags do MusicBrainz";
   @override
   String get labelSelectArtworkFromDevice =>
-    "Select Artwork from Device";
+    "Selecionar Artwork do dispositivo";
 
   // Telegram Join Channel Dialog
   @override
-  String get labelJoinTelegramChannel => "Join Telegram Channel!";
+  String get labelJoinTelegramChannel => "Junte-se ao Canal do Telegram!";
   @override
   String get labelJoinTelegramJustification =>
-    "Do you like SongTube? Please join the Telegram Channel! You will find " +
-    "Updates, Information, Development, Group Link and other Social links." +
+    "Você gosta do SongTube? Por favor, junte-se ao Canal do Telegram! Você vai encontrar " +
+    "Atualizações, Informações, Desenvolvimento, Link do Grupo e outros links de redes sociais." +
     "\n\n" +
-    "In case you have an issue or a great recommentation in your mind, " +
-    "please join the Group from the Channel and write it down! But take in mind " +
-    "you can only speak in English, thanks!";
+    "No caso de você ter um problema ou uma grande recomendação em sua mente, " +
+    "por favor, junte-se ao Grupo do Canal e escreva-o! Mas tenha em mente " +
+    "você só pode falar em inglês, obrigado!";
   @override
-  String get labelRemindLater => "Remind Later";
+  String get labelRemindLater => "Lembre-me Mais Tarde";
 
   // Common Words (One word labels)
   @override
@@ -343,12 +343,12 @@ class LanguagePtBr extends Languages {
   @override
   String get labelCancel => "Cancelar";
   @override
-  String get labelGeneral => "General";
+  String get labelGeneral => "Geral";
   @override
-  String get labelRemove => "Remove";
+  String get labelRemove => "Remover";
   @override
-  String get labelJoin => "Join";
+  String get labelJoin => "Se Juntar";
   @override
-  String get labelNo => "No";
+  String get labelNo => "Não";
 
 }
