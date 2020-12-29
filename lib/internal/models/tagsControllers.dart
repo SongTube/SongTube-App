@@ -25,7 +25,7 @@ class TagsControllers {
   TextEditingController trackController;
   String artworkController;
 
-  void updateTextControllers(Video videoDetails) {
+  void updateTextControllers(Video videoDetails, String artwork) {
     titleController.text  = videoDetails.title;
     albumController.text  = "YouTube";
     artistController.text = videoDetails.author
@@ -37,7 +37,20 @@ class TagsControllers {
                             + "${videoDetails.uploadDate.day}";
     discController.text   = "1";
     trackController.text  = "1";
-    artworkController     = videoDetails.thumbnails.mediumResUrl;
+    artworkController     = artwork;
+  }
+
+  void updateTextControllersFromPlaylist(Playlist playlist, String artwork) {
+    titleController.text  = playlist.title;
+    albumController.text  = "YouTube";
+    artistController.text = playlist.author;
+    genreController.text  = "Any";
+    dateController.text   = "${DateTime.now().year}/"
+                            + "${DateTime.now().month}"
+                            + "${DateTime.now().day}";
+    discController.text   = "1";
+    trackController.text  = "1";
+    artworkController     = artwork;
   }
 
 }

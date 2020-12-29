@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 // Internal
-import 'package:songtube/internal/models/downloadinfoset.dart';
+import 'package:songtube/internal/models/infoSets/downloadinfoset.dart';
 import 'package:songtube/provider/downloadsProvider.dart';
 
 // Packages
@@ -40,6 +40,7 @@ class DownloadsTab extends StatelessWidget {
                 progressBar: infoset.progressBar.stream,
                 currentAction: infoset.currentAction.stream,
                 metadata: infoset.metadata,
+                videoDetails: infoset.videoDetails,
                 downloadType: infoset.downloadType,
                 onDownloadCancel: null,
                 cancelDownloadIcon: Container()

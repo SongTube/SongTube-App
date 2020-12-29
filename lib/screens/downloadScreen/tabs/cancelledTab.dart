@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:autolist/autolist.dart';
 import 'package:provider/provider.dart';
-import 'package:songtube/internal/models/downloadinfoset.dart';
+import 'package:songtube/internal/models/infoSets/downloadinfoset.dart';
 import 'package:songtube/provider/downloadsProvider.dart';
 import 'package:songtube/screens/downloadScreen/components/downloadTile.dart';
 import 'package:songtube/screens/downloadScreen/components/downloadsEmpty.dart';
@@ -38,6 +38,7 @@ class _DownloadsCancelledTabState extends State<DownloadsCancelledTab> {
                 progressBar: infoset.progressBar.stream,
                 currentAction: infoset.currentAction.stream,
                 metadata: infoset.metadata,
+                videoDetails: infoset.videoDetails,
                 downloadType: infoset.downloadType,
                 onDownloadCancel: () {
                   Permission.storage.request().then((value) {

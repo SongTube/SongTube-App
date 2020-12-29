@@ -7,6 +7,8 @@ import 'languages/languageEn.dart';
 import 'languages/languageEs.dart';
 import 'languages/languagePt-BR.dart';
 import 'languages/languageIgbo-NG.dart';
+import 'languages/languageId.dart';
+import 'languages/languageTr.dart';
 
 /// Multi-Language Support for SongTube, for new Languages to be supported
 /// a new [File] in this project [internal/languages] folder needs to be
@@ -23,9 +25,13 @@ final supportedLanguages = <LanguageData>[
   // Spanish (VE)
   LanguageData("ve", "Español", "es"),
   // Portuguese (BR)
-  LanguageData("br", "Português", "pt"),
-  // Igbo (Igbo)
-  LanguageData("ng", "Igbo", "Igbo"),
+  LanguageData("🇧🇷", "Português", "pt"),
+  // Igbo (NG)
+  LanguageData("ng", "Igbo", "ig"),
+  // Indonesia (ID)
+  LanguageData("🇮🇩", "Indonesia", "id"),
+  // Turkish (TR)
+  LanguageData("tr", "Turkey", "tr")
 ];
 Future<Languages> _loadLocale(Locale locale) async {
   switch (locale.languageCode) {
@@ -38,9 +44,15 @@ Future<Languages> _loadLocale(Locale locale) async {
     // Portuguese (BR)
     case 'pt':
       return LanguagePtBr();
-    // Igbo (Igbo)
-    case 'Igbo':
-      return LanguageIgboNG();
+    // Igbo (NG)
+    case 'ig':
+      return LanguageIgbo();
+    // Indonesia (ID)
+    case 'id':
+      return LanguageId();
+    // Turkish (TR)
+    case 'tr':
+      return LanguageTr();
     // Default Language (English)
     default:
       return LanguageEn();
@@ -80,6 +92,15 @@ class AppLocalizationsDelegate extends LocalizationsDelegate<Languages> {
   
 }
 
+class FallbackLocalizationDelegate extends LocalizationsDelegate<MaterialLocalizations> {
+  @override
+  bool isSupported(Locale locale) => true;
+  @override
+  Future<MaterialLocalizations> load(Locale locale) async => DefaultMaterialLocalizations();
+  @override
+  bool shouldReload(_) => false;
+}
+
 abstract class Languages {
   
   static Languages of(BuildContext context) {
@@ -112,6 +133,15 @@ abstract class Languages {
   String get labelEditArtwork;
   String get labelDownloadAll;
   String get labelLoadingVideos;
+  String get labelHomePage;
+  String get labelTrending;
+  String get labelFavorites;
+  String get labelWatchLater;
+  
+  // Video Options Menu
+  String get labelCopyLink;
+  String get labelAddToFavorites;
+  String get labelAddToWatchLater;
 
   // Downloads Screen
   String get labelQueued;
@@ -155,6 +185,7 @@ abstract class Languages {
   String get labelDeleteSong;
   String get labelNoPermissionJustification;
   String get labelGettingYourMedia;
+  String get labelEditTags;
 
   // Navigate Screen
   String get labelSearchYoutube;
@@ -207,6 +238,30 @@ abstract class Languages {
   String get labelAndroid11Detected;
   String get labelAndroid11DetectedJustification;
 
+  // Music Player
+  String get labelPlayerSettings;
+  String get labelExpandArtwork;
+  String get labelArtworkRoundedCorners;
+  String get labelPlayingFrom;
+  String get labelBlurBackground;
+
+  // Video Page
+  String get labelTags;
+  String get labelRelated;
+  String get labelAutoPlay;
+
+  // Tags Pages
+  String get labelAudioFormatNotCompatible;
+  String get labelNotSpecified;
+  String get labelPerformAutomaticTagging;
+  String get labelSelectTagsfromMusicBrainz;
+  String get labelSelectArtworkFromDevice;
+
+  // Telegram Join Channel Dialog
+  String get labelJoinTelegramChannel;
+  String get labelJoinTelegramJustification;
+  String get labelRemindLater;
+
   // Common Words (One word labels)
   String get labelExit;
   String get labelSystem;
@@ -226,6 +281,10 @@ abstract class Languages {
   String get labelCalculating;
   String get labelCleaning;
   String get labelCancel;
+  String get labelGeneral;
+  String get labelRemove;
+  String get labelJoin;
+  String get labelNo;
 
 }
 

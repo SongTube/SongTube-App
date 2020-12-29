@@ -2,31 +2,24 @@
 import 'package:flutter/material.dart';
 
 // Internal
-import 'package:songtube/internal/services/playerService.dart';
-import 'package:songtube/internal/screenStateStream.dart';
+import 'package:songtube/players/service/playerService.dart';
+import 'package:songtube/players/service/screenStateStream.dart';
 
 // Packages
 import 'package:audio_service/audio_service.dart';
 
 class AppSnack {
 
-  GlobalKey<ScaffoldState> scaffoldKey;
-  BuildContext context;
-  bool addPadding;
-  AppSnack({
-    @required this.scaffoldKey,
-    @required this.context,
-    this.addPadding = true,
-  });
-
   // Show SnackBar with Icon, Title and Message
-  void showSnackBar({
+  static void showSnackBar({
     @required IconData icon,
     @required String title,
     String message,
-    Duration duration
+    Duration duration = const Duration(seconds: 2),
+    @required context,
+    @required ScaffoldState scaffoldKey
   }) {
-    scaffoldKey.currentState.removeCurrentSnackBar();
+    scaffoldKey.removeCurrentSnackBar();
     final snack = SnackBar(
       content: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -38,34 +31,37 @@ class AppSnack {
             children: <Widget>[
               Icon(
                 icon,
-                color: Theme.of(context).iconTheme.color,
+                color: Theme.of(context).accentColor,
               ),
               SizedBox(width: 8),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(height: 4),
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      color: Theme.of(context).textTheme.bodyText1.color
-                    )
-                  ),
-                  if (message != null)
-                  Text(
-                    message,
-                    style: TextStyle(
-                      color: Theme.of(context).textTheme.bodyText1.color
-                    )
-                  ),
-                  SizedBox(height: 4),
-                ],
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    SizedBox(height: 4),
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        color: Theme.of(context).textTheme.bodyText1.color
+                      )
+                    ),
+                    if (message != null)
+                    Text(
+                      message,
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyText1.color
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.clip,
+                    ),
+                    SizedBox(height: 4),
+                  ],
+                ),
               ),
             ],
           ),
-          if (addPadding)
           StreamBuilder<ScreenState>(
             stream: screenStateStream,
             builder: (context, snapshot) {
@@ -91,6 +87,6 @@ class AppSnack {
       ),
       backgroundColor: Theme.of(context).canvasColor
     );
-    scaffoldKey.currentState.showSnackBar(snack);
+    scaffoldKey.showSnackBar(snack);
   }
 }

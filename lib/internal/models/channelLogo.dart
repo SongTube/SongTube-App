@@ -1,7 +1,11 @@
 // Flutter
 import 'dart:convert';
+import 'dart:isolate';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:songtube/provider/configurationProvider.dart';
+import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 class ChannelLogo {
 
@@ -76,6 +80,55 @@ class ChannelLogo {
     Map<String, dynamic> map() => {'listChannels': x};
     String result = jsonEncode(map());
     return result;
+  }
+
+  static void getChannelLogoUrlIsolate(SendPort mainSendPort) async {
+    ReceivePort childReceivePort = ReceivePort();
+    mainSendPort.send(childReceivePort.sendPort);
+    await for (var message in childReceivePort) {
+      YoutubeExplode yt = YoutubeExplode();
+      String videoId = message[0];
+      SendPort replyPort = message[1];
+      Channel channel;
+      try {
+        channel = await yt.channels.getByVideo(videoId);
+      } catch (_) {
+        replyPort.send("");
+        yt.close();
+        break;
+      }
+      replyPort.send(channel.logoUrl);
+      yt.close();
+      break;
+    }
+  }
+
+  static Future<String> getChannelLogoUrl(BuildContext context, SearchVideo video) async {
+    if (context == null) return null;
+    ConfigurationProvider config = Provider.of<ConfigurationProvider>(context, listen: false);
+    if ((config.channelLogos.singleWhere((it) => it.name == video.videoAuthor,
+          orElse: () => null)) != null) {
+      return config.channelLogos[config.channelLogos
+        .indexWhere((element) => element.name == video.videoAuthor)].logoUrl;
+    } else {
+      ReceivePort receivePort = ReceivePort();
+      await Isolate.spawn(ChannelLogo.getChannelLogoUrlIsolate, receivePort.sendPort);
+      SendPort childSendPort = await receivePort.first;
+      ReceivePort responsePort = ReceivePort();
+      childSendPort.send(["${video.videoId}", responsePort.sendPort]);
+      String url = await responsePort.first;
+      if (url == "") return null;
+      if ((config.channelLogos.singleWhere((it) => it.name == video.videoAuthor,
+          orElse: () => null)) != null) {
+        print("logo Exist");
+      } else {
+        config.addItemtoChannelLogoList(ChannelLogo(
+          name: video.videoAuthor,
+          logoUrl: url
+        ));
+      }
+      return url;
+    }
   }
 
 }

@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:songtube/internal/ffmpeg/converter.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/models/audioModifiers.dart';
-import 'package:songtube/internal/models/downloadinfoset.dart';
+import 'package:songtube/internal/models/infoSets/downloadinfoset.dart';
 import 'package:songtube/internal/models/metadata.dart';
 import 'package:songtube/internal/models/songFile.dart';
 import 'package:songtube/internal/randomString.dart';
-import 'package:songtube/internal/services/databaseService.dart';
-import 'package:songtube/provider/app_provider.dart';
+import 'package:songtube/internal/database/databaseService.dart';
+import 'package:songtube/internal/youtube/youtubeExtractor.dart';
+import 'package:songtube/provider/configurationProvider.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 class DownloadsProvider extends ChangeNotifier {
@@ -19,12 +20,8 @@ class DownloadsProvider extends ChangeNotifier {
     convertingList = new List<DownloadInfoSet>();
     completedList = new List<DownloadInfoSet>();
     cancelledList = new List<DownloadInfoSet>();
-    databaseSongs = new List<MediaItem>();
-    getDatabase();
+    
   }
-
-  // List Songs on Database
-  List<MediaItem> databaseSongs;
 
   // Queue List
   List<DownloadInfoSet> queueList;
@@ -41,46 +38,43 @@ class DownloadsProvider extends ChangeNotifier {
   // Cancelled List
   List<DownloadInfoSet> cancelledList;
 
-  // --------
-  // Database
-  // --------
-  final dbHelper = DatabaseService.instance;
-  Future<void> getDatabase() async {
-    List<SongFile> tmp = await dbHelper.getDownloadList();
-    databaseSongs = convertToMediaItem(tmp);
-    notifyListeners();
-  }
-
   // Handle Single Video Download
   void handleVideoDownload({
     @required Languages language,
-    AppDataProvider currentAppData,
+    ConfigurationProvider config,
     DownloadMetaData metadata,
     StreamManifest manifest,
     Video videoDetails,
     List data,
   }) {
     DownloadType downloadType;
-    AudioConvert convertFormat;
-    if (currentAppData.audioConvertFormat == "AAC") convertFormat = AudioConvert.ToAAC;
-    if (currentAppData.audioConvertFormat == "OGG Vorbis") convertFormat = AudioConvert.ToOGGVorbis;
-    if (currentAppData.audioConvertFormat == "MP3") convertFormat = AudioConvert.ToMP3;
-    if (currentAppData.enableAudioConvertion == false) convertFormat = AudioConvert.NONE;
+    FFmpegActionType convertFormat;
+    if (config.ffmpegActionTypeFormat == "AAC")
+      convertFormat = FFmpegActionType.ConvertToAAC;
+    if (config.ffmpegActionTypeFormat == "OGG Vorbis")
+      convertFormat = FFmpegActionType.ConvertToOGGVorbis;
+    if (config.ffmpegActionTypeFormat == "MP3")
+      convertFormat = FFmpegActionType.ConvertToMP3;
+    if (config.enableFFmpegActionType == false)
+      convertFormat = FFmpegActionType.NONE;
     String downloadPath;
     StreamInfo audioStreamInfo;
     StreamInfo videoStreamInfo;
     switch (data[0]) {
       case "Audio":
         downloadType = DownloadType.AUDIO;
-        downloadPath = currentAppData.audioDownloadPath;
+        downloadPath = config.audioDownloadPath;
         audioStreamInfo = data[1];
         break;
       case "Video":
         downloadType = DownloadType.VIDEO;
         videoStreamInfo = data[1];
-        audioStreamInfo = manifest.audioOnly.withHighestBitrate();
-        downloadPath = currentAppData.videoDownloadPath;
-        convertFormat = AudioConvert.WriteAudio;
+        audioStreamInfo = YoutubeExtractor.getBestAudioStreamForVideo(
+          manifest,
+          videoStreamInfo.container.name
+        );
+        downloadPath = config.videoDownloadPath;
+        convertFormat = FFmpegActionType.AppendAudioOnVideo;
         break;
     }
     metadata.title = removeToxicSymbols(metadata.title);
@@ -91,7 +85,7 @@ class DownloadsProvider extends ChangeNotifier {
       videoDetails: videoDetails,
       metadata: metadata,
       downloadType: downloadType,
-      downloadPath: currentAppData.enableAlbumFolder
+      downloadPath: config.enableAlbumFolder
         ? downloadPath + "/${metadata.album}"
         : downloadPath,
       convertFormat: convertFormat,
@@ -122,16 +116,20 @@ class DownloadsProvider extends ChangeNotifier {
   // Handle Playlist Downloads
   void handlePlaylistDownload({
     @required Languages language,
-    AppDataProvider currentAppData,
+    ConfigurationProvider config,
     List<Video> listVideos,
     String album, String artist
   }) {
     int track = 1;
-    AudioConvert convertFormat;
-    if (currentAppData.audioConvertFormat == "AAC") convertFormat = AudioConvert.ToAAC;
-    if (currentAppData.audioConvertFormat == "OGG Vorbis") convertFormat = AudioConvert.ToOGGVorbis;
-    if (currentAppData.audioConvertFormat == "MP3") convertFormat = AudioConvert.ToMP3;
-    if (currentAppData.enableAudioConvertion == false) convertFormat = AudioConvert.NONE;
+    FFmpegActionType convertFormat;
+    if (config.ffmpegActionTypeFormat == "AAC")
+      convertFormat = FFmpegActionType.ConvertToAAC;
+    if (config.ffmpegActionTypeFormat == "OGG Vorbis")
+      convertFormat = FFmpegActionType.ConvertToOGGVorbis;
+    if (config.ffmpegActionTypeFormat == "MP3")
+      convertFormat = FFmpegActionType.ConvertToMP3;
+    if (config.enableFFmpegActionType == false)
+      convertFormat = FFmpegActionType.NONE;
     listVideos.forEach((video) {
       queueList.add(
         new DownloadInfoSet(
@@ -148,9 +146,9 @@ class DownloadsProvider extends ChangeNotifier {
             disc: "1", track: "$track"
           ),
           downloadType: DownloadType.AUDIO,
-          downloadPath: currentAppData.enableAlbumFolder
-            ? currentAppData.audioDownloadPath + "/$album"
-            : currentAppData.audioDownloadPath,
+          downloadPath: config.enableAlbumFolder
+            ? config.audioDownloadPath + "/$album"
+            : config.audioDownloadPath,
           convertFormat: convertFormat,
           audioModifiers: AudioModifiers(),
           downloadId: RandomString.getRandomString(6),
@@ -248,45 +246,4 @@ class DownloadsProvider extends ChangeNotifier {
       .replaceAll('>', '')
       .replaceAll('|', '');
   }
-
-  // Convert any List<SongFile> to a List<MediaItem>
-  List<MediaItem> convertToMediaItem(List<SongFile> songList) {
-    List<MediaItem> list = [];
-    songList.forEach((SongFile element) {
-      int hours = 0;
-      int minutes = 0;
-      int micros;
-      List<String> parts = element.duration.split(':');
-      if (parts.length > 2) {
-        hours = int.parse(parts[parts.length - 3]);
-      }
-      if (parts.length > 1) {
-        minutes = int.parse(parts[parts.length - 2]);
-      }
-      micros = (double.parse(parts[parts.length - 1]) * 1000000).round();
-      Duration duration = Duration(
-        milliseconds: Duration(
-          hours: hours,
-          minutes: minutes,
-          microseconds: micros
-        ).inMilliseconds
-      );
-      list.add(
-        new MediaItem(
-          id: element.path,
-          title: element.title,
-          album: element.album,
-          artist: element.author,
-          artUri: "file://${element.coverPath}",
-          duration: duration,
-          extras: {
-            "downloadType": element.downloadType,
-            "artwork": element.coverPath
-          }
-        )
-      );
-    });
-    return list;
-  }
-
 }

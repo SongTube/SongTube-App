@@ -40,8 +40,10 @@ class AppTheme {
   }
 
   static ThemeData dark(Color accent) {
+    HSVColor color = HSVColor.fromColor(accent);
+    HSVColor desaturated = HSVColor.fromAHSV(color.alpha, color.hue, 0.65, color.value);
     return ThemeData.dark().copyWith(
-      accentColor: accent,
+      accentColor: desaturated.toColor(),
       iconTheme: IconThemeData(
         color: Colors.white
       ),
@@ -59,8 +61,9 @@ class AppTheme {
           color: Colors.white
         ),
       ),
+      scaffoldBackgroundColor: Color.fromARGB(255, 40, 40, 40),
       toggleableActiveColor: accent,
-      cardColor: Color.fromARGB(255, 60, 60, 60),
+      cardColor: Color.fromARGB(255, 45, 45, 45),
       inputDecorationTheme: InputDecorationTheme(
         labelStyle: TextStyle(
           color: accent,
@@ -74,9 +77,11 @@ class AppTheme {
   }
 
   static ThemeData black(Color accent) {
+    HSVColor color = HSVColor.fromColor(accent);
+    HSVColor desaturated = HSVColor.fromAHSV(color.alpha, color.hue, 0.65, color.value);
     return ThemeData.dark().copyWith(
       canvasColor: Colors.black,
-      accentColor: accent,
+      accentColor: desaturated.toColor(),
       iconTheme: IconThemeData(
         color: Colors.white
       ),
@@ -94,10 +99,9 @@ class AppTheme {
           color: Colors.white
         ),
       ),
-
       toggleableActiveColor: accent,
       scaffoldBackgroundColor: Colors.black,
-      cardColor: Color.fromARGB(255, 20, 20, 20),
+      cardColor: Colors.black,
       primaryColor: Colors.black,
       primaryColorLight: Colors.black,
       inputDecorationTheme: InputDecorationTheme(

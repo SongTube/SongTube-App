@@ -51,6 +51,22 @@ class LanguageEs extends Languages {
   String get labelDownloadAll => "Descargar Todo";
   @override 
   String get labelLoadingVideos => "Cargando Videos...";
+  @override
+  String get labelHomePage => "Inicio";
+  @override
+  String get labelTrending => "Tendencias";
+  @override
+  String get labelFavorites => "Favoritos";
+  @override
+  String get labelWatchLater => "Ver mas tarde";
+
+  // Video Options Menu
+  @override
+  String get labelCopyLink => "Copiar Enlace";
+  @override
+  String get labelAddToFavorites => "Añadir a Favoritos";
+  @override
+  String get labelAddToWatchLater => "Añadir a Ver mas tarde";
 
   // Downloads Screen
   @override
@@ -131,6 +147,8 @@ class LanguageEs extends Languages {
     "acceso a la Memoria Externa";
   @override
   String get labelGettingYourMedia => "Obteniendo tu Colección...";
+  @override
+  String get labelEditTags => "Editar Tags";
 
   // Navigate Screen
   @override
@@ -237,6 +255,57 @@ class LanguageEs extends Languages {
     "a ser temporal y no será requerido en futuras actualizaciones. Puedes" +
     "también dar el permiso luego en la Configuracion de esta aplicación.";
 
+  // Music Player
+  @override
+  String get labelPlayerSettings => "Configuration del Reproductor";
+  @override
+  String get labelExpandArtwork => "Expandir Caratula";
+  @override
+  String get labelArtworkRoundedCorners => "Bordes redondeados de Caratula";
+  @override
+  String get labelPlayingFrom => "Reproduciendo desde";
+  @override
+  String get labelBlurBackground => "Fondo Blur";
+
+  // Video Page
+  @override
+  String get labelTags => "Tags";
+  @override
+  String get labelRelated => "Relacionado";
+  @override
+  String get labelAutoPlay => "Reproducción Automatica";
+
+  // Tags Pages
+  @override
+  String get labelAudioFormatNotCompatible =>
+    "Formato de audio no compatible";
+  @override
+  String get labelNotSpecified => "Sin Especificar";
+  @override
+  String get labelPerformAutomaticTagging => 
+    "Taggear Automaticamente";
+  @override
+  String get labelSelectTagsfromMusicBrainz => 
+    "Seleccionar Tags desde MusicBrainz";
+  @override
+  String get labelSelectArtworkFromDevice =>
+    "Seleccionar Caratula local";
+
+  // Telegram Join Channel Dialog
+  @override
+  String get labelJoinTelegramChannel => "¡Uneté al canal de Telegram!";
+  @override
+  String get labelJoinTelegramJustification =>
+    "¿Te gusta SongTube? Entra a nuestro canal! Vas a encontrar " +
+    "Actualizaciones, Información, Desarrollo, link del Group " +
+    "y las redes sociales." +
+    "\n\n" +
+    "En caso de que tengas un problema o una gran recomendacion que hacer, " +
+    "eres bienvenido de entrar al grupo desde el canal y hacermelo saber! "+ 
+    "Pero ten en cuenta, solo esta permitido hablar en ingles, gracias!";
+  @override
+  String get labelRemindLater => "Recordar mas tarde";
+
   // Common Words (One word labels)
   @override
   String get labelExit => "Salir";
@@ -274,5 +343,14 @@ class LanguageEs extends Languages {
   String get labelCleaning => "Limpiando";
   @override
   String get labelCancel => "Cancelar";
+  @override
+  String get labelGeneral => "General";
+  @override
+  String get labelRemove => "Remover";
+  @override
+  String get labelJoin => "Entrar";
+  @override
+  String get labelNo => "No";
+
 
 }

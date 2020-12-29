@@ -1,6 +1,6 @@
 import 'package:songtube/internal/languages.dart';
 
-class languageIgbo-NG extends Languages {
+class LanguageIgbo extends Languages {
 
   // Introduction Screens
   @override
@@ -44,13 +44,29 @@ class languageIgbo-NG extends Languages {
   @override
   String get labelQuickSearch => "Ndenye Search...";
   @override
-  String get labelTagsEditor => "Mkpado \ nOdechukwu";
+  String get labelTagsEditor => "Mkpado\nnOdechukwu";
   @override
   String get labelEditArtwork => "Nka";
   @override
   String get labelDownloadAll => "Budata Ha niile";
   @override 
   String get labelLoadingVideos => "Na-adọnye vidiyo...";
+  @override
+  String get labelHomePage => "Home Page";
+  @override
+  String get labelTrending => "Trending";
+  @override
+  String get labelFavorites => "Favorites";
+  @override
+  String get labelWatchLater => "Watch Later";
+
+  // Video Options Menu
+  @override
+  String get labelCopyLink => "Copy Link";
+  @override
+  String get labelAddToFavorites => "Add to Favorites";
+  @override
+  String get labelAddToWatchLater => "Add to Watch Later";
 
   // Downloads Screen
   @override
@@ -131,6 +147,8 @@ class languageIgbo-NG extends Languages {
     "Inye ikike ikike nchekwa";
   @override
   String get labelGettingYourMedia => "Inweta Mgbasa ozi gị...";
+  @override
+  String get labelEditTags => "Edit Tags";
 
   // Navigate Screen
   @override
@@ -235,6 +253,56 @@ class languageIgbo-NG extends Languages {
     "Enwere ike ịnweta ikikere faịlụ, nke a ga-abụ nke oge na-achọghị " +
     "na mmelite n'ọdịnihu. I nwekwara ike itinye ndozi a na Ntọala.";
 
+  // Music Player
+  @override
+  String get labelPlayerSettings => "Player Settings";
+  @override
+  String get labelExpandArtwork => "Expand Artwork";
+  @override
+  String get labelArtworkRoundedCorners => "Artwork Rounded Corners";
+  @override
+  String get labelPlayingFrom => "Playing From";
+  @override
+  String get labelBlurBackground => "Blur Background";
+
+  // Video Page
+  @override
+  String get labelTags => "Tags";
+  @override
+  String get labelRelated => "Related";
+  @override
+  String get labelAutoPlay => "AutoPlay";
+
+  // Tags Pages
+  @override
+  String get labelAudioFormatNotCompatible =>
+    "Audio format not Compatible";
+  @override
+  String get labelNotSpecified => "Not Specified";
+  @override
+  String get labelPerformAutomaticTagging => 
+    "Perform Automatic Tagging";
+  @override
+  String get labelSelectTagsfromMusicBrainz => 
+    "Select Tags from MusicBrainz";
+  @override
+  String get labelSelectArtworkFromDevice =>
+    "Select Artwork from Device";
+
+  // Telegram Join Channel Dialog
+  @override
+  String get labelJoinTelegramChannel => "Join Telegram Channel!";
+  @override
+  String get labelJoinTelegramJustification =>
+    "Do you like SongTube? Please join the Telegram Channel! You will find " +
+    "Updates, Information, Development, Group Link and other Social links." +
+    "\n\n" +
+    "In case you have an issue or a great recommentation in your mind, " +
+    "please join the Group from the Channel and write it down! But take in mind " +
+    "you can only speak in English, thanks!";
+  @override
+  String get labelRemindLater => "Remind Later";
+
   // Common Words (One word labels)
   @override
   String get labelExit => "Ụzọ ọpụpụ";
@@ -272,5 +340,13 @@ class languageIgbo-NG extends Languages {
   String get labelCleaning => "Nhicha";
   @override
   String get labelCancel => "Kagbuo";
+  @override
+  String get labelGeneral => "General";
+  @override
+  String get labelRemove => "Remove";
+  @override
+  String get labelJoin => "Join";
+  @override
+  String get labelNo => "No";
 
 }

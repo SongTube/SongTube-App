@@ -8,7 +8,7 @@ import 'package:songtube/intro/components/introPermissions.dart';
 import 'package:songtube/intro/components/introReady.dart';
 import 'package:songtube/intro/components/introTheme.dart';
 import 'package:songtube/intro/components/introWelcome.dart';
-import 'package:songtube/provider/app_provider.dart';
+import 'package:songtube/provider/configurationProvider.dart';
 
 // Packages
 import 'package:provider/provider.dart';
@@ -42,7 +42,7 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
       IntroTheme(),
       IntroReady(
         onEnd: () {
-          Provider.of<AppDataProvider>(context, listen: false).preferences.saveShowIntroductionPages(false);
+          Provider.of<ConfigurationProvider>(context, listen: false).preferences.saveShowIntroductionPages(false);
           Navigator.pushReplacementNamed(context, 'homeScreen');
         },
       )
@@ -107,7 +107,7 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
                         ),
                       ),
                       onPressed: () {
-                        Provider.of<AppDataProvider>(context, listen: false).preferences.saveShowIntroductionPages(false);
+                        Provider.of<ConfigurationProvider>(context, listen: false).preferences.saveShowIntroductionPages(false);
                         Navigator.pushReplacementNamed(context, 'homeScreen');
                       },
                     ),

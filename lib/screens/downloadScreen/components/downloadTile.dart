@@ -1,18 +1,19 @@
 import 'dart:io';
-
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:songtube/internal/languages.dart';
-import 'package:songtube/internal/models/downloadinfoset.dart';
+import 'package:songtube/internal/models/infoSets/downloadinfoset.dart';
 import 'package:songtube/internal/models/metadata.dart';
 import 'package:string_validator/string_validator.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 class DownloadTile extends StatelessWidget {
   final Stream dataProgress;
   final Stream currentAction;
   final Stream progressBar;
   final DownloadMetaData metadata;
+  final Video videoDetails;
   final DownloadType downloadType;
   final Function onDownloadCancel;
   final Widget cancelDownloadIcon;
@@ -21,6 +22,7 @@ class DownloadTile extends StatelessWidget {
     @required this.currentAction,
     @required this.progressBar,
     @required this.metadata,
+    @required this.videoDetails,
     @required this.downloadType,
     this.onDownloadCancel,
     this.cancelDownloadIcon,
@@ -52,7 +54,11 @@ class DownloadTile extends StatelessWidget {
                         fadeInDuration: Duration(milliseconds: 250),
                         placeholder: MemoryImage(kTransparentImage),
                         image: isURL(metadata.coverurl)
-                          ? NetworkImage(metadata.coverurl)
+                          ? NetworkImage(
+                              metadata.coverurl == videoDetails.thumbnails.maxResUrl
+                                ? videoDetails.thumbnails.mediumResUrl
+                                : metadata.coverurl
+                            )
                           : FileImage(File(metadata.coverurl)),
                         fit: BoxFit.fitWidth,
                       ),

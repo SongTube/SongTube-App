@@ -19,7 +19,7 @@ class MediaSearchBar extends StatelessWidget {
       width: double.infinity,
       height: kToolbarHeight*0.8,
       decoration: BoxDecoration(
-        color: Theme.of(context).scaffoldBackgroundColor
+        color: Theme.of(context).cardColor
       ),
       child: Container(
         margin: EdgeInsets.only(
@@ -27,8 +27,8 @@ class MediaSearchBar extends StatelessWidget {
           right: 16
         ),
         decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(10)
+          color: Theme.of(context).scaffoldBackgroundColor,
+          borderRadius: BorderRadius.circular(20)
         ),
         child: Theme(
           data: ThemeData(primaryColor: Theme.of(context).accentColor),

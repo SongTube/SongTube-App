@@ -14,28 +14,35 @@ class AppBottomNavigationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        boxShadow: [                                                               
+        border: Border(
+          top: BorderSide(
+            color: Colors.grey[400].withOpacity(0.1)
+          )
+        ),
+        boxShadow: [
           BoxShadow(
             color: Colors.black12.withOpacity(0.05),
             spreadRadius: 0.1,
             blurRadius: 10
           ),
-        ],                                                                         
-      ), 
+        ],    
+      ),
       child: BottomNavigationBar(
         backgroundColor: Theme.of(context).cardColor,
         currentIndex: currentIndex,
         selectedLabelStyle: TextStyle(
-          fontFamily: 'Varela',
-          fontWeight: FontWeight.w600
+          fontFamily: 'Product Sans',
+          fontWeight: FontWeight.w600,
+          letterSpacing: 0.2
         ),
         unselectedLabelStyle: TextStyle(
-          fontFamily: 'Varela',
-          fontWeight: FontWeight.w600
+          fontFamily: 'Product Sans',
+          fontWeight: FontWeight.w600,
+          letterSpacing: 0.2
         ),
         iconSize: 22,
         selectedFontSize: 12,
-        unselectedFontSize: 10,
+        unselectedFontSize: 12,
         elevation: 8,
         selectedItemColor: Theme.of(context).accentColor,
         unselectedItemColor: Theme.of(context).iconTheme.color,
@@ -53,10 +60,6 @@ class AppBottomNavigationBar extends StatelessWidget {
           BottomNavigationBarItem(
             icon: Icon(EvaIcons.musicOutline),
             label: Languages.of(context).labelMedia
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(EvaIcons.videoOutline),
-            label: "YouTube"
           ),
           BottomNavigationBarItem(
             icon: Icon(MdiIcons.dotsHorizontal),

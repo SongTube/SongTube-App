@@ -3,25 +3,16 @@ import 'dart:async';
 
 // Flutter
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:songtube/internal/models/tagsControllers.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:songtube/internal/models/infoSets/mediaInfoSet.dart';
 
 // Internal
-import 'package:songtube/internal/nativeMethods.dart';
-import 'package:songtube/internal/randomString.dart';
-import 'package:songtube/internal/youtube/youtubeInfo.dart';
+import 'package:songtube/internal/youtube/youtubeExtractor.dart';
 
 // Packages
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
-// UI
-import 'package:songtube/ui/internal/snackbar.dart';
-import 'package:youtube_player_iframe/youtube_player_iframe.dart';
-
-enum LoadingStatus { Success, Loading, Unload }
-enum CurrentLoad { None, SingleVideo, Playlist }
-enum LibraryScreen { Home, Downloads, Media, Youtube, More }
-enum LinkType { Video, Playlist }
+enum HomeScreenTab { Home, Trending, Music, Favorites, WatchLater }
 
 class ManagerProvider extends ChangeNotifier {
 
@@ -29,22 +20,27 @@ class ManagerProvider extends ChangeNotifier {
   // Initialize Class
   // ----------------
   //
-  ManagerProvider() {
+  ManagerProvider(lastSearchQuery) {
     // Variables
-    showEmptyScreenWidget    = true;
-    currentLoad              = CurrentLoad.None;
-    mediaStreamReady         = false;
-    showFloatingActionButtom = false;
     showSearchBar            = false;
+    searchBarFocusNode = FocusNode();
     urlController = new TextEditingController();
-    tagsControllers = new TagsControllers();
+    // HomeScreen
+    homeScrollController = ScrollController();
+    expandablePlayerPanelController = PanelController();
     // Library Scaffold Key
     _libraryScaffoldKey = new GlobalKey<ScaffoldState>();
     _screenIndex        = 0;
-    // YouTube Info
-    youtubeInfo = new YoutubeInfo();
-    // Navigate
+    // Home Screen
+    currentHomeTab = HomeScreenTab.Home;
+    homeTrendingVideoList = [];
+    homeMusicVideoList = [];
+    youtubeSearchQuery = lastSearchQuery;
     searchStreamRunning = false;
+    searchResultsLength = 10;
+    updateYoutubeSearchResults();
+    // YoutubeExtractor
+    youtubeExtractor = YoutubeExtractor();
   }
 
   // -------------
@@ -55,76 +51,70 @@ class ManagerProvider extends ChangeNotifier {
   GlobalKey<ScaffoldState> _libraryScaffoldKey;
   int _screenIndex;
   // Home Screen
-  bool showEmptyScreenWidget;
-  CurrentLoad _currentLoad;
-  LoadingStatus loadingStatus;
-  bool mediaStreamReady;
-  bool showFloatingActionButtom;
+  ScrollController homeScrollController;
+  PanelController expandablePlayerPanelController;
   // Navitate Screen
-  String _navigateQuery;
-  String get navigateQuery => _navigateQuery == null
-    ? RandomString.getRandomLetter()
-    : _navigateQuery;
-  set navigateQuery(String searchQuery) {
-    _navigateQuery = searchQuery;
-  }
+  String youtubeSearchQuery;
   // SearchBar
   bool _showSearchBar;
+  FocusNode searchBarFocusNode;
 
-  // Change current Screen
-  void navigateToScreen(LibraryScreen screen) {
-    switch (screen) {
-      case LibraryScreen.Home:
-        _screenIndex = 0;
-        break;
-      case LibraryScreen.Downloads:
-        _screenIndex = 1;
-        break;
-      case LibraryScreen.Media:
-        _screenIndex = 2;
-        break;
-      case LibraryScreen.Youtube:
-        _screenIndex = 3;
-        break;
-      case LibraryScreen.More:
-        _screenIndex = 4;
-        break;
-    }
-    _showSearchBar = false;
-    notifyListeners();
-  }  
+  // Current MediaInfoSet (Used to store all the current Media Information
+  // for Playback, Tags and Downloads)
+  MediaInfoSet mediaInfoSet;
 
-  // --------------------------------
-  // Current Video and StreamManifest
-  // --------------------------------
-  StreamManifest streamManifest;
-  Video videoDetails;
-  TagsControllers tagsControllers;
-  // Current Channel
-  Channel channelDetails;
+  // YoutubeExtractor
+  YoutubeExtractor youtubeExtractor;
 
-  // ----------------
-  // Current Playlist
-  // ----------------
-  Playlist playlistDetails;
-  List<Video> playlistVideos = [];
+  // ---------------------
+  // Stream Youtube Player
+  // ---------------------
+  StreamManifest playerStream;
 
-  // -------------------------
-  // Youtube Player Controller
-  // -------------------------
-  YoutubePlayerController youtubePlayerController;
-
-  // ---------------
-  // Navigate Screen
-  // ---------------
+  // -----------
+  // Home Screen
+  // -----------
   bool searchStreamRunning;
   StreamSubscription youtubeSearchStream;
+  int searchResultsLength;
   List<dynamic> youtubeSearchResults = [];
-
-  // --------
-  // SnackBar
-  // --------
-  AppSnack snackBar;
+  void updateSearchResults(newItem) {
+    if (youtubeSearchResults.length < searchResultsLength) {
+      youtubeSearchResults.add(newItem);
+    } else if (youtubeSearchResults.length == searchResultsLength) {
+      youtubeSearchResults.add(newItem);
+      youtubeSearchStream.pause();
+      searchStreamRunning = false;
+      searchResultsLength += 10;
+      notifyListeners();
+    }
+  }
+  HomeScreenTab _currentHomeTab;
+  HomeScreenTab get currentHomeTab => _currentHomeTab;
+  set currentHomeTab(HomeScreenTab tab) {
+    _currentHomeTab = tab;
+    notifyListeners();
+    if (tab == HomeScreenTab.Trending && homeTrendingVideoList.isEmpty) {
+      youtubeExtractor.getPlaylistVideos(
+        PlaylistId('PLrEnWoR732-BHrPp_Pm8_VleD68f9s14-')
+      ).then((value) {
+        homeTrendingVideoList = value;
+        notifyListeners();
+      });
+    }
+    if (tab == HomeScreenTab.Music && homeMusicVideoList.isEmpty) {
+      youtubeExtractor.getPlaylistVideos(
+        PlaylistId('PLFgquLnL59akA2PflFpeQG9L01VFg90wS')
+      ).then((value) {
+        homeMusicVideoList = value;
+        notifyListeners();
+      });
+    }
+  }
+  // Trending Video List
+  List<Video> homeTrendingVideoList;
+  // Music Video List
+  List<Video> homeMusicVideoList;
 
   // ---------------
   // URL Controller
@@ -132,214 +122,184 @@ class ManagerProvider extends ChangeNotifier {
   TextEditingController urlController;
   // ----------------------------------
 
-  // -------------------------
-  // Other Functions & Helpers
-  // -------------------------
+  // -------------------
+  // Functions & Helpers
+  // -------------------
   //
+  // Get current Video or Playlist
+  void updateMediaInfoSet(dynamic searchMedia, List<Video> relatedVideos) {
+    mediaInfoSet = MediaInfoSet();
+    playerStream = null;
+    notifyListeners();
+    if (searchMedia is Video) {
+      Video video = searchMedia;
+      mediaInfoSet.mediaType = MediaInfoSetType.Video;
+      mediaInfoSet.videoFromSearch = SearchVideo(
+        VideoId(video.id.value),
+        video.title, video.author,
+        null, null, null,
+        [
+          Thumbnail(Uri(
+            path: video.thumbnails.highResUrl
+              .replaceAll("https://i.ytimg.com", "")
+              .replaceAll("https://img.youtube.com", "")
+          ), null, null)
+        ]
+      );
+      VideoId id = mediaInfoSet.videoFromSearch.videoId;
+      mediaInfoSet.updateVideoDetails(video);
+      notifyListeners();
+      // Get the Channel Details
+      youtubeExtractor.getChannelByVideoId(id).then((value) {
+        mediaInfoSet.channelDetails = value;
+        notifyListeners();
+      });
+      // Get Related videos
+      if (relatedVideos == null) {
+        youtubeExtractor.getChannelVideos(id)
+          .then((value) {
+            mediaInfoSet.relatedVideos = value;
+            notifyListeners();
+        });
+      } else {
+        mediaInfoSet.relatedVideos = relatedVideos;
+        notifyListeners();
+      }
+      // Get the StreamManifest for Downloads
+      youtubeExtractor.getStreamManifest(id).then((value) {
+        mediaInfoSet.streamManifest = value;
+        playerStream = value;
+        notifyListeners();
+      });
+    } else if (searchMedia is SearchVideo) {
+      // Get current Search Video and update the YoutubePlayerController
+      mediaInfoSet.mediaType = MediaInfoSetType.Video;
+      mediaInfoSet.videoFromSearch = searchMedia;
+      VideoId id = mediaInfoSet.videoFromSearch.videoId;
+      notifyListeners();
+      // Get the Video Details from our Search
+      youtubeExtractor.getVideoDetails(id).then((value) {
+        mediaInfoSet.updateVideoDetails(value);
+        notifyListeners();
+      });
+      // Get the Channel Details without waiting for it's result
+      youtubeExtractor.getChannelByVideoId(id).then((value) {
+        mediaInfoSet.channelDetails = value;
+        notifyListeners();
+      });
+      // Get Related videos
+      if (relatedVideos == null) {
+        youtubeExtractor.getChannelVideos(mediaInfoSet.videoFromSearch.videoId)
+          .then((value) {
+            mediaInfoSet.relatedVideos = value;
+            notifyListeners();
+        });
+      } else {
+        mediaInfoSet.relatedVideos = relatedVideos;
+        notifyListeners();
+      }
+      // Get the StreamManifest for Downloads
+      youtubeExtractor.getStreamManifest(id).then((value) {
+        mediaInfoSet.streamManifest = value;
+        playerStream = value;
+        notifyListeners();
+      });
+      notifyListeners();
+    } else if (searchMedia is Playlist) {
+      Playlist playlist = searchMedia;
+      mediaInfoSet.mediaType = MediaInfoSetType.Playlist;
+      mediaInfoSet.playlistFromSearch = SearchPlaylist(
+        playlist.id,
+        playlist.title,
+        null,
+      );
+      mediaInfoSet.updatePlaylistDetails(playlist);
+      notifyListeners();
+      // Get the Playlist Videos from our Details
+      youtubeExtractor.getPlaylistVideos(playlist.id).then((value) {
+        mediaInfoSet.playlistVideos = value;
+        updateStreamManifestPlayer(value[0].id);
+        notifyListeners();
+      });
+    } else {
+      // Get current Search Playlist
+      mediaInfoSet.mediaType = MediaInfoSetType.Playlist;
+      mediaInfoSet.playlistFromSearch = searchMedia;
+      PlaylistId id = mediaInfoSet.playlistFromSearch.playlistId;
+      notifyListeners();
+      // Get the Playlist Details from our Search and update Thumbnail
+      youtubeExtractor.getPlaylistDetails(id).then((value) {
+        mediaInfoSet.updatePlaylistDetails(value);
+        notifyListeners();
+      });
+      notifyListeners();
+      // Get the Playlist Videos from our Details
+      youtubeExtractor.getPlaylistVideos(id).then((value) {
+        mediaInfoSet.playlistVideos = value;
+        updateStreamManifestPlayer(value[0].id);
+        notifyListeners();
+      });
+    }
+  }
+
+  // Manually update Stream Youtube Player
+  void updateStreamManifestPlayer(VideoId id) {
+    playerStream = null;
+    notifyListeners();
+    youtubeExtractor.getStreamManifest(id).then((value) {
+      playerStream = value;
+      notifyListeners();
+    });
+  }
+
   // Search for Videos on Youtube
   void updateYoutubeSearchResults({bool updateResults = false}) async {
     int resultsCounter = 0;
     if (updateResults || youtubeSearchStream == null) {
+      searchResultsLength = 10;
       searchStreamRunning = true;
       youtubeSearchResults.clear();
+      currentHomeTab = HomeScreenTab.Home;
       if (youtubeSearchStream != null) {
         await youtubeSearchStream.cancel();
         youtubeSearchStream = null;
       }
-      notifyListeners();
-      youtubeSearchStream = youtubeInfo.yt.search
-        .getVideosFromPage(navigateQuery)
+      youtubeSearchStream = YoutubeExplode().search
+        .getVideosFromPage(youtubeSearchQuery)
         .listen((event) {
-          youtubeSearchResults.add(event);
+          print(resultsCounter);
           resultsCounter++;
-          if (resultsCounter >= 10) {
-            youtubeSearchStream.pause();
-            searchStreamRunning = false;
-            notifyListeners();
-          }
+          updateSearchResults(event);
         }, cancelOnError: true);
     } else {
       resultsCounter = 0;
       youtubeSearchStream.resume();
     }
   }
-  // Update Video Player Controller
-  void updateYoutubePlayerController(String id, bool useLoad) {
-    if (useLoad) {
-      youtubePlayerController.load(id);
-    } else {
-      youtubePlayerController = new YoutubePlayerController(
-        initialVideoId: id,
-        params: YoutubePlayerParams(
-          autoPlay: true,
-          showFullscreenButton: true,
-        )
-      );
-      youtubePlayerController.onEnterFullscreen = () {
-        SystemChrome.setPreferredOrientations([
-          DeviceOrientation.landscapeLeft,
-          DeviceOrientation.landscapeRight,
-        ]);
-      };
-      youtubePlayerController.onExitFullscreen = () {
-        SystemChrome.setPreferredOrientations([
-          DeviceOrientation.portraitDown,
-          DeviceOrientation.portraitUp,
-        ]);
-      };
-    }
-    notifyListeners();
-  }
-  // Unload HomeScreen Data
-  void updateHomeScreen(LoadingStatus status, [CurrentLoad type]) {
-    CurrentLoad loadingType = type == null ? CurrentLoad.None : type;
-    switch(status) {
-      // Failed to get mediaStream
-      case LoadingStatus.Unload:
-        showEmptyScreenWidget    = true;
-        currentLoad              = loadingType;
-        loadingStatus            = LoadingStatus.Unload;
-        showFloatingActionButtom = false;
-        mediaStreamReady         = false;
-        channelDetails           = null;
-        youtubePlayerController  = null;
-        break;
-      // Is loading
-      case LoadingStatus.Loading:
-        showEmptyScreenWidget    = false;
-        currentLoad              = loadingType;
-        loadingStatus            = LoadingStatus.Loading;
-        showFloatingActionButtom = false;
-        mediaStreamReady         = false;
-        channelDetails           = null;
-        break;
-      // Is loaded
-      case LoadingStatus.Success:
-        currentLoad              = loadingType;
-        loadingStatus            = LoadingStatus.Success;
-        showFloatingActionButtom = true;
-        mediaStreamReady         = true;
-        break;
-    }
-    notifyListeners();
-  }
-  // Handle incoming intents (Links via share)
-  Future<void> handleIntent() async {
-    // Return if the a mediaStream is beign loaded
-    if (loadingStatus == LoadingStatus.Loading) return;
-    // Handle Intent
-    String url = await NativeMethod.handleIntent();
-    if (url == null) return;
-    if (PlaylistId.parsePlaylistId(url) != null) {
-      urlController.text = url;
-      notifyListeners();
-      await getPlaylistDetails(url);
-    }
-    if (VideoId.parseVideoId(url) != null) {
-      urlController.text = url;
-      notifyListeners();
-      await getVideoDetails(url);
-    }
-  }
-  // Handle Library WillPop
-  DateTime _currentBackPressTime;
-  Future<bool> handlePop(index) async {
-    if (index != 0) {
-      _screenIndex = 0;
-      notifyListeners();
-      return false;
-    } else {
-      DateTime now = DateTime.now();
-      if (_currentBackPressTime == null || 
-          now.difference(_currentBackPressTime) > Duration(seconds: 2)) {
-        _currentBackPressTime = now;
-        snackBar.showSnackBar(
-          icon: Icons.warning,
-          title: "Press back again to exit",
-          duration: Duration(seconds: 1)
+  // Update Stream Video Player
+  void streamPlayerAutoPlay() {
+    if (mediaInfoSet.mediaType == MediaInfoSetType.Video) {
+      int currentIndex = mediaInfoSet.autoPlayIndex;
+      if (currentIndex <= mediaInfoSet.relatedVideos.length-1) {
+        updateMediaInfoSet(
+          mediaInfoSet.relatedVideos[currentIndex+1],
+          mediaInfoSet.relatedVideos
         );
-        return Future.value(false);
+        mediaInfoSet.autoPlayIndex += 1;
       }
-      return Future.value(true);
+    } else {
+      int currentIndex = mediaInfoSet.autoPlayIndex;
+      if (currentIndex <= mediaInfoSet.playlistVideos.length-1) {
+        updateMediaInfoSet(
+          mediaInfoSet.playlistVideos[currentIndex+1],
+          mediaInfoSet.relatedVideos
+        );
+        mediaInfoSet.autoPlayIndex += 1;
+      }
     }
-  }
-  // Move to Navigate Screen with a Search Intent
-  void pushYoutubePage(String searchQuery) async {
-    navigateQuery = searchQuery;
-    await Future.delayed((Duration(milliseconds: 50)), () 
-      => navigateToScreen(LibraryScreen.Youtube));
-    notifyListeners();
   }
 
-  // -------------------------------------
-  // Info & Downloads Management Functions
-  // -------------------------------------
-  //
-  // YouTube Info
-  YoutubeInfo youtubeInfo;
-  // Get Channel Link
-  Future<Channel> getChannel() async {
-    return await youtubeInfo.getChannel(urlController.text);
-  }
-  // Get Playlist Details
-  Future<void> getPlaylistDetails(String url) async {
-    if (loadingStatus == LoadingStatus.Loading) return null;
-    if (PlaylistId.parsePlaylistId(url) == null) return null;
-    playlistVideos = [];
-    navigateToScreen(LibraryScreen.Home);
-    updateHomeScreen(LoadingStatus.Loading, CurrentLoad.Playlist);
-    try {
-      playlistDetails = await youtubeInfo.getPlaylistDetails(url)
-        .timeout(Duration(seconds: 20));
-    } catch (_) {
-      updateHomeScreen(LoadingStatus.Unload);
-      return;
-    }
-    updateHomeScreen(LoadingStatus.Success, CurrentLoad.Playlist);
-    notifyListeners();
-    getPlaylistVideos(url);
-  }
-  // Get Video MediaStreamInfo from Id
-  Future<void> getVideoDetails(String url) async {
-    if (loadingStatus == LoadingStatus.Loading) return null;
-    if (VideoId.parseVideoId(url) == null) return null;
-    navigateToScreen(LibraryScreen.Home);
-    updateHomeScreen(LoadingStatus.Loading, CurrentLoad.SingleVideo);
-    try {
-      videoDetails = await youtubeInfo.getVideoDetails(url)
-        .timeout(Duration(seconds: 20));
-      streamManifest = null;
-    } catch (e) {
-      updateHomeScreen(LoadingStatus.Unload);
-    }
-    tagsControllers.updateTextControllers(videoDetails);
-    updateHomeScreen(LoadingStatus.Success, CurrentLoad.SingleVideo);
-    updateYoutubePlayerController(videoDetails.id.value, false);
-    notifyListeners();
-    await Future.delayed(Duration(milliseconds: 400));
-    getChannelDetails(url);
-    getStreamManifest(url);
-  }
-  // Get StreamManifest
-  void getStreamManifest(String url) async {
-    while (streamManifest == null) {
-      try {
-        streamManifest =
-          await youtubeInfo.getVideoManifest(url)
-            .timeout(Duration(seconds: 30));
-        notifyListeners();
-      } catch (_) {}
-    }
-  }
-  // Get Channel Details
-  void getChannelDetails(String url) async {
-    channelDetails = await youtubeInfo.getChannel(url);
-    notifyListeners();
-  }
-  // Playlist Details
-  void getPlaylistVideos(String url) async {
-    playlistVideos = await youtubeInfo.getPlaylistVideos(url);
-    updateYoutubePlayerController(playlistVideos[0].id.value, false);
+  void setState() {
     notifyListeners();
   }
 
@@ -353,12 +313,6 @@ class ManagerProvider extends ChangeNotifier {
   set screenIndex(int value) {
     _screenIndex = value;
     _showSearchBar = false;
-    notifyListeners();
-  }
-  // Loading Video
-  CurrentLoad get currentLoad => _currentLoad;
-  set currentLoad(CurrentLoad value) {
-    _currentLoad = value;
     notifyListeners();
   }
   bool get showSearchBar => _showSearchBar;

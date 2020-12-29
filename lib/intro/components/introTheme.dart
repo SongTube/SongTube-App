@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:songtube/internal/languages.dart';
 
 // Internal
-import 'package:songtube/provider/app_provider.dart';
+import 'package:songtube/provider/configurationProvider.dart';
 
 // Packages
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
@@ -32,13 +32,13 @@ class _IntroThemeState extends State<IntroTheme> {
 
   @override
   Widget build(BuildContext context) {
-    AppDataProvider appData = Provider.of<AppDataProvider>(context);
+    ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
     void checkTheme() {
-      if (appData.preferences.getSystemThemeEnabled() == true) {
+      if (config.preferences.getSystemThemeEnabled() == true) {
         theme = ThemeSelected.System;
       } else if (
-        appData.preferences.getSystemThemeEnabled() == false &&
-        appData.preferences.getDarkThemeEnabled() == false
+        config.preferences.getSystemThemeEnabled() == false &&
+        config.preferences.getDarkThemeEnabled() == false
       ) {
         theme = ThemeSelected.Light;
       } else {
@@ -151,8 +151,8 @@ class _IntroThemeState extends State<IntroTheme> {
                   slideSide: SlideFromSlide.BOTTOM,
                   child: GestureDetector(
                     onTap: () {
-                      appData.systemThemeEnabled = true;
-                      appData.darkThemeEnabled = false;
+                      config.systemThemeEnabled = true;
+                      config.darkThemeEnabled = false;
                     },
                     child: AnimatedContainer(
                       padding: EdgeInsets.all(8),
@@ -195,8 +195,8 @@ class _IntroThemeState extends State<IntroTheme> {
                   slideSide: SlideFromSlide.BOTTOM,
                   child: GestureDetector(
                     onTap: () {
-                      appData.systemThemeEnabled = false;
-                      appData.darkThemeEnabled = false;
+                      config.systemThemeEnabled = false;
+                      config.darkThemeEnabled = false;
                     },
                     child: AnimatedContainer(
                       padding: EdgeInsets.all(8),
@@ -239,8 +239,8 @@ class _IntroThemeState extends State<IntroTheme> {
                   slideSide: SlideFromSlide.BOTTOM,
                   child: GestureDetector(
                     onTap: () {
-                      appData.systemThemeEnabled = false;
-                      appData.darkThemeEnabled = true;
+                      config.systemThemeEnabled = false;
+                      config.darkThemeEnabled = true;
                     },
                     child: AnimatedContainer(
                       padding: EdgeInsets.all(16),

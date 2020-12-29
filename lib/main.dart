@@ -1,27 +1,31 @@
 // Flutter
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:songtube/internal/languages.dart';
+import 'package:songtube/internal/randomString.dart';
 
 // Internal
 import 'package:songtube/intro/introduction.dart';
 import 'package:songtube/provider/downloadsProvider.dart';
 import 'package:songtube/provider/managerProvider.dart';
-import 'package:songtube/provider/app_provider.dart';
-import 'package:songtube/library.dart';
-import 'package:songtube/internal/preferences.dart';
+import 'package:songtube/provider/configurationProvider.dart';
+import 'package:songtube/lib.dart';
+import 'package:songtube/internal/legacyPreferences.dart';
 import 'package:songtube/provider/mediaProvider.dart';
 
 // Packages
 import 'package:audio_service/audio_service.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/provider/preferencesProvider.dart';
 
 // UI
 import 'package:songtube/ui/internal/themeValues.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Preferences preferences = new Preferences();
+  LegacyPreferences preferences = new LegacyPreferences();
   await preferences.initPreferences();
   runApp(Main(preloadedFs: preferences));
 }
@@ -33,7 +37,7 @@ class Main extends StatefulWidget {
     state.setLocale(newLocale);
   }
 
-  final Preferences preloadedFs;
+  final LegacyPreferences preloadedFs;
   Main({
     @required this.preloadedFs
   });
@@ -64,33 +68,42 @@ class _MainState extends State<Main> {
 
   @override
   Widget build(BuildContext context) {
+    List lastSearchQuery = (jsonDecode(widget.preloadedFs.getSearchHistory())
+      as List<dynamic>).cast<String>();
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<AppDataProvider>(
-          create: (context) => AppDataProvider(preferences: widget.preloadedFs)
+        ChangeNotifierProvider<ConfigurationProvider>(
+          create: (context) => ConfigurationProvider(preferences: widget.preloadedFs)
         ),
         ChangeNotifierProvider<ManagerProvider>(
-          create: (context) => ManagerProvider()
+          create: (context) => ManagerProvider(
+            lastSearchQuery.isNotEmpty
+              ? lastSearchQuery[0]
+              : RandomString.getRandomLetter()
+          )
         ),
         ChangeNotifierProvider<DownloadsProvider>(
           create: (context) => DownloadsProvider()
         ),
         ChangeNotifierProvider<MediaProvider>(
           create: (context) => MediaProvider()
+        ),
+        ChangeNotifierProvider<PreferencesProvider>(
+          create: (context) => PreferencesProvider(),
         )
       ],
       child: Builder( builder: (context) {
-        AppDataProvider appData = Provider.of<AppDataProvider>(context);        
+        ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
         ThemeData customTheme;
         ThemeData darkTheme;
 
-        darkTheme = appData.blackThemeEnabled 
-                    ? AppTheme.black(appData.accentColor)
-                    : AppTheme.dark(appData.accentColor);
+        darkTheme = config.blackThemeEnabled 
+                    ? AppTheme.black(config.accentColor)
+                    : AppTheme.dark(config.accentColor);
 
-        customTheme = appData.darkThemeEnabled
+        customTheme = config.darkThemeEnabled
                       ? darkTheme
-                      : AppTheme.white(appData.accentColor);
+                      : AppTheme.white(config.accentColor);
 
         List<Locale> supportedLocales = [];
         supportedLanguages.forEach((element) =>
@@ -100,6 +113,7 @@ class _MainState extends State<Main> {
           locale: _locale,
           supportedLocales: supportedLocales,
           localizationsDelegates: [
+            FallbackLocalizationDelegate(),
             AppLocalizationsDelegate(),
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
@@ -115,17 +129,17 @@ class _MainState extends State<Main> {
             return supportedLocales?.first;
           },
           title: "SongTube",
-          theme: appData.systemThemeEnabled
-                 ? AppTheme.white(appData.accentColor)
+          theme: config.systemThemeEnabled
+                 ? AppTheme.white(config.accentColor)
                  : customTheme,
-          darkTheme: appData.systemThemeEnabled
+          darkTheme: config.systemThemeEnabled
                      ? darkTheme
                      : customTheme,
-          initialRoute: appData.preferences.showIntroductionPages()
+          initialRoute: config.preferences.showIntroductionPages()
             ? 'introScreen'
             : 'homeScreen',
           routes: {
-            'homeScreen':  (context) => AudioServiceWidget(child: MainLibrary()),
+            'homeScreen':  (context) => AudioServiceWidget(child: MainLib()),
             'introScreen': (context) => IntroScreen()
           },
         );
