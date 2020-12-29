@@ -1,6 +1,6 @@
 import 'package:songtube/internal/languages.dart';
 
-class languageIgbo-NG extends Languages {
+class LanguageIgbo extends Languages {
 
   // Introduction Screens
   @override
@@ -44,7 +44,7 @@ class languageIgbo-NG extends Languages {
   @override
   String get labelQuickSearch => "Ndenye Search...";
   @override
-  String get labelTagsEditor => "Mkpado \ nOdechukwu";
+  String get labelTagsEditor => "Mkpado\nnOdechukwu";
   @override
   String get labelEditArtwork => "Nka";
   @override
