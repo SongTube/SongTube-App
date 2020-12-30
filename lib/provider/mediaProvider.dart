@@ -159,6 +159,7 @@ class MediaProvider extends ChangeNotifier {
   }
 
   Future<void> updateUIElements() async {
+    if (AudioService.currentMediaItem == null) return;
     String currentAlbumId = await AudioService.currentMediaItem.extras["albumId"];
     artwork = await FFmpegExtractor.getAudioArtwork(
       audioFile: mediaItem.id,
