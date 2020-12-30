@@ -52,21 +52,21 @@ class LanguageIgbo extends Languages {
   @override 
   String get labelLoadingVideos => "Na-adọnye vidiyo...";
   @override
-  String get labelHomePage => "Home Page";
+  String get labelHomePage => "Peeji mbụ";
   @override
-  String get labelTrending => "Trending";
+  String get labelTrending => "Na-achọ";
   @override
-  String get labelFavorites => "Favorites";
+  String get labelFavorites => "Ọkacha mmasị";
   @override
-  String get labelWatchLater => "Watch Later";
+  String get labelWatchLater => "Lelee Mgbe Emechara";
 
   // Video Options Menu
   @override
-  String get labelCopyLink => "Copy Link";
+  String get labelCopyLink => "Detuo njikọ";
   @override
-  String get labelAddToFavorites => "Add to Favorites";
+  String get labelAddToFavorites => "Tinye ka ọkacha mmasị";
   @override
-  String get labelAddToWatchLater => "Add to Watch Later";
+  String get labelAddToWatchLater => "Tinye na Nlele Mgbe Emechara";
 
   // Downloads Screen
   @override
@@ -147,8 +147,6 @@ class LanguageIgbo extends Languages {
     "Inye ikike ikike nchekwa";
   @override
   String get labelGettingYourMedia => "Inweta Mgbasa ozi gị...";
-  @override
-  String get labelEditTags => "Edit Tags";
 
   // Navigate Screen
   @override
@@ -255,53 +253,53 @@ class LanguageIgbo extends Languages {
 
   // Music Player
   @override
-  String get labelPlayerSettings => "Player Settings";
+  String get labelPlayerSettings => "Egwuregwu Onye egwu";
   @override
-  String get labelExpandArtwork => "Expand Artwork";
+  String get labelExpandArtwork => "Gbasaa Nka";
   @override
-  String get labelArtworkRoundedCorners => "Artwork Rounded Corners";
+  String get labelArtworkRoundedCorners => "Nka gbara gburugburu Nkuku";
   @override
-  String get labelPlayingFrom => "Playing From";
+  String get labelPlayingFrom => "Na-egwu Site";
   @override
-  String get labelBlurBackground => "Blur Background";
+  String get labelBlurBackground => "Blur okirikiri";
 
   // Video Page
   @override
-  String get labelTags => "Tags";
+  String get labelTags => "Mkpado";
   @override
-  String get labelRelated => "Related";
+  String get labelRelated => "Njikọ";
   @override
   String get labelAutoPlay => "AutoPlay";
 
   // Tags Pages
   @override
   String get labelAudioFormatNotCompatible =>
-    "Audio format not Compatible";
+    "Ọdịdị ọdịyo adabaghị";
   @override
-  String get labelNotSpecified => "Not Specified";
+  String get labelNotSpecified => "Akọwapụtaghị ya";
   @override
   String get labelPerformAutomaticTagging => 
-    "Perform Automatic Tagging";
+    "Mee Akpado Akpado";
   @override
   String get labelSelectTagsfromMusicBrainz => 
-    "Select Tags from MusicBrainz";
+    "Họrọ mkpado site na MusicBrainz";
   @override
   String get labelSelectArtworkFromDevice =>
-    "Select Artwork from Device";
+    "Họrọ Nka na Ngwaọrụ";
 
   // Telegram Join Channel Dialog
   @override
-  String get labelJoinTelegramChannel => "Join Telegram Channel!";
+  String get labelJoinTelegramChannel => "Jikọọ na Channel Telegram!";
   @override
   String get labelJoinTelegramJustification =>
-    "Do you like SongTube? Please join the Telegram Channel! You will find " +
-    "Updates, Information, Development, Group Link and other Social links." +
+    "Tube na-amasị SongTube? Biko sonye na Telegram Channel! Will ga-achọta " +
+    "Mmelite, Ozi, Mmepe, Njikọ Njikọ na njikọta mmekọrịta ndị ọzọ." +
     "\n\n" +
-    "In case you have an issue or a great recommentation in your mind, " +
-    "please join the Group from the Channel and write it down! But take in mind " +
-    "you can only speak in English, thanks!";
+    "Ọ bụrụ na ị nwere nsogbu ma ọ bụ nnukwu nkwụghachi ụgwọ n'uche gị, " +
+    "biko sonye na Otu si na Channel ma dee ya! Ma buru n'uche " +
+    "ị ga - asụ bekee naanị, daalụ!";
   @override
-  String get labelRemindLater => "Remind Later";
+  String get labelRemindLater => "Chetara Mgbe Emechara";
 
   // Common Words (One word labels)
   @override
@@ -343,10 +341,9 @@ class LanguageIgbo extends Languages {
   @override
   String get labelGeneral => "General";
   @override
-  String get labelRemove => "Remove";
+  String get labelRemove => "Iwepụ";
   @override
-  String get labelJoin => "Join";
+  String get labelJoin => "Jikọọ";
   @override
-  String get labelNo => "No";
-
+  String get labelNo => "Mba";
 }
