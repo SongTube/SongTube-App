@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:songtube/internal/languages/languageRu.dart';
 import 'package:songtube/main.dart';
 
 // Language Files
@@ -31,7 +32,9 @@ final supportedLanguages = <LanguageData>[
   // Indonesia (ID)
   LanguageData("🇮🇩", "Indonesia", "id"),
   // Turkish (TR)
-  LanguageData("tr", "Turkey", "tr")
+  LanguageData("tr", "Turkey", "tr"),
+  // Russian (RU)
+  LanguageData("ru", "Russian", "ru")
 ];
 Future<Languages> _loadLocale(Locale locale) async {
   switch (locale.languageCode) {
@@ -53,6 +56,9 @@ Future<Languages> _loadLocale(Locale locale) async {
     // Turkish (TR)
     case 'tr':
       return LanguageTr();
+    // Russian (RU)
+    case 'ru':
+      return LanguageRu();
     // Default Language (English)
     default:
       return LanguageEn();
