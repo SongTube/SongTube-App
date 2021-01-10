@@ -148,7 +148,7 @@ class LanguageIgbo extends Languages {
   @override
   String get labelGettingYourMedia => "Inweta Mgbasa ozi gị...";
   @override
-  String get labelEditTags => "Edit Tags";
+  String get labelEditTags => "Dezie mkpado";
 
   // Navigate Screen
   @override
