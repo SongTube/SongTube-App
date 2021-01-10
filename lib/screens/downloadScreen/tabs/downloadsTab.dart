@@ -29,7 +29,7 @@ class DownloadsTab extends StatelessWidget {
       return Padding(
         padding: EdgeInsets.only(top: 8),
         child: AutoList<DownloadInfoSet>(
-          physics: BouncingScrollPhysics(),
+          
           items: downloadsProvider.completedList,
           duration: Duration(milliseconds: 400),
           itemBuilder: (context, infoset) {

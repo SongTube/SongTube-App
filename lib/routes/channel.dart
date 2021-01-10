@@ -51,7 +51,7 @@ class YoutubeChannelPage extends StatelessWidget {
         ),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
+          
           child: Column(
             children: [
               AspectRatio(

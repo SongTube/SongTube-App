@@ -77,7 +77,7 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
         ),
       ),
       body: ListView(
-        physics: BouncingScrollPhysics(),
+        
         children: [
           SizedBox(height: 16),
           FutureBuilder(

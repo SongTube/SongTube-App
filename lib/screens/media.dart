@@ -114,7 +114,7 @@ class _MediaScreenState extends State<MediaScreen> {
             ),
           ),
           bottom: TabBar(
-            physics: BouncingScrollPhysics(),
+            
             labelStyle: TextStyle(
               fontSize: 13,
               fontFamily: 'Product Sans',

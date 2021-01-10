@@ -79,7 +79,7 @@ class _MusicPlayerCurrentPlaylistState extends State<MusicPlayerCurrentPlaylist>
               opacity: bodyOpacity,
               child: ListView.builder(
                 controller: controller,
-                physics: BouncingScrollPhysics(),
+                
                 itemExtent: 75,
                 padding: EdgeInsets.only(top: 12, left: 12, right: 12),
                 itemCount: AudioService.queue.length,

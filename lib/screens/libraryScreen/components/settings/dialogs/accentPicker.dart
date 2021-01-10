@@ -69,7 +69,7 @@ class _AccentPickerState extends State<AccentPicker> {
                   delay: Duration(milliseconds: 200),
                   duration: Duration(milliseconds: 200),
                   child: MaterialColorPicker(
-                    physics: BouncingScrollPhysics(),
+                    
                     circleSize: 50,
                     spacing: 10,
                     colors: const <ColorSwatch>[

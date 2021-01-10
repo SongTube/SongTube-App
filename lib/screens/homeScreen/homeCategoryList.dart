@@ -53,7 +53,7 @@ class HomePageCategoryList extends SliverPersistentHeaderDelegate {
   Widget categoryList(BuildContext context) {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
     return ListView(
-      physics: BouncingScrollPhysics(),
+      
       scrollDirection: Axis.horizontal,
       children: [
         SizedBox(width: 8),

@@ -73,7 +73,7 @@ class ShimmerPlaylistPage extends StatelessWidget {
         Expanded(
           child: ListView.builder(
             itemCount: 20,
-            physics: BouncingScrollPhysics(),
+            
             itemExtent: 80,
             itemBuilder: (context,_) {
               return ListTile(

@@ -31,7 +31,7 @@ class _DownloadsQueueTabState extends State<DownloadsQueueTab> with TickerProvid
       return Padding(
         padding: EdgeInsets.only(top: 16),
         child: ListView(
-          physics: BouncingScrollPhysics(),
+          
           children: [
             AnimatedSize(
               vsync: this,

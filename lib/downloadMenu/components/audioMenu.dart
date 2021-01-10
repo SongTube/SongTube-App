@@ -95,7 +95,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
           SizedBox(
             height: 150,
             child: ListView.builder(
-              physics: BouncingScrollPhysics(),
+              
               itemCount: widget.audioList.length,
               scrollDirection: Axis.horizontal,
               shrinkWrap: true,

@@ -223,7 +223,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> {
             duration: Duration(milliseconds: 300),
             child: ListView(
               padding: EdgeInsets.zero,
-              physics: BouncingScrollPhysics(),
+              
               children: [
                 SizedBox(height: 12),
                 // Video Details

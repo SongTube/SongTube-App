@@ -13,7 +13,7 @@ class SearchHistoryList extends StatelessWidget {
     List<String> searchHistory = config.getSearchHistory();
     return ListView.builder(
       itemExtent: 40,
-      physics: BouncingScrollPhysics(),
+      
       itemCount: searchHistory.length,
       itemBuilder: (context, index) {
         String item = searchHistory[index];

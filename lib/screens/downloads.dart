@@ -58,7 +58,7 @@ class DownloadTab extends StatelessWidget {
             ),
           ),
           bottom: TabBar(
-            physics: BouncingScrollPhysics(),
+            
             labelStyle: TextStyle(
               fontSize: 13,
               fontFamily: 'Product Sans',

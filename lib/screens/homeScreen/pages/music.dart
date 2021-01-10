@@ -10,7 +10,6 @@ class HomePageMusic extends StatelessWidget {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
     if (manager.homeMusicVideoList.isNotEmpty) {
       return ListView.builder(
-        physics: BouncingScrollPhysics(),
         itemCount: manager.homeMusicVideoList.length,
         itemBuilder: (context, index) {
           return Padding(

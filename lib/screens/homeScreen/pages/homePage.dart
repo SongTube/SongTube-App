@@ -10,7 +10,6 @@ class HomePage extends StatelessWidget {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
     if (manager.youtubeSearchResults.isNotEmpty) {
       return ListView.builder(
-        physics: BouncingScrollPhysics(),
         itemCount: manager.youtubeSearchResults.length,
         itemBuilder: (context, index) {
           if (index == manager.youtubeSearchResults.length-2) {

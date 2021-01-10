@@ -78,7 +78,7 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
           // Main Body
           Expanded(
             child: TabBarView(
-              physics: BouncingScrollPhysics(),
+              
               controller: _controller,
               children: screens,
               ),

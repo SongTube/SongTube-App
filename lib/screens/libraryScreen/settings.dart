@@ -63,7 +63,7 @@ class _SettingsTabState extends State<SettingsTab> {
       body: Padding(
         padding: const EdgeInsets.only(left: 8, right: 8),
         child: ListView(
-          physics: BouncingScrollPhysics(),
+          
           children: <Widget>[
             // Themes Settings
             ThemeSettings(),

@@ -15,7 +15,7 @@ class PlaylistVideosListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: playlistVideos.length,
-      physics: BouncingScrollPhysics(),
+      
       itemExtent: 80,
       padding: EdgeInsets.zero,
       itemBuilder: (context, index) {

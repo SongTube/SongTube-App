@@ -102,7 +102,7 @@ class PlayerArtwork extends StatelessWidget {
                               margin: EdgeInsets.only(left: 16, right: 16),
                               alignment: Alignment.center,
                               child: SingleChildScrollView(
-                                physics: BouncingScrollPhysics(),
+                                
                                 child: Text(
                                   "\n" +
                                   mediaProvider.currentLyrics +

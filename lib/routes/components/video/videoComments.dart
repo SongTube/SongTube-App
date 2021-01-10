@@ -62,7 +62,7 @@ class VideoComments extends StatelessWidget {
                   child: comments.connectionState == ConnectionState.done
                   ? comments.data != null
                     ? ListView.separated(
-                        physics: BouncingScrollPhysics(),
+                        
                         itemCount: comments.data.length,
                         separatorBuilder: (context,_) {
                           return Divider();

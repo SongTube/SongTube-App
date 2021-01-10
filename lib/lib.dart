@@ -53,16 +53,31 @@ class Lib extends StatefulWidget {
   _LibState createState() => _LibState();
 }
 
-class _LibState extends State<Lib> {
+class _LibState extends State<Lib> with TickerProviderStateMixin {
+
+  AnimationController navigationBarAnimationController;
+  bool navigationBarClosed = false;
+  double position = 0.0;
+  double sensitivityFactor = 100.0;
 
   @override
   void initState() {
     super.initState();
+    navigationBarAnimationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 300)
+    );
+    navigationBarAnimationController.forward();
     WidgetsBinding.instance.renderView.automaticSystemUiAdjustment=false;
     KeyboardVisibility.onChange.listen((bool visible) {
         if (visible == false) FocusScope.of(context).unfocus();
       }
     );
+    NativeMethod.handleIntent().then((intent) async {
+      if (intent != null) {
+        _handleIntent(intent);
+      }
+    });
     WidgetsBinding.instance.addObserver(
       new LifecycleEventHandler(resumeCallBack: () async {
         PreferencesProvider prefs = Provider.of<PreferencesProvider>(context, listen: false);
@@ -81,47 +96,7 @@ class _LibState extends State<Lib> {
         }
         String intent = await NativeMethod.handleIntent();
         if (intent == null) return;
-        if (VideoId.parseVideoId(intent) != null) {
-          String id = VideoId.parseVideoId(intent);
-          showDialog(
-            context: context,
-            builder: (_) => LoadingDialog()
-          );
-          YoutubeExplode yt = YoutubeExplode();
-          Video video = await yt.videos.get(id);
-          Provider.of<ManagerProvider>(context, listen: false)
-            .updateMediaInfoSet(video, null);
-          Navigator.pop(context);
-          Navigator.push(context,
-            BlurPageRoute(
-              blurStrength: Provider.of<PreferencesProvider>(context, listen: false)
-                .enableBlurUI ? 20 : 0,
-              slideOffset: Offset(0.0, 10.0),
-              builder: (_) => YoutubePlayerVideoPage(
-                url: video.id.value,
-                thumbnailUrl: video.thumbnails.highResUrl,
-              )
-          ));
-        }
-        if (PlaylistId.parsePlaylistId(intent) != null) {
-          String id = PlaylistId.parsePlaylistId(intent);
-          showDialog(
-            context: context,
-            builder: (_) => LoadingDialog()
-          );
-          YoutubeExplode yt = YoutubeExplode();
-          Playlist playlist = await yt.playlists.get(id);
-          Provider.of<ManagerProvider>(context, listen: false)
-            .updateMediaInfoSet(playlist, null);
-          Navigator.pop(context);
-          Navigator.push(context,
-            BlurPageRoute(
-              blurStrength: Provider.of<PreferencesProvider>(context, listen: false)
-                .enableBlurUI ? 20 : 0,
-              slideOffset: Offset(0.0, 10.0),
-              builder: (_) => YoutubePlayerPlaylistPage()
-          ));
-        }
+        _handleIntent(intent);
         return;
       })
     );
@@ -163,6 +138,56 @@ class _LibState extends State<Lib> {
         });
       });
     });
+  }
+
+  @override
+  void dispose() {
+    navigationBarAnimationController.dispose();
+    super.dispose();
+  }
+
+  void _handleIntent(String intent) async {
+    if (VideoId.parseVideoId(intent) != null) {
+    String id = VideoId.parseVideoId(intent);
+    showDialog(
+      context: context,
+      builder: (_) => LoadingDialog()
+    );
+    YoutubeExplode yt = YoutubeExplode();
+    Video video = await yt.videos.get(id);
+    Provider.of<ManagerProvider>(context, listen: false)
+      .updateMediaInfoSet(video, null);
+    Navigator.pop(context);
+    Navigator.push(context,
+      BlurPageRoute(
+        blurStrength: Provider.of<PreferencesProvider>(context, listen: false)
+          .enableBlurUI ? 20 : 0,
+        slideOffset: Offset(0.0, 10.0),
+        builder: (_) => YoutubePlayerVideoPage(
+          url: video.id.value,
+          thumbnailUrl: video.thumbnails.highResUrl,
+        )
+    ));
+  }
+  if (PlaylistId.parsePlaylistId(intent) != null) {
+    String id = PlaylistId.parsePlaylistId(intent);
+    showDialog(
+      context: context,
+      builder: (_) => LoadingDialog()
+    );
+    YoutubeExplode yt = YoutubeExplode();
+    Playlist playlist = await yt.playlists.get(id);
+    Provider.of<ManagerProvider>(context, listen: false)
+      .updateMediaInfoSet(playlist, null);
+    Navigator.pop(context);
+    Navigator.push(context,
+      BlurPageRoute(
+        blurStrength: Provider.of<PreferencesProvider>(context, listen: false)
+          .enableBlurUI ? 20 : 0,
+        slideOffset: Offset(0.0, 10.0),
+        builder: (_) => YoutubePlayerPlaylistPage()
+    ));
+  }
   }
 
   @override
@@ -221,7 +246,21 @@ class _LibState extends State<Lib> {
                       Expanded(
                         child: AnimatedSwitcher(
                           duration: Duration(milliseconds: 250),
-                          child: _currentScreen(manager)
+                          child: NotificationListener<ScrollNotification>(
+                            onNotification: (ScrollNotification details) {
+                              if (details.metrics.pixels - position >= sensitivityFactor && details.metrics.axis == Axis.vertical) {
+                                position = details.metrics.pixels;
+                                navigationBarAnimationController.reverse();
+                                navigationBarClosed = true;
+                              } else if (position - details.metrics.pixels  >= sensitivityFactor && details.metrics.axis == Axis.vertical) {
+                                position = details.metrics.pixels;
+                                navigationBarAnimationController.forward();
+                                navigationBarClosed = false;
+                              }
+                              return false;
+                            },
+                            child: _currentScreen(manager)
+                          )
                         ),
                       ),
                       if (manager.screenIndex == 2)
@@ -235,9 +274,18 @@ class _LibState extends State<Lib> {
         ),
         bottomNavigationBar: Consumer<ManagerProvider>(
           builder: (context, manager, _) {
-            return AppBottomNavigationBar(
-              onItemTap: (int index) => manager.screenIndex = index,
-              currentIndex: manager.screenIndex
+            return AnimatedBuilder(
+              animation: navigationBarAnimationController,
+              builder: (context, child) {
+                return Container(
+                  height: kBottomNavigationBarHeight *
+                    navigationBarAnimationController.value,
+                  child: AppBottomNavigationBar(
+                    onItemTap: (int index) => manager.screenIndex = index,
+                    currentIndex: manager.screenIndex
+                  ),
+                );
+              },
             );
           }
         ),

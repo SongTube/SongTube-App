@@ -13,7 +13,6 @@ class HomePageFavorites extends StatelessWidget {
     PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     if (prefs.favoriteVideos.isNotEmpty) {
       return ListView.builder(
-        physics: BouncingScrollPhysics(),
         itemCount: prefs.favoriteVideos.length,
         itemBuilder: (context, index) {
           return Padding(

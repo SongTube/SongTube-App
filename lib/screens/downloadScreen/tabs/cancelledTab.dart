@@ -27,7 +27,7 @@ class _DownloadsCancelledTabState extends State<DownloadsCancelledTab> {
       return Padding(
         padding: EdgeInsets.only(top: 8),
         child: AutoList<DownloadInfoSet>(
-          physics: BouncingScrollPhysics(),
+          
           items: downloadsProvider.cancelledList,
           duration: Duration(milliseconds: 400),
           itemBuilder: (context, infoset) {

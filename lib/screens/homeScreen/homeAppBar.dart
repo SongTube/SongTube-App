@@ -143,7 +143,6 @@ class _HomePageAppBarState extends State<HomePageAppBar> {
                 manager.currentHomeTab = HomeScreenTab.WatchLater;
               }
             },
-            physics: BouncingScrollPhysics(),
             isScrollable: true,
             labelStyle: TextStyle(
               fontSize: 13,

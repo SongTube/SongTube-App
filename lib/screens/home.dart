@@ -61,7 +61,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       body: Stack(
         children: [
           NestedScrollView(
-            physics: BouncingScrollPhysics(),
             floatHeaderSlivers: true,
             headerSliverBuilder: (context, value) {
               return [

@@ -19,6 +19,7 @@ import 'package:songtube/provider/mediaProvider.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/provider/preferencesProvider.dart';
+import 'package:songtube/ui/internal/scrollBehavior.dart';
 
 // UI
 import 'package:songtube/ui/internal/themeValues.dart';
@@ -127,6 +128,12 @@ class _MainState extends State<Main> {
               }
             }
             return supportedLocales?.first;
+          },
+          builder: (context, child) {
+            return ScrollConfiguration(
+              behavior: CustomScrollBehavior(),
+              child: child,
+            );
           },
           title: "SongTube",
           theme: config.systemThemeEnabled

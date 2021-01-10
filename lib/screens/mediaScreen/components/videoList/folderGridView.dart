@@ -17,7 +17,7 @@ class FolderGridView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-      physics: BouncingScrollPhysics(),
+      
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
       itemCount: list.length,
       itemBuilder: (context, index) {

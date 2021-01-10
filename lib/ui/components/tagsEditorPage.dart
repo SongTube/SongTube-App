@@ -144,7 +144,7 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
       ),
       body: ListView(
         padding: EdgeInsets.all(12),
-        physics: BouncingScrollPhysics(),
+        
         children: [
           Container(
             margin: EdgeInsets.only(bottom: 12),

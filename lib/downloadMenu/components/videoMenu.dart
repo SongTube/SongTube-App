@@ -63,7 +63,7 @@ class _VideoDownloadMenuState extends State<VideoDownloadMenu> {
           child: GroupedListView<VideoStreamInfo, String>(
             stickyHeaderBackgroundColor: Theme.of(context)
               .scaffoldBackgroundColor,
-            physics: BouncingScrollPhysics(),
+            
             elements: widget.videoList,
             groupBy: (element) =>
               (element.videoQualityLabel.split("p").first+"p"),
