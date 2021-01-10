@@ -4,23 +4,22 @@ import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:share/share.dart';
 import 'package:songtube/internal/languages.dart';
+import 'package:songtube/internal/models/infoSets/mediaInfoSet.dart';
 import 'package:songtube/screens/homeScreen/components/roundTile.dart';
 
 class VideoEngagement extends StatelessWidget {
-  final int likeCount;
-  final int dislikeCount;
-  final int viewCount;
-  final String videoUrl;
+  final MediaInfoSet infoset;
   final Function onSaveToFavorite;
   VideoEngagement({
-    @required this.likeCount,
-    @required this.dislikeCount,
-    @required this.viewCount,
-    @required this.videoUrl,
+    @required this.infoset,
     @required this.onSaveToFavorite
   });
   @override
   Widget build(BuildContext context) {
+    int likeCount = infoset.videoDetails.engagement.likeCount;
+    int dislikeCount = infoset.videoDetails.engagement.dislikeCount;
+    int viewCount = infoset.videoDetails.engagement.viewCount;
+    String videoUrl =  infoset.videoDetails.url;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       crossAxisAlignment: CrossAxisAlignment.center,

@@ -98,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           ),
           AnimatedSwitcher(
             duration: Duration(milliseconds: 300),
-            child: manager.showSearchBar
+            child: manager.showSearchBar && config.getSearchHistory().isNotEmpty
               ? Column(
                 children: [
                   Container(

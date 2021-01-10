@@ -61,7 +61,8 @@ class YoutubeExtractor {
           yt.close();
           break;
         }
-        replyPort.send(jsonEncode(manifest.toMap()));
+        String json = jsonEncode(manifest.toMap());
+        replyPort.send(json);
         yt.close();
         break;
       }

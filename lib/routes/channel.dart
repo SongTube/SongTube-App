@@ -107,7 +107,7 @@ class YoutubeChannelPage extends StatelessWidget {
                       duration: Duration(milliseconds: 300),
                       child: snapshot.hasData
                         ? RelatedVideosList(
-                            relatedVideos: videos,
+                            related: videos,
                             onVideoTap: (index) {
                               Navigator.pop(context);
                               manager.updateMediaInfoSet(videos[index], null);

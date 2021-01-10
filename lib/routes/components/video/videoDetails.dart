@@ -1,22 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:songtube/internal/models/infoSets/mediaInfoSet.dart';
 import 'package:songtube/routes/components/video/shimmer/shimmerChannelLogo.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class VideoDetails extends StatelessWidget {
-  final String title;
-  final String author;
-  final String duration;
-  final String date;
-  final String channelLogo;
+  final MediaInfoSet infoset;
   VideoDetails({
-    @required this.title,
-    @required this.author,
-    @required this.duration,
-    @required this.date,
-    @required this.channelLogo
+    @required this.infoset
   });
   @override
   Widget build(BuildContext context) {
+    String channelLogo = infoset.channelDetails != null
+      ? infoset.channelDetails.logoUrl : null;
+    String title = infoset.videoFromSearch.videoTitle;
+    String author = infoset.videoFromSearch.videoAuthor;
+    String duration = infoset.videoDetails != null
+      ? infoset.videoDetails.duration.inMinutes.remainder(60).toString().padLeft(2, '0') + " min "
+        + infoset.videoDetails.duration.inSeconds.remainder(60).toString().padLeft(2, '0') + " sec"
+      : null;
+    String date = infoset.videoDetails != null
+      ? "${infoset.videoDetails.uploadDate.year}/" +
+        "${infoset.videoDetails.uploadDate.month}/" +
+        "${infoset.videoDetails.uploadDate.day}"
+      : null;
     return Column(
       children: [
         Container(

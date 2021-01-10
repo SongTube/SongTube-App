@@ -1,32 +1,29 @@
 import 'dart:io';
 
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/models/tagsControllers.dart';
+import 'package:songtube/internal/musicBrainzApi.dart';
+import 'package:songtube/provider/managerProvider.dart';
+import 'package:songtube/ui/animations/blurPageRoute.dart';
 import 'package:songtube/ui/components/popupMenu.dart';
+import 'package:songtube/ui/components/tagsResultsPage.dart';
 import 'package:songtube/ui/components/textfieldTile.dart';
+import 'package:songtube/ui/dialogs/loadingDialog.dart';
 import 'package:string_validator/string_validator.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 class VideoTags extends StatelessWidget {
-  final TagsControllers tagsControllers;
-  final Video videoDetails;
-  final String artworkUrl;
-  final Function onArtworkTap;
-  final Function onMBTap;
-  final Function onMBSearchTap;
-  VideoTags({
-    this.tagsControllers,
-    this.artworkUrl,
-    @required this.videoDetails,
-    this.onArtworkTap,
-    this.onMBTap,
-    this.onMBSearchTap
-  });
   @override
   Widget build(BuildContext context) {
+    ManagerProvider manager = Provider.of<ManagerProvider>(context);
+    Video videoDetails =  manager.mediaInfoSet.videoDetails;
+    TagsControllers tagsControllers = manager.mediaInfoSet.mediaTags;
+    String artworkUrl = tagsControllers.artworkController;
     return ExpansionTile(
       tilePadding: EdgeInsets.zero,
       title: Row(
@@ -65,16 +62,48 @@ class VideoTags extends StatelessWidget {
             value: "FromDevice",
           )
         ],
-        onItemTap: (value) {
+        onItemTap: (value) async {
           switch (value) {
             case "AutoTag":
-              onMBTap();
+              showDialog(
+                context: context,
+                builder: (_) => LoadingDialog()
+              );
+              String lastArtwork = manager.mediaInfoSet.mediaTags.artworkController;
+              var record = await MusicBrainzAPI
+                .getFirstRecord(manager.mediaInfoSet.mediaTags.titleController.text);
+              manager.mediaInfoSet.mediaTags = await MusicBrainzAPI.getSongTags(record);
+              if (manager.mediaInfoSet.mediaTags.artworkController == null)
+                manager.mediaInfoSet.mediaTags.artworkController = lastArtwork;
+              Navigator.pop(context);
+              manager.setState();
               break;
             case "SearchMB":
-              onMBSearchTap();
+              var record = await Navigator.push(context,
+                BlurPageRoute(builder: (context) => 
+                  TagsResultsPage(
+                    title: manager.mediaInfoSet.mediaTags.titleController.text,
+                    artist: manager.mediaInfoSet.mediaTags.artistController.text
+                  )));
+              if (record == null) return;
+              showDialog(
+                context: context,
+                builder: (_) => LoadingDialog()
+              );
+              String lastArtwork = manager.mediaInfoSet.mediaTags.artworkController;
+              manager.mediaInfoSet.mediaTags = await MusicBrainzAPI.getSongTags(record);
+              if (manager.mediaInfoSet.mediaTags.artworkController == null)
+                manager.mediaInfoSet.mediaTags.artworkController = lastArtwork;
+              Navigator.pop(context);
               break;
             case "FromDevice":
-              onArtworkTap();
+              File image = File((await FilePicker.platform
+                .pickFiles(type: FileType.image))
+                .paths[0]);
+              if (image == null) return;
+              manager.mediaInfoSet.mediaTags
+                .artworkController = image.path;
+              manager.setState();
               break;
           }
         },

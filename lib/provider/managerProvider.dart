@@ -198,12 +198,6 @@ class ManagerProvider extends ChangeNotifier {
         mediaInfoSet.relatedVideos = relatedVideos;
         notifyListeners();
       }
-      // Get the StreamManifest for Downloads
-      youtubeExtractor.getStreamManifest(id).then((value) {
-        mediaInfoSet.streamManifest = value;
-        playerStream = value;
-        notifyListeners();
-      });
       notifyListeners();
     } else if (searchMedia is Playlist) {
       Playlist playlist = searchMedia;

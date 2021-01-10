@@ -14,7 +14,7 @@ class LyricsProviders {
     return jsonDecode(response.body)["lyrics"]; 
   }
 
-  static final happiDevKey = "";
+  static final happiDevKey = "e1de5fbTOztuNxXBGZ1m39MbY0SPfUUQQm2pbLSdEADsMMm1duk4xQBa";
 
   static Future<String> lyricsHappiDev({String title}) async {
     Client client = Client();
