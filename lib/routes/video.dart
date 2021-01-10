@@ -71,6 +71,14 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> {
   }
 
   @override
+  void dispose() {
+    if (_controller != null) {
+      _controller.dispose();
+    }
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
     PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
