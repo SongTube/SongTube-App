@@ -119,6 +119,31 @@ class VideoTile extends StatelessWidget {
                         ),
                       ),
                     ),
+                    Align(
+                        alignment: Alignment.bottomRight,
+                        child: Container(
+                            margin: EdgeInsets.only(right: 20, bottom: 10),
+                            padding: EdgeInsets.all(3),
+                            decoration: BoxDecoration(
+                                color: Colors.black.withOpacity(0.6),
+                                borderRadius: BorderRadius.circular(3)),
+                            child: searchItem is Video
+                                ? Text(
+                                    "${searchItem.duration.inMinutes}:" +
+                                        "${searchItem.duration.inSeconds.remainder(60).toString().padRight(2, "0")}",
+                                    style: TextStyle(
+                                      fontFamily: 'YTSans',
+                                    ),
+                                  )
+                                : searchItem is SearchVideo
+                                    ? Text(
+                                        "${searchItem.videoDuration}", //SearchVideo
+                                        style: TextStyle(
+                                          fontFamily: 'YTSans',
+                                        ),
+                                      )
+                                    : ""),
+                      ),
                     if (searchItem is SearchPlaylist)
                     Container(
                       margin: EdgeInsets.only(left: 12, right: 12),

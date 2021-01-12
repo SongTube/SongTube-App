@@ -124,18 +124,17 @@ class RelatedVideosList extends StatelessWidget {
                                     alignment: Alignment.bottomRight,
                                     child: Container(
                                       margin: EdgeInsets.all(6),
-                                      padding: EdgeInsets.all(6),
+                                      padding: EdgeInsets.all(2),
                                       decoration: BoxDecoration(
                                         color: Colors.black.withOpacity(0.6),
-                                        borderRadius: BorderRadius.circular(20)
+                                        borderRadius: BorderRadius.circular(3)
                                       ),
                                       child: Text(
                                         "${video.duration.inMinutes}:" +
-                                        "${video.duration.inSeconds.remainder(60).toString().padRight(2, "0")}" +
-                                        " min",
+                                        "${video.duration.inSeconds.remainder(60).toString().padRight(2, "0")}",
                                         style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 8
+                                          fontSize: 11,
+                                          fontFamily: 'YTSans',
                                         ),
                                       ),
                                     ),
