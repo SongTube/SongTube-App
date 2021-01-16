@@ -71,6 +71,7 @@ class _MainState extends State<Main> {
   Widget build(BuildContext context) {
     List lastSearchQuery = (jsonDecode(widget.preloadedFs.getSearchHistory())
       as List<dynamic>).cast<String>();
+    NativeMethod.exitFullScreen();
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<ConfigurationProvider>(

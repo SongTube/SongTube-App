@@ -1,4 +1,4 @@
-package com.example.songtube
+package com.artxdev.songtube
 
 import android.content.Intent
 import android.graphics.Bitmap

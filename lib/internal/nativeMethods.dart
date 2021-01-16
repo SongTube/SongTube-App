@@ -20,6 +20,11 @@ class NativeMethod {
     return _intent;
   }
 
+  // Exit FullScreen
+  static Future<void> exitFullScreen() async {
+    await platform.invokeMethod('exitFullScreen');
+  }
+
   // Update android MediaStore with a new File
   // This allows music/video players to detect the new media
   static void registerFile(String file) async {
