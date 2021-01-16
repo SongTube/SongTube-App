@@ -53,7 +53,7 @@ class Lib extends StatefulWidget {
   _LibState createState() => _LibState();
 }
 
-class _LibState extends State<Lib> with TickerProviderStateMixin {
+class _LibState extends State<Lib> {
 
   AnimationController navigationBarAnimationController;
   bool navigationBarClosed = false;
@@ -140,54 +140,48 @@ class _LibState extends State<Lib> with TickerProviderStateMixin {
     });
   }
 
-  @override
-  void dispose() {
-    navigationBarAnimationController.dispose();
-    super.dispose();
-  }
-
   void _handleIntent(String intent) async {
     if (VideoId.parseVideoId(intent) != null) {
-    String id = VideoId.parseVideoId(intent);
-    showDialog(
-      context: context,
-      builder: (_) => LoadingDialog()
-    );
-    YoutubeExplode yt = YoutubeExplode();
-    Video video = await yt.videos.get(id);
-    Provider.of<ManagerProvider>(context, listen: false)
-      .updateMediaInfoSet(video, null);
-    Navigator.pop(context);
-    Navigator.push(context,
-      BlurPageRoute(
-        blurStrength: Provider.of<PreferencesProvider>(context, listen: false)
-          .enableBlurUI ? 20 : 0,
-        slideOffset: Offset(0.0, 10.0),
-        builder: (_) => YoutubePlayerVideoPage(
-          url: video.id.value,
-          thumbnailUrl: video.thumbnails.highResUrl,
-        )
-    ));
-  }
-  if (PlaylistId.parsePlaylistId(intent) != null) {
-    String id = PlaylistId.parsePlaylistId(intent);
-    showDialog(
-      context: context,
-      builder: (_) => LoadingDialog()
-    );
-    YoutubeExplode yt = YoutubeExplode();
-    Playlist playlist = await yt.playlists.get(id);
-    Provider.of<ManagerProvider>(context, listen: false)
-      .updateMediaInfoSet(playlist, null);
-    Navigator.pop(context);
-    Navigator.push(context,
-      BlurPageRoute(
-        blurStrength: Provider.of<PreferencesProvider>(context, listen: false)
-          .enableBlurUI ? 20 : 0,
-        slideOffset: Offset(0.0, 10.0),
-        builder: (_) => YoutubePlayerPlaylistPage()
-    ));
-  }
+      String id = VideoId.parseVideoId(intent);
+      showDialog(
+        context: context,
+        builder: (_) => LoadingDialog()
+      );
+      YoutubeExplode yt = YoutubeExplode();
+      Video video = await yt.videos.get(id);
+      Provider.of<ManagerProvider>(context, listen: false)
+        .updateMediaInfoSet(video, null);
+      Navigator.pop(context);
+      Navigator.push(context,
+        BlurPageRoute(
+          blurStrength: Provider.of<PreferencesProvider>(context, listen: false)
+            .enableBlurUI ? 20 : 0,
+          slideOffset: Offset(0.0, 10.0),
+          builder: (_) => YoutubePlayerVideoPage(
+            url: video.id.value,
+            thumbnailUrl: video.thumbnails.highResUrl,
+          )
+      ));
+    }
+    if (PlaylistId.parsePlaylistId(intent) != null) {
+      String id = PlaylistId.parsePlaylistId(intent);
+      showDialog(
+        context: context,
+        builder: (_) => LoadingDialog()
+      );
+      YoutubeExplode yt = YoutubeExplode();
+      Playlist playlist = await yt.playlists.get(id);
+      Provider.of<ManagerProvider>(context, listen: false)
+        .updateMediaInfoSet(playlist, null);
+      Navigator.pop(context);
+      Navigator.push(context,
+        BlurPageRoute(
+          blurStrength: Provider.of<PreferencesProvider>(context, listen: false)
+            .enableBlurUI ? 20 : 0,
+          slideOffset: Offset(0.0, 10.0),
+          builder: (_) => YoutubePlayerPlaylistPage()
+      ));
+    }
   }
 
   @override
