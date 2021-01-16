@@ -147,7 +147,7 @@ class _MainState extends State<Main> {
             ? 'introScreen'
             : 'homeScreen',
           routes: {
-            'homeScreen':  (context) => AudioServiceWidget(child: MainLib()),
+            'homeScreen':  (context) => AudioServiceWidget(child: Material(child: Lib())),
             'introScreen': (context) => IntroScreen()
           },
         );
