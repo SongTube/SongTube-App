@@ -15,15 +15,18 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:songtube/provider/preferencesProvider.dart';
 
-// UI
-import 'package:songtube/ui/animations/showUp.dart';
+typedef FloatingWidgetCallback = void Function(double position);
 
 class SlidingPlayerPanel extends StatelessWidget {
+  final FloatingWidgetCallback callback;
+  SlidingPlayerPanel({
+    this.callback
+  });
   @override
   Widget build(BuildContext context) {
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
-    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
-    return StreamBuilder<ScreenState>(
+    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context, listen: false);
+    return StreamBuilder(
       stream: screenStateStream,
       builder: (context, snapshot) {
         final screenState = snapshot.data;
@@ -51,13 +54,20 @@ class SlidingPlayerPanel extends StatelessWidget {
             );
           }
           if (mediaProvider.artwork != null) {
-            return ShowUpTransition(
-              duration: Duration(milliseconds: 400),
-              slideSide: SlideFromSlide.BOTTOM,
-              forward: processingState != AudioProcessingState.none,
-              child: SlidingPlayer(
-                snapshot: snapshot,
-              ),
+            Color dominantColor = prefs.enablePlayerBlurBackground
+              ? mediaProvider.dominantColor == null ? Colors.white : mediaProvider.dominantColor
+              : Theme.of(context).accentColor;
+            Color textColor = prefs.enablePlayerBlurBackground
+              ? dominantColor.computeLuminance() > 0.5 ? Colors.black : Colors.white
+              : Theme.of(context).textTheme.bodyText1.color;
+            return AnimatedSwitcher(
+              duration: Duration(milliseconds: 300),
+              child: processingState != AudioProcessingState.none ? _buildSlidingPanel(
+                context,
+                textColor: textColor,
+                dominantColor: dominantColor,
+                useBlurUI: prefs.enableBlurUI
+              ) : Container()
             );
           } else {
             return Container();
@@ -68,35 +78,29 @@ class SlidingPlayerPanel extends StatelessWidget {
       }
     );
   }
-}
 
-class SlidingPlayer extends StatelessWidget {
-  final AsyncSnapshot<ScreenState> snapshot;
-  SlidingPlayer({
-    this.snapshot,
-  });
-  @override
-  Widget build(BuildContext context) {
-    MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
-    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
-    Color dominantColor = prefs.enablePlayerBlurBackground
-      ? mediaProvider.dominantColor == null ? Colors.white : mediaProvider.dominantColor
-      : Theme.of(context).accentColor;
-    Color textColor = prefs.enablePlayerBlurBackground
-      ? dominantColor.computeLuminance() > 0.5 ? Colors.black : Colors.white
-      : Theme.of(context).textTheme.bodyText1.color;
+  Widget _buildSlidingPanel(BuildContext context, {
+    Color dominantColor, Color textColor, bool useBlurUI
+  }) {
+    MediaProvider mediaProvider = Provider.of<MediaProvider>(context, listen: false);
+    var borderRadius = 20.0;
     return SlidingUpPanel(
       controller: mediaProvider.panelController,
-      borderRadius: BorderRadius.circular(10),
       minHeight: kToolbarHeight * 1.15,
-      backdropColor: prefs.enableBlurUI ? dominantColor : Colors.black,
-      backdropEnabled: true,
-      backdropBlurStrength: prefs.enableBlurUI ? 15 : 0,
-      enableBottomNavigationBarMargin: true,
       maxHeight: MediaQuery.of(context).size.height,
+      isPanelVisible: true,
+      margin: EdgeInsets.only(
+        left: 12, right: 12,
+        bottom: 12
+      ),
+      backdropColor: useBlurUI ? dominantColor : Colors.black,
+      backdropEnabled: true,
+      borderRadius: borderRadius,
+      backdropBlurStrength: useBlurUI ? 15 : 0,
       onPanelClosed: () => mediaProvider.slidingPanelOpen = false,
       onPanelOpened: () => mediaProvider.slidingPanelOpen = true,
       onPanelSlide: (double position) {
+        callback(position);
         if (position > 0.95) {
           SystemChrome.setSystemUIOverlayStyle(
             SystemUiOverlayStyle(
@@ -122,9 +126,10 @@ class SlidingPlayer extends StatelessWidget {
       color: Theme.of(context).cardColor,
       panel: ExpandedPlayer(
         controller: mediaProvider.panelController,
-        snapshot: snapshot,
       ),
-      collapsed: CollapsedPanel(snapshot),
+      collapsed: CollapsedPanel(
+        borderRadius: borderRadius,
+      ),
     );
   }
 }
