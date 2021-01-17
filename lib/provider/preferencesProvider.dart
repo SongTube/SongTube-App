@@ -101,10 +101,10 @@ class PreferencesProvider extends ChangeNotifier {
 
   // Enable/Disable App's BlurUI
   bool get enableBlurUI {
-    return prefs.getBool('enableBlurUI') ?? true;
+    return prefs.getBool('enable_BlurUI') ?? false;
   }
   set enableBlurUI(bool value) {
-    prefs.setBool('enableBlurUI', value);
+    prefs.setBool('enable_BlurUI', value);
     notifyListeners();
   }
 
