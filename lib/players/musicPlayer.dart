@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 // Internal
-import 'package:songtube/players/service/playerService.dart';
 import 'package:songtube/players/components/musicPlayer/collapsedPanel.dart';
 import 'package:songtube/players/components/musicPlayer/expandedPanel.dart';
 import 'package:songtube/players/service/screenStateStream.dart';
@@ -39,7 +38,7 @@ class SlidingPlayerPanel extends StatelessWidget {
             mediaProvider.mediaItem = newMediaItem;
           }
         });
-        if (mediaItem != null) {
+        if (mediaItem?.artUri != null) {
           if (mediaProvider.slidingPanelOpen == true) {
             Color dominantColor = prefs.enablePlayerBlurBackground
               ? mediaProvider.dominantColor == null ? Colors.white : mediaProvider.dominantColor
