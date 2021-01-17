@@ -28,9 +28,6 @@ class ManagerProvider extends ChangeNotifier {
     // HomeScreen
     homeScrollController = ScrollController();
     expandablePlayerPanelController = PanelController();
-    // Library Scaffold Key
-    _libraryScaffoldKey = new GlobalKey<ScaffoldState>();
-    _screenIndex        = 0;
     // Home Screen
     currentHomeTab = HomeScreenTab.Home;
     homeTrendingVideoList = [];
@@ -48,8 +45,7 @@ class ManagerProvider extends ChangeNotifier {
   // -------------
   //
   // Library
-  GlobalKey<ScaffoldState> _libraryScaffoldKey;
-  int _screenIndex;
+  GlobalKey _libraryScaffoldKey;
   // Home Screen
   ScrollController homeScrollController;
   PanelController expandablePlayerPanelController;
@@ -303,10 +299,8 @@ class ManagerProvider extends ChangeNotifier {
   //
   // Library
   GlobalKey<ScaffoldState> get libraryScaffoldKey => _libraryScaffoldKey;
-  int get screenIndex => _screenIndex;
-  set screenIndex(int value) {
-    _screenIndex = value;
-    _showSearchBar = false;
+  set libraryScaffoldKey(GlobalKey key) {
+    _libraryScaffoldKey = key;
     notifyListeners();
   }
   bool get showSearchBar => _showSearchBar;
