@@ -1,7 +1,9 @@
 // Flutter
 import 'package:flutter/material.dart';
 import 'package:md2_tab_indicator/md2_tab_indicator.dart';
+import 'package:provider/provider.dart';
 import 'package:songtube/internal/languages.dart';
+import 'package:songtube/provider/downloadsProvider.dart';
 import 'package:songtube/screens/downloadScreen/tabs/cancelledTab.dart';
 
 // Internal
@@ -12,14 +14,15 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:songtube/screens/downloadScreen/tabs/queueTab.dart';
 
 // UI
-import 'package:songtube/ui/animations/showUp.dart';
 import 'package:songtube/ui/components/autohideScaffold.dart';
 
 class DownloadTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    DownloadsProvider downloadsProvider = Provider.of<DownloadsProvider>(context, listen: false);
     return DefaultTabController(
-      initialIndex: 0,
+      initialIndex: downloadsProvider.queueList.isNotEmpty ||
+        downloadsProvider.convertingList.isNotEmpty ? 0 : 1,
       length: 3,
       child: AutoHideScaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
