@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:songtube/internal/languages.dart';
+import 'package:songtube/internal/nativeMethods.dart';
 import 'package:songtube/internal/randomString.dart';
 
 // Internal
