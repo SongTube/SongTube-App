@@ -148,7 +148,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               ? Column(
                 children: [
                   Container(
-                    height: kToolbarHeight + 48,
+                    height: 48,
                   ),
                   Expanded(
                     child: Container(
