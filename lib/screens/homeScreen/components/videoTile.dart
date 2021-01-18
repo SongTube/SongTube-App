@@ -79,7 +79,7 @@ class VideoTile extends StatelessWidget {
       },
       child: Ink(
         decoration: BoxDecoration(
-          color: Theme.of(context).cardColor
+          color: Theme.of(context).scaffoldBackgroundColor
         ),
         child: Column(
           children: <Widget>[

@@ -13,6 +13,7 @@ import 'package:songtube/screens/downloadScreen/tabs/queueTab.dart';
 
 // UI
 import 'package:songtube/ui/animations/showUp.dart';
+import 'package:songtube/ui/components/autohideScaffold.dart';
 
 class DownloadTab extends StatelessWidget {
   @override
@@ -20,83 +21,85 @@ class DownloadTab extends StatelessWidget {
     return DefaultTabController(
       initialIndex: 0,
       length: 3,
-      child: Scaffold(
+      child: AutoHideScaffold(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
-          titleSpacing: 0,
-          elevation: 12,
-          shadowColor: Colors.black.withOpacity(0.15),
+          elevation: 0,
           backgroundColor: Theme.of(context).cardColor,
-          title: ShowUpTransition(
-            forward: true,
-            duration: Duration(milliseconds: 400),
-            slideSide: SlideFromSlide.TOP,
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: Container(
-                margin: EdgeInsets.all(18),
-                child: Row(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(right: 8),
-                      child: Icon(
-                        EvaIcons.cloudDownloadOutline,
-                        color: Theme.of(context).accentColor,
-                      ),
-                    ),
-                    Text(
-                      Languages.of(context).labelDownloads,
-                      style: TextStyle(
-                        fontFamily: 'Product Sans',
-                        fontWeight: FontWeight.w700,
-                        fontSize: 20,
-                        color: Theme.of(context).textTheme.bodyText1.color
-                      ),
-                    ),
-                  ],
+          title: Row(
+            children: [
+              Container(
+                margin: EdgeInsets.only(right: 8),
+                child: Icon(
+                  EvaIcons.cloudDownloadOutline,
+                  color: Theme.of(context).accentColor,
                 ),
               ),
-            ),
-          ),
-          bottom: TabBar(
-            
-            labelStyle: TextStyle(
-              fontSize: 13,
-              fontFamily: 'Product Sans',
-              fontWeight: FontWeight.w600,
-              letterSpacing: 0.3
-            ),
-            unselectedLabelStyle: TextStyle(
-                fontSize: 13,
-                fontFamily: 'Product Sans',
-                fontWeight: FontWeight.w600,
-                letterSpacing: 0.2
-            ),
-            labelColor: Theme.of(context).accentColor,
-            unselectedLabelColor: Theme.of(context).textTheme.bodyText1
-              .color.withOpacity(0.4),
-            indicator: MD2Indicator(
-              indicatorSize: MD2IndicatorSize.tiny,
-              indicatorHeight: 4,
-              indicatorColor: Theme.of(context).accentColor,
-            ),
-            tabs: [
-              Tab(child: Text(
-                Languages.of(context).labelQueued
-              )),
-              Tab(child: Text(
-                Languages.of(context).labelCompleted
-              )),
-              Tab(child: Text(
-                Languages.of(context).labelCancelled
-              ))
+              Text(
+                Languages.of(context).labelDownloads,
+                style: TextStyle(
+                  fontFamily: 'Product Sans',
+                  fontWeight: FontWeight.w700,
+                  fontSize: 20,
+                  color: Theme.of(context).textTheme.bodyText1.color
+                ),
+              ),
             ],
           ),
         ),
-        body: TabBarView(
+        body: Column(
           children: [
-            DownloadsQueueTab(),
-            DownloadsTab(),
-            DownloadsCancelledTab()
+            Container(
+              height: 48,
+              color: Theme.of(context).cardColor,
+              child: TabBar(
+                labelStyle: TextStyle(
+                  fontSize: 13,
+                  fontFamily: 'Product Sans',
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 0.3
+                ),
+                unselectedLabelStyle: TextStyle(
+                    fontSize: 13,
+                    fontFamily: 'Product Sans',
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 0.2
+                ),
+                labelColor: Theme.of(context).accentColor,
+                unselectedLabelColor: Theme.of(context).textTheme.bodyText1
+                  .color.withOpacity(0.4),
+                indicator: MD2Indicator(
+                  indicatorSize: MD2IndicatorSize.tiny,
+                  indicatorHeight: 4,
+                  indicatorColor: Theme.of(context).accentColor,
+                ),
+                tabs: [
+                  Tab(child: Text(
+                    Languages.of(context).labelQueued
+                  )),
+                  Tab(child: Text(
+                    Languages.of(context).labelCompleted
+                  )),
+                  Tab(child: Text(
+                    Languages.of(context).labelCancelled
+                  ))
+                ],
+              ),
+            ),
+            Divider(
+              height: 1,
+              thickness: 1,
+              color: Colors.grey[600].withOpacity(0.2)
+            ),
+            Expanded(
+              child: TabBarView(
+                children: [
+                  DownloadsQueueTab(),
+                  DownloadsTab(),
+                  DownloadsCancelledTab()
+                ],
+              ),
+            ),
           ],
         ),
       ),

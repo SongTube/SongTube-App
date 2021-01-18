@@ -14,11 +14,9 @@ import 'package:md2_tab_indicator/md2_tab_indicator.dart';
 
 class HomePageAppBar extends StatefulWidget {
   final bool openSearch;
-  final TabController tabController;
   final Function onSearch;
   HomePageAppBar({
     this.openSearch,
-    this.tabController,
     this.onSearch
   });
 
@@ -32,11 +30,9 @@ class _HomePageAppBarState extends State<HomePageAppBar> {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
     ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
     PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
-    return SliverAppBar(
+    return AppBar(
       titleSpacing: 0,
-      pinned: true,
-      floating: true,
-      snap: true,
+      elevation: 0,
       backgroundColor: Theme.of(context).cardColor,
       title: AnimatedSwitcher(
         reverseDuration: Duration(milliseconds: 200),
@@ -120,59 +116,6 @@ class _HomePageAppBarState extends State<HomePageAppBar> {
             manager.showSearchBar = true;
           }
         )
-      ),
-      bottom: PreferredSize(
-        preferredSize: Size(
-          MediaQuery.of(context).size.width,
-          48
-        ),
-        child: Padding(
-          padding: EdgeInsets.only(left: 32),
-          child: TabBar(
-            controller: widget.tabController,
-            onTap: (int tabIndex) {
-              if (tabIndex == 0) {
-                manager.currentHomeTab = HomeScreenTab.Home;
-              } else if (tabIndex == 1) {
-                manager.currentHomeTab = HomeScreenTab.Trending;
-              } else if (tabIndex == 2) {
-                manager.currentHomeTab = HomeScreenTab.Music;
-              } else if (tabIndex == 3) {
-                manager.currentHomeTab = HomeScreenTab.Favorites;
-              } else if (tabIndex == 4) {
-                manager.currentHomeTab = HomeScreenTab.WatchLater;
-              }
-            },
-            isScrollable: true,
-            labelStyle: TextStyle(
-              fontSize: 13,
-              fontFamily: 'Product Sans',
-              fontWeight: FontWeight.w600,
-              letterSpacing: 0.3
-            ),
-            unselectedLabelStyle: TextStyle(
-                fontSize: 13,
-                fontFamily: 'Product Sans',
-                fontWeight: FontWeight.w600,
-                letterSpacing: 0.2
-            ),
-            labelColor: Theme.of(context).accentColor,
-            unselectedLabelColor: Theme.of(context).textTheme.bodyText1
-              .color.withOpacity(0.4),
-            indicator: MD2Indicator(
-              indicatorSize: MD2IndicatorSize.normal,
-              indicatorHeight: 4,
-              indicatorColor: Theme.of(context).accentColor,
-            ),
-            tabs: [
-              Tab(text: Languages.of(context).labelHomePage),
-              Tab(text: Languages.of(context).labelTrending),
-              Tab(text: Languages.of(context).labelMusic),
-              Tab(text: Languages.of(context).labelFavorites),
-              Tab(text: Languages.of(context).labelWatchLater)
-            ],
-          ),
-        ),
       ),
     );
   }
