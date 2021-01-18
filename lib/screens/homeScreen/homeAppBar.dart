@@ -103,18 +103,35 @@ class _HomePageAppBarState extends State<HomePageAppBar> {
           },
           leadingIcon: Padding(
             padding: const EdgeInsets.all(10.0),
-            child: Image.asset(
-              DateTime.now().month == 12
-                ? 'assets/images/logo_christmas.png'
-                : 'assets/images/ic_launcher.png',
-              fit: BoxFit.cover,
-              filterQuality: FilterQuality.high,
+            child: AnimatedSwitcher(
+              duration: Duration(milliseconds: 250),
+              child: !manager.showSearchBar
+                ? Image.asset(
+                    DateTime.now().month == 12
+                      ? 'assets/images/logo_christmas.png'
+                      : 'assets/images/ic_launcher.png',
+                    fit: BoxFit.cover,
+                    filterQuality: FilterQuality.high,
+                  )
+                : GestureDetector(
+                    onTap: () {
+                      FocusScope.of(context).requestFocus(new FocusNode());
+                      Future.delayed(Duration(milliseconds: 50),
+                        () => manager.showSearchBar = false);
+                    },
+                    child: Container(
+                      color: Colors.transparent,
+                      child: Icon(Icons.arrow_back_outlined)
+                    ),
+                  )
             ),
           ),
           searchHint: "SongTube",
           onTap: () {
-            manager.showSearchBar = true;
-          }
+            if (!manager.showSearchBar) {
+              manager.showSearchBar = true;
+            }
+          },
         )
       ),
     );

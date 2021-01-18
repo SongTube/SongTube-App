@@ -1,5 +1,8 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:songtube/internal/languages.dart';
+import 'package:songtube/provider/managerProvider.dart';
 
 class STSearchBar extends StatelessWidget {
   final TextEditingController controller;
@@ -24,6 +27,7 @@ class STSearchBar extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
+    ManagerProvider manager = Provider.of<ManagerProvider>(context, listen: false);
     return Container(
       width: double.infinity,
       height: kToolbarHeight,
@@ -60,14 +64,18 @@ class STSearchBar extends StatelessWidget {
                   cursorRadius: Radius.circular(20),
                   decoration: InputDecoration(
                     prefixIcon: leadingIcon == null
-                      ? Container() : leadingIcon,
-                    hintText: searchHint,
-                    hintStyle: TextStyle(
-                      color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6),
-                      fontFamily: 'Product Sans',
-                      fontWeight: FontWeight.w700,
-                      fontSize: 20,
-                    ),
+                      ? Container() : Container(color: Colors.transparent, child: leadingIcon),
+                    hintText: !manager.showSearchBar ? searchHint : Languages.of(context).labelSearchYoutube,
+                    hintStyle: !manager.showSearchBar
+                      ? TextStyle(
+                          color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6),
+                          fontFamily: 'Product Sans',
+                          fontWeight: FontWeight.w700,
+                          fontSize: 20,
+                        )
+                      : TextStyle(
+                          color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6),
+                        ),
                     border: UnderlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide: BorderSide(
