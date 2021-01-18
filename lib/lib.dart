@@ -1,13 +1,19 @@
 // Flutter
+import 'package:audio_service/audio_service.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:package_info/package_info.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:songtube/internal/nativeMethods.dart';
 
 // Internal
 import 'package:songtube/internal/updateChecker.dart';
+import 'package:songtube/players/components/musicPlayer/collapsedPanel.dart';
+import 'package:songtube/players/components/musicPlayer/expandedPanel.dart';
 import 'package:songtube/players/components/musicPlayer/playerPadding.dart';
+import 'package:songtube/players/service/playerService.dart';
+import 'package:songtube/players/service/screenStateStream.dart';
 import 'package:songtube/provider/configurationProvider.dart';
 import 'package:songtube/provider/downloadsProvider.dart';
 import 'package:songtube/provider/managerProvider.dart';
@@ -25,6 +31,7 @@ import 'package:songtube/players/musicPlayer.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:songtube/ui/animations/blurPageRoute.dart';
+import 'package:songtube/ui/components/autohideScaffold.dart';
 import 'package:songtube/ui/components/navigationBar.dart';
 import 'package:songtube/ui/dialogs/appUpdateDialog.dart';
 import 'package:songtube/ui/dialogs/joinTelegramDialog.dart';
@@ -34,20 +41,6 @@ import 'package:songtube/ui/internal/downloadFixDialog.dart';
 import 'package:songtube/ui/internal/lifecycleEvents.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
-class MainLib extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      child: Stack(
-        children: [
-          Lib(),
-          SlidingPlayerPanel()
-        ],
-      )
-    );
-  }
-}
-
 class Lib extends StatefulWidget {
   @override
   _LibState createState() => _LibState();
@@ -55,19 +48,17 @@ class Lib extends StatefulWidget {
 
 class _LibState extends State<Lib> {
 
-  AnimationController navigationBarAnimationController;
-  bool navigationBarClosed = false;
-  double position = 0.0;
-  double sensitivityFactor = 100.0;
+  // Current Screen Index
+  int _screenIndex;
+
+  // This Widget ScaffoldKey
+  GlobalKey<AutoHideScaffoldState> _libraryScaffoldKey;
 
   @override
   void initState() {
     super.initState();
-    navigationBarAnimationController = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 300)
-    );
-    navigationBarAnimationController.forward();
+    _screenIndex = 0;
+    _libraryScaffoldKey = new GlobalKey();
     WidgetsBinding.instance.renderView.automaticSystemUiAdjustment=false;
     KeyboardVisibility.onChange.listen((bool visible) {
         if (visible == false) FocusScope.of(context).unfocus();
@@ -104,6 +95,9 @@ class _LibState extends State<Lib> {
     Provider.of<MediaProvider>(context, listen: false).loadVideoList();
     // Disclaimer
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      // Save ScaffoldState Key
+      Provider.of<ManagerProvider>(context, listen: false).libraryScaffoldKey =
+        this._libraryScaffoldKey;
       // Show Disclaimer
       if (!Provider.of<ConfigurationProvider>(context, listen: false).disclaimerAccepted) {
         await showDialog(
@@ -137,6 +131,9 @@ class _LibState extends State<Lib> {
           }
         });
       });
+    });
+    AudioService.runningStream.listen((_) {
+      setState(() {});
     });
   }
 
@@ -186,8 +183,6 @@ class _LibState extends State<Lib> {
 
   @override
   Widget build(BuildContext context) {
-    //ManagerProvider manager = Provider.of<ManagerProvider>(context);
-    MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
     Brightness _systemBrightness = Theme.of(context).brightness;
     Brightness _statusBarBrightness = _systemBrightness == Brightness.light
       ? Brightness.dark
@@ -207,94 +202,73 @@ class _LibState extends State<Lib> {
     ]);
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
-      child: Scaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        resizeToAvoidBottomInset: false,
-        key: Provider.of<ManagerProvider>
-          (context, listen: false).libraryScaffoldKey,
-        body: Container(
-          color: Theme.of(context).cardColor,
-          child: SafeArea(
-            child: WillPopScope(
-              onWillPop: () {
-                ManagerProvider manager =
-                  Provider.of<ManagerProvider>(context, listen: false);
-                if (mediaProvider.slidingPanelOpen) {
-                  mediaProvider.slidingPanelOpen = false;
-                  mediaProvider.panelController.close();
-                  return Future.value(false);
-                } else if (manager.showSearchBar) {
-                  manager.showSearchBar = false;
-                  return Future.value(false);
-                } else if (manager.screenIndex == 0 && manager.currentHomeTab != HomeScreenTab.Home) {
-                  manager.currentHomeTab = HomeScreenTab.Home;
-                  return Future.value(false);
-                } else {
-                  return Future.value(true);
-                }
-              },
-              child: Consumer<ManagerProvider>(
-                builder: (context, manager, _) {
-                  return Column(
-                    children: [
-                      Expanded(
-                        child: AnimatedSwitcher(
-                          duration: Duration(milliseconds: 250),
-                          child: NotificationListener<ScrollNotification>(
-                            onNotification: (ScrollNotification details) {
-                              if (details.metrics.pixels - position >= sensitivityFactor && details.metrics.axis == Axis.vertical) {
-                                position = details.metrics.pixels;
-                                navigationBarAnimationController.reverse();
-                                navigationBarClosed = true;
-                              } else if (position - details.metrics.pixels  >= sensitivityFactor && details.metrics.axis == Axis.vertical) {
-                                position = details.metrics.pixels;
-                                navigationBarAnimationController.forward();
-                                navigationBarClosed = false;
-                              }
-                              return false;
-                            },
-                            child: _currentScreen(manager)
-                          )
-                        ),
-                      ),
-                      if (manager.screenIndex == 2)
-                      MusicPlayerPadding(manager.showSearchBar)
-                    ],
-                  );
-                }
-              ),
-            ),
-          ),
-        ),
-        bottomNavigationBar: Consumer<ManagerProvider>(
-          builder: (context, manager, _) {
-            return AnimatedBuilder(
-              animation: navigationBarAnimationController,
-              builder: (context, child) {
-                return Container(
-                  height: kBottomNavigationBarHeight *
-                    navigationBarAnimationController.value,
-                  child: AppBottomNavigationBar(
-                    onItemTap: (int index) => manager.screenIndex = index,
-                    currentIndex: manager.screenIndex
-                  ),
-                );
-              },
-            );
-          }
-        ),
-      ),
+      child: _libBody()
     );
   }
 
-  Widget _currentScreen(manager) {
-    if (manager.screenIndex == 0) {
+  Widget _libBody() {
+    return AutoHideScaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      resizeToAvoidBottomInset: false,
+      key: _libraryScaffoldKey,
+      body: Container(
+        color: Theme.of(context).cardColor,
+        child: SafeArea(
+          child: Consumer2<MediaProvider, ManagerProvider>(
+            builder: (context, mediaProvider, manager, child) {
+              return WillPopScope(
+                onWillPop: () {
+                  if (mediaProvider.slidingPanelOpen) {
+                    mediaProvider.slidingPanelOpen = false;
+                    mediaProvider.panelController.close();
+                    return Future.value(false);
+                  } else if (manager.showSearchBar) {
+                    manager.showSearchBar = false;
+                    setState(() {});
+                    return Future.value(false);
+                  } else if (_screenIndex != 0) {
+                    setState(() => _screenIndex = 0);
+                    return Future.value(false);
+                  } else if (_screenIndex == 0 && manager.currentHomeTab != HomeScreenTab.Home) {
+                    manager.currentHomeTab = HomeScreenTab.Home;
+                    return Future.value(false);
+                  } else {
+                    return Future.value(true);
+                  }
+                },
+                child: child,
+              );
+            },
+            child: AnimatedSwitcher(
+              duration: Duration(milliseconds: 250),
+              child: _currentScreen(_screenIndex)
+            ),
+          ),
+        ),
+      ),
+      bottomNavigationBar: AppBottomNavigationBar(
+        currentIndex: _screenIndex,
+        onItemTap: (int index) {
+          setState(() => _screenIndex = index);
+        }
+      ),
+      floatingWidget: SlidingPlayerPanel(
+        callback: (double position) {
+          _libraryScaffoldKey.currentState
+            .updateInternalController(position);
+        },
+      )
+    );
+  }
+
+  Widget _currentScreen(screenIndex) {
+    if (screenIndex == 0) {
       return HomeScreen();
-    } else if (manager.screenIndex == 1) {
+    } else if (screenIndex == 1) {
       return DownloadTab();
-    } else if (manager.screenIndex == 2) {
+    } else if (screenIndex == 2) {
       return MediaScreen();
-    } else if (manager.screenIndex == 3) {
+    } else if (screenIndex == 3) {
       return LibraryScreen();
     } else {
       return Container();
