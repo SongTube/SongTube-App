@@ -22,6 +22,8 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import android.view.WindowManager
+import android.os.Build
 
 class MainActivity : FlutterActivity() {
     private var sharedText: String? = null
@@ -34,6 +36,10 @@ class MainActivity : FlutterActivity() {
                     }
                     if (call.method == "clearSharedText") {
                         sharedText = null
+                        result.success(0)
+                    }
+                    if (call.method == "exitFullScreen") {
+                        window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
                         result.success(0)
                     }
                 }
