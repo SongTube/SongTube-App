@@ -9,6 +9,7 @@ import 'package:songtube/provider/downloadsProvider.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/routes/components/playlist/pageDetails.dart';
 import 'package:songtube/routes/components/playlist/videosListview.dart';
+import 'package:songtube/ui/internal/snackbar.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 class YoutubePlayerPlaylistPage extends StatefulWidget {
@@ -127,7 +128,13 @@ class _YoutubePlayerPlaylistPageState extends State<YoutubePlayerPlaylistPage> {
                 );
                 Navigator.of(context).pop();
                 await Future.delayed(Duration(milliseconds: 400));
-                manager.screenIndex = 1;
+                AppSnack.showSnackBar(
+                  icon: EvaIcons.cloudDownloadOutline,
+                  title: "Download started...",
+                  message: "",
+                  context: context,
+                  scaffoldKey: manager.libraryScaffoldKey.currentState
+                );
               },
               backgroundColor: Theme.of(context).accentColor,
               label: Row(
@@ -137,7 +144,7 @@ class _YoutubePlayerPlaylistPageState extends State<YoutubePlayerPlaylistPage> {
                   Text(Languages.of(context).labelDownloadAll,
                     style: TextStyle(color: Colors.white))
                 ],
-              ) 
+              )
             )
           : Container()
       ),

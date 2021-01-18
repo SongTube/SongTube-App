@@ -34,58 +34,64 @@ class PlayerBody extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          centerTitle: true,
-          leading: IconButton(
-            icon: Icon(Icons.expand_more, color: textColor),
-            onPressed: () {
-              controller.close();
-            },
-          ),
-          title: RichText(
-            textAlign: TextAlign.center,
-            maxLines: 2,
-            text: TextSpan(
-              children: [
-                TextSpan(
-                  text: Languages.of(context).labelPlayingFrom+"\n",
-                  style: TextStyle(
-                    letterSpacing: 2,
-                    color: textColor,
-                    fontFamily: 'YTSans'
-                  )
+    return SingleChildScrollView(
+      physics: NeverScrollableScrollPhysics(),
+      child: Container(
+        height: MediaQuery.of(context).size.height,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+              AppBar(
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                centerTitle: true,
+                leading: IconButton(
+                  icon: Icon(Icons.expand_more, color: textColor),
+                  onPressed: () {
+                    controller.close();
+                  },
                 ),
-                TextSpan(
-                  text: "$playingFrom",
-                  style: TextStyle(
-                    color: textColor.withOpacity(0.6),
-                    fontSize: 12,
-                    fontFamily: 'YTSans'
+                title: RichText(
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: Languages.of(context).labelPlayingFrom+"\n",
+                        style: TextStyle(
+                          letterSpacing: 2,
+                          color: textColor,
+                          fontFamily: 'YTSans'
+                        )
+                      ),
+                      TextSpan(
+                        text: "$playingFrom",
+                        style: TextStyle(
+                          color: textColor.withOpacity(0.6),
+                          fontSize: 12,
+                          fontFamily: 'YTSans'
+                        )
+                      )
+                    ]
+                  ),
+                ),
+              ),
+              expandArtwork
+                ? Expanded(
+                    child: PlayerArtwork(image: artworkFile, textColor: textColor)
                   )
-                )
-              ]
-            ),
-          ),
+                : PlayerArtwork(image: artworkFile, textColor: textColor),
+              PlayerControls(
+                vibrantColor: vibrantColor,
+                mediaItem: mediaItem,
+                playing: playing,
+                textColor: textColor,
+                dominantColor: dominantColor,
+                state: state,
+              )
+          ],
         ),
-        expandArtwork
-          ? Expanded(
-              child: PlayerArtwork(image: artworkFile, textColor: textColor)
-            )
-          : PlayerArtwork(image: artworkFile, textColor: textColor),
-        PlayerControls(
-          vibrantColor: vibrantColor,
-          mediaItem: mediaItem,
-          playing: playing,
-          textColor: textColor,
-          dominantColor: dominantColor,
-          state: state,
-        )
-      ],
+      ),
     );
   }
 }

@@ -26,6 +26,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   TabController controller;
+  String searchQuery = "";
 
   @override
   void initState() {
@@ -56,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    ManagerProvider manager = Provider.of<ManagerProvider>(context);
+    ManagerProvider manager = Provider.of<ManagerProvider>(context, listen: false);
     ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
     return AutoHideScaffold(
       resizeToAvoidBottomInset: false,
@@ -65,7 +66,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         openSearch: manager.showSearchBar,
         onSearch: () {
           controller.animateTo(0);
-        }
+        },
+        onChanged: (String query) {
+          searchQuery = query;
+        },
       ),
       body: Stack(
         children: [
@@ -153,20 +157,25 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   Expanded(
                     child: Container(
                       color: Theme.of(context).scaffoldBackgroundColor,
-                      child: SearchHistoryList(
-                        onItemTap: (String item) {
-                          manager.searchBarFocusNode.unfocus();
-                          manager.youtubeSearchQuery = item;
-                          controller.animateTo(0);
-                          manager.updateYoutubeSearchResults(updateResults: true);
-                          Future.delayed(Duration(milliseconds: 100), () {
-                            manager.showSearchBar = false;
-                          });
-                          if (item.length > 1) {
-                            Future.delayed(Duration(milliseconds: 400), () =>
-                              config.addStringtoSearchHistory(item.trim()
-                            ));
-                          }
+                      child: Consumer<ManagerProvider>(
+                        builder: (context, manager, _) {
+                          return SearchHistoryList(
+                            searchQuery: searchQuery,
+                            onItemTap: (String item) {
+                              manager.searchBarFocusNode.unfocus();
+                              manager.youtubeSearchQuery = item;
+                              controller.animateTo(0);
+                              manager.updateYoutubeSearchResults(updateResults: true);
+                              Future.delayed(Duration(milliseconds: 100), () {
+                                manager.showSearchBar = false;
+                              });
+                              if (item.length > 1) {
+                                Future.delayed(Duration(milliseconds: 400), () =>
+                                  config.addStringtoSearchHistory(item.trim()
+                                ));
+                              }
+                            },
+                          );
                         }
                       ),
                     ),

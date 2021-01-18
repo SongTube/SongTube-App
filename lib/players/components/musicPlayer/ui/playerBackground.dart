@@ -25,31 +25,27 @@ class PlayerBackground extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        AnimatedSwitcher(
-          duration: Duration(milliseconds: 400),
-          child: enableBlur ? ImageFade(
-            image: FileImage(backgroundImage),
-            height: double.infinity,
-            width: double.infinity,
-            fit: BoxFit.cover,
-          ) : Container()
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 400),
+      decoration: BoxDecoration(
+        image: enableBlur ? DecorationImage(
+          image: FileImage(backgroundImage),
+          fit: BoxFit.cover,
+          colorFilter: ColorFilter.mode(
+            backdropColor.withOpacity(backdropOpacity),
+            BlendMode.darken
+          )
+        ) : null,
+      ),
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
+      child: BackdropFilter(
+        filter: ImageFilter.blur(
+          sigmaX: blurIntensity,
+          sigmaY: blurIntensity
         ),
-        AnimatedContainer(
-          duration: Duration(milliseconds: 400),
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          color: backdropColor.withOpacity(backdropOpacity),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(
-              sigmaX: blurIntensity,
-              sigmaY: blurIntensity
-            ),
-            child: child,
-          ),
-        )
-      ],
+        child: child,
+      ),
     );
   }
 }
