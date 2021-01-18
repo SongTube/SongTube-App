@@ -117,6 +117,7 @@ class YoutubeChannelPage extends StatelessWidget {
                                 slideOffset: Offset(0.0, 10.0),
                                 builder: (_) => 
                                 YoutubePlayerVideoPage(
+                                  related: videos,
                                   url: videos[index].id.value,
                                   thumbnailUrl: "${videos[index].thumbnails.highResUrl}",
                               )));

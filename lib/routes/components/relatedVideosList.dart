@@ -21,8 +21,6 @@ class RelatedVideosList extends StatelessWidget {
   Widget build(BuildContext context) {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
     PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
-    List<Video> relatedVideos = related == null
-      ? manager.mediaInfoSet.relatedVideos : related;
     return Column(
       children: [
         SizedBox(height: 8),
@@ -44,7 +42,7 @@ class RelatedVideosList extends StatelessWidget {
               SizedBox(width: 8),
               AnimatedSwitcher(
                 duration: Duration(milliseconds: 300),
-                child: manager.mediaInfoSet.relatedVideos.isEmpty
+                child: related.isEmpty
                   ? SizedBox(
                       height: 20,
                       width: 20,
@@ -77,14 +75,14 @@ class RelatedVideosList extends StatelessWidget {
         ),
         AnimatedSwitcher(
           duration: Duration(milliseconds: 300),
-          child: manager.mediaInfoSet.relatedVideos.isNotEmpty
+          child: related.isNotEmpty
             ? ListView.builder(
                 shrinkWrap: shrinkWrap,
                 padding: EdgeInsets.zero,
                 physics: NeverScrollableScrollPhysics(),
-                itemCount: relatedVideos.length,
+                itemCount: related.length,
                 itemBuilder: (context, index) {
-                  Video video = relatedVideos[index];
+                  Video video = related[index];
                   return GestureDetector(
                     onTap: () {
                       if (onVideoTap == null) {

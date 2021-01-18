@@ -35,9 +35,11 @@ import 'components/video/videoEngagement.dart';
 class YoutubePlayerVideoPage extends StatefulWidget {
   final String url;
   final String thumbnailUrl;
+  final List<Video> related;
   YoutubePlayerVideoPage({
     @required this.url,
     @required this.thumbnailUrl,
+    this.related
   });
 
   @override
@@ -262,6 +264,9 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> {
                           Divider(),
                           // Related Videos
                           RelatedVideosList(
+                            related: widget.related == null
+                              ? manager.mediaInfoSet.relatedVideos
+                              : widget.related,
                             onVideoTap: (index) {
                               manager.updateMediaInfoSet(
                                 manager.mediaInfoSet.relatedVideos[index],
