@@ -63,7 +63,14 @@ class AutoHideScaffoldState extends State<AutoHideScaffold> with TickerProviderS
                   double.infinity,
                   kToolbarHeight * _hideAnimationController.value
                 ),
-                child: widget.appBar,
+                child: Container(
+                  color: Theme.of(context).cardColor,
+                  child: Opacity(
+                    opacity: (_hideAnimationController.value - (1 - _hideAnimationController.value)) > 0
+                      ? (_hideAnimationController.value - (1 - _hideAnimationController.value)) : 0,
+                    child: widget.appBar
+                  ),
+                ),
               ): null,
               body: child,
               bottomNavigationBar: widget.bottomNavigationBar != null ? Container(
