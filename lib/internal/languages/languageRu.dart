@@ -348,5 +348,6 @@ class LanguageRu extends Languages {
   String get labelJoin => "Подписаться";
   @override
   String get labelNo => "Нет";
-
+  @override
+  String get labelLibrary => "библиотека";
 }

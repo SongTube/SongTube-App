@@ -351,6 +351,7 @@ class LanguageEs extends Languages {
   String get labelJoin => "Entrar";
   @override
   String get labelNo => "No";
-
+  @override
+  String get labelLibrary => "Libraria";
 
 }

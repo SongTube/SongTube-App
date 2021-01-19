@@ -350,5 +350,6 @@ class LanguagePtBr extends Languages {
   String get labelJoin => "Se Juntar";
   @override
   String get labelNo => "Não";
-
+  @override
+  String get labelLibrary => "biblioteca";
 }

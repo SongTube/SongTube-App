@@ -291,6 +291,7 @@ abstract class Languages {
   String get labelRemove;
   String get labelJoin;
   String get labelNo;
+  String get labelLibrary;
 
 }
 

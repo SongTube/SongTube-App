@@ -348,4 +348,6 @@ class LanguageIgbo extends Languages {
   String get labelJoin => "Jikọọ";
   @override
   String get labelNo => "Mba";
+  @override
+  String get labelLibrary => "ọba akwụkwọ";
 }

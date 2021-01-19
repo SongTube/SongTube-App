@@ -348,5 +348,6 @@ class LanguageId extends Languages {
   String get labelJoin => "Join";
   @override
   String get labelNo => "No";
-
+  @override
+  String get labelLibrary => "Perpustakaan";
 }
