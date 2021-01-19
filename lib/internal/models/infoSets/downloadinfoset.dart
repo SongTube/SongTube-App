@@ -137,6 +137,10 @@ class DownloadInfoSet {
   // Download, Convert, Write Metadata and Save
   // ---------------------------------------------
   Future<void> downloadMedia() async {
+    bool applyFilters = audioModifiers.volume != 1.0 ||
+      audioModifiers.bassGain != 0 ||
+      audioModifiers.trebleGain != 0
+      ? true : false;
     // Check Storage Permissions
     if (!await _appHasPermissions()) {
       _interruptDownload(language.labelDownloadAcesssDenied);
@@ -169,13 +173,13 @@ class DownloadInfoSet {
       downloadedFile = await ffmpegConverter.clearFileMetadata(downloadedFile.path);
       // Apply Audio Normalizer
       if (normalizeAudio) {
-        currentAction.add(language.labelPatchingAudio);
+        currentAction.add(language.labelPatchingAudio + (applyFilters ? " (1/2)" : ""));
         downloadedFile = await ffmpegConverter.normalizeAudio(downloadedFile.path);
         if (downloadedFile == null) return;
       }
       // Apply Audio Filters
-      if (audioModifiers.volume != 1.0 || audioModifiers.bassGain != 0 || audioModifiers.trebleGain != 0) {
-        currentAction.add(language.labelPatchingAudio);
+      if (applyFilters) {
+        currentAction.add(language.labelPatchingAudio + (normalizeAudio ? " (2/2)" : ""));
         downloadedFile = await ffmpegConverter.applyAudioModifiers(downloadedFile.path, audioModifiers);
       }
       if (downloadedFile == null) return;
