@@ -119,8 +119,13 @@ class SlidingPlayerPanel extends StatelessWidget {
       panel: ExpandedPlayer(
         controller: mediaProvider.panelController,
       ),
-      collapsed: CollapsedPanel(
-        borderRadius: borderRadius,
+      collapsed: GestureDetector(
+        onTap: () {
+          mediaProvider.panelController.open();
+        },
+        child: CollapsedPanel(
+          borderRadius: borderRadius,
+        ),
       ),
     );
   }
