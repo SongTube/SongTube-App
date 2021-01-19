@@ -8,7 +8,6 @@ import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/provider/mediaProvider.dart';
 
 // Internal
-import 'package:songtube/screens/mediaScreen/tabs/downloadsTab.dart';
 import 'package:songtube/screens/mediaScreen/tabs/musicTab.dart';
 import 'package:songtube/screens/mediaScreen/tabs/videosTab.dart';
 
@@ -17,7 +16,6 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:songtube/screens/mediaScreen/components/mediaSearchBar.dart';
 
 // UI
-import 'package:songtube/ui/animations/showUp.dart';
 import 'package:songtube/ui/components/autohideScaffold.dart';
 
 class MediaScreen extends StatefulWidget {
@@ -53,8 +51,8 @@ class _MediaScreenState extends State<MediaScreen> {
   Widget build(BuildContext context) {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
     return DefaultTabController(
-      initialIndex: 1,
-      length: 3,
+      initialIndex: 0,
+      length: 2,
       child: AutoHideScaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         resizeToAvoidBottomInset: false,
@@ -135,9 +133,6 @@ class _MediaScreenState extends State<MediaScreen> {
                 ),
                 tabs: [
                   Tab(child: Text(
-                    Languages.of(context).labelDownloads
-                  )),
-                  Tab(child: Text(
                     Languages.of(context).labelMusic
                   )),
                   Tab(child: Text(
@@ -154,7 +149,6 @@ class _MediaScreenState extends State<MediaScreen> {
             Expanded(
               child: TabBarView(
                 children: [
-                  MediaDownloadTab(searchQuery),
                   MediaMusicTab(searchQuery),
                   MediaVideoTab(searchQuery)
                 ],

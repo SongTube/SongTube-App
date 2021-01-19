@@ -23,7 +23,7 @@ class SongsListView extends StatelessWidget {
   SongsListView({
     @required this.songs,
     this.hasDownloadType = false,
-    this.searchQuery
+    this.searchQuery = ""
   });
   @override
   Widget build(BuildContext context) {

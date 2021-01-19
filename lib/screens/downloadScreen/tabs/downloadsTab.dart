@@ -1,59 +1,29 @@
 // Flutter
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 // Internal
-import 'package:songtube/internal/models/infoSets/downloadinfoset.dart';
-import 'package:songtube/provider/downloadsProvider.dart';
+import 'package:songtube/provider/mediaProvider.dart';
+import 'package:songtube/screens/mediaScreen/components/mediaListBase.dart';
 
 // Packages
 import 'package:provider/provider.dart';
-import 'package:songtube/screens/downloadScreen/components/downloadTile.dart';
-import 'package:autolist/autolist.dart';
 
 // UI
-import 'package:songtube/screens/downloadScreen/components/downloadsEmpty.dart';
+import 'package:songtube/screens/mediaScreen/components/songsListView.dart';
 
 class DownloadsTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return AnimatedSwitcher(
-      duration: Duration(milliseconds: 200),
-      child: downloadsBody(context)
+    MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
+    mediaProvider.getDatabase();
+    return MediaListBase(
+      isLoading: mediaProvider.loadingDownloads,
+      isEmpty: mediaProvider.databaseSongs.isEmpty,
+      listType: MediaListBaseType.Downloads,
+      child: SongsListView(
+        songs: mediaProvider.databaseSongs,
+        hasDownloadType: true,
+      ),
     );
-  }
-
-  Widget downloadsBody(BuildContext context) {
-    DownloadsProvider downloadsProvider = Provider.of<DownloadsProvider>(context);
-    if (downloadsProvider.completedList.isNotEmpty) {
-      return Padding(
-        padding: EdgeInsets.only(top: 8),
-        child: AutoList<DownloadInfoSet>(
-          
-          items: downloadsProvider.completedList,
-          duration: Duration(milliseconds: 400),
-          itemBuilder: (context, infoset) {
-            return Padding(
-              padding: EdgeInsets.only(left: 16, right: 16, bottom: 8),
-              child: DownloadTile(
-                dataProgress: infoset.dataProgress.stream,
-                progressBar: infoset.progressBar.stream,
-                currentAction: infoset.currentAction.stream,
-                metadata: infoset.metadata,
-                videoDetails: infoset.videoDetails,
-                downloadType: infoset.downloadType,
-                onDownloadCancel: null,
-                cancelDownloadIcon: Container()
-              )
-            );
-          },
-        ),
-      );
-    } else {
-      return Align(
-        alignment: Alignment.bottomCenter,
-        child: const NoDownloads()
-      );
-    }
   }
 }

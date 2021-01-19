@@ -22,6 +22,7 @@ class DownloadTab extends StatelessWidget {
     DownloadsProvider downloadsProvider = Provider.of<DownloadsProvider>(context, listen: false);
     return DefaultTabController(
       initialIndex: downloadsProvider.queueList.isNotEmpty ||
+        downloadsProvider.downloadingList.isNotEmpty ||
         downloadsProvider.convertingList.isNotEmpty ? 0 : 1,
       length: 3,
       child: AutoHideScaffold(
