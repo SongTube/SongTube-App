@@ -32,48 +32,41 @@ class SlidingPlayerPanel extends StatelessWidget {
         final state = screenState?.playbackState;
         final processingState =
           state?.processingState ?? AudioProcessingState.none;
-        final mediaItem = screenState?.mediaItem;
         AudioService.currentMediaItemStream.listen((newMediaItem) {
           if (newMediaItem != mediaProvider.mediaItem) {
             mediaProvider.mediaItem = newMediaItem;
           }
         });
-        if (mediaItem?.artUri != null) {
-          if (mediaProvider.slidingPanelOpen == true) {
-            Color dominantColor = prefs.enablePlayerBlurBackground
-              ? mediaProvider.dominantColor == null ? Colors.white : mediaProvider.dominantColor
-              : Theme.of(context).accentColor;
-            Color textColor = prefs.enablePlayerBlurBackground
-              ? dominantColor.computeLuminance() > 0.5 ? Colors.black : Colors.white
-              : Theme.of(context).textTheme.bodyText1.color;
-            SystemChrome.setSystemUIOverlayStyle(
-              SystemUiOverlayStyle(
-                statusBarIconBrightness: textColor == Colors.black? Brightness.dark : Brightness.light,
-              ),
-            );
-          }
-          if (mediaProvider.artwork != null) {
-            Color dominantColor = prefs.enablePlayerBlurBackground
-              ? mediaProvider.dominantColor == null ? Colors.white : mediaProvider.dominantColor
-              : Theme.of(context).accentColor;
-            Color textColor = prefs.enablePlayerBlurBackground
-              ? dominantColor.computeLuminance() > 0.5 ? Colors.black : Colors.white
-              : Theme.of(context).textTheme.bodyText1.color;
-            return AnimatedSwitcher(
-              duration: Duration(milliseconds: 300),
-              child: processingState != AudioProcessingState.none ? _buildSlidingPanel(
+        if (mediaProvider.slidingPanelOpen == true) {
+          Color dominantColor = prefs.enablePlayerBlurBackground
+            ? mediaProvider.dominantColor == null ? Colors.white : mediaProvider.dominantColor
+            : Theme.of(context).accentColor;
+          Color textColor = prefs.enablePlayerBlurBackground
+            ? dominantColor.computeLuminance() > 0.5 ? Colors.black : Colors.white
+            : Theme.of(context).textTheme.bodyText1.color;
+          SystemChrome.setSystemUIOverlayStyle(
+            SystemUiOverlayStyle(
+              statusBarIconBrightness: textColor == Colors.black? Brightness.dark : Brightness.light,
+            ),
+          );
+        }
+        Color dominantColor = prefs.enablePlayerBlurBackground
+          ? mediaProvider.dominantColor == null ? Colors.white : mediaProvider.dominantColor
+          : Theme.of(context).accentColor;
+        Color textColor = prefs.enablePlayerBlurBackground
+          ? dominantColor.computeLuminance() > 0.5 ? Colors.black : Colors.white
+          : Theme.of(context).textTheme.bodyText1.color;
+        return AnimatedSwitcher(
+          duration: Duration(milliseconds: 300),
+          child: AudioService?.currentMediaItem != null
+            ? _buildSlidingPanel(
                 context,
                 textColor: textColor,
                 dominantColor: dominantColor,
                 useBlurUI: prefs.enableBlurUI
-              ) : Container()
-            );
-          } else {
-            return Container();
-          }
-        } else {
-          return Container();
-        }
+              )
+            : Container()
+        );
       }
     );
   }
