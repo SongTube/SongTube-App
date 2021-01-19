@@ -54,9 +54,6 @@ class _SettingsTabState extends State<SettingsTab> {
             iconTheme: IconThemeData(
               color: Theme.of(context).iconTheme.color
             ),
-            actions: [
-              _createLanguageDropDown(context)
-            ],
           ),
         ),
       ),
@@ -75,43 +72,6 @@ class _SettingsTabState extends State<SettingsTab> {
             BackupSettings(scaffoldKey: scaffoldState),
           ],
         ),
-      ),
-    );
-  }
-
-  _createLanguageDropDown(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(right: 16),
-      child: DropdownButton<LanguageData>(
-        iconSize: 30,
-        icon: Icon(EvaIcons.globe2Outline,
-          color: Theme.of(context).iconTheme.color),
-        onChanged: (LanguageData language) {
-          changeLanguage(context, language.languageCode);
-        },
-        underline: DropdownButtonHideUnderline(child: Container()),
-        items: supportedLanguages
-          .map<DropdownMenuItem<LanguageData>>(
-            (e) =>
-            DropdownMenuItem<LanguageData>(
-              value: e,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  Text(
-                    e.name,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontFamily: 'YTSans',
-                      fontWeight: FontWeight.w400,
-                      color: Theme.of(context).textTheme.bodyText1.color
-                    ),
-                  )
-                ],
-              ),
-            ),
-          )
-          .toList(),
       ),
     );
   }
