@@ -34,6 +34,7 @@ class TagsEditorPage extends StatefulWidget {
 class _TagsEditorPageState extends State<TagsEditorPage> {
 
   TagsControllers tagsControllers;
+  String originalArtwork;
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -61,6 +62,7 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
         audioFile: widget.song.id,
         audioId: ""
     )).path;
+    originalArtwork = this.tagsControllers.artworkController;
     setState(() {});
   }
 
@@ -289,6 +291,25 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
                 ),
               ),
             ],
+          ),
+          Divider(),
+          ListTile(
+            onTap: () {
+              setState(() {
+                tagsControllers.artworkController =
+                originalArtwork;
+              });
+            },
+            leading: Icon(
+              EvaIcons.imageOutline,
+              color: Theme.of(context).iconTheme.color
+            ),
+            title: Text(
+              "Restore Artwork",
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodyText1.color
+              ),
+            ),
           ),
         ],
       ),
