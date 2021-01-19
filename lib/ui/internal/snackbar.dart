@@ -17,7 +17,7 @@ class AppSnack {
     String message,
     Duration duration = const Duration(seconds: 2),
     @required context,
-    @required ScaffoldState scaffoldKey
+    @required scaffoldKey
   }) {
     scaffoldKey.removeCurrentSnackBar();
     final snack = SnackBar(

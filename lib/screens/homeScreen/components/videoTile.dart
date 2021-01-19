@@ -332,7 +332,7 @@ class VideoTile extends StatelessWidget {
                                 DownloadMenu(
                                   videoUrl: url,
                                   scaffoldState: manager
-                                    .libraryScaffoldKey.currentState,
+                                    .internalScaffoldKey.currentState,
                                 ),
                               ],
                             );

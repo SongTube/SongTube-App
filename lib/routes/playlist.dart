@@ -133,7 +133,7 @@ class _YoutubePlayerPlaylistPageState extends State<YoutubePlayerPlaylistPage> {
                   title: "Download started...",
                   message: "",
                   context: context,
-                  scaffoldKey: manager.libraryScaffoldKey.currentState
+                  scaffoldKey: manager.internalScaffoldKey.currentState
                 );
               },
               backgroundColor: Theme.of(context).accentColor,

@@ -45,7 +45,8 @@ class ManagerProvider extends ChangeNotifier {
   // -------------
   //
   // Library
-  GlobalKey _libraryScaffoldKey;
+  GlobalKey _internalScaffoldKey;
+  GlobalKey _scaffoldStateKey;
   // Home Screen
   ScrollController homeScrollController;
   PanelController expandablePlayerPanelController;
@@ -298,9 +299,15 @@ class ManagerProvider extends ChangeNotifier {
   // -------------------
   //
   // Library
-  GlobalKey<ScaffoldState> get libraryScaffoldKey => _libraryScaffoldKey;
-  set libraryScaffoldKey(GlobalKey key) {
-    _libraryScaffoldKey = key;
+  GlobalKey get internalScaffoldKey => _internalScaffoldKey;
+  set internalScaffoldKey(GlobalKey key) {
+    _internalScaffoldKey = key;
+    notifyListeners();
+  }
+  // Library
+  GlobalKey get scaffoldStateKey => _scaffoldStateKey;
+  set scaffoldStateKey(GlobalKey key) {
+    _scaffoldStateKey = key;
     notifyListeners();
   }
   bool get showSearchBar => _showSearchBar;

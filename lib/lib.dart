@@ -52,13 +52,15 @@ class _LibState extends State<Lib> {
   int _screenIndex;
 
   // This Widget ScaffoldKey
-  GlobalKey<AutoHideScaffoldState> _libraryScaffoldKey;
+  GlobalKey<AutoHideScaffoldState> _scaffoldStateKey;
+  GlobalKey<ScaffoldState> _internalScaffoldKey;
 
   @override
   void initState() {
     super.initState();
     _screenIndex = 0;
-    _libraryScaffoldKey = new GlobalKey();
+    _scaffoldStateKey = new GlobalKey();
+    _internalScaffoldKey = GlobalKey<ScaffoldState>();
     WidgetsBinding.instance.renderView.automaticSystemUiAdjustment=false;
     KeyboardVisibility.onChange.listen((bool visible) {
         if (visible == false) FocusScope.of(context).unfocus();
@@ -96,8 +98,10 @@ class _LibState extends State<Lib> {
     // Disclaimer
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       // Save ScaffoldState Key
-      Provider.of<ManagerProvider>(context, listen: false).libraryScaffoldKey =
-        this._libraryScaffoldKey;
+      Provider.of<ManagerProvider>(context, listen: false).scaffoldStateKey =
+        this._scaffoldStateKey;
+      Provider.of<ManagerProvider>(context, listen: false).internalScaffoldKey =
+        this._internalScaffoldKey;
       // Show Disclaimer
       if (!Provider.of<ConfigurationProvider>(context, listen: false).disclaimerAccepted) {
         await showDialog(
@@ -210,7 +214,8 @@ class _LibState extends State<Lib> {
     return AutoHideScaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       resizeToAvoidBottomInset: false,
-      key: _libraryScaffoldKey,
+      key: _scaffoldStateKey,
+      internalKey: _internalScaffoldKey,
       body: Container(
         color: Theme.of(context).cardColor,
         child: SafeArea(
@@ -254,7 +259,7 @@ class _LibState extends State<Lib> {
       ),
       floatingWidget: SlidingPlayerPanel(
         callback: (double position) {
-          _libraryScaffoldKey.currentState
+          _scaffoldStateKey.currentState
             .updateInternalController(position);
         },
       )

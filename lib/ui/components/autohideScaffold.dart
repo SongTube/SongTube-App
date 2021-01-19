@@ -9,6 +9,7 @@ class AutoHideScaffold extends StatefulWidget {
   final Function(double) floatingWidgetPositionCallback;
   final bool resizeToAvoidBottomInset;
   final Color backgroundColor;
+  final GlobalKey<ScaffoldState> internalKey;
   AutoHideScaffold({
     this.appBar,
     @required this.body,
@@ -17,6 +18,7 @@ class AutoHideScaffold extends StatefulWidget {
     this.resizeToAvoidBottomInset,
     this.floatingWidgetPositionCallback,
     this.backgroundColor,
+    this.internalKey,
     Key key
   }) : super(key: key);
 
@@ -56,6 +58,7 @@ class AutoHideScaffoldState extends State<AutoHideScaffold> with TickerProviderS
         return Stack(
           children: [
             Scaffold(
+              key: widget.internalKey,
               backgroundColor: widget.backgroundColor,
               resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
               appBar: widget.appBar != null ? PreferredSize(
