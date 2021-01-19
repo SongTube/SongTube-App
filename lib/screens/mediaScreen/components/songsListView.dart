@@ -138,7 +138,11 @@ class SongsListView extends StatelessWidget {
                   }
                 }
               },
-              child: Icon(Icons.more_vert, size: 18)
+              child: Container(
+                color: Colors.transparent,
+                padding: EdgeInsets.all(4),
+                child: Icon(Icons.more_vert, size: 18),
+              )
             ),
             onTap: () async {
               if (hasDownloadType == false || song.extras["downloadType"] == "Audio") {
