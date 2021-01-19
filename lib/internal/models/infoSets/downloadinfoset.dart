@@ -43,6 +43,7 @@ class DownloadInfoSet {
   Video videoDetails;
   String downloadId;
   int totalDownloaded = 0;
+  bool normalizeAudio;
   Function(String, bool) completedCallback;
   Function(String) cancelledCallback;
   Function(String) convertingCallback;
@@ -62,6 +63,7 @@ class DownloadInfoSet {
     @required this.cancelledCallback,
     @required this.convertingCallback,
     @required this.saveErrorCallback,
+    this.normalizeAudio = false,
     this.videoStreamInfo,
   }) {
     ffmpegConverter = new FFmpegConverter();
@@ -165,6 +167,13 @@ class DownloadInfoSet {
       // Remove Existing Metadata
       currentAction.add(language.labelClearingExistingMetadata);
       downloadedFile = await ffmpegConverter.clearFileMetadata(downloadedFile.path);
+      // Apply Audio Normalizer
+      if (normalizeAudio) {
+        currentAction.add(language.labelPatchingAudio);
+        downloadedFile = await ffmpegConverter.normalizeAudio(downloadedFile.path);
+        if (downloadedFile == null) return;
+      }
+      // Apply Audio Filters
       if (audioModifiers.volume != 1.0 || audioModifiers.bassGain != 0 || audioModifiers.trebleGain != 0) {
         currentAction.add(language.labelPatchingAudio);
         downloadedFile = await ffmpegConverter.applyAudioModifiers(downloadedFile.path, audioModifiers);

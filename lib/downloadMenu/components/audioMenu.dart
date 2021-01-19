@@ -29,6 +29,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
   double volumeModifier = 1;
   int bassGain = 0;
   int trebleGain = 0;
+  bool normalizeAudio = false;
 
   void _onDownload(AudioStreamInfo streamInfo) {
     List<dynamic> list = [
@@ -37,6 +38,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
       volumeModifier.toString(),
       bassGain.toString(),
       trebleGain.toString(),
+      normalizeAudio
     ];
     widget.onDownload(list);
   }
@@ -479,7 +481,32 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
               )
             ],
           ),
-          SizedBox(height: 16)
+          SizedBox(height: 8),
+          GestureDetector(
+            onTap: () {
+              setState(() => normalizeAudio = !normalizeAudio);
+            },
+            child: ListTile(
+              title: Container(
+                child: Row(
+                  children: [
+                    Icon(EvaIcons.volumeDownOutline, color: Theme.of(context).accentColor),
+                    SizedBox(width: 8),
+                    Text("Normalize Audio", style: TextStyle(
+                      fontSize: 20,
+                      fontFamily: "YTSans"
+                    )),
+                  ],
+                ),
+              ),
+              trailing: CircularCheckBox(
+                value: normalizeAudio,
+                onChanged: (bool value) {
+                  setState(() => normalizeAudio = value);
+                },
+              )
+            ),
+          ),
         ],
       ),
     );

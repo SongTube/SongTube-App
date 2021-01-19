@@ -252,4 +252,26 @@ class FFmpegConverter {
     return output;
   }
 
+  /// Normalize any [Audio] file using FFmpeg's dynaudnorm
+  Future<File> normalizeAudio(String audioFile) async {
+    assert(audioFile != "" || audioFile != null);
+    String outDir = (await getTemporaryDirectory()).path + "/";
+    String fileFormat = await getMediaFormat(audioFile);
+    File output = File(outDir + RandomString.getRandomString(10) + ".$fileFormat");
+    List<String> _argsList = [
+      "-y", "-i", "$audioFile", "-filter_complex",
+      "[0:a]dynaudnorm", "${output.path}"
+    ];
+    int _result = await flutterFFmpeg.executeWithArguments(_argsList);
+    if (_result == 1)
+      throw Exception(
+        "Audio Normalization Failed\n"
+        "audioFile: $audioFile\n"
+        "argument list: $_argsList\n"
+        "output: $output"
+      );
+    await File(audioFile).delete();
+    return output;
+  }
+
 }

@@ -94,6 +94,7 @@ class DownloadsProvider extends ChangeNotifier {
         bassGain: int.parse(data[3]),
         trebleGain: int.parse(data[4])
       ),
+      normalizeAudio: data[5],
       downloadId: RandomString.getRandomString(6),
       convertingCallback: (String downloadId) {
         moveToConverting(downloadId);
