@@ -5,15 +5,18 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/internal/ffmpeg/converter.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/models/videoFile.dart';
 import 'package:songtube/players/service/playerService.dart';
 import 'package:songtube/players/videoPlayer.dart';
+import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/provider/mediaProvider.dart';
 import 'package:songtube/provider/preferencesProvider.dart';
 import 'package:songtube/ui/animations/blurPageRoute.dart';
 import 'package:songtube/ui/components/popupMenu.dart';
 import 'package:songtube/ui/components/tagsEditorPage.dart';
+import 'package:songtube/ui/internal/snackbar.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class SongsListView extends StatelessWidget {
@@ -120,17 +123,30 @@ class SongsListView extends StatelessWidget {
                       mediaProvider.deleteSong(song);
                       break;
                     case "Edit Tags":
-                      await Navigator.of(context).push(
-                        BlurPageRoute(
-                          builder: (_) {
-                            return TagsEditorPage(
-                              song: song,
-                            );
-                          },
-                          blurStrength: prefs.enableBlurUI
-                            ? 20 : 0
-                        )
-                      );
+                      FFmpegConverter().getMediaFormat(song.id). then((format) {
+                        if (format == "m4a") {
+                          Navigator.of(context).push(
+                            BlurPageRoute(
+                              builder: (_) {
+                                return TagsEditorPage(
+                                  song: song,
+                                );
+                              },
+                              blurStrength: prefs.enableBlurUI
+                                ? 20 : 0
+                            )
+                          );
+                        } else {
+                          AppSnack.showSnackBar(
+                            icon: EvaIcons.alertCircleOutline,
+                            title: "Cannot Edit Tags",
+                            message: "Audio format not supported ($format)",
+                            context: context,
+                            scaffoldKey: Provider.of<ManagerProvider>(context, listen: false)
+                              .internalScaffoldKey.currentState
+                          );
+                        }
+                      });
                       break;
                     case "Apply Filters":
                       // TODO: Allow Audio Filters application
