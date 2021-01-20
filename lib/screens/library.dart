@@ -1,4 +1,5 @@
 // Flutter
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:songtube/internal/languages.dart';
 
@@ -63,108 +64,125 @@ class LibraryScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Watch History Row (First 10 videos only)
-          WatchHistoryRow(),
-          SizedBox(height: 8),
-          Divider(indent: 12, endIndent: 12),
-          // Watch History (All videos)
-          ListTile(
-            leading: Icon(EvaIcons.clockOutline),
-            title: Text(
-              "Watch History",
-              style: TextStyle(
-                fontFamily: 'Product Sans',
-              ),
+          Expanded(
+            child: ListView(
+              children: [
+                // Watch History Row (First 10 videos only)
+                WatchHistoryRow(),
+                SizedBox(height: 8),
+                Divider(indent: 12, endIndent: 12),
+                // Watch History (All videos)
+                ListTile(
+                  leading: Icon(EvaIcons.clockOutline),
+                  title: Text(
+                    "Watch History",
+                    style: TextStyle(
+                      fontFamily: 'Product Sans',
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) {
+                      return WatchHistoryPage();
+                    }));
+                  },
+                ),
+                // Playlist History
+                ListTile(
+                  leading: Icon(MdiIcons.playlistCheck),
+                  title: Text(
+                    "Playlist History",
+                    style: TextStyle(
+                      fontFamily: 'Product Sans',
+                    ),
+                  ),
+                  onTap: () {
+                    // TODO: Push Playlist History Page
+                  },
+                ),
+                // Channel History
+                ListTile(
+                  leading: Icon(EvaIcons.bookOpenOutline),
+                  title: Text(
+                    "Channel History",
+                    style: TextStyle(
+                      fontFamily: 'Product Sans',
+                    ),
+                  ),
+                  onTap: () {
+                    // TODO: Push Channel History Page
+                  },
+                ),
+                Divider(indent: 12, endIndent: 12),
+                // All Social Links
+                Container(
+                  margin: EdgeInsets.only(left: 16, top: 8),
+                  child: Text(
+                    "Social",
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Product Sans',
+                    )
+                  ),
+                ),
+                SocialLinksRow(),
+                SizedBox(height: 16),
+                Divider(indent: 12, endIndent: 12),
+                // Donate
+                ListTile(
+                  onTap: () {
+                    launch("https://paypal.me/artixo");
+                  },
+                  leading: Icon(
+                    EvaIcons.heart,
+                    color: Colors.red,
+                    size: 36,
+                  ),
+                  title: Text(
+                    Languages.of(context).labelDonate,
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Product Sans',
+                    )
+                  ),
+                  subtitle: Text(
+                    "Support Development!",
+                    style: TextStyle(
+                      fontFamily: 'Product Sans'
+                    ),
+                  ),
+                ),
+              ],
             ),
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return WatchHistoryPage();
-              }));
-            },
           ),
-          // Playlist History
-          ListTile(
-            leading: Icon(MdiIcons.playlistCheck),
-            title: Text(
-              "Playlist History",
-              style: TextStyle(
-                fontFamily: 'Product Sans',
-              ),
-            ),
-            onTap: () {
-              // TODO: Push Playlist History Page
-            },
-          ),
-          // Channel History
-          ListTile(
-            leading: Icon(EvaIcons.bookOpenOutline),
-            title: Text(
-              "Channel History",
-              style: TextStyle(
-                fontFamily: 'Product Sans',
-              ),
-            ),
-            onTap: () {
-              // TODO: Push Channel History Page
-            },
-          ),
-          Divider(indent: 12, endIndent: 12),
-          // All Social Links
-          Container(
-            margin: EdgeInsets.only(left: 16, top: 8),
-            child: Text(
-              "Social",
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontFamily: 'Product Sans',
-              )
-            ),
-          ),
-          SocialLinksRow(),
-          SizedBox(height: 16),
-          Divider(indent: 12, endIndent: 12),
-          // Donate
-          ListTile(
-            onTap: () {
-              launch("https://paypal.me/artixo");
-            },
-            leading: Icon(
-              EvaIcons.heart,
-              color: Colors.red,
-              size: 36,
-            ),
-            title: Text(
-              Languages.of(context).labelDonate,
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.w600,
-                fontFamily: 'Product Sans',
-              )
-            ),
-            subtitle: Text(
-              "Support Development!",
-              style: TextStyle(
-                fontFamily: 'Product Sans'
-              ),
-            ),
-          ),
-          Spacer(),
           Container(
             height: 50,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              borderRadius: AudioService?.currentMediaItem != null
+              ? BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20)
+              ) : null,
+              color: Theme.of(context).accentColor
+                .withOpacity(0.4),
+            ),
+            child: Text(
+              "About  •  Contact us",
+              style: TextStyle(
+                fontSize: 15,
+                fontFamily: 'Product Sans',
+                fontWeight: FontWeight.w600
+              ),
+            ),
+          ),
+          if (AudioService?.currentMediaItem != null)
+          Container(
+            height: kBottomNavigationBarHeight*1.4,
             decoration: BoxDecoration(
               color: Theme.of(context).accentColor.withOpacity(0.4),
-            ),
-            child: Center(
-              child: Text(
-                "About  •  Contact us",
-                style: TextStyle(
-                  fontSize: 15,
-                  fontFamily: 'Product Sans',
-                  fontWeight: FontWeight.w600
-                ),
-              ),
             ),
           )
         ],
