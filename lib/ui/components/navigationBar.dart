@@ -57,8 +57,8 @@ class AppBottomNavigationBar extends StatelessWidget {
             label: Languages.of(context).labelMedia
           ),
           BottomNavigationBarItem(
-            icon: Icon(MdiIcons.dotsHorizontal),
-            label: Languages.of(context).labelMore
+            icon: Icon(MdiIcons.folderOutline),
+            label: Languages.of(context).labelLibrary
           )
         ]
       ),
