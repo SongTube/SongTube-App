@@ -1,12 +1,11 @@
 // Flutter
 import 'package:device_info/device_info.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/nativeMethods.dart';
 
 // Internal
-import 'package:songtube/screens/libraryScreen/components/settings/columnTile.dart';
+import 'package:songtube/ui/settings/components/columnTile.dart';
 
 class GeneralSettings extends StatelessWidget {
   @override

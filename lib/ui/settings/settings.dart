@@ -1,13 +1,12 @@
 // Flutter
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:songtube/internal/languages.dart';
 
 // Internal
-import 'package:songtube/screens/libraryScreen/components/settings/components/backupSettings.dart';
-import 'package:songtube/screens/libraryScreen/components/settings/components/downloadSettings.dart';
-import 'package:songtube/screens/libraryScreen/components/settings/components/generalSettings.dart';
-import 'package:songtube/screens/libraryScreen/components/settings/components/themeSettings.dart';
+import 'package:songtube/ui/settings/components/backupSettings.dart';
+import 'package:songtube/ui/settings/components/downloadSettings.dart';
+import 'package:songtube/ui/settings/components/generalSettings.dart';
+import 'package:songtube/ui/settings/components/themeSettings.dart';
 
 class SettingsTab extends StatefulWidget {
   

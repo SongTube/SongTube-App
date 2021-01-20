@@ -4,7 +4,7 @@ import 'package:songtube/internal/languages.dart';
 
 // Internal
 import 'package:songtube/provider/configurationProvider.dart';
-import 'package:songtube/screens/libraryScreen/settings.dart';
+import 'package:songtube/ui/settings/settings.dart';
 import 'package:songtube/screens/libraryScreen/components/quickAcessTile.dart';
 
 // Packages

@@ -7,7 +7,7 @@ import 'package:songtube/internal/languages.dart';
 
 // Internal
 import 'package:songtube/provider/configurationProvider.dart';
-import 'package:songtube/screens/libraryScreen/components/settings/columnTile.dart';
+import 'package:songtube/ui/settings/components/columnTile.dart';
 
 // Packages
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
