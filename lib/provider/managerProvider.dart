@@ -1,8 +1,10 @@
 // Dart
 import 'dart:async';
+import 'dart:convert';
 
 // Flutter
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:songtube/internal/models/infoSets/mediaInfoSet.dart';
 
@@ -145,6 +147,7 @@ class ManagerProvider extends ChangeNotifier {
       );
       VideoId id = mediaInfoSet.videoFromSearch.videoId;
       mediaInfoSet.updateVideoDetails(video);
+      saveToHistory(video);
       notifyListeners();
       // Get the Channel Details
       youtubeExtractor.getChannelByVideoId(id).then((value) {
@@ -177,6 +180,7 @@ class ManagerProvider extends ChangeNotifier {
       // Get the Video Details from our Search
       youtubeExtractor.getVideoDetails(id).then((value) {
         mediaInfoSet.updateVideoDetails(value);
+        saveToHistory(value);
         notifyListeners();
       });
       // Get the Channel Details without waiting for it's result
@@ -287,6 +291,33 @@ class ManagerProvider extends ChangeNotifier {
         );
         mediaInfoSet.autoPlayIndex += 1;
       }
+    }
+  }
+
+  Future<void> saveToHistory(Video video) async {
+    var prefs = await SharedPreferences.getInstance();
+    String json = prefs.getString('watchHistory');
+    if (json == null) {
+      List<Video> videos = [video];
+      List<Map<String, dynamic>> map =
+      videos.map((e) => e.toMap()).toList();
+      prefs.setString('watchHistory', jsonEncode(map));
+    } else {
+      List<Video> history = [];
+      var map = jsonDecode(json);
+      if (map.isNotEmpty) {
+        map.forEach((element) {
+          history.add(Video.fromMap(element));
+        });
+      }
+      if (history.contains(video)) {
+        history.removeAt(history.indexWhere((element) => video == element));
+        history.insert(0, video);
+      } else {
+        history.insert(0, video);
+      }
+      map = history.map((e) => e.toMap()).toList();
+      prefs.setString('watchHistory', jsonEncode(map));
     }
   }
 

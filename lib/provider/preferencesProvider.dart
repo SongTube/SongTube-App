@@ -135,4 +135,31 @@ class PreferencesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Watch History
+  List<Video> get watchHistory {
+    String json = prefs.getString('watchHistory');
+    if (json == null) return [];
+    var map = jsonDecode(json);
+    List<Video> history = [];
+    if (map.isNotEmpty) {
+      map.forEach((element) {
+        history.add(Video.fromMap(element));
+      });
+    }
+    return history;
+  }
+
+  set watchHistory(List<Video> history) {
+    List<Map<String, dynamic>> map =
+      history.map((e) => e.toMap()).toList();
+    prefs.setString('watchHistory', jsonEncode(map));
+    notifyListeners();
+  }
+
+  void watchHistoryInsert(dynamic video) {
+    List<Video> history = watchHistory;
+    history.add(video);
+    watchHistory = history;
+  }
+
 }
