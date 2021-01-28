@@ -5,6 +5,7 @@ import 'package:songtube/internal/languages.dart';
 
 // Internal
 import 'package:songtube/provider/configurationProvider.dart';
+import 'package:songtube/screens/libraryScreen/aboutPage.dart';
 import 'package:songtube/screens/libraryScreen/socialLinksRow.dart';
 import 'package:songtube/screens/libraryScreen/watchHistory.dart';
 import 'package:songtube/screens/libraryScreen/watchHistoryRow.dart';
@@ -51,7 +52,8 @@ class LibraryScreen extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(right: 12),
             child: IconButton(
-              icon: Icon(EvaIcons.settingsOutline),
+              icon: Icon(EvaIcons.settingsOutline,
+                color: Theme.of(context).iconTheme.color),
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute
                   (builder: (context) => SettingsTab()));
@@ -78,6 +80,7 @@ class LibraryScreen extends StatelessWidget {
                     "Watch History",
                     style: TextStyle(
                       fontFamily: 'Product Sans',
+                      color: Theme.of(context).textTheme.bodyText1.color
                     ),
                   ),
                   onTap: () {
@@ -93,6 +96,7 @@ class LibraryScreen extends StatelessWidget {
                     "Playlist History",
                     style: TextStyle(
                       fontFamily: 'Product Sans',
+                      color: Theme.of(context).textTheme.bodyText1.color
                     ),
                   ),
                   onTap: () {
@@ -106,6 +110,7 @@ class LibraryScreen extends StatelessWidget {
                     "Channel History",
                     style: TextStyle(
                       fontFamily: 'Product Sans',
+                      color: Theme.of(context).textTheme.bodyText1.color
                     ),
                   ),
                   onTap: () {
@@ -122,6 +127,7 @@ class LibraryScreen extends StatelessWidget {
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontFamily: 'Product Sans',
+                      color: Theme.of(context).textTheme.bodyText1.color
                     )
                   ),
                 ),
@@ -145,46 +151,79 @@ class LibraryScreen extends StatelessWidget {
                       fontSize: 22,
                       fontWeight: FontWeight.w600,
                       fontFamily: 'Product Sans',
+                      color: Theme.of(context).textTheme.bodyText1.color
                     )
                   ),
                   subtitle: Text(
                     "Support Development!",
                     style: TextStyle(
-                      fontFamily: 'Product Sans'
+                      fontFamily: 'Product Sans',
+                      color: Theme.of(context).textTheme.bodyText1.color
                     ),
                   ),
                 ),
+                if (AudioService?.currentMediaItem != null)
+                // About us
+                ListTile(
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) {
+                      return AboutPage();
+                    }));
+                  },
+                  leading: Icon(
+                    EvaIcons.questionMarkCircle,
+                    color: Colors.orangeAccent,
+                    size: 36,
+                  ),
+                  title: Text(
+                    "About",
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Product Sans',
+                      color: Theme.of(context).textTheme.bodyText1.color
+                    )
+                  ),
+                  subtitle: Text(
+                    "Licenses, Contact Info and more",
+                    style: TextStyle(
+                      fontFamily: 'Product Sans',
+                      color: Theme.of(context).textTheme.bodyText1.color
+                    ),
+                  ),
+                ),
+                if (AudioService?.currentMediaItem != null)
+                SizedBox(height: kBottomNavigationBarHeight*1.5)
               ],
             ),
           ),
-          Container(
-            height: 50,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              borderRadius: AudioService?.currentMediaItem != null
-              ? BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(20)
-              ) : null,
-              color: Theme.of(context).accentColor
-                .withOpacity(0.4),
-            ),
-            child: Text(
-              "About  •  Contact us",
-              style: TextStyle(
-                fontSize: 15,
-                fontFamily: 'Product Sans',
-                fontWeight: FontWeight.w600
+          if (AudioService?.currentMediaItem == null)
+          GestureDetector(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return AboutPage();
+              }));
+            },
+            child: Container(
+              height: 50,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Theme.of(context).brightness == Brightness.light
+                  ? Theme.of(context).accentColor : Theme.of(context).accentColor
+                  .withOpacity(0.4)
+              ),
+              child: Text(
+                "About  •  Contact us",
+                style: TextStyle(
+                  fontSize: 15,
+                  fontFamily: 'Product Sans',
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white
+                ),
               ),
             ),
           ),
-          if (AudioService?.currentMediaItem != null)
-          Container(
-            height: kBottomNavigationBarHeight*1.4,
-            decoration: BoxDecoration(
-              color: Theme.of(context).accentColor.withOpacity(0.4),
-            ),
-          )
         ],
       )
     );
