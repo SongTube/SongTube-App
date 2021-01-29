@@ -9,15 +9,31 @@ import 'package:songtube/routes/videoCollapsed.dart';
 
 typedef FloatingWidgetCallback = void Function(double position);
 
-class SlidableVideoPage extends StatelessWidget {
+class SlidableVideoPage extends StatefulWidget {
   final FloatingWidgetCallback callback;
   SlidableVideoPage({
     @required this.callback,
   });
+
+  @override
+  _SlidableVideoPageState createState() => _SlidableVideoPageState();
+}
+
+class _SlidableVideoPageState extends State<SlidableVideoPage> {
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<ManagerProvider>(context, listen: false)
+        .expandablePlayerPanelController.open();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    ManagerProvider manager = Provider.of<ManagerProvider>(context, listen: false);
-    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context, listen: false);
+    ManagerProvider manager = Provider.of<ManagerProvider>(context);
+    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     var borderRadius = 20.0;
     return SlidingUpPanel(
       controller: manager.expandablePlayerPanelController,
@@ -33,7 +49,7 @@ class SlidableVideoPage extends StatelessWidget {
       borderRadius: borderRadius,
       backdropBlurStrength: prefs.enableBlurUI ? 15 : 0,
       onPanelSlide: (double position) {
-        callback(position);
+        widget.callback(position);
       },
       boxShadow: [
         BoxShadow(

@@ -146,7 +146,7 @@ class _StreamManifestPlayerState extends State<StreamManifestPlayer> {
                 padding: EdgeInsets.zero,
                 colors: VideoProgressColors(
                   playedColor: Theme.of(context).accentColor,
-                  bufferedColor: Colors.white,
+                  bufferedColor: Colors.white.withOpacity(0.6),
                   backgroundColor: Colors.white.withOpacity(0.4)
                 ),
               ),

@@ -275,7 +275,9 @@ class ManagerProvider extends ChangeNotifier {
   Future<void> updateMediaInfoSet(dynamic searchResult, List<Video> related) async {
     mediaInfoSet = MediaInfoSet();
     notifyListeners();
-    expandablePlayerPanelController.open();
+    if (expandablePlayerPanelController.isAttached) {
+      expandablePlayerPanelController.open();
+    }
     var id = getIdFromSearchResult(searchResult);
     if (related != null) {
       updateCurrentRelatedVideos(id: id, relatedVideos: related);
