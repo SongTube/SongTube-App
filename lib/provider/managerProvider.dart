@@ -290,10 +290,10 @@ class ManagerProvider extends ChangeNotifier {
       mediaInfoSet.videoDetails = mediaInfoSet.relatedVideos[0];
       notifyListeners();
       await updateCurrentManifest(
-        mediaInfoSet.relatedVideos[1].id
+        mediaInfoSet.relatedVideos[0].id
       );
       await updateCurrentChannel(
-        mediaInfoSet.relatedVideos[1].id
+        mediaInfoSet.relatedVideos[0].id
       );
     }
   }
