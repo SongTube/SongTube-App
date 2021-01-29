@@ -109,7 +109,7 @@ class PreferencesProvider extends ChangeNotifier {
   }
 
   bool get enablePlayerBlurBackground {
-    return prefs.getBool('enablePlayerBlurBackground') ?? true;
+    return prefs?.getBool('enablePlayerBlurBackground') ?? true;
   }
   set enablePlayerBlurBackground(bool value) {
     prefs.setBool('enablePlayerBlurBackground', value);
