@@ -37,13 +37,6 @@ class WatchHistoryPage extends StatelessWidget {
             onTap: () {
               Navigator.pop(context);
               manager.updateMediaInfoSet(video, history);
-              Navigator.push(context,
-              BlurPageRoute(
-                blurStrength: prefs.enableBlurUI ? 20 : 0,
-                slideOffset: Offset(0.0, 10.0),
-                builder: (_) => 
-                YoutubePlayerVideoPage()
-              ));
             },
             child: Container(
               color: Colors.transparent,
