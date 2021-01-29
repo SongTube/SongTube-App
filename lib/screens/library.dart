@@ -5,6 +5,7 @@ import 'package:songtube/internal/languages.dart';
 
 // Internal
 import 'package:songtube/provider/configurationProvider.dart';
+import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/screens/libraryScreen/aboutPage.dart';
 import 'package:songtube/screens/libraryScreen/socialLinksRow.dart';
 import 'package:songtube/screens/libraryScreen/watchHistory.dart';
@@ -23,6 +24,7 @@ class LibraryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
+    ManagerProvider manager = Provider.of<ManagerProvider>(context);
     return Scaffold(
       backgroundColor: Theme.of(context).cardColor,
       appBar: AppBar(
@@ -162,7 +164,7 @@ class LibraryScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (AudioService?.currentMediaItem != null)
+                if (AudioService?.currentMediaItem != null || manager.mediaInfoSet != null)
                 // About us
                 ListTile(
                   onTap: () {
@@ -193,12 +195,12 @@ class LibraryScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (AudioService?.currentMediaItem != null)
+                if (AudioService?.currentMediaItem != null || manager.mediaInfoSet != null)
                 SizedBox(height: kBottomNavigationBarHeight*1.5)
               ],
             ),
           ),
-          if (AudioService?.currentMediaItem == null)
+          if (AudioService?.currentMediaItem == null && manager.mediaInfoSet == null)
           GestureDetector(
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
