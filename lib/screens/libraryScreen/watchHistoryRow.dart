@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:image_fade/image_fade.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/provider/preferencesProvider.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
@@ -9,6 +10,7 @@ class WatchHistoryRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
+    ManagerProvider manager = Provider.of<ManagerProvider>(context);
     List<Video> watchHistory = prefs.watchHistory;
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -35,39 +37,44 @@ class WatchHistoryRow extends StatelessWidget {
                   ? watchHistory.length : 10,
                 itemBuilder: (context, index) {
                   Video video = watchHistory[index];
-                  return Container(
-                    width: 160,
-                    margin: EdgeInsets.only(left: 16),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: AspectRatio(
-                            aspectRatio: 16/9,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: ImageFade(
-                                fit: BoxFit.cover,
-                                fadeDuration: Duration(milliseconds: 200),
-                                image: NetworkImage(video.thumbnails.mediumResUrl),
+                  return GestureDetector(
+                    onTap: () {
+                      manager.updateMediaInfoSet(video, watchHistory);
+                    },
+                    child: Container(
+                      width: 160,
+                      margin: EdgeInsets.only(left: 16),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: AspectRatio(
+                              aspectRatio: 16/9,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: ImageFade(
+                                  fit: BoxFit.cover,
+                                  fadeDuration: Duration(milliseconds: 200),
+                                  image: NetworkImage(video.thumbnails.mediumResUrl),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        SizedBox(height: 8),
-                        Container(
-                          height: 40,
-                          padding: EdgeInsets.only(left: 4, right: 4),
-                          child: Text(
-                            "${video.title}",
-                            maxLines: 2,
-                            overflow: TextOverflow.clip,
-                            textAlign: TextAlign.start,
-                          ),
-                        )
-                      ],
+                          SizedBox(height: 8),
+                          Container(
+                            height: 40,
+                            padding: EdgeInsets.only(left: 4, right: 4),
+                            child: Text(
+                              "${video.title}",
+                              maxLines: 2,
+                              overflow: TextOverflow.clip,
+                              textAlign: TextAlign.start,
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   );
                 },
