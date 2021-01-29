@@ -92,7 +92,7 @@ class LibraryScreen extends StatelessWidget {
                   },
                 ),
                 // Playlist History
-                ListTile(
+                /*ListTile(
                   leading: Icon(MdiIcons.playlistCheck),
                   title: Text(
                     "Playlist History",
@@ -118,7 +118,7 @@ class LibraryScreen extends StatelessWidget {
                   onTap: () {
                     // TODO: Push Channel History Page
                   },
-                ),
+                ),*/
                 Divider(indent: 12, endIndent: 12),
                 // All Social Links
                 Container(
