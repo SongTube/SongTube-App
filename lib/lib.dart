@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:package_info/package_info.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:songtube/internal/models/infoSets/mediaInfoSet.dart';
 import 'package:songtube/internal/nativeMethods.dart';
 
 // Internal
@@ -19,6 +20,7 @@ import 'package:songtube/provider/downloadsProvider.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/provider/mediaProvider.dart';
 import 'package:songtube/provider/preferencesProvider.dart';
+import 'package:songtube/routes/slidableVideoPage.dart';
 import 'package:songtube/routes/video.dart';
 import 'package:songtube/screens/downloads.dart';
 import 'package:songtube/screens/home.dart';
@@ -152,13 +154,6 @@ class _LibState extends State<Lib> {
       Provider.of<ManagerProvider>(context, listen: false)
         .updateMediaInfoSet(video, null);
       Navigator.pop(context);
-      Navigator.push(context,
-        BlurPageRoute(
-          blurStrength: Provider.of<PreferencesProvider>(context, listen: false)
-            .enableBlurUI ? 20 : 0,
-          slideOffset: Offset(0.0, 10.0),
-          builder: (_) => YoutubePlayerVideoPage()
-      ));
     }
     if (PlaylistId.parsePlaylistId(intent) != null) {
       String id = PlaylistId.parsePlaylistId(intent);
@@ -171,13 +166,6 @@ class _LibState extends State<Lib> {
       Provider.of<ManagerProvider>(context, listen: false)
         .updateMediaInfoSet(playlist, null);
       Navigator.pop(context);
-      Navigator.push(context,
-        BlurPageRoute(
-          blurStrength: Provider.of<PreferencesProvider>(context, listen: false)
-            .enableBlurUI ? 20 : 0,
-          slideOffset: Offset(0.0, 10.0),
-          builder: (_) => YoutubePlayerVideoPage(isPlaylist: true)
-      ));
     }
   }
 
@@ -219,7 +207,10 @@ class _LibState extends State<Lib> {
             builder: (context, mediaProvider, manager, child) {
               return WillPopScope(
                 onWillPop: () {
-                  if (mediaProvider.slidingPanelOpen) {
+                  if (manager.expandablePlayerPanelController.isPanelOpen) {
+                    manager.expandablePlayerPanelController.close();
+                    return Future.value(false);
+                  } else if (mediaProvider.slidingPanelOpen) {
                     mediaProvider.slidingPanelOpen = false;
                     mediaProvider.panelController.close();
                     return Future.value(false);
@@ -253,11 +244,39 @@ class _LibState extends State<Lib> {
           setState(() => _screenIndex = index);
         }
       ),
-      floatingWidget: SlidingPlayerPanel(
-        callback: (double position) {
-          _scaffoldStateKey.currentState
-            .updateInternalController(position);
-        },
+      floatingWidget: Stack(
+        children: [
+          Consumer<ManagerProvider>(
+            builder: (context, manager, child) {
+              return AnimatedSwitcher(
+                duration: Duration(milliseconds: 300),
+                child: manager.mediaInfoSet == null
+                  ? child : Container(),
+              );
+            },
+            child: SlidingPlayerPanel(
+              callback: (double position) {
+                _scaffoldStateKey.currentState
+                  .updateInternalController(position);
+              },
+            ),
+          ),
+          Consumer<ManagerProvider>(
+            builder: (context, manager, _) {
+              return AnimatedSwitcher(
+                duration: Duration(milliseconds: 300),
+                child: manager.mediaInfoSet != null
+                  ? SlidableVideoPage(
+                      callback: (double position) {
+                        _scaffoldStateKey.currentState
+                          .updateInternalController(position);
+                      },
+                    )
+                  : Container(),
+              );
+            },
+          )
+        ],
       )
     );
   }

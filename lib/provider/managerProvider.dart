@@ -162,12 +162,14 @@ class ManagerProvider extends ChangeNotifier {
     if (searchResult is Video) {
       Video video = searchResult;
       mediaInfoSet.mediaType = MediaInfoSetType.Video;
+      notifyListeners();
       mediaInfoSet.videoFromSearch = videoToSearchVideo(video);
       mediaInfoSet.updateVideoDetails(video);
       saveToHistory(video);
       notifyListeners();
     } else if (searchResult is SearchVideo) {
       mediaInfoSet.mediaType = MediaInfoSetType.Video;
+      notifyListeners();
       mediaInfoSet.videoFromSearch = searchResult;
       VideoId id = mediaInfoSet.videoFromSearch.videoId;
       notifyListeners();
@@ -178,6 +180,7 @@ class ManagerProvider extends ChangeNotifier {
       notifyListeners();
     } else if (searchResult is SearchPlaylist) {
       mediaInfoSet.mediaType = MediaInfoSetType.Playlist;
+      notifyListeners();
       mediaInfoSet.playlistFromSearch = searchResult;
       PlaylistId id = mediaInfoSet.playlistFromSearch.playlistId;
       notifyListeners();
@@ -189,6 +192,7 @@ class ManagerProvider extends ChangeNotifier {
     } else {
       Playlist playlist = searchResult;
       mediaInfoSet.mediaType = MediaInfoSetType.Playlist;
+      notifyListeners();
       mediaInfoSet.playlistFromSearch = SearchPlaylist(
         playlist.id,
         playlist.title,
@@ -270,6 +274,8 @@ class ManagerProvider extends ChangeNotifier {
 
   Future<void> updateMediaInfoSet(dynamic searchResult, List<Video> related) async {
     mediaInfoSet = MediaInfoSet();
+    notifyListeners();
+    expandablePlayerPanelController.open();
     var id = getIdFromSearchResult(searchResult);
     if (related != null) {
       updateCurrentRelatedVideos(id: id, relatedVideos: related);

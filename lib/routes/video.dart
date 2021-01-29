@@ -70,12 +70,11 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> {
         key: scaffoldKey,
         body: FadeInTransition(
           duration: Duration(milliseconds: 400),
-          child: OrientationBuilder(
-            builder: (context, orientation) {
-              if (orientation == Orientation.portrait) {
-                return _portraitPage();
-              } else {
-                return AnimatedSwitcher(
+          child: AnimatedSwitcher(
+            duration: Duration(milliseconds: 300),
+            child: MediaQuery.of(context).orientation == Orientation.portrait
+              ? _portraitPage()
+              : AnimatedSwitcher(
                   duration: Duration(milliseconds: 400),
                   child: manager.playerController != null 
                     ? Material(
@@ -112,9 +111,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> {
                         ),
                       )
                     : _videoLoading()
-                );
-              }
-            }
+            )
           ),
         ),
         floatingActionButton: OrientationBuilder(

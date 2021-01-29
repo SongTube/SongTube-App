@@ -53,17 +53,6 @@ class VideoTile extends StatelessWidget {
           searchItem,
           relatedVideos
         );
-        Navigator.push(context,
-        BlurPageRoute(
-          blurStrength: prefs.enableBlurUI ? 20 : 0,
-          slideOffset: Offset(0.0, 10.0),
-          builder: (_) {
-            return YoutubePlayerVideoPage(
-              isPlaylist: searchItem is Playlist || searchItem is SearchPlaylist
-                ? true : false,
-            );
-          }
-        ));
       },
       child: Ink(
         decoration: BoxDecoration(
