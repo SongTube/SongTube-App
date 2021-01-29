@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 class VideoDownloadFab extends StatelessWidget {
   final bool readyToDownload;
   final Function onDownload;
+  final bool isPlaylist;
   VideoDownloadFab({
     @required this.readyToDownload,
-    @required this.onDownload
+    @required this.onDownload,
+    this.isPlaylist = false
   });
   @override
   Widget build(BuildContext context) {

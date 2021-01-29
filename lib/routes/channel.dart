@@ -110,17 +110,14 @@ class YoutubeChannelPage extends StatelessWidget {
                             related: videos,
                             onVideoTap: (index) {
                               Navigator.pop(context);
-                              manager.updateMediaInfoSet(videos[index], null);
+                              manager.updateMediaInfoSet(videos[index], videos);
                               Navigator.push(context,
                               BlurPageRoute(
                                 blurStrength: prefs.enableBlurUI ? 20 : 0,
                                 slideOffset: Offset(0.0, 10.0),
                                 builder: (_) => 
-                                YoutubePlayerVideoPage(
-                                  related: videos,
-                                  url: videos[index].id.value,
-                                  thumbnailUrl: "${videos[index].thumbnails.highResUrl}",
-                              )));
+                                YoutubePlayerVideoPage()
+                              ));
                             }
                           )
                         : Padding(

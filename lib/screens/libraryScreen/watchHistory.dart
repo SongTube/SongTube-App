@@ -36,17 +36,14 @@ class WatchHistoryPage extends StatelessWidget {
           return GestureDetector(
             onTap: () {
               Navigator.pop(context);
-              manager.updateMediaInfoSet(video, null);
+              manager.updateMediaInfoSet(video, history);
               Navigator.push(context,
               BlurPageRoute(
                 blurStrength: prefs.enableBlurUI ? 20 : 0,
                 slideOffset: Offset(0.0, 10.0),
                 builder: (_) => 
-                YoutubePlayerVideoPage(
-                  related: history,
-                  url: video.id.value,
-                  thumbnailUrl: "${video.thumbnails.highResUrl}",
-              )));
+                YoutubePlayerVideoPage()
+              ));
             },
             child: Container(
               color: Colors.transparent,

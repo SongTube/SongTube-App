@@ -18,7 +18,6 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/provider/preferencesProvider.dart';
 import 'package:songtube/routes/channel.dart';
-import 'package:songtube/routes/playlist.dart';
 import 'package:songtube/routes/video.dart';
 import 'package:songtube/ui/animations/blurPageRoute.dart';
 import 'package:songtube/ui/components/popupMenu.dart';
@@ -59,21 +58,10 @@ class VideoTile extends StatelessWidget {
           blurStrength: prefs.enableBlurUI ? 20 : 0,
           slideOffset: Offset(0.0, 10.0),
           builder: (_) {
-            if (searchItem is Video) {
-              return YoutubePlayerVideoPage(
-                url: searchItem.id.value,
-                thumbnailUrl: searchItem.thumbnails.highResUrl
-              );
-            } else if (searchItem is SearchVideo) {
-              return YoutubePlayerVideoPage(
-                url: searchItem.videoId.value,
-                thumbnailUrl: searchItem.videoThumbnails.last.url.toString(),
-              );
-            } else if (searchItem is SearchPlaylist) {
-              return YoutubePlayerPlaylistPage();
-            } else {
-              return Container();
-            }
+            return YoutubePlayerVideoPage(
+              isPlaylist: searchItem is Playlist || searchItem is SearchPlaylist
+                ? true : false,
+            );
           }
         ));
       },

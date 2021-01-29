@@ -12,10 +12,12 @@ class RelatedVideosList extends StatelessWidget {
   final List<Video> related;
   final bool shrinkWrap;
   final Function(int) onVideoTap;
+  final bool isPlaylist;
   RelatedVideosList({
     this.related,
     this.onVideoTap,
     this.shrinkWrap = true,
+    this.isPlaylist = false
   });
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,9 @@ class RelatedVideosList extends StatelessWidget {
             children: [
               SizedBox(width: 16),
               Text(
-                Languages.of(context).labelRelated,
+                !isPlaylist
+                  ? Languages.of(context).labelRelated
+                  : Languages.of(context).labelPlaylist,
                 style: TextStyle(
                   fontSize: 14,
                   color: Theme.of(context).textTheme.bodyText1.color,

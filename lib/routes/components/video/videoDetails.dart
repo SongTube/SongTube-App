@@ -5,15 +5,20 @@ import 'package:transparent_image/transparent_image.dart';
 
 class VideoDetails extends StatelessWidget {
   final MediaInfoSet infoset;
+  final bool isPlaylist;
   VideoDetails({
-    @required this.infoset
+    @required this.infoset,
+    this.isPlaylist = false
   });
   @override
   Widget build(BuildContext context) {
     String channelLogo = infoset.channelDetails != null
       ? infoset.channelDetails.logoUrl : null;
-    String title = infoset.videoFromSearch.videoTitle;
-    String author = infoset.videoFromSearch.videoAuthor;
+    String title = !isPlaylist
+      ? infoset.videoFromSearch.videoTitle
+      : infoset.playlistFromSearch.playlistTitle;
+    String author = !isPlaylist
+      ? infoset.videoFromSearch.videoAuthor : " ";
     String duration = infoset.videoDetails != null
       ? infoset.videoDetails.duration.inMinutes.remainder(60).toString().padLeft(2, '0') + " min "
         + infoset.videoDetails.duration.inSeconds.remainder(60).toString().padLeft(2, '0') + " sec"

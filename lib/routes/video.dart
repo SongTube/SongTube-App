@@ -9,6 +9,7 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:image_fade/image_fade.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/languages.dart';
+import 'package:songtube/internal/models/infoSets/mediaInfoSet.dart';
 import 'package:songtube/internal/musicBrainzApi.dart';
 import 'package:songtube/players/youtubePlayer.dart';
 import 'package:songtube/provider/managerProvider.dart';
@@ -33,13 +34,9 @@ import 'components/video/videoDetails.dart';
 import 'components/video/videoEngagement.dart';
 
 class YoutubePlayerVideoPage extends StatefulWidget {
-  final String url;
-  final String thumbnailUrl;
-  final List<Video> related;
+  final bool isPlaylist;
   YoutubePlayerVideoPage({
-    @required this.url,
-    @required this.thumbnailUrl,
-    this.related
+    this.isPlaylist = false
   });
 
   @override
@@ -49,35 +46,15 @@ class YoutubePlayerVideoPage extends StatefulWidget {
 class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> {
 
   GlobalKey<ScaffoldState> scaffoldKey;
-  double playerSize;
-
-  bool showPlayer = false;
-  bool useFadeInImage = false;
-  String thumbnailUrl;
-
-  // Video Player Controller
-  VideoPlayerController _controller;
 
   @override
   void initState() {
-    thumbnailUrl = widget.thumbnailUrl;
     super.initState();
-    Future.delayed(Duration(milliseconds: 500), () =>
-      setState(() => showPlayer = true));
     scaffoldKey = GlobalKey<ScaffoldState>();
     KeyboardVisibility.onChange.listen((bool visible) {
         if (visible == false) FocusScope.of(context).requestFocus(new FocusNode());
       }
     );
-    _updateVideo(thumbnail: thumbnailUrl);
-  }
-
-  @override
-  void dispose() {
-    if (_controller != null) {
-      _controller.dispose();
-    }
-    super.dispose();
   }
 
   @override
@@ -100,17 +77,28 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> {
               } else {
                 return AnimatedSwitcher(
                   duration: Duration(milliseconds: 400),
-                  child: showPlayer && _controller != null 
+                  child: manager.playerController != null 
                     ? Material(
                         color: Colors.black,
                         child: StreamManifestPlayer(
                           manifest: manager.mediaInfoSet.streamManifest,
-                          controller: _controller,
+                          controller: manager.playerController,
                           isFullscreen: true,
-                          onVideoEnded: () {
+                          onVideoEnded: () async {
                             if (prefs.youtubeAutoPlay) {
-                              manager.streamPlayerAutoPlay();
-                              Future.delayed(Duration(milliseconds: 400), () =>_updateVideo());
+                              int currentIndex = manager.mediaInfoSet.autoPlayIndex;
+                              if (currentIndex <= manager.mediaInfoSet.relatedVideos.length-1) {
+                                manager.updateBySearchResult(
+                                  manager.mediaInfoSet.relatedVideos[currentIndex]
+                                );
+                                await manager.updateCurrentManifest(
+                                  manager.mediaInfoSet.relatedVideos[currentIndex].id
+                                );
+                                manager.updateCurrentChannel(
+                                  manager.mediaInfoSet.relatedVideos[currentIndex].id
+                                );
+                                manager.mediaInfoSet.autoPlayIndex += 1;
+                              }
                             }
                           },
                           onFullscreenTap: () {
@@ -133,7 +121,8 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> {
           builder: (context, orientation) {
             if (orientation == Orientation.portrait) {
               return VideoDownloadFab(
-                readyToDownload: manager.mediaInfoSet.streamManifest == null ||
+                isPlaylist: widget.isPlaylist,
+                readyToDownload: manager.playerController == null ||
                   manager.mediaInfoSet.videoDetails == null ? false : true,
                 onDownload: () {
                   FocusScope.of(context).requestFocus(new FocusNode());
@@ -155,6 +144,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> {
                             tags: manager.mediaInfoSet.mediaTags,
                             videoDetails: manager.mediaInfoSet.videoDetails,
                             scaffoldState: scaffoldKey.currentState,
+                            playlistVideos: manager.mediaInfoSet.relatedVideos
                           ),
                         ],
                       );
@@ -187,36 +177,39 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> {
           margin: EdgeInsets.only(left: 12, right: 12),
           child: AspectRatio(
             aspectRatio: 16/9,
-            child: Hero(
-              tag: "${widget.url}player",
-              child: MeasureSize(
-                onChange: (size) {
-                  playerSize = size.height;
-                },
-                child: AnimatedSwitcher(
-                  duration: Duration(milliseconds: 400),
-                  child: showPlayer && _controller != null
-                    ? StreamManifestPlayer(
-                        manifest: manager.mediaInfoSet.streamManifest,
-                        controller: _controller,
-                        isFullscreen: false,
-                        onVideoEnded: () {
-                          if (prefs.youtubeAutoPlay) {
-                            manager.streamPlayerAutoPlay();
-                            Future.delayed(Duration(milliseconds: 400), () =>_updateVideo());
-                          }
-                        },
-                        onFullscreenTap: () {
-                          SystemChrome.setPreferredOrientations([
-                            DeviceOrientation.landscapeLeft,
-                            DeviceOrientation.landscapeRight,
-                          ]);
-                          SystemChrome.setEnabledSystemUIOverlays([]);
-                        },
-                      )
-                    : _videoLoading()
-                ),
-              ),
+            child: AnimatedSwitcher(
+              duration: Duration(milliseconds: 400),
+              child: manager.playerController != null
+                ? StreamManifestPlayer(
+                    manifest: manager.mediaInfoSet.streamManifest,
+                    controller: manager.playerController,
+                    isFullscreen: false,
+                    onVideoEnded: () async {
+                      if (prefs.youtubeAutoPlay) {
+                        int currentIndex = manager.mediaInfoSet.autoPlayIndex;
+                        if (currentIndex <= manager.mediaInfoSet.relatedVideos.length-1) {
+                          manager.updateBySearchResult(
+                            manager.mediaInfoSet.relatedVideos[currentIndex]
+                          );
+                          await manager.updateCurrentManifest(
+                            manager.mediaInfoSet.relatedVideos[currentIndex].id
+                          );
+                          manager.updateCurrentChannel(
+                            manager.mediaInfoSet.relatedVideos[currentIndex].id
+                          );
+                          manager.mediaInfoSet.autoPlayIndex += 1;
+                        }
+                      }
+                    },
+                    onFullscreenTap: () {
+                      SystemChrome.setPreferredOrientations([
+                        DeviceOrientation.landscapeLeft,
+                        DeviceOrientation.landscapeRight,
+                      ]);
+                      SystemChrome.setEnabledSystemUIOverlays([]);
+                    },
+                  )
+                : _videoLoading()
             ),
           ),
         ),
@@ -231,6 +224,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> {
                 // Video Details
                 VideoDetails(
                   infoset: manager.mediaInfoSet,
+                  isPlaylist: widget.isPlaylist
                 ),
                 // ---------------------------------------
                 // Likes, dislikes, Views and Share button
@@ -259,20 +253,31 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> {
                             },
                           ),
                           Divider(),
-                          // Tags Editor
+                          // Tags Editor (Not available on Playlists)
+                          if (!widget.isPlaylist)
                           VideoTags(),
+                          if (!widget.isPlaylist)
                           Divider(),
                           // Related Videos
                           RelatedVideosList(
-                            related: widget.related == null
-                              ? manager.mediaInfoSet.relatedVideos
-                              : widget.related,
-                            onVideoTap: (index) {
-                              manager.updateMediaInfoSet(
-                                manager.mediaInfoSet.relatedVideos[index],
-                                manager.mediaInfoSet.relatedVideos
+                            related: manager.mediaInfoSet.relatedVideos,
+                            isPlaylist: widget.isPlaylist,
+                            onVideoTap: (index) async {
+                              manager.mediaInfoSet.autoPlayIndex = index+1;
+                              manager.updateBySearchResult(
+                                manager.mediaInfoSet.relatedVideos[index]
                               );
-                              _updateVideo();
+                              await manager.updateCurrentManifest(
+                                manager.mediaInfoSet.relatedVideos[index].id
+                              );
+                              if (
+                                manager.mediaInfoSet.channelDetails.title != 
+                                manager.mediaInfoSet.relatedVideos[index].author
+                              ) {
+                                manager.updateCurrentChannel(
+                                  manager.mediaInfoSet.relatedVideos[index].id
+                                );
+                              }
                             },
                           )
                         ],
@@ -301,45 +306,10 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> {
   }
 
   Widget _videoLoading() {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(10),
-      child: Stack(
-        alignment: Alignment.center,
-        fit: StackFit.loose,
-        children: [
-          useFadeInImage
-          ? ImageFade(
-              fadeDuration: Duration(milliseconds: 300),
-              width: double.infinity,
-              fit: BoxFit.cover,
-              image: NetworkImage(thumbnailUrl),
-            )
-          : Image.network(
-              thumbnailUrl, width: double.infinity, fit: BoxFit.cover,
-            ),
-          CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation(Colors.white),
-          )
-        ],
+    return Center(
+      child: CircularProgressIndicator(
+        valueColor: AlwaysStoppedAnimation(Colors.white),
       ),
     );
-  }
-
-  void _updateVideo({String thumbnail}) async {
-    ManagerProvider manager = Provider.of<ManagerProvider>(context, listen: false);
-    thumbnailUrl = thumbnail == null
-      ? manager.mediaInfoSet.videoDetails.thumbnails.highResUrl : thumbnail;
-    setState(() => showPlayer = false);
-    VideoId id = manager.mediaInfoSet.videoFromSearch.videoId;
-    manager.youtubeExtractor.getStreamManifest(id).then((value) {
-      manager.mediaInfoSet.streamManifest = value;
-      manager.playerStream = value;
-      _controller = VideoPlayerController.network(
-        manager.mediaInfoSet.streamManifest.muxed.withHighestBitrate().url.toString()
-      )..initialize().then((value) {
-        _controller.play();
-        setState(() { showPlayer = true; useFadeInImage = true; });
-      });
-    });
   }
 }
