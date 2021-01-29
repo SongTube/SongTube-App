@@ -43,10 +43,12 @@ class VideoPageCollapsed extends StatelessWidget {
                     ? FadeInImage(
                         fadeInDuration: Duration(milliseconds: 400),
                         placeholder: MemoryImage(kTransparentImage),
-                        image: NetworkImage(
-                          manager.mediaInfoSet.videoFromSearch
-                            .videoThumbnails[0].url.toString()
-                        ),
+                        image: manager?.mediaInfoSet?.videoDetails
+                          ?.thumbnails?.mediumResUrl != null
+                            ? NetworkImage(
+                                manager.mediaInfoSet.videoDetails
+                                  .thumbnails.mediumResUrl)
+                            : MemoryImage(kTransparentImage),
                         fit: BoxFit.cover,
                       )
                     : Container(
