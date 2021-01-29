@@ -306,6 +306,17 @@ class ManagerProvider extends ChangeNotifier {
     }
   }
   
+  void disposeMediaInfoSet() {
+    mediaInfoSet = null;
+    expandablePlayerPanelController = PanelController();
+    if (playerController != null) {
+      playerController.dispose();
+    }
+    youtubeExtractor.killIsolates();
+    playerController = null;
+    notifyListeners();
+  }
+
   Future<void> saveToHistory(Video video) async {
     var prefs = await SharedPreferences.getInstance();
     String json = prefs.getString('watchHistory');
