@@ -1,3 +1,4 @@
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -109,34 +110,19 @@ class VideoPageCollapsed extends StatelessWidget {
           ),
           // Play/Pause
           SizedBox(width: 8),
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              StreamBuilder(
-                stream: Rx.combineLatest2<double, double, double>(
-                  _dragPositionSubject.stream,
-                  Stream.periodic(Duration(milliseconds: 1000)),
-                  (dragPosition, _) => dragPosition),
-                builder: (context, snapshot) {
-                  Duration position = manager?.playerController?.value?.position ?? Duration(microseconds: 0);
-                  Duration duration = manager?.playerController?.value?.duration ?? Duration(seconds: 1);
-                  return CircularProgressIndicator(
-                    strokeWidth: 3,
-                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                    valueColor: AlwaysStoppedAnimation(Theme.of(context).accentColor),
-                    value: (position.inMilliseconds/duration.inMilliseconds),
-                  );
-                }
-              ),
-              IconButton(
-                icon: manager?.playerController?.value?.isPlaying ?? false
-                  ? Icon(MdiIcons.pause, size: 22)
-                  : Icon(MdiIcons.play, size: 22),
-                onPressed: manager?.playerController?.value?.isPlaying ?? false
-                  ? () { manager.playerController.pause(); manager.setState(); }
-                  : () { manager.playerController.play(); manager.setState(); }
-              ),
-            ],
+          IconButton(
+            icon: manager?.playerController?.value?.isPlaying ?? false
+              ? Icon(MdiIcons.pause, size: 22)
+              : Icon(MdiIcons.play, size: 22),
+            onPressed: manager?.playerController?.value?.isPlaying ?? false
+              ? () { manager.playerController.pause(); manager.setState(); }
+              : () { manager.playerController.play(); manager.setState(); }
+          ),
+          IconButton(
+            icon: Icon(EvaIcons.closeOutline),
+            onPressed: () {
+              manager.disposeMediaInfoSet();
+            },
           ),
           SizedBox(width: 16)
         ],
