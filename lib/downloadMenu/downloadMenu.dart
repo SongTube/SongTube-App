@@ -27,13 +27,15 @@ class DownloadMenu extends StatefulWidget {
   final TagsControllers tags;
   final Video videoDetails;
   final String videoUrl;
+  final List<Video> playlistVideos;
   final scaffoldState;
   DownloadMenu({
     this.streamManifest,
     this.tags,
     this.videoDetails,
     this.videoUrl,
-    this.scaffoldState
+    this.scaffoldState,
+    this.playlistVideos
   });
   @override
   _DownloadMenuState createState() => _DownloadMenuState();
@@ -96,6 +98,7 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
     switch (currentDownloadMenu) {
       case CurrentDownloadMenu.Home:
         returnWidget = DownloadMenuHome(
+          playlistVideos: widget.playlistVideos,
           onBack: () => Navigator.pop(context),
           onAudioTap: () => setState(() => 
             currentDownloadMenu = CurrentDownloadMenu.Audio),
