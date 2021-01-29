@@ -59,7 +59,7 @@ class _SlidableVideoPageState extends State<SlidableVideoPage> {
         )
       ],
       color: Theme.of(context).cardColor,
-      panel: manager.mediaInfoSet.mediaType != null
+      panel: manager?.mediaInfoSet?.mediaType != null
         ? YoutubePlayerVideoPage(
             isPlaylist: manager.mediaInfoSet.mediaType == MediaInfoSetType.Playlist
               ? true : false,
@@ -69,7 +69,7 @@ class _SlidableVideoPageState extends State<SlidableVideoPage> {
         onTap: () {
           manager.expandablePlayerPanelController.open();
         },
-        child: manager.mediaInfoSet.mediaType != null
+        child: manager?.mediaInfoSet?.mediaType != null
           ? VideoPageCollapsed(
               isPlaylist: manager.mediaInfoSet.mediaType == MediaInfoSetType.Playlist
                 ? true : false,

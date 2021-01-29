@@ -265,7 +265,7 @@ class _LibState extends State<Lib> {
             builder: (context, manager, _) {
               return AnimatedSwitcher(
                 duration: Duration(milliseconds: 300),
-                child: manager.mediaInfoSet != null
+                child: manager?.mediaInfoSet != null
                   ? SlidableVideoPage(
                       callback: (double position) {
                         _scaffoldStateKey.currentState
