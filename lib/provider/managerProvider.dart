@@ -10,6 +10,7 @@ import 'package:songtube/internal/models/infoSets/mediaInfoSet.dart';
 
 // Internal
 import 'package:songtube/internal/youtube/youtubeExtractor.dart';
+import 'package:video_player/video_player.dart';
 
 // Packages
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
@@ -65,10 +66,10 @@ class ManagerProvider extends ChangeNotifier {
   // YoutubeExtractor
   YoutubeExtractor youtubeExtractor;
 
-  // ---------------------
-  // Stream Youtube Player
-  // ---------------------
-  StreamManifest playerStream;
+  // -----------------------------
+  // Controller for Youtube Player
+  // -----------------------------
+  VideoPlayerController playerController;
 
   // -----------
   // Home Screen
@@ -125,16 +126,23 @@ class ManagerProvider extends ChangeNotifier {
   // Functions & Helpers
   // -------------------
   //
-  // Get current Video or Playlist
-  void updateMediaInfoSet(dynamic searchMedia, List<Video> relatedVideos) {
-    mediaInfoSet = MediaInfoSet();
-    playerStream = null;
-    notifyListeners();
-    if (searchMedia is Video) {
-      Video video = searchMedia;
-      mediaInfoSet.mediaType = MediaInfoSetType.Video;
-      mediaInfoSet.videoFromSearch = SearchVideo(
-        VideoId(video.id.value),
+  // Get current Video or Playlist ID
+  dynamic getIdFromSearchResult(dynamic searchResult) {
+    if (searchResult is Video) {
+      return searchResult.id;
+    } else if (searchResult is SearchVideo) {
+      return searchResult.videoId;
+    } else if (searchResult is Playlist) {
+      return searchResult.id;
+    } else {
+      return searchResult.playlistId;
+    }
+  }
+
+  // Transform a Video object to SearchVideo
+  SearchVideo videoToSearchVideo(Video video) {
+    return SearchVideo(
+      VideoId(video.id.value),
         video.title, video.author,
         null, null, null,
         [
@@ -144,64 +152,42 @@ class ManagerProvider extends ChangeNotifier {
               .replaceAll("https://img.youtube.com", "")
           ), null, null)
         ]
-      );
-      VideoId id = mediaInfoSet.videoFromSearch.videoId;
+    );
+  }
+
+
+  // Update the current SearchVideo/Video or SearchPlaylist/Playlist
+  // for details, engage and tags
+  Future<void> updateBySearchResult(dynamic searchResult) async {
+    if (searchResult is Video) {
+      Video video = searchResult;
+      mediaInfoSet.mediaType = MediaInfoSetType.Video;
+      mediaInfoSet.videoFromSearch = videoToSearchVideo(video);
       mediaInfoSet.updateVideoDetails(video);
       saveToHistory(video);
       notifyListeners();
-      // Get the Channel Details
-      youtubeExtractor.getChannelByVideoId(id).then((value) {
-        mediaInfoSet.channelDetails = value;
-        notifyListeners();
-      });
-      // Get Related videos
-      if (relatedVideos == null) {
-        youtubeExtractor.getChannelVideos(id)
-          .then((value) {
-            mediaInfoSet.relatedVideos = value;
-            notifyListeners();
-        });
-      } else {
-        mediaInfoSet.relatedVideos = relatedVideos;
-        notifyListeners();
-      }
-      // Get the StreamManifest for Downloads
-      youtubeExtractor.getStreamManifest(id).then((value) {
-        mediaInfoSet.streamManifest = value;
-        playerStream = value;
-        notifyListeners();
-      });
-    } else if (searchMedia is SearchVideo) {
-      // Get current Search Video and update the YoutubePlayerController
+    } else if (searchResult is SearchVideo) {
       mediaInfoSet.mediaType = MediaInfoSetType.Video;
-      mediaInfoSet.videoFromSearch = searchMedia;
+      mediaInfoSet.videoFromSearch = searchResult;
       VideoId id = mediaInfoSet.videoFromSearch.videoId;
       notifyListeners();
       // Get the Video Details from our Search
-      youtubeExtractor.getVideoDetails(id).then((value) {
-        mediaInfoSet.updateVideoDetails(value);
-        saveToHistory(value);
-        notifyListeners();
-      });
-      // Get the Channel Details without waiting for it's result
-      youtubeExtractor.getChannelByVideoId(id).then((value) {
-        mediaInfoSet.channelDetails = value;
-        notifyListeners();
-      });
-      // Get Related videos
-      if (relatedVideos == null) {
-        youtubeExtractor.getChannelVideos(mediaInfoSet.videoFromSearch.videoId)
-          .then((value) {
-            mediaInfoSet.relatedVideos = value;
-            notifyListeners();
-        });
-      } else {
-        mediaInfoSet.relatedVideos = relatedVideos;
-        notifyListeners();
-      }
+      Video video = await youtubeExtractor.getVideoDetails(id);
+      mediaInfoSet.updateVideoDetails(video);
+      saveToHistory(video);
       notifyListeners();
-    } else if (searchMedia is Playlist) {
-      Playlist playlist = searchMedia;
+    } else if (searchResult is SearchPlaylist) {
+      mediaInfoSet.mediaType = MediaInfoSetType.Playlist;
+      mediaInfoSet.playlistFromSearch = searchResult;
+      PlaylistId id = mediaInfoSet.playlistFromSearch.playlistId;
+      notifyListeners();
+      youtubeExtractor.getPlaylistDetails(id).then((value) {
+        mediaInfoSet.updatePlaylistDetails(value);
+        notifyListeners();
+      });
+      notifyListeners();
+    } else {
+      Playlist playlist = searchResult;
       mediaInfoSet.mediaType = MediaInfoSetType.Playlist;
       mediaInfoSet.playlistFromSearch = SearchPlaylist(
         playlist.id,
@@ -210,40 +196,50 @@ class ManagerProvider extends ChangeNotifier {
       );
       mediaInfoSet.updatePlaylistDetails(playlist);
       notifyListeners();
-      // Get the Playlist Videos from our Details
-      youtubeExtractor.getPlaylistVideos(playlist.id).then((value) {
-        mediaInfoSet.playlistVideos = value;
-        updateStreamManifestPlayer(value[0].id);
-        notifyListeners();
-      });
-    } else {
-      // Get current Search Playlist
-      mediaInfoSet.mediaType = MediaInfoSetType.Playlist;
-      mediaInfoSet.playlistFromSearch = searchMedia;
-      PlaylistId id = mediaInfoSet.playlistFromSearch.playlistId;
-      notifyListeners();
-      // Get the Playlist Details from our Search and update Thumbnail
-      youtubeExtractor.getPlaylistDetails(id).then((value) {
-        mediaInfoSet.updatePlaylistDetails(value);
-        notifyListeners();
-      });
-      notifyListeners();
-      // Get the Playlist Videos from our Details
-      youtubeExtractor.getPlaylistVideos(id).then((value) {
-        mediaInfoSet.playlistVideos = value;
-        updateStreamManifestPlayer(value[0].id);
-        notifyListeners();
-      });
     }
   }
 
-  // Manually update Stream Youtube Player
-  void updateStreamManifestPlayer(VideoId id) {
-    playerStream = null;
+  // Update current Channel from VideoId
+  Future<void> updateCurrentChannel(VideoId id) async {
+    mediaInfoSet.channelDetails = await youtubeExtractor
+      .getChannelByVideoId(id);
     notifyListeners();
-    youtubeExtractor.getStreamManifest(id).then((value) {
-      playerStream = value;
+  }
+
+  // Get current Related Videos, the ID can be VideoId or PlaylistId
+  // if relatedVideos is provided this function will just use that instead
+  Future<void> updateCurrentRelatedVideos({dynamic id, List<Video> relatedVideos}) async {
+    if (relatedVideos == null) {
+      if (id is VideoId) {
+        mediaInfoSet.relatedVideos = await youtubeExtractor
+          .getChannelVideos(id);
+      } else {
+        mediaInfoSet.relatedVideos = await youtubeExtractor
+          .getPlaylistVideos(id);
+      }
       notifyListeners();
+    } else {
+      mediaInfoSet.relatedVideos = relatedVideos;
+    }
+    mediaInfoSet.autoPlayIndex = 0;
+    notifyListeners();
+  }
+
+  // Update current Video StreamManifest
+  Future<void> updateCurrentManifest(VideoId id) async {
+    if (playerController != null) {
+      playerController.pause();
+      playerController = null;
+    }
+    notifyListeners();
+    mediaInfoSet.streamManifest = await youtubeExtractor
+      .getStreamManifest(id);
+    playerController = VideoPlayerController.network(
+      mediaInfoSet.streamManifest.muxed.withHighestBitrate().url.toString()
+      )..initialize().then((value) {
+        playerController.play().then((_) {
+          notifyListeners();
+        });
     });
   }
 
@@ -271,29 +267,37 @@ class ManagerProvider extends ChangeNotifier {
       youtubeSearchStream.resume();
     }
   }
-  // Update Stream Video Player
-  void streamPlayerAutoPlay() {
-    if (mediaInfoSet.mediaType == MediaInfoSetType.Video) {
-      int currentIndex = mediaInfoSet.autoPlayIndex;
-      if (currentIndex <= mediaInfoSet.relatedVideos.length-1) {
-        updateMediaInfoSet(
-          mediaInfoSet.relatedVideos[currentIndex+1],
-          mediaInfoSet.relatedVideos
-        );
-        mediaInfoSet.autoPlayIndex += 1;
+
+  Future<void> updateMediaInfoSet(dynamic searchResult, List<Video> related) async {
+    mediaInfoSet = MediaInfoSet();
+    var id = getIdFromSearchResult(searchResult);
+    if (related != null) {
+      updateCurrentRelatedVideos(id: id, relatedVideos: related);
+    }
+    if (searchResult is SearchVideo || searchResult is Video) {
+      if (related != null) {
+        updateCurrentRelatedVideos(id: id, relatedVideos: related);
       }
-    } else {
-      int currentIndex = mediaInfoSet.autoPlayIndex;
-      if (currentIndex <= mediaInfoSet.playlistVideos.length-1) {
-        updateMediaInfoSet(
-          mediaInfoSet.playlistVideos[currentIndex+1],
-          mediaInfoSet.relatedVideos
-        );
-        mediaInfoSet.autoPlayIndex += 1;
-      }
+      await updateBySearchResult(searchResult);
+      await updateCurrentManifest(id);
+      await updateCurrentChannel(id);
+      if (related == null)
+        await updateCurrentRelatedVideos(id: id);
+    } else if (searchResult is Playlist || searchResult is SearchPlaylist) {
+      await updateBySearchResult(searchResult);
+      if (related == null)
+        await updateCurrentRelatedVideos(id: id);
+      mediaInfoSet.videoDetails = mediaInfoSet.relatedVideos[0];
+      notifyListeners();
+      await updateCurrentManifest(
+        mediaInfoSet.relatedVideos[1].id
+      );
+      await updateCurrentChannel(
+        mediaInfoSet.relatedVideos[1].id
+      );
     }
   }
-
+  
   Future<void> saveToHistory(Video video) async {
     var prefs = await SharedPreferences.getInstance();
     String json = prefs.getString('watchHistory');
