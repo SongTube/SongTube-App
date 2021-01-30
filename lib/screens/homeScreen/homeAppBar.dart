@@ -121,7 +121,8 @@ class _HomePageAppBarState extends State<HomePageAppBar> {
                     },
                     child: Container(
                       color: Colors.transparent,
-                      child: Icon(Icons.arrow_back_outlined)
+                      child: Icon(Icons.arrow_back_outlined,
+                        color: Theme.of(context).iconTheme.color),
                     ),
                   )
             ),
