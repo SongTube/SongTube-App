@@ -27,7 +27,10 @@ dependencies:
 
   # Media Playback Packages
   flutter_audio_query: ^0.3.5+6
-  video_player: ^1.0.1
+  video_player:
+    git:
+      url: https://github.com/SongTube/video_player
+      ref: master
   just_audio: ^0.5.4
   audio_service: ^0.15.1
   sliding_up_panel:
