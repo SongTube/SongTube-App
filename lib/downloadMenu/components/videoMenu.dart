@@ -29,7 +29,7 @@ class _VideoDownloadMenuState extends State<VideoDownloadMenu> {
     List<dynamic> list = [
       "Video",
       video,
-      "1.0", "0", "0"
+      "1.0", "0", "0", false
     ];
     widget.onOptionSelect(list);
   }
