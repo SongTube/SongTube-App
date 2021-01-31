@@ -23,11 +23,14 @@ class WatchHistoryPage extends StatelessWidget {
           "Watch History",
           style: TextStyle(
             fontFamily: 'Product Sans',
-            fontWeight: FontWeight.w600
+            fontWeight: FontWeight.w600,
+            color: Theme.of(context).textTheme.bodyText1.color
           ),
         ),
         elevation: 0,
         backgroundColor: Theme.of(context).cardColor,
+        iconTheme: IconThemeData(
+          color: Theme.of(context).iconTheme.color),
       ),
       body: history.isNotEmpty ? ListView.builder(
         itemCount: history.length,
