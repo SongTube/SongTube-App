@@ -17,7 +17,7 @@ class ScrollDetector extends StatefulWidget {
 class _ScrollDetectorState extends State<ScrollDetector> {
 
   double position = 0.0;
-  double sensitivityFactor = 100.0;
+  double sensitivityFactor = 50.0;
 
   @override
   Widget build(BuildContext context) {
