@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/provider/managerProvider.dart';
@@ -10,6 +12,7 @@ class HomePage extends StatelessWidget {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
     if (manager.youtubeSearchResults.isNotEmpty) {
       return ListView.builder(
+        cacheExtent: 10000,
         itemCount: manager.youtubeSearchResults.length,
         itemBuilder: (context, index) {
           if (index == manager.youtubeSearchResults.length-2) {

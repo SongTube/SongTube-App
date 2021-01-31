@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
@@ -33,7 +34,8 @@ class SongsListView extends StatelessWidget {
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
     PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     return ListView.builder(
-      
+      physics: AlwaysScrollableScrollPhysics(),
+      itemExtent: 75,
       itemCount: songs.length,
       itemBuilder: (context, index) {
         MediaItem song = songs[index];
