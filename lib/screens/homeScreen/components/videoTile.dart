@@ -18,7 +18,6 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/provider/preferencesProvider.dart';
 import 'package:songtube/routes/channel.dart';
-import 'package:songtube/routes/video.dart';
 import 'package:songtube/ui/animations/blurPageRoute.dart';
 import 'package:songtube/ui/components/popupMenu.dart';
 import 'package:songtube/ui/dialogs/loadingDialog.dart';

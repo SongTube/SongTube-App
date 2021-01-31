@@ -4,26 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:songtube/internal/languages.dart';
 
 // Internal
-import 'package:songtube/provider/configurationProvider.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/screens/libraryScreen/aboutPage.dart';
 import 'package:songtube/screens/libraryScreen/socialLinksRow.dart';
 import 'package:songtube/screens/libraryScreen/watchHistory.dart';
 import 'package:songtube/screens/libraryScreen/watchHistoryRow.dart';
 import 'package:songtube/ui/settings/settings.dart';
-import 'package:songtube/screens/libraryScreen/components/quickAcessTile.dart';
 
 // Packages
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-import 'package:songtube/screens/libraryScreen/components/songtubeBanner.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:provider/provider.dart';
 
 class LibraryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
     return Scaffold(
       backgroundColor: Theme.of(context).cardColor,

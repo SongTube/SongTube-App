@@ -1,5 +1,4 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
@@ -12,9 +11,6 @@ class VideoPageCollapsed extends StatelessWidget {
   VideoPageCollapsed({
     this.isPlaylist = false
   });
-  //ignore: close_sinks
-  final BehaviorSubject<double> _dragPositionSubject =
-    BehaviorSubject.seeded(null);
   @override
   Widget build(BuildContext context) {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);

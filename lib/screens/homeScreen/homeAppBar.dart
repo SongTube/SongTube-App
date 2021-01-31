@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:songtube/internal/languages.dart';
 import 'package:songtube/provider/configurationProvider.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/provider/preferencesProvider.dart';
@@ -9,7 +8,6 @@ import 'package:songtube/ui/animations/blurPageRoute.dart';
 import 'package:songtube/ui/components/searchBar.dart';
 import 'package:songtube/ui/dialogs/loadingDialog.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
-import 'package:md2_tab_indicator/md2_tab_indicator.dart';
 
 class HomePageAppBar extends StatefulWidget {
   final bool openSearch;

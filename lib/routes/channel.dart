@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/provider/managerProvider.dart';
-import 'package:songtube/provider/preferencesProvider.dart';
 import 'package:songtube/routes/components/relatedVideosList.dart';
-import 'package:songtube/routes/video.dart';
-import 'package:songtube/ui/animations/blurPageRoute.dart';
 import 'package:songtube/ui/animations/fadeIn.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
@@ -23,7 +20,6 @@ class YoutubeChannelPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
-    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
         statusBarIconBrightness:

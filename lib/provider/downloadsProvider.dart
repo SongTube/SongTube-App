@@ -1,13 +1,10 @@
-import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:songtube/internal/ffmpeg/converter.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/models/audioModifiers.dart';
 import 'package:songtube/internal/models/infoSets/downloadinfoset.dart';
 import 'package:songtube/internal/models/metadata.dart';
-import 'package:songtube/internal/models/songFile.dart';
 import 'package:songtube/internal/randomString.dart';
-import 'package:songtube/internal/database/databaseService.dart';
 import 'package:songtube/internal/youtube/youtubeExtractor.dart';
 import 'package:songtube/provider/configurationProvider.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';

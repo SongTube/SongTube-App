@@ -3,8 +3,6 @@ import 'dart:io';
 
 // Flutter
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 
 // Internal
 import 'package:songtube/players/service/playerService.dart';

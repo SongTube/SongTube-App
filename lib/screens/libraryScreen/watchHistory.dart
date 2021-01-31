@@ -1,11 +1,8 @@
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/provider/preferencesProvider.dart';
-import 'package:songtube/routes/video.dart';
-import 'package:songtube/ui/animations/blurPageRoute.dart';
 import 'package:songtube/ui/components/autohideScaffold.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';

@@ -28,10 +28,6 @@ class SlidingPlayerPanel extends StatelessWidget {
     return StreamBuilder(
       stream: screenStateStream,
       builder: (context, snapshot) {
-        final screenState = snapshot.data;
-        final state = screenState?.playbackState;
-        final processingState =
-          state?.processingState ?? AudioProcessingState.none;
         AudioService.currentMediaItemStream.listen((newMediaItem) {
           if (newMediaItem != mediaProvider.mediaItem) {
             mediaProvider.mediaItem = newMediaItem;

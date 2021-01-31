@@ -4,24 +4,16 @@ import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:package_info/package_info.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:songtube/internal/models/infoSets/mediaInfoSet.dart';
 import 'package:songtube/internal/nativeMethods.dart';
 
 // Internal
 import 'package:songtube/internal/updateChecker.dart';
-import 'package:songtube/players/components/musicPlayer/collapsedPanel.dart';
-import 'package:songtube/players/components/musicPlayer/expandedPanel.dart';
-import 'package:songtube/players/components/musicPlayer/playerPadding.dart';
-import 'package:songtube/players/service/playerService.dart';
-import 'package:songtube/players/service/screenStateStream.dart';
 import 'package:songtube/provider/configurationProvider.dart';
 import 'package:songtube/provider/downloadsProvider.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/provider/mediaProvider.dart';
 import 'package:songtube/provider/preferencesProvider.dart';
 import 'package:songtube/routes/slidableVideoPage.dart';
-import 'package:songtube/routes/video.dart';
 import 'package:songtube/screens/downloads.dart';
 import 'package:songtube/screens/home.dart';
 import 'package:songtube/screens/media.dart';
@@ -31,7 +23,6 @@ import 'package:songtube/players/musicPlayer.dart';
 // Packages
 import 'package:provider/provider.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:songtube/ui/animations/blurPageRoute.dart';
 import 'package:songtube/ui/components/autohideScaffold.dart';
 import 'package:songtube/ui/components/navigationBar.dart';
 import 'package:songtube/ui/dialogs/appUpdateDialog.dart';

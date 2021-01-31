@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:songtube/players/components/videoPlayer/controls.dart';
-import 'package:songtube/provider/preferencesProvider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';

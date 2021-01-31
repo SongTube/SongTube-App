@@ -1,16 +1,9 @@
 import 'dart:async';
-import 'dart:io';
-import 'package:circular_check_box/circular_check_box.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:image_fade/image_fade.dart';
 import 'package:provider/provider.dart';
-import 'package:songtube/internal/languages.dart';
-import 'package:songtube/internal/models/infoSets/mediaInfoSet.dart';
-import 'package:songtube/internal/musicBrainzApi.dart';
 import 'package:songtube/players/youtubePlayer.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/provider/preferencesProvider.dart';
@@ -21,13 +14,8 @@ import 'package:songtube/routes/components/video/shimmer/shimmerVideoEngagement.
 import 'package:songtube/routes/components/video/videoDownloadFab.dart';
 import 'package:songtube/routes/components/video/videoTags.dart';
 import 'package:songtube/downloadMenu/downloadMenu.dart';
-import 'package:songtube/ui/animations/blurPageRoute.dart';
 import 'package:songtube/ui/animations/fadeIn.dart';
-import 'package:songtube/ui/components/measureSize.dart';
-import 'package:songtube/ui/components/tagsResultsPage.dart';
-import 'package:songtube/ui/dialogs/loadingDialog.dart';
 import 'package:songtube/ui/internal/snackbar.dart';
-import 'package:video_player/video_player.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 import 'components/video/videoDetails.dart';
