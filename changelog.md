@@ -25,6 +25,7 @@
 - Added a new "About us" page at Library screen
 - Fixed MusicBrainz API results weird characters
 - Added Video duration to search results
+- Implemented support for fast Reverse & Forward on Youtube Player
 
 # SongTube 5.3.0:
 
