@@ -1,10 +1,13 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:songtube/provider/configurationProvider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -142,9 +145,12 @@ class AboutPage extends StatelessWidget {
           SizedBox(height: 8),
           ListTile(
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return AboutPage();
-              }));
+              showLicensePage(
+                applicationName: config.appName,
+                applicationIcon: Image.asset('assets/images/ic_launcher.png', height: 50, width: 50),
+                applicationVersion: config.appVersion,
+                context: context
+              );
             },
             title: Center(
               child: Text(
@@ -160,7 +166,7 @@ class AboutPage extends StatelessWidget {
             ),
             subtitle: Center(
               child: Text(
-                "All Packages & Plugins Licenes",
+                "All Packages & Plugins Licenses",
                 style: TextStyle(
                   fontFamily: 'Product Sans',
                   color: Theme.of(context).textTheme.bodyText1.color
