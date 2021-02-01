@@ -50,7 +50,7 @@ class VideoTags extends StatelessWidget {
         borderRadius: 15,
         items: [
           FlexiblePopupItem(
-            title: Languages.of(context).labelSelectTagsfromMusicBrainz,
+            title: Languages.of(context).labelPerformAutomaticTagging,
             value: "AutoTag",
           ),
           FlexiblePopupItem(
