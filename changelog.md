@@ -1,3 +1,30 @@
+# SongTube 5.6.0:
+
+- Imported Product Sans font
+- Added missing translations
+- Added Russian Language (Thanks @yxur_bruh)
+- Video Player Portrait/Fullscreen transition is smoother
+- App NavigationBar and AppBar can now hide/shows on scroll
+- Improved SplashArt
+- Blur UI Style disable by default (causes lag)
+- Improved design consistency between screens/pages
+- Improved SearchBar behavior
+- Implemented typeahead suggestions on Youtube SearchBar
+- Moved Download page from Media screen to Downloads screen
+- Added Audio Normalization checkbox on Audio download panel
+- MusicPlayer collapsed panel now expands on Tap
+- Made some IconButtons in the UI easier to Tap
+- Tags Editor will no longer show up on unsupported audio files
+- Added new Library screen that replaces old More screen
+- Implemented Search History on Library screen
+- Implemented Playlist support in the same Video page
+- Deleted old Playlist page
+- DownloadMenu has new button to Download all Related/Playlist videos
+- Video Page is now a Slidable Panel (Like the MusicPlayer)
+- Added a new "About us" page at Library screen
+- Fixed MusicBrainz API results weird characters
+- Added Video duration to search results
+
 # SongTube 5.3.0:
 
 - Fixed "Join Telegram" dialog text color
