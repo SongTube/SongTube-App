@@ -6,6 +6,7 @@
 - Video Player Portrait/Fullscreen transition is smoother
 - App NavigationBar and AppBar can now hide/shows on scroll
 - Improved SplashArt
+- Added support for Background Playback
 - Blur UI Style disable by default (causes lag)
 - Improved design consistency between screens/pages
 - Improved SearchBar behavior
