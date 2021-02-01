@@ -162,6 +162,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           return SearchHistoryList(
                             searchQuery: searchQuery,
                             onItemTap: (String item) {
+                              manager.urlController.clear();
                               manager.searchBarFocusNode.unfocus();
                               manager.youtubeSearchQuery = item;
                               controller.animateTo(0);
