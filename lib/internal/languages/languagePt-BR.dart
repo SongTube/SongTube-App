@@ -351,5 +351,5 @@ class LanguagePtBr extends Languages {
   @override
   String get labelNo => "Não";
   @override
-  String get labelLibrary => "biblioteca";
+  String get labelLibrary => "Biblioteca";
 }
