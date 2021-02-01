@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:md2_tab_indicator/md2_tab_indicator.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/provider/configurationProvider.dart';
+import 'package:songtube/provider/preferencesProvider.dart';
+import 'package:songtube/routes/video.dart';
 import 'package:songtube/screens/homeScreen/homeAppBar.dart';
 
 // Internal
@@ -15,8 +17,11 @@ import 'package:songtube/screens/homeScreen/pages/homePage.dart';
 import 'package:songtube/screens/homeScreen/pages/music.dart';
 import 'package:songtube/screens/homeScreen/pages/trending.dart';
 import 'package:songtube/screens/homeScreen/pages/watchLater.dart';
+import 'package:songtube/ui/animations/blurPageRoute.dart';
 import 'package:songtube/ui/components/autohideScaffold.dart';
 import 'package:songtube/ui/components/searchHistory.dart';
+import 'package:songtube/ui/dialogs/loadingDialog.dart';
+import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -58,14 +63,61 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     ManagerProvider manager = Provider.of<ManagerProvider>(context, listen: false);
+    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context, listen: false);
     ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
     return AutoHideScaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: HomePageAppBar(
         openSearch: manager.showSearchBar,
-        onSearch: () {
+        onSearch: (searchQuery) async {
+          manager.urlController.clear();
+          manager.searchBarFocusNode.unfocus();
+          manager.youtubeSearchQuery = searchQuery;
           controller.animateTo(0);
+          manager.showSearchBar = false;
+          if (VideoId.parseVideoId(searchQuery) != null) {
+            String id = VideoId.parseVideoId(searchQuery);
+            showDialog(
+              context: context,
+              builder: (_) => LoadingDialog()
+            );
+            YoutubeExplode yt = YoutubeExplode();
+            Video video = await yt.videos.get(id);
+            manager.updateMediaInfoSet(video, null);
+            Navigator.pop(context);
+            Navigator.push(context,
+              BlurPageRoute(
+                blurStrength: prefs.enableBlurUI ? 20 : 0,
+                slideOffset: Offset(0.0, 10.0),
+                builder: (_) => YoutubePlayerVideoPage()
+            ));
+            return;
+          }
+          if (PlaylistId.parsePlaylistId(searchQuery) != null) {
+            String id = PlaylistId.parsePlaylistId(searchQuery);
+            showDialog(
+              context: context,
+              builder: (_) => LoadingDialog()
+            );
+            YoutubeExplode yt = YoutubeExplode();
+            Playlist playlist = await yt.playlists.get(id);
+            manager.updateMediaInfoSet(playlist, null);
+            Navigator.pop(context);
+            Navigator.push(context,
+              BlurPageRoute(
+                blurStrength: prefs.enableBlurUI ? 20 : 0,
+                slideOffset: Offset(0.0, 10.0),
+                builder: (_) => YoutubePlayerVideoPage(isPlaylist: true)
+            ));
+            return;
+          }
+          manager.updateYoutubeSearchResults(updateResults: true);
+          if (searchQuery.length > 1) {
+            Future.delayed(Duration(milliseconds: 400), () =>
+              config.addStringtoSearchHistory(searchQuery.trim()
+            ));
+          }
         },
         onChanged: (String query) {
           searchQuery = query;
