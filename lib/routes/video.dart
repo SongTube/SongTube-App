@@ -58,90 +58,81 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> {
         key: scaffoldKey,
         body: FadeInTransition(
           duration: Duration(milliseconds: 400),
-          child: AnimatedSwitcher(
-            duration: Duration(milliseconds: 300),
-            child: MediaQuery.of(context).orientation == Orientation.portrait
-              ? _portraitPage()
-              : AnimatedSwitcher(
-                  duration: Duration(milliseconds: 400),
-                  child: manager.playerController != null 
-                    ? Material(
-                        color: Colors.black,
-                        child: StreamManifestPlayer(
-                          manifest: manager.mediaInfoSet.streamManifest,
-                          controller: manager.playerController,
-                          isFullscreen: true,
-                          onVideoEnded: () async {
-                            if (prefs.youtubeAutoPlay) {
-                              int currentIndex = manager.mediaInfoSet.autoPlayIndex;
-                              if (currentIndex <= manager.mediaInfoSet.relatedVideos.length-1) {
-                                manager.updateBySearchResult(
-                                  manager.mediaInfoSet.relatedVideos[currentIndex]
-                                );
-                                await manager.updateCurrentManifest(
-                                  manager.mediaInfoSet.relatedVideos[currentIndex].id
-                                );
-                                manager.updateCurrentChannel(
-                                  manager.mediaInfoSet.relatedVideos[currentIndex].id
-                                );
-                                manager.mediaInfoSet.autoPlayIndex += 1;
-                              }
+          child: MediaQuery.of(context).orientation == Orientation.portrait
+            ? _portraitPage()
+            : AnimatedSwitcher(
+                duration: Duration(milliseconds: 400),
+                child: manager.playerController != null 
+                  ? Material(
+                      color: Colors.black,
+                      child: StreamManifestPlayer(
+                        manifest: manager.mediaInfoSet.streamManifest,
+                        controller: manager.playerController,
+                        isFullscreen: true,
+                        onVideoEnded: () async {
+                          if (prefs.youtubeAutoPlay) {
+                            int currentIndex = manager.mediaInfoSet.autoPlayIndex;
+                            if (currentIndex <= manager.mediaInfoSet.relatedVideos.length-1) {
+                              manager.updateBySearchResult(
+                                manager.mediaInfoSet.relatedVideos[currentIndex]
+                              );
+                              await manager.updateCurrentManifest(
+                                manager.mediaInfoSet.relatedVideos[currentIndex].id
+                              );
+                              manager.updateCurrentChannel(
+                                manager.mediaInfoSet.relatedVideos[currentIndex].id
+                              );
+                              manager.mediaInfoSet.autoPlayIndex += 1;
                             }
-                          },
-                          onFullscreenTap: () {
-                            SystemChrome.setPreferredOrientations([
-                              DeviceOrientation.portraitUp,
-                              DeviceOrientation.portraitDown,
-                            ]);
-                            SystemChrome.setEnabledSystemUIOverlays
-                              ([SystemUiOverlay.top, SystemUiOverlay.bottom]);
-                          },
-                        ),
-                      )
-                    : _videoLoading()
-            )
+                          }
+                        },
+                        onFullscreenTap: () {
+                          SystemChrome.setPreferredOrientations([
+                            DeviceOrientation.portraitUp,
+                            DeviceOrientation.portraitDown,
+                          ]);
+                          SystemChrome.setEnabledSystemUIOverlays
+                            ([SystemUiOverlay.top, SystemUiOverlay.bottom]);
+                        },
+                      ),
+                    )
+                  : _videoLoading()
           ),
         ),
-        floatingActionButton: OrientationBuilder(
-          builder: (context, orientation) {
-            if (orientation == Orientation.portrait) {
-              return VideoDownloadFab(
-                isPlaylist: widget.isPlaylist,
-                readyToDownload: manager.playerController == null ||
-                  manager.mediaInfoSet.videoDetails == null ? false : true,
-                onDownload: () {
-                  FocusScope.of(context).requestFocus(new FocusNode());
-                  showModalBottomSheet<dynamic>(
-                    isScrollControlled: true,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(30),
-                        topRight: Radius.circular(30)
-                      ),
+        floatingActionButton: MediaQuery.of(context).orientation == Orientation.portrait
+          ? VideoDownloadFab(
+              isPlaylist: widget.isPlaylist,
+              readyToDownload: manager.playerController == null ||
+                manager.mediaInfoSet.videoDetails == null ? false : true,
+              onDownload: () {
+                FocusScope.of(context).requestFocus(new FocusNode());
+                showModalBottomSheet<dynamic>(
+                  isScrollControlled: true,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      topRight: Radius.circular(30)
                     ),
-                    clipBehavior: Clip.antiAlias,
-                    context: context,
-                    builder: (context) {
-                      return Wrap(
-                        children: [
-                          DownloadMenu(
-                            streamManifest: manager.mediaInfoSet.streamManifest,
-                            tags: manager.mediaInfoSet.mediaTags,
-                            videoDetails: manager.mediaInfoSet.videoDetails,
-                            scaffoldState: scaffoldKey.currentState,
-                            playlistVideos: manager.mediaInfoSet.relatedVideos
-                          ),
-                        ],
-                      );
-                    }
-                  );
-                },
-              );
-            } else {
-              return Container();
-            }
-          }
-        ),
+                  ),
+                  clipBehavior: Clip.antiAlias,
+                  context: context,
+                  builder: (context) {
+                    return Wrap(
+                      children: [
+                        DownloadMenu(
+                          streamManifest: manager.mediaInfoSet.streamManifest,
+                          tags: manager.mediaInfoSet.mediaTags,
+                          videoDetails: manager.mediaInfoSet.videoDetails,
+                          scaffoldState: scaffoldKey.currentState,
+                          playlistVideos: manager.mediaInfoSet.relatedVideos
+                        ),
+                      ],
+                    );
+                  }
+                );
+              },
+            )
+          : Container(),
       ),
     );
   }
