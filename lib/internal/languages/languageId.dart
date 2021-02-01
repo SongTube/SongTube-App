@@ -32,7 +32,7 @@ class LanguageId extends Languages {
   @override
   String get labelHome => "Beranda";
   @override
-  String get labelDownloads => "Unduh";
+  String get labelDownloads => "Unduhan";
   @override
   String get labelMedia => "Media";
   @override
@@ -52,21 +52,21 @@ class LanguageId extends Languages {
   @override 
   String get labelLoadingVideos => "Memuat Video...";
   @override
-  String get labelHomePage => "Home Page";
+  String get labelHomePage => "Halaman Beranda";
   @override
   String get labelTrending => "Trending";
   @override
-  String get labelFavorites => "Favorites";
+  String get labelFavorites => "Favorit";
   @override
-  String get labelWatchLater => "Watch Later";
+  String get labelWatchLater => "Tonton nanti";
 
   // Video Options Menu
   @override
-  String get labelCopyLink => "Copy Link";
+  String get labelCopyLink => "Salin tautan";
   @override
-  String get labelAddToFavorites => "Add to Favorites";
+  String get labelAddToFavorites => "Tambahkan ke Favorit";
   @override
-  String get labelAddToWatchLater => "Add to Watch Later";
+  String get labelAddToWatchLater => "Tambahkan ke Tonton Nanti";
 
   // Downloads Screen
   @override
@@ -148,7 +148,7 @@ class LanguageId extends Languages {
   @override
   String get labelGettingYourMedia => "Mendapatkan Media anda...";
   @override
-  String get labelEditTags => "Edit Tags";
+  String get labelEditTags => "Edit Tag";
 
   // Navigate Screen
   @override
@@ -255,53 +255,53 @@ class LanguageId extends Languages {
 
   // Music Player
   @override
-  String get labelPlayerSettings => "Player Settings";
+  String get labelPlayerSettings => "Pengaturan Player";
   @override
-  String get labelExpandArtwork => "Expand Artwork";
+  String get labelExpandArtwork => "Perluas Artwork";
   @override
-  String get labelArtworkRoundedCorners => "Artwork Rounded Corners";
+  String get labelArtworkRoundedCorners => "Sudut Bulat Artwork";
   @override
-  String get labelPlayingFrom => "Playing From";
+  String get labelPlayingFrom => "Memutar Dari";
   @override
-  String get labelBlurBackground => "Blur Background";
+  String get labelBlurBackground => "Latar Belakang Buram";
 
   // Video Page
   @override
-  String get labelTags => "Tags";
+  String get labelTags => "Tag";
   @override
-  String get labelRelated => "Related";
+  String get labelRelated => "Terkait";
   @override
-  String get labelAutoPlay => "AutoPlay";
+  String get labelAutoPlay => "PutarOtomatis";
 
   // Tags Pages
   @override
   String get labelAudioFormatNotCompatible =>
-    "Audio format not Compatible";
+    "Format audio tidak Kompatibel";
   @override
-  String get labelNotSpecified => "Not Specified";
+  String get labelNotSpecified => "Tidak Ditentukan";
   @override
   String get labelPerformAutomaticTagging => 
-    "Perform Automatic Tagging";
+    "Melakukan Pemberian Tag Otomatis";
   @override
   String get labelSelectTagsfromMusicBrainz => 
-    "Select Tags from MusicBrainz";
+    "Pilih Tag dari MusicBrainz";
   @override
   String get labelSelectArtworkFromDevice =>
-    "Select Artwork from Device";
+    "Pilih Artwork dari Perangkat";
 
   // Telegram Join Channel Dialog
   @override
-  String get labelJoinTelegramChannel => "Join Telegram Channel!";
+  String get labelJoinTelegramChannel => "Gabung Saluran Telegram!";
   @override
   String get labelJoinTelegramJustification =>
-    "Do you like SongTube? Please join the Telegram Channel! You will find " +
-    "Updates, Information, Development, Group Link and other Social links." +
+    "Apakah anda suka SongTube? Silakan bergabung dengan Saluran Telegram! Anda akan menemukan " +
+    "Pembaruan, Informasi, Pengembangan, Tautan Grup, dan tautan Sosial lainnya." +
     "\n\n" +
-    "In case you have an issue or a great recommentation in your mind, " +
-    "please join the Group from the Channel and write it down! But take in mind " +
-    "you can only speak in English, thanks!";
+    "Jika anda memiliki masalah atau rekomendasi yang bagus dalam pikiran anda, " +
+    "silakan bergabung dengan Grup dari Saluran dan tuliskan! Tapi ingatlah " +
+    "anda hanya dapat berbicara dalam bahasa Inggris, terima kasih!";
   @override
-  String get labelRemindLater => "Remind Later";
+  String get labelRemindLater => "Ingatkan Nanti";
 
   // Common Words (One word labels)
   @override
@@ -341,13 +341,13 @@ class LanguageId extends Languages {
   @override
   String get labelCancel => "Batalkan";
   @override
-  String get labelGeneral => "General";
+  String get labelGeneral => "Umum";
   @override
-  String get labelRemove => "Remove";
+  String get labelRemove => "Hapus";
   @override
-  String get labelJoin => "Join";
+  String get labelJoin => "Gabung";
   @override
-  String get labelNo => "No";
+  String get labelNo => "Tidak";
   @override
   String get labelLibrary => "Perpustakaan";
 }
