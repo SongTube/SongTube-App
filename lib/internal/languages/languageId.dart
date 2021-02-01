@@ -58,11 +58,11 @@ class LanguageId extends Languages {
   @override
   String get labelFavorites => "Favorit";
   @override
-  String get labelWatchLater => "Tonton nanti";
+  String get labelWatchLater => "Tonton Nanti";
 
   // Video Options Menu
   @override
-  String get labelCopyLink => "Salin tautan";
+  String get labelCopyLink => "Salin Tautan";
   @override
   String get labelAddToFavorites => "Tambahkan ke Favorit";
   @override
