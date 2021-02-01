@@ -8,6 +8,14 @@ class MusicBrainzAPI {
 
   MusicBrainzAPI();
 
+  static final headers = {
+    'user-agent':
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+      '(KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36',
+    'accept-language': 'en-US,en;q=1.0',
+    'Content-Type': 'application/json'
+  };
+
   static Future<dynamic> getFirstRecord(String title) async {
     http.Client client = new http.Client();
     var response = await client.get(
@@ -16,7 +24,7 @@ class MusicBrainzAPI {
       "&fmt=json"
     );
     await Future.delayed(Duration(milliseconds: 1));
-    var parsedJson = jsonDecode(response.body)["recordings"][0];
+    var parsedJson = jsonDecode(utf8.decode(response.bodyBytes))["recordings"][0];
     response = await client.get(
       "http://musicbrainz.org/ws/2/recording/"
       "${parsedJson['id']}?inc=aliases+"
@@ -25,7 +33,7 @@ class MusicBrainzAPI {
     );
     await Future.delayed(Duration(milliseconds: 1));
     client.close();
-    parsedJson = jsonDecode(response.body);
+    parsedJson = jsonDecode(utf8.decode(response.bodyBytes));
     return parsedJson;
   }
 
@@ -34,10 +42,11 @@ class MusicBrainzAPI {
     var response = await client.get(
       "http://musicbrainz.org/ws/2/recording?query="
       "${title.trim()}&dismax=true"
-      "&fmt=json"
+      "&fmt=json",
+      headers: headers,
     );
     client.close();
-    return jsonDecode(response.body)["recordings"];
+    return jsonDecode(utf8.decode(response.bodyBytes))["recordings"];
   }
 
   static Future<TagsControllers> getSongTags(parsedJson, {String artworkLink}) async {
