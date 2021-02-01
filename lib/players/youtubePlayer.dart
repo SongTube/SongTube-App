@@ -76,35 +76,35 @@ class _StreamManifestPlayerState extends State<StreamManifestPlayer> {
             // Video Player
             Container(
               child: widget.controller.value.initialized
-                ? AspectRatio(
-                    aspectRatio: widget.controller.value.aspectRatio,
-                    child: VideoPlayer(widget.controller),
-                  )
+                ? VideoPlayer(widget.controller)
                 : Container(),
             ),
             // Video PlayBack Controls & Progress Bar
-            VideoPlayerControls(
-              progressBar: widget.controller?.value?.duration?.inMinutes != null
-                ? videoPlayerProgressBar() : Container(),
-              videoTitle: null,
-              playing: widget.controller.value.isPlaying,
-              onPlayPause: widget.controller.value.isPlaying
-                ? () {
-                    widget.controller.pause();
-                    setState(() {});
-                    Future.delayed(Duration(seconds: 2), () {
-                      setState(() => hideControls = true);
-                    });
-                  }
-                : () {
-                    widget.controller.play();
-                    setState(() {});
-                    Future.delayed(Duration(seconds: 2), () {
-                      setState(() => hideControls = true);
-                    });
-                  },
-              onExit: () => Navigator.pop(context),
-              showControls: hideControls,
+            GestureDetector(
+              onTap: () => setState(() => hideControls = !hideControls),
+              child: VideoPlayerControls(
+                progressBar: widget.controller?.value?.duration?.inMinutes != null
+                  ? videoPlayerProgressBar() : Container(),
+                videoTitle: null,
+                playing: widget.controller.value.isPlaying,
+                onPlayPause: widget.controller.value.isPlaying
+                  ? () {
+                      widget.controller.pause();
+                      setState(() {});
+                      Future.delayed(Duration(seconds: 2), () {
+                        setState(() => hideControls = true);
+                      });
+                    }
+                  : () {
+                      widget.controller.play();
+                      setState(() {});
+                      Future.delayed(Duration(seconds: 2), () {
+                        setState(() => hideControls = true);
+                      });
+                    },
+                onExit: () => Navigator.pop(context),
+                showControls: hideControls,
+              ),
             ),
             Flex(
               direction: Axis.horizontal,
@@ -128,6 +128,7 @@ class _StreamManifestPlayerState extends State<StreamManifestPlayer> {
                       }
                     },
                     child: Container(
+                      margin: EdgeInsets.all(50),
                       alignment: Alignment.center,
                       color: Colors.transparent,
                       child: AnimatedSwitcher(
@@ -154,6 +155,7 @@ class _StreamManifestPlayerState extends State<StreamManifestPlayer> {
                       }
                     },
                     child: Container(
+                      margin: EdgeInsets.all(50),
                       alignment: Alignment.center,
                       color: Colors.transparent,
                       child: AnimatedSwitcher(
