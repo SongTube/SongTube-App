@@ -29,6 +29,10 @@ class _StreamManifestPlayerState extends State<StreamManifestPlayer> {
   bool hideControls = false;
   bool videoEnded = false;
 
+  // Reverse and Forward Animation
+  bool showReverse = false;
+  bool showForward = false;
+
   // ignore: close_sinks
   final BehaviorSubject<double> _dragPositionSubject =
     BehaviorSubject.seeded(null);
@@ -79,32 +83,92 @@ class _StreamManifestPlayerState extends State<StreamManifestPlayer> {
                 : Container(),
             ),
             // Video PlayBack Controls & Progress Bar
-            GestureDetector(
-              onTap: () => setState(() => hideControls = !hideControls),
-              child: VideoPlayerControls(
-                progressBar: widget.controller?.value?.duration?.inMinutes != null
-                  ? videoPlayerProgressBar() : Container(),
-                videoTitle: null,
-                playing: widget.controller.value.isPlaying,
-                onPlayPause: widget.controller.value.isPlaying
-                  ? () {
-                      widget.controller.pause();
-                      setState(() {});
-                      Future.delayed(Duration(seconds: 2), () {
-                        setState(() => hideControls = true);
-                      });
-                    }
-                  : () {
-                      widget.controller.play();
-                      setState(() {});
-                      Future.delayed(Duration(seconds: 2), () {
-                        setState(() => hideControls = true);
-                      });
+            VideoPlayerControls(
+              progressBar: widget.controller?.value?.duration?.inMinutes != null
+                ? videoPlayerProgressBar() : Container(),
+              videoTitle: null,
+              playing: widget.controller.value.isPlaying,
+              onPlayPause: widget.controller.value.isPlaying
+                ? () {
+                    widget.controller.pause();
+                    setState(() {});
+                    Future.delayed(Duration(seconds: 2), () {
+                      setState(() => hideControls = true);
+                    });
+                  }
+                : () {
+                    widget.controller.play();
+                    setState(() {});
+                    Future.delayed(Duration(seconds: 2), () {
+                      setState(() => hideControls = true);
+                    });
+                  },
+              onExit: () => Navigator.pop(context),
+              showControls: hideControls,
+            ),
+            Flex(
+              direction: Axis.horizontal,
+              children: [
+                Flexible(
+                  flex: 1,
+                  child: GestureDetector(
+                    onTap: () => setState(() => hideControls = !hideControls),
+                    onDoubleTap: () {
+                      if (widget.controller.value.initialized) {
+                        Duration seekNewPosition;
+                        if (widget.controller.value.position < Duration(seconds: 10)) {
+                          seekNewPosition = Duration.zero;
+                        } else {
+                          seekNewPosition = widget.controller.value.position - Duration(seconds: 10);
+                        }
+                        widget.controller.seekTo(seekNewPosition);
+                        setState(() => showReverse = true);
+                        Future.delayed(Duration(milliseconds: 250), ()
+                          => setState(() => showReverse = false));
+                      }
                     },
-                onExit: () => Navigator.pop(context),
-                showControls: hideControls,
-              ),
-            )
+                    child: Container(
+                      alignment: Alignment.center,
+                      color: Colors.transparent,
+                      child: AnimatedSwitcher(
+                        duration: Duration(milliseconds: 250),
+                        child: showReverse
+                          ? Icon(Icons.replay_10_outlined,
+                              color: Colors.white,
+                              size: 40)
+                          : Container()
+                      ),
+                    ),
+                  ),
+                ),
+                Flexible(
+                  flex: 1,
+                  child: GestureDetector(
+                    onTap: () => setState(() => hideControls = !hideControls),
+                    onDoubleTap: () {
+                      if (widget.controller.value.initialized) {
+                        widget.controller.seekTo(widget.controller.value.position + Duration(seconds: 10));
+                        setState(() => showForward = true);
+                        Future.delayed(Duration(milliseconds: 250), ()
+                          => setState(() => showForward = false));
+                      }
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      color: Colors.transparent,
+                      child: AnimatedSwitcher(
+                        duration: Duration(milliseconds: 250),
+                        child: showForward
+                          ? Icon(Icons.forward_10_outlined,
+                              color: Colors.white,
+                              size: 40)
+                          : Container()
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
           ],
         ),
       ),
