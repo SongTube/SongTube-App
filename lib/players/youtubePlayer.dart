@@ -76,7 +76,10 @@ class _StreamManifestPlayerState extends State<StreamManifestPlayer> {
             // Video Player
             Container(
               child: widget.controller.value.initialized
-                ? VideoPlayer(widget.controller)
+                ? AspectRatio(
+                    aspectRatio: widget?.controller?.value?.aspectRatio ?? 16/9,
+                    child: VideoPlayer(widget.controller)
+                  )
                 : Container(),
             ),
             // Video PlayBack Controls & Progress Bar

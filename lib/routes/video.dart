@@ -152,7 +152,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> {
         Container(
           margin: EdgeInsets.only(left: 12, right: 12),
           child: AspectRatio(
-            aspectRatio: 16/9,
+            aspectRatio: manager?.playerController?.value?.aspectRatio ?? 16/9,
             child: AnimatedSwitcher(
               duration: Duration(milliseconds: 400),
               child: manager.playerController != null
