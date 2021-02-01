@@ -10,7 +10,6 @@ class HomePageTrending extends StatelessWidget {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
     if (manager.homeTrendingVideoList.isNotEmpty) {
       return ListView.builder(
-        cacheExtent: 10000,
         itemCount: manager.homeTrendingVideoList.length,
         itemBuilder: (context, index) {
           return Padding(
