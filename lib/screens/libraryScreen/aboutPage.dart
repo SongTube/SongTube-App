@@ -1,5 +1,6 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AboutPage extends StatelessWidget {
   @override
@@ -83,9 +84,7 @@ class AboutPage extends StatelessWidget {
           SizedBox(height: 16),
           ListTile(
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return AboutPage();
-              }));
+              launch('mailto:artx4dev@gmail.com');
             },
             leading: Icon(
               EvaIcons.emailOutline,
@@ -113,9 +112,7 @@ class AboutPage extends StatelessWidget {
           SizedBox(height: 16),
           ListTile(
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return AboutPage();
-              }));
+              launch('tel://+58 (414) 3521458');
             },
             leading: Icon(
               EvaIcons.phoneOutline,
@@ -133,7 +130,7 @@ class AboutPage extends StatelessWidget {
               )
             ),
             subtitle: Text(
-              "+584143521458",
+              "+58 (414) 3521458",
               style: TextStyle(
                 fontFamily: 'Product Sans',
                 color: Theme.of(context).textTheme.bodyText1.color
