@@ -36,7 +36,9 @@ class _SearchHistoryListState extends State<SearchHistoryList> {
   @override
   Widget build(BuildContext context) {
     ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
-    List<String> searchHistory = [];
+    List<String> searchHistory = config.getSearchHistory();
+    List<String> suggestionsList = [];
+    List<String> finalList = [];
     return FutureBuilder(
       future: widget.searchQuery != "" ? client.get(
         'http://suggestqueries.google.com/complete/search?client=firefox&q=${widget.searchQuery}',
@@ -48,20 +50,20 @@ class _SearchHistoryListState extends State<SearchHistoryList> {
         }
       ) : null,
       builder: (context, AsyncSnapshot<http.Response> suggestions) {
-        searchHistory.clear();
+        suggestionsList.clear();
         if (suggestions.hasData && widget.searchQuery != "") {
           var map = jsonDecode(suggestions.data.body);
           var mapList = map[1];
           mapList.forEach((result) {
-            searchHistory.add(result);
+            suggestionsList.add(result);
           });
         }
-        searchHistory.addAll(config.getSearchHistory());
+        finalList = suggestionsList + searchHistory;
         return ListView.builder(
           itemExtent: 40,
-          itemCount: searchHistory.length,
+          itemCount: finalList.length,
           itemBuilder: (context, index) {
-            String item = searchHistory[index];
+            String item = finalList[index];
             return ListTile(
               title: Text(
                 "$item",
@@ -76,15 +78,19 @@ class _SearchHistoryListState extends State<SearchHistoryList> {
               leading: SizedBox(
                 width: 40,
                 height: 40,
-                child: Icon(Icons.search,
-                  color: Theme.of(context).iconTheme.color),
+                child: Icon(
+                  suggestionsList.contains(item)
+                    ? Icons.search
+                    : Icons.history_outlined,
+                  color: Theme.of(context).iconTheme.color
+                ),
               ),
-              trailing: IconButton(
+              trailing: !suggestionsList.contains(item) ? IconButton(
                 icon: Icon(Icons.clear, size: 20),
                 onPressed: () {
                   config.removeStringfromSearchHistory(index);
                 },
-              ),
+              ) : null,
               onTap: () => widget.onItemTap(item),
             );
           },
