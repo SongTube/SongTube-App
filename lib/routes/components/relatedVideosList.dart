@@ -126,7 +126,7 @@ class RelatedVideosList extends StatelessWidget {
                                     alignment: Alignment.bottomRight,
                                     child: Container(
                                       margin: EdgeInsets.all(6),
-                                      padding: EdgeInsets.all(2),
+                                      padding: EdgeInsets.all(3),
                                       decoration: BoxDecoration(
                                         color: Colors.black.withOpacity(0.6),
                                         borderRadius: BorderRadius.circular(3)
@@ -135,8 +135,10 @@ class RelatedVideosList extends StatelessWidget {
                                         "${video.duration.inMinutes}:" +
                                         "${video.duration.inSeconds.remainder(60).toString().padRight(2, "0")}",
                                         style: TextStyle(
-                                          fontSize: 11,
-                                          fontFamily: 'YTSans',
+                                          fontFamily: 'Product Sans',
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.white,
+                                          fontSize: 8
                                         ),
                                       ),
                                     ),
