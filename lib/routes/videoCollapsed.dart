@@ -106,19 +106,25 @@ class VideoPageCollapsed extends StatelessWidget {
           ),
           // Play/Pause
           SizedBox(width: 8),
-          IconButton(
-            icon: manager?.playerController?.value?.isPlaying ?? false
-              ? Icon(MdiIcons.pause, size: 22)
-              : Icon(MdiIcons.play, size: 22),
-            onPressed: manager?.playerController?.value?.isPlaying ?? false
-              ? () { manager.playerController.pause(); manager.setState(); }
-              : () { manager.playerController.play(); manager.setState(); }
+          Container(
+            color: Colors.transparent,
+            child: IconButton(
+              icon: manager?.playerController?.value?.isPlaying ?? false
+                ? Icon(MdiIcons.pause, size: 22)
+                : Icon(MdiIcons.play, size: 22),
+              onPressed: manager?.playerController?.value?.isPlaying ?? false
+                ? () { manager.playerController.pause(); manager.setState(); }
+                : () { manager.playerController.play(); manager.setState(); }
+            ),
           ),
-          IconButton(
-            icon: Icon(EvaIcons.closeOutline),
-            onPressed: () {
-              manager.disposeMediaInfoSet();
-            },
+          Container(
+            color: Colors.transparent,
+            child: IconButton(
+              icon: Icon(EvaIcons.closeOutline),
+              onPressed: () {
+                manager.disposeMediaInfoSet();
+              },
+            ),
           ),
           SizedBox(width: 16)
         ],
