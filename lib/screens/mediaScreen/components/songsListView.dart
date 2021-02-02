@@ -35,7 +35,6 @@ class SongsListView extends StatelessWidget {
     PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     return ListView.builder(
       physics: AlwaysScrollableScrollPhysics(),
-      itemExtent: 75,
       itemCount: songs.length,
       itemBuilder: (context, index) {
         MediaItem song = songs[index];
