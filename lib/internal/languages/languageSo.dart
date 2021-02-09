@@ -126,7 +126,7 @@ class LanguageEn extends Languages {
   @override
   String get labelSelectVideo => "Dooro Muuqaalka";
   @override
-  String get labelSelectAudio => "Dooro Codka";
+  String get labelSelectAudio => "Dooro Dhagaysiga";
 
   // Media Screen
   @override
