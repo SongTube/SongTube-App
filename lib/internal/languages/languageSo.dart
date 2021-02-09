@@ -6,7 +6,7 @@ class LanguageEn extends Languages {
   @override
   String get labelAppWelcome => "Kusoo dhawoow";
   @override
-  String get labelStart => "Bilow";
+  String get labelStart => "Billow";
   @override
   String get labelSkip => "Ka bood";
   @override
@@ -18,336 +18,336 @@ class LanguageEn extends Languages {
   @override
   String get labelAppCustomization => "Nashqadaynta";
   @override
-  String get labelSelectPreferred => "Select your Preferred";
+  String get labelSelectPreferred => "Dooro kaad rabto";
   @override
-  String get labelConfigReady => "Config Ready";
+  String get labelConfigReady => "Nidaaminta waa diyaar";
   @override
-  String get labelIntroductionIsOver => "Introduction is over";
+  String get labelIntroductionIsOver => "Hordhicii wuu dhamaaday";
   @override
-  String get labelEnjoy => "Enjoy";
+  String get labelEnjoy => "Baashaal";
   @override 
-  String get labelGoHome => "Go Home";
+  String get labelGoHome => "Aad Bogga Hore";
 
   // Bottom Navigation Bar
   @override
-  String get labelHome => "Home";
+  String get labelHome => "Bogga Hore";
   @override
-  String get labelDownloads => "Downloads";
+  String get labelDownloads => "Soodajinta";
   @override
-  String get labelMedia => "Media";
+  String get labelMedia => "Kuugu Jira";
   @override
   String get labelYouTube => "YouTube";
   @override
-  String get labelMore => "More";
+  String get labelMore => "In Badan";
 
   // Home Screen
   @override
-  String get labelQuickSearch => "Quick Search...";
+  String get labelQuickSearch => "Raadin...";
   @override
-  String get labelTagsEditor => "Tags\nEditor";
+  String get labelTagsEditor => "Shaanbad\nTifatire";
   @override
-  String get labelEditArtwork => "Edit\nArtwork";
+  String get labelEditArtwork => "Wax kabadal\nAFarshaxank";
   @override
-  String get labelDownloadAll => "Download All";
+  String get labelDownloadAll => "Wada Daji";
   @override 
-  String get labelLoadingVideos => "Loading Videos...";
+  String get labelLoadingVideos => "Sookicinaya Muuqaalada...";
   @override
-  String get labelHomePage => "Home Page";
+  String get labelHomePage => "Bogga Hore";
   @override
-  String get labelTrending => "Trending";
+  String get labelTrending => "Shiddan";
   @override
-  String get labelFavorites => "Favorites";
+  String get labelFavorites => "La jecelyahay";
   @override
-  String get labelWatchLater => "Watch Later";
+  String get labelWatchLater => "Hadhow Daawo";
 
   // Video Options Menu
   @override
-  String get labelCopyLink => "Copy Link";
+  String get labelCopyLink => "Koobiyee Tixraaca";
   @override
-  String get labelAddToFavorites => "Add to Favorites";
+  String get labelAddToFavorites => "Ku dar La jecelyahay";
   @override
-  String get labelAddToWatchLater => "Add to Watch Later";
+  String get labelAddToWatchLater => "Ku dar Hadhow Daawo";
 
   // Downloads Screen
   @override
-  String get labelQueued => "Queued";
+  String get labelQueued => "La horay";
   @override
-  String get labelDownloading => "Downloading";
+  String get labelDownloading => "Dajinaya";
   @override
-  String get labelConverting => "Converting";
+  String get labelConverting => "Badalaya";
   @override
-  String get labelCancelled => "Cancelled";
+  String get labelCancelled => "Lajoojiyay";
   @override
-  String get labelCompleted => "Completed";
+  String get labelCompleted => "Dhamaystirmay";
 
   // Download Status/Error Messages
   @override
-  String get labelDownloadQueued => "Download Queued";
+  String get labelDownloadQueued => "Dajinta Waa Lahoray";
   @override
-  String get labelDownloadAcesssDenied => "Access Denied";
+  String get labelDownloadAcesssDenied => "Lama Ogola";
   @override
-  String get labelClearingExistingMetadata => "Clearing Existing Metadata...";
+  String get labelClearingExistingMetadata => "Nadiifinaya Xogihii Yaryaraa ee horay ujiray...";
   @override
-  String get labelWrittingTagsAndArtwork => "Writting Tags & Artwork...";
+  String get labelWrittingTagsAndArtwork => "Kudaraya Shaambadaha & Farshaxanka...";
   @override
-  String get labelSavingFile => "Saving File...";
+  String get labelSavingFile => "Kaydinaya...";
   @override
-  String get labelAndroid11FixNeeded => "Error, Android 11 Fix needed, check Settings";
+  String get labelAndroid11FixNeeded => "Khalad, Hagaajinta Android ayaa loobaahanyahay, fiiri xaga Fadhiga";
   @override
-  String get labelErrorSavingDownload => "Couldn't save your Download, check Permissions";
+  String get labelErrorSavingDownload => "Lama kaydin karo Dajinta, fiiri Ogolaanshaha";
   @override
-  String get labelDownloadingVideo => "Downloading Video...";
+  String get labelDownloadingVideo => "Dajinaya Muuqaalka...";
   @override
-  String get labelDownloadingAudio => "Downloading Audio...";
+  String get labelDownloadingAudio => "Dajinaya Codka...";
   @override
-  String get labelGettingAudioStream => "Getting Audio Stream...";
+  String get labelGettingAudioStream => "Sooqabanaya Qaybta Codka...";
   @override
-  String get labelAudioNoDataRecieved => "Couldn't get Audio Stream";
+  String get labelAudioNoDataRecieved => "Lama Qabankaro Qaybta Codka";
   @override
-  String get labelDownloadStarting => "Download Starting...";
+  String get labelDownloadStarting => "Dajintu Way Bilaanaysaa...";
   @override
-  String get labelDownloadCancelled => "Download Cancelled";
+  String get labelDownloadCancelled => "Dajinta Waa Lajoojiyay";
   @override
-  String get labelAnIssueOcurredConvertingAudio => "Converted Process Failed";
+  String get labelAnIssueOcurredConvertingAudio => "Hawshii Baddalida Ma Guulaysan";
   @override
-  String get labelPatchingAudio => "Patching Audio...";
+  String get labelPatchingAudio => "Habaynaya Codka...";
 
   // Download Menu
   @override
-  String get labelEnableAudioConversion => "Enable Audio Conversion";
+  String get labelEnableAudioConversion => "Fur Baddalida Codka";
   @override
-  String get labelGainControls => "Gain Controls";
+  String get labelGainControls => "Hel Maamulka";
   @override
-  String get labelVolume => "Volume";
+  String get labelVolume => "Codka";
   @override
-  String get labelBassGain => "Bass Gain";
+  String get labelBassGain => "Kudar Bass";
   @override
-  String get labelTrebleGain => "Treble Gain";
+  String get labelTrebleGain => "Kudar Dheeraynta";
   @override
-  String get labelSelectVideo => "Select Video";
+  String get labelSelectVideo => "Dooro Muuqaalka";
   @override
-  String get labelSelectAudio => "Select Audio";
+  String get labelSelectAudio => "Dooro Codka";
 
   // Media Screen
   @override
-  String get labelMusic => "Music";
+  String get labelMusic => "Heeso";
   @override
-  String get labelVideos => "Videos";
+  String get labelVideos => "Muuqaalo";
   @override
-  String get labelNoMediaYet => "No Media Yet";
+  String get labelNoMediaYet => "Meel Madhan";
   @override
-  String get labelNoMediaYetJustification => "All your Media" +
-    "will be shown here";
+  String get labelNoMediaYetJustification => "Waxa Kuugu Jiroo dhan" +
+    "Halkan Ayaad Ka Arki";
   @override
-  String get labelSearchMedia => "Search Media...";
+  String get labelSearchMedia => "Raadi...";
   @override
-  String get labelDeleteSong => "Delete Song";
+  String get labelDeleteSong => "Tirtir Heesta";
   @override
-  String get labelNoPermissionJustification => "View your Media by" + "\n" +
+  String get labelNoPermissionJustification => "Usoo dhig Waxa Kuugujira sida" + "\n" +
     "Granting Storage Permission";
   @override
-  String get labelGettingYourMedia => "Getting your Media...";
+  String get labelGettingYourMedia => "Raadinaya Waxa Kuugujira...";
   @override
-  String get labelEditTags => "Edit Tags";
+  String get labelEditTags => "Waxkabadal Shaambadaha";
 
   // Navigate Screen
   @override
-  String get labelSearchYoutube => "Search YouTube...";
+  String get labelSearchYoutube => "Raadi...";
 
   // More Screen
   @override
-  String get labelSettings => "Settings";
+  String get labelSettings => "Fadhiga";
   @override
-  String get labelDonate => "Donate";
+  String get labelDonate => "Ugu Deeq";
   @override
-  String get labelLicenses => "Licenses";
+  String get labelLicenses => "Laysimada";
   @override
-  String get labelChooseColor => "Choose Color";
+  String get labelChooseColor => "Dooro Midabka";
   @override
-  String get labelTheme => "Theme";
+  String get labelTheme => "Nashqada";
   @override
-  String get labelUseSystemTheme => "Use System Theme";
+  String get labelUseSystemTheme => "Isticmaal Nashqada Aalada";
   @override
   String get labelUseSystemThemeJustification =>
-    "Enable/Disable automatic Theme";
+    "Xidh/Fur Nashqada ismaamusha";
   @override
-  String get labelEnableDarkTheme => "Enable Dark Theme";
+  String get labelEnableDarkTheme => "Fur Nashqada Mugdiga";
   @override
   String get labelEnableDarkThemeJustification =>
-    "Use Dark Theme by default";
+    "Marwalba isticmaal Nashqada Mugdiga";
   @override
-  String get labelEnableBlackTheme => "Enable Black Theme";
+  String get labelEnableBlackTheme => "Fur Nashqada Madow";
   @override
   String get labelEnableBlackThemeJustification =>
-    "Enable Pure Black Theme";
+    "Fur Nashqada Mugdiga AMOLED";
   @override
-  String get labelAccentColor => "Accent Color";
+  String get labelAccentColor => "Midabka Qoraalka";
   @override
-  String get labelAccentColorJustification => "Customize accent color";
+  String get labelAccentColorJustification => "Nashqadee midabka shaashada";
   @override
-  String get labelAudioFolder => "Audio Folder";
+  String get labelAudioFolder => "Galka Dhagaysiga";
   @override
-  String get labelAudioFolderJustification => "Choose a Folder for " +
-    "Audio downloads";
+  String get labelAudioFolderJustification => "U fadhiisi galka" +
+    "Dajinta dhagaysiga";
   @override
-  String get labelVideoFolder => "Video Folder";
+  String get labelVideoFolder => "Galka Muuqaalka";
   @override
-  String get labelVideoFolderJustification => "Choose a folder for " +
+  String get labelVideoFolderJustification => "U fadhiisi galka" +
     "Video downloads";
   @override
-  String get labelAlbumFolder => "Album Folder";
+  String get labelAlbumFolder => "Galka Albumka";
   @override
-  String get labelAlbumFolderJustification => "Create a Folder for each Song Album";
+  String get labelAlbumFolderJustification => "Usamee gal Albumka Hees walba";
   @override
-  String get labelDeleteCache => "Delete Cache";
+  String get labelDeleteCache => "Tirtir Kaydka K/G";
   @override
-  String get labelDeleteCacheJustification => "Clear SongTube Cache";
+  String get labelDeleteCacheJustification => "Nadiifi Kaydka K/G ee SongTube";
   @override
-  String get labelAndroid11Fix => "Android 11 Fix";
+  String get labelAndroid11Fix => "Hagaajinta Android 11";
   @override
-  String get labelAndroid11FixJustification => "Fixes Download issues on " +
+  String get labelAndroid11FixJustification => "Wuxuu saxaa arimaha Dajinta " +
     "Android 10 & 11";
   @override
-  String get labelBackup => "Backup";
+  String get labelBackup => "Kaydi";
   @override
-  String get labelBackupJustification => "Backup your media library";
+  String get labelBackupJustification => "Kayd ka qaad Waxa Kuugujira";
   @override
-  String get labelRestore => "Restore";
+  String get labelRestore => "Sooceli";
   @override
-  String get labelRestoreJustification => "Restore your media library";
+  String get labelRestoreJustification => "Sooceli Wixii Kuugujiray";
   @override
-  String get labelBackupLibraryEmpty => "Your Library is empty";
+  String get labelBackupLibraryEmpty => "Waxba kuuguma jiraan";
   @override
-  String get labelBackupCompleted => "Backup Completed";
+  String get labelBackupCompleted => "Kaydintii way dhamaatay";
   @override
-  String get labelRestoreNotFound => "Restore Not Found";
+  String get labelRestoreNotFound => "Soocelintii kaydka lama helin";
   @override
-  String get labelRestoreCompleted => "Restore Completed";
+  String get labelRestoreCompleted => "Soocelintii way dhamaystirantay";
   @override
-  String get labelCacheIsEmpty => "Cache is Empty";
+  String get labelCacheIsEmpty => "Kaydka K/G wuu madhan yahay";
   @override
-  String get labelYouAreAboutToClear => "You're about to clear";
+  String get labelYouAreAboutToClear => "Waxaad nadiifinaysaa";
 
   // Tags Editor TextFields
   @override
-  String get labelEditorTitle => "Title";
+  String get labelEditorTitle => "Magaca";
   @override
-  String get labelEditorArtist => "Artist";
+  String get labelEditorArtist => "Fanaanka";
   @override
-  String get labelEditorGenre => "Genre";
+  String get labelEditorGenre => "Nooca";
   @override
-  String get labelEditorDisc => "Disc";
+  String get labelEditorDisc => "Cajalka";
   @override
-  String get labelEditorTrack => "Track";
+  String get labelEditorTrack => "Shayga";
   @override
-  String get labelEditorDate => "Date";
+  String get labelEditorDate => "Taariikh";
   @override
   String get labelEditorAlbum => "Album";
 
   // Android 10 or 11 Detected Dialog
   @override
-  String get labelAndroid11Detected => "Android 10 or 11 Detected";
+  String get labelAndroid11Detected => "Android 10 ama 11 ayaa kuugujira";
   @override
-  String get labelAndroid11DetectedJustification => "To ensure the correct " +
-    "functioning of this app Downloads, on Android 10 and 11, access to all " +
-    "Files permission might be needed, this will be temporal and not required " +
-    "on future updates. You can also apply this fix in Settings.";
+  String get labelAndroid11DetectedJustification => "Si looxaqiijiyo shaqaynta " +
+    "saxda ah ee dajinta App-kan, marka la isticmaalayo Android 10 iyo 11, ogolaanshaha dhamaan " +
+    "waxa kuugujira ayaa loobaahan karaa, Tani aaa kumeelgaadh loomana baahandoono mustaqblka " +
+    "Sidoo kale hagaajintan xaga Fadhiga ayaad kahirgalin kartaa.";
 
   // Music Player
   @override
-  String get labelPlayerSettings => "Player Settings";
+  String get labelPlayerSettings => "Fadhiga Daareha";
   @override
-  String get labelExpandArtwork => "Expand Artwork";
+  String get labelExpandArtwork => "Waynee Farshaxanka";
   @override
-  String get labelArtworkRoundedCorners => "Artwork Rounded Corners";
+  String get labelArtworkRoundedCorners => "Farshaxanka Geesihiisa Qalooci";
   @override
-  String get labelPlayingFrom => "Playing From";
+  String get labelPlayingFrom => "Kadaaraya";
   @override
-  String get labelBlurBackground => "Blur Background";
+  String get labelBlurBackground => "Xaga Dambe shucaac gali";
 
   // Video Page
   @override
-  String get labelTags => "Tags";
+  String get labelTags => "Shaambadaha";
   @override
-  String get labelRelated => "Related";
+  String get labelRelated => "La xidhiidha";
   @override
-  String get labelAutoPlay => "AutoPlay";
+  String get labelAutoPlay => "isdaarida";
 
   // Tags Pages
   @override
   String get labelAudioFormatNotCompatible =>
-    "Audio format not Compatible";
+    "Nooca codka kuma shaqayn karo";
   @override
-  String get labelNotSpecified => "Not Specified";
+  String get labelNotSpecified => "Lama Cayimin";
   @override
   String get labelPerformAutomaticTagging => 
-    "Perform Automatic Tagging";
+    "Samee Shaambadayn isutalisa";
   @override
   String get labelSelectTagsfromMusicBrainz => 
-    "Select Tags from MusicBrainz";
+    "Shaambadaha kasoo dooro MusicBrainz";
   @override
   String get labelSelectArtworkFromDevice =>
-    "Select Artwork from Device";
+    "Farshaxanka Aalada kasoo dooro";
 
   // Telegram Join Channel Dialog
   @override
-  String get labelJoinTelegramChannel => "Join Telegram Channel!";
+  String get labelJoinTelegramChannel => "Kusoo biir Kanaalka Telegram!";
   @override
   String get labelJoinTelegramJustification =>
-    "Do you like SongTube? Please join the Telegram Channel! You will find " +
-    "Updates, Information, Development, Group Link and other Social links." +
+    "Ma jeceshahay SongTube? Fadlan Kusoo biir Kanaalka Telegram! Waxaad heli " +
+    "Cusboonaysiin, Xog, Hormarin, Tixraaca kooxda iyo tixraacyo kale oo Baraha Bulshada ah." +
     "\n\n" +
-    "In case you have an issue or a great recommentation in your mind, " +
-    "please join the Group from the Channel and write it down! But take in mind " +
-    "you can only speak in English, thanks!";
+    "Haduu jiro arin aad hayso ama aad soojeedin dhakada kuhayso, " +
+    "Fadlan kooxda kaga biir Kanaalka dhexdiisa oo wax sooqor! Laakiin xusuusnow " +
+    "Luuqada lagu wada xidhiidhayo waa Ingiriis kaliya, mahadsanid!";
   @override
-  String get labelRemindLater => "Remind Later";
+  String get labelRemindLater => "Hadhow ixasuusi";
 
   // Common Words (One word labels)
   @override
-  String get labelExit => "Exit";
+  String get labelExit => "Ka bax";
   @override
-  String get labelSystem => "System";
+  String get labelSystem => "Aalada";
   @override
-  String get labelChannel => "Channel";
+  String get labelChannel => "Kanaalkal";
   @override
-  String get labelShare => "Share";
+  String get labelShare => "La wadaag";
   @override
-  String get labelAudio => "Audio";
+  String get labelAudio => "Dhagaysi";
   @override
-  String get labelVideo => "Video";
+  String get labelVideo => "Muuqaal";
   @override
-  String get labelDownload => "Download";
+  String get labelDownload => "Daji";
   @override
-  String get labelBest => "Best";
+  String get labelBest => "Ugu Fiican";
   @override
-  String get labelPlaylist => "Playlist";
+  String get labelPlaylist => "Xul";
   @override
-  String get labelVersion => "Version";
+  String get labelVersion => "Tirsiga";
   @override
-  String get labelLanguage => "Language";
+  String get labelLanguage => "Luuqada";
   @override
-  String get labelGrant => "Grant";
+  String get labelGrant => "U ogolow";
   @override
-  String get labelAllow => "Allow";
+  String get labelAllow => "U ogolow";
   @override
-  String get labelAccess => "Access";
+  String get labelAccess => "Fasaxa";
   @override
-  String get labelEmpty => "Empty";
+  String get labelEmpty => "Madhan";
   @override
-  String get labelCalculating => "Calculating";
+  String get labelCalculating => "Xisaabinaya";
   @override
-  String get labelCleaning => "Cleaning";
+  String get labelCleaning => "Nadiifinaya";
   @override
-  String get labelCancel => "Cancel";
+  String get labelCancel => "Ka noqo";
   @override
-  String get labelGeneral => "General";
+  String get labelGeneral => "Guud";
   @override
-  String get labelRemove => "Remove";
+  String get labelRemove => "Ka saar";
   @override
-  String get labelJoin => "Join";
+  String get labelJoin => "Ku biir";
   @override
-  String get labelNo => "No";
+  String get labelNo => "Maya";
   @override
-  String get labelLibrary => "Library";
+  String get labelLibrary => "Boggaaga";
 }
