@@ -38,7 +38,7 @@ class LanguageEn extends Languages {
   @override
   String get labelYouTube => "YouTube";
   @override
-  String get labelMore => "In Badan";
+  String get labelMore => "Wax Kale";
 
   // Home Screen
   @override
@@ -46,7 +46,7 @@ class LanguageEn extends Languages {
   @override
   String get labelTagsEditor => "Shaanbad\nTifatire";
   @override
-  String get labelEditArtwork => "Wax kabadal\nAFarshaxank";
+  String get labelEditArtwork => "Wax kabadal\nAFarshaxanka";
   @override
   String get labelDownloadAll => "Wada Daji";
   @override 
@@ -56,7 +56,7 @@ class LanguageEn extends Languages {
   @override
   String get labelTrending => "Shiddan";
   @override
-  String get labelFavorites => "La jecelyahay";
+  String get labelFavorites => "Lajecelyahay";
   @override
   String get labelWatchLater => "Hadhow Daawo";
 
@@ -64,7 +64,7 @@ class LanguageEn extends Languages {
   @override
   String get labelCopyLink => "Koobiyee Tixraaca";
   @override
-  String get labelAddToFavorites => "Ku dar La jecelyahay";
+  String get labelAddToFavorites => "Ku dar Lajecelyahay";
   @override
   String get labelAddToWatchLater => "Ku dar Hadhow Daawo";
 
@@ -92,17 +92,17 @@ class LanguageEn extends Languages {
   @override
   String get labelSavingFile => "Kaydinaya...";
   @override
-  String get labelAndroid11FixNeeded => "Khalad, Hagaajinta Android ayaa loobaahanyahay, fiiri xaga Fadhiga";
+  String get labelAndroid11FixNeeded => "Khalad, Hagaajinta Android 11 ayaa loobaahanyahay, fiiri xaga Fadhiga";
   @override
   String get labelErrorSavingDownload => "Lama kaydin karo Dajinta, fiiri Ogolaanshaha";
   @override
   String get labelDownloadingVideo => "Dajinaya Muuqaalka...";
   @override
-  String get labelDownloadingAudio => "Dajinaya Codka...";
+  String get labelDownloadingAudio => "Dajinaya Dhagaysiga...";
   @override
   String get labelGettingAudioStream => "Sooqabanaya Qaybta Codka...";
   @override
-  String get labelAudioNoDataRecieved => "Lama Qabankaro Qaybta Codka";
+  String get labelAudioNoDataRecieved => "Lama Soo Qabankaro Qaybta Codka";
   @override
   String get labelDownloadStarting => "Dajintu Way Bilaanaysaa...";
   @override
@@ -137,14 +137,14 @@ class LanguageEn extends Languages {
   String get labelNoMediaYet => "Meel Madhan";
   @override
   String get labelNoMediaYetJustification => "Waxa Kuugu Jiroo dhan" +
-    "Halkan Ayaad Ka Arki";
+    "halkan ayaad ka arki";
   @override
   String get labelSearchMedia => "Raadi...";
   @override
   String get labelDeleteSong => "Tirtir Heesta";
   @override
   String get labelNoPermissionJustification => "Usoo dhig Waxa Kuugujira sida" + "\n" +
-    "Granting Storage Permission";
+    "U oglaanaya Fasaxa Kaydka";
   @override
   String get labelGettingYourMedia => "Raadinaya Waxa Kuugujira...";
   @override
@@ -193,7 +193,7 @@ class LanguageEn extends Languages {
   String get labelVideoFolder => "Galka Muuqaalka";
   @override
   String get labelVideoFolderJustification => "U fadhiisi galka" +
-    "Video downloads";
+    "Dajinta muuqaalka";
   @override
   String get labelAlbumFolder => "Galka Albumka";
   @override
@@ -226,7 +226,7 @@ class LanguageEn extends Languages {
   @override
   String get labelCacheIsEmpty => "Kaydka K/G wuu madhan yahay";
   @override
-  String get labelYouAreAboutToClear => "Waxaad nadiifinaysaa";
+  String get labelYouAreAboutToClear => "Waad nadiifinaysaa";
 
   // Tags Editor TextFields
   @override
@@ -249,8 +249,8 @@ class LanguageEn extends Languages {
   String get labelAndroid11Detected => "Android 10 ama 11 ayaa kuugujira";
   @override
   String get labelAndroid11DetectedJustification => "Si looxaqiijiyo shaqaynta " +
-    "saxda ah ee dajinta App-kan, marka la isticmaalayo Android 10 iyo 11, ogolaanshaha dhamaan " +
-    "waxa kuugujira ayaa loobaahan karaa, Tani aaa kumeelgaadh loomana baahandoono mustaqblka " +
+    "saxda ah ee dajinta App-kan, marka la isticmaalayo Android 10 iyo 11, ogolaanshaha dhammaan " +
+    "waxa kuugujira ayaa loobaahan karaa, tani aaa kumeelgaadh loomana baahandoono mustaqblka " +
     "Sidoo kale hagaajintan xaga Fadhiga ayaad kahirgalin kartaa.";
 
   // Music Player
@@ -298,8 +298,8 @@ class LanguageEn extends Languages {
     "Cusboonaysiin, Xog, Hormarin, Tixraaca kooxda iyo tixraacyo kale oo Baraha Bulshada ah." +
     "\n\n" +
     "Haduu jiro arin aad hayso ama aad soojeedin dhakada kuhayso, " +
-    "Fadlan kooxda kaga biir Kanaalka dhexdiisa oo wax sooqor! Laakiin xusuusnow " +
-    "Luuqada lagu wada xidhiidhayo waa Ingiriis kaliya, mahadsanid!";
+    "fadlan kooxda kaga biir Kanaalka dhexdiisa oo wax sooqor! Laakiin xusuusnow " +
+    "luuqada lagu wada xidhiidhayo waa Ingiriis kaliya, mahadsanid!";
   @override
   String get labelRemindLater => "Hadhow ixasuusi";
 
