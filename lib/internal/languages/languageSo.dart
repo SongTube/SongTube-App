@@ -34,7 +34,7 @@ class LanguageEn extends Languages {
   @override
   String get labelDownloads => "Soodajinta";
   @override
-  String get labelMedia => "Kuugu Jira";
+  String get labelMedia => "Gudaha";
   @override
   String get labelYouTube => "YouTube";
   @override
@@ -70,7 +70,7 @@ class LanguageEn extends Languages {
 
   // Downloads Screen
   @override
-  String get labelQueued => "La horay";
+  String get labelQueued => "Lahoray";
   @override
   String get labelDownloading => "Dajinaya";
   @override
@@ -136,17 +136,17 @@ class LanguageEn extends Languages {
   @override
   String get labelNoMediaYet => "Meel Madhan";
   @override
-  String get labelNoMediaYetJustification => "Waxa Kuugu Jiroo dhan" +
+  String get labelNoMediaYetJustification => "Waxa gudaha aalada kuugu Jiroo dhan" +
     "halkan ayaad ka arki";
   @override
   String get labelSearchMedia => "Raadi...";
   @override
   String get labelDeleteSong => "Tirtir Heesta";
   @override
-  String get labelNoPermissionJustification => "Usoo dhig Waxa Kuugujira sida" + "\n" +
+  String get labelNoPermissionJustification => "Usoo dhig gudaha waxa wuugujira sida" + "\n" +
     "U oglaanaya Fasaxa Kaydka";
   @override
-  String get labelGettingYourMedia => "Raadinaya Waxa Kuugujira...";
+  String get labelGettingYourMedia => "Raadinaya gudaha aalada waxa kuugujira...";
   @override
   String get labelEditTags => "Waxkabadal Shaambadaha";
 
@@ -210,11 +210,11 @@ class LanguageEn extends Languages {
   @override
   String get labelBackup => "Kaydi";
   @override
-  String get labelBackupJustification => "Kayd ka qaad Waxa Kuugujira";
+  String get labelBackupJustification => "Kayd ka qaad gudaha aalada waxa kuugujira";
   @override
   String get labelRestore => "Sooceli";
   @override
-  String get labelRestoreJustification => "Sooceli Wixii Kuugujiray";
+  String get labelRestoreJustification => "Sooceli wixii kuugujiray";
   @override
   String get labelBackupLibraryEmpty => "Waxba kuuguma jiraan";
   @override
@@ -250,7 +250,7 @@ class LanguageEn extends Languages {
   @override
   String get labelAndroid11DetectedJustification => "Si looxaqiijiyo shaqaynta " +
     "saxda ah ee dajinta App-kan, marka la isticmaalayo Android 10 iyo 11, ogolaanshaha dhammaan " +
-    "waxa kuugujira ayaa loobaahan karaa, tani aaa kumeelgaadh loomana baahandoono mustaqblka " +
+    "waxa gudaha aalada kuugujira ayaa loobaahan karaa, tani aaa kumeelgaadh loomana baahandoono mustaqblka " +
     "Sidoo kale hagaajintan xaga Fadhiga ayaad kahirgalin kartaa.";
 
   // Music Player
