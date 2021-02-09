@@ -46,7 +46,7 @@ class LanguageEn extends Languages {
   @override
   String get labelTagsEditor => "Shaanbad\nTifatire";
   @override
-  String get labelEditArtwork => "Wax kabadal\nAFarshaxanka";
+  String get labelEditArtwork => "Waxkabadal\nAFarshaxanka";
   @override
   String get labelDownloadAll => "Wada Daji";
   @override 
