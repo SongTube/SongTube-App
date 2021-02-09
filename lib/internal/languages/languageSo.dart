@@ -38,7 +38,7 @@ class LanguageEn extends Languages {
   @override
   String get labelYouTube => "YouTube";
   @override
-  String get labelMore => "Wax Kale";
+  String get labelMore => "Waxkale";
 
   // Home Screen
   @override
@@ -114,7 +114,7 @@ class LanguageEn extends Languages {
 
   // Download Menu
   @override
-  String get labelEnableAudioConversion => "Fur Baddalida Codka";
+  String get labelEnableAudioConversion => "Fur Baddalida Dhagaysiga";
   @override
   String get labelGainControls => "Hel Maamulka";
   @override
