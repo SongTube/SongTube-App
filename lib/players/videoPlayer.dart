@@ -150,7 +150,7 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
     SystemChrome.setEnabledSystemUIOverlays([]);
     return Scaffold(
       backgroundColor: Colors.black,
-      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: false,
       body: MediaQuery(
         data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
         child: Stack(
