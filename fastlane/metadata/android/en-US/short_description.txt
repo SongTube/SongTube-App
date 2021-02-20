@@ -1,1 +1,1 @@
-SongTube is a new beautiful and fast application made in flutter.
+YouTube audio and video downloading, In-App YouTube Browser, audio conversion.
