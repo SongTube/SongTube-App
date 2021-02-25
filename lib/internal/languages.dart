@@ -35,7 +35,7 @@ final supportedLanguages = <LanguageData>[
   // Turkish (TR)
   LanguageData("tr", "Turkey", "tr"),
   // Russian (RU)
-  LanguageData("ru", "Russian", "ru")
+  LanguageData("ru", "Russian", "ru"),
   // Somali (SO, ET, DJI, KEN)
   LanguageData("🇸🇴" "🇪🇹" "🇩🇯" "🇰🇪", "Soomaali", "so"),
 ];
@@ -64,7 +64,7 @@ Future<Languages> _loadLocale(Locale locale) async {
       return LanguageRu();
     // Somali (SO, ET, DJI, KEN)
     case 'so':
-    return LanguageSo();
+      return LanguageSo();
     // Default Language (English)
     default:
       return LanguageEn();
