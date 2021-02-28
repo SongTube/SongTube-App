@@ -162,7 +162,7 @@ class LanguageEn extends Languages {
   @override
   String get labelLicenses => "Licenses";
   @override
-  String get labelChooseColor => "Choose Colour";
+  String get labelChooseColor => "Choose Color";
   @override
   String get labelTheme => "Theme";
   @override
@@ -246,7 +246,7 @@ class LanguageEn extends Languages {
 
   // Android 10 or 11 Detected Dialog
   @override
-  String get labelAndroid11Detected => "You are usingAndroid 10 or 11";
+  String get labelAndroid11Detected => "You are using Android 10 or 11";
   @override
   String get labelAndroid11DetectedJustification => "Ensure you are granting " +
     "access to all files temporarily here or by requesting it from the setttings. " +
