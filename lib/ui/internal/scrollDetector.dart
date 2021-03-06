@@ -16,7 +16,7 @@ class ScrollDetector extends StatelessWidget {
       onNotification: (ScrollUpdateNotification details) {
         if (details.scrollDelta.abs() < sensitivityFactor)
           return false;
-        if (details.scrollDelta > 0.0) {
+        if (details.scrollDelta > 0.0 && details.metrics.axis == Axis.vertical) {
           onScrollDown();
         } else {
           onScrollUp();
