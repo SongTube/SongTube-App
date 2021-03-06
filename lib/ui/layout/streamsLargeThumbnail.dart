@@ -48,7 +48,7 @@ class StreamsLargeThumbnailView extends StatelessWidget {
           double delta = 200.0;
           if ( maxScroll - currentScroll <= delta)
             onReachingListEnd();
-          return true;
+          return false;
         },
         child: ListView.builder(
           itemCount: infoItems.length,
