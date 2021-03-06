@@ -37,7 +37,7 @@ void main() async {
   LegacyPreferences preferences = new LegacyPreferences();
   await preferences.initPreferences();
   if (kDebugMode)
-    timeDilation = 3.0;
+    timeDilation = 1.0;
   runApp(Main(preloadedFs: preferences));
 }
 

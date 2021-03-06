@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ScrollDetector extends StatefulWidget {
+class ScrollDetector extends StatelessWidget {
   final Function onScrollUp;
   final Function onScrollDown;
   final Widget child;
@@ -9,30 +9,21 @@ class ScrollDetector extends StatefulWidget {
     this.onScrollDown,
     this.onScrollUp
   });
-
-  @override
-  _ScrollDetectorState createState() => _ScrollDetectorState();
-}
-
-class _ScrollDetectorState extends State<ScrollDetector> {
-
-  double position = 0.0;
-  double sensitivityFactor = 50.0;
-
+  final sensitivityFactor = 5;
   @override
   Widget build(BuildContext context) {
-    return NotificationListener<ScrollNotification>(
-      onNotification: (ScrollNotification details) {
-        if (details.metrics.pixels - position >= sensitivityFactor && details.metrics.axis == Axis.vertical) {
-          position = details.metrics.pixels;
-          widget.onScrollDown();
-        } else if (position - details.metrics.pixels  >= sensitivityFactor && details.metrics.axis == Axis.vertical) {
-          position = details.metrics.pixels;
-          widget.onScrollUp();
+    return NotificationListener<ScrollUpdateNotification>(
+      onNotification: (ScrollUpdateNotification details) {
+        if (details.scrollDelta.abs() < sensitivityFactor)
+          return false;
+        if (details.scrollDelta > 0.0) {
+          onScrollDown();
+        } else {
+          onScrollUp();
         }
         return false;
       },
-      child: widget.child,
+      child: child,
     );
   }
 }
