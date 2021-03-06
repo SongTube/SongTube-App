@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:image_fade/image_fade.dart';
+import 'package:newpipeextractor_dart/models/infoItems/video.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/provider/preferencesProvider.dart';
-import 'package:youtube_explode_dart/youtube_explode_dart.dart';
+import 'package:songtube/provider/videoPageProvider.dart';
 
 class WatchHistoryRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
-    ManagerProvider manager = Provider.of<ManagerProvider>(context);
-    List<Video> watchHistory = prefs.watchHistory;
+    VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
+    List<StreamInfoItem> watchHistory = prefs.watchHistory;
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,10 +37,10 @@ class WatchHistoryRow extends StatelessWidget {
                 itemCount: watchHistory.length < 10
                   ? watchHistory.length : 10,
                 itemBuilder: (context, index) {
-                  Video video = watchHistory[index];
+                  StreamInfoItem video = watchHistory[index];
                   return GestureDetector(
                     onTap: () {
-                      manager.updateMediaInfoSet(video, watchHistory);
+                      pageProvider.infoItem = video;
                     },
                     child: Container(
                       width: 160,
@@ -57,7 +58,7 @@ class WatchHistoryRow extends StatelessWidget {
                                 child: ImageFade(
                                   fit: BoxFit.cover,
                                   fadeDuration: Duration(milliseconds: 200),
-                                  image: NetworkImage(video.thumbnails.mediumResUrl),
+                                  image: NetworkImage(video.thumbnails.hqdefault),
                                 ),
                               ),
                             ),
@@ -67,7 +68,7 @@ class WatchHistoryRow extends StatelessWidget {
                             height: 40,
                             padding: EdgeInsets.only(left: 4, right: 4),
                             child: Text(
-                              "${video.title}",
+                              "${video.name}",
                               maxLines: 2,
                               overflow: TextOverflow.clip,
                               textAlign: TextAlign.start,

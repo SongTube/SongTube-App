@@ -5,17 +5,19 @@ import 'package:flutter/material.dart';
 // Packages
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter_xlider/flutter_xlider.dart';
+import 'package:newpipeextractor_dart/models/streams/audioOnlyStream.dart';
+import 'package:newpipeextractor_dart/models/video.dart';
+import 'package:newpipeextractor_dart/utils/httpClient.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/provider/configurationProvider.dart';
-import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 class AudioDownloadMenu extends StatefulWidget {
-  final List<AudioStreamInfo> audioList;
+  final YoutubeVideo video;
   final Function(List<dynamic>) onDownload;
   final Function onBack;
   AudioDownloadMenu({
-    @required this.audioList,
+    @required this.video,
     @required this.onDownload,
     @required this.onBack
   });
@@ -31,7 +33,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
   int trebleGain = 0;
   bool normalizeAudio = false;
 
-  void _onDownload(AudioStreamInfo streamInfo) {
+  void _onDownload(AudioOnlyStream streamInfo) {
     List<dynamic> list = [
       "Audio",
       streamInfo, 
@@ -53,16 +55,6 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
     } else {
       return "Not Supported";
     }
-  }
-
-  AudioStreamInfo _getBestStream() {
-    List<AudioStreamInfo> list = [];
-    widget.audioList.forEach((element) {
-      if (element.audioCodec == "mp4a.40.2") {
-        list.add(element);
-      }
-    });
-    return list.withHighestBitrate();
   }
 
   @override
@@ -97,20 +89,20 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
           SizedBox(
             height: 150,
             child: ListView.builder(
-              
-              itemCount: widget.audioList.length,
+              itemCount: widget.video.audioOnlyStreams.length,
               scrollDirection: Axis.horizontal,
               shrinkWrap: true,
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
-                  onTap: () => _onDownload(widget.audioList[index]),
+                  onTap: () => _onDownload(widget.video.audioOnlyStreams[index]),
                   child: Container(
                     width: 125,
                     margin: EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                        color: widget.audioList[index] == _getBestStream()
+                        color: widget.video.audioOnlyStreams[index] ==
+                          widget.video.audioWithBestAacQuality
                           ? Theme.of(context).accentColor
                           : Theme.of(context).iconTheme.color.withOpacity(0.1),
                         width: 1.5,
@@ -126,7 +118,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
-                        if (widget.audioList[index] == _getBestStream())
+                        if (widget.video.audioOnlyStreams[index] == widget.video.audioWithBestAacQuality)
                         Align(
                           alignment: Alignment.topLeft,
                           child: Container(
@@ -156,7 +148,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                             Column(
                               children: [
                                 Text(
-                                  "${widget.audioList[index].audioCodec}",
+                                  "${widget.video.audioOnlyStreams[index].formatName}",
                                   overflow: TextOverflow.fade,
                                   textAlign: TextAlign.center,
                                   softWrap: false,
@@ -166,7 +158,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                                   ),
                                 ),
                                 Text(
-                                  "${widget.audioList[index].bitrate.kiloBitsPerSecond.toStringAsFixed(2)} Kbit/s",
+                                  "${widget.video.audioOnlyStreams[index].averageBitrate} Kbit/s",
                                   overflow: TextOverflow.fade,
                                   textAlign: TextAlign.center,
                                   softWrap: false,
@@ -174,14 +166,21 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                                     fontSize: 10
                                   ),
                                 ),
-                                Text(
-                                  "${widget.audioList[index].size.totalMegaBytes.toStringAsFixed(2)} MB",
-                                  overflow: TextOverflow.fade,
-                                  textAlign: TextAlign.center,
-                                  softWrap: false,
-                                  style: TextStyle(
-                                    fontSize: 10
-                                  ),
+                                FutureBuilder(
+                                  future: ExtractorHttpClient.getContentLength(widget.video.audioOnlyStreams[index].url),
+                                  builder: (context, snapshot) {
+                                    return Text(
+                                      snapshot.hasData
+                                        ? "${((snapshot.data/1024)/1024).toStringAsFixed(2)} MB"
+                                        : "Loading...",
+                                      overflow: TextOverflow.fade,
+                                      textAlign: TextAlign.center,
+                                      softWrap: false,
+                                      style: TextStyle(
+                                        fontSize: 10
+                                      ),
+                                    );
+                                  }
                                 ),
                               ],
                             )
@@ -494,6 +493,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                     SizedBox(width: 8),
                     Text("Normalize Audio", style: TextStyle(
                       fontSize: 20,
+                      color: Theme.of(context).textTheme.bodyText1.color,
                       fontFamily: "YTSans"
                     )),
                   ],

@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:newpipeextractor_dart/models/infoItems/video.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/provider/preferencesProvider.dart';
+import 'package:songtube/provider/videoPageProvider.dart';
 import 'package:songtube/ui/components/autohideScaffold.dart';
 import 'package:transparent_image/transparent_image.dart';
-import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 class WatchHistoryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
-    ManagerProvider manager = Provider.of<ManagerProvider>(context);
-    List<Video> history = prefs.watchHistory;
+    VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
+    List<StreamInfoItem> history = prefs.watchHistory;
     return AutoHideScaffold(
       backgroundColor: Theme.of(context).cardColor,
       appBar: AppBar(
@@ -32,11 +33,11 @@ class WatchHistoryPage extends StatelessWidget {
       body: history.isNotEmpty ? ListView.builder(
         itemCount: history.length,
         itemBuilder: (context, index) {
-          Video video = history[index];
+          StreamInfoItem video = history[index];
           return GestureDetector(
             onTap: () {
               Navigator.pop(context);
-              manager.updateMediaInfoSet(video, history);
+              pageProvider.infoItem = video;
             },
             child: Container(
               color: Colors.transparent,
@@ -54,11 +55,15 @@ class WatchHistoryPage extends StatelessWidget {
                         children: [
                           ClipRRect(
                             borderRadius: BorderRadius.circular(10),
-                            child: FadeInImage(
-                              fadeInDuration: Duration(milliseconds: 300),
-                              placeholder: MemoryImage(kTransparentImage),
-                              image: NetworkImage(
-                                "https://img.youtube.com/vi/${video.id.value}/mqdefault.jpg"
+                            child: AspectRatio(
+                              aspectRatio: 16/9,
+                              child: FadeInImage(
+                                fadeInDuration: Duration(milliseconds: 300),
+                                placeholder: MemoryImage(kTransparentImage),
+                                image: NetworkImage(
+                                  video.thumbnails.hqdefault
+                                ),
+                                fit: BoxFit.cover,
                               ),
                             ),
                           ),
@@ -72,8 +77,8 @@ class WatchHistoryPage extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(20)
                               ),
                               child: Text(
-                                "${video.duration.inMinutes}:" +
-                                "${video.duration.inSeconds.remainder(60).toString().padRight(2, "0")}" +
+                                "${Duration(seconds: video.duration).inMinutes}:" +
+                                "${Duration(seconds: video.duration).inSeconds.remainder(60).toString().padRight(2, "0")}" +
                                 " min",
                                 style: TextStyle(
                                   color: Colors.white,
@@ -99,7 +104,7 @@ class WatchHistoryPage extends StatelessWidget {
                             bottom: 4
                           ),
                           child: Text(
-                            video.title,
+                            video.name,
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 14
@@ -111,8 +116,8 @@ class WatchHistoryPage extends StatelessWidget {
                         Container(
                           padding: EdgeInsets.only(left: 8),
                           child: Text(
-                            video.author + " • " +
-                            "${NumberFormat.compact().format(video.engagement.viewCount)}" +
+                            video.uploaderName + " • " +
+                            "${NumberFormat.compact().format(video.viewCount)}" +
                             " Views",
                             style: TextStyle(
                               fontSize: 11,

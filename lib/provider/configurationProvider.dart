@@ -2,7 +2,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:songtube/internal/models/channelLogo.dart';
 
 // Internal
 import 'package:songtube/internal/legacyPreferences.dart';
@@ -83,8 +82,6 @@ class ConfigurationProvider extends ChangeNotifier {
   bool get enableAlbumFolder => _enableAlbumFolder;
   // Use Youtube Webview
   bool get useYoutubeWebview => _useYoutubeWebview;
-  // Navigate ChannelLogo Cache
-  List<ChannelLogo> _channelLogos;
 
   // Disclaimer Status
   bool _disclaimerAccepted;
@@ -150,7 +147,6 @@ class ConfigurationProvider extends ChangeNotifier {
     enableAlbumFolder = preferences.getEnableAlbumFolder();
     _searchHistory = (jsonDecode(preferences.getSearchHistory())
       as List<dynamic>).cast<String>();
-    _channelLogos = ChannelLogo.fromJsonArray(preferences.getChannelLogos());
     // Load Disclaimer Status
     _disclaimerAccepted = preferences.getDisclaimerStatus();
     _showDownloadFixDialog = preferences.getShowDownloadFixDialog();
@@ -197,18 +193,6 @@ class ConfigurationProvider extends ChangeNotifier {
     _searchHistory.removeAt(index);
     preferences.saveSearchHistory(jsonEncode(_searchHistory));
     notifyListeners();
-  }
-
-  // Navigate ChannelLogo Cache
-  List<ChannelLogo> get channelLogos => _channelLogos;
-  set channelLogos(List<ChannelLogo> newList) {
-    _channelLogos = newList;
-    preferences.saveChannelLogos(ChannelLogo.listToJson(newList));
-    notifyListeners();
-  }
-  void addItemtoChannelLogoList(ChannelLogo item) {
-    _channelLogos.add(item);
-    preferences.saveChannelLogos(ChannelLogo.listToJson(_channelLogos));
   }
 
   //

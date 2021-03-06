@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:youtube_explode_dart/youtube_explode_dart.dart';
+import 'package:newpipeextractor_dart/models/playlist.dart';
+import 'package:newpipeextractor_dart/models/video.dart';
 
 class TagsControllers {
 
@@ -25,32 +26,30 @@ class TagsControllers {
   TextEditingController trackController;
   String artworkController;
 
-  void updateTextControllers(Video videoDetails, String artwork) {
-    titleController.text  = videoDetails.title;
+  void updateTextControllers(YoutubeVideo stream) {
+    titleController.text  = stream.name;
     albumController.text  = "YouTube";
-    artistController.text = videoDetails.author
+    artistController.text = stream.uploaderName
                               .replaceAll("- Topic", "")
                               .trim();
     genreController.text  = "Any";
-    dateController.text   = "${videoDetails.uploadDate.year}/"
-                            + "${videoDetails.uploadDate.month}/"
-                            + "${videoDetails.uploadDate.day}";
+    dateController.text   = stream.uploadDate;
     discController.text   = "1";
     trackController.text  = "1";
-    artworkController     = artwork;
+    artworkController     = stream.thumbnailUrl;
   }
 
-  void updateTextControllersFromPlaylist(Playlist playlist, String artwork) {
-    titleController.text  = playlist.title;
+  void updateTextControllersFromPlaylist(YoutubePlaylist playlist) {
+    titleController.text  = playlist.name;
     albumController.text  = "YouTube";
-    artistController.text = playlist.author;
+    artistController.text = playlist.uploaderName;
     genreController.text  = "Any";
     dateController.text   = "${DateTime.now().year}/"
                             + "${DateTime.now().month}"
                             + "${DateTime.now().day}";
     discController.text   = "1";
     trackController.text  = "1";
-    artworkController     = artwork;
+    artworkController     = playlist.thumbnailUrl;
   }
 
 }

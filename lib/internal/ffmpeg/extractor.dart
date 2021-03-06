@@ -231,25 +231,25 @@ class FFmpegExtractor {
   static Future<int> getVideoDuration(File video) async {
     assert(video.path != "" || video != null);
     var json = await FlutterFFprobe().getMediaInformation(video.path);
-    return json['duration'];
+    return json.getMediaProperties()['duration'];
   }
 
   /// Get Audio Date
   static Future<String> getAudioDate(String audioPath) async {
     var json = await FlutterFFprobe().getMediaInformation(audioPath);
-    return "${json["metadata"]["date"]}";
+    return "${json.getMediaProperties()["tags"]["date"]}";
   }
 
   /// Get Audio Disc
   static Future<String> getAudioDisc(String audioPath) async {
     var json = await FlutterFFprobe().getMediaInformation(audioPath);
-    return "${json["metadata"]["disc"]}";
+    return "${json.getMediaProperties()["tags"]["disc"]}";
   }
 
   /// Get Audio Track
   static Future<String> getAudioTrack(String audioPath) async {
     var json = await FlutterFFprobe().getMediaInformation(audioPath);
-    return "${json["metadata"]["track"]}";
+    return "${json.getMediaProperties()["tags"]["track"]}";
   }
 
 }

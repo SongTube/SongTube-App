@@ -1,6 +1,9 @@
 // Flutter
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:newpipeextractor_dart/extractors/videos.dart';
+import 'package:newpipeextractor_dart/models/infoItems/video.dart';
+import 'package:newpipeextractor_dart/models/video.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/downloadMenu/components/homeMenu.dart';
 import 'package:songtube/downloadMenu/components/loadingMenu.dart';
@@ -11,31 +14,24 @@ import 'package:songtube/downloadMenu/components/audioMenu.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/models/metadata.dart';
 import 'package:songtube/internal/models/tagsControllers.dart';
-import 'package:songtube/internal/youtube/youtubeExtractor.dart';
 import 'package:songtube/provider/configurationProvider.dart';
 import 'package:songtube/provider/downloadsProvider.dart';
-import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/ui/internal/snackbar.dart';
-
-// Packages
-import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 enum CurrentDownloadMenu { Home, Audio, Video, Loading }
 
 class DownloadMenu extends StatefulWidget {
-  final StreamManifest streamManifest;
+  final YoutubeVideo video;
   final TagsControllers tags;
-  final Video videoDetails;
   final String videoUrl;
-  final List<Video> playlistVideos;
+  final List<StreamInfoItem> relatedVideos;
   final scaffoldState;
   DownloadMenu({
-    this.streamManifest,
+    this.video,
     this.tags,
-    this.videoDetails,
     this.videoUrl,
     this.scaffoldState,
-    this.playlistVideos
+    this.relatedVideos
   });
   @override
   _DownloadMenuState createState() => _DownloadMenuState();
@@ -47,48 +43,37 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
   CurrentDownloadMenu currentDownloadMenu;
 
   // Download Menu StreamManifest
-  StreamManifest manifest;
+  YoutubeVideo video;
   TagsControllers tags;
-  Video details;
 
   @override
   void initState() {
     currentDownloadMenu =
       CurrentDownloadMenu.Loading;
     super.initState();
-    if (widget.streamManifest == null) {
-      initStreamManifest();
+    if (widget.video == null) {
+      getVideo();
     } else {
-      manifest = widget.streamManifest;
+      video = widget.video;
       tags = widget.tags;
-      details = widget.videoDetails;
       setState(() => currentDownloadMenu = CurrentDownloadMenu.Home);
     }
     
   }
 
-  void initStreamManifest() async {
-    VideoId videoId = VideoId(VideoId.parseVideoId(widget.videoUrl));
-    manifest = await YoutubeExtractor().getStreamManifest(videoId);
-    details = await YoutubeExtractor().getVideoDetails(videoId);
+  void getVideo() async {
+    video = await VideoExtractor.getVideoInfoAndStreams(widget.videoUrl);
     tags = TagsControllers();
-    tags.updateTextControllers(details, details.thumbnails.mediumResUrl);
+    tags.updateTextControllers(video);
     setState(() => currentDownloadMenu = CurrentDownloadMenu.Home);
   }
 
   Widget build(BuildContext context) {
-    ManagerProvider manager = Provider.of<ManagerProvider>(context);
-    return WillPopScope(
-      onWillPop: () {
-        manager.youtubeExtractor.killIsolates();
-        return Future.value(true);
-      },
-      child: AnimatedSize(
-        vsync: this,
-        curve: Curves.easeInOut,
-        duration: Duration(milliseconds: 200),
-        child: _currentDownloadMenuWidget(),
-      ),
+    return AnimatedSize(
+      vsync: this,
+      curve: Curves.easeInOut,
+      duration: Duration(milliseconds: 200),
+      child: _currentDownloadMenuWidget(),
     );
   }
 
@@ -98,7 +83,7 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
     switch (currentDownloadMenu) {
       case CurrentDownloadMenu.Home:
         returnWidget = DownloadMenuHome(
-          playlistVideos: widget.playlistVideos,
+          playlistVideos: widget.relatedVideos,
           onBack: () => Navigator.pop(context),
           onAudioTap: () => setState(() => 
             currentDownloadMenu = CurrentDownloadMenu.Audio),
@@ -108,9 +93,7 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
       case CurrentDownloadMenu.Audio:
         returnWidget = Container(
           child: AudioDownloadMenu(
-            audioList: manifest.audioOnly
-              .sortByBitrate()
-              .reversed.toList(),
+            video: video,
             onBack: () => setState(() => 
               currentDownloadMenu = CurrentDownloadMenu.Home),
             onDownload: (list) => _initializeDownload(list),
@@ -120,12 +103,9 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
         returnWidget = Container(
           height: MediaQuery.of(context).size.height*0.6,
           child: VideoDownloadMenu(
-            videoList: manifest.videoOnly
-              .sortByVideoQuality(),
+            videoList: video.videoOnlyStreams,
             onOptionSelect: (list) => _initializeDownload(list),
-            audioSize: manifest.audioOnly
-              .withHighestBitrate()
-              .size.totalMegaBytes,
+            audioStream: video.audioWithBestAacQuality,
             onBack: () => setState(() => 
               currentDownloadMenu = CurrentDownloadMenu.Home),
           ),
@@ -155,8 +135,7 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
         disc: tags.discController.text,
         track: tags.trackController.text
       ),
-      manifest: manifest,
-      videoDetails: details,
+      videoDetails: video,
       data: configList
     );
     Navigator.of(context).pop();
@@ -164,7 +143,7 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
       AppSnack.showSnackBar(
         icon: EvaIcons.cloudDownloadOutline,
         title: "Download started...",
-        message: "${details.title}",
+        message: "${video.name}",
         context: context,
         scaffoldKey: widget.scaffoldState
       );

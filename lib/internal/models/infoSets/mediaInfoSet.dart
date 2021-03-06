@@ -1,50 +1,41 @@
+import 'package:newpipeextractor_dart/extractors/channels.dart';
+import 'package:newpipeextractor_dart/models/channel.dart';
+import 'package:newpipeextractor_dart/models/infoItems/video.dart';
+import 'package:newpipeextractor_dart/models/video.dart';
 import 'package:songtube/internal/models/tagsControllers.dart';
-import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 enum MediaInfoSetType { Video, Playlist }
 
 class MediaInfoSet {
 
-  SearchVideo videoFromSearch;
-  SearchPlaylist playlistFromSearch;
   MediaInfoSetType mediaType;
-  Video videoDetails;
-  Playlist playlistDetails;
-  List<Video> playlistVideos;
-  Channel channelDetails;
-  StreamManifest streamManifest;
+  dynamic infoItem;
+  dynamic youtubeInfoItem;
+  YoutubeChannel channel;
   TagsControllers mediaTags;
-  List<Video> relatedVideos;
+  List<StreamInfoItem> relatedVideos;
   int autoPlayIndex;
 
   MediaInfoSet({
-    this.videoFromSearch,
-    this.playlistFromSearch,
     this.mediaType,
-    this.videoDetails,
-    this.playlistDetails,
-    this.streamManifest,
-    this.channelDetails,
+    this.infoItem,
     this.relatedVideos
   }) {
     mediaTags = TagsControllers();
-    playlistVideos = List<Video>();
-    relatedVideos = this.relatedVideos ?? List<Video>();
+    relatedVideos = this.relatedVideos ?? List<StreamInfoItem>();
     autoPlayIndex = 0;
   }
 
-  void updateVideoDetails(Video video) {
-    videoDetails = video;
-    mediaTags.updateTextControllers(
-      video, video.thumbnails.maxResUrl
-    );
+  void updateTagsDetails() {
+    if (youtubeInfoItem is YoutubeVideo) {
+      mediaTags.updateTextControllers(youtubeInfoItem);
+    } else {
+      mediaTags.updateTextControllersFromPlaylist(youtubeInfoItem);
+    }
   }
 
-  void updatePlaylistDetails(Playlist playlist) {
-    playlistDetails = playlist;
-    mediaTags.updateTextControllersFromPlaylist(
-      playlist, playlist.thumbnails.maxResUrl
-    );
+  Future<void> getChannel() async {
+    channel = await ChannelExtractor.channelInfo(infoItem.uploaderUrl);
   }
 
 }

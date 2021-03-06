@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:newpipeextractor_dart/models/infoItems/video.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 class PreferencesProvider extends ChangeNotifier {
 
@@ -19,72 +19,72 @@ class PreferencesProvider extends ChangeNotifier {
   SharedPreferences prefs;
 
   // Favorites Videos
-  List<Video> get favoriteVideos {
-    var map = jsonDecode(prefs.getString('favoriteVideos') ?? "{}");
-    List<Video> videos = [];
+  List<StreamInfoItem> get favoriteVideos {
+    var map = jsonDecode(prefs.getString('newFavoriteVideos') ?? "{}");
+    List<StreamInfoItem> videos = [];
     if (map.isNotEmpty) {
       if (map['favoriteVideos'].isNotEmpty) {
         map['favoriteVideos'].forEach((v) {
-          videos.add(Video.fromMap(v));
+          videos.add(StreamInfoItem.fromMap(v));
         });
       }
     }
     return videos;
   }
-  set favoriteVideos(List<Video> videos) {
+  set favoriteVideos(List<StreamInfoItem> videos) {
     var map = videos.map((e) {
       return e.toMap();
     }).toList();
     String json = jsonEncode({ 'favoriteVideos': map });
-    prefs.setString('favoriteVideos', json).then((_) {
+    prefs.setString('newFavoriteVideos', json).then((_) {
       notifyListeners();
     });
   }
 
   // Watch Later Videos
-  List<Video> get watchLaterVideos {
-    var map = jsonDecode(prefs.getString('watchLaterList') ?? "{}");
-    List<Video> videos = [];
+  List<StreamInfoItem> get watchLaterVideos {
+    var map = jsonDecode(prefs.getString('newWatchLaterList') ?? "{}");
+    List<StreamInfoItem> videos = [];
     if (map.isNotEmpty) {
       if (map['watchLaterList'].isNotEmpty) {
         map['watchLaterList'].forEach((v) {
-          videos.add(Video.fromMap(v));
+          videos.add(StreamInfoItem.fromMap(v));
         });
       }
     }
     return videos;
   }
-  set watchLaterVideos(List<Video> videos) {
+  set watchLaterVideos(List<StreamInfoItem> videos) {
     var map = videos.map((e) {
       return e.toMap();
     }).toList();
     String json = jsonEncode({ 'watchLaterList': map });
-    prefs.setString('watchLaterList', json).then((_) {
+    prefs.setString('newWatchLaterList', json).then((_) {
       notifyListeners();
     });
   }
 
   // View History Videos
-  List<Video> get viewHistory {
-    var map = jsonDecode(prefs.getString('viewHistory') ?? "{}");
-    List<Video> videos = [];
+  List<StreamInfoItem> get viewHistory {
+    var map = jsonDecode(prefs.getString('newViewHistory') ?? "{}");
+    List<StreamInfoItem> videos = [];
     if (map.isNotEmpty) {
       if (map['viewHistory'].isNotEmpty) {
         map['viewHistory'].forEach((v) {
-          videos.add(Video.fromMap(v));
+          videos.add(StreamInfoItem.fromMap(v));
         });
       }
     }
     return videos;
   }
-  set addVideoToViewHistory(Video video) {
-    List<Video> videos = viewHistory;
+  set addVideoToViewHistory(StreamInfoItem video) {
+    List<StreamInfoItem> videos = viewHistory;
     videos.add(video);
     var map = videos.map((e) {
       return e.toMap();
     }).toList();
     String json = jsonEncode({ 'viewHistory': map });
-    prefs.setString('viewHistory', json).then((_) {
+    prefs.setString('newViewHistory', json).then((_) {
       notifyListeners();
     });
   }
@@ -136,28 +136,28 @@ class PreferencesProvider extends ChangeNotifier {
   }
 
   // Watch History
-  List<Video> get watchHistory {
-    String json = prefs.getString('watchHistory');
+  List<StreamInfoItem> get watchHistory {
+    String json = prefs.getString('newWatchHistory');
     if (json == null) return [];
     var map = jsonDecode(json);
-    List<Video> history = [];
+    List<StreamInfoItem> history = [];
     if (map.isNotEmpty) {
       map.forEach((element) {
-        history.add(Video.fromMap(element));
+        history.add(StreamInfoItem.fromMap(element));
       });
     }
     return history;
   }
 
-  set watchHistory(List<Video> history) {
+  set watchHistory(List<StreamInfoItem> history) {
     List<Map<String, dynamic>> map =
       history.map((e) => e.toMap()).toList();
-    prefs.setString('watchHistory', jsonEncode(map));
+    prefs.setString('newWatchHistory', jsonEncode(map));
     notifyListeners();
   }
 
   void watchHistoryInsert(dynamic video) {
-    List<Video> history = watchHistory;
+    List<StreamInfoItem> history = watchHistory;
     history.add(video);
     watchHistory = history;
   }
