@@ -29,7 +29,8 @@ dependencies:
   flutter_audio_query: ^0.3.5+6
   video_player:
     git:
-      url: https://github.com/SongTube/video_player
+      url: https://github.com/SongTube/plugins
+      path: packages/video_player/video_player
       ref: master
   just_audio: ^0.5.4
   audio_service: ^0.15.1
