@@ -18,6 +18,7 @@ import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/provider/preferencesProvider.dart';
 import 'package:songtube/provider/videoPageProvider.dart';
 import 'package:songtube/ui/animations/blurPageRoute.dart';
+import 'package:songtube/ui/animations/fadeIn.dart';
 import 'package:songtube/ui/components/shimmerContainer.dart';
 import 'package:songtube/ui/internal/popupMenu.dart';
 import 'package:songtube/ui/internal/snackbar.dart';
@@ -54,48 +55,51 @@ class StreamsLargeThumbnailView extends StatelessWidget {
           itemCount: infoItems.length,
           itemBuilder: (context, index) {
             dynamic infoItem = infoItems[index];
-            return Padding(
-              padding: EdgeInsets.only(
-                bottom: 16, top: index == 0 ? 12 : 0,
-                left: 12, right: 12
-              ),
-              child: Consumer<VideoPageProvider>(
-                builder: (context, provider, child) {
-                  return GestureDetector(
-                    onTap: () {
-                      if (infoItem is StreamInfoItem || infoItem is PlaylistInfoItem) {
-                        provider.infoItem = infoItem;
-                      } else {
-                        Navigator.push(context,
-                          BlurPageRoute(
-                            blurStrength: 0,
-                            builder: (_) => 
-                            YoutubeChannelPage(
-                              url: infoItem.url,
-                              name: infoItem.name,
-                        )));
-                      }
-                    },
-                    child: child,
-                  );
-                },
-                child: infoItem is ChannelInfoItem
-                  ? _channelWidget(context, infoItem)
-                  : Column(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(bottom: 8),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: _thumbnailWidget(infoItem)
+            return FadeInTransition(
+              duration: Duration(milliseconds: 300),
+              child: Padding(
+                padding: EdgeInsets.only(
+                  bottom: 16, top: index == 0 ? 12 : 0,
+                  left: 12, right: 12
+                ),
+                child: Consumer<VideoPageProvider>(
+                  builder: (context, provider, child) {
+                    return GestureDetector(
+                      onTap: () {
+                        if (infoItem is StreamInfoItem || infoItem is PlaylistInfoItem) {
+                          provider.infoItem = infoItem;
+                        } else {
+                          Navigator.push(context,
+                            BlurPageRoute(
+                              blurStrength: 0,
+                              builder: (_) => 
+                              YoutubeChannelPage(
+                                url: infoItem.url,
+                                name: infoItem.name,
+                          )));
+                        }
+                      },
+                      child: child,
+                    );
+                  },
+                  child: infoItem is ChannelInfoItem
+                    ? _channelWidget(context, infoItem)
+                    : Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 8),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: _thumbnailWidget(infoItem)
+                            ),
                           ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(bottom: 8),
-                          child: _infoItemDetails(context, infoItem),
-                        )
-                      ],
-                    )
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 8),
+                            child: _infoItemDetails(context, infoItem),
+                          )
+                        ],
+                      )
+                ),
               ),
             );
           }
