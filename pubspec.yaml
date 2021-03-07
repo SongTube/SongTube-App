@@ -39,10 +39,10 @@ dependencies:
       url: git://github.com/SongTube/sliding_up_panel.git
       ref: master
 
-  # Youtube Explode
-  youtube_explode_dart:
+  # NewPipe Extractor
+  newpipeextractor_dart:
     git:
-      url: https://github.com/SongTube/youtube_explode_dart
+      url: https://github.com/SongTube/newpipeextractor_dart
       ref: master
 
   # Device Providers
