@@ -81,7 +81,10 @@ dependencies:
 
   # Tools
   share: ^0.6.4+3
-  flutter_ffmpeg: ^0.3.1
+  flutter_ffmpeg:
+    git:
+      url: https://github.com/SongTube/flutter-ffmpeg
+      ref: master
   url_launcher: ^5.4.7
   transparent_image: ^1.0.0
   grouped_list: ^3.5.0
