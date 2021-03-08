@@ -86,6 +86,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
           ? SingleChildScrollView(
               child: Container(
                 height: MediaQuery.of(context).size.height,
+                padding: EdgeInsets.only(top: 4),
                 child: _portraitPage()
               )
             )
