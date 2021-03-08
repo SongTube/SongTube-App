@@ -141,7 +141,9 @@ class _LibState extends State<Lib> {
   }
 
   void _handleIntent(String intent) async {
-    if (YoutubeId.getIdFromStreamUrl(intent) != null) {
+    String streamId = await YoutubeId.getIdFromStreamUrl(intent);
+    String playlistId = await YoutubeId.getIdFromPlaylistUrl(intent);
+    if (streamId != null) {
       showDialog(
         context: context,
         builder: (_) => LoadingDialog()
@@ -152,7 +154,7 @@ class _LibState extends State<Lib> {
         .infoItem = video.toStreamInfoItem();
       Navigator.pop(context);
     }
-    if (YoutubeId.getIdFromPlaylistUrl(intent) != null) {
+    if (playlistId != null) {
       showDialog(
         context: context,
         builder: (_) => LoadingDialog()
