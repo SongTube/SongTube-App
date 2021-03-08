@@ -116,7 +116,8 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
             isFullscreen: true,
             onVideoEnded: () async {
               if (prefs.youtubeAutoPlay) {
-                executeAutoPlay();
+                if (mounted)
+                  executeAutoPlay();
               }
             },
             onFullscreenTap: () {
@@ -171,7 +172,8 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                       isFullscreen: false,
                       onVideoEnded: () async {
                         if (prefs.youtubeAutoPlay) {
-                          executeAutoPlay();
+                          if (mounted)
+                            executeAutoPlay();
                         }
                       },
                       onFullscreenTap: () {

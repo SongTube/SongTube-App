@@ -103,7 +103,8 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
       if (currentPosition == totalDuration) {
         if (!videoEnded) {
           videoEnded = true;
-          widget.onVideoEnded();
+          Future.delayed((Duration(seconds: 2)),
+            () => widget.onVideoEnded());
         }
       }
       if (_controller.value.isBuffering && buffering == false) {
