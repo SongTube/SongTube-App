@@ -12,9 +12,9 @@ import 'package:newpipeextractor_dart/models/infoItems/playlist.dart';
 import 'package:newpipeextractor_dart/models/infoItems/video.dart';
 import 'package:newpipeextractor_dart/models/video.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/models/tagsControllers.dart';
 import 'package:songtube/internal/musicBrainzApi.dart';
-import 'package:songtube/pages/components/relatedVideosList.dart';
 import 'package:songtube/players/components/youtubePlayer/ui/comments.dart';
 import 'package:songtube/players/components/youtubePlayer/videoPlayer.dart';
 import 'package:songtube/provider/managerProvider.dart';
@@ -32,6 +32,7 @@ import 'package:songtube/ui/components/measureSize.dart';
 import 'package:songtube/ui/components/tagsResultsPage.dart';
 import 'package:songtube/ui/dialogs/loadingDialog.dart';
 import 'package:songtube/ui/internal/snackbar.dart';
+import 'package:songtube/ui/layout/streamsListTile.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 import 'ui/details.dart';
@@ -265,12 +266,14 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                 if (!isPlaylist)
                 Divider(height: 1),
                 SizedBox(height: !isPlaylist ? 8 : 8),
+                // AutoPlay Widget
+                _autoPlayWidget(),
                 // Related Videos
-                RelatedVideosList(
-                  related: pageProvider?.currentRelatedVideos == null
+                StreamsListTileView(
+                  shrinkWrap: true,
+                  streams: pageProvider?.currentRelatedVideos == null
                     ? [] : pageProvider.currentRelatedVideos, 
-                  isPlaylist: isPlaylist,
-                  onVideoTap: (index) async {
+                  onTap: (stream, index) async {
                     pageProvider.infoItem =
                       pageProvider.currentRelatedVideos[index];
                   },
@@ -376,6 +379,66 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                 const ShimmerVideoEngagement(),
               ],
             )
+      ),
+    );
+  }
+
+  Widget _autoPlayWidget() {
+    VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
+    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
+    bool isPlaylist = pageProvider.infoItem is StreamInfoItem &&
+      pageProvider.currentPlaylist != null;
+    List<StreamInfoItem> related = pageProvider?.currentRelatedVideos == null
+      ? [] : pageProvider.currentRelatedVideos;
+    return Container(
+      margin: EdgeInsets.only(bottom: 12, top: 8),
+      height: 20,
+      child: Row(
+        children: [
+          SizedBox(width: 16),
+          Text(
+            !isPlaylist
+              ? Languages.of(context).labelRelated
+              : Languages.of(context).labelPlaylist,
+            style: TextStyle(
+              fontSize: 14,
+              color: Theme.of(context).textTheme.bodyText1.color,
+              fontFamily: 'YTSans'
+            ),
+            textAlign: TextAlign.left,
+          ),
+          SizedBox(width: 8),
+          AnimatedSwitcher(
+            duration: Duration(milliseconds: 300),
+            child: related.isEmpty
+              ? SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 1,
+                  )
+                )
+              : Container()
+          ),
+          Spacer(),
+          Text(
+            Languages.of(context).labelAutoPlay,
+            style: TextStyle(
+              fontSize: 14,
+              color: Theme.of(context).textTheme.bodyText1.color,
+              fontFamily: 'YTSans'
+            ),
+            textAlign: TextAlign.left,
+          ),
+          Switch(
+            activeColor: Theme.of(context).accentColor,
+            value: prefs.youtubeAutoPlay,
+            onChanged: (bool value) {
+              prefs.youtubeAutoPlay = value;
+            }
+          ),
+          SizedBox(width: 4)
+        ],
       ),
     );
   }

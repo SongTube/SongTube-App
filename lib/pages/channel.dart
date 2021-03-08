@@ -6,11 +6,10 @@ import 'package:newpipeextractor_dart/extractors/channels.dart';
 import 'package:newpipeextractor_dart/models/channel.dart';
 import 'package:newpipeextractor_dart/models/infoItems/video.dart';
 import 'package:provider/provider.dart';
-import 'package:songtube/provider/managerProvider.dart';
-import 'package:songtube/pages/components/relatedVideosList.dart';
 import 'package:songtube/provider/videoPageProvider.dart';
 import 'package:songtube/ui/animations/fadeIn.dart';
 import 'package:songtube/ui/components/shimmerContainer.dart';
+import 'package:songtube/ui/layout/streamsListTile.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class YoutubeChannelPage extends StatefulWidget {
@@ -165,24 +164,14 @@ class _YoutubeChannelPageState extends State<YoutubeChannelPage> {
               child: FutureBuilder<List<StreamInfoItem>>(
                 future: ChannelExtractor.getChannelUploads(widget.url),
                 builder: (context, AsyncSnapshot<List<StreamInfoItem>> snapshot) {
-                  List<StreamInfoItem> videos = snapshot.data;
-                  return AnimatedSwitcher(
-                    duration: Duration(milliseconds: 300),
-                    child: snapshot.hasData
-                      ? RelatedVideosList(
-                          related: videos,
-                          showAutoPlay: false,
-                          onVideoTap: (index) {
-                            Navigator.pop(context);
-                            pageProvider.infoItem = videos[index];
-                          }
-                        )
-                      : Padding(
-                          padding: EdgeInsets.only(top: 32),
-                          child: Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                        ),
+                  return StreamsListTileView(
+                    shrinkWrap: true,
+                    streams: snapshot.hasData
+                      ? snapshot.data : [],
+                    onTap: (stream, index) {
+                      Navigator.pop(context);
+                      pageProvider.infoItem = stream;
+                    }
                   );
                 },
               ),
