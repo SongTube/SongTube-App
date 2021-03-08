@@ -30,7 +30,6 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
   }
   @override
   Widget build(BuildContext context) {
-    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -106,7 +105,8 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
                             var result = await Navigator.of(context).push(
                               BlurPageRoute(
                                 backdropColor: Colors.black.withOpacity(0.4),
-                                blurStrength: prefs.enableBlurUI ? 20 : 0,
+                                blurStrength: Provider.of<PreferencesProvider>
+                                  (context, listen: false).enableBlurUI ? 20 : 0,
                                 builder: (BuildContext context) {
                                   return Center(
                                     child: Container(

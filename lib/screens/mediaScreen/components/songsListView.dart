@@ -32,7 +32,6 @@ class SongsListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
-    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     return ListView.builder(
       physics: AlwaysScrollableScrollPhysics(),
       itemCount: songs.length,
@@ -133,8 +132,8 @@ class SongsListView extends StatelessWidget {
                                   song: song,
                                 );
                               },
-                              blurStrength: prefs.enableBlurUI
-                                ? 20 : 0
+                              blurStrength: Provider.of<PreferencesProvider>
+                                (context, listen: false).enableBlurUI ? 20 : 0,
                             )
                           );
                         } else {

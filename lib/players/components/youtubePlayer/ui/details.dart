@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:newpipeextractor_dart/extractors/channels.dart';
 import 'package:newpipeextractor_dart/utils/url.dart';
+import 'package:provider/provider.dart';
 import 'package:songtube/pages/channel.dart';
 import 'package:songtube/pages/components/video/shimmer/shimmerChannelLogo.dart';
+import 'package:songtube/provider/preferencesProvider.dart';
 import 'package:songtube/ui/animations/blurPageRoute.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -37,7 +39,8 @@ class VideoDetails extends StatelessWidget {
                           onTap: () {
                             Navigator.push(context,
                               BlurPageRoute(
-                                blurStrength: 0,
+                                blurStrength: Provider.of<PreferencesProvider>
+                                  (context, listen: false).enableBlurUI ? 20 : 0,
                                 builder: (_) => 
                                 YoutubeChannelPage(
                                   url: infoItem.uploaderUrl,

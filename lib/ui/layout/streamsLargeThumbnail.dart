@@ -71,7 +71,8 @@ class StreamsLargeThumbnailView extends StatelessWidget {
                         } else {
                           Navigator.push(context,
                             BlurPageRoute(
-                              blurStrength: 0,
+                              blurStrength: Provider.of<PreferencesProvider>
+                                (context, listen: false).enableBlurUI ? 20 : 0,
                               builder: (_) => 
                               YoutubeChannelPage(
                                 url: infoItem.url,
@@ -253,7 +254,8 @@ class StreamsLargeThumbnailView extends StatelessWidget {
                     onTap: () {
                       Navigator.push(context,
                         BlurPageRoute(
-                          blurStrength: 0,
+                          blurStrength: Provider.of<PreferencesProvider>
+                            (context, listen: false).enableBlurUI ? 20 : 0,
                           builder: (_) => 
                           YoutubeChannelPage(
                             url: infoItem.uploaderUrl,

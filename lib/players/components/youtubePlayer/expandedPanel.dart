@@ -240,7 +240,9 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                           TagsResultsPage(
                             title: pageProvider.currentTags.titleController.text,
                             artist: pageProvider.currentTags.artistController.text
-                          )));
+                          ),
+                          blurStrength: Provider.of<PreferencesProvider>
+                            (context, listen: false).enableBlurUI ? 20 : 0));
                       if (record == null) return;
                       showDialog(
                         context: context,

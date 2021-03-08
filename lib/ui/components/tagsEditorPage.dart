@@ -67,7 +67,6 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
   @override
   Widget build(BuildContext context) {
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
-    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     return Scaffold(
       key: scaffoldKey,
       resizeToAvoidBottomInset: true,
@@ -118,8 +117,9 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
                     BlurPageRoute(builder: (context) => 
                       TagsResultsPage(
                         title: tagsControllers.titleController.text,
-                        artist: tagsControllers.artistController.text
-                      ), blurStrength: prefs.enableBlurUI ? 20 : 0));
+                        artist: tagsControllers.artistController.text),
+                      blurStrength: Provider.of<PreferencesProvider>
+                        (context, listen: false).enableBlurUI ? 20 : 0));
                   if (record == null) return;
                   showDialog(
                     context: context,
