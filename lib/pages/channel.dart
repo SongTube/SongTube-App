@@ -16,10 +16,12 @@ class YoutubeChannelPage extends StatefulWidget {
   final String url;
   final String name;
   final String lowResAvatar;
+  final String heroTag;
   YoutubeChannelPage({
     @required this.url,
     @required this.name,
-    this.lowResAvatar
+    this.lowResAvatar,
+    this.heroTag = ""
   });
 
   @override
@@ -78,7 +80,7 @@ class _YoutubeChannelPageState extends State<YoutubeChannelPage> {
                   duration: Duration(milliseconds: 250),
                   child: widget.lowResAvatar != null
                     ? Hero(
-                        tag: widget.url,
+                        tag: widget.heroTag,
                         child: Container(
                           height: 100,
                           width: 100,

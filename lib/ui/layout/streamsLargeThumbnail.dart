@@ -258,11 +258,12 @@ class StreamsLargeThumbnailView extends StatelessWidget {
                           YoutubeChannelPage(
                             url: infoItem.uploaderUrl,
                             name: infoItem.uploaderName,
-                            lowResAvatar: snapshot.data
+                            lowResAvatar: snapshot.data,
+                            heroTag: infoItem.uploaderUrl + infoItem.id,
                       )));
                     },
                     child: Hero(
-                      tag: infoItem.uploaderUrl,
+                      tag: infoItem.uploaderUrl + infoItem.id,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(100),
                         child: FadeInImage(
