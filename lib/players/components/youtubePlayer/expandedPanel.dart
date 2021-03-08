@@ -77,8 +77,6 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
 
   @override
   Widget build(BuildContext context) {
-    VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
-    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     return Scaffold(
       key: scaffoldKey,
       body: FadeInTransition(
@@ -90,34 +88,46 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                 child: _portraitPage()
               )
             )
-          : AnimatedSwitcher(
-              duration: Duration(milliseconds: 400),
-              child: pageProvider.currentVideo != null 
-                ? Material(
-                    color: Colors.black,
-                    child: StreamManifestPlayer(
-                      key: pageProvider.playerKey,
-                      stream: pageProvider.currentVideo.videoWithHighestQuality,
-                      isFullscreen: true,
-                      onVideoEnded: () async {
-                        if (prefs.youtubeAutoPlay) {
-                          executeAutoPlay();
-                        }
-                      },
-                      onFullscreenTap: () {
-                        SystemChrome.setPreferredOrientations([
-                          DeviceOrientation.portraitUp,
-                          DeviceOrientation.portraitDown,
-                        ]);
-                        SystemChrome.setEnabledSystemUIOverlays
-                          ([SystemUiOverlay.top, SystemUiOverlay.bottom]);
-                      },
-                    ),
-                  )
-                : _videoLoading(pageProvider.infoItem.thumbnails.hqdefault)
+          : _fullscreenPage(),
         ),
-      ),
       floatingActionButton: _fab()
+    );
+  }
+
+  Widget _fullscreenPage() {
+    VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
+    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+    SystemChrome.setEnabledSystemUIOverlays([]);
+    return AnimatedSwitcher(
+      duration: Duration(milliseconds: 400),
+      child: pageProvider.currentVideo != null 
+        ? StreamManifestPlayer(
+            videoTitle: pageProvider.currentVideo.name,
+            key: pageProvider.playerKey,
+            streams: pageProvider.currentVideo.videoOnlyStreams,
+            audioStream: pageProvider.currentVideo.getAudioStreamWithBestMatchForVideoStream(
+              pageProvider.currentVideo.videoOnlyWithHighestQuality
+            ),
+            isFullscreen: true,
+            onVideoEnded: () async {
+              if (prefs.youtubeAutoPlay) {
+                executeAutoPlay();
+              }
+            },
+            onFullscreenTap: () {
+              SystemChrome.setPreferredOrientations([
+                DeviceOrientation.portraitUp,
+                DeviceOrientation.portraitDown,
+              ]);
+              SystemChrome.setEnabledSystemUIOverlays
+                ([SystemUiOverlay.top, SystemUiOverlay.bottom]);
+            },
+          )
+        : _videoLoading(pageProvider.infoItem.thumbnails.hqdefault)
     );
   }
 
@@ -126,6 +136,12 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
     PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     bool isPlaylist = pageProvider.infoItem is StreamInfoItem &&
       pageProvider.currentPlaylist != null;
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    SystemChrome.setEnabledSystemUIOverlays
+      ([SystemUiOverlay.top, SystemUiOverlay.bottom]);
     return Column(
       children: <Widget> [
         // Top StatusBar Padding
@@ -147,8 +163,10 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                 duration: Duration(milliseconds: 400),
                 child: pageProvider.currentVideo != null
                   ? StreamManifestPlayer(
+                      videoTitle: pageProvider.currentVideo.name,
                       key: pageProvider.playerKey,
-                      stream: pageProvider.currentVideo.videoWithHighestQuality,
+                      streams: pageProvider.currentVideo.videoOnlyStreams,
+                      audioStream: pageProvider.currentVideo.audioWithBestOggQuality,
                       isFullscreen: false,
                       onVideoEnded: () async {
                         if (prefs.youtubeAutoPlay) {

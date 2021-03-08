@@ -33,6 +33,10 @@ class VideoPageProvider extends ChangeNotifier {
   List<StreamInfoItem> currentRelatedVideos;
   dynamic get infoItem => _infoItem;
   set infoItem(dynamic infoItem) {
+    if (_infoItem != null) {
+      if (panelController.isAttached)
+        panelController.open();
+    }
     if (currentPlaylist == null) {
       if (infoItem is StreamInfoItem) {
         initializeStream(infoItem);

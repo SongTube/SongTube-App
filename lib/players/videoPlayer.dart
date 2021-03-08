@@ -5,6 +5,7 @@ import 'dart:io';
 // Flutter
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:screen/screen.dart';
 
 // Internal
 import 'package:songtube/internal/models/videoFile.dart';
@@ -13,7 +14,6 @@ import 'package:songtube/internal/models/videoFile.dart';
 import 'package:songtube/players/components/videoPlayer/controls.dart';
 import 'package:songtube/players/components/videoPlayer/progressBar.dart';
 import 'package:video_player/video_player.dart';
-import 'package:wakelock/wakelock.dart';
 
 class AppVideoPlayer extends StatefulWidget {
   final VideoFile video;
@@ -63,7 +63,7 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
           ]);
         }
         // Prevent the screen of beign turned off automatically
-        Wakelock.toggle(on: true);
+        Screen.keepOn(true);
         setState(() {
           _controller.play();
         });
@@ -141,7 +141,7 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    Wakelock.toggle(on: false);
+    Screen.keepOn(false);
   }
 
   @override
@@ -158,7 +158,7 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
           children: <Widget>[
             // Video Player
             Container(
-              child: _controller.value.initialized
+              child: _controller.value.isInitialized
                 ? AspectRatio(
                     aspectRatio: _controller.value.aspectRatio,
                     child: VideoPlayer(_controller),
