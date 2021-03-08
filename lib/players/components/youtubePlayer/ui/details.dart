@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:newpipeextractor_dart/extractors/channels.dart';
 import 'package:newpipeextractor_dart/utils/url.dart';
+import 'package:songtube/pages/channel.dart';
 import 'package:songtube/pages/components/video/shimmer/shimmerChannelLogo.dart';
+import 'package:songtube/ui/animations/blurPageRoute.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class VideoDetails extends StatelessWidget {
@@ -31,19 +33,32 @@ class VideoDetails extends StatelessWidget {
                   ? FutureBuilder<String>(
                       future: _getAvatarUrl(infoItem.uploaderUrl),
                       builder: (context, snapshot) {
-                        return Container(
-                          height: 60,
-                          width: 60,
-                          margin: EdgeInsets.only(right: 12),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(50),
-                            child: FadeInImage(
-                              fadeInDuration: Duration(milliseconds: 400),
-                              placeholder: MemoryImage(kTransparentImage),
-                              image: snapshot.hasData
-                                ? NetworkImage(snapshot.data)
-                                : MemoryImage(kTransparentImage),
-                              fit: BoxFit.cover,
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(context,
+                              BlurPageRoute(
+                                blurStrength: 0,
+                                builder: (_) => 
+                                YoutubeChannelPage(
+                                  url: infoItem.uploaderUrl,
+                                  name: infoItem.uploaderName,
+                                  lowResAvatar: snapshot.data,
+                            )));
+                          },
+                          child: Container(
+                            height: 60,
+                            width: 60,
+                            margin: EdgeInsets.only(right: 12),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(50),
+                              child: FadeInImage(
+                                fadeInDuration: Duration(milliseconds: 400),
+                                placeholder: MemoryImage(kTransparentImage),
+                                image: snapshot.hasData
+                                  ? NetworkImage(snapshot.data)
+                                  : MemoryImage(kTransparentImage),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                         );
