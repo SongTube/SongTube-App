@@ -1,74 +1,109 @@
 // Flutter
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:md2_tab_indicator/md2_tab_indicator.dart';
 import 'package:songtube/internal/languages.dart';
 
 // Internal
-import 'package:songtube/pages/settings/components/backupSettings.dart';
 import 'package:songtube/pages/settings/components/downloadSettings.dart';
 import 'package:songtube/pages/settings/components/generalSettings.dart';
 import 'package:songtube/pages/settings/components/themeSettings.dart';
 
-class SettingsTab extends StatefulWidget {
+class SettingsPage extends StatefulWidget {
   
   // Scaffold Key
   @override
-  _SettingsTabState createState() => _SettingsTabState();
+  _SettingsPageState createState() => _SettingsPageState();
 }
 
-class _SettingsTabState extends State<SettingsTab> {
+class _SettingsPageState extends State<SettingsPage> {
   
-  final GlobalKey<ScaffoldState> scaffoldState = new GlobalKey<ScaffoldState>();
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: scaffoldState,
-      appBar: PreferredSize(
-        preferredSize: Size(
-          double.infinity,
-          kToolbarHeight
-        ),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(10),
-              bottomRight: Radius.circular(10)
+    return DefaultTabController(
+      initialIndex: 0,
+      length: 3,
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          titleSpacing: 0,
+          backgroundColor: Theme.of(context).cardColor,
+          title: Text(
+            Languages.of(context).labelSettings,
+            style: TextStyle(
+              fontFamily: 'Product Sans',
+              fontWeight: FontWeight.w700,
+              fontSize: 20,
+              color: Theme.of(context).textTheme.bodyText1.color
             ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black12,
-                offset: Offset(0.0, -2), //(x,y)
-                blurRadius: 10.0,
-                spreadRadius: 0.6
+          ),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_rounded),
+            color: Theme.of(context).iconTheme.color,
+            onPressed: () => Navigator.pop(context),
+          ),
+        ),
+        body: Column(
+          children: [
+            Container(
+              height: 40,
+              color: Theme.of(context).cardColor,
+              child: TabBar(
+                labelStyle: TextStyle(
+                  fontSize: 13,
+                  fontFamily: 'Product Sans',
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 0.3
+                ),
+                unselectedLabelStyle: TextStyle(
+                    fontSize: 13,
+                    fontFamily: 'Product Sans',
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 0.2
+                ),
+                labelColor: Theme.of(context).accentColor,
+                unselectedLabelColor: Theme.of(context).textTheme.bodyText1
+                  .color.withOpacity(0.4),
+                indicator: MD2Indicator(
+                  indicatorSize: MD2IndicatorSize.tiny,
+                  indicatorHeight: 4,
+                  indicatorColor: Theme.of(context).accentColor,
+                ),
+                tabs: [
+                  Tab(child: Text(
+                    Languages.of(context).labelTheme
+                  )),
+                  Tab(child: Text(
+                    Languages.of(context).labelGeneral
+                  )),
+                  Tab(child: Text(
+                    Languages.of(context).labelDownload
+                  ))
+                ],
               ),
-            ],
-          ),
-          child: AppBar(
-            elevation: 0,
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            title: Text(
-              Languages.of(context).labelSettings,
-              style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color),
             ),
-            iconTheme: IconThemeData(
-              color: Theme.of(context).iconTheme.color
+            Divider(
+              height: 1,
+              thickness: 1,
+              color: Colors.grey[600].withOpacity(0.1),
+              indent: 12,
+              endIndent: 12
             ),
-          ),
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 8, right: 8),
-        child: ListView(
-          
-          children: <Widget>[
-            // Themes Settings
-            ThemeSettings(),
-            // General Settings
-            GeneralSettings(),
-            // Downloads Settings
-            DownloadSettings(),
-            // Backup Options
-            BackupSettings(scaffoldKey: scaffoldState),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TabBarView(
+                  children: [
+                    // Themes Settings
+                    ThemeSettings(),
+                    // General Settings
+                    GeneralSettings(),
+                    // Downloads Settings
+                    DownloadSettings(),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),

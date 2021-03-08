@@ -7,7 +7,6 @@ import 'package:songtube/internal/languages.dart';
 
 // Internal
 import 'package:songtube/provider/configurationProvider.dart';
-import 'package:songtube/pages/settings/components/columnTile.dart';
 
 // Packages
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -25,9 +24,7 @@ class DownloadSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
-    return SettingsColumnTile(
-      title: Languages.of(context).labelDownloads,
-      icon: EvaIcons.downloadOutline,
+    return ListView(
       children: <Widget>[
         ListTile(
           title: Text(

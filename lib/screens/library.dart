@@ -5,6 +5,7 @@ import 'package:songtube/internal/languages.dart';
 
 // Internal
 import 'package:songtube/provider/managerProvider.dart';
+import 'package:songtube/provider/preferencesProvider.dart';
 import 'package:songtube/provider/videoPageProvider.dart';
 import 'package:songtube/screens/libraryScreen/aboutPage.dart';
 import 'package:songtube/screens/libraryScreen/socialLinksRow.dart';
@@ -14,6 +15,7 @@ import 'package:songtube/pages/settings.dart';
 
 // Packages
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:songtube/ui/animations/blurPageRoute.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:provider/provider.dart';
 
@@ -53,8 +55,12 @@ class LibraryScreen extends StatelessWidget {
               icon: Icon(EvaIcons.settingsOutline,
                 color: Theme.of(context).iconTheme.color),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute
-                  (builder: (context) => SettingsTab()));
+                Navigator.push(context,
+                  BlurPageRoute(
+                    blurStrength: Provider.of<PreferencesProvider>
+                      (context, listen: false).enableBlurUI ? 20 : 0,
+                    builder: (_) => 
+                    SettingsPage()));
               }
             ),
           )

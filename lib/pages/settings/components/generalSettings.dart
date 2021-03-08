@@ -4,15 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/nativeMethods.dart';
 
-// Internal
-import 'package:songtube/pages/settings/components/columnTile.dart';
-
 class GeneralSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SettingsColumnTile(
-      title: Languages.of(context).labelGeneral,
-      icon: Icons.architecture_rounded,
+    return ListView(
       children: <Widget>[
         ListTile(
           title: Text(

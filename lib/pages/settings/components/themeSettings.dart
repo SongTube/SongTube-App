@@ -7,7 +7,6 @@ import 'package:songtube/internal/languages.dart';
 import 'package:songtube/provider/configurationProvider.dart';
 import 'package:songtube/provider/preferencesProvider.dart';
 import 'package:songtube/pages/settings/dialogs/accentPicker.dart';
-import 'package:songtube/pages/settings/components/columnTile.dart';
 
 // Packages
 import 'package:provider/provider.dart';
@@ -22,9 +21,7 @@ class _ThemeSettingsState extends State<ThemeSettings> with TickerProviderStateM
   Widget build(BuildContext context) {
     ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
     PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
-    return SettingsColumnTile(
-      title: Languages.of(context).labelTheme,
-      icon: Icons.color_lens,
+    return ListView(
       children: <Widget>[
         ListTile(
           onTap: () => config.systemThemeEnabled = !config.systemThemeEnabled,
