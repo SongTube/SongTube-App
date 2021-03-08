@@ -119,6 +119,7 @@ class _HomePageAppBarState extends State<HomePageAppBar> with TickerProviderStat
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
     return GestureDetector(
       onTap: () {
+        manager.searchController.clear();
         manager.searchBarFocusNode.requestFocus();
       },
       child: Container(
@@ -158,65 +159,42 @@ class _HomePageAppBarState extends State<HomePageAppBar> with TickerProviderStat
   Widget _searchBarTextField() {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
     ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
-    return Row(
-      children: [
-        Expanded(
-          child: Padding(
-            padding: EdgeInsets.only(left: 12, right: 12),
-            child: TextFormField(
-              controller: manager.searchController,
-              focusNode: manager.searchBarFocusNode,
-              onTap: () => manager.searchBarFocusNode.requestFocus(),
-              style: TextStyle(
-                color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6),
-                fontSize: 14
-              ),
-              decoration: InputDecoration(
-                hintText: Languages.of(context).labelSearchYoutube,
-                hintStyle: TextStyle(
-                  color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6),
-                ),
-                border: UnderlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(
-                    width: 0, 
-                    style: BorderStyle.none,
-                  ),
-                ),
-              ),
-              onFieldSubmitted: (String query) {
-                manager.searchYoutube(query: query, forceReload: true);
-                FocusScope.of(context).unfocus();
-                if (query.length > 1) {
-                  Future.delayed(Duration(milliseconds: 400), () =>
-                    config.addStringtoSearchHistory(query.trim()
-                  ));
-                }
-              },
-              onChanged: (_) {
-                manager.setState();
-              },
+    return Padding(
+      padding: EdgeInsets.only(left: 12, right: 12),
+      child: TextFormField(
+        controller: manager.searchController,
+        focusNode: manager.searchBarFocusNode,
+        onTap: () => manager.searchBarFocusNode.requestFocus(),
+        style: TextStyle(
+          color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6),
+          fontSize: 14
+        ),
+        decoration: InputDecoration(
+          hintText: Languages.of(context).labelSearchYoutube,
+          hintStyle: TextStyle(
+            color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6),
+          ),
+          border: UnderlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(
+              width: 0, 
+              style: BorderStyle.none,
             ),
           ),
         ),
-        AnimatedOpacity(
-          duration: Duration(milliseconds: 200),
-          opacity: manager.searchController.text.isNotEmpty
-            ? 1.0 : 0.0,
-          child: IconButton(
-            icon: Icon(
-              EvaIcons.trash2Outline,
-              size: 18,
-              color: Theme.of(context).iconTheme.color
-                .withOpacity(0.6)
-            ),
-            onPressed: () {
-              manager.searchController.clear();
-              manager.setState();
-            },
-          ),
-        )
-      ],
+        onFieldSubmitted: (String query) {
+          manager.searchYoutube(query: query, forceReload: true);
+          FocusScope.of(context).unfocus();
+          if (query.length > 1) {
+            Future.delayed(Duration(milliseconds: 400), () =>
+              config.addStringtoSearchHistory(query.trim()
+            ));
+          }
+        },
+        onChanged: (_) {
+          manager.setState();
+        },
+      ),
     );
   }
 
