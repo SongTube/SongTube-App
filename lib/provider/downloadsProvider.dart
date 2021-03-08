@@ -14,11 +14,11 @@ import 'package:songtube/provider/configurationProvider.dart';
 class DownloadsProvider extends ChangeNotifier {
 
   DownloadsProvider() {
-    queueList = new List<DownloadInfoSet>();
-    downloadingList = new List<DownloadInfoSet>();
-    convertingList = new List<DownloadInfoSet>();
-    completedList = new List<DownloadInfoSet>();
-    cancelledList = new List<DownloadInfoSet>();
+    queueList       = <DownloadInfoSet>[];
+    downloadingList = <DownloadInfoSet>[];
+    convertingList  = <DownloadInfoSet>[];
+    completedList   = <DownloadInfoSet>[];
+    cancelledList   = <DownloadInfoSet>[];
     
   }
 

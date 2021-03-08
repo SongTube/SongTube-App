@@ -34,7 +34,7 @@ class DisclaimerDialog extends StatelessWidget {
           ),
         ),
         actions: [
-          FlatButton(
+          TextButton(
             onPressed: () {
               config.disclaimerAccepted = true;
               Navigator.pop(context);
@@ -43,7 +43,7 @@ class DisclaimerDialog extends StatelessWidget {
               color: Theme.of(context).accentColor,
             )),
           ),
-          FlatButton(
+          TextButton(
             onPressed: () {
               showDialog(
                 context: context,
@@ -54,7 +54,7 @@ class DisclaimerDialog extends StatelessWidget {
               color: Theme.of(context).accentColor,
             )),
           ),
-          FlatButton(
+          TextButton(
             onPressed: () {
               SystemNavigator.pop();
             },

@@ -146,7 +146,7 @@ class DownloadSettings extends StatelessWidget {
                         title: Languages.of(context).labelCleaning,
                         content: Languages.of(context).labelCacheIsEmpty,
                         actions: <Widget>[
-                          FlatButton(
+                          TextButton(
                             onPressed: () {
                               Navigator.pop(context);
                             },
@@ -167,14 +167,14 @@ class DownloadSettings extends StatelessWidget {
                       content: Languages.of(context).labelYouAreAboutToClear +
                         ": " + totalSize.toStringAsFixed(2) + "MB",
                       actions: <Widget>[
-                        FlatButton(
+                        TextButton(
                           onPressed: () async {
                             await Directory(tmpPath).delete(recursive: true);
                             Navigator.pop(context);
                           },
                           child: Text("OK"),
                         ),
-                        FlatButton(
+                        TextButton(
                           onPressed: () {
                             Navigator.pop(context);
                           },

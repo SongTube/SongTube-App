@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:md2_tab_indicator/md2_tab_indicator.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/provider/configurationProvider.dart';
-import 'package:songtube/provider/preferencesProvider.dart';
-import 'package:songtube/provider/videoPageProvider.dart';
 import 'package:songtube/screens/homeScreen/searchBar.dart';
 
 // Internal

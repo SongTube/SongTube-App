@@ -69,7 +69,7 @@ class FFmpegConverter {
     assert(videoFormat != "" || videoFormat != null);
     assert(videoPath != "" || videoPath != null);
     assert(audioPath != "" || audioPath != null);
-    List<String> _argsList = List<String>();
+    List<String> _argsList = <String>[];
     String outDir = (await getTemporaryDirectory()).path + "/";
     File output = File(outDir + RandomString.getRandomString(10));
     String audioFormat = await getMediaFormat(audioPath);

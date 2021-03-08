@@ -32,7 +32,7 @@ class JoinTelegramDialog extends StatelessWidget {
         ),
       ),
       actions: [
-        FlatButton(
+        TextButton(
           child: Text(Languages.of(context).labelJoin),
           onPressed: () {
             prefs.showJoinTelegramDialog = false;
@@ -40,14 +40,14 @@ class JoinTelegramDialog extends StatelessWidget {
             Navigator.pop(context);
           },
         ),
-        FlatButton(
+        TextButton(
           child: Text(Languages.of(context).labelRemindLater),
           onPressed: () {
             prefs.remindTelegramLater = true;
             Navigator.pop(context);
           },
         ),
-        FlatButton(
+        TextButton(
           child: Text(Languages.of(context).labelNo),
           onPressed: () {
             prefs.showJoinTelegramDialog = false;

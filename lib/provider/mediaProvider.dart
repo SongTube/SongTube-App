@@ -31,14 +31,14 @@ import 'package:string_validator/string_validator.dart';
 class MediaProvider extends ChangeNotifier {
 
   MediaProvider() {
-    audioQuery = new FlutterAudioQuery();
-    listMediaItems = new List<MediaItem>();
-    listVideos = new List<VideoFile>();
-    listFolders = new List<FolderItem>();
+    audioQuery        = FlutterAudioQuery();
+    listMediaItems    = <MediaItem>[];
+    listVideos        = <VideoFile>[];
+    listFolders       = <FolderItem>[];
     storagePermission = true;
-    panelController = new PanelController();
-    slidingPanelOpen = false;
-    databaseSongs = new List<MediaItem>();
+    panelController   = PanelController();
+    slidingPanelOpen  = false;
+    databaseSongs     = <MediaItem>[];
     getDatabase();
   }
 

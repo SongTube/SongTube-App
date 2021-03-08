@@ -214,8 +214,4 @@ class _YoutubeChannelPageState extends State<YoutubeChannelPage> {
       );
     }
   }
-
-  Widget avatarWidget(String url) {
-    
-  }
 }

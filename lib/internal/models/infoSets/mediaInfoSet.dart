@@ -22,7 +22,7 @@ class MediaInfoSet {
     this.relatedVideos
   }) {
     mediaTags = TagsControllers();
-    relatedVideos = this.relatedVideos ?? List<StreamInfoItem>();
+    relatedVideos = this.relatedVideos ?? <StreamInfoItem>[];
     autoPlayIndex = 0;
   }
 

@@ -22,7 +22,7 @@ class DownloadFixDialog extends StatelessWidget {
         ),
       ),
       actions: [
-        FlatButton(
+        TextButton(
           child: Text(
             "Allow",
             style: TextStyle(
@@ -34,7 +34,7 @@ class DownloadFixDialog extends StatelessWidget {
             Navigator.pop(context);
           },
         ),
-        FlatButton(
+        TextButton(
           child: Text(
             "Not Now",
             style: TextStyle(

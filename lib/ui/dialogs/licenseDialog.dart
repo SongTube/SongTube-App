@@ -24,7 +24,7 @@ class LicenseDialog extends StatelessWidget {
         },
       ),
       actions: [
-        FlatButton(
+        TextButton(
           onPressed: () {
             Navigator.pop(context);
           },

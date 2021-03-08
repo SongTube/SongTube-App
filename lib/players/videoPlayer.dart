@@ -91,7 +91,7 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
                 ),
               ),
               actions: [
-                FlatButton(
+                TextButton(
                   child: Text(
                     "OK",
                     style: TextStyle(

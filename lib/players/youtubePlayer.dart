@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:newpipeextractor_dart/models/infoItems/playlist.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/players/components/slidablePanel.dart';
 import 'package:songtube/players/components/youtubePlayer/expandedPanel.dart';
