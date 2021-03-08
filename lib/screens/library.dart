@@ -88,9 +88,12 @@ class LibraryScreen extends StatelessWidget {
                     ),
                   ),
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) {
-                      return WatchHistoryPage();
-                    }));
+                    Navigator.push(context,
+                      BlurPageRoute(
+                        blurStrength: Provider.of<PreferencesProvider>
+                          (context, listen: false).enableBlurUI ? 20 : 0,
+                        builder: (_) => 
+                        WatchHistoryPage()));
                   },
                 ),
                 // Playlist History
