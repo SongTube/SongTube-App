@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:songtube/internal/languages.dart';
 
 // Internal
-import 'package:songtube/ui/settings/components/backupSettings.dart';
-import 'package:songtube/ui/settings/components/downloadSettings.dart';
-import 'package:songtube/ui/settings/components/generalSettings.dart';
-import 'package:songtube/ui/settings/components/themeSettings.dart';
+import 'package:songtube/pages/settings/components/backupSettings.dart';
+import 'package:songtube/pages/settings/components/downloadSettings.dart';
+import 'package:songtube/pages/settings/components/generalSettings.dart';
+import 'package:songtube/pages/settings/components/themeSettings.dart';
 
 class SettingsTab extends StatefulWidget {
   

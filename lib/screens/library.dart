@@ -10,7 +10,7 @@ import 'package:songtube/screens/libraryScreen/aboutPage.dart';
 import 'package:songtube/screens/libraryScreen/socialLinksRow.dart';
 import 'package:songtube/screens/libraryScreen/watchHistory.dart';
 import 'package:songtube/screens/libraryScreen/watchHistoryRow.dart';
-import 'package:songtube/ui/settings/settings.dart';
+import 'package:songtube/pages/settings.dart';
 
 // Packages
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
