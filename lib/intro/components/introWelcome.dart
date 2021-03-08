@@ -91,7 +91,7 @@ class IntroWelcome extends StatelessWidget {
               duration: Duration(milliseconds: 600),
               child: GestureDetector(
                 onTap: () {
-                  launch('https://github.com/Hexer10/youtube_explode_dart');
+                  launch('https://github.com/TeamNewPipe/NewPipeExtractor');
                 },
                 child: Container(
                   alignment: Alignment.topLeft,
@@ -121,7 +121,7 @@ class IntroWelcome extends StatelessWidget {
                               text: "Powered by\n"
                             ),
                             TextSpan(
-                              text: "YouTubeExplode",
+                              text: "NewPipe Extractor",
                               style: TextStyle(
                                 color: Theme.of(context).accentColor,
                                 fontWeight: FontWeight.w600
