@@ -183,7 +183,7 @@ class _DownloadsQueueTabState extends State<DownloadsQueueTab> with TickerProvid
       );
     } else {
       return Align(
-        alignment: Alignment.bottomCenter,
+        alignment: Alignment.topCenter,
         child: const NoDownloads()
       );
     }

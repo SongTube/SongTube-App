@@ -56,7 +56,7 @@ class _DownloadsCancelledTabState extends State<DownloadsCancelledTab> {
       );
     } else {
       return Align(
-        alignment: Alignment.bottomCenter,
+        alignment: Alignment.topCenter,
         child: const NoDownloads()
       );
     }

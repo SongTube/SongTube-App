@@ -11,7 +11,7 @@ class NoDownloads extends StatelessWidget {
       duration: Duration(milliseconds: 600),
       delay: Duration(milliseconds: 400),
       forward: true,
-      slideSide: SlideFromSlide.BOTTOM,
+      slideSide: SlideFromSlide.TOP,
       child: Container(
         height: 30,
         margin: EdgeInsets.all(16),
