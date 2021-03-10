@@ -164,6 +164,14 @@ class _YoutubeChannelPageState extends State<YoutubeChannelPage> {
                   ],
                 ),
               ),
+              SizedBox(height: 8),
+              Divider(
+                height: 1,
+                thickness: 1,
+                color: Colors.grey[600].withOpacity(0.1),
+                indent: 12,
+                endIndent: 12
+              ),
               Expanded(
                 child: FadeInTransition(
                   delay: Duration(milliseconds: 600),
