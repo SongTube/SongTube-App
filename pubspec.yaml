@@ -90,7 +90,7 @@ dependencies:
   transparent_image: ^1.0.0
   grouped_list: ^3.5.0
   volume: ^1.0.1
-  screen: ^0.0.5
+  flutter_screen: ^0.0.2
   
   # Database
   sqflite: ^1.3.0

@@ -24,6 +24,7 @@ import 'package:songtube/ui/components/measureSize.dart';
 import 'package:songtube/ui/components/tagsResultsPage.dart';
 import 'package:songtube/ui/dialogs/loadingDialog.dart';
 import 'package:songtube/ui/internal/snackbar.dart';
+import 'package:flutter_screen/flutter_screen.dart';
 import 'package:songtube/ui/layout/streamsListTile.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -41,6 +42,8 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
 
   // Player Height
   double playerHeight = 0;
+
+  // Current Screen Brightness
 
   @override
   void initState() {
@@ -137,6 +140,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
     ]);
     SystemChrome.setEnabledSystemUIOverlays
       ([SystemUiOverlay.top, SystemUiOverlay.bottom]);
+    FlutterScreen.resetBrightness();
     return Column(
       children: <Widget> [
         // Top StatusBar Padding

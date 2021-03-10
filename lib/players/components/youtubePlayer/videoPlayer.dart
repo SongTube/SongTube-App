@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:newpipeextractor_dart/models/streams/audioOnlyStream.dart';
 import 'package:newpipeextractor_dart/models/streams/videoOnlyStream.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:screen/screen.dart';
+import 'package:flutter_screen/flutter_screen.dart';
 import 'package:songtube/players/components/youtubePlayer/player/playPauseButton.dart';
 import 'package:songtube/players/components/youtubePlayer/player/playerAppBar.dart';
 import 'package:songtube/players/components/youtubePlayer/player/playerProgressBar.dart';
@@ -72,11 +72,11 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
       currentVolumePercentage =
         "${(((await Volume.getVol)/(await Volume.getMaxVol)) * 100).round()}";
     });
-    Screen.brightness.then((value) {
+    FlutterScreen.brightness.then((value) {
       currentBrightnessPercentage =
         "${((value/1) * 100).round()}";
     });
-    Screen.keepOn(true);
+    FlutterScreen.keepOn(true);
     Future.delayed(Duration(seconds: 2), () {
       setState(() => hideControls = true);
     });
@@ -119,7 +119,7 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
 
   @override
   void dispose() {
-    Screen.keepOn(false);
+    FlutterScreen.keepOn(false);
     if (_controller != null)
       _controller.dispose();
     super.dispose();
@@ -161,13 +161,13 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
   void handleBrightnessGesture(double primaryDelta) async {
     tapId = Random().nextInt(10);
     int currentId = tapId;
-    double currentBrightness = await Screen.brightness;
+    double currentBrightness = await FlutterScreen.brightness;
     double newBrightness =
       currentBrightness + ((primaryDelta*-1)*0.01);
     currentBrightnessPercentage = newBrightness > 1 ? "100" :
       newBrightness < 0 ? "0" : "${((newBrightness/1)*100).round()}";
     setState(() {});
-    Screen.setBrightness(
+    FlutterScreen.setBrightness(
       newBrightness > 1 ? 1 : newBrightness < 0 ? 0 : newBrightness
     );
     if (!showVolumeUI) {
