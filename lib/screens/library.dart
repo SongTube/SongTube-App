@@ -192,9 +192,12 @@ class LibraryScreen extends StatelessWidget {
                 // About us
                 ListTile(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) {
-                      return AboutPage();
-                    }));
+                    Navigator.push(context,
+                      BlurPageRoute(
+                        blurStrength: Provider.of<PreferencesProvider>
+                          (context, listen: false).enableBlurUI ? 20 : 0,
+                        builder: (_) => 
+                        AboutPage()));
                   },
                   leading: Icon(
                     EvaIcons.questionMarkCircle,
@@ -227,9 +230,12 @@ class LibraryScreen extends StatelessWidget {
           if (AudioService?.currentMediaItem == null && pageProvider.infoItem == null)
           GestureDetector(
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return AboutPage();
-              }));
+              Navigator.push(context,
+                BlurPageRoute(
+                  blurStrength: Provider.of<PreferencesProvider>
+                    (context, listen: false).enableBlurUI ? 20 : 0,
+                  builder: (_) => 
+                  AboutPage()));
             },
             child: Container(
               height: 50,
