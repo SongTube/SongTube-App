@@ -365,7 +365,9 @@ class MediaProvider extends ChangeNotifier {
       artUri: "file://" + thumbnail.path,
       extras: {
         "artwork": thumbnail.path,
-        "albumId": song.extras["albumId"]
+        "albumId": song.extras["albumId"],
+        "downloadType": song.extras.containsKey("downloadType")
+          ? song.extras["downloadType"] : ""
       }
     );
     if (databaseSongs.contains(song)) {
