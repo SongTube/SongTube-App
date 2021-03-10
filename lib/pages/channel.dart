@@ -67,118 +67,125 @@ class _YoutubeChannelPageState extends State<YoutubeChannelPage> {
       ),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            // Channel Banner
-            AnimatedContainer(
-              duration: Duration(milliseconds: 250),
-              child: bannerWidget(),
-            ),
-            Row(
-              children: [
-                AnimatedSwitcher(
-                  duration: Duration(milliseconds: 250),
-                  child: widget.lowResAvatar != null
-                    ? Hero(
-                        tag: widget.heroTag,
-                        child: Container(
-                          height: 100,
-                          width: 100,
+        physics: NeverScrollableScrollPhysics(),
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          child: Column(
+            children: [
+              // Channel Banner
+              AnimatedContainer(
+                duration: Duration(milliseconds: 250),
+                child: bannerWidget(),
+              ),
+              Row(
+                children: [
+                  AnimatedSwitcher(
+                    duration: Duration(milliseconds: 250),
+                    child: widget.lowResAvatar != null
+                      ? Hero(
+                          tag: widget.heroTag,
                           child: Container(
-                            margin: EdgeInsets.all(16),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(100),
-                              child: FadeInImage(
-                                fadeInDuration: Duration(milliseconds: 300),
-                                placeholder: MemoryImage(kTransparentImage),
-                                image: NetworkImage(
-                                  channel?.avatarUrl != null
-                                    ? channel.avatarUrl
-                                    : widget.lowResAvatar
+                            height: 100,
+                            width: 100,
+                            child: Container(
+                              margin: EdgeInsets.all(16),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(100),
+                                child: FadeInImage(
+                                  fadeInDuration: Duration(milliseconds: 300),
+                                  placeholder: MemoryImage(kTransparentImage),
+                                  image: NetworkImage(
+                                    channel?.avatarUrl != null
+                                      ? channel.avatarUrl
+                                      : widget.lowResAvatar
+                                  ),
+                                  fit: BoxFit.cover,
                                 ),
-                                fit: BoxFit.cover,
                               ),
                             ),
                           ),
+                        )
+                      : ShimmerContainer(
+                          height: 100,
+                          width: 100,
+                          borderRadius: BorderRadius.circular(100),
                         ),
-                      )
-                    : ShimmerContainer(
-                        height: 100,
-                        width: 100,
-                        borderRadius: BorderRadius.circular(100),
-                      ),
-                ),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.name,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontFamily: 'Product Sans',
-                          fontWeight: FontWeight.w600
-                        ),
-                      ),
-                      Text(
-                        "${NumberFormat.compact().format(channel?.subscriberCount ?? 0)} Subs",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Product Sans',
-                          color: Theme.of(context).textTheme.bodyText1.color
-                            .withOpacity(0.5)
-                        ),
-                      ),
-                    ],
                   ),
-                )
-              ],
-            ),
-            Container(
-              margin: EdgeInsets.only(
-                left: 16,
-                right: 16,
-              ),
-              child: Row(
-                children: [
-                  Row(
-                    children: [
-                      Icon(EvaIcons.cloudUploadOutline,
-                        color: Theme.of(context).accentColor),
-                      SizedBox(width: 8),
-                      Text(
-                        "Videos",
-                        style: TextStyle(
-                          fontFamily: "YTSans",
-                          fontSize: 22
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.name,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: 'Product Sans',
+                            fontWeight: FontWeight.w600
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  Spacer(),
+                        Text(
+                          "${NumberFormat.compact().format(channel?.subscriberCount ?? 0)} Subs",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Product Sans',
+                            color: Theme.of(context).textTheme.bodyText1.color
+                              .withOpacity(0.5)
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
                 ],
               ),
-            ),
-            FadeInTransition(
-              delay: Duration(milliseconds: 600),
-              child: FutureBuilder<List<StreamInfoItem>>(
-                future: ChannelExtractor.getChannelUploads(widget.url),
-                builder: (context, AsyncSnapshot<List<StreamInfoItem>> snapshot) {
-                  return StreamsListTileView(
-                    shrinkWrap: true,
-                    streams: snapshot.hasData
-                      ? snapshot.data : [],
-                    onTap: (stream, index) {
-                      Navigator.pop(context);
-                      pageProvider.infoItem = stream;
-                    }
-                  );
-                },
+              Container(
+                margin: EdgeInsets.only(
+                  left: 16,
+                  right: 16,
+                ),
+                child: Row(
+                  children: [
+                    Row(
+                      children: [
+                        Icon(EvaIcons.cloudUploadOutline,
+                          color: Theme.of(context).accentColor),
+                        SizedBox(width: 8),
+                        Text(
+                          "Videos",
+                          style: TextStyle(
+                            fontFamily: "YTSans",
+                            fontSize: 22
+                          ),
+                        ),
+                      ],
+                    ),
+                    Spacer(),
+                  ],
+                ),
               ),
-            )
-          ],
+              Expanded(
+                child: FadeInTransition(
+                  delay: Duration(milliseconds: 600),
+                  child: FutureBuilder<List<StreamInfoItem>>(
+                    future: ChannelExtractor.getChannelUploads(widget.url),
+                    builder: (context, AsyncSnapshot<List<StreamInfoItem>> snapshot) {
+                      return StreamsListTileView(
+                        shrinkWrap: true,
+                        removePhysics: false,
+                        streams: snapshot.hasData
+                          ? snapshot.data : [],
+                        onTap: (stream, index) {
+                          Navigator.pop(context);
+                          pageProvider.infoItem = stream;
+                        }
+                      );
+                    },
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       )
     );
