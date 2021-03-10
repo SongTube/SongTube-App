@@ -129,7 +129,7 @@ class _AddStreamToPlaylistSheetState extends State<AddStreamToPlaylistSheet> wit
           endIndent: 12
         ),
         Container(
-          height: 50,
+          height: kToolbarHeight*1.1,
           child: Row(
             children: [
               SizedBox(width: 16),
@@ -160,7 +160,7 @@ class _AddStreamToPlaylistSheetState extends State<AddStreamToPlaylistSheet> wit
                     borderRadius: BorderRadius.circular(50),
                     color: Theme.of(context).scaffoldBackgroundColor,
                   ),
-                  padding: EdgeInsets.all(8),
+                  padding: EdgeInsets.all(12),
                   margin: EdgeInsets.only(right: 16),
                   child: Row(
                     children: [
@@ -172,7 +172,7 @@ class _AddStreamToPlaylistSheetState extends State<AddStreamToPlaylistSheet> wit
                         Languages.of(context).labelCreate,
                         style: TextStyle(
                           color: Theme.of(context).textTheme.bodyText1.color,
-                          fontSize: 12,
+                          fontSize: 14,
                           fontFamily: 'Product Sans',
                           fontWeight: FontWeight.w600
                         ),
@@ -247,6 +247,9 @@ class _CreatePlaylistDialogState extends State<CreatePlaylistDialog> {
       title: Text(
         Languages.of(context).labelCreate +
         " " + Languages.of(context).labelPlaylist,
+        style: TextStyle(
+          color: Theme.of(context).textTheme.bodyText1.color
+        ),
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,

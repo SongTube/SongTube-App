@@ -52,6 +52,11 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
               color: Theme.of(context).textTheme.bodyText1.color
             ),
           ),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_rounded,
+              color: Theme.of(context).iconTheme.color),
+            onPressed: () => Navigator.pop(context),
+          ),
         ),
         body: Column(
           children: [
@@ -158,11 +163,14 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
         children: [
           AspectRatio(
             aspectRatio: 16/9,
-            child: FadeInImage(
-              fadeInDuration: Duration(milliseconds: 300),
-              image: NetworkImage(playlist.streams[0].thumbnails.hqdefault),
-              placeholder: MemoryImage(kTransparentImage),
-              fit: BoxFit.cover,
+            child: Transform.scale(
+              scale: 1.01,
+              child: FadeInImage(
+                fadeInDuration: Duration(milliseconds: 300),
+                image: NetworkImage(playlist.streams[0].thumbnails.hqdefault),
+                placeholder: MemoryImage(kTransparentImage),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
           Container(
@@ -198,7 +206,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
                       ),
                       child: Icon(
                         Icons.playlist_play_outlined,
-                        color: Theme.of(context).iconTheme.color,
+                        color: Colors.white,
                         size: 32,
                       ),
                     ),
@@ -216,7 +224,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
                               fontFamily: 'Product Sans',
                               fontWeight: FontWeight.w600,
                               fontSize: 24,
-                              color: Theme.of(context).textTheme.bodyText1.color
+                              color: Colors.white
                             ),
                           ),
                           SizedBox(height: 4),
@@ -229,7 +237,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
                               fontFamily: 'Product Sans',
                               fontWeight: FontWeight.w600,
                               fontSize: 14,
-                              color: Theme.of(context).textTheme.bodyText1.color
+                              color: Colors.white
                             ),
                           ),
                         ],

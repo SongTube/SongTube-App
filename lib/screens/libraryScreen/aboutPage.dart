@@ -110,7 +110,7 @@ class AboutPage extends StatelessWidget {
               children: [
                 Spacer(),
                 Text(
-                  "Airis Dev Team",
+                  "Airis Team",
                   style: TextStyle(
                     color: Theme.of(context).textTheme.bodyText1.color,
                     fontSize: 18,
