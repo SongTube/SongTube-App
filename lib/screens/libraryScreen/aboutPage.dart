@@ -1,5 +1,6 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/provider/configurationProvider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -23,128 +24,11 @@ class AboutPage extends StatelessWidget {
         ),
         iconTheme: IconThemeData(
           color: Theme.of(context).iconTheme.color),
-      ),
-      body: ListView(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                margin: EdgeInsets.all(16),
-                child: Image.asset(
-                  'assets/images/logo.png',
-                  width: MediaQuery.of(context).size.width*0.25,
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  margin: EdgeInsets.only(right: 24, top: 16),
-                  child: Text(
-                    "SongTube is an Open Source app for media downloading or "
-                    "streaming, designed and developed as a beautiful, "
-                    "fast and functional alternative to other Youtube Clients.\n\n"
-                    "This app is, and will always be provided for you for free "
-                    "and without Ads.",
-                    style: TextStyle(
-                      fontFamily: 'Product Sans',
-                      fontSize: 15,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [Expanded(
-                child: Container(
-                  margin: EdgeInsets.only(left: 24, top: 16),
-                  child: Text(
-                    "Airis is a new Development Group and we will "
-                    "do any kind of software based development, professionally."
-                    "\n\nYou can contact us and we will deliver any Web Page, API, "
-                    "Mobile App or anything software related with the best "
-                    "looking, functional and care for you.",
-                    style: TextStyle(
-                      fontFamily: 'Product Sans',
-                      fontSize: 15,
-                    ),
-                  ),
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.all(16),
-                child: Image.asset(
-                  'assets/images/airis.png',
-                  width: MediaQuery.of(context).size.width*0.25,
-                ),
-              )
-            ],
-          ),
-          SizedBox(height: 16),
-          ListTile(
-            onTap: () {
-              launch('mailto:artx4dev@gmail.com');
-            },
-            leading: Icon(
-              EvaIcons.emailOutline,
-              color: Colors.red,
-              size: 36,
-            ),
-            title: Text(
-              "Email",
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.w600,
-                fontFamily: 'Product Sans',
-                color: Theme.of(context).textTheme.bodyText1.color
-              )
-            ),
-            subtitle: Text(
-              "artx4dev@gmail.com",
-              style: TextStyle(
-                fontFamily: 'Product Sans',
-                color: Theme.of(context).textTheme.bodyText1.color
-              ),
-            ),
-          ),
-          SizedBox(height: 16),
-          ListTile(
-            onTap: () {
-              launch('tel://+58 (414) 3521458');
-            },
-            leading: Icon(
-              EvaIcons.phoneOutline,
-              color: Colors.blue,
-              size: 36,
-            ),
-            title: Text(
-              "Phone Number",
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.w600,
-                fontFamily: 'Product Sans',
-                color: Theme.of(context).textTheme.bodyText1.color
-              )
-            ),
-            subtitle: Text(
-              "+58 (414) 3521458",
-              style: TextStyle(
-                fontFamily: 'Product Sans',
-                color: Theme.of(context).textTheme.bodyText1.color
-              ),
-            ),
-          ),
-          SizedBox(height: 8),
-          Divider(),
-          SizedBox(height: 8),
-          ListTile(
-            onTap: () {
+        actions: [
+          IconButton(
+            icon: Icon(MdiIcons.license,
+              color: Colors.green),
+            onPressed: () {
               showLicensePage(
                 applicationName: config.appName,
                 applicationIcon: Image.asset('assets/images/ic_launcher.png', height: 50, width: 50),
@@ -152,29 +36,205 @@ class AboutPage extends StatelessWidget {
                 context: context
               );
             },
-            title: Center(
-              child: Text(
-                "Licenses",
+          )
+        ],
+      ),
+      body: Padding(
+        padding: EdgeInsets.only(left: 40, right: 40),
+        child: ListView(
+          children: [
+            SizedBox(height: 12),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Spacer(),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.grey.withOpacity(0.6),
+                    borderRadius: BorderRadius.circular(100)
+                  ),
+                  padding: EdgeInsets.all(8),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(100)
+                    ),
+                    padding: EdgeInsets.all(12),
+                    child: Image.asset(
+                      'assets/images/logo.png',
+                      width: MediaQuery.of(context).size.width*0.15,
+                    ),
+                  ),
+                ),
+                SizedBox(width: 32),
+                Text(
+                  "SongTube",
+                  style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyText1.color,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Product Sans'
+                  ),
+                ),
+                Spacer(),
+              ],
+            ),
+            SizedBox(height: 16),
+            RichText(
+              text: TextSpan(
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Theme.of(context).textTheme.bodyText1.color
+                ),
+                children: [
+                  TextSpan(
+                    text: "It's an Open Source app for media downloading "
+                      "or streaming purposes\n\nMeant to be a beautiful, "
+                      "fast and functional alternative to other Youtube "
+                      "Clients, "
+                  ),
+                  TextSpan(
+                    text: "it'll be forever free with no ads.",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700
+                    )
+                  )
+                ]
+              ),
+            ),
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Spacer(),
+                Text(
+                  "Airis Dev Team",
+                  style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyText1.color,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Product Sans'
+                  ),
+                ),
+                SizedBox(width: 32),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Color.fromARGB(255, 0, 10, 28),
+                    borderRadius: BorderRadius.circular(100)
+                  ),
+                  padding: EdgeInsets.all(8),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Color.fromARGB(255, 0, 10, 28),
+                      borderRadius: BorderRadius.circular(100)
+                    ),
+                    padding: EdgeInsets.all(12),
+                    child: Image.asset(
+                      'assets/images/airis.png',
+                      width: MediaQuery.of(context).size.width*0.15,
+                    ),
+                  ),
+                ),
+                Spacer(),
+              ],
+            ),
+            SizedBox(height: 16),
+            Text(
+              "We are a Development Team dedicated to professional software "
+              "solutions.\n\nContact us to know more about the best Web "
+              "and Mobile services we can offer you.",
+              style: TextStyle(
+                fontSize: 14
+              ),
+            ),
+            SizedBox(height: 16),
+            Divider(),
+            ListTile(
+              onTap: () {
+                launch('mailto:artx4dev@gmail.com');
+              },
+              leading: Icon(
+                EvaIcons.emailOutline,
+                color: Colors.red,
+                size: 28,
+              ),
+              title: Text(
+                "Email",
                 textAlign: TextAlign.start,
                 style: TextStyle(
-                  fontSize: 22,
+                  fontSize: 18,
                   fontWeight: FontWeight.w600,
                   fontFamily: 'Product Sans',
                   color: Theme.of(context).textTheme.bodyText1.color
                 )
               ),
-            ),
-            subtitle: Center(
-              child: Text(
-                "All Packages & Plugins Licenses",
+              subtitle: Text(
+                "artx4dev@gmail.com",
                 style: TextStyle(
                   fontFamily: 'Product Sans',
                   color: Theme.of(context).textTheme.bodyText1.color
                 ),
               ),
             ),
-          ),
-        ],
+            ListTile(
+              onTap: () {
+                launch('mailto:artx4dev@gmail.com');
+              },
+              leading: Icon(
+                EvaIcons.emailOutline,
+                color: Colors.transparent,
+                size: 28,
+              ),
+              title: Text(
+                "Airis Email",
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Product Sans',
+                  color: Theme.of(context).textTheme.bodyText1.color
+                )
+              ),
+              subtitle: Text(
+                "airisdevgroup@gmail.com",
+                style: TextStyle(
+                  fontFamily: 'Product Sans',
+                  color: Theme.of(context).textTheme.bodyText1.color
+                ),
+              ),
+            ),
+            SizedBox(height: 16),
+            ListTile(
+              onTap: () {
+                launch('tel://+58 (414) 3521458');
+              },
+              leading: Icon(
+                EvaIcons.phoneOutline,
+                color: Colors.blue,
+                size: 28,
+              ),
+              title: Text(
+                "Phone Number",
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Product Sans',
+                  color: Theme.of(context).textTheme.bodyText1.color
+                )
+              ),
+              subtitle: Text(
+                "+58 (414) 3521458",
+                style: TextStyle(
+                  fontFamily: 'Product Sans',
+                  color: Theme.of(context).textTheme.bodyText1.color
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
