@@ -84,17 +84,18 @@ class _MusicScreenState extends State<MusicScreen> {
                     color: Theme.of(context).cardColor,
                     child: StreamsLargeThumbnailView(
                       infoItems: manager?.youtubeMusicSearch?.dynamicSearchResultsList ?? [],
+                      onReachingListEnd: () {
+                        manager.searchYoutubeMusic(
+                          query: manager.youtubeMusicSearch.query
+                        );
+                      },
                     ),
                   )
                 : Container(
                     color: Theme.of(context).cardColor,
                     child: StreamsLargeThumbnailView(
                       infoItems: manager?.homeMusicVideoList ?? [],
-                      onReachingListEnd: () {
-                        manager.searchYoutubeMusic(
-                          query: manager.youtubeMusicSearch.query
-                        );
-                      },
+                      onReachingListEnd: () {},
                     ),
                   )
             ),
