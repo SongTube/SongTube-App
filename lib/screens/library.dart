@@ -2,6 +2,7 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:songtube/internal/languages.dart';
+import 'package:songtube/pages/playlists.dart';
 
 // Internal
 import 'package:songtube/provider/preferencesProvider.dart';
@@ -76,6 +77,25 @@ class LibraryScreen extends StatelessWidget {
                 WatchHistoryRow(),
                 SizedBox(height: 8),
                 Divider(indent: 12, endIndent: 12),
+                // Playlists
+                ListTile(
+                  leading: Icon(Icons.playlist_play_rounded),
+                  title: Text(
+                    Languages.of(context).labelPlaylists,
+                    style: TextStyle(
+                      fontFamily: 'Product Sans',
+                      color: Theme.of(context).textTheme.bodyText1.color
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.push(context,
+                      BlurPageRoute(
+                        blurStrength: Provider.of<PreferencesProvider>
+                          (context, listen: false).enableBlurUI ? 20 : 0,
+                        builder: (_) => 
+                        PlaylistsPage()));
+                  },
+                ),
                 // Watch History (All videos)
                 ListTile(
                   leading: Icon(EvaIcons.clockOutline),

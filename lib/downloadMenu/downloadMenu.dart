@@ -145,7 +145,6 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
         title: "Download started...",
         message: "${video.name}",
         context: context,
-        scaffoldKey: widget.scaffoldState
       );
     }
   }

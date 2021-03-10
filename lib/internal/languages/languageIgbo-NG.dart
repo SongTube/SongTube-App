@@ -67,6 +67,8 @@ class LanguageIgbo extends Languages {
   String get labelAddToFavorites => "Tinye ka ọkacha mmasị";
   @override
   String get labelAddToWatchLater => "Tinye na Nlele Mgbe Emechara";
+  @override
+  String get labelAddToPlaylist => "Tinye na ndepụta egwu";
 
   // Downloads Screen
   @override
@@ -350,4 +352,8 @@ class LanguageIgbo extends Languages {
   String get labelNo => "Mba";
   @override
   String get labelLibrary => "ọba akwụkwọ";
+  @override
+  String get labelCreate => "Kee";
+  @override
+  String get labelPlaylists => "ndepụta egwu";
 }

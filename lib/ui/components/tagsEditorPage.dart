@@ -332,7 +332,6 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
               title: Languages.of(context).labelAudioFormatNotCompatible,
               duration: Duration(seconds: 2),
               context: context,
-              scaffoldKey: scaffoldKey.currentState
             );
             return;
           }

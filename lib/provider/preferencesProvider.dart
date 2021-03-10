@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:newpipeextractor_dart/models/infoItems/video.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:songtube/internal/models/playlist.dart';
 
 class PreferencesProvider extends ChangeNotifier {
 
@@ -40,6 +41,15 @@ class PreferencesProvider extends ChangeNotifier {
       notifyListeners();
     });
   }
+  bool favoriteHasVideo(StreamInfoItem stream) {
+    List<StreamInfoItem> videos = favoriteVideos;
+    int index = videos.indexWhere((element) => element.id == stream.id);
+    if (index == -1) {
+      return false;
+    } else {
+      return true;
+    }
+  }
 
   // Watch Later Videos
   List<StreamInfoItem> get watchLaterVideos {
@@ -62,6 +72,15 @@ class PreferencesProvider extends ChangeNotifier {
     prefs.setString('newWatchLaterList', json).then((_) {
       notifyListeners();
     });
+  }
+  bool watchLaterHasVideo(StreamInfoItem stream) {
+    List<StreamInfoItem> videos = watchLaterVideos;
+    int index = videos.indexWhere((element) => element.id == stream.id);
+    if (index == -1) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   // View History Videos
@@ -129,7 +148,6 @@ class PreferencesProvider extends ChangeNotifier {
   bool get youtubeAutoPlay {
     return prefs.getBool('youtubeAutoPlay') ?? true;
   }
-
   set youtubeAutoPlay(bool value) {
     prefs.setBool('youtubeAutoPlay', value);
     notifyListeners();
@@ -148,18 +166,76 @@ class PreferencesProvider extends ChangeNotifier {
     }
     return history;
   }
-
   set watchHistory(List<StreamInfoItem> history) {
     List<Map<String, dynamic>> map =
       history.map((e) => e.toMap()).toList();
     prefs.setString('newWatchHistory', jsonEncode(map));
     notifyListeners();
   }
-
   void watchHistoryInsert(dynamic video) {
     List<StreamInfoItem> history = watchHistory;
     history.add(video);
     watchHistory = history;
+  }
+
+  // ------------------------------------
+  // Stream Playlists Creation/Management
+  // ------------------------------------
+  set streamPlaylists(List<StreamPlaylist> playlists) {
+    String json = StreamPlaylist.listToJson(playlists);
+    prefs.setString('playlists', json);
+    notifyListeners();
+  }
+  List<StreamPlaylist> get streamPlaylists {
+    String json = prefs.getString('playlists') ?? "";
+    return StreamPlaylist.fromJsonList(json);
+  }
+  void streamPlaylistCreate(String playlistName, String author, List<StreamInfoItem> streams) {
+    StreamPlaylist playlist = StreamPlaylist(
+      name: playlistName,
+      author: author,
+      streams: streams,
+      favorited: false
+    );
+    List<StreamPlaylist> playlists = streamPlaylists;
+    playlists.add(playlist);
+    streamPlaylists = playlists;
+  }
+  void streamPlaylistRemove(String playlistName) {
+    List<StreamPlaylist> playlists = streamPlaylists;
+    int index = playlists.indexWhere((element) => element.name == playlistName);
+    if (index == -1) return;
+    playlists.removeAt(index);
+    streamPlaylists = playlists;
+  }
+  void streamPlaylistsInsertStream(String playlistName, StreamInfoItem stream) {
+    List<StreamPlaylist> playlists = streamPlaylists;
+    int index = playlists.indexWhere((element) => element.name == playlistName);
+    if (index == -1) return;
+    playlists[index].streams.add(stream);
+    streamPlaylists = playlists;
+  }
+  void streamPlaylistRemoveStream(String playlistName, StreamInfoItem stream) {
+    List<StreamPlaylist> playlists = streamPlaylists;
+    int index = playlists.indexWhere((element) => element.name == playlistName);
+    if (index == -1) return;
+    playlists[index].streams.removeWhere((element) => element.id == stream.id);
+    if (playlists[index].streams.isEmpty) {
+      playlists.removeAt(index);
+    }
+    streamPlaylists = playlists;
+  }
+  bool streamPlaylistHasStream(String playlistName, StreamInfoItem stream) {
+    List<StreamPlaylist> playlists = streamPlaylists;
+    int playlistIndex = playlists.indexWhere((element) => element.name == playlistName);
+    if (playlistIndex == -1) return false;
+    StreamPlaylist playlist = playlists[playlistIndex];
+    int streamIndex = playlist.streams.indexWhere((element) => element.id == stream.id);
+    if (streamIndex == -1) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
 }

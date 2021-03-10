@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:newpipeextractor_dart/extractors/channels.dart';
+import 'package:newpipeextractor_dart/extractors/playlist.dart';
 import 'package:newpipeextractor_dart/models/channel.dart';
 import 'package:newpipeextractor_dart/models/infoItems/channel.dart';
 import 'package:newpipeextractor_dart/models/infoItems/playlist.dart';
@@ -19,7 +20,9 @@ import 'package:songtube/provider/preferencesProvider.dart';
 import 'package:songtube/provider/videoPageProvider.dart';
 import 'package:songtube/ui/animations/blurPageRoute.dart';
 import 'package:songtube/ui/animations/fadeIn.dart';
+import 'package:songtube/ui/components/addToPlaylist.dart';
 import 'package:songtube/ui/components/shimmerContainer.dart';
+import 'package:songtube/ui/dialogs/loadingDialog.dart';
 import 'package:songtube/ui/internal/popupMenu.dart';
 import 'package:songtube/ui/internal/snackbar.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -424,126 +427,138 @@ class StreamsLargeThumbnailView extends StatelessWidget {
 
   Widget _flexiblePopupMenu(BuildContext context, infoItem) {
     PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
-    if (infoItem is StreamInfoItem) {
-      return FlexiblePopupMenu(
-        items: [
-          FlexiblePopupItem(
-            title: Languages.of(context).labelShare,
-            value: "Share"
-          ),
-          FlexiblePopupItem(
-            title: Languages.of(context).labelCopyLink,
-            value: "CopyLink"
-          ),
-          FlexiblePopupItem(
-            title: Languages.of(context).labelDownload,
-            value: "Download"
-          ),
-          if (onDelete != null)
-          FlexiblePopupItem(
-            title: Languages.of(context).labelRemove,
-            value: "Remove"
-          ),
-          if (allowSaveToFavorites)
-          FlexiblePopupItem(
-            title: Languages.of(context).labelAddToFavorites,
-            value: "AddFavorites"
-          ),
-          if (allowSaveToWatchLater)
-          FlexiblePopupItem(
-            title: Languages.of(context).labelAddToWatchLater,
-            value: "AddWatchLater"
-          )
-        ],
-        onItemTap: (String value) async {
-          switch(value) {
-            case "Share":
-              Share.share(
-                infoItem.url
-              );
-              break;
-            case "CopyLink":
-              Clipboard.setData(ClipboardData(
-                text: infoItem.url
-              ));
-              final scaffold = Scaffold.of(context);
-              AppSnack.showSnackBar(
-                icon: Icons.copy,
-                title: "Link copied to Clipboard",
-                duration: Duration(seconds: 2),
+    return FlexiblePopupMenu(
+      items: [
+        FlexiblePopupItem(
+          title: Languages.of(context).labelShare,
+          value: "Share"
+        ),
+        FlexiblePopupItem(
+          title: Languages.of(context).labelCopyLink,
+          value: "CopyLink"
+        ),
+        if (infoItem is StreamInfoItem)
+        FlexiblePopupItem(
+          title: Languages.of(context).labelDownload,
+          value: "Download"
+        ),
+        if (onDelete != null)
+        FlexiblePopupItem(
+          title: Languages.of(context).labelRemove,
+          value: "Remove"
+        ),
+        FlexiblePopupItem(
+          title: Languages.of(context).labelAddToPlaylist,
+          value: "AddPlaylist"
+        ),
+      ],
+      onItemTap: (String value) async {
+        switch(value) {
+          case "Share":
+            Share.share(
+              infoItem.url
+            );
+            break;
+          case "CopyLink":
+            Clipboard.setData(ClipboardData(
+              text: infoItem.url
+            ));
+            final scaffold = Scaffold.of(context);
+            AppSnack.showSnackBar(
+              icon: Icons.copy,
+              title: "Link copied to Clipboard",
+              duration: Duration(seconds: 2),
+              context: context,
+            );
+            break;
+          case "Download":
+            showModalBottomSheet<dynamic>(
+              isScrollControlled: true,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30)
+                ),
+              ),
+              clipBehavior: Clip.antiAlias,
+              context: context,
+              builder: (context) {
+                String url = infoItem.url;
+                return Wrap(
+                  children: [
+                    Consumer<ManagerProvider>(
+                      builder: (context, provider, _) {
+                        return DownloadMenu(
+                          videoUrl: url,
+                          scaffoldState: provider
+                            .internalScaffoldKey.currentState,
+                        );
+                      }
+                    ),
+                  ],
+                );
+              }
+            );
+            break;
+          case "Remove":
+            onDelete(infoItem);
+            break;
+          case "AddPlaylist":
+            if (infoItem is StreamInfoItem) {
+              showModalBottomSheet(
                 context: context,
-                scaffoldKey: scaffold
-              );
-              break;
-            case "Download":
-              showModalBottomSheet<dynamic>(
-                isScrollControlled: true,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30)
-                  ),
+                    topLeft: Radius.circular(15),
+                    topRight: Radius.circular(15)
+                  )
                 ),
-                clipBehavior: Clip.antiAlias,
-                context: context,
                 builder: (context) {
-                  String url = infoItem.url;
-                  return Wrap(
-                    children: [
-                      Consumer<ManagerProvider>(
-                        builder: (context, provider, _) {
-                          return DownloadMenu(
-                            videoUrl: url,
-                            scaffoldState: provider
-                              .internalScaffoldKey.currentState,
-                          );
-                        }
-                      ),
-                    ],
-                  );
+                  return AddStreamToPlaylistSheet(stream: infoItem);
                 }
               );
-              break;
-            case "Remove":
-              onDelete(infoItem);
-              break;
-            case "AddFavorites":
-              StreamInfoItem videoToSave = infoItem;
-              List<StreamInfoItem> videos = prefs.favoriteVideos;
-              videos.add(videoToSave);
-              prefs.favoriteVideos = videos;
-              AppSnack.showSnackBar(
-                icon: EvaIcons.heartOutline,
-                title: "Video added to Favorites",
+            } else {
+              PlaylistInfoItem playlist = infoItem as PlaylistInfoItem;
+              if (prefs.streamPlaylists.indexWhere((element) => element.name == playlist.name) != -1) {
+                AppSnack.showSnackBar(
+                  icon: Icons.warning_rounded,
+                  title: Languages.of(context).labelCancelled,
+                  message: "Playlist already exists!",
+                  context: context,
+                );
+                return;
+              }
+              showDialog(
                 context: context,
-                scaffoldKey: Scaffold.of(context)
+                barrierDismissible: false,
+                builder: (context) {
+                  return LoadingDialog();
+                }
               );
-              break;
-            case "AddWatchLater":
-              StreamInfoItem videoToSave = infoItem;
-              List<StreamInfoItem> videos = prefs.watchLaterVideos;
-              videos.add(videoToSave);
-              prefs.watchLaterVideos = videos;
+              prefs.streamPlaylistCreate(
+                playlist.name,
+                playlist.uploaderName,
+                await PlaylistExtractor.getPlaylistStreams(playlist.url)
+              );
+              Navigator.pop(context);
               AppSnack.showSnackBar(
-                icon: EvaIcons.clockOutline,
-                title: "Video added to Watch Later",
+                icon: Icons.playlist_add_check_rounded,
+                title: Languages.of(context).labelCompleted,
+                message: "Playlist saved successfully!",
                 context: context,
-                scaffoldKey: Scaffold.of(context)
               );
-              break;
             }
-        },
-        borderRadius: 10,
-        child: Container(
-          padding: EdgeInsets.all(4),
-          color: Colors.transparent,
-          child: Icon(Icons.more_vert_rounded,
-            size: 14),
-        ),
-      );
-    } else {
-      return Container();
-    }
+            break;
+          }
+      },
+      borderRadius: 10,
+      child: Container(
+        padding: EdgeInsets.all(4),
+        color: Colors.transparent,
+        child: Icon(Icons.more_vert_rounded,
+          size: 16),
+      ),
+    );
   }
 
 }

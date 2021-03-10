@@ -22,7 +22,6 @@ class HomePageFavorites extends StatelessWidget {
           icon: EvaIcons.alertCircleOutline,
           title: "Video removed from Favorites",
           context: context,
-          scaffoldKey: Scaffold.of(context)
         );
       },
     );

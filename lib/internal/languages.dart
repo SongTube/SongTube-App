@@ -160,6 +160,7 @@ abstract class Languages {
   String get labelCopyLink;
   String get labelAddToFavorites;
   String get labelAddToWatchLater;
+  String get labelAddToPlaylist;
 
   // Downloads Screen
   String get labelQueued;
@@ -304,6 +305,8 @@ abstract class Languages {
   String get labelJoin;
   String get labelNo;
   String get labelLibrary;
+  String get labelCreate;
+  String get labelPlaylists;
 
 }
 

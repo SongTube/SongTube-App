@@ -67,6 +67,8 @@ class LanguageSo extends Languages {
   String get labelAddToFavorites => "Ku dar Lajecelyahay";
   @override
   String get labelAddToWatchLater => "Ku dar Hadhow Daawo";
+  @override
+  String get labelAddToPlaylist => "Добавить в плейлист";
 
   // Downloads Screen
   @override
@@ -350,4 +352,8 @@ class LanguageSo extends Languages {
   String get labelNo => "Maya";
   @override
   String get labelLibrary => "Boggaaga";
+  @override
+  String get labelCreate => "Abuur";
+  @override
+  String get labelPlaylists => "Liiska Ciyaarta";
 }

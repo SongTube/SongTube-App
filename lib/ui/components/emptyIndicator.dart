@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/ui/animations/showUp.dart';
 
-class NoDownloads extends StatelessWidget {
-  const NoDownloads();
+class EmptyIndicator extends StatelessWidget {
+  const EmptyIndicator();
   @override
   Widget build(BuildContext context) {
     return ShowUpTransition(

@@ -142,8 +142,6 @@ class SongsListView extends StatelessWidget {
                             title: "Cannot Edit Tags",
                             message: "Audio format not supported ($format)",
                             context: context,
-                            scaffoldKey: Provider.of<ManagerProvider>(context, listen: false)
-                              .internalScaffoldKey.currentState
                           );
                         }
                       });

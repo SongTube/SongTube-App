@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:newpipeextractor_dart/extractors/channels.dart';
+import 'package:newpipeextractor_dart/extractors/playlist.dart';
 import 'package:newpipeextractor_dart/extractors/videos.dart';
 import 'package:newpipeextractor_dart/models/channel.dart';
 import 'package:newpipeextractor_dart/models/infoItems/playlist.dart';
@@ -9,6 +10,7 @@ import 'package:newpipeextractor_dart/models/playlist.dart';
 import 'package:newpipeextractor_dart/models/video.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:songtube/internal/models/playlist.dart';
 import 'package:songtube/internal/models/tagsControllers.dart';
 import 'package:songtube/players/components/youtubePlayer/videoPlayer.dart';
 
@@ -40,7 +42,7 @@ class VideoPageProvider extends ChangeNotifier {
     if (currentPlaylist == null) {
       if (infoItem is StreamInfoItem) {
         initializeStream(infoItem);
-      } else if (infoItem is PlaylistInfoItem) {
+      } else if (infoItem is PlaylistInfoItem || infoItem is StreamPlaylist) {
         initializePlaylist(infoItem);
       }
     } else {
@@ -90,17 +92,35 @@ class VideoPageProvider extends ChangeNotifier {
     });
   }
 
-  void initializePlaylist(PlaylistInfoItem item) async {
+  void initializePlaylist(dynamic playlist) async {
+    PlaylistInfoItem item = playlist is PlaylistInfoItem
+      ? playlist : PlaylistInfoItem(
+        null,
+        playlist.name,
+        playlist.author,
+        null, null
+      );
     _infoItem = item;
     currentVideo = null;
     currentChannel = null;
     currentPlaylist = null;
     currentTags = null;
     notifyListeners();
-    currentPlaylist = await item.getPlaylist;
+    if (playlist is PlaylistInfoItem) {
+      currentPlaylist = await item.getPlaylist;
+    } else {
+      currentPlaylist = YoutubePlaylist(
+        null, null, null, null, null,
+        null, null, null, null
+      );
+    }
     notifyListeners();
-    await currentPlaylist.getStreams();
-    currentRelatedVideos = currentPlaylist.streams;
+    if (playlist is PlaylistInfoItem) {
+      await currentPlaylist.getStreams();
+      currentRelatedVideos = currentPlaylist.streams;
+    } else {
+      currentRelatedVideos = (playlist as StreamPlaylist).streams;
+    }
     _infoItem = currentRelatedVideos[0];
     notifyListeners();
     _infoItem.getVideo.then((value) { 

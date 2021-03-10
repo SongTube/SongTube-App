@@ -67,6 +67,8 @@ class LanguageTr extends Languages {
   String get labelAddToFavorites => "Add to Favorites";
   @override
   String get labelAddToWatchLater => "Add to Watch Later";
+  @override
+  String get labelAddToPlaylist => "Add to Playlist";
 
   // Downloads Screen
   @override
@@ -350,4 +352,8 @@ class LanguageTr extends Languages {
   String get labelNo => "No";
   @override
   String get labelLibrary => "kütüphane";
+  @override
+  String get labelCreate => "Oluşturmak";
+  @override
+  String get labelPlaylists => "Çalma listeleri";
 }

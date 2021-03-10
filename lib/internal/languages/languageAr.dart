@@ -67,6 +67,8 @@ class LanguageAr extends Languages {
   String get labelAddToFavorites => "إضافة إلى المفضلة";
   @override
   String get labelAddToWatchLater => "إضافة إلى قائمة المشاهدة لاحقاً";
+  @override
+  String get labelAddToPlaylist => "إضافة إلى قائمة التشغيل";
 
   // Downloads Screen
   @override
@@ -352,4 +354,8 @@ class LanguageAr extends Languages {
   String get labelNo => "لا";
   @override
   String get labelLibrary => "المكتبة";
+  @override
+  String get labelCreate => "خلق";
+  @override
+  String get labelPlaylists => "قوائم التشغيل";
 }

@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:songtube/internal/models/infoSets/downloadinfoset.dart';
 import 'package:songtube/provider/downloadsProvider.dart';
 import 'package:songtube/screens/downloadScreen/components/downloadTile.dart';
-import 'package:songtube/screens/downloadScreen/components/downloadsEmpty.dart';
+import 'package:songtube/ui/components/emptyIndicator.dart';
 
 class DownloadsCancelledTab extends StatefulWidget {
   @override
@@ -57,7 +57,7 @@ class _DownloadsCancelledTabState extends State<DownloadsCancelledTab> {
     } else {
       return Align(
         alignment: Alignment.topCenter,
-        child: const NoDownloads()
+        child: const EmptyIndicator()
       );
     }
   }

@@ -350,7 +350,6 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                       icon: EvaIcons.heartOutline,
                       title: "Video added to Favorites",
                       context: context,
-                      scaffoldKey: scaffoldKey.currentState
                     );
                   },
                   onOpenComments: () {

@@ -20,6 +20,7 @@ class StreamsListTileView extends StatelessWidget {
       duration: Duration(milliseconds: 300),
       child: streams.isNotEmpty
         ? ListView.builder(
+            physics: NeverScrollableScrollPhysics(),
             shrinkWrap: shrinkWrap,
             padding: EdgeInsets.zero,
             itemCount: streams.length,

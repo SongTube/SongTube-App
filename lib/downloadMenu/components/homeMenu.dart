@@ -160,7 +160,6 @@ class DownloadMenuHome extends StatelessWidget {
                           title: "Downloading Playlist...",
                           message: "Songs queued",
                           context: context,
-                          scaffoldKey: scaffoldState
                         );
                       }
                     },

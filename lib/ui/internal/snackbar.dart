@@ -17,9 +17,8 @@ class AppSnack {
     String message,
     Duration duration = const Duration(seconds: 2),
     @required context,
-    @required scaffoldKey
   }) {
-    scaffoldKey.removeCurrentSnackBar();
+    ScaffoldMessenger.of(context).removeCurrentSnackBar();
     final snack = SnackBar(
       content: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -87,6 +86,6 @@ class AppSnack {
       ),
       backgroundColor: Theme.of(context).canvasColor
     );
-    scaffoldKey.showSnackBar(snack);
+    ScaffoldMessenger.of(context).showSnackBar(snack);
   }
 }

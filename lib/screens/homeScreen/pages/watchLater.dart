@@ -22,7 +22,6 @@ class HomePageWatchLater extends StatelessWidget {
           icon: EvaIcons.alertCircleOutline,
           title: "Video removed from Watch Later",
           context: context,
-          scaffoldKey: Scaffold.of(context)
         );
       },
     );
