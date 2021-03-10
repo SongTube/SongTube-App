@@ -160,6 +160,9 @@ class FFmpegConverter {
       ];
       output = File(output.path + ".mp3");
     }
+    if (format == FFmpegActionType.NONE) {
+      return File(audioFile);
+    }
     int _result = await flutterFFmpeg.executeWithArguments(_argsList);
     if (_result == 1)
       throw Exception(
