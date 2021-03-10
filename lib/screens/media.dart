@@ -65,7 +65,7 @@ class _MediaScreenState extends State<MediaScreen> {
                 Container(
                   margin: EdgeInsets.only(right: 8),
                   child: Icon(
-                    EvaIcons.musicOutline,
+                    EvaIcons.headphonesOutline,
                     color: Theme.of(context).accentColor,
                   ),
                 ),
