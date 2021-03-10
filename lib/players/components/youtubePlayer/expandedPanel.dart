@@ -19,6 +19,7 @@ import 'package:songtube/downloadMenu/downloadMenu.dart';
 import 'package:songtube/provider/videoPageProvider.dart';
 import 'package:songtube/ui/animations/blurPageRoute.dart';
 import 'package:songtube/ui/animations/fadeIn.dart';
+import 'package:songtube/ui/components/addToPlaylist.dart';
 import 'package:songtube/ui/components/measureSize.dart';
 import 'package:songtube/ui/components/tagsResultsPage.dart';
 import 'package:songtube/ui/dialogs/loadingDialog.dart';
@@ -343,13 +344,17 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                   dislikeCount: pageProvider.currentVideo.dislikeCount,
                   viewCount: pageProvider.currentVideo.viewCount,
                   onSaveToPlaylist: () {
-                    List<StreamInfoItem> videos = prefs.favoriteVideos;
-                    videos.add(pageProvider.infoItem);
-                    prefs.favoriteVideos = videos;
-                    AppSnack.showSnackBar(
-                      icon: EvaIcons.heartOutline,
-                      title: "Video added to Favorites",
+                    showModalBottomSheet(
                       context: context,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          topRight: Radius.circular(15)
+                        )
+                      ),
+                      builder: (context) {
+                        return AddStreamToPlaylistSheet(stream: pageProvider.infoItem);
+                      }
                     );
                   },
                   onOpenComments: () {
