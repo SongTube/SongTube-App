@@ -9,10 +9,12 @@ class StreamsListTileView extends StatelessWidget {
   final List<StreamInfoItem> streams;
   final Function(StreamInfoItem, int) onTap;
   final bool shrinkWrap;
+  final bool removePhysics;
   StreamsListTileView({
     @required this.streams,
     @required this.onTap,
-    this.shrinkWrap = false
+    this.shrinkWrap = false,
+    this.removePhysics = false
   });
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,9 @@ class StreamsListTileView extends StatelessWidget {
       duration: Duration(milliseconds: 300),
       child: streams.isNotEmpty
         ? ListView.builder(
-            physics: NeverScrollableScrollPhysics(),
+            physics: removePhysics
+              ? NeverScrollableScrollPhysics()
+              : AlwaysScrollableScrollPhysics(),
             shrinkWrap: shrinkWrap,
             padding: EdgeInsets.zero,
             itemCount: streams.length,

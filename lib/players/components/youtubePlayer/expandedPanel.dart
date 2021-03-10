@@ -268,6 +268,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                 // Related Videos
                 StreamsListTileView(
                   shrinkWrap: true,
+                  removePhysics: true,
                   streams: pageProvider?.currentRelatedVideos == null
                     ? [] : pageProvider.currentRelatedVideos, 
                   onTap: (stream, index) async {
