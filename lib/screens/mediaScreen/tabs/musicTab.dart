@@ -16,7 +16,7 @@ class MediaMusicTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
-    List<MediaItem> songs = List<MediaItem>();
+    List<MediaItem> songs = <MediaItem>[];
     if (searchQuery == "") {
       songs = mediaProvider.listMediaItems;
     } else {

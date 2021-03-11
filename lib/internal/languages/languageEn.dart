@@ -67,6 +67,8 @@ class LanguageEn extends Languages {
   String get labelAddToFavorites => "Add as Favorite";
   @override
   String get labelAddToWatchLater => "Watch Later";
+  @override
+  String get labelAddToPlaylist => "Add to Playlist";
 
   // Downloads Screen
   @override
@@ -349,4 +351,7 @@ class LanguageEn extends Languages {
   String get labelNo => "No";
   @override
   String get labelLibrary => "Library";
-}
+  @override
+  String get labelCreate => "Create";
+  @override
+  String get labelPlaylists => "Playlists";

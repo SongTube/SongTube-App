@@ -11,7 +11,7 @@ import 'package:songtube/internal/musicBrainzApi.dart';
 import 'package:songtube/provider/mediaProvider.dart';
 import 'package:songtube/provider/preferencesProvider.dart';
 import 'package:songtube/ui/animations/blurPageRoute.dart';
-import 'package:songtube/ui/components/popupMenu.dart';
+import 'package:songtube/ui/internal/popupMenu.dart';
 import 'package:songtube/ui/components/tagsResultsPage.dart';
 import 'package:songtube/ui/components/textfieldTile.dart';
 import 'package:songtube/ui/dialogs/loadingDialog.dart';
@@ -67,7 +67,6 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
   @override
   Widget build(BuildContext context) {
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
-    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     return Scaffold(
       key: scaffoldKey,
       resizeToAvoidBottomInset: true,
@@ -118,8 +117,9 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
                     BlurPageRoute(builder: (context) => 
                       TagsResultsPage(
                         title: tagsControllers.titleController.text,
-                        artist: tagsControllers.artistController.text
-                      ), blurStrength: prefs.enableBlurUI ? 20 : 0));
+                        artist: tagsControllers.artistController.text),
+                      blurStrength: Provider.of<PreferencesProvider>
+                        (context, listen: false).enableBlurUI ? 20 : 0));
                   if (record == null) return;
                   showDialog(
                     context: context,
@@ -332,7 +332,6 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
               title: Languages.of(context).labelAudioFormatNotCompatible,
               duration: Duration(seconds: 2),
               context: context,
-              scaffoldKey: scaffoldKey.currentState
             );
             return;
           }

@@ -67,6 +67,8 @@ class LanguageId extends Languages {
   String get labelAddToFavorites => "Tambahkan ke Favorit";
   @override
   String get labelAddToWatchLater => "Tambahkan ke Tonton Nanti";
+  @override
+  String get labelAddToPlaylist => "Tambahkan ke Daftar Putar";
 
   // Downloads Screen
   @override
@@ -350,4 +352,8 @@ class LanguageId extends Languages {
   String get labelNo => "Tidak";
   @override
   String get labelLibrary => "Perpustakaan";
+  @override
+  String get labelCreate => "Membuat";
+  @override
+  String get labelPlaylists => "Daftar Putar";
 }

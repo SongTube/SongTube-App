@@ -1,117 +1,83 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:songtube/internal/languages.dart';
-import 'package:songtube/provider/managerProvider.dart';
 
-class STSearchBar extends StatelessWidget {
-  final TextEditingController controller;
+class CommonSearchBar extends StatelessWidget {
+  final TextEditingController textController;
   final FocusNode focusNode;
-  final Function(String) onSearch;
-  final Function onBack;
-  final Function onClear;
   final Function(String) onChanged;
-  final Function onTap;
-  final Widget leadingIcon;
-  final String searchHint;
-  STSearchBar({
-    @required this.controller,
+  final Function(String) onSubmit;
+  final Function onClear;
+  final String hintText;
+  CommonSearchBar({
+    @required this.textController,
     @required this.focusNode,
-    @required this.onSearch,
-    this.onBack,
-    this.onClear,
-    this.onTap,
-    this.leadingIcon,
-    this.searchHint = "",
-    this.onChanged
+    @required this.onChanged,
+    @required this.onClear,
+    this.onSubmit,
+    this.hintText = ""
   });
   @override
   Widget build(BuildContext context) {
-    ManagerProvider manager = Provider.of<ManagerProvider>(context, listen: false);
     return Container(
       width: double.infinity,
-      height: kToolbarHeight,
+      height: kToolbarHeight*0.8,
       decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
+        color: Theme.of(context).cardColor
       ),
       child: Container(
-        height: 45,
-        margin: EdgeInsets.only(
-          left: 18,
-          right: 18,
-          top: 4,
-        ),
         decoration: BoxDecoration(
-          color: Theme.of(context).iconTheme.color.withOpacity(0.03),
-          borderRadius: BorderRadius.circular(15)
+          color: Theme.of(context).scaffoldBackgroundColor,
+          borderRadius: BorderRadius.circular(20)
         ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Theme(
-                data: ThemeData(primaryColor: Theme.of(context).accentColor),
-                child: TextField(
-                  onTap: onTap,
-                  focusNode: focusNode,
-                  keyboardType: TextInputType.url,
-                  style: TextStyle(
-                    color: Theme.of(context).textTheme.bodyText1.color,
-                    fontSize: 16
-                  ),
-                  textAlignVertical: TextAlignVertical.center,
-                  controller: controller,
-                  cursorColor: Theme.of(context).accentColor,
-                  cursorRadius: Radius.circular(20),
-                  decoration: InputDecoration(
-                    prefixIcon: leadingIcon == null
-                      ? Container() : Container(color: Colors.transparent, child: leadingIcon),
-                    hintText: !manager.showSearchBar ? searchHint : Languages.of(context).labelSearchYoutube,
-                    hintStyle: !manager.showSearchBar
-                      ? TextStyle(
-                          color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6),
-                          fontFamily: 'Product Sans',
-                          fontWeight: FontWeight.w700,
-                          fontSize: 20,
-                        )
-                      : TextStyle(
-                          color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6),
-                        ),
-                    border: UnderlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(
-                        width: 0, 
-                        style: BorderStyle.none,
-                      ),
-                    ),
-                  ),
-                  onSubmitted: (searchQuery) {
-                    onSearch(searchQuery);
-                  },
-                  onChanged: (text) => onChanged(text),
+        child: Theme(
+          data: ThemeData(primaryColor: Theme.of(context).accentColor),
+          child: Stack(
+            children: [
+              TextField(
+                keyboardType: TextInputType.url,
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.bodyText1.color,
+                  fontSize: 14
                 ),
+                focusNode: focusNode,
+                controller: textController,
+                decoration: InputDecoration(
+                  contentPadding: EdgeInsets.all(14.0),
+                  prefixIcon: Icon(EvaIcons.searchOutline, size: 22, color: Colors.red),
+                  hintText: hintText,
+                  hintStyle: TextStyle(
+                    color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.4),
+                    fontSize: 14
+                  ),
+                  border: UnderlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(
+                    width: 0, 
+                    style: BorderStyle.none,
+                  ),
+                ),
+                ),
+                onChanged: (String searchQuery) => onChanged(searchQuery),
+                onSubmitted: (searchQuery) {
+                  onSubmit(searchQuery);
+                  FocusScope.of(context).unfocus();
+                }
               ),
-            ),
-            if (onClear != null)
-            AnimatedSwitcher(
-              duration: Duration(milliseconds: 250),
-              child: controller.text != ""
-                ? IconButton(
-                    splashColor: Colors.transparent,
-                    icon: Icon(EvaIcons.trashOutline,
-                      color: Theme.of(context).iconTheme.color,
-                      size: 18),
-                    onPressed: onClear
-                  )
-                : IconButton(
-                    splashColor: Colors.transparent,
-                    icon: Icon(EvaIcons.searchOutline,
-                      color: Theme.of(context).iconTheme.color
-                        .withOpacity(0.8)),
-                    onPressed: onTap
-                  )
-            ),
-            SizedBox(width: 4)
-          ],
+              Align(
+                alignment: Alignment.centerRight,
+                child: textController.text != ""
+                  ? IconButton(
+                      icon: Icon(
+                        Icons.clear,
+                        size: 20,
+                        color: Theme.of(context).iconTheme.color
+                      ),
+                      onPressed: onClear
+                    )
+                  : Container(),
+              )
+            ],
+          ),
         ),
       )
     );

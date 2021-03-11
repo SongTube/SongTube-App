@@ -6,6 +6,11 @@ import 'dart:io';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:newpipeextractor_dart/extractors/videos.dart';
+import 'package:newpipeextractor_dart/models/infoItems/video.dart';
+import 'package:newpipeextractor_dart/models/streams/audioOnlyStream.dart';
+import 'package:newpipeextractor_dart/models/streams/videoOnlyStream.dart';
+import 'package:newpipeextractor_dart/utils/httpClient.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/models/audioModifiers.dart';
 
@@ -19,7 +24,6 @@ import 'package:songtube/internal/randomString.dart';
 import 'package:songtube/internal/tagsManager.dart';
 
 // Packages
-import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -38,9 +42,9 @@ class DownloadInfoSet {
   FFmpegActionType convertFormat;
   String downloadPath;
   AudioModifiers audioModifiers;
-  StreamInfo audioStreamInfo;
-  StreamInfo videoStreamInfo;
-  Video videoDetails;
+  AudioOnlyStream audioStreamInfo;
+  VideoOnlyStream videoStreamInfo;
+  StreamInfoItem videoDetails;
   String downloadId;
   int totalDownloaded = 0;
   bool normalizeAudio;
@@ -166,6 +170,10 @@ class DownloadInfoSet {
       if (downloadedFile == null) return;
     // Our Download is an Audio
     } else if (downloadType == DownloadType.AUDIO) {
+      if (audioStreamInfo == null) {
+        audioStreamInfo = (await VideoExtractor.getVideoInfoAndStreams(videoDetails.url))
+          .audioWithBestAacQuality;
+      }
       // Download specified AudioStream
       downloadedFile = await _downloadStream(audioStreamInfo, downloadType);
       // Remove Existing Metadata
@@ -227,51 +235,20 @@ class DownloadInfoSet {
   }
 
   // Start Downloading our Stream
-  Future<File> _downloadStream(StreamInfo streamToDownload, DownloadType type) async {
+  Future<File> _downloadStream(dynamic streamToDownload, DownloadType type) async {
     // Download
     File download = File(
       (await getTemporaryDirectory()).path +
       "/" + RandomString.getRandomString(10)
     );
     // YoutubeExplode Instance
-    YoutubeExplode yt = new YoutubeExplode();
     downloadStatus.add(DownloadStatus.Loading);
     // StreamData
-    Stream<List<int>> streamData;
-    if (streamToDownload != null) {
-      streamData = yt.videos.streamsClient.get(streamToDownload);
-      if (type == DownloadType.VIDEO)
-        currentAction.add(language.labelDownloadingVideo);
-      else
-        currentAction.add(language.labelDownloadingAudio);
-    } else {
-      int retryCount = 0;
-      currentAction.add(language.labelGettingAudioStream);
-      StreamManifest audioManifest;
-      while (retryCount < 3) {
-        try {
-          audioManifest = await yt.videos.streamsClient.getManifest(videoDetails.id)
-            .timeout(Duration(seconds: 30));
-          break;
-        } catch (_) {
-          retryCount++;
-        }
-      }
-      if (audioManifest == null) {
-        currentAction.add(language.labelAudioNoDataRecieved);
-        yt.close();
-        return null;
-      }
-      List<AudioStreamInfo> list = [];
-      audioManifest.audioOnly.forEach((element) {
-        if (element.audioCodec == "mp4a.40.2") {
-          list.add(element);
-        }
-      });
-      audioStreamInfo = list.withHighestBitrate();
-      streamData = yt.videos.streamsClient.get(audioStreamInfo);
+    Stream<List<int>> streamData = ExtractorHttpClient.getStream(streamToDownload);
+    if (type == DownloadType.VIDEO)
+      currentAction.add(language.labelDownloadingVideo);
+    else
       currentAction.add(language.labelDownloadingAudio);
-    }
     // Update Streams
     dataProgress.add(language.labelDownloadStarting);
     progressBar.add(0.0);
@@ -280,9 +257,15 @@ class DownloadInfoSet {
     // Local variables for File Download Status
     var _len;
     if (videoStreamInfo == null) {
-      _len = audioStreamInfo.size.totalBytes;
+      if (audioStreamInfo.size == null)
+        audioStreamInfo.size = await getContentSize(audioStreamInfo.url);
+      _len = audioStreamInfo.size;
     } else {
-      _len = videoStreamInfo.size.totalBytes + audioStreamInfo.size.totalBytes;
+      if (videoStreamInfo.size == null)
+        videoStreamInfo.size = await getContentSize(videoStreamInfo.url);
+      if (audioStreamInfo.size == null)
+        audioStreamInfo.size = await getContentSize(audioStreamInfo.url);
+      _len = videoStreamInfo.size + audioStreamInfo.size;
     }
     downloadStatus.add(DownloadStatus.Downloading);
     // Start stream download while updating internal
@@ -292,7 +275,6 @@ class DownloadInfoSet {
         _output.close();
         downloadStatus.add(DownloadStatus.Cancelled);
         _interruptDownload(language.labelDownloadCancelled);
-        yt.close();
         return null;
       }
       totalDownloaded += data.length;
@@ -304,7 +286,6 @@ class DownloadInfoSet {
     }
     await _output.flush();
     await _output.close();
-    yt.close();
     return download;
   }
 
@@ -387,10 +368,10 @@ class DownloadInfoSet {
           // If it doesnt exist try Getting MediumQuality Artwork
           if (response == null || response.bodyBytes == null) {
             try {
-              response = await http.get(videoDetails.thumbnails.mediumResUrl)
+              response = await http.get(videoDetails.thumbnails.mqdefault)
                 .timeout(Duration(seconds: 30));
               await artwork.writeAsBytes(response.bodyBytes);
-              metadata.coverurl = videoDetails.thumbnails.mediumResUrl;
+              metadata.coverurl = videoDetails.thumbnails.mqdefault;
             } catch (_) {}
           }
           croppedImage = await NativeMethod.cropToSquare(artwork);
@@ -430,4 +411,15 @@ class DownloadInfoSet {
     NativeMethod.registerFile(finalFile.path);
     _closeStreams();
   }
+
+  Future<int> getContentSize(String url) async {
+    int size;
+    while (size == null) {
+      try {
+        size = await ExtractorHttpClient.getContentLength(url);
+      } catch (_) {}
+    }
+    return size;
+  }
+
 }

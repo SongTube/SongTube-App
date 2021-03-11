@@ -4,7 +4,7 @@ import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/models/infoSets/downloadinfoset.dart';
 import 'package:songtube/provider/downloadsProvider.dart';
 import 'package:songtube/screens/downloadScreen/components/downloadTile.dart';
-import 'package:songtube/screens/downloadScreen/components/downloadsEmpty.dart';
+import 'package:songtube/ui/components/emptyIndicator.dart';
 import 'package:autolist/autolist.dart';
 
 class DownloadsQueueTab extends StatefulWidget {
@@ -183,8 +183,8 @@ class _DownloadsQueueTabState extends State<DownloadsQueueTab> with TickerProvid
       );
     } else {
       return Align(
-        alignment: Alignment.bottomCenter,
-        child: const NoDownloads()
+        alignment: Alignment.topCenter,
+        child: const EmptyIndicator()
       );
     }
   }

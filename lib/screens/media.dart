@@ -4,7 +4,6 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:md2_tab_indicator/md2_tab_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/languages.dart';
-import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/provider/mediaProvider.dart';
 
 // Internal
@@ -13,7 +12,7 @@ import 'package:songtube/screens/mediaScreen/tabs/videosTab.dart';
 
 // Packages
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-import 'package:songtube/screens/mediaScreen/components/mediaSearchBar.dart';
+import 'package:songtube/ui/components/searchBar.dart';
 
 // UI
 import 'package:songtube/ui/components/autohideScaffold.dart';
@@ -31,6 +30,7 @@ class _MediaScreenState extends State<MediaScreen> {
 
   // Current Search Query
   String searchQuery = "";
+  bool showSearchBar = false;
 
   @override
   void initState() {
@@ -49,24 +49,23 @@ class _MediaScreenState extends State<MediaScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ManagerProvider manager = Provider.of<ManagerProvider>(context);
     return DefaultTabController(
       initialIndex: 0,
       length: 2,
       child: AutoHideScaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: Theme.of(context).cardColor,
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           elevation: 0,
           backgroundColor: Theme.of(context).cardColor,
           title: AnimatedSwitcher(
             duration: Duration(milliseconds: 250),
-            child: !manager.showSearchBar ? Row(
+            child: !showSearchBar ? Row(
               children: [
                 Container(
                   margin: EdgeInsets.only(right: 8),
                   child: Icon(
-                    EvaIcons.musicOutline,
+                    EvaIcons.headphonesOutline,
                     color: Theme.of(context).accentColor,
                   ),
                 ),
@@ -86,15 +85,11 @@ class _MediaScreenState extends State<MediaScreen> {
                     color: Theme.of(context).iconTheme.color,
                   ),
                   onPressed: () {
-                    setState(() {
-                      manager.showSearchBar = true;
-                      if (manager.showSearchBar == true)
-                        searchNode.requestFocus();
-                    });
+                    setState(() => showSearchBar = !showSearchBar);
                   },
                 ),
               ],
-            ) : MediaSearchBar(
+            ) : CommonSearchBar(
               textController: searchController,
               onClear: () => setState(() {
                 searchController.clear();
@@ -102,13 +97,14 @@ class _MediaScreenState extends State<MediaScreen> {
               }),
               focusNode: searchNode,
               onChanged: (String search) => setState(() => searchQuery = search),
+              hintText: Languages.of(context).labelSearchMedia,
             )
           ),
         ),
         body: Column(
           children: [
             Container(
-              height: 48,
+              height: 40,
               color: Theme.of(context).cardColor,
               child: TabBar(
                 labelStyle: TextStyle(
@@ -144,7 +140,9 @@ class _MediaScreenState extends State<MediaScreen> {
             Divider(
               height: 1,
               thickness: 1,
-              color: Colors.grey[600].withOpacity(0.2)
+              color: Colors.grey[600].withOpacity(0.1),
+              indent: 12,
+              endIndent: 12
             ),
             Expanded(
               child: TabBarView(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:songtube/ui/components/scrollDetector.dart';
+import 'package:songtube/ui/internal/scrollDetector.dart';
 
 class AutoHideScaffold extends StatefulWidget {
   final Widget appBar;

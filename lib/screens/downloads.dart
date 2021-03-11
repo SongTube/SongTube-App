@@ -26,7 +26,7 @@ class DownloadTab extends StatelessWidget {
         downloadsProvider.convertingList.isNotEmpty ? 0 : 1,
       length: 3,
       child: AutoHideScaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: Theme.of(context).cardColor,
         appBar: AppBar(
           elevation: 0,
           backgroundColor: Theme.of(context).cardColor,
@@ -54,7 +54,7 @@ class DownloadTab extends StatelessWidget {
         body: Column(
           children: [
             Container(
-              height: 48,
+              height: 40,
               color: Theme.of(context).cardColor,
               child: TabBar(
                 labelStyle: TextStyle(
@@ -93,7 +93,9 @@ class DownloadTab extends StatelessWidget {
             Divider(
               height: 1,
               thickness: 1,
-              color: Colors.grey[600].withOpacity(0.2)
+              color: Colors.grey[600].withOpacity(0.1),
+              indent: 12,
+              endIndent: 12
             ),
             Expanded(
               child: TabBarView(

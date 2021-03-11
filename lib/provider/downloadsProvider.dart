@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:newpipeextractor_dart/models/infoItems/video.dart';
+import 'package:newpipeextractor_dart/models/streams/audioOnlyStream.dart';
+import 'package:newpipeextractor_dart/models/streams/videoOnlyStream.dart';
+import 'package:newpipeextractor_dart/models/video.dart';
 import 'package:songtube/internal/ffmpeg/converter.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/models/audioModifiers.dart';
 import 'package:songtube/internal/models/infoSets/downloadinfoset.dart';
 import 'package:songtube/internal/models/metadata.dart';
 import 'package:songtube/internal/randomString.dart';
-import 'package:songtube/internal/youtube/youtubeExtractor.dart';
 import 'package:songtube/provider/configurationProvider.dart';
-import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 class DownloadsProvider extends ChangeNotifier {
 
   DownloadsProvider() {
-    queueList = new List<DownloadInfoSet>();
-    downloadingList = new List<DownloadInfoSet>();
-    convertingList = new List<DownloadInfoSet>();
-    completedList = new List<DownloadInfoSet>();
-    cancelledList = new List<DownloadInfoSet>();
+    queueList       = <DownloadInfoSet>[];
+    downloadingList = <DownloadInfoSet>[];
+    convertingList  = <DownloadInfoSet>[];
+    completedList   = <DownloadInfoSet>[];
+    cancelledList   = <DownloadInfoSet>[];
     
   }
 
@@ -40,8 +42,7 @@ class DownloadsProvider extends ChangeNotifier {
     @required Languages language,
     ConfigurationProvider config,
     DownloadMetaData metadata,
-    StreamManifest manifest,
-    Video videoDetails,
+    YoutubeVideo videoDetails,
     List data,
   }) {
     DownloadType downloadType;
@@ -55,8 +56,8 @@ class DownloadsProvider extends ChangeNotifier {
     if (config.enableFFmpegActionType == false)
       convertFormat = FFmpegActionType.NONE;
     String downloadPath;
-    StreamInfo audioStreamInfo;
-    StreamInfo videoStreamInfo;
+    AudioOnlyStream audioStreamInfo;
+    VideoOnlyStream videoStreamInfo;
     switch (data[0]) {
       case "Audio":
         downloadType = DownloadType.AUDIO;
@@ -66,10 +67,8 @@ class DownloadsProvider extends ChangeNotifier {
       case "Video":
         downloadType = DownloadType.VIDEO;
         videoStreamInfo = data[1];
-        audioStreamInfo = YoutubeExtractor.getBestAudioStreamForVideo(
-          manifest,
-          videoStreamInfo.container.name
-        );
+        audioStreamInfo = videoDetails
+          .getAudioStreamWithBestMatchForVideoStream(videoStreamInfo);
         downloadPath = config.videoDownloadPath;
         convertFormat = FFmpegActionType.AppendAudioOnVideo;
         break;
@@ -79,7 +78,7 @@ class DownloadsProvider extends ChangeNotifier {
       language: language,
       audioStreamInfo: audioStreamInfo,
       videoStreamInfo: videoStreamInfo,
-      videoDetails: videoDetails,
+      videoDetails: videoDetails.toStreamInfoItem(),
       metadata: metadata,
       downloadType: downloadType,
       downloadPath: config.enableAlbumFolder
@@ -115,7 +114,7 @@ class DownloadsProvider extends ChangeNotifier {
   void handlePlaylistDownload({
     @required Languages language,
     ConfigurationProvider config,
-    List<Video> listVideos,
+    List<StreamInfoItem> listVideos,
     String album, String artist
   }) {
     int track = 1;
@@ -128,19 +127,17 @@ class DownloadsProvider extends ChangeNotifier {
       convertFormat = FFmpegActionType.ConvertToMP3;
     if (config.enableFFmpegActionType == false)
       convertFormat = FFmpegActionType.NONE;
-    listVideos.forEach((video) {
+    listVideos.forEach((infoItem) {
       queueList.add(
         new DownloadInfoSet(
           language: language,
           audioStreamInfo: null,
-          videoDetails: video,
+          videoDetails: infoItem,
           metadata: DownloadMetaData(
-            title: removeToxicSymbols(video.title),
+            title: removeToxicSymbols(infoItem.name),
             album: album, artist: artist,
-            genre: "Any", coverurl: video.thumbnails.mediumResUrl,
-            date: "${video.uploadDate.year}/"
-            + "${video.uploadDate.month}/"
-            + "${video.uploadDate.day}",
+            genre: "Any", coverurl: infoItem.thumbnails.hqdefault,
+            date: infoItem.uploadDate,
             disc: "1", track: "$track"
           ),
           downloadType: DownloadType.AUDIO,

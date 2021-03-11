@@ -2,24 +2,27 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:songtube/internal/languages.dart';
+import 'package:songtube/pages/playlists.dart';
 
 // Internal
-import 'package:songtube/provider/managerProvider.dart';
+import 'package:songtube/provider/preferencesProvider.dart';
+import 'package:songtube/provider/videoPageProvider.dart';
 import 'package:songtube/screens/libraryScreen/aboutPage.dart';
 import 'package:songtube/screens/libraryScreen/socialLinksRow.dart';
-import 'package:songtube/screens/libraryScreen/watchHistory.dart';
+import 'package:songtube/pages/watchHistory.dart';
 import 'package:songtube/screens/libraryScreen/watchHistoryRow.dart';
-import 'package:songtube/ui/settings/settings.dart';
+import 'package:songtube/pages/settings.dart';
 
 // Packages
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:songtube/ui/animations/blurPageRoute.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:provider/provider.dart';
 
 class LibraryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    ManagerProvider manager = Provider.of<ManagerProvider>(context);
+    VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
     return Scaffold(
       backgroundColor: Theme.of(context).cardColor,
       appBar: AppBar(
@@ -52,8 +55,12 @@ class LibraryScreen extends StatelessWidget {
               icon: Icon(EvaIcons.settingsOutline,
                 color: Theme.of(context).iconTheme.color),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute
-                  (builder: (context) => SettingsTab()));
+                Navigator.push(context,
+                  BlurPageRoute(
+                    blurStrength: Provider.of<PreferencesProvider>
+                      (context, listen: false).enableBlurUI ? 20 : 0,
+                    builder: (_) => 
+                    SettingsPage()));
               }
             ),
           )
@@ -70,6 +77,25 @@ class LibraryScreen extends StatelessWidget {
                 WatchHistoryRow(),
                 SizedBox(height: 8),
                 Divider(indent: 12, endIndent: 12),
+                // Playlists
+                ListTile(
+                  leading: Icon(Icons.playlist_play_rounded),
+                  title: Text(
+                    Languages.of(context).labelPlaylists,
+                    style: TextStyle(
+                      fontFamily: 'Product Sans',
+                      color: Theme.of(context).textTheme.bodyText1.color
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.push(context,
+                      BlurPageRoute(
+                        blurStrength: Provider.of<PreferencesProvider>
+                          (context, listen: false).enableBlurUI ? 20 : 0,
+                        builder: (_) => 
+                        PlaylistsPage()));
+                  },
+                ),
                 // Watch History (All videos)
                 ListTile(
                   leading: Icon(EvaIcons.clockOutline),
@@ -81,9 +107,12 @@ class LibraryScreen extends StatelessWidget {
                     ),
                   ),
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) {
-                      return WatchHistoryPage();
-                    }));
+                    Navigator.push(context,
+                      BlurPageRoute(
+                        blurStrength: Provider.of<PreferencesProvider>
+                          (context, listen: false).enableBlurUI ? 20 : 0,
+                        builder: (_) => 
+                        WatchHistoryPage()));
                   },
                 ),
                 // Playlist History
@@ -159,13 +188,16 @@ class LibraryScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (AudioService?.currentMediaItem != null || manager.mediaInfoSet != null)
+                if (AudioService?.currentMediaItem != null || pageProvider.infoItem != null)
                 // About us
                 ListTile(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) {
-                      return AboutPage();
-                    }));
+                    Navigator.push(context,
+                      BlurPageRoute(
+                        blurStrength: Provider.of<PreferencesProvider>
+                          (context, listen: false).enableBlurUI ? 20 : 0,
+                        builder: (_) => 
+                        AboutPage()));
                   },
                   leading: Icon(
                     EvaIcons.questionMarkCircle,
@@ -190,17 +222,20 @@ class LibraryScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (AudioService?.currentMediaItem != null || manager.mediaInfoSet != null)
+                if (AudioService?.currentMediaItem != null || pageProvider.infoItem != null)
                 SizedBox(height: kBottomNavigationBarHeight*1.5)
               ],
             ),
           ),
-          if (AudioService?.currentMediaItem == null && manager.mediaInfoSet == null)
+          if (AudioService?.currentMediaItem == null && pageProvider.infoItem == null)
           GestureDetector(
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return AboutPage();
-              }));
+              Navigator.push(context,
+                BlurPageRoute(
+                  blurStrength: Provider.of<PreferencesProvider>
+                    (context, listen: false).enableBlurUI ? 20 : 0,
+                  builder: (_) => 
+                  AboutPage()));
             },
             child: Container(
               height: 50,

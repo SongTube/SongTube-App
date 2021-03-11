@@ -67,6 +67,8 @@ class LanguageRu extends Languages {
   String get labelAddToFavorites => "Добавиь в Избранное";
   @override
   String get labelAddToWatchLater => "Добавить в Смотреть позже";
+  @override
+  String get labelAddToPlaylist => "Добавить в плейлист";
 
   // Downloads Screen
   @override
@@ -350,4 +352,8 @@ class LanguageRu extends Languages {
   String get labelNo => "Нет";
   @override
   String get labelLibrary => "библиотека";
+  @override
+  String get labelCreate => "Создавать";
+  @override
+  String get labelPlaylists => "Плейлисты";
 }

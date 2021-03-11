@@ -35,7 +35,9 @@ class AppTheme {
       tabBarTheme: TabBarTheme(
         labelColor: Colors.grey[200],
       ),
-      textSelectionHandleColor: accent,
+      textSelectionTheme: TextSelectionThemeData(
+        selectionHandleColor: accent
+      ),
     );
   }
 
@@ -72,7 +74,9 @@ class AppTheme {
       tabBarTheme: TabBarTheme(
         labelColor: Colors.black12
       ),
-      textSelectionHandleColor: accent,
+      textSelectionTheme: TextSelectionThemeData(
+        selectionHandleColor: accent
+      ),
     );
   }
 
@@ -113,7 +117,9 @@ class AppTheme {
       tabBarTheme: TabBarTheme(
         labelColor: Color.fromARGB(255, 20, 20, 20),
       ),
-      textSelectionHandleColor: accent,
+      textSelectionTheme: TextSelectionThemeData(
+        selectionHandleColor: accent
+      ),
     );
   }
 }

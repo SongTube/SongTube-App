@@ -1,19 +1,19 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:newpipeextractor_dart/models/infoItems/video.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/provider/configurationProvider.dart';
 import 'package:songtube/provider/downloadsProvider.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/ui/internal/snackbar.dart';
-import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 class DownloadMenuHome extends StatelessWidget {
   final Function onBack;
   final Function onAudioTap;
   final Function onVideoTap;
-  final List<Video> playlistVideos;
+  final List<StreamInfoItem> playlistVideos;
   final scaffoldState;
   DownloadMenuHome({
     @required this.onBack,
@@ -150,9 +150,8 @@ class DownloadMenuHome extends StatelessWidget {
                         language: Languages.of(context),
                         config: Provider.of<ConfigurationProvider>(context, listen: false),
                         listVideos: playlistVideos,
-                        album: manager.mediaInfoSet.mediaTags.albumController.text,
-                        artist: manager.mediaInfoSet.mediaTags.artistController.text
-                          .replaceAll("- Topic", "").trim()
+                        album: "Youtube",
+                        artist: "Youtube"
                       );
                       Navigator.of(context).pop();
                       if (scaffoldState != null) {
@@ -161,7 +160,6 @@ class DownloadMenuHome extends StatelessWidget {
                           title: "Downloading Playlist...",
                           message: "Songs queued",
                           context: context,
-                          scaffoldKey: scaffoldState
                         );
                       }
                     },

@@ -20,7 +20,13 @@ class AppBottomNavigationBar extends StatelessWidget {
             spreadRadius: 0.1,
             blurRadius: 10
           ),
-        ],    
+        ],
+        border: Border(
+          top: BorderSide(
+            width: 1,
+            color: Colors.grey[600].withOpacity(0.1)
+          )
+        )
       ),
       child: BottomNavigationBar(
         backgroundColor: Theme.of(context).cardColor,
@@ -49,11 +55,15 @@ class AppBottomNavigationBar extends StatelessWidget {
             label: Languages.of(context).labelHome
           ),
           BottomNavigationBarItem(
+            icon: Icon(EvaIcons.musicOutline),
+            label: Languages.of(context).labelMusic
+          ),
+          BottomNavigationBarItem(
             icon: Icon(EvaIcons.cloudDownloadOutline),
             label: Languages.of(context).labelDownloads
           ),
           BottomNavigationBarItem(
-            icon: Icon(EvaIcons.musicOutline),
+            icon: Icon(EvaIcons.headphonesOutline),
             label: Languages.of(context).labelMedia
           ),
           BottomNavigationBarItem(

@@ -39,17 +39,17 @@ class FFmpegConverter {
   Future<String> getMediaDuration(String mediaFile) async {
     assert(mediaFile != "" || mediaFile != null);
     if (!await File(mediaFile).exists()) return null;
-    return (await flutterFFprobe.getMediaInformation(mediaFile))["duration"];
+    return (await flutterFFprobe.getMediaInformation(mediaFile)).getMediaProperties()["duration"];
   }
 
   /// Gets the file Extension of any Media [File]
   Future<String> getMediaFormat(String mediaFile) async {
     assert(mediaFile != "" || mediaFile != null);
-    var _info; String _codec;
-    _info = await flutterFFprobe.getMediaInformation(mediaFile);
-    final streamsInfoArray = _info['streams'];
-    _codec = "${streamsInfoArray[0]['codec']}";
-    _info = "${_info['format']}";
+    String _codec; var _info;
+    final streamsInfoArray = (await flutterFFprobe.getMediaInformation(mediaFile))
+      .getAllProperties();
+    _codec = "${streamsInfoArray['streams'][0]['codec_name']}";
+    _info = "${streamsInfoArray['format']['format_name']}";
     if (_codec == "aac") return "m4a";
     if (_codec == "opus") return "ogg";
     if (_codec == "mp3") return "mp3";
@@ -69,7 +69,7 @@ class FFmpegConverter {
     assert(videoFormat != "" || videoFormat != null);
     assert(videoPath != "" || videoPath != null);
     assert(audioPath != "" || audioPath != null);
-    List<String> _argsList = List<String>();
+    List<String> _argsList = <String>[];
     String outDir = (await getTemporaryDirectory()).path + "/";
     File output = File(outDir + RandomString.getRandomString(10));
     String audioFormat = await getMediaFormat(audioPath);
@@ -159,6 +159,9 @@ class FFmpegConverter {
         "${output.path}.mp3"
       ];
       output = File(output.path + ".mp3");
+    }
+    if (format == FFmpegActionType.NONE) {
+      return File(audioFile);
     }
     int _result = await flutterFFmpeg.executeWithArguments(_argsList);
     if (_result == 1)

@@ -85,7 +85,7 @@ class SongTubePlayerService extends BackgroundAudioTask {
   // Initialise your audio task.
   @override
   Future<void> onStart(Map<String, dynamic> params) async {
-    _queue = new List<MediaItem>();
+    _queue = <MediaItem>[];
     session = await AudioSession.instance;
     await session.configure(AudioSessionConfiguration.music());
     session.interruptionEventStream.listen((event) {

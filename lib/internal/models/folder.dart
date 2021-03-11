@@ -11,7 +11,7 @@ class FolderItem {
     this.name,
     this.path,
   }) {
-    videos = new List<VideoFile>();
+    videos = <VideoFile>[];
   }
 
 }

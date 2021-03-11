@@ -34,7 +34,9 @@ class PlayerBackground extends StatelessWidget {
             height: double.infinity,
             width: double.infinity,
             fit: BoxFit.cover,
-          ) : Container()
+          ) : Container(
+            color: Theme.of(context).scaffoldBackgroundColor,
+          )
         ),
         AnimatedContainer(
           duration: Duration(milliseconds: 400),
@@ -43,6 +45,7 @@ class PlayerBackground extends StatelessWidget {
           color: backdropColor.withOpacity(backdropOpacity),
           child: BackdropFilter(
             filter: ImageFilter.blur(
+              tileMode: TileMode.mirror,
               sigmaX: blurIntensity,
               sigmaY: blurIntensity
             ),

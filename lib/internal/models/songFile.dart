@@ -46,7 +46,7 @@ class SongFile {
     title = map["title"];
     album = map["album"];
     author = map["author"];
-    duration = map["duration"];
+    duration = map["duration"].toString();
     downloadType = map["downloadType"];
     path = map["path"];
     fileSize = map["fileSize"].toString();
@@ -58,7 +58,7 @@ class SongFile {
       "title": this.title,
       "album": this.album,
       "author": this.author,
-      "duration": this.duration,
+      "duration": this.duration.toString(),
       "downloadType": this.downloadType,
       "path": this.path,
       "fileSize": this.fileSize,

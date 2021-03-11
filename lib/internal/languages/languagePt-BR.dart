@@ -67,6 +67,8 @@ class LanguagePtBr extends Languages {
   String get labelAddToFavorites => "Adicionar aos Favoritos";
   @override
   String get labelAddToWatchLater => "Adicionar em Assistir Mais Tarde";
+  @override
+  String get labelAddToPlaylist => "Adicionar à Playlist";
 
   // Downloads Screen
   @override
@@ -352,4 +354,8 @@ class LanguagePtBr extends Languages {
   String get labelNo => "Não";
   @override
   String get labelLibrary => "Biblioteca";
+  @override
+  String get labelCreate => "Crio";
+  @override
+  String get labelPlaylists => "Playlists";
 }

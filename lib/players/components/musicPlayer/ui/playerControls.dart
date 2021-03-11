@@ -35,7 +35,6 @@ class PlayerControls extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
-    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     return Container(
       margin: EdgeInsets.only(left: 16, right: 16, bottom: 20),
       child: Column(
@@ -172,13 +171,15 @@ class PlayerControls extends StatelessWidget {
                       Navigator.push(context, 
                         BlurPageRoute(builder: (context) {
                           return MusicPlayerCurrentPlaylist(
-                            blurUIEnabled: prefs.enableBlurUI,
+                            blurUIEnabled: Provider.of<PreferencesProvider>
+                              (context, listen: false).enableBlurUI,
                           );
                         },
                           duration: Duration(milliseconds: 400),
-                          blurStrength: prefs.enableBlurUI
-                            ? 20 : 0,
-                          useCardExit: !prefs.enableBlurUI
+                          blurStrength: Provider.of<PreferencesProvider>
+                            (context, listen: false).enableBlurUI ? 20 : 0,
+                          useCardExit: Provider.of<PreferencesProvider>
+                            (context, listen: false).enableBlurUI,
                         ));
                     },
                   ),

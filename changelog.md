@@ -1,3 +1,52 @@
+# SongTube 6.0.0:
+
+- Playlist Creation/Management Support:
+    * First implementation of custom Playlists
+    * You can now create new Playlists and add Videos to created Playlists
+    * You can now save playlists from your search results
+
+- Youtube Video Player:
+    * Re-designed Video Player with much better looking UI
+    * Added support for changing streaming quality
+    * Added support for double tap to fast back or forward (10s)
+    * Added support for vertical drag to change screen brightness (left side, only in fullscreen)
+    * Added support for vertical drag to change media volume (right side, only in fullscreen)
+    * Related videos are now actually related to the video you are watching
+    * Added a button to open video comments!
+
+- YouTube Extractor:
+    * Replaced youtube_explode_dart with newpipe_extractor
+    * Loading speed for Search, Channels, Videos, etc, has dramatically improved
+    * Search will now show Channels as results!
+    
+- Screens & Pages:
+    * Added new Music Screen! You can now search for Music only.
+    * Home Screen now shows Trending Videos on app start (No more weird videos)
+    * Added a new page for all your saved Playlists! Accesible on Library Screen
+    * Consistency between Screens & Pages have been improved
+    * Updated and Re-designed the About us Page
+
+- UI Experience:
+    * Added a new and smoother transition animation between pages
+    * Improved Search show/hide animation from the Home Screen
+    * Pages opening animation have been improved
+    * Blur UI Style fixed (Pages now properly makes use of it)
+    * Optimized Sliding Panel open/close perfomance (for Videos/Music)
+    * Fixed issues where the Collapsed Panel would not respond
+    * UI is now more smooth in general
+
+- Languages:
+    * Added Arabic language (Thanks @JOOD_TECH)
+    * Added Somali language (Thanks @nadiration)
+
+- General:
+    * Fixed all issues related to Channels and Playlists
+    * Added more Shimmer Effects
+    * Added an empty indicator wherever it is needed
+    * Improved SplashArt Image (Goodbye blurred logo)
+    * Switched to GPLv3 license
+
+
 # SongTube 5.6.0:
 
 - Imported Product Sans font

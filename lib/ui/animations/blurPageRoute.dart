@@ -16,7 +16,7 @@ class BlurPageRoute<T> extends PageRoute<T> with MaterialRouteTransitionMixin<T>
   BlurPageRoute({
     this.duration = const Duration(milliseconds: 500),
     this.keepState = false,
-    this.blurStrength = 20,
+    this.blurStrength = 0,
     @required this.builder,
     RouteSettings settings,
     this.maintainState = true,
@@ -24,7 +24,7 @@ class BlurPageRoute<T> extends PageRoute<T> with MaterialRouteTransitionMixin<T>
     this.animationCurve = Curves.fastLinearToSlowEaseIn,
     this.opaque = false,
     this.slideOffset = const Offset(0.0, 10.0),
-    this.useCardExit = false,
+    this.useCardExit = true,
     this.backdropColor = Colors.transparent
   }) : assert(builder != null),
        assert(maintainState != null),

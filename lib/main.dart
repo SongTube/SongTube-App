@@ -1,6 +1,8 @@
 // Flutter
 import 'dart:convert';
+import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:songtube/internal/languages.dart';
@@ -20,15 +22,23 @@ import 'package:songtube/provider/mediaProvider.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/provider/preferencesProvider.dart';
+import 'package:songtube/provider/videoPageProvider.dart';
 import 'package:songtube/ui/internal/scrollBehavior.dart';
+import 'package:newpipeextractor_dart/utils/reCaptcha.dart';
+import 'package:newpipeextractor_dart/utils/navigationService.dart';
 
 // UI
 import 'package:songtube/ui/internal/themeValues.dart';
+
+// Debug
+import 'package:flutter/scheduler.dart' show timeDilation;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   LegacyPreferences preferences = new LegacyPreferences();
   await preferences.initPreferences();
+  if (kDebugMode)
+    timeDilation = 1.0;
   runApp(Main(preloadedFs: preferences));
 }
 
@@ -93,7 +103,10 @@ class _MainState extends State<Main> {
         ),
         ChangeNotifierProvider<PreferencesProvider>(
           create: (context) => PreferencesProvider(),
-        )
+        ),
+        ChangeNotifierProvider<VideoPageProvider>(
+          create: (context) => VideoPageProvider(),
+        ),
       ],
       child: Builder( builder: (context) {
         ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
@@ -137,6 +150,7 @@ class _MainState extends State<Main> {
               child: child,
             );
           },
+          navigatorKey: NavigationService.instance.navigationKey,
           title: "SongTube",
           theme: config.systemThemeEnabled
                  ? AppTheme.white(config.accentColor)
@@ -149,7 +163,8 @@ class _MainState extends State<Main> {
             : 'homeScreen',
           routes: {
             'homeScreen':  (context) => AudioServiceWidget(child: Material(child: Lib())),
-            'introScreen': (context) => IntroScreen()
+            'introScreen': (context) => IntroScreen(),
+            'reCaptcha': (context) => ReCaptchaPage(),
           },
         );
       }),

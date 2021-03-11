@@ -1,8 +1,14 @@
 // Flutter
+import 'package:animations/animations.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:newpipeextractor_dart/extractors/playlist.dart';
+import 'package:newpipeextractor_dart/extractors/videos.dart';
+import 'package:newpipeextractor_dart/models/playlist.dart';
+import 'package:newpipeextractor_dart/models/video.dart';
+import 'package:newpipeextractor_dart/utils/url.dart';
 import 'package:package_info/package_info.dart';
 import 'package:songtube/internal/nativeMethods.dart';
 
@@ -13,7 +19,8 @@ import 'package:songtube/provider/downloadsProvider.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/provider/mediaProvider.dart';
 import 'package:songtube/provider/preferencesProvider.dart';
-import 'package:songtube/routes/slidableVideoPage.dart';
+import 'package:songtube/players/youtubePlayer.dart';
+import 'package:songtube/provider/videoPageProvider.dart';
 import 'package:songtube/screens/downloads.dart';
 import 'package:songtube/screens/home.dart';
 import 'package:songtube/screens/media.dart';
@@ -23,15 +30,15 @@ import 'package:songtube/players/musicPlayer.dart';
 // Packages
 import 'package:provider/provider.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:songtube/screens/music.dart';
 import 'package:songtube/ui/components/autohideScaffold.dart';
 import 'package:songtube/ui/components/navigationBar.dart';
 import 'package:songtube/ui/dialogs/appUpdateDialog.dart';
 import 'package:songtube/ui/dialogs/joinTelegramDialog.dart';
 import 'package:songtube/ui/dialogs/loadingDialog.dart';
-import 'package:songtube/ui/internal/disclaimerDialog.dart';
-import 'package:songtube/ui/internal/downloadFixDialog.dart';
+import 'package:songtube/ui/dialogs/disclaimerDialog.dart';
+import 'package:songtube/ui/dialogs/downloadFixDialog.dart';
 import 'package:songtube/ui/internal/lifecycleEvents.dart';
-import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 class Lib extends StatefulWidget {
   @override
@@ -134,28 +141,28 @@ class _LibState extends State<Lib> {
   }
 
   void _handleIntent(String intent) async {
-    if (VideoId.parseVideoId(intent) != null) {
-      String id = VideoId.parseVideoId(intent);
+    String streamId = await YoutubeId.getIdFromStreamUrl(intent);
+    String playlistId = await YoutubeId.getIdFromPlaylistUrl(intent);
+    if (streamId != null) {
       showDialog(
         context: context,
         builder: (_) => LoadingDialog()
       );
-      YoutubeExplode yt = YoutubeExplode();
-      Video video = await yt.videos.get(id);
-      Provider.of<ManagerProvider>(context, listen: false)
-        .updateMediaInfoSet(video, null);
+      YoutubeVideo video = await VideoExtractor
+        .getVideoInfoAndStreams(intent);
+      Provider.of<VideoPageProvider>(context, listen: false)
+        .infoItem = video.toStreamInfoItem();
       Navigator.pop(context);
     }
-    if (PlaylistId.parsePlaylistId(intent) != null) {
-      String id = PlaylistId.parsePlaylistId(intent);
+    if (playlistId != null) {
       showDialog(
         context: context,
         builder: (_) => LoadingDialog()
       );
-      YoutubeExplode yt = YoutubeExplode();
-      Playlist playlist = await yt.playlists.get(id);
-      Provider.of<ManagerProvider>(context, listen: false)
-        .updateMediaInfoSet(playlist, null);
+      YoutubePlaylist playlist = await PlaylistExtractor
+        .getPlaylistDetails(intent);
+      Provider.of<VideoPageProvider>(context, listen: false)
+        .infoItem = playlist.toPlaylistInfoItem();
       Navigator.pop(context);
     }
   }
@@ -187,76 +194,82 @@ class _LibState extends State<Lib> {
 
   Widget _libBody() {
     return AutoHideScaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: Theme.of(context).cardColor,
       resizeToAvoidBottomInset: false,
       key: _scaffoldStateKey,
       internalKey: _internalScaffoldKey,
-      body: Container(
-        color: Theme.of(context).cardColor,
-        child: SafeArea(
-          child: Consumer2<MediaProvider, ManagerProvider>(
-            builder: (context, mediaProvider, manager, child) {
-              return WillPopScope(
-                onWillPop: () {
-                  if (manager.expandablePlayerPanelController.isPanelOpen) {
-                    manager.expandablePlayerPanelController.close();
-                    return Future.value(false);
-                  } else if (mediaProvider.slidingPanelOpen) {
-                    mediaProvider.slidingPanelOpen = false;
-                    mediaProvider.panelController.close();
-                    return Future.value(false);
-                  } else if (manager.showSearchBar) {
-                    manager.showSearchBar = false;
-                    setState(() {});
-                    return Future.value(false);
-                  } else if (_screenIndex != 0) {
-                    setState(() => _screenIndex = 0);
-                    return Future.value(false);
-                  } else if (_screenIndex == 0 && manager.currentHomeTab != HomeScreenTab.Home) {
-                    manager.currentHomeTab = HomeScreenTab.Home;
-                    return Future.value(false);
-                  } else {
-                    return Future.value(true);
-                  }
-                },
+      body: SafeArea(
+        child: Consumer3<MediaProvider, ManagerProvider, VideoPageProvider>(
+          builder: (context, mediaProvider, manager, pageProvider, child) {
+            return WillPopScope(
+              onWillPop: () {
+                if (pageProvider.panelController.isAttached && pageProvider.panelController.isPanelOpen) {
+                  pageProvider.panelController.close();
+                  return Future.value(false);
+                } else if (mediaProvider.slidingPanelOpen) {
+                  mediaProvider.slidingPanelOpen = false;
+                  mediaProvider.panelController.close();
+                  return Future.value(false);
+                } else if (_screenIndex != 0) {
+                  setState(() => _screenIndex = 0);
+                  return Future.value(false);
+                } else if (manager.youtubeSearch != null) {
+                  manager.youtubeSearch = null;
+                  manager.setState();
+                  return Future.value(false);
+                } else if (_screenIndex == 0 && manager.currentHomeTab != HomeScreenTab.Trending) {
+                  manager.currentHomeTab = HomeScreenTab.Trending;
+                  return Future.value(false);
+                } else {
+                  return Future.value(true);
+                }
+              },
+              child: child,
+            );
+          },
+          child: PageTransitionSwitcher(
+            transitionBuilder: (
+              Widget child,
+              Animation<double> animation,
+              Animation<double> secondaryAnimation,
+            ) {
+              return FadeThroughTransition(
+                fillColor: Theme.of(context).cardColor,
+                animation: animation,
+                secondaryAnimation: secondaryAnimation,
                 child: child,
               );
             },
-            child: AnimatedSwitcher(
-              duration: Duration(milliseconds: 250),
-              child: _currentScreen(_screenIndex)
-            ),
+            duration: Duration(milliseconds: 300),
+            child: _currentScreen(_screenIndex)
           ),
         ),
       ),
       bottomNavigationBar: AppBottomNavigationBar(
         currentIndex: _screenIndex,
         onItemTap: (int index) {
+          ScaffoldMessenger.of(context).removeCurrentSnackBar();
           setState(() => _screenIndex = index);
         }
       ),
-      floatingWidget: Stack(
-        children: [
-          Consumer<ManagerProvider>(
-            builder: (context, manager, child) {
-              return AnimatedSwitcher(
+      floatingWidget: Consumer<VideoPageProvider>(
+        builder: (context, provider, _) {
+          return Stack(
+            children: [
+              AnimatedSwitcher(
                 duration: Duration(milliseconds: 300),
-                child: manager.mediaInfoSet == null
-                  ? child : Container(),
-              );
-            },
-            child: SlidingPlayerPanel(
-              callback: (double position) {
-                _scaffoldStateKey.currentState
-                  .updateInternalController(position);
-              },
-            ),
-          ),
-          Consumer<ManagerProvider>(
-            builder: (context, manager, _) {
-              return AnimatedSwitcher(
+                child: provider.infoItem == null
+                  ? SlidingPlayerPanel(
+                      callback: (double position) {
+                        _scaffoldStateKey.currentState
+                          .updateInternalController(position);
+                      },
+                    )
+                  : Container(),
+              ),
+              AnimatedSwitcher(
                 duration: Duration(milliseconds: 300),
-                child: manager?.mediaInfoSet != null
+                child: provider.infoItem != null
                   ? SlidableVideoPage(
                       callback: (double position) {
                         _scaffoldStateKey.currentState
@@ -264,10 +277,10 @@ class _LibState extends State<Lib> {
                       },
                     )
                   : Container(),
-              );
-            },
-          )
-        ],
+              )
+            ],
+          );
+        }
       )
     );
   }
@@ -276,10 +289,12 @@ class _LibState extends State<Lib> {
     if (screenIndex == 0) {
       return HomeScreen();
     } else if (screenIndex == 1) {
-      return DownloadTab();
+      return MusicScreen();
     } else if (screenIndex == 2) {
-      return MediaScreen();
+      return DownloadTab();
     } else if (screenIndex == 3) {
+      return MediaScreen();
+    } else if (screenIndex == 4) {
       return LibraryScreen();
     } else {
       return Container();

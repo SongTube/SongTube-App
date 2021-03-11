@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:songtube/internal/languages/languageAr.dart';
 import 'package:songtube/internal/languages/languageRu.dart';
 import 'package:songtube/main.dart';
 
@@ -38,6 +39,8 @@ final supportedLanguages = <LanguageData>[
   LanguageData("ru", "Russian", "ru"),
   // Somali (SO, ET, DJI, KEN)
   LanguageData("🇸🇴" "🇪🇹" "🇩🇯" "🇰🇪", "Soomaali", "so"),
+  // Arabic (AR)
+  LanguageData("ar", "Arabic", "ar"),
 ];
 Future<Languages> _loadLocale(Locale locale) async {
   switch (locale.languageCode) {
@@ -65,6 +68,9 @@ Future<Languages> _loadLocale(Locale locale) async {
     // Somali (SO, ET, DJI, KEN)
     case 'so':
       return LanguageSo();
+    // Arabic (AR)
+    case 'ar':
+      return LanguageAr();
     // Default Language (English)
     default:
       return LanguageEn();
@@ -154,6 +160,7 @@ abstract class Languages {
   String get labelCopyLink;
   String get labelAddToFavorites;
   String get labelAddToWatchLater;
+  String get labelAddToPlaylist;
 
   // Downloads Screen
   String get labelQueued;
@@ -298,6 +305,8 @@ abstract class Languages {
   String get labelJoin;
   String get labelNo;
   String get labelLibrary;
+  String get labelCreate;
+  String get labelPlaylists;
 
 }
 

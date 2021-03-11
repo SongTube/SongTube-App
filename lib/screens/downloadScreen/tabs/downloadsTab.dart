@@ -11,11 +11,22 @@ import 'package:provider/provider.dart';
 // UI
 import 'package:songtube/screens/mediaScreen/components/songsListView.dart';
 
-class DownloadsTab extends StatelessWidget {
+class DownloadsTab extends StatefulWidget {
+  @override
+  _DownloadsTabState createState() => _DownloadsTabState();
+}
+
+class _DownloadsTabState extends State<DownloadsTab> {
+
+  @override
+  void initState() {
+    Provider.of<MediaProvider>(context, listen: false).getDatabase();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
-    mediaProvider.getDatabase();
     return MediaListBase(
       isLoading: mediaProvider.loadingDownloads,
       isEmpty: mediaProvider.databaseSongs.isEmpty,
