@@ -20,6 +20,9 @@ class StreamManifestPlayer extends StatefulWidget {
   final Function onVideoEnded;
   final Function onFullscreenTap;
   final bool isFullscreen;
+  final Function onEnterPipMode;
+  final double borderRadius;
+  final bool forceHideControls;
   StreamManifestPlayer({
     Key key,
     @required this.videoTitle,
@@ -27,7 +30,10 @@ class StreamManifestPlayer extends StatefulWidget {
     @required this.audioStream,
     this.onVideoEnded,
     this.onFullscreenTap,
-    this.isFullscreen
+    this.isFullscreen,
+    this.onEnterPipMode,
+    this.borderRadius,
+    this.forceHideControls = false
   }) : super(key: key);
   @override
   StreamManifestPlayerState createState() => StreamManifestPlayerState();
@@ -46,8 +52,29 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
   bool showForward = false;
 
   // UI
-  bool showControls   = true;
-  bool showBackdrop   = true;
+  bool _showControls   = true;
+  bool get showControls => _showControls;
+  set showControls(bool value) {
+    if (value == false) {
+      _showControls = false;
+    } else {
+      if (!widget.forceHideControls) {
+        _showControls = true;
+      }
+    }
+  }
+  bool _showBackdrop   = true;
+  bool get showBackdrop => _showBackdrop;
+  set showBackdrop(bool value) {
+    if (value == false) {
+      _showBackdrop = false;
+    } else {
+      if (!widget.forceHideControls) {
+        _showBackdrop = true;
+      }
+    }
+  }
+
   String currentVolumePercentage;
   String currentBrightnessPercentage;
 
@@ -217,7 +244,7 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(10),
+      borderRadius: BorderRadius.circular(widget.borderRadius),
       child: Material(
         color: Colors.black,
         child: Stack(
@@ -409,6 +436,7 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
                         onStreamSelect: (String url) {
                           _controller.changeVideoUrl(url);
                         },
+                        onEnterPipMode: widget.onEnterPipMode,
                       ),
                     ),
                     // Play/Pause Buttons

@@ -4,6 +4,9 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:flutter_pip/flutter_pip.dart';
+import 'package:flutter_pip/models/pip_ratio.dart';
+import 'package:flutter_pip/platform_channel/channel.dart';
 import 'package:newpipeextractor_dart/models/infoItems/playlist.dart';
 import 'package:newpipeextractor_dart/models/infoItems/video.dart';
 import 'package:provider/provider.dart';
@@ -43,7 +46,8 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
   // Player Height
   double playerHeight = 0;
 
-  // Current Screen Brightness
+  // Pip Status
+  bool isInPictureInPictureMode = false;
 
   @override
   void initState() {
@@ -73,36 +77,47 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: scaffoldKey,
-      body: FadeInTransition(
-        duration: Duration(milliseconds: 400),
-        child: MediaQuery.of(context).orientation == Orientation.portrait
-          ? SingleChildScrollView(
-              child: Container(
-                height: MediaQuery.of(context).size.height,
-                padding: EdgeInsets.only(top: 4),
-                child: _portraitPage()
-              )
-            )
-          : _fullscreenPage(),
-        ),
-      floatingActionButton: _fab()
+    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
+    return PipWidget(
+      onResume: (bool pipMode) {
+        setState(() => isInPictureInPictureMode = pipMode);
+      },
+      onSuspending: () {
+        if (prefs.enablePictureInPicture) {
+          setState(() => isInPictureInPictureMode = true);
+          FlutterPip.enterPictureInPictureMode();
+        }
+      },
+      child: Scaffold(
+        key: scaffoldKey,
+        body: AnimatedSwitcher(
+          duration: Duration(milliseconds: 400),
+          child: _currentWidget()
+          ),
+        floatingActionButton: _fab()
+      ),
     );
   }
 
-  Widget _fullscreenPage() {
+  Widget _currentWidget() {
+    if (isInPictureInPictureMode) {
+      return _pipWidget();
+    } else if (MediaQuery.of(context).orientation == Orientation.portrait) {
+      return _portraitPage();
+    } else {
+      return _fullscreenPage();
+    }
+  }
+
+  Widget _pipWidget() {
     VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
     PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight,
-    ]);
-    SystemChrome.setEnabledSystemUIOverlays([]);
+    pageProvider.playerKey?.currentState?.controller?.play();
     return AnimatedSwitcher(
       duration: Duration(milliseconds: 400),
       child: pageProvider.currentVideo != null 
         ? StreamManifestPlayer(
+            borderRadius: 0,
             videoTitle: pageProvider.currentVideo.name,
             key: pageProvider.playerKey,
             streams: pageProvider.currentVideo.videoOnlyStreams,
@@ -124,6 +139,53 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
               SystemChrome.setEnabledSystemUIOverlays
                 ([SystemUiOverlay.top, SystemUiOverlay.bottom]);
             },
+            onEnterPipMode: () {
+              setState(() => isInPictureInPictureMode = true);
+              FlutterPip.enterPictureInPictureMode();
+            },
+          )
+        : _videoLoading(pageProvider.infoItem.thumbnails.hqdefault)
+    );
+  }
+
+  Widget _fullscreenPage() {
+    VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
+    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+    SystemChrome.setEnabledSystemUIOverlays([]);
+    return AnimatedSwitcher(
+      duration: Duration(milliseconds: 400),
+      child: pageProvider.currentVideo != null 
+        ? StreamManifestPlayer(
+            borderRadius: 0,
+            videoTitle: pageProvider.currentVideo.name,
+            key: pageProvider.playerKey,
+            streams: pageProvider.currentVideo.videoOnlyStreams,
+            audioStream: pageProvider.currentVideo.getAudioStreamWithBestMatchForVideoStream(
+              pageProvider.currentVideo.videoOnlyWithHighestQuality
+            ),
+            isFullscreen: true,
+            onVideoEnded: () async {
+              if (prefs.youtubeAutoPlay) {
+                if (mounted)
+                  executeAutoPlay();
+              }
+            },
+            onFullscreenTap: () {
+              SystemChrome.setPreferredOrientations([
+                DeviceOrientation.portraitUp,
+                DeviceOrientation.portraitDown,
+              ]);
+              SystemChrome.setEnabledSystemUIOverlays
+                ([SystemUiOverlay.top, SystemUiOverlay.bottom]);
+            },
+            onEnterPipMode: () {
+              setState(() => isInPictureInPictureMode = true);
+              FlutterPip.enterPictureInPictureMode();
+            },
           )
         : _videoLoading(pageProvider.infoItem.thumbnails.hqdefault)
     );
@@ -141,150 +203,161 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
     SystemChrome.setEnabledSystemUIOverlays
       ([SystemUiOverlay.top, SystemUiOverlay.bottom]);
     FlutterScreen.resetBrightness();
-    return Column(
-      children: <Widget> [
-        // Top StatusBar Padding
-        Container(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          height: MediaQuery.of(context).padding.top,
-          width: double.infinity,
-        ),
-        // Mini-Player
-        Container(
-          margin: EdgeInsets.only(left: 12, right: 12),
-          child: MeasureSize(
-            onChange: (Size size) {
-              playerHeight = size.height;
-            },
-            child: AspectRatio(
-              aspectRatio: 16/9,
-              child: AnimatedSwitcher(
-                duration: Duration(milliseconds: 400),
-                child: pageProvider.currentVideo != null
-                  ? StreamManifestPlayer(
-                      videoTitle: pageProvider.currentVideo.name,
-                      key: pageProvider.playerKey,
-                      streams: pageProvider.currentVideo.videoOnlyStreams,
-                      audioStream: pageProvider.currentVideo.audioWithBestOggQuality,
-                      isFullscreen: false,
-                      onVideoEnded: () async {
-                        if (prefs.youtubeAutoPlay) {
-                          if (mounted)
-                            executeAutoPlay();
-                        }
-                      },
-                      onFullscreenTap: () {
-                        SystemChrome.setPreferredOrientations([
-                          DeviceOrientation.landscapeLeft,
-                          DeviceOrientation.landscapeRight,
-                        ]);
-                        SystemChrome.setEnabledSystemUIOverlays([]);
-                      },
-                    )
-                  : _videoLoading(
-                      pageProvider.infoItem is StreamInfoItem
-                        ? pageProvider.infoItem.thumbnails.hqdefault
-                        : pageProvider.infoItem is PlaylistInfoItem
-                          ? pageProvider.infoItem.thumbnailUrl
-                          : null,
-                    )
-              ),
+    return SingleChildScrollView(
+      child: Container(
+        height: MediaQuery.of(context).size.height,
+        padding: EdgeInsets.only(top: 4),
+        child: Column(
+          children: <Widget> [
+            // Top StatusBar Padding
+            Container(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              height: MediaQuery.of(context).padding.top,
+              width: double.infinity,
             ),
-          ),
-        ),
-        SizedBox(height: 12),
-        // Video Details
-        VideoDetails(
-          infoItem: pageProvider.infoItem,
-          uploaderAvatarUrl: pageProvider.currentChannel?.avatarUrl ?? null,
-        ),
-        // ---------------------------------------
-        // Likes, dislikes, Views and Share button
-        // ---------------------------------------
-        _videoEngagementWidget(),
-        Divider(height: 1),
-        Expanded(
-          child: AnimatedSwitcher(
-            duration: Duration(milliseconds: 300),
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: [
-                SizedBox(height: !isPlaylist ? 4 : 0),
-                // Tags Editor (Not available on Playlists)
-                if (!isPlaylist)
-                AnimatedSize(
-                  vsync: this,
-                  duration: Duration(milliseconds: 300),
-                  child: VideoTags(
-                    tags: pageProvider.currentTags,
-                    infoItem: pageProvider.infoItem is StreamInfoItem
-                      ? pageProvider.infoItem : null,
-                    onAutoTag: () async {
-                      showDialog(
-                        context: context,
-                        builder: (_) => LoadingDialog()
-                      );
-                      String lastArtwork = pageProvider.currentTags.artworkController;
-                      var record = await MusicBrainzAPI
-                        .getFirstRecord(pageProvider.currentTags.titleController.text);
-                      pageProvider.currentTags = await MusicBrainzAPI.getSongTags(record);
-                      if (pageProvider.currentTags.artworkController == null)
-                        pageProvider.currentTags.artworkController = lastArtwork;
-                      Navigator.pop(context);
-                      setState(() {});
-                    },
-                    onManualTag: () async {
-                      var record = await Navigator.push(context,
-                        BlurPageRoute(builder: (context) => 
-                          TagsResultsPage(
-                            title: pageProvider.currentTags.titleController.text,
-                            artist: pageProvider.currentTags.artistController.text
-                          ),
-                          blurStrength: Provider.of<PreferencesProvider>
-                            (context, listen: false).enableBlurUI ? 20 : 0));
-                      if (record == null) return;
-                      showDialog(
-                        context: context,
-                        builder: (_) => LoadingDialog()
-                      );
-                      String lastArtwork = pageProvider.currentTags.artworkController;
-                      pageProvider.currentTags = await MusicBrainzAPI.getSongTags(record);
-                      if (pageProvider.currentTags.artworkController == null)
-                        pageProvider.currentTags.artworkController = lastArtwork;
-                      Navigator.pop(context);
-                    },
-                    onSearchDevice: () async {
-                      File image = File((await FilePicker.platform
-                        .pickFiles(type: FileType.image))
-                        .paths[0]);
-                      if (image == null) return;
-                      pageProvider.currentTags.artworkController = image.path;
-                      setState(() {});
-                    },
+            // Mini-Player
+            Container(
+              margin: EdgeInsets.only(left: 12, right: 12),
+              child: MeasureSize(
+                onChange: (Size size) {
+                  playerHeight = size.height;
+                },
+                child: AspectRatio(
+                  aspectRatio: 16/9,
+                  child: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 400),
+                    child: pageProvider.currentVideo != null
+                      ? StreamManifestPlayer(
+                          borderRadius: 10,
+                          videoTitle: pageProvider.currentVideo.name,
+                          key: pageProvider.playerKey,
+                          streams: pageProvider.currentVideo.videoOnlyStreams,
+                          audioStream: pageProvider.currentVideo.audioWithBestOggQuality,
+                          isFullscreen: false,
+                          onVideoEnded: () async {
+                            if (prefs.youtubeAutoPlay) {
+                              if (mounted)
+                                executeAutoPlay();
+                            }
+                          },
+                          onFullscreenTap: () {
+                            SystemChrome.setPreferredOrientations([
+                              DeviceOrientation.landscapeLeft,
+                              DeviceOrientation.landscapeRight,
+                            ]);
+                            SystemChrome.setEnabledSystemUIOverlays([]);
+                          },
+                          onEnterPipMode: () {
+                            setState(() => isInPictureInPictureMode = true);
+                            FlutterPip.enterPictureInPictureMode();
+                          },
+                        )
+                      : _videoLoading(
+                          pageProvider.infoItem is StreamInfoItem
+                            ? pageProvider.infoItem.thumbnails.hqdefault
+                            : pageProvider.infoItem is PlaylistInfoItem
+                              ? pageProvider.infoItem.thumbnailUrl
+                              : null,
+                        )
                   ),
                 ),
-                SizedBox(height: !isPlaylist ? 4 : 0),
-                if (!isPlaylist)
-                Divider(height: 1),
-                SizedBox(height: !isPlaylist ? 8 : 8),
-                // AutoPlay Widget
-                _autoPlayWidget(),
-                // Related Videos
-                StreamsListTileView(
-                  shrinkWrap: true,
-                  removePhysics: true,
-                  streams: pageProvider?.currentRelatedVideos == null
-                    ? [] : pageProvider.currentRelatedVideos, 
-                  onTap: (stream, index) async {
-                    pageProvider.infoItem =
-                      pageProvider.currentRelatedVideos[index];
-                  },
-                )
-              ],
+              ),
             ),
-          ),
+            SizedBox(height: 12),
+            // Video Details
+            VideoDetails(
+              infoItem: pageProvider.infoItem,
+              uploaderAvatarUrl: pageProvider.currentChannel?.avatarUrl ?? null,
+            ),
+            // ---------------------------------------
+            // Likes, dislikes, Views and Share button
+            // ---------------------------------------
+            _videoEngagementWidget(),
+            Divider(height: 1),
+            Expanded(
+              child: AnimatedSwitcher(
+                duration: Duration(milliseconds: 300),
+                child: ListView(
+                  padding: EdgeInsets.zero,
+                  children: [
+                    SizedBox(height: !isPlaylist ? 4 : 0),
+                    // Tags Editor (Not available on Playlists)
+                    if (!isPlaylist)
+                    AnimatedSize(
+                      vsync: this,
+                      duration: Duration(milliseconds: 300),
+                      child: VideoTags(
+                        tags: pageProvider.currentTags,
+                        infoItem: pageProvider.infoItem is StreamInfoItem
+                          ? pageProvider.infoItem : null,
+                        onAutoTag: () async {
+                          showDialog(
+                            context: context,
+                            builder: (_) => LoadingDialog()
+                          );
+                          String lastArtwork = pageProvider.currentTags.artworkController;
+                          var record = await MusicBrainzAPI
+                            .getFirstRecord(pageProvider.currentTags.titleController.text);
+                          pageProvider.currentTags = await MusicBrainzAPI.getSongTags(record);
+                          if (pageProvider.currentTags.artworkController == null)
+                            pageProvider.currentTags.artworkController = lastArtwork;
+                          Navigator.pop(context);
+                          setState(() {});
+                        },
+                        onManualTag: () async {
+                          var record = await Navigator.push(context,
+                            BlurPageRoute(builder: (context) => 
+                              TagsResultsPage(
+                                title: pageProvider.currentTags.titleController.text,
+                                artist: pageProvider.currentTags.artistController.text
+                              ),
+                              blurStrength: Provider.of<PreferencesProvider>
+                                (context, listen: false).enableBlurUI ? 20 : 0));
+                          if (record == null) return;
+                          showDialog(
+                            context: context,
+                            builder: (_) => LoadingDialog()
+                          );
+                          String lastArtwork = pageProvider.currentTags.artworkController;
+                          pageProvider.currentTags = await MusicBrainzAPI.getSongTags(record);
+                          if (pageProvider.currentTags.artworkController == null)
+                            pageProvider.currentTags.artworkController = lastArtwork;
+                          Navigator.pop(context);
+                        },
+                        onSearchDevice: () async {
+                          File image = File((await FilePicker.platform
+                            .pickFiles(type: FileType.image))
+                            .paths[0]);
+                          if (image == null) return;
+                          pageProvider.currentTags.artworkController = image.path;
+                          setState(() {});
+                        },
+                      ),
+                    ),
+                    SizedBox(height: !isPlaylist ? 4 : 0),
+                    if (!isPlaylist)
+                    Divider(height: 1),
+                    SizedBox(height: !isPlaylist ? 8 : 8),
+                    // AutoPlay Widget
+                    _autoPlayWidget(),
+                    // Related Videos
+                    StreamsListTileView(
+                      shrinkWrap: true,
+                      removePhysics: true,
+                      streams: pageProvider?.currentRelatedVideos == null
+                        ? [] : pageProvider.currentRelatedVideos, 
+                      onTap: (stream, index) async {
+                        pageProvider.infoItem =
+                          pageProvider.currentRelatedVideos[index];
+                      },
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ]
         ),
-      ]
+      ),
     );
   }
 

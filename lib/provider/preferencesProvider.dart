@@ -238,4 +238,13 @@ class PreferencesProvider extends ChangeNotifier {
     }
   }
 
+  // Enable/Disable Picture in Picture
+  bool get enablePictureInPicture {
+    return prefs.getBool('enablePictureInPicture') ?? true;
+  }
+  set enablePictureInPicture(bool value) {
+    prefs.setBool('enablePictureInPicture', value);
+    notifyListeners();
+  }
+
 }

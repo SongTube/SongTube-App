@@ -7,10 +7,12 @@ class PlayerAppBar extends StatelessWidget {
   final List<VideoOnlyStream> streams;
   final String videoTitle;
   final Function(String) onStreamSelect;
+  final Function onEnterPipMode;
   PlayerAppBar({
     @required this.streams,
     @required this.videoTitle,
-    @required this.onStreamSelect
+    @required this.onStreamSelect,
+    this.onEnterPipMode
   });
   @override
   Widget build(BuildContext context) {
@@ -46,6 +48,19 @@ class PlayerAppBar extends StatelessWidget {
             ),
           ),
           SizedBox(width: 16),
+          GestureDetector(
+            onTap: onEnterPipMode,
+            child: Container(
+              padding: EdgeInsets.all(4),
+              color: Colors.transparent,
+              child: Icon(
+                MdiIcons.pictureInPictureBottomRightOutline,
+                color: Colors.white,
+                size: 18,
+              ),
+            ),
+          ),
+          SizedBox(width: 8),
           FlexiblePopupMenu(
             borderRadius: 10,
             child: Container(
