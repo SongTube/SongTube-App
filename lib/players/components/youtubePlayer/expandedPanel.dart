@@ -113,6 +113,8 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
     VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
     PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     pageProvider.playerKey?.currentState?.controller?.play();
+    pageProvider.panelController.open();
+    FlutterScreen.resetBrightness();
     return AnimatedSwitcher(
       duration: Duration(milliseconds: 400),
       child: pageProvider.currentVideo != null 
