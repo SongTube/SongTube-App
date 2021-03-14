@@ -123,6 +123,16 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
         setState(() {isPlaying = true; buffering = false;});
       });
     });
+    _controller.addListener(() {
+      if (_controller.value.isBuffering && buffering == false) {
+        setState(() => buffering = true);
+        setState(() { showControls = true; showBackdrop = true; });
+      }
+      if (!_controller.value.isBuffering && buffering == true) {
+        setState(() => buffering = false);
+        setState(() { showControls = false; showBackdrop = false; });
+      }
+    });
     Future.delayed(Duration(seconds: 10), () {
       _controller.addListener(() {
         int currentPosition = _controller?.value?.position?.inSeconds ?? null;
@@ -133,14 +143,6 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
             Future.delayed((Duration(seconds: 2)),
               () => widget.onVideoEnded());
           }
-        }
-        if (_controller.value.isBuffering && buffering == false) {
-          setState(() => buffering = true);
-          setState(() { showControls = true; showBackdrop = true; });
-        }
-        if (!_controller.value.isBuffering && buffering == true) {
-          setState(() => buffering = false);
-          setState(() { showControls = false; showBackdrop = false; });
         }
       });
     });

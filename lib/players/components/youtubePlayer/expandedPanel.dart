@@ -77,17 +77,9 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
 
   @override
   Widget build(BuildContext context) {
-    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     return PipWidget(
       onResume: (bool pipMode) {
         setState(() => isInPictureInPictureMode = pipMode);
-      },
-      onSuspending: () {
-        if (prefs.enablePictureInPicture) {
-          FlutterPip.enterPictureInPictureMode().then((value) {
-            setState(() => isInPictureInPictureMode = true);
-          });
-        }
       },
       child: Scaffold(
         key: scaffoldKey,
