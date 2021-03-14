@@ -22,7 +22,8 @@ class VideoPageProvider extends ChangeNotifier {
   PanelController panelController;
 
   // Video Player Key
-  final playerKey = GlobalKey<StreamManifestPlayerState>();
+  GlobalKey<StreamManifestPlayerState> playerKey =
+    GlobalKey<StreamManifestPlayerState>();
 
   VideoPageProvider() {
     panelController = PanelController();

@@ -123,24 +123,26 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
         setState(() {isPlaying = true; buffering = false;});
       });
     });
-    _controller.addListener(() {
-      int currentPosition = _controller?.value?.position?.inSeconds ?? 100;
-      int totalDuration = _controller?.value?.duration?.inSeconds ?? 0;
-      if (currentPosition == totalDuration) {
-        if (!videoEnded) {
-          videoEnded = true;
-          Future.delayed((Duration(seconds: 2)),
-            () => widget.onVideoEnded());
+    Future.delayed(Duration(seconds: 10), () {
+      _controller.addListener(() {
+        int currentPosition = _controller?.value?.position?.inSeconds ?? null;
+        int totalDuration = _controller?.value?.duration?.inSeconds ?? null;
+        if (currentPosition == totalDuration && currentPosition != null && totalDuration != null) {
+          if (!videoEnded) {
+            videoEnded = true;
+            Future.delayed((Duration(seconds: 2)),
+              () => widget.onVideoEnded());
+          }
         }
-      }
-      if (_controller.value.isBuffering && buffering == false) {
-        setState(() => buffering = true);
-        setState(() { showControls = true; showBackdrop = true; });
-      }
-      if (!_controller.value.isBuffering && buffering == true) {
-        setState(() => buffering = false);
-        setState(() { showControls = false; showBackdrop = false; });
-      }
+        if (_controller.value.isBuffering && buffering == false) {
+          setState(() => buffering = true);
+          setState(() { showControls = true; showBackdrop = true; });
+        }
+        if (!_controller.value.isBuffering && buffering == true) {
+          setState(() => buffering = false);
+          setState(() { showControls = false; showBackdrop = false; });
+        }
+      });
     });
   }
 

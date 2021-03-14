@@ -84,16 +84,14 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
       },
       onSuspending: () {
         if (prefs.enablePictureInPicture) {
-          setState(() => isInPictureInPictureMode = true);
-          FlutterPip.enterPictureInPictureMode();
+          FlutterPip.enterPictureInPictureMode().then((value) {
+            setState(() => isInPictureInPictureMode = true);
+          });
         }
       },
       child: Scaffold(
         key: scaffoldKey,
-        body: AnimatedSwitcher(
-          duration: Duration(milliseconds: 400),
-          child: _currentWidget()
-          ),
+        body: _currentWidget(),
         floatingActionButton: _fab()
       ),
     );
@@ -109,50 +107,64 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
     }
   }
 
-  Widget _pipWidget() {
+  Widget _videoPlayerWidget() {
     VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
     PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
+    return StreamManifestPlayer(
+      borderRadius: MediaQuery.of(context).orientation == Orientation.landscape
+        ? 0 : 10,
+      key: pageProvider.playerKey,
+      videoTitle: pageProvider?.currentVideo?.name ?? "",
+      streams: pageProvider.currentVideo.videoOnlyStreams,
+      audioStream: pageProvider.currentVideo.getAudioStreamWithBestMatchForVideoStream(
+        pageProvider.currentVideo.videoOnlyWithHighestQuality
+      ),
+      isFullscreen: MediaQuery.of(context).orientation == Orientation.landscape
+        ? true : false,
+      onVideoEnded: () async {
+        if (prefs.youtubeAutoPlay) {
+          if (mounted)
+            executeAutoPlay();
+        }
+      },
+      onFullscreenTap: () {
+        if (MediaQuery.of(context).orientation == Orientation.landscape) {
+          SystemChrome.setPreferredOrientations([
+            DeviceOrientation.portraitUp,
+            DeviceOrientation.portraitDown,
+          ]);
+          SystemChrome.setEnabledSystemUIOverlays
+            ([SystemUiOverlay.top, SystemUiOverlay.bottom]);
+        } else {
+          SystemChrome.setPreferredOrientations([
+            DeviceOrientation.landscapeLeft,
+            DeviceOrientation.landscapeRight,
+          ]);
+          SystemChrome.setEnabledSystemUIOverlays([]);
+        }
+      },
+      onEnterPipMode: () {
+        setState(() => isInPictureInPictureMode = true);
+        FlutterPip.enterPictureInPictureMode();
+      },
+    );
+  }
+
+  Widget _pipWidget() {
+    VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
     pageProvider.playerKey?.currentState?.controller?.play();
     pageProvider.panelController.open();
     FlutterScreen.resetBrightness();
     return AnimatedSwitcher(
       duration: Duration(milliseconds: 400),
       child: pageProvider.currentVideo != null 
-        ? StreamManifestPlayer(
-            borderRadius: 0,
-            videoTitle: pageProvider.currentVideo.name,
-            key: pageProvider.playerKey,
-            streams: pageProvider.currentVideo.videoOnlyStreams,
-            audioStream: pageProvider.currentVideo.getAudioStreamWithBestMatchForVideoStream(
-              pageProvider.currentVideo.videoOnlyWithHighestQuality
-            ),
-            isFullscreen: true,
-            onVideoEnded: () async {
-              if (prefs.youtubeAutoPlay) {
-                if (mounted)
-                  executeAutoPlay();
-              }
-            },
-            onFullscreenTap: () {
-              SystemChrome.setPreferredOrientations([
-                DeviceOrientation.portraitUp,
-                DeviceOrientation.portraitDown,
-              ]);
-              SystemChrome.setEnabledSystemUIOverlays
-                ([SystemUiOverlay.top, SystemUiOverlay.bottom]);
-            },
-            onEnterPipMode: () {
-              setState(() => isInPictureInPictureMode = true);
-              FlutterPip.enterPictureInPictureMode();
-            },
-          )
+        ? _videoPlayerWidget()
         : _videoLoading(pageProvider.infoItem.thumbnails.hqdefault)
     );
   }
 
   Widget _fullscreenPage() {
     VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
-    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
@@ -161,41 +173,13 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
     return AnimatedSwitcher(
       duration: Duration(milliseconds: 400),
       child: pageProvider.currentVideo != null 
-        ? StreamManifestPlayer(
-            borderRadius: 0,
-            videoTitle: pageProvider.currentVideo.name,
-            key: pageProvider.playerKey,
-            streams: pageProvider.currentVideo.videoOnlyStreams,
-            audioStream: pageProvider.currentVideo.getAudioStreamWithBestMatchForVideoStream(
-              pageProvider.currentVideo.videoOnlyWithHighestQuality
-            ),
-            isFullscreen: true,
-            onVideoEnded: () async {
-              if (prefs.youtubeAutoPlay) {
-                if (mounted)
-                  executeAutoPlay();
-              }
-            },
-            onFullscreenTap: () {
-              SystemChrome.setPreferredOrientations([
-                DeviceOrientation.portraitUp,
-                DeviceOrientation.portraitDown,
-              ]);
-              SystemChrome.setEnabledSystemUIOverlays
-                ([SystemUiOverlay.top, SystemUiOverlay.bottom]);
-            },
-            onEnterPipMode: () {
-              setState(() => isInPictureInPictureMode = true);
-              FlutterPip.enterPictureInPictureMode();
-            },
-          )
+        ? _videoPlayerWidget()
         : _videoLoading(pageProvider.infoItem.thumbnails.hqdefault)
     );
   }
 
   Widget _portraitPage() {
     VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
-    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     bool isPlaylist = pageProvider.infoItem is StreamInfoItem &&
       pageProvider.currentPlaylist != null;
     SystemChrome.setPreferredOrientations([
@@ -229,31 +213,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                   child: AnimatedSwitcher(
                     duration: Duration(milliseconds: 400),
                     child: pageProvider.currentVideo != null
-                      ? StreamManifestPlayer(
-                          borderRadius: 10,
-                          videoTitle: pageProvider.currentVideo.name,
-                          key: pageProvider.playerKey,
-                          streams: pageProvider.currentVideo.videoOnlyStreams,
-                          audioStream: pageProvider.currentVideo.audioWithBestOggQuality,
-                          isFullscreen: false,
-                          onVideoEnded: () async {
-                            if (prefs.youtubeAutoPlay) {
-                              if (mounted)
-                                executeAutoPlay();
-                            }
-                          },
-                          onFullscreenTap: () {
-                            SystemChrome.setPreferredOrientations([
-                              DeviceOrientation.landscapeLeft,
-                              DeviceOrientation.landscapeRight,
-                            ]);
-                            SystemChrome.setEnabledSystemUIOverlays([]);
-                          },
-                          onEnterPipMode: () {
-                            setState(() => isInPictureInPictureMode = true);
-                            FlutterPip.enterPictureInPictureMode();
-                          },
-                        )
+                      ? _videoPlayerWidget()
                       : _videoLoading(
                           pageProvider.infoItem is StreamInfoItem
                             ? pageProvider.infoItem.thumbnails.hqdefault
