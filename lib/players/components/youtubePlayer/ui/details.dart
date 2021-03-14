@@ -1,3 +1,5 @@
+import 'dart:isolate';
+
 import 'package:flutter/material.dart';
 import 'package:newpipeextractor_dart/extractors/channels.dart';
 import 'package:newpipeextractor_dart/utils/url.dart';
@@ -32,45 +34,40 @@ class VideoDetails extends StatelessWidget {
               AnimatedSwitcher(
                 duration: Duration(milliseconds: 300),
                 child: uploaderAvatarUrl != null
-                  ? FutureBuilder<String>(
-                      future: _getAvatarUrl(infoItem.uploaderUrl),
-                      builder: (context, snapshot) {
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(context,
-                              BlurPageRoute(
-                                blurStrength: Provider.of<PreferencesProvider>
-                                  (context, listen: false).enableBlurUI ? 20 : 0,
-                                builder: (_) => 
-                                YoutubeChannelPage(
-                                  url: infoItem.uploaderUrl,
-                                  name: infoItem.uploaderName,
-                                  lowResAvatar: snapshot.data,
-                            )));
-                          },
-                          child: Container(
-                            height: 60,
-                            width: 60,
-                            margin: EdgeInsets.only(right: 12),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(50),
-                              child: FadeInImage(
-                                fadeInDuration: Duration(milliseconds: 400),
-                                placeholder: MemoryImage(kTransparentImage),
-                                image: snapshot.hasData
-                                  ? NetworkImage(snapshot.data)
-                                  : MemoryImage(kTransparentImage),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
+                  ? GestureDetector(
+                      onTap: () {
+                        Navigator.push(context,
+                          BlurPageRoute(
+                            blurStrength: Provider.of<PreferencesProvider>
+                              (context, listen: false).enableBlurUI ? 20 : 0,
+                            builder: (_) => 
+                            YoutubeChannelPage(
+                              url: infoItem.uploaderUrl,
+                              name: infoItem.uploaderName,
+                              lowResAvatar: uploaderAvatarUrl,
+                        )));
+                      },
+                      child: Container(
+                        height: 60,
+                        width: 60,
+                        margin: EdgeInsets.only(right: 12),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(50),
+                          child: FadeInImage(
+                            fadeInDuration: Duration(milliseconds: 400),
+                            placeholder: MemoryImage(kTransparentImage),
+                            image: uploaderAvatarUrl != null
+                              ? NetworkImage(uploaderAvatarUrl)
+                              : MemoryImage(kTransparentImage),
+                            fit: BoxFit.cover,
                           ),
-                        );
-                      }
+                        ),
+                      ),
                     )
-                  : Container(
-                      margin: EdgeInsets.only(right: 12),
-                      child: const ShimmerChannelLogo()
-                    )
+                : Container(
+                    margin: EdgeInsets.only(right: 12),
+                    child: const ShimmerChannelLogo()
+                  )
               ),
               Expanded(
                 child: Column(
@@ -116,9 +113,6 @@ class VideoDetails extends StatelessWidget {
     );
   }
 
-  Future<String> _getAvatarUrl(String uploaderUrl) async {
-    String id = (await YoutubeId.getIdFromChannelUrl(uploaderUrl)).split("/").last;
-    return await ChannelExtractor.getAvatarUrl(id);
-  }
+  
 
 }
