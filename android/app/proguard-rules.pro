@@ -1,4 +1,4 @@
--keep class org.schabi.newpipe.extractor.timeago.patterns.** { *; }
+-keep class org.schabi.newpipe.extractor.** { *; }
 -keep class org.ocpsoft.prettytime.i18n.** { *; }
 
 -keep class org.mozilla.javascript.** { *; }
@@ -9,8 +9,11 @@
 -dontwarn org.mozilla.javascript.tools.**
 -dontwarn android.arch.util.paging.CountedDataSource
 -dontwarn android.arch.persistence.room.paging.LimitOffsetDataSource
--keep class com.artxdev.newpipeextractor_dart.** { *; }
+-keep class com.artxdev.** { *; }
 -keep class androidx.lifecycle.** { *; }
+
+-dontobfuscate
+
 ## Flutter wrapper
 -keep class io.flutter.app.** { *; }
 -keep class io.flutter.plugin.** { *; }
@@ -18,11 +21,8 @@
 -keep class io.flutter.view.** { *; }
 -keep class io.flutter.** { *; }
 -keep class io.flutter.plugins.** { *; }
-# -keep class com.google.firebase.** { *; } // uncomment this if you are using firebase in the project
--dontwarn io.flutter.embedding.**
--ignorewarnings
 
--keep class android.process.media.** { *; }
+# -keep class com.google.firebase.** { *; } // uncomment this if you are using firebase in the project
 
 -keep class com.arthenica.mobileffmpeg.Config {
     native <methods>;
