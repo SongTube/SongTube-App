@@ -1,10 +1,11 @@
 import 'dart:io';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:newpipeextractor_dart/models/infoItems/video.dart';
+import 'package:flutter/services.dart';
 import 'package:songtube/internal/languages.dart';
-import 'package:songtube/internal/models/infoSets/downloadinfoset.dart';
-import 'package:songtube/internal/models/metadata.dart';
+import 'package:songtube/internal/download/downloadSet.dart';
+import 'package:songtube/internal/download/tags.dart';
+import 'package:songtube/ui/internal/snackbar.dart';
 import 'package:string_validator/string_validator.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -12,20 +13,20 @@ class DownloadTile extends StatelessWidget {
   final Stream dataProgress;
   final Stream currentAction;
   final Stream progressBar;
-  final DownloadMetaData metadata;
-  final StreamInfoItem videoDetails;
+  final DownloadTags metadata;
   final DownloadType downloadType;
   final Function onDownloadCancel;
   final Widget cancelDownloadIcon;
+  final String errorReason;
   DownloadTile({
     @required this.dataProgress,
     @required this.currentAction,
     @required this.progressBar,
     @required this.metadata,
-    @required this.videoDetails,
     @required this.downloadType,
     this.onDownloadCancel,
     this.cancelDownloadIcon,
+    this.errorReason
   });
   @override
   Widget build(BuildContext context) {
@@ -54,11 +55,7 @@ class DownloadTile extends StatelessWidget {
                         fadeInDuration: Duration(milliseconds: 250),
                         placeholder: MemoryImage(kTransparentImage),
                         image: isURL(metadata.coverurl)
-                          ? NetworkImage(
-                              metadata.coverurl == videoDetails.thumbnails.hqdefault
-                                ? videoDetails.thumbnails.hqdefault
-                                : metadata.coverurl
-                            )
+                          ? NetworkImage(metadata.coverurl)
                           : FileImage(File(metadata.coverurl)),
                         fit: BoxFit.fitWidth,
                       ),
@@ -115,14 +112,52 @@ class DownloadTile extends StatelessWidget {
                       ),
                       Align(
                         alignment: Alignment.bottomRight,
-                        child: AnimatedSwitcher(
-                          duration: Duration(milliseconds: 250),
-                          child: cancelDownloadIcon == null
-                            ? Container()
-                            : IconButton(
-                                icon: cancelDownloadIcon,
-                                onPressed: onDownloadCancel
-                              )
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            AnimatedSwitcher(
+                              duration: Duration(milliseconds: 250),
+                              child: cancelDownloadIcon == null
+                                ? Container()
+                                : IconButton(
+                                    icon: cancelDownloadIcon,
+                                    onPressed: onDownloadCancel
+                                  )
+                            ),
+                            if (errorReason != null)
+                            GestureDetector(
+                              child: Container(
+                                padding: EdgeInsets.all(6),
+                                decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  borderRadius: BorderRadius.circular(10)
+                                ),
+                                child: Column(
+                                  children: [
+                                    Icon(Icons.copy_outlined,
+                                      size: 18, color: Colors.white),
+                                    Text(
+                                      "copy error",
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              onTap: () {
+                                Clipboard.setData(ClipboardData(text: errorReason));
+                                AppSnack.showSnackBar(
+                                  icon: Icons.copy,
+                                  title: "Error copied to Clipboard",
+                                  duration: Duration(seconds: 2),
+                                  context: context
+                                );
+                              }
+                            )
+                          ],
                         ),
                       )
                     ],
@@ -166,6 +201,7 @@ class DownloadTile extends StatelessWidget {
                     }
                   ),
                   Spacer(),
+                  if (errorReason == null)
                   StreamBuilder<String>(
                     stream: currentAction,
                     builder: (context, snapshot) {
@@ -175,12 +211,14 @@ class DownloadTile extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 12,
                         ),
+                        maxLines: 1,
                       )
                       : Text(
                         snapshot.data.toString(),
                         style: TextStyle(
                           fontSize: 12
                         ),
+                        maxLines: 1,
                       );
                     }
                   ),
