@@ -129,6 +129,8 @@ class LanguageSo extends Languages {
   String get labelSelectVideo => "Dooro Muuqaalka";
   @override
   String get labelSelectAudio => "Dooro Dhagaysiga";
+  @override
+  String get labelGlobalParameters => "Qiyaasaha adduunka";
 
   // Media Screen
   @override
@@ -356,4 +358,6 @@ class LanguageSo extends Languages {
   String get labelCreate => "Abuur";
   @override
   String get labelPlaylists => "Liiska Ciyaarta";
+  @override
+  String get labelQuality => "Tayada";
 }

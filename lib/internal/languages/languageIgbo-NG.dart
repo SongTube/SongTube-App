@@ -129,6 +129,8 @@ class LanguageIgbo extends Languages {
   String get labelSelectVideo => "Họrọ Vidio";
   @override
   String get labelSelectAudio => "Họrọ Audio";
+  @override
+  String get labelGlobalParameters => "uwa";
 
   // Media Screen
   @override
@@ -356,4 +358,6 @@ class LanguageIgbo extends Languages {
   String get labelCreate => "Kee";
   @override
   String get labelPlaylists => "ndepụta egwu";
+  @override
+  String get labelQuality => "Ezigbo";
 }

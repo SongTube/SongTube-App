@@ -129,6 +129,8 @@ class LanguageTr extends Languages {
   String get labelSelectVideo => "Video Seç";
   @override
   String get labelSelectAudio => "Ses Seç";
+  @override
+  String get labelGlobalParameters => "Global parametreler";
 
   // Media Screen
   @override
@@ -356,4 +358,6 @@ class LanguageTr extends Languages {
   String get labelCreate => "Oluşturmak";
   @override
   String get labelPlaylists => "Çalma listeleri";
+  @override
+  String get labelQuality => "Kalite";
 }

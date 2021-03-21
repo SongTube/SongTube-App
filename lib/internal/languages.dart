@@ -194,6 +194,7 @@ abstract class Languages {
   String get labelTrebleGain;
   String get labelSelectVideo;
   String get labelSelectAudio;
+  String get labelGlobalParameters;
 
   // Media Screen
   String get labelMusic;
@@ -307,7 +308,7 @@ abstract class Languages {
   String get labelLibrary;
   String get labelCreate;
   String get labelPlaylists;
-
+  String get labelQuality;
 }
 
 // ----------------------------------------

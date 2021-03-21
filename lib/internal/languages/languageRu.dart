@@ -129,6 +129,8 @@ class LanguageRu extends Languages {
   String get labelSelectVideo => "Выберите формат видео";
   @override
   String get labelSelectAudio => "Выберите формат аудио";
+  @override
+  String get labelGlobalParameters => "Глобальные параметры";
 
   // Media Screen
   @override
@@ -356,4 +358,6 @@ class LanguageRu extends Languages {
   String get labelCreate => "Создавать";
   @override
   String get labelPlaylists => "Плейлисты";
+  @override
+  String get labelQuality => "Качественный";
 }

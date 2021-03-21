@@ -129,6 +129,8 @@ class LanguageId extends Languages {
   String get labelSelectVideo => "Pilih Video";
   @override
   String get labelSelectAudio => "Pilih Audio";
+  @override
+  String get labelGlobalParameters => "Parameter global";
 
   // Media Screen
   @override
@@ -356,4 +358,6 @@ class LanguageId extends Languages {
   String get labelCreate => "Membuat";
   @override
   String get labelPlaylists => "Daftar Putar";
+  @override
+  String get labelQuality => "Kualitas";
 }

@@ -130,6 +130,8 @@ class LanguageAr extends Languages {
   String get labelSelectVideo => "اختر الفيديو";
   @override
   String get labelSelectAudio => "اختر الصوت";
+  @override
+  String get labelGlobalParameters => "المعايير العالمية";
 
   // Media Screen
   @override
@@ -358,4 +360,6 @@ class LanguageAr extends Languages {
   String get labelCreate => "خلق";
   @override
   String get labelPlaylists => "قوائم التشغيل";
+  @override
+  String get labelQuality => "جودة";
 }

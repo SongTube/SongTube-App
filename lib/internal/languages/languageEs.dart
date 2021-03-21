@@ -129,6 +129,8 @@ class LanguageEs extends Languages {
   String get labelSelectVideo => "Seleciona un Video";
   @override
   String get labelSelectAudio => "Selecciona un Audio";
+  @override
+  String get labelGlobalParameters => "Parametros globales";
 
   // Media Screen
   @override
@@ -359,4 +361,6 @@ class LanguageEs extends Languages {
   String get labelCreate => "Crear";
   @override
   String get labelPlaylists => "Listas de reproducción";
+  @override
+  String get labelQuality => "Calidad";
 }

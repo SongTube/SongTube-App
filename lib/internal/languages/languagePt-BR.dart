@@ -129,6 +129,8 @@ class LanguagePtBr extends Languages {
   String get labelSelectVideo => "Selecionar Vídeo";
   @override
   String get labelSelectAudio => "Selecionar Áudio";
+  @override
+  String get labelGlobalParameters => "Parâmetros globais";
 
   // Media Screen
   @override
@@ -358,4 +360,6 @@ class LanguagePtBr extends Languages {
   String get labelCreate => "Crio";
   @override
   String get labelPlaylists => "Playlists";
+  @override
+  String get labelQuality => "Qualidade";
 }
