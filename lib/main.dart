@@ -27,7 +27,7 @@ import 'package:songtube/provider/videoPageProvider.dart';
 import 'package:songtube/ui/internal/scrollBehavior.dart';
 import 'package:newpipeextractor_dart/utils/reCaptcha.dart';
 import 'package:newpipeextractor_dart/utils/navigationService.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
+// import 'package:sentry_flutter/sentry_flutter.dart';
 
 // UI
 import 'package:songtube/ui/internal/themeValues.dart';
@@ -35,8 +35,8 @@ import 'package:songtube/ui/internal/themeValues.dart';
 // Debug
 import 'package:flutter/scheduler.dart' show timeDilation;
 
-const dsn = '';
-final sentry = SentryClient(SentryOptions(dsn: dsn));
+// const dsn = '';
+// final sentry = SentryClient(SentryOptions(dsn: dsn));
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,7 +44,8 @@ Future<void> main() async {
   await preferences.initPreferences();
   if (kDebugMode)
     timeDilation = 1.0;
-  if (dsn.isNotEmpty) {
+  runApp(Main(preloadedFs: preferences));
+  /* if (dsn.isNotEmpty) {
     runZonedGuarded(() => runApp(Main(preloadedFs: preferences)),
       (error, stackTrace) async {
         await sentry.captureException(
@@ -53,14 +54,18 @@ Future<void> main() async {
       },
     );
     FlutterError.onError = (details, {bool forceReport = false}) {
-      sentry.captureException(
-        details.exception,
-        stackTrace: details.stack,
-      );
+      if (
+        !(details.exception is AssertionError)
+      ) {
+        sentry.captureException(
+          details.exception,
+          stackTrace: details.stack,
+        );
+      }
     };
   } else {
-    runApp(Main(preloadedFs: preferences));
-  }
+    
+  } */
 }
 
 class Main extends StatefulWidget {
