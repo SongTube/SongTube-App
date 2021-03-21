@@ -3,7 +3,7 @@ import 'dart:async';
 import 'dart:io';
 
 // Internal
-import 'package:songtube/internal/models/audioModifiers.dart';
+import 'package:songtube/internal/download/audioFilters.dart';
 import 'package:songtube/internal/randomString.dart';
 
 // Packages
@@ -11,7 +11,7 @@ import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 import 'package:path_provider/path_provider.dart';
 
 /// Type of Actions that the [FFmpegConverter] can execute
-enum FFmpegActionType {
+enum FFmpegTask {
   ConvertToAAC,
   ConvertToOGG,
   ConvertToOGGVorbis,
@@ -70,7 +70,7 @@ class FFmpegConverter {
     assert(videoPath != "" || videoPath != null);
     assert(audioPath != "" || audioPath != null);
     List<String> _argsList = <String>[];
-    String outDir = (await getTemporaryDirectory()).path + "/";
+    String outDir = (await getExternalStorageDirectory()).path + "/";
     File output = File(outDir + RandomString.getRandomString(10));
     String audioFormat = await getMediaFormat(audioPath);
     if (videoFormat == "webm" && audioFormat == "ogg" || videoFormat == "mp4" && audioFormat == "m4a") {
@@ -105,6 +105,11 @@ class FFmpegConverter {
         "argument list: $_argsList\n" +
         "output path: $output"
       );
+    // Try delete old files
+    try {
+      await File(videoPath).delete();
+      await File(audioPath).delete();
+    } catch (_) {}
     return output;
   }
 
@@ -116,17 +121,17 @@ class FFmpegConverter {
   /// to avoid any quality loss
   Future<File> convertAudio({
     String audioFile,
-    FFmpegActionType format,
+    FFmpegTask task,
   }) async {
     assert(audioFile != "" || audioFile != null);
-    assert(format != null);
-    if (!await audioConversionRequired(format, audioFile)) {
+    assert(task != null);
+    if (!await audioConversionRequired(task, audioFile)) {
       return File(audioFile);
     }
     List<String> _argsList;
-    String outDir = (await getTemporaryDirectory()).path + "/";
+    String outDir = (await getExternalStorageDirectory()).path + "/";
     File output = File(outDir + RandomString.getRandomString(10));
-    if (format == FFmpegActionType.ConvertToAAC) {
+    if (task == FFmpegTask.ConvertToAAC) {
       _argsList = [
         "-y", "-i",
         "$audioFile",
@@ -136,7 +141,7 @@ class FFmpegConverter {
       ];
       output = File(output.path + ".m4a");
     }
-    if (format == FFmpegActionType.ConvertToOGG) {
+    if (task == FFmpegTask.ConvertToOGG) {
       _argsList = [
         "-y", "-i", "$audioFile", "-c:a", "libopus",
         "-b:a", "256k", "-vbr", "on", "-compression_level", "10",
@@ -144,7 +149,7 @@ class FFmpegConverter {
       ];
       output = File(output.path + ".ogg");
     }
-    if (format == FFmpegActionType.ConvertToOGGVorbis) {
+    if (task == FFmpegTask.ConvertToOGGVorbis) {
       _argsList = [
         "-y", "-i", "$audioFile",
         "-c:a", "libvorbis", "-b:a", "256k",
@@ -152,7 +157,7 @@ class FFmpegConverter {
       ];
       output = File(output.path + ".ogg");
     }
-    if (format == FFmpegActionType.ConvertToMP3) {
+    if (task == FFmpegTask.ConvertToMP3) {
       _argsList = [
         "-y", "-i", "$audioFile",
         "-c:a", "libmp3lame", "-b:a", "256k",
@@ -160,7 +165,7 @@ class FFmpegConverter {
       ];
       output = File(output.path + ".mp3");
     }
-    if (format == FFmpegActionType.NONE) {
+    if (task == FFmpegTask.NONE) {
       return File(audioFile);
     }
     int _result = await flutterFFmpeg.executeWithArguments(_argsList);
@@ -168,7 +173,7 @@ class FFmpegConverter {
       throw Exception(
         "An issue ocurred trying to convert audio File\n" +
         "audioFile: $audioFile\n" +
-        "format: $format\n" +
+        "format: $task\n" +
         "argument list: $_argsList\n" +
         "output path: $output"
       );
@@ -184,12 +189,12 @@ class FFmpegConverter {
   /// On failure this function will return [null]
   Future<File> applyAudioModifiers(
     String audioPath,
-    AudioModifiers audioModifiers
+    AudioFilters audioModifiers
   ) async {
     assert(audioPath != "" || audioPath != null);
     assert(audioModifiers != null);
     if (audioModifiers == null) return File(audioPath);
-    String outDir = (await getTemporaryDirectory()).path + "/";
+    String outDir = (await getExternalStorageDirectory()).path + "/";
     String format = await getMediaFormat(audioPath);
     File output = File(outDir +
       RandomString.getRandomString(10) + ".$format");
@@ -217,15 +222,15 @@ class FFmpegConverter {
 
   /// Return a [bool] indicating if the provided [Audio] file needs Conversion
   Future<bool> audioConversionRequired(
-    FFmpegActionType convertFormat,
+    FFmpegTask task,
     String audioFile
   ) async {
     assert(audioFile != "" || audioFile != null);
-    assert(convertFormat != null);
+    assert(task != null);
     String format = await getMediaFormat(audioFile);
-    if (convertFormat == FFmpegActionType.ConvertToAAC)
+    if (task == FFmpegTask.ConvertToAAC)
       return format == "m4a" ? false : true;
-    else if (convertFormat == FFmpegActionType.ConvertToOGGVorbis)
+    else if (task == FFmpegTask.ConvertToOGGVorbis)
       return format == "ogg" ? false : true;
     else
       return true;
@@ -236,7 +241,7 @@ class FFmpegConverter {
   /// incompatible one
   Future<File> clearFileMetadata(String audioFile) async {
     assert(audioFile != "" || audioFile != null);
-    String outDir = (await getTemporaryDirectory()).path + "/";
+    String outDir = (await getExternalStorageDirectory()).path + "/";
     String fileFormat = await getMediaFormat(audioFile);
     File output = File(outDir + RandomString.getRandomString(10) + ".$fileFormat");
     List<String> _argsList = [
@@ -258,7 +263,7 @@ class FFmpegConverter {
   /// Normalize any [Audio] file using FFmpeg's dynaudnorm
   Future<File> normalizeAudio(String audioFile) async {
     assert(audioFile != "" || audioFile != null);
-    String outDir = (await getTemporaryDirectory()).path + "/";
+    String outDir = (await getExternalStorageDirectory()).path + "/";
     String fileFormat = await getMediaFormat(audioFile);
     File output = File(outDir + RandomString.getRandomString(10) + ".$fileFormat");
     List<String> _argsList = [
