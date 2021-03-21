@@ -27,6 +27,18 @@ class DownloadSettings extends StatelessWidget {
     return ListView(
       children: <Widget>[
         ListTile(
+          isThreeLine: true,
+          onTap: () {
+            Permission.storage.request().then((status) {
+              if (status == PermissionStatus.granted) {
+                FilePicker.platform.getDirectoryPath().then((path) {
+                  if (path != null) {
+                    config.audioDownloadPath = path;
+                  }
+                });
+              }
+            });
+          },
           title: Text(
             Languages.of(context).labelAudioFolder,
             style: TextStyle(
@@ -34,31 +46,49 @@ class DownloadSettings extends StatelessWidget {
               fontWeight: FontWeight.w500
             ),
           ),
-          subtitle: Text(Languages.of(context).labelAudioFolderJustification,
-            style: TextStyle(fontSize: 12)
+          subtitle: RichText(
+            text: TextSpan(
+              style: TextStyle(fontSize: 12),
+              children: [
+                TextSpan(
+                  text: Languages.of(context).labelAudioFolderJustification+"\n"
+                ),
+                TextSpan(
+                  text: config.audioDownloadPath,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 13
+                  )
+                )
+              ]
+            ),
           ),
           trailing: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(30),
               color: Theme.of(context).scaffoldBackgroundColor
             ),
-            child: IconButton(
-              icon: Icon(EvaIcons.folderOutline, color: Theme.of(context).iconTheme.color),
-              onPressed: () {
-                Permission.storage.request().then((status) {
-                  if (status == PermissionStatus.granted) {
-                    FilePicker.platform.getDirectoryPath().then((path) {
-                      if (path != null) {
-                        config.audioDownloadPath = path;
-                      }
-                    });
-                  }
-                });
-              }
-            )
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Icon(EvaIcons.folderOutline,
+                color: Theme.of(context).iconTheme.color,
+                size: 24),
+            ),
           )
         ),
         ListTile(
+          isThreeLine: true,
+          onTap: () {
+            Permission.storage.request().then((status) {
+              if (status == PermissionStatus.granted) {
+                FilePicker.platform.getDirectoryPath().then((path) {
+                  if (path != null) {
+                    config.videoDownloadPath = path;
+                  }
+                });
+              }
+            });
+          },
           title: Text(
             Languages.of(context).labelVideoFolder,
             style: TextStyle(
@@ -66,28 +96,34 @@ class DownloadSettings extends StatelessWidget {
               fontWeight: FontWeight.w500
             ),
           ),
-          subtitle: Text(Languages.of(context).labelVideoFolderJustification,
-            style: TextStyle(fontSize: 12)
+          subtitle: RichText(
+            text: TextSpan(
+              style: TextStyle(fontSize: 12),
+              children: [
+                TextSpan(
+                  text: Languages.of(context).labelVideoFolderJustification+"\n"
+                ),
+                TextSpan(
+                  text: config.videoDownloadPath,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 13
+                  )
+                )
+              ]
+            ),
           ),
           trailing: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(30),
               color: Theme.of(context).scaffoldBackgroundColor
             ),
-            child: IconButton(
-              icon: Icon(EvaIcons.folderOutline, color: Theme.of(context).iconTheme.color),
-              onPressed: () {
-                Permission.storage.request().then((status) {
-                  if (status == PermissionStatus.granted) {
-                    FilePicker.platform.getDirectoryPath().then((path) {
-                      if (path != null) {
-                        config.videoDownloadPath = path;
-                      }
-                    });
-                  }
-                });
-              }
-            )
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Icon(EvaIcons.folderOutline,
+                color: Theme.of(context).iconTheme.color,
+                size: 24),
+            ),
           )
         ),
         ListTile(
@@ -129,7 +165,7 @@ class DownloadSettings extends StatelessWidget {
               icon: Icon(EvaIcons.trashOutline, color: Theme.of(context).iconTheme.color),
               onPressed: () async {
                 double totalSize = 0;
-                String tmpPath = (await getTemporaryDirectory()).path;
+                String tmpPath = (await getExternalStorageDirectory()).path;
                 List<FileSystemEntity> listFiles = Directory(tmpPath).listSync();
                 listFiles.forEach((element) {
                   if (element is File) {
