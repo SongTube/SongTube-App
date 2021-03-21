@@ -66,7 +66,7 @@ class TagsManager {
     if (artworkPath != null) {artwork = artworkPath; fromUrl = false;}
     if (artworkUrl  != null) {artwork = artworkUrl; fromUrl = true;}
     if (fromUrl == true) {
-      directory    = await getTemporaryDirectory();
+      directory    = await getExternalStorageDirectory();
       artworkFile  = new File(directory.path + "/" + _randomString());
       response     = await http.get(artwork);
       artwork      = artworkFile.path;
