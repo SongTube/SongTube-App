@@ -327,7 +327,7 @@ class MediaProvider extends ChangeNotifier {
     if (isURL(tags.artworkController)) {
       http.Response response;
       File artwork = new File(
-        (await getTemporaryDirectory()).path +
+        (await getExternalStorageDirectory()).path +
         "/${RandomString.getRandomString(5)}"
       );
       try {
