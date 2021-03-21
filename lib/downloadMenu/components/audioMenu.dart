@@ -9,12 +9,14 @@ import 'package:newpipeextractor_dart/models/streams/audioOnlyStream.dart';
 import 'package:newpipeextractor_dart/models/video.dart';
 import 'package:newpipeextractor_dart/utils/httpClient.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/internal/download/downloadItem.dart';
 import 'package:songtube/internal/languages.dart';
+import 'package:songtube/internal/models/tagsControllers.dart';
 import 'package:songtube/provider/configurationProvider.dart';
 
 class AudioDownloadMenu extends StatefulWidget {
   final YoutubeVideo video;
-  final Function(List<dynamic>) onDownload;
+  final Function(DownloadItem) onDownload;
   final Function onBack;
   AudioDownloadMenu({
     @required this.video,
@@ -34,6 +36,8 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
   bool normalizeAudio = false;
 
   void _onDownload(AudioOnlyStream streamInfo) {
+    TagsControllers tags = TagsControllers();
+    tags.updateTextControllers(widget.video);
     List<dynamic> list = [
       "Audio",
       streamInfo, 
@@ -42,7 +46,13 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
       trebleGain.toString(),
       normalizeAudio
     ];
-    widget.onDownload(list);
+    DownloadItem item = DownloadItem.fetchData(
+      widget.video,
+      list, 
+      tags,
+      Provider.of<ConfigurationProvider>(context, listen: false)
+    );
+    widget.onDownload(item);
   }
 
   String volumeString(double value) {

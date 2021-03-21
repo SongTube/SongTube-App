@@ -13,12 +13,14 @@ class DownloadMenuHome extends StatelessWidget {
   final Function onBack;
   final Function onAudioTap;
   final Function onVideoTap;
+  final Function onPlaylistTap;
   final List<StreamInfoItem> playlistVideos;
   final scaffoldState;
   DownloadMenuHome({
     @required this.onBack,
     @required this.onAudioTap,
     @required this.onVideoTap,
+    @required this.onPlaylistTap,
     @required this.playlistVideos,
     this.scaffoldState
   });
@@ -57,7 +59,7 @@ class DownloadMenuHome extends StatelessWidget {
                 children: [
                   // Audio
                   Flexible(
-                    flex: 1,
+                    fit: FlexFit.tight,
                     child: GestureDetector(
                       onTap: onAudioTap,
                       child: Container(
@@ -77,7 +79,7 @@ class DownloadMenuHome extends StatelessWidget {
                             )
                           ]
                         ),
-                        child: Row(
+                        child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(EvaIcons.musicOutline, size: 35,
@@ -98,11 +100,10 @@ class DownloadMenuHome extends StatelessWidget {
                   ),
                   // Video
                   Flexible(
-                    flex: 1,
+                    fit: FlexFit.tight,
                     child: GestureDetector(
                       onTap: onVideoTap,
                       child: Container(
-                        margin: EdgeInsets.only(left: 8),
                         height: 80,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
@@ -118,7 +119,7 @@ class DownloadMenuHome extends StatelessWidget {
                             )
                           ]
                         ),
-                        child: Row(
+                        child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(EvaIcons.videoOutline, size: 35,
@@ -136,71 +137,50 @@ class DownloadMenuHome extends StatelessWidget {
                         ),
                       ),
                     ),
+                  ),
+                  //Playlist
+                  if (playlistVideos != null)
+                  Flexible(
+                    fit: FlexFit.tight,
+                    child: GestureDetector(
+                      onTap: onPlaylistTap,
+                      child: Container(
+                        margin: EdgeInsets.only(left: 8),
+                        height: 80,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: Theme.of(context).iconTheme.color.withOpacity(0.1),
+                            width: 1.5,
+                          ),
+                          color: Theme.of(context).cardColor,
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 12,
+                              color: Colors.black.withOpacity(0.04)
+                            )
+                          ]
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(MdiIcons.playlistMusicOutline, size: 35,
+                              color: Theme.of(context).accentColor),
+                            SizedBox(width: 16),
+                            Text(
+                              Languages.of(context).labelPlaylist,
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.9),
+                                fontFamily: "YTSans"
+                              )
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
                   )
                 ],
-              ),
-              if (playlistVideos != null)
-              SizedBox(height: 16),
-              if (playlistVideos != null)
-              Consumer2<DownloadsProvider, ManagerProvider>(
-                builder: (context, downloadsProvider, manager, child) {
-                  return GestureDetector(
-                    onTap: () {
-                      downloadsProvider.handlePlaylistDownload(
-                        language: Languages.of(context),
-                        config: Provider.of<ConfigurationProvider>(context, listen: false),
-                        listVideos: playlistVideos,
-                        album: "Youtube",
-                        artist: "Youtube"
-                      );
-                      Navigator.of(context).pop();
-                      if (scaffoldState != null) {
-                        AppSnack.showSnackBar(
-                          icon: EvaIcons.cloudDownloadOutline,
-                          title: "Downloading Playlist...",
-                          message: "Songs queued",
-                          context: context,
-                        );
-                      }
-                    },
-                    child: child
-                  );
-                },
-                child: Container(
-                  margin: EdgeInsets.only(right: 8),
-                  height: 80,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: Theme.of(context).iconTheme.color.withOpacity(0.1),
-                      width: 1.5,
-                    ),
-                    color: Theme.of(context).cardColor,
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 12,
-                        color: Colors.black.withOpacity(0.04)
-                      )
-                    ]
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(MdiIcons.playlistMusicOutline, size: 35,
-                        color: Theme.of(context).accentColor),
-                      SizedBox(width: 16),
-                      Text(
-                        Languages.of(context).labelDownloadAll +
-                        " (${Languages.of(context).labelPlaylist})",
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.9),
-                          fontFamily: "YTSans"
-                        )
-                      )
-                    ],
-                  ),
-                ),
               ),
             ],
           ),

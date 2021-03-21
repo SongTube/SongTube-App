@@ -4,18 +4,24 @@ import 'package:flutter/material.dart';
 // Packages
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:grouped_list/grouped_list.dart';
+import 'package:newpipeextractor_dart/models/infoItems/video.dart';
 import 'package:newpipeextractor_dart/models/streams/audioOnlyStream.dart';
 import 'package:newpipeextractor_dart/models/streams/videoOnlyStream.dart';
+import 'package:newpipeextractor_dart/models/video.dart';
 import 'package:newpipeextractor_dart/utils/httpClient.dart';
+import 'package:provider/provider.dart';
+import 'package:songtube/internal/download/downloadItem.dart';
 import 'package:songtube/internal/languages.dart';
+import 'package:songtube/internal/models/tagsControllers.dart';
+import 'package:songtube/provider/configurationProvider.dart';
 
 class VideoDownloadMenu extends StatefulWidget {
-  final List<VideoOnlyStream> videoList;
+  final YoutubeVideo video;
   final AudioOnlyStream audioStream;
-  final Function(List<dynamic>) onOptionSelect;
+  final Function(DownloadItem) onOptionSelect;
   final Function onBack;
   VideoDownloadMenu({
-    @required this.videoList,
+    @required this.video,
     @required this.onOptionSelect,
     @required this.audioStream,
     @required this.onBack
@@ -26,16 +32,6 @@ class VideoDownloadMenu extends StatefulWidget {
 }
 
 class _VideoDownloadMenuState extends State<VideoDownloadMenu> {
-
-  void _onOptionSelect(VideoOnlyStream video) {
-    List<dynamic> list = [
-      "Video",
-      video,
-      "1.0", "0", "0", false
-    ];
-    widget.onOptionSelect(list);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -69,7 +65,7 @@ class _VideoDownloadMenuState extends State<VideoDownloadMenu> {
                 stickyHeaderBackgroundColor: Theme.of(context)
                   .scaffoldBackgroundColor,
                 
-                elements: widget.videoList,
+                elements: widget.video.videoOnlyStreams,
                 groupBy: (element) =>
                   (element.resolution.split("p").first+"p"),
                 groupSeparatorBuilder: (String groupByValue) =>
@@ -114,9 +110,21 @@ class _VideoDownloadMenuState extends State<VideoDownloadMenu> {
                   int framerate = int.parse(
                     framerateString == "" ? "30" : framerateString
                   );
+                  var configList = [
+                    "Video",
+                    element,
+                    "1.0", "0", "0", false
+                  ];
+                  TagsControllers tags = TagsControllers();
+                  tags.updateTextControllers(widget.video);
                   return GestureDetector(
                     onTap: () {
-                      _onOptionSelect(element);
+                      widget.onOptionSelect(DownloadItem.fetchData(
+                        widget.video,
+                        configList,
+                        tags,
+                        Provider.of<ConfigurationProvider>(context, listen: false)
+                      ));
                     },
                     child: Container(
                       margin: EdgeInsets.only(

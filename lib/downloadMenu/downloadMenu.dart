@@ -3,22 +3,30 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:newpipeextractor_dart/extractors/videos.dart';
 import 'package:newpipeextractor_dart/models/infoItems/video.dart';
+import 'package:newpipeextractor_dart/models/streams/audioOnlyStream.dart';
+import 'package:newpipeextractor_dart/models/streams/videoOnlyStream.dart';
 import 'package:newpipeextractor_dart/models/video.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/downloadMenu/components/homeMenu.dart';
 import 'package:songtube/downloadMenu/components/loadingMenu.dart';
+import 'package:songtube/downloadMenu/components/playlistMenu.dart';
 
 // Internal
 import 'package:songtube/downloadMenu/components/videoMenu.dart';
 import 'package:songtube/downloadMenu/components/audioMenu.dart';
+import 'package:songtube/internal/ffmpeg/converter.dart';
+import 'package:songtube/internal/ffmpeg/extractor.dart';
 import 'package:songtube/internal/languages.dart';
-import 'package:songtube/internal/models/metadata.dart';
+import 'package:songtube/internal/download/audioFilters.dart';
+import 'package:songtube/internal/download/downloadItem.dart';
+import 'package:songtube/internal/download/downloadSet.dart';
+import 'package:songtube/internal/download/tags.dart';
 import 'package:songtube/internal/models/tagsControllers.dart';
 import 'package:songtube/provider/configurationProvider.dart';
 import 'package:songtube/provider/downloadsProvider.dart';
 import 'package:songtube/ui/internal/snackbar.dart';
 
-enum CurrentDownloadMenu { Home, Audio, Video, Loading }
+enum CurrentDownloadMenu { Home, Audio, Video, Playlist, Loading }
 
 class DownloadMenu extends StatefulWidget {
   final YoutubeVideo video;
@@ -89,6 +97,8 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
             currentDownloadMenu = CurrentDownloadMenu.Audio),
           onVideoTap: () => setState(() => 
             currentDownloadMenu = CurrentDownloadMenu.Video),
+          onPlaylistTap: () => setState(() =>
+            currentDownloadMenu = CurrentDownloadMenu.Playlist),
         ); break;
       case CurrentDownloadMenu.Audio:
         returnWidget = Container(
@@ -96,16 +106,26 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
             video: video,
             onBack: () => setState(() => 
               currentDownloadMenu = CurrentDownloadMenu.Home),
-            onDownload: (list) => _initializeDownload(list),
+            onDownload: (item) => _initializeDownload([item]),
           ),
         ); break;
       case CurrentDownloadMenu.Video:
         returnWidget = Container(
           height: MediaQuery.of(context).size.height*0.6,
           child: VideoDownloadMenu(
-            videoList: video.videoOnlyStreams,
-            onOptionSelect: (list) => _initializeDownload(list),
+            video: video,
+            onOptionSelect: (item) => _initializeDownload([item]),
             audioStream: video.audioWithBestAacQuality,
+            onBack: () => setState(() => 
+              currentDownloadMenu = CurrentDownloadMenu.Home),
+          ),
+        ); break;
+      case CurrentDownloadMenu.Playlist:
+        returnWidget = Container(
+          height: MediaQuery.of(context).size.height*0.6,
+          child: PlaylistDownloadMenu(
+            playlistStreams: widget.relatedVideos,
+            onDownload: (items) => _initializeDownload(items),
             onBack: () => setState(() => 
               currentDownloadMenu = CurrentDownloadMenu.Home),
           ),
@@ -119,35 +139,32 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
     return returnWidget;
   }
 
-  void _initializeDownload(dynamic configList) async {
-    DownloadsProvider downloadsProvider = Provider.of<DownloadsProvider>(context, listen: false);
-    downloadsProvider.handleVideoDownload(
-      language: Languages.of(context),
-      config: Provider.of<ConfigurationProvider>(context, listen: false),
-      metadata: DownloadMetaData(
-        title: tags.titleController.text,
-        album: tags.albumController.text,
-        artist: tags.artistController.text
-          .replaceAll("- Topic", "").trim(),
-        genre: tags.genreController.text,
-        coverurl: tags.artworkController,
-        date: tags.dateController.text,
-        disc: tags.discController.text,
-        track: tags.trackController.text
-      ),
-      videoDetails: video,
-      data: configList
-    );
+  void _initializeDownload(List<DownloadItem> items) async {
+    items.forEach((item) {
+      Provider.of<DownloadsProvider>(context, listen: false)
+        .handleDownloadItem(
+          language: Languages.of(context),
+          item: item
+        );
+      });
     Navigator.of(context).pop();
     if (widget.scaffoldState != null) {
+      String message;
+      if (items.length == 1) {
+        message = "${video.name}";
+      } else {
+        message = "${items[0].tags.title}, ${items[1].tags.title}, ${items[2].tags.title}...";
+      }
       AppSnack.showSnackBar(
         icon: EvaIcons.cloudDownloadOutline,
         title: "Download started...",
-        message: "${video.name}",
+        message: message,
         context: context,
         scaffoldKey: widget.scaffoldState
       );
     }
   }
+
+  
 
 }
