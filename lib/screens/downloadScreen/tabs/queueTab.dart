@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/languages.dart';
-import 'package:songtube/internal/models/infoSets/downloadinfoset.dart';
+import 'package:songtube/internal/download/downloadSet.dart';
 import 'package:songtube/provider/downloadsProvider.dart';
 import 'package:songtube/screens/downloadScreen/components/downloadTile.dart';
 import 'package:songtube/ui/components/emptyIndicator.dart';
@@ -53,7 +53,7 @@ class _DownloadsQueueTabState extends State<DownloadsQueueTab> with TickerProvid
                         )
                       ),
                     ),
-                    AutoList<DownloadInfoSet>(
+                    AutoList<DownloadSet>(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
                       items: downloadsProvider.convertingList,
@@ -65,9 +65,8 @@ class _DownloadsQueueTabState extends State<DownloadsQueueTab> with TickerProvid
                             dataProgress: infoset.dataProgress.stream,
                             progressBar: infoset.progressBar.stream,
                             currentAction: infoset.currentAction.stream,
-                            metadata: infoset.metadata,
-                            videoDetails: infoset.videoDetails,
-                            downloadType: infoset.downloadType,
+                            metadata: infoset.downloadItem.tags,
+                            downloadType: infoset.downloadItem.downloadType,
                             onDownloadCancel: null,
                             cancelDownloadIcon: Container()
                           ),
@@ -98,7 +97,7 @@ class _DownloadsQueueTabState extends State<DownloadsQueueTab> with TickerProvid
                         )
                       ),
                     ),
-                    AutoList<DownloadInfoSet>(
+                    AutoList<DownloadSet>(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
                       items: downloadsProvider.downloadingList,
@@ -107,15 +106,14 @@ class _DownloadsQueueTabState extends State<DownloadsQueueTab> with TickerProvid
                         return Padding(
                           padding: EdgeInsets.only(left: 16, right: 16, bottom: 8),
                           child: StreamBuilder<Object>(
-                            stream: infoset.downloadStatus.stream,
+                            stream: infoset.downloadStatusStream.stream,
                             builder: (context, snapshot) {
                               return DownloadTile(
                                 dataProgress: infoset.dataProgress.stream,
                                 progressBar: infoset.progressBar.stream,
                                 currentAction: infoset.currentAction.stream,
-                                metadata: infoset.metadata,
-                                downloadType: infoset.downloadType,
-                                videoDetails: infoset.videoDetails,
+                                metadata: infoset.downloadItem.tags,
+                                downloadType: infoset.downloadItem.downloadType,
                                 onDownloadCancel: snapshot.data == DownloadStatus.Downloading
                                   ? () {
                                     infoset.cancelDownload = true;
@@ -153,7 +151,7 @@ class _DownloadsQueueTabState extends State<DownloadsQueueTab> with TickerProvid
                         )
                       ),
                     ),
-                    AutoList<DownloadInfoSet>(
+                    AutoList<DownloadSet>(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
                       items: downloadsProvider.queueList,
@@ -165,9 +163,8 @@ class _DownloadsQueueTabState extends State<DownloadsQueueTab> with TickerProvid
                             dataProgress: infoset.dataProgress.stream,
                             progressBar: infoset.progressBar.stream,
                             currentAction: infoset.currentAction.stream,
-                            videoDetails: infoset.videoDetails,
-                            metadata: infoset.metadata,
-                            downloadType: infoset.downloadType,
+                            metadata: infoset.downloadItem.tags,
+                            downloadType: infoset.downloadItem.downloadType,
                             onDownloadCancel: null,
                             cancelDownloadIcon: Container()
                           )

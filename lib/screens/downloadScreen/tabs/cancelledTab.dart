@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:autolist/autolist.dart';
 import 'package:provider/provider.dart';
-import 'package:songtube/internal/models/infoSets/downloadinfoset.dart';
+import 'package:songtube/internal/download/downloadSet.dart';
 import 'package:songtube/provider/downloadsProvider.dart';
 import 'package:songtube/screens/downloadScreen/components/downloadTile.dart';
 import 'package:songtube/ui/components/emptyIndicator.dart';
@@ -26,8 +26,7 @@ class _DownloadsCancelledTabState extends State<DownloadsCancelledTab> {
     if (downloadsProvider.cancelledList.isNotEmpty) {
       return Padding(
         padding: EdgeInsets.only(top: 8),
-        child: AutoList<DownloadInfoSet>(
-          
+        child: AutoList<DownloadSet>(
           items: downloadsProvider.cancelledList,
           duration: Duration(milliseconds: 400),
           itemBuilder: (context, infoset) {
@@ -37,9 +36,9 @@ class _DownloadsCancelledTabState extends State<DownloadsCancelledTab> {
                 dataProgress: infoset.dataProgress.stream,
                 progressBar: infoset.progressBar.stream,
                 currentAction: infoset.currentAction.stream,
-                metadata: infoset.metadata,
-                videoDetails: infoset.videoDetails,
-                downloadType: infoset.downloadType,
+                metadata: infoset.downloadItem.tags,
+                downloadType: infoset.downloadItem.downloadType,
+                errorReason: infoset.errorReason,
                 onDownloadCancel: () {
                   Permission.storage.request().then((value) {
                     if (value == PermissionStatus.granted) {
