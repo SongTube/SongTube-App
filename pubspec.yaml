@@ -115,10 +115,6 @@ dependencies:
   palette_generator: ^0.2.3
   flutter_markdown: ^0.5.0
   md2_tab_indicator: ^1.0.2
-  iconswitcher:
-    git:
-      url: https://github.com/SongTube/iconswitcher
-      ref: master
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
