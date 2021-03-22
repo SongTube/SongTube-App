@@ -33,11 +33,12 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:songtube/screens/music.dart';
 import 'package:songtube/ui/components/autohideScaffold.dart';
 import 'package:songtube/ui/components/navigationBar.dart';
-import 'package:songtube/ui/dialogs/appUpdateDialog.dart';
-import 'package:songtube/ui/dialogs/joinTelegramDialog.dart';
+import 'package:songtube/ui/components/styledBottomSheet.dart';
+import 'package:songtube/ui/sheets/appUpdate.dart';
+import 'package:songtube/ui/sheets/joinTelegram.dart';
 import 'package:songtube/ui/dialogs/loadingDialog.dart';
-import 'package:songtube/ui/dialogs/disclaimerDialog.dart';
-import 'package:songtube/ui/dialogs/downloadFixDialog.dart';
+import 'package:songtube/ui/sheets/disclaimer.dart';
+import 'package:songtube/ui/sheets/downloadFix.dart';
 import 'package:songtube/ui/internal/lifecycleEvents.dart';
 
 class Lib extends StatefulWidget {
@@ -80,9 +81,17 @@ class _LibState extends State<Lib> {
           downloads.completedList.isNotEmpty
         ) {
           if (prefs.showJoinTelegramDialog && prefs.remindTelegramLater == false) {
-            showDialog<void>(
+            showModalBottomSheet(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(15),
+                  topRight: Radius.circular(15)
+                )
+              ),
               context: context,
-              builder: (_) => JoinTelegramDialog()
+              builder: (_) => Wrap(children: [
+                JoinTelegramSheet()
+              ])
             );
           }
         }
@@ -101,42 +110,66 @@ class _LibState extends State<Lib> {
         this._scaffoldStateKey;
       Provider.of<ManagerProvider>(context, listen: false).internalScaffoldKey =
         this._internalScaffoldKey;
-      // Show Disclaimer
-      if (!Provider.of<ConfigurationProvider>(context, listen: false).disclaimerAccepted) {
-        await showDialog(
-          context: context,
-          builder: (context) => DisclaimerDialog()
-        );
-      }
-      if (Provider.of<ConfigurationProvider>(context, listen: false).showDownloadFixDialog) {
-        AndroidDeviceInfo deviceInfo = await DeviceInfoPlugin().androidInfo;
-        int sdkNumber = deviceInfo.version.sdkInt;
-        if (sdkNumber >= 30) {
-          await showDialog(
-            context: context,
-            builder: (context) => DownloadFixDialog()
-          );
-        }
-        Provider.of<ConfigurationProvider>(context, listen: false)
-          .showDownloadFixDialog = false;
-      }
-      // Check for Updates
-      PackageInfo.fromPlatform().then((android) {
-        double appVersion = double
-          .parse(android.version.replaceRange(3, 5, ""));
-        getLatestRelease().then((details) {
-          if (appVersion < details.version) {
-            // Show the user an Update is available
-            showDialog(
-              context: context,
-              builder: (context) => AppUpdateDialog(details)
-            );
-          }
-        });
-      });
+      _showSheets();
+      _checkForUpdates();
     });
     AudioService.runningStream.listen((_) {
       setState(() {});
+    });
+  }
+
+  void _showSheets() {
+    ConfigurationProvider config = Provider.of<ConfigurationProvider>(context, listen: false);
+    // Build our list of BottomSheets to show
+    List<Widget> bottomSheets = [];
+    if (!config.disclaimerAccepted) {
+      bottomSheets.add(DisclaimerSheet());
+      config.disclaimerAccepted = true;
+    }
+    if (config.showDownloadFixDialog) {
+      bottomSheets.add(DownloadFixSheet());
+      config.showDownloadFixDialog = false;
+    }
+    // Show our Sheets if there is any
+    if (bottomSheets.isNotEmpty) {
+      showModalBottomSheet(
+        isDismissible: false,
+        enableDrag: false,
+        isScrollControlled: true,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(15),
+            topRight: Radius.circular(15)
+          )
+        ),
+        context: context,
+        builder: (context) => Wrap(children: [
+          StyledBottomSheetList(children: bottomSheets)
+        ])
+      );
+    }
+  }
+
+  void _checkForUpdates() {
+    PackageInfo.fromPlatform().then((android) {
+      double appVersion = double
+        .parse(android.version.replaceRange(3, 5, ""));
+      getLatestRelease().then((details) {
+        if (appVersion < details.version) {
+          // Show the user an Update is available
+          showModalBottomSheet(
+            isScrollControlled: true,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20)
+              )
+            ),
+            context: context,
+            builder: (context) => AppUpdateSheet(details)
+          );
+        }
+      });
     });
   }
 
