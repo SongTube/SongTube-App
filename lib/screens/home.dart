@@ -1,8 +1,13 @@
 // Flutter
 import 'package:flutter/material.dart';
 import 'package:md2_tab_indicator/md2_tab_indicator.dart';
+import 'package:newpipeextractor_dart/extractors/playlist.dart';
+import 'package:newpipeextractor_dart/extractors/videos.dart';
+import 'package:newpipeextractor_dart/models/playlist.dart';
+import 'package:newpipeextractor_dart/models/video.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/provider/configurationProvider.dart';
+import 'package:songtube/provider/videoPageProvider.dart';
 import 'package:songtube/screens/homeScreen/searchBar.dart';
 
 // Internal
@@ -15,6 +20,7 @@ import 'package:songtube/screens/homeScreen/pages/trending.dart';
 import 'package:songtube/screens/homeScreen/pages/watchLater.dart';
 import 'package:songtube/ui/components/autohideScaffold.dart';
 import 'package:songtube/ui/components/searchHistory.dart';
+import 'package:songtube/ui/dialogs/loadingDialog.dart';
 import 'package:songtube/ui/layout/streamsLargeThumbnail.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -58,7 +64,30 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       backgroundColor: Theme.of(context).cardColor,
       appBar: Padding(
         padding: EdgeInsets.only(bottom: 8),
-        child: HomePageAppBar()
+        child: HomePageAppBar(
+          onLoadPlaylist: (id) async {
+            showDialog(
+              context: context,
+              builder: (_) => LoadingDialog()
+            );
+            YoutubePlaylist playlist = await PlaylistExtractor
+              .getPlaylistDetails(id);
+            Provider.of<VideoPageProvider>(context, listen: false)
+              .infoItem = playlist.toPlaylistInfoItem();
+            Navigator.pop(context);
+          },
+          onLoadVideo: (id) async {
+            showDialog(
+              context: context,
+              builder: (_) => LoadingDialog()
+            );
+            YoutubeVideo video = await VideoExtractor
+              .getVideoInfoAndStreams(id);
+            Provider.of<VideoPageProvider>(context, listen: false)
+              .infoItem = video.toStreamInfoItem();
+            Navigator.pop(context);
+          },
+        )
       ),
       body: Stack(
         children: [

@@ -73,6 +73,7 @@ class _LibState extends State<Lib> {
     });
     WidgetsBinding.instance.addObserver(
       new LifecycleEventHandler(resumeCallBack: () async {
+        setState(() {});
         PreferencesProvider prefs = Provider.of<PreferencesProvider>(context, listen: false);
         DownloadsProvider downloads = Provider.of<DownloadsProvider>(context, listen: false);
         if (downloads.queueList.isNotEmpty ||

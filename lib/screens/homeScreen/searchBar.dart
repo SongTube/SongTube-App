@@ -1,11 +1,19 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:newpipeextractor_dart/utils/url.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/provider/configurationProvider.dart';
 import 'package:songtube/provider/managerProvider.dart';
 
 class HomePageAppBar extends StatefulWidget {
+  final Function(String) onLoadVideo;
+  final Function(String) onLoadPlaylist;
+  HomePageAppBar({
+    this.onLoadPlaylist,
+    this.onLoadVideo
+  });
   @override
   _HomePageAppBarState createState() => _HomePageAppBarState();
 }
@@ -124,7 +132,29 @@ class _HomePageAppBarState extends State<HomePageAppBar> with TickerProviderStat
                           },
                         )
                       : Container()
-                  )
+                  ),
+                  FutureBuilder<dynamic>(
+                    future: _getClipboardData(),
+                    builder: (context, dynamic id) {
+                      return AnimatedSwitcher(
+                        duration: Duration(milliseconds: 300),
+                        child: id.data != null
+                          ? IconButton(
+                              icon: Icon(EvaIcons.linkOutline,
+                                color: Theme.of(context).accentColor,
+                                size: 20),
+                              onPressed: () {
+                                manager.searchBarFocusNode.unfocus();
+                                if (id.data is _VideoId)
+                                  widget.onLoadVideo(id.data.id);
+                                if (id.data is _PlaylistId)
+                                  widget.onLoadPlaylist(id.data.id);
+                              },
+                            )
+                          : Container()
+                      );
+                    }
+                  ),
                 ],
               )
             ),
@@ -132,6 +162,19 @@ class _HomePageAppBarState extends State<HomePageAppBar> with TickerProviderStat
         ],
       )
     );
+  }
+
+  Future<dynamic> _getClipboardData() async {
+    String data = (await Clipboard.getData("text/plain")).text ?? "";
+    _VideoId videoId = _VideoId(await YoutubeId.getIdFromStreamUrl(data));
+    _PlaylistId playlistId = _PlaylistId(await YoutubeId.getIdFromPlaylistUrl(data));
+    if (videoId.id != null) {
+      return _VideoId(data);
+    }
+    if (playlistId.id != null) {
+      return _PlaylistId(data);
+    }
+    return null;
   }
 
   Widget _searchBarLogo() {
@@ -220,3 +263,12 @@ class _HomePageAppBarState extends State<HomePageAppBar> with TickerProviderStat
 
 }
 
+class _VideoId {
+  String id;
+  _VideoId(this.id);
+}
+
+class _PlaylistId {
+  String id;
+  _PlaylistId(this.id);
+}
