@@ -322,7 +322,11 @@ class StreamsLargeThumbnailView extends StatelessWidget {
                 ),
                 SizedBox(height: 4),
                 Text(
-                  "${infoItem.uploaderName}",
+                  "${infoItem.uploaderName}" +
+                  (infoItem is StreamInfoItem
+                    ? "${infoItem.viewCount != -1 ? " • " + NumberFormat.compact().format(infoItem.viewCount) + " views" : ""}"
+                      " ${infoItem.uploadDate == null ? "" : " • " + infoItem.uploadDate}"
+                    : ""),
                   style: TextStyle(
                     fontSize: 12,
                     color: Theme.of(context).textTheme.bodyText1.color
