@@ -71,40 +71,60 @@ class _HomePageAppBarState extends State<HomePageAppBar> with TickerProviderStat
                   .withOpacity(0.03),
                 borderRadius: BorderRadius.circular(15)
               ),
-              child: Stack(
+              child: Row(
                 children: [
-                  FadeTransition(
-                    opacity: Tween<double>(
-                      begin: 0.0,
-                      end: 1.0,
-                    ).animate(CurvedAnimation(
-                      parent: _animationController,
-                      curve: Curves.fastOutSlowIn,
-                      reverseCurve: Curves.fastOutSlowIn
-                    )),
-                    child: _searchBarTextField(),
-                  ),
-                  FadeTransition(
-                    opacity: Tween<double>(
-                      begin: 1.0,
-                      end: 0.0,
-                    ).animate(CurvedAnimation(
-                      parent: _animationController,
-                      curve: Curves.fastOutSlowIn,
-                      reverseCurve: Curves.easeInQuart
-                    )),
-                    child: SlideTransition(
-                      position: Tween<Offset>(
-                        begin: Offset.zero,
-                        end: Offset(0.2, 0.0)
-                      ).animate(CurvedAnimation(
-                        parent: _animationController,
-                        curve: Curves.fastOutSlowIn,
-                        reverseCurve: Curves.easeInQuart
-                      )),
-                      child: _searchBarLogo()
+                  Expanded(
+                                      child: Stack(
+                      children: [
+                        FadeTransition(
+                          opacity: Tween<double>(
+                            begin: 0.0,
+                            end: 1.0,
+                          ).animate(CurvedAnimation(
+                            parent: _animationController,
+                            curve: Curves.fastOutSlowIn,
+                            reverseCurve: Curves.fastOutSlowIn
+                          )),
+                          child: _searchBarTextField(),
+                        ),
+                        FadeTransition(
+                          opacity: Tween<double>(
+                            begin: 1.0,
+                            end: 0.0,
+                          ).animate(CurvedAnimation(
+                            parent: _animationController,
+                            curve: Curves.fastOutSlowIn,
+                            reverseCurve: Curves.easeInQuart
+                          )),
+                          child: SlideTransition(
+                            position: Tween<Offset>(
+                              begin: Offset.zero,
+                              end: Offset(0.2, 0.0)
+                            ).animate(CurvedAnimation(
+                              parent: _animationController,
+                              curve: Curves.fastOutSlowIn,
+                              reverseCurve: Curves.easeInQuart
+                            )),
+                            child: _searchBarLogo()
+                          ),
+                        ),
+                      ],
                     ),
                   ),
+                  AnimatedSwitcher(
+                    duration: Duration(milliseconds: 300),
+                    child: manager.searchController.text.isNotEmpty
+                      ? IconButton(
+                          icon: Icon(EvaIcons.trashOutline,
+                            color: Theme.of(context).iconTheme.color.withOpacity(0.6),
+                            size: 20),
+                          onPressed: () {
+                            manager.searchController.clear();
+                            setState(() {});
+                          },
+                        )
+                      : Container()
+                  )
                 ],
               )
             ),
@@ -118,7 +138,6 @@ class _HomePageAppBarState extends State<HomePageAppBar> with TickerProviderStat
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
     return GestureDetector(
       onTap: () {
-        manager.searchController.clear();
         manager.searchBarFocusNode.requestFocus();
       },
       child: Container(
@@ -160,39 +179,41 @@ class _HomePageAppBarState extends State<HomePageAppBar> with TickerProviderStat
     ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
     return Padding(
       padding: EdgeInsets.only(left: 12, right: 12),
-      child: TextFormField(
-        controller: manager.searchController,
-        focusNode: manager.searchBarFocusNode,
-        onTap: () => manager.searchBarFocusNode.requestFocus(),
-        style: TextStyle(
-          color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6),
-          fontSize: 14
-        ),
-        decoration: InputDecoration(
-          hintText: Languages.of(context).labelSearchYoutube,
-          hintStyle: TextStyle(
+      child: Expanded(
+        child: TextFormField(
+          controller: manager.searchController,
+          focusNode: manager.searchBarFocusNode,
+          onTap: () => manager.searchBarFocusNode.requestFocus(),
+          style: TextStyle(
             color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6),
+            fontSize: 14
           ),
-          border: UnderlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(
-              width: 0, 
-              style: BorderStyle.none,
+          decoration: InputDecoration(
+            hintText: Languages.of(context).labelSearchYoutube,
+            hintStyle: TextStyle(
+              color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6),
+            ),
+            border: UnderlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(
+                width: 0, 
+                style: BorderStyle.none,
+              ),
             ),
           ),
+          onFieldSubmitted: (String query) {
+            manager.searchYoutube(query: query, forceReload: true);
+            FocusScope.of(context).unfocus();
+            if (query.length > 1) {
+              Future.delayed(Duration(milliseconds: 400), () =>
+                config.addStringtoSearchHistory(query.trim()
+              ));
+            }
+          },
+          onChanged: (_) {
+            manager.setState();
+          },
         ),
-        onFieldSubmitted: (String query) {
-          manager.searchYoutube(query: query, forceReload: true);
-          FocusScope.of(context).unfocus();
-          if (query.length > 1) {
-            Future.delayed(Duration(milliseconds: 400), () =>
-              config.addStringtoSearchHistory(query.trim()
-            ));
-          }
-        },
-        onChanged: (_) {
-          manager.setState();
-        },
       ),
     );
   }
