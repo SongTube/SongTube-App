@@ -222,41 +222,39 @@ class _HomePageAppBarState extends State<HomePageAppBar> with TickerProviderStat
     ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
     return Padding(
       padding: EdgeInsets.only(left: 12, right: 12),
-      child: Expanded(
-        child: TextFormField(
-          controller: manager.searchController,
-          focusNode: manager.searchBarFocusNode,
-          onTap: () => manager.searchBarFocusNode.requestFocus(),
-          style: TextStyle(
-            color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6),
-            fontSize: 14
-          ),
-          decoration: InputDecoration(
-            hintText: Languages.of(context).labelSearchYoutube,
-            hintStyle: TextStyle(
-              color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6),
-            ),
-            border: UnderlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(
-                width: 0, 
-                style: BorderStyle.none,
-              ),
-            ),
-          ),
-          onFieldSubmitted: (String query) {
-            manager.searchYoutube(query: query, forceReload: true);
-            FocusScope.of(context).unfocus();
-            if (query.length > 1) {
-              Future.delayed(Duration(milliseconds: 400), () =>
-                config.addStringtoSearchHistory(query.trim()
-              ));
-            }
-          },
-          onChanged: (_) {
-            manager.setState();
-          },
+      child: TextFormField(
+        controller: manager.searchController,
+        focusNode: manager.searchBarFocusNode,
+        onTap: () => manager.searchBarFocusNode.requestFocus(),
+        style: TextStyle(
+          color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6),
+          fontSize: 14
         ),
+        decoration: InputDecoration(
+          hintText: Languages.of(context).labelSearchYoutube,
+          hintStyle: TextStyle(
+            color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6),
+          ),
+          border: UnderlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(
+              width: 0, 
+              style: BorderStyle.none,
+            ),
+          ),
+        ),
+        onFieldSubmitted: (String query) {
+          manager.searchYoutube(query: query, forceReload: true);
+          FocusScope.of(context).unfocus();
+          if (query.length > 1) {
+            Future.delayed(Duration(milliseconds: 400), () =>
+              config.addStringtoSearchHistory(query.trim()
+            ));
+          }
+        },
+        onChanged: (_) {
+          manager.setState();
+        },
       ),
     );
   }
