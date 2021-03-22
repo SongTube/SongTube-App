@@ -6,12 +6,14 @@ import 'package:songtube/ui/internal/popupMenu.dart';
 class PlayerAppBar extends StatelessWidget {
   final List<VideoOnlyStream> streams;
   final String videoTitle;
-  final Function(String) onStreamSelect;
+  final Function(String, String) onStreamSelect;
   final Function onEnterPipMode;
+  final String currentQuality;
   PlayerAppBar({
     @required this.streams,
     @required this.videoTitle,
     @required this.onStreamSelect,
+    @required this.currentQuality,
     this.onEnterPipMode
   });
   @override
@@ -66,10 +68,14 @@ class PlayerAppBar extends StatelessWidget {
             child: Container(
               padding: EdgeInsets.all(4),
               color: Colors.transparent,
-              child: Icon(
-                MdiIcons.dotsVertical,
-                color: Colors.white,
-              ),
+              child: Text(
+                currentQuality+"p",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Product Sans'
+                ),
+              )
             ),
             items: List<FlexiblePopupItem>.generate(qualities.length, (index) {
               return FlexiblePopupItem(
@@ -81,7 +87,7 @@ class PlayerAppBar extends StatelessWidget {
               if (value == null) return;
               int index = streams.indexWhere((element) =>
                 element.formatSuffix + " • " + element.resolution == value);
-              onStreamSelect(streams[index].url);
+              onStreamSelect(streams[index].url, streams[index].resolution);
             }
           ),
           SizedBox(width: 8)

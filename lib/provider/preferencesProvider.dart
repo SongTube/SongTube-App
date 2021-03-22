@@ -237,4 +237,13 @@ class PreferencesProvider extends ChangeNotifier {
       return true;
     }
   }
+
+  // Youtube Player last set quality
+  String get youtubePlayerQuality {
+    return prefs.getString('youtubePlayerQuality') ?? "720";
+  }
+  set youtubePlayerQuality(String quality) {
+    prefs.setString('youtubePlayerQuality', quality);
+    notifyListeners();
+  }
 }

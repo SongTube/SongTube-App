@@ -103,6 +103,10 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
     VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
     PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     return StreamManifestPlayer(
+      quality: prefs.youtubePlayerQuality,
+      onQualityChanged: (String quality) {
+        prefs.youtubePlayerQuality = quality;
+      },
       borderRadius: MediaQuery.of(context).orientation == Orientation.landscape
         ? 0 : 10,
       key: pageProvider.playerKey,

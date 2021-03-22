@@ -23,6 +23,8 @@ class StreamManifestPlayer extends StatefulWidget {
   final Function onEnterPipMode;
   final double borderRadius;
   final bool forceHideControls;
+  final String quality;
+  final Function(String) onQualityChanged;
   StreamManifestPlayer({
     Key key,
     @required this.videoTitle,
@@ -33,7 +35,9 @@ class StreamManifestPlayer extends StatefulWidget {
     this.isFullscreen,
     this.onEnterPipMode,
     this.borderRadius,
-    this.forceHideControls = false
+    this.forceHideControls = false,
+    @required this.quality,
+    @required this.onQualityChanged
   }) : super(key: key);
   @override
   StreamManifestPlayerState createState() => StreamManifestPlayerState();
@@ -46,6 +50,7 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
   bool hideControls = false;
   bool videoEnded = false;
   bool buffering = true;
+  String currentQuality;
 
   // Reverse and Forward Animation
   bool showReverse = false;
@@ -95,6 +100,7 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
   void initState() {
     super.initState();
     isPlaying = false;
+    currentQuality = widget.quality;
     Volume.controlVolume(AudioManager.STREAM_MUSIC).then((value) async {
       currentVolumePercentage =
         "${(((await Volume.getVol)/(await Volume.getMaxVol)) * 100).round()}";
@@ -112,9 +118,11 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
       playerStreamsUrls.add(element.url);
     });
     int indexToPlay = widget.streams.indexWhere((element)
-      => element.resolution.contains("720"));
-    if (indexToPlay == -1)
+      => element.resolution.contains(widget.quality));
+    if (indexToPlay == -1) {
       indexToPlay = 0;
+      currentQuality = widget.streams[indexToPlay].resolution.split("p").first;
+    }
     _controller = VideoPlayerController.network(
       widget.streams[indexToPlay].url, audioDataSource: widget.audioStream.url,
       formatHint: VideoFormat.other
@@ -435,10 +443,13 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
                     Align(
                       alignment: Alignment.topLeft,
                       child: PlayerAppBar(
+                        currentQuality: currentQuality,
                         videoTitle: widget.videoTitle,
                         streams: widget.streams,
-                        onStreamSelect: (String url) {
+                        onStreamSelect: (String url, String quality) {
                           _controller.changeVideoUrl(url);
+                          widget.onQualityChanged(quality.split("p").first);
+                          setState(() => currentQuality = quality.split("p").first);
                         },
                         onEnterPipMode: widget.onEnterPipMode,
                       ),
