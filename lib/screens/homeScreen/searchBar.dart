@@ -74,7 +74,7 @@ class _HomePageAppBarState extends State<HomePageAppBar> with TickerProviderStat
               child: Row(
                 children: [
                   Expanded(
-                                      child: Stack(
+                    child: Stack(
                       children: [
                         FadeTransition(
                           opacity: Tween<double>(
@@ -113,7 +113,7 @@ class _HomePageAppBarState extends State<HomePageAppBar> with TickerProviderStat
                   ),
                   AnimatedSwitcher(
                     duration: Duration(milliseconds: 300),
-                    child: manager.searchController.text.isNotEmpty
+                    child: manager.searchController.text.isNotEmpty && manager.showSearchBar
                       ? IconButton(
                           icon: Icon(EvaIcons.trashOutline,
                             color: Theme.of(context).iconTheme.color.withOpacity(0.6),
