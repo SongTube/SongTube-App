@@ -96,6 +96,10 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
                   : _playlistStreamsListView()
               ),
             ),
+            Container(
+              height: MediaQuery.of(context).padding.bottom,
+              color: Theme.of(context).cardColor
+            )
           ],
         ),
         floatingActionButton: IgnorePointer(

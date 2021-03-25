@@ -127,6 +127,10 @@ class _StyledBottomSheetListState extends State<StyledBottomSheetList> with Tick
                   )
                 ],
               ),
+            ),
+            Container(
+              height: MediaQuery.of(context).padding.bottom,
+              color: Theme.of(context).cardColor
             )
           ],
         ),
@@ -150,6 +154,8 @@ class StyledBottomSheet extends StatelessWidget {
   final EdgeInsetsGeometry actionsPadding;
   /// On dismiss
   final Function onDismiss;
+  /// Add padding at the bottom of the sheet
+  final bool addBottomPadding;
   StyledBottomSheet({
     this.title,
     this.leading,
@@ -161,7 +167,8 @@ class StyledBottomSheet extends StatelessWidget {
     this.actionsPadding = const EdgeInsets.only(
       right: 24, left: 24, bottom: 12
     ),
-    this.onDismiss
+    this.onDismiss,
+    this.addBottomPadding = false
   });
   @override
   Widget build(BuildContext context) {
@@ -215,6 +222,11 @@ class StyledBottomSheet extends StatelessWidget {
                   children: actions
                 )
               ),
+            ),
+            if (addBottomPadding)
+            Container(
+              height: MediaQuery.of(context).padding.bottom,
+              color: Theme.of(context).cardColor
             )
           ],
         ),

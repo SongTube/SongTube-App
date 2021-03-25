@@ -11,6 +11,10 @@ class JoinTelegramSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     PreferencesProvider prefs = Provider.of<PreferencesProvider>(context, listen: false);
     return StyledBottomSheet(
+      actionsPadding: EdgeInsets.only(
+        right: 24, left: 24, bottom: 12
+      ),
+      addBottomPadding: true,
       leading: Icon(MdiIcons.telegram, color: Colors.blue),
       title: Languages.of(context).labelJoinTelegramChannel,
       content: Text(

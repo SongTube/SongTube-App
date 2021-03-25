@@ -103,6 +103,10 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ),
             ),
+            Container(
+              height: MediaQuery.of(context).padding.bottom,
+              color: Theme.of(context).cardColor
+            )
           ],
         ),
       ),

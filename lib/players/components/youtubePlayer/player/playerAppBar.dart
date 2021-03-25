@@ -1,3 +1,4 @@
+import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:newpipeextractor_dart/models/streams/videoOnlyStream.dart';
@@ -50,17 +51,46 @@ class PlayerAppBar extends StatelessWidget {
             ),
           ),
           SizedBox(width: 16),
-          GestureDetector(
-            onTap: onEnterPipMode,
-            child: Container(
-              padding: EdgeInsets.all(4),
-              color: Colors.transparent,
-              child: Icon(
-                MdiIcons.pictureInPictureBottomRightOutline,
-                color: Colors.white,
-                size: 18,
-              ),
-            ),
+          FutureBuilder(
+            future: DeviceInfoPlugin().androidInfo, 
+            builder: (context, AsyncSnapshot<AndroidDeviceInfo> info) {
+              if (info.hasData) {
+                if (info.data.version.sdkInt >= 26) {
+                  return GestureDetector(
+                    onTap: onEnterPipMode,
+                    child: Container(
+                      padding: EdgeInsets.all(4),
+                      color: Colors.transparent,
+                      child: Icon(
+                        MdiIcons.pictureInPictureBottomRightOutline,
+                        color: Colors.white,
+                        size: 18,
+                      ),
+                    ),
+                  );
+                } else {
+                  return Container(
+                    padding: EdgeInsets.all(4),
+                    color: Colors.transparent,
+                    child: Icon(
+                      MdiIcons.pictureInPictureBottomRightOutline,
+                      color: Colors.transparent,
+                      size: 18,
+                    ),
+                  );
+                }
+              } else {
+                return Container(
+                  padding: EdgeInsets.all(4),
+                  color: Colors.transparent,
+                  child: Icon(
+                    MdiIcons.pictureInPictureBottomRightOutline,
+                    color: Colors.transparent,
+                    size: 18,
+                  ),
+                );
+              }
+            }
           ),
           SizedBox(width: 8),
           FlexiblePopupMenu(

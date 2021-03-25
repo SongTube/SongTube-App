@@ -78,7 +78,6 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
           // Main Body
           Expanded(
             child: TabBarView(
-              
               controller: _controller,
               children: screens,
               ),
@@ -168,6 +167,10 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
                 )
               ],
             ),
+          ),
+          Container(
+            height: MediaQuery.of(context).padding.bottom,
+            color: Theme.of(context).scaffoldBackgroundColor
           )
         ],
       ),

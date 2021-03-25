@@ -55,6 +55,10 @@ class WatchHistoryPage extends StatelessWidget {
                   ),
             ),
           ),
+          Container(
+            height: MediaQuery.of(context).padding.bottom,
+            color: Theme.of(context).cardColor
+          )
         ],
       )
     );

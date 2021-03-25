@@ -288,6 +288,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                                 if (pageProvider.currentTags.artworkController == null)
                                   pageProvider.currentTags.artworkController = lastArtwork;
                                 Navigator.pop(context);
+                                setState(() {});
                               },
                               onSearchDevice: () async {
                                 File image = File((await FilePicker.platform

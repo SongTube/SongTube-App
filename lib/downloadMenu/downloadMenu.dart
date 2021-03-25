@@ -81,7 +81,15 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
       vsync: this,
       curve: Curves.easeInOut,
       duration: Duration(milliseconds: 200),
-      child: _currentDownloadMenuWidget(),
+      child: Column(
+        children: [
+          _currentDownloadMenuWidget(),
+          Container(
+            height: MediaQuery.of(context).padding.bottom,
+            color: Theme.of(context).cardColor
+          )
+        ],
+      ),
     );
   }
 
