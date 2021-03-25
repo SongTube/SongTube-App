@@ -1,5 +1,4 @@
 // Flutter
-import 'package:circular_check_box/circular_check_box.dart';
 import 'package:flutter/material.dart';
 import 'package:songtube/internal/languages.dart';
 
@@ -23,8 +22,7 @@ class _ThemeSettingsState extends State<ThemeSettings> with TickerProviderStateM
     PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     return ListView(
       children: <Widget>[
-        ListTile(
-          onTap: () => config.systemThemeEnabled = !config.systemThemeEnabled,
+        SwitchListTile(
           title: Text(
             Languages.of(context).labelUseSystemTheme,
             style: TextStyle(
@@ -34,13 +32,11 @@ class _ThemeSettingsState extends State<ThemeSettings> with TickerProviderStateM
           ),
           subtitle: Text(Languages.of(context).labelUseSystemThemeJustification,
             style: TextStyle(fontSize: 12),),
-          trailing: CircularCheckBox(
-            activeColor: Theme.of(context).accentColor,
-            value: config.systemThemeEnabled,
-            onChanged: (bool newValue) {
-              config.systemThemeEnabled = newValue;
-            },
-          ),
+          activeColor: Theme.of(context).accentColor,
+          value: config.systemThemeEnabled,
+          onChanged: (bool newValue) {
+            config.systemThemeEnabled = newValue;
+          },
         ),
         // Enable/Disable Dark Theme
         AnimatedSize(
@@ -48,8 +44,7 @@ class _ThemeSettingsState extends State<ThemeSettings> with TickerProviderStateM
           curve: Curves.easeInOutBack,
           duration: Duration(milliseconds: 500),
           child: config.systemThemeEnabled == false
-          ? ListTile(
-              onTap: () => config.darkThemeEnabled = !config.darkThemeEnabled,
+          ? SwitchListTile(
               title: Text(
                 Languages.of(context).labelEnableDarkTheme,
                 style: TextStyle(
@@ -59,19 +54,16 @@ class _ThemeSettingsState extends State<ThemeSettings> with TickerProviderStateM
               ),
               subtitle: Text(Languages.of(context).labelEnableDarkThemeJustification,
                 style: TextStyle(fontSize: 12),),
-              trailing: CircularCheckBox(
-                activeColor: Theme.of(context).accentColor,
-                value: config.darkThemeEnabled,
-                onChanged: (bool newValue) {
-                  config.darkThemeEnabled = newValue;
-                },
-              ),
+              activeColor: Theme.of(context).accentColor,
+              value: config.darkThemeEnabled,
+              onChanged: (bool newValue) {
+                config.darkThemeEnabled = newValue;
+              },
             )
           : Container()
         ),
         // Enable/Disable Black Theme
-        ListTile(
-          onTap: () => config.blackThemeEnabled = !config.blackThemeEnabled,
+        SwitchListTile(
           title: Text(
             Languages.of(context).labelEnableBlackTheme,
             style: TextStyle(
@@ -81,13 +73,11 @@ class _ThemeSettingsState extends State<ThemeSettings> with TickerProviderStateM
           ),
           subtitle: Text(Languages.of(context).labelEnableBlackThemeJustification,
             style: TextStyle(fontSize: 12),),
-          trailing: CircularCheckBox(
-            activeColor: Theme.of(context).accentColor,
-            value: config.blackThemeEnabled,
-            onChanged: (bool newValue) {
-              config.blackThemeEnabled = newValue;
-            },
-          ),
+          activeColor: Theme.of(context).accentColor,
+          value: config.blackThemeEnabled,
+          onChanged: (bool newValue) {
+            config.blackThemeEnabled = newValue;
+          },
         ),
         // App AccentColor Setting
         ListTile(

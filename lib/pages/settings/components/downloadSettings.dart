@@ -12,7 +12,6 @@ import 'package:songtube/provider/configurationProvider.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:circular_check_box/circular_check_box.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:file_picker/file_picker.dart';
@@ -51,13 +50,19 @@ class DownloadSettings extends StatelessWidget {
               style: TextStyle(fontSize: 12),
               children: [
                 TextSpan(
-                  text: Languages.of(context).labelAudioFolderJustification+"\n"
+                  text: Languages.of(context).labelAudioFolderJustification+"\n",
+                  style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyText1.color
+                      .withOpacity(0.8),
+                  )
                 ),
                 TextSpan(
                   text: config.audioDownloadPath,
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
-                    fontSize: 13
+                    fontSize: 13,
+                    color: Theme.of(context).textTheme.bodyText1.color
+                      .withOpacity(0.8),
                   )
                 )
               ]
@@ -101,13 +106,19 @@ class DownloadSettings extends StatelessWidget {
               style: TextStyle(fontSize: 12),
               children: [
                 TextSpan(
-                  text: Languages.of(context).labelVideoFolderJustification+"\n"
+                  text: Languages.of(context).labelVideoFolderJustification+"\n",
+                  style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyText1.color
+                      .withOpacity(0.8),
+                  )
                 ),
                 TextSpan(
                   text: config.videoDownloadPath,
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
-                    fontSize: 13
+                    fontSize: 13,
+                    color: Theme.of(context).textTheme.bodyText1.color
+                      .withOpacity(0.8),
                   )
                 )
               ]
@@ -137,7 +148,7 @@ class DownloadSettings extends StatelessWidget {
           subtitle: Text(Languages.of(context).labelAlbumFolderJustification,
             style: TextStyle(fontSize: 12)
           ),
-          trailing: CircularCheckBox(
+          trailing: Checkbox(
             activeColor: Theme.of(context).accentColor,
             value: config.enableAlbumFolder,
             onChanged: (bool newValue) async {

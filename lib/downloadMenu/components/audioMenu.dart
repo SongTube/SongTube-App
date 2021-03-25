@@ -1,5 +1,4 @@
 // Flutter
-import 'package:circular_check_box/circular_check_box.dart';
 import 'package:flutter/material.dart';
 
 // Packages
@@ -218,7 +217,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                   padding: EdgeInsets.only(left: 12, bottom: 12, top: 4),
                   child: Row(
                     children: [
-                      CircularCheckBox(
+                      Checkbox(
                         value: config.enableFFmpegActionType,
                         onChanged: (_) {}
                       ),
@@ -495,7 +494,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
             onTap: () {
               setState(() => normalizeAudio = !normalizeAudio);
             },
-            child: ListTile(
+            child: SwitchListTile(
               title: Container(
                 child: Row(
                   children: [
@@ -509,12 +508,10 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                   ],
                 ),
               ),
-              trailing: CircularCheckBox(
-                value: normalizeAudio,
-                onChanged: (bool value) {
-                  setState(() => normalizeAudio = value);
-                },
-              )
+              value: normalizeAudio,
+              onChanged: (bool value) {
+                setState(() => normalizeAudio = value);
+              },
             ),
           ),
         ],
