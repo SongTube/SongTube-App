@@ -394,7 +394,7 @@ class DownloadSet {
           );
           try {
             response = await http.get(downloadItem.tags.coverurl)
-              .timeout(Duration(seconds: 30));
+              .timeout(Duration(seconds: 120));
             await artwork.writeAsBytes(response.bodyBytes);
             var decodedImage = await decodeImageFromList(artwork.readAsBytesSync());
             if (decodedImage.width == 120 && decodedImage.height == 90)

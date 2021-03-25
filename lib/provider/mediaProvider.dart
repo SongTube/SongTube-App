@@ -347,7 +347,7 @@ class MediaProvider extends ChangeNotifier {
       );
       try {
         response = await http.get(tags.artworkController)
-          .timeout(Duration(seconds: 30));
+          .timeout(Duration(seconds: 120));
         await artwork.writeAsBytes(response.bodyBytes);
       } catch (_) {}
       croppedImage = await NativeMethod.cropToSquare(artwork);

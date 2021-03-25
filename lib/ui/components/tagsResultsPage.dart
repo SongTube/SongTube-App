@@ -253,7 +253,8 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
                                                       Navigator.pop(context, record);
                                                     },
                                                     child: Container(
-                                                      margin: EdgeInsets.all(8),
+                                                      color: Colors.transparent,
+                                                      padding: EdgeInsets.all(8),
                                                       child: Row(
                                                         mainAxisSize: MainAxisSize.min,
                                                         children: [
@@ -437,8 +438,14 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
 
   Future<String> _getArtworkLink(record, int index) async {
     await Future.delayed(Duration(seconds: index));
-    String url = await MusicBrainzAPI
-      .getThumbnail(record['releases'][0]['id']);
+    Map<String, String> map = await MusicBrainzAPI
+      .getThumbnails(record['releases'][0]['id']);
+    String url;
+    if (map.containsKey("1200x1200")) {
+      url = map["1200x1200"];
+    } else {
+      url = map["500x500"];
+    }
     return url;
   }
 

@@ -55,14 +55,19 @@ class MusicBrainzAPI {
     tagsControllers.artistController.text = getArtist(parsedJson);
     tagsControllers.albumController.text = getAlbum(parsedJson);
     tagsControllers.dateController.text = getDate(parsedJson);
-    if (artworkLink == null)
-      tagsControllers.artworkController = await getArtwork(parsedJson["releases"][0]["id"]);
-    else
-      tagsControllers.artworkController = artworkLink;
     tagsControllers.discController.text = getDiscNumber(parsedJson);
     tagsControllers.trackController.text = getTrackNumber(parsedJson);
     tagsControllers.genreController.text = getGenre(parsedJson);
-    print(tagsControllers);
+    if (artworkLink == null) {
+      await getThumbnails(parsedJson["releases"][0]["id"]).then((map) {
+        if (map.containsKey("1200x1200"))
+          tagsControllers.artworkController = map["1200x1200"];
+        else
+          tagsControllers.artworkController = map["500x500"];
+      });
+    } else {
+      tagsControllers.artworkController = artworkLink;
+    }
     return tagsControllers;
   }
 
@@ -135,7 +140,36 @@ class MusicBrainzAPI {
       return null;
     } else {
       var json = jsonDecode(response.body);
-      return json["images"][0]["thumbnails"]["large"];
+      return json ["images"][0]["thumbnails"]["large"];
+    }
+  }
+
+  static Future<Map<String, String>> getThumbnails(mbid) async {
+    http.Client client = new http.Client();
+    Map<String, String> thumbnails = Map<String, String>();
+    var response = await client.get(
+      "http://coverartarchive.org/release/$mbid"
+    );
+    client.close();
+    if (response.body.contains("Not Found")) {
+      return null;
+    } else {
+      var json = jsonDecode(response.body);
+      json["images"][0]["thumbnails"].forEach((key, url) {
+        if (key == "1200") {
+          if (!thumbnails.containsKey("1200x1200"))
+            thumbnails.addAll({"1200x1200": url});
+        }
+        if (key == "large" || key == "500") {
+          if (!thumbnails.containsKey("500x500"))
+            thumbnails.addAll({"500x500": url});
+        }
+        if (key == "small" || key == "250") {
+          if (!thumbnails.containsKey("250x250"))
+            thumbnails.addAll({"250x250": url});
+        }
+      });
+      return thumbnails;
     }
   }
 
