@@ -178,7 +178,8 @@ class MediaProvider extends ChangeNotifier {
     if (palette.vibrantColor == null) {
       vibrantColor = dominantColor;
     } else { vibrantColor = palette.vibrantColor.color; }
-    textColor = dominantColor == null ? Colors.white : dominantColor;
+    textColor = dominantColor.computeLuminance() > 0.5
+      ? Colors.black : Colors.white;
     showLyrics = false;
     notifyListeners();
     // Preload Previous and Next Artwork
