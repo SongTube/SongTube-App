@@ -37,10 +37,6 @@ dependencies:
       ref: master
   just_audio: ^0.5.4
   audio_service: ^0.15.1
-  sliding_up_panel:
-    git:
-      url: git://github.com/SongTube/sliding_up_panel.git
-      ref: master
 
   # NewPipe Extractor
   newpipeextractor_dart:
