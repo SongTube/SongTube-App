@@ -15,10 +15,10 @@ class AutoHideScaffold extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  AutoHideScaffoldState createState() => AutoHideScaffoldState();
+  _AutoHideScaffoldState createState() => _AutoHideScaffoldState();
 }
 
-class AutoHideScaffoldState extends State<AutoHideScaffold> with TickerProviderStateMixin {
+class _AutoHideScaffoldState extends State<AutoHideScaffold> with TickerProviderStateMixin {
 
   AnimationController _hideAnimationController;
   bool navigationBarScrolledDown = false;
@@ -30,16 +30,6 @@ class AutoHideScaffoldState extends State<AutoHideScaffold> with TickerProviderS
     );
     _hideAnimationController.animateTo(1, duration: Duration.zero);
     super.initState();
-  }
-
-  /// For any implementation of the [floatingWidget] made, you will need
-  /// to add a GlobaKey<AutoHideScaffoldState> and use it to update the AppBar/NavBar
-  /// position if you need them to hide them (ex: [floatingWidget] is a slidable panel
-  /// and you want to hide the appbar and navbar on panel slide)
-  void updateInternalController(double position) {
-    if (!navigationBarScrolledDown) {
-      _hideAnimationController.animateTo((1 - position));
-    }
   }
 
   @override
