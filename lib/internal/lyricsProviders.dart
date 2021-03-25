@@ -6,10 +6,15 @@ class LyricsProviders {
 
   static Future<String> lyricsOvh({String author, String title}) async {
     Client client = Client();
-    var response = await client.get(
-      "https://api.lyrics.ovh/v1/"
-      "$author/$title"
-    );
+    var response;
+    try {
+      response = await client.get(
+        "https://api.lyrics.ovh/v1/"
+        "$author/$title"
+      ).timeout(Duration(seconds: 5));
+    } catch (_) {
+      return "";
+    }
     client.close();
     return jsonDecode(response.body)["lyrics"]; 
   }
