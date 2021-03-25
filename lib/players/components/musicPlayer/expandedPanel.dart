@@ -16,14 +16,15 @@ import 'package:songtube/provider/configurationProvider.dart';
 import 'package:songtube/provider/mediaProvider.dart';
 
 // Packages
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:songtube/provider/preferencesProvider.dart';
+import 'package:songtube/ui/components/fancyScaffold.dart';
 
 class ExpandedPlayer extends StatelessWidget {
-  final PanelController controller;
-  ExpandedPlayer({
-    this.controller,
-  });
+  static FloatingWidgetConfig config () {
+    return FloatingWidgetConfig(
+      
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<ScreenState>(
@@ -56,7 +57,7 @@ class ExpandedPlayer extends StatelessWidget {
             : Theme.of(context).scaffoldBackgroundColor,
           backdropOpacity: 0.4,
           child: PlayerBody(
-            controller: controller,
+            controller: mediaProvider.fwController,
             playingFrom: mediaItem.album,
             textColor: textColor,
             artworkFile: image,

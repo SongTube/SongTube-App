@@ -49,7 +49,12 @@ class PlayerBackground extends StatelessWidget {
               sigmaX: blurIntensity,
               sigmaY: blurIntensity
             ),
-            child: child,
+            child: Column(
+              children: [
+                Expanded(child: child),
+                Container(height: MediaQuery.of(context).padding.bottom)
+              ],
+            ),
           ),
         )
       ],

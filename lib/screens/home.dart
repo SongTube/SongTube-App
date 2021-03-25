@@ -18,7 +18,7 @@ import 'package:provider/provider.dart';
 import 'package:songtube/screens/homeScreen/pages/favorites.dart';
 import 'package:songtube/screens/homeScreen/pages/trending.dart';
 import 'package:songtube/screens/homeScreen/pages/watchLater.dart';
-import 'package:songtube/ui/components/autohideScaffold.dart';
+import 'package:songtube/ui/components/fancyScaffold.dart';
 import 'package:songtube/ui/components/searchHistory.dart';
 import 'package:songtube/ui/dialogs/loadingDialog.dart';
 import 'package:songtube/ui/layout/streamsLargeThumbnail.dart';
@@ -59,35 +59,41 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
     ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
-    return AutoHideScaffold(
+    return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Theme.of(context).cardColor,
-      appBar: Padding(
-        padding: EdgeInsets.only(bottom: 8),
-        child: HomePageAppBar(
-          onLoadPlaylist: (id) async {
-            showDialog(
-              context: context,
-              builder: (_) => LoadingDialog()
-            );
-            YoutubePlaylist playlist = await PlaylistExtractor
-              .getPlaylistDetails(id);
-            Provider.of<VideoPageProvider>(context, listen: false)
-              .infoItem = playlist.toPlaylistInfoItem();
-            Navigator.pop(context);
-          },
-          onLoadVideo: (id) async {
-            showDialog(
-              context: context,
-              builder: (_) => LoadingDialog()
-            );
-            YoutubeVideo video = await VideoExtractor
-              .getVideoInfoAndStreams(id);
-            Provider.of<VideoPageProvider>(context, listen: false)
-              .infoItem = video.toStreamInfoItem();
-            Navigator.pop(context);
-          },
-        )
+      appBar: PreferredSize(
+        preferredSize: Size(
+          double.infinity,
+          kToolbarHeight
+        ),
+        child: Padding(
+          padding: EdgeInsets.only(bottom: 8),
+          child: HomePageAppBar(
+            onLoadPlaylist: (id) async {
+              showDialog(
+                context: context,
+                builder: (_) => LoadingDialog()
+              );
+              YoutubePlaylist playlist = await PlaylistExtractor
+                .getPlaylistDetails(id);
+              Provider.of<VideoPageProvider>(context, listen: false)
+                .infoItem = playlist.toPlaylistInfoItem();
+              Navigator.pop(context);
+            },
+            onLoadVideo: (id) async {
+              showDialog(
+                context: context,
+                builder: (_) => LoadingDialog()
+              );
+              YoutubeVideo video = await VideoExtractor
+                .getVideoInfoAndStreams(id);
+              Provider.of<VideoPageProvider>(context, listen: false)
+                .infoItem = video.toStreamInfoItem();
+              Navigator.pop(context);
+            },
+          )
+        ),
       ),
       body: Stack(
         children: [

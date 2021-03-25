@@ -2,15 +2,15 @@ import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/players/components/musicPlayer/ui/playerArtwork.dart';
 import 'package:songtube/players/components/musicPlayer/ui/playerControls.dart';
+import 'package:songtube/ui/components/fancyScaffold.dart';
 
 class PlayerBody extends StatelessWidget {
   final File artworkFile;
   final bool expandArtwork;
-  final PanelController controller;
+  final FloatingWidgetController controller;
   final Color textColor;
   final double artworkRoundedCorners;
   final String playingFrom;
@@ -37,7 +37,7 @@ class PlayerBody extends StatelessWidget {
     return SingleChildScrollView(
       physics: NeverScrollableScrollPhysics(),
       child: Container(
-        height: MediaQuery.of(context).size.height,
+        height: MediaQuery.of(context).size.height - MediaQuery.of(context).padding.bottom,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

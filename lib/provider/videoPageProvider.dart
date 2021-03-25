@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:isolate';
 import 'package:flutter/cupertino.dart';
 import 'package:newpipeextractor_dart/extractors/channels.dart';
-import 'package:newpipeextractor_dart/extractors/playlist.dart';
 import 'package:newpipeextractor_dart/extractors/videos.dart';
 import 'package:newpipeextractor_dart/models/channel.dart';
 import 'package:newpipeextractor_dart/models/infoItems/playlist.dart';
@@ -11,22 +10,22 @@ import 'package:newpipeextractor_dart/models/playlist.dart';
 import 'package:newpipeextractor_dart/models/video.dart';
 import 'package:newpipeextractor_dart/utils/url.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:songtube/internal/models/playlist.dart';
 import 'package:songtube/internal/models/tagsControllers.dart';
 import 'package:songtube/players/components/youtubePlayer/videoPlayer.dart';
+import 'package:songtube/ui/components/fancyScaffold.dart';
 
 class VideoPageProvider extends ChangeNotifier {
 
   // Slidable panel controller
-  PanelController panelController;
+  FloatingWidgetController fwController;
 
   // Video Player Key
   GlobalKey<StreamManifestPlayerState> playerKey =
     GlobalKey<StreamManifestPlayerState>();
 
   VideoPageProvider() {
-    panelController = PanelController();
+    fwController = FloatingWidgetController();
   }
 
   // Current infoItem & YoutubeVideo
@@ -39,8 +38,8 @@ class VideoPageProvider extends ChangeNotifier {
   dynamic get infoItem => _infoItem;
   set infoItem(dynamic infoItem) {
     if (_infoItem != null) {
-      if (panelController.isAttached)
-        panelController.open();
+      if (fwController.isAttached)
+        fwController.open();
     }
     if (currentPlaylist == null) {
       if (infoItem is StreamInfoItem) {

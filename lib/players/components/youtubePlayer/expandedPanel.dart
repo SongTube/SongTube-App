@@ -58,6 +58,10 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
         if (visible == false) FocusScope.of(context).requestFocus(new FocusNode());
       }
     });
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<VideoPageProvider>(context, listen: false)
+        .fwController.open();
+    });
   }
 
   void executeAutoPlay() {
@@ -149,7 +153,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
   Widget _pipWidget() {
     VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
     pageProvider.playerKey?.currentState?.controller?.play();
-    pageProvider.panelController.open();
+    pageProvider.fwController.open();
     FlutterScreen.resetBrightness();
     return AnimatedSwitcher(
       duration: Duration(milliseconds: 400),
@@ -185,137 +189,147 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
     SystemChrome.setEnabledSystemUIOverlays
       ([SystemUiOverlay.top, SystemUiOverlay.bottom]);
     FlutterScreen.resetBrightness();
-    return SingleChildScrollView(
-      child: Container(
-        height: MediaQuery.of(context).size.height,
-        padding: EdgeInsets.only(top: 4),
-        child: Column(
-          children: <Widget> [
-            // Top StatusBar Padding
-            Container(
-              color: Theme.of(context).scaffoldBackgroundColor,
-              height: MediaQuery.of(context).padding.top,
-              width: double.infinity,
-            ),
-            // Mini-Player
-            Container(
-              margin: EdgeInsets.only(left: 12, right: 12),
-              child: MeasureSize(
-                onChange: (Size size) {
-                  playerHeight = size.height;
-                },
-                child: AspectRatio(
-                  aspectRatio: 16/9,
-                  child: AnimatedSwitcher(
-                    duration: Duration(milliseconds: 400),
-                    child: pageProvider.currentVideo != null
-                      ? _videoPlayerWidget()
-                      : _videoLoading(
-                          pageProvider.infoItem is StreamInfoItem
-                            ? pageProvider.infoItem.thumbnails.hqdefault
-                            : pageProvider.infoItem is PlaylistInfoItem
-                              ? pageProvider.infoItem.thumbnailUrl
-                              : null,
-                        )
+    return Column(
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            child: Container(
+              height: MediaQuery.of(context).size.height - MediaQuery.of(context).padding.bottom,
+              padding: EdgeInsets.only(top: 4),
+              child: Column(
+                children: <Widget> [
+                  // Top StatusBar Padding
+                  Container(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    height: MediaQuery.of(context).padding.top,
+                    width: double.infinity,
                   ),
-                ),
-              ),
-            ),
-            SizedBox(height: 12),
-            // Video Details
-            VideoDetails(
-              infoItem: pageProvider.infoItem,
-              uploaderAvatarUrl: pageProvider.currentChannel?.avatarUrl ?? null,
-            ),
-            // ---------------------------------------
-            // Likes, dislikes, Views and Share button
-            // ---------------------------------------
-            _videoEngagementWidget(),
-            Divider(height: 1),
-            Expanded(
-              child: AnimatedSwitcher(
-                duration: Duration(milliseconds: 300),
-                child: ListView(
-                  padding: EdgeInsets.zero,
-                  children: [
-                    SizedBox(height: !isPlaylist ? 4 : 0),
-                    // Tags Editor (Not available on Playlists)
-                    if (!isPlaylist)
-                    AnimatedSize(
-                      vsync: this,
-                      duration: Duration(milliseconds: 300),
-                      child: VideoTags(
-                        tags: pageProvider.currentTags,
-                        infoItem: pageProvider.infoItem is StreamInfoItem
-                          ? pageProvider.infoItem : null,
-                        onAutoTag: () async {
-                          showDialog(
-                            context: context,
-                            builder: (_) => LoadingDialog()
-                          );
-                          String lastArtwork = pageProvider.currentTags.artworkController;
-                          var record = await MusicBrainzAPI
-                            .getFirstRecord(pageProvider.currentTags.titleController.text);
-                          pageProvider.currentTags = await MusicBrainzAPI.getSongTags(record);
-                          if (pageProvider.currentTags.artworkController == null)
-                            pageProvider.currentTags.artworkController = lastArtwork;
-                          Navigator.pop(context);
-                          setState(() {});
-                        },
-                        onManualTag: () async {
-                          var record = await Navigator.push(context,
-                            BlurPageRoute(builder: (context) => 
-                              TagsResultsPage(
-                                title: pageProvider.currentTags.titleController.text,
-                                artist: pageProvider.currentTags.artistController.text
-                              ),
-                              blurStrength: Provider.of<PreferencesProvider>
-                                (context, listen: false).enableBlurUI ? 20 : 0));
-                          if (record == null) return;
-                          showDialog(
-                            context: context,
-                            builder: (_) => LoadingDialog()
-                          );
-                          String lastArtwork = pageProvider.currentTags.artworkController;
-                          pageProvider.currentTags = await MusicBrainzAPI.getSongTags(record);
-                          if (pageProvider.currentTags.artworkController == null)
-                            pageProvider.currentTags.artworkController = lastArtwork;
-                          Navigator.pop(context);
-                        },
-                        onSearchDevice: () async {
-                          File image = File((await FilePicker.platform
-                            .pickFiles(type: FileType.image))
-                            .paths[0]);
-                          if (image == null) return;
-                          pageProvider.currentTags.artworkController = image.path;
-                          setState(() {});
-                        },
+                  // Mini-Player
+                  Container(
+                    margin: EdgeInsets.only(left: 12, right: 12),
+                    child: MeasureSize(
+                      onChange: (Size size) {
+                        playerHeight = size.height;
+                      },
+                      child: AspectRatio(
+                        aspectRatio: 16/9,
+                        child: AnimatedSwitcher(
+                          duration: Duration(milliseconds: 400),
+                          child: pageProvider.currentVideo != null
+                            ? _videoPlayerWidget()
+                            : _videoLoading(
+                                pageProvider.infoItem is StreamInfoItem
+                                  ? pageProvider.infoItem.thumbnails.hqdefault
+                                  : pageProvider.infoItem is PlaylistInfoItem
+                                    ? pageProvider.infoItem.thumbnailUrl
+                                    : null,
+                              )
+                        ),
                       ),
                     ),
-                    SizedBox(height: !isPlaylist ? 4 : 0),
-                    if (!isPlaylist)
-                    Divider(height: 1),
-                    SizedBox(height: !isPlaylist ? 8 : 8),
-                    // AutoPlay Widget
-                    _autoPlayWidget(),
-                    // Related Videos
-                    StreamsListTileView(
-                      shrinkWrap: true,
-                      removePhysics: true,
-                      streams: pageProvider?.currentRelatedVideos == null
-                        ? [] : pageProvider.currentRelatedVideos, 
-                      onTap: (stream, index) async {
-                        pageProvider.infoItem =
-                          pageProvider.currentRelatedVideos[index];
-                      },
-                    )
-                  ],
-                ),
+                  ),
+                  SizedBox(height: 12),
+                  // Video Details
+                  VideoDetails(
+                    infoItem: pageProvider.infoItem,
+                    uploaderAvatarUrl: pageProvider.currentChannel?.avatarUrl ?? null,
+                  ),
+                  // ---------------------------------------
+                  // Likes, dislikes, Views and Share button
+                  // ---------------------------------------
+                  _videoEngagementWidget(),
+                  Divider(height: 1),
+                  Expanded(
+                    child: AnimatedSwitcher(
+                      duration: Duration(milliseconds: 300),
+                      child: ListView(
+                        padding: EdgeInsets.zero,
+                        children: [
+                          SizedBox(height: !isPlaylist ? 4 : 0),
+                          // Tags Editor (Not available on Playlists)
+                          if (!isPlaylist)
+                          AnimatedSize(
+                            vsync: this,
+                            duration: Duration(milliseconds: 300),
+                            child: VideoTags(
+                              tags: pageProvider.currentTags,
+                              infoItem: pageProvider.infoItem is StreamInfoItem
+                                ? pageProvider.infoItem : null,
+                              onAutoTag: () async {
+                                showDialog(
+                                  context: context,
+                                  builder: (_) => LoadingDialog()
+                                );
+                                String lastArtwork = pageProvider.currentTags.artworkController;
+                                var record = await MusicBrainzAPI
+                                  .getFirstRecord(pageProvider.currentTags.titleController.text);
+                                pageProvider.currentTags = await MusicBrainzAPI.getSongTags(record);
+                                if (pageProvider.currentTags.artworkController == null)
+                                  pageProvider.currentTags.artworkController = lastArtwork;
+                                Navigator.pop(context);
+                                setState(() {});
+                              },
+                              onManualTag: () async {
+                                var record = await Navigator.push(context,
+                                  BlurPageRoute(builder: (context) => 
+                                    TagsResultsPage(
+                                      title: pageProvider.currentTags.titleController.text,
+                                      artist: pageProvider.currentTags.artistController.text
+                                    ),
+                                    blurStrength: Provider.of<PreferencesProvider>
+                                      (context, listen: false).enableBlurUI ? 20 : 0));
+                                if (record == null) return;
+                                showDialog(
+                                  context: context,
+                                  builder: (_) => LoadingDialog()
+                                );
+                                String lastArtwork = pageProvider.currentTags.artworkController;
+                                pageProvider.currentTags = await MusicBrainzAPI.getSongTags(record);
+                                if (pageProvider.currentTags.artworkController == null)
+                                  pageProvider.currentTags.artworkController = lastArtwork;
+                                Navigator.pop(context);
+                              },
+                              onSearchDevice: () async {
+                                File image = File((await FilePicker.platform
+                                  .pickFiles(type: FileType.image))
+                                  .paths[0]);
+                                if (image == null) return;
+                                pageProvider.currentTags.artworkController = image.path;
+                                setState(() {});
+                              },
+                            ),
+                          ),
+                          SizedBox(height: !isPlaylist ? 4 : 0),
+                          if (!isPlaylist)
+                          Divider(height: 1),
+                          SizedBox(height: !isPlaylist ? 8 : 8),
+                          // AutoPlay Widget
+                          _autoPlayWidget(),
+                          // Related Videos
+                          StreamsListTileView(
+                            shrinkWrap: true,
+                            removePhysics: true,
+                            streams: pageProvider?.currentRelatedVideos == null
+                              ? [] : pageProvider.currentRelatedVideos, 
+                            onTap: (stream, index) async {
+                              pageProvider.infoItem =
+                                pageProvider.currentRelatedVideos[index];
+                            },
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ]
               ),
             ),
-          ]
+          ),
         ),
-      ),
+        Container(
+          height: MediaQuery.of(context).padding.bottom,
+          color: Theme.of(context).cardColor
+        )
+      ],
     );
   }
 

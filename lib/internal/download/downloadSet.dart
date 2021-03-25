@@ -64,7 +64,8 @@ class DownloadSet {
   // Download Item
   DownloadItem downloadItem;
 
-  // Download
+  // Download Lenth
+  int totalDownloadLength = 0;
 
   DownloadSet({
     @required this.language,
@@ -184,6 +185,13 @@ class DownloadSet {
         downloadItem.audioStream = video.getAudioStreamWithBestMatchForVideoStream(downloadItem.videoStream);
       }
       // Download specified VideoStream
+      if (downloadItem.videoStream.size == null) {
+        downloadItem.videoStream.size = await getContentSize(downloadItem.videoStream.url);
+      }
+      if (downloadItem.audioStream.size == null) {
+        downloadItem.audioStream.size = await getContentSize(downloadItem.audioStream.url);
+      }
+      totalDownloadLength = downloadItem.videoStream.size + downloadItem.audioStream.size;
       downloadedFile = await _downloadStream(downloadItem.videoStream);
       if (downloadedFile == null) return;
       // Download best Audio file and slam
@@ -201,6 +209,10 @@ class DownloadSet {
           .audioWithBestAacQuality;
       }
       // Download specified AudioStream
+      if (downloadItem.audioStream.size == null) {
+        downloadItem.audioStream.size = await getContentSize(downloadItem.audioStream.url);
+      }
+      totalDownloadLength = downloadItem.audioStream.size;
       downloadedFile = await _downloadStream(downloadItem.audioStream);
       if (downloadedFile == null) return;
       // Remove Existing Metadata
@@ -271,8 +283,10 @@ class DownloadSet {
       "/" + RandomString.getRandomString(10)
     );
     // Update Streams
-    downloadStatusStream.add(DownloadStatus.Loading);
-    currentAction.add(language.labelDownloading);
+    if (totalDownloaded == 0) {
+      downloadStatusStream.add(DownloadStatus.Loading);
+      currentAction.add(language.labelDownloading);
+    }
     // Stream to Download
     dynamic streamToDownload = stream;
     if (streamToDownload.size == null) {
@@ -281,12 +295,12 @@ class DownloadSet {
     // StreamData
     Stream<List<int>> streamData = ExtractorHttpClient.getStream(streamToDownload);
     // Update Streams
-    dataProgress.add(language.labelDownloadStarting);
-    progressBar.add(0.0);
+    if (totalDownloaded == 0) {
+      dataProgress.add(language.labelDownloadStarting);
+      progressBar.add(0.0);
+    }
     // Open the file in write.
     var _output = download.openWrite(mode: FileMode.write);
-    // Local variables for File Download Status
-    var _len = streamToDownload.size;
     downloadStatusStream.add(DownloadStatus.Downloading);
     // Start stream download while updating internal
     // BehaviorSubject for external access
@@ -300,8 +314,8 @@ class DownloadSet {
       totalDownloaded += data.length;
       dataProgress.add(
         "${(totalDownloaded * 0.000001).toStringAsFixed(2)} MB " + 
-        "/ ${(_len * 0.000001).toStringAsFixed(2)} MB");
-      progressBar.add((totalDownloaded / _len).toDouble());
+        "/ ${(totalDownloadLength * 0.000001).toStringAsFixed(2)} MB");
+      progressBar.add((totalDownloaded / totalDownloadLength).toDouble());
       _output.add(data);
     }
     await _output.flush();

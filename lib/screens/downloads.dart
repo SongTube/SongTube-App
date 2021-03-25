@@ -14,7 +14,7 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:songtube/screens/downloadScreen/tabs/queueTab.dart';
 
 // UI
-import 'package:songtube/ui/components/autohideScaffold.dart';
+import 'package:songtube/ui/components/fancyScaffold.dart';
 
 class DownloadTab extends StatelessWidget {
   @override
@@ -25,7 +25,7 @@ class DownloadTab extends StatelessWidget {
         downloadsProvider.downloadingList.isNotEmpty ||
         downloadsProvider.convertingList.isNotEmpty ? 0 : 1,
       length: 3,
-      child: AutoHideScaffold(
+      child: Scaffold(
         backgroundColor: Theme.of(context).cardColor,
         appBar: AppBar(
           elevation: 0,

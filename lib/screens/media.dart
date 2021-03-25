@@ -15,7 +15,7 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:songtube/ui/components/searchBar.dart';
 
 // UI
-import 'package:songtube/ui/components/autohideScaffold.dart';
+import 'package:songtube/ui/components/fancyScaffold.dart';
 
 class MediaScreen extends StatefulWidget {
   @override
@@ -52,7 +52,7 @@ class _MediaScreenState extends State<MediaScreen> {
     return DefaultTabController(
       initialIndex: 0,
       length: 2,
-      child: AutoHideScaffold(
+      child: Scaffold(
         backgroundColor: Theme.of(context).cardColor,
         resizeToAvoidBottomInset: false,
         appBar: AppBar(

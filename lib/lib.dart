@@ -14,24 +14,26 @@ import 'package:songtube/internal/nativeMethods.dart';
 
 // Internal
 import 'package:songtube/internal/updateChecker.dart';
+import 'package:songtube/players/components/musicPlayer/collapsedPanel.dart';
+import 'package:songtube/players/components/musicPlayer/expandedPanel.dart';
+import 'package:songtube/players/components/youtubePlayer/collapsedPanel.dart';
+import 'package:songtube/players/components/youtubePlayer/expandedPanel.dart';
 import 'package:songtube/provider/configurationProvider.dart';
 import 'package:songtube/provider/downloadsProvider.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/provider/mediaProvider.dart';
 import 'package:songtube/provider/preferencesProvider.dart';
-import 'package:songtube/players/youtubePlayer.dart';
 import 'package:songtube/provider/videoPageProvider.dart';
 import 'package:songtube/screens/downloads.dart';
 import 'package:songtube/screens/home.dart';
 import 'package:songtube/screens/media.dart';
 import 'package:songtube/screens/library.dart';
-import 'package:songtube/players/musicPlayer.dart';
 
 // Packages
 import 'package:provider/provider.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:songtube/screens/music.dart';
-import 'package:songtube/ui/components/autohideScaffold.dart';
+import 'package:songtube/ui/components/fancyScaffold.dart';
 import 'package:songtube/ui/components/navigationBar.dart';
 import 'package:songtube/ui/components/styledBottomSheet.dart';
 import 'package:songtube/ui/sheets/appUpdate.dart';
@@ -52,14 +54,12 @@ class _LibState extends State<Lib> {
   int _screenIndex;
 
   // This Widget ScaffoldKey
-  GlobalKey<AutoHideScaffoldState> _scaffoldStateKey;
   GlobalKey<ScaffoldState> _internalScaffoldKey;
 
   @override
   void initState() {
     super.initState();
     _screenIndex = 0;
-    _scaffoldStateKey = new GlobalKey();
     _internalScaffoldKey = GlobalKey<ScaffoldState>();
     WidgetsBinding.instance.renderView.automaticSystemUiAdjustment=false;
     KeyboardVisibility.onChange.listen((bool visible) {
@@ -106,15 +106,28 @@ class _LibState extends State<Lib> {
     Provider.of<MediaProvider>(context, listen: false).loadVideoList();
     // Disclaimer
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      // Save ScaffoldState Key
-      Provider.of<ManagerProvider>(context, listen: false).scaffoldStateKey =
-        this._scaffoldStateKey;
+      Brightness _systemBrightness = Theme.of(context).brightness;
+      Brightness _statusBarBrightness = _systemBrightness == Brightness.light
+        ? Brightness.dark
+        : Brightness.light;
+      SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          statusBarBrightness: _statusBarBrightness,
+          statusBarIconBrightness: _statusBarBrightness,
+          systemNavigationBarColor: Colors.transparent,
+          systemNavigationBarIconBrightness: _statusBarBrightness,
+        ),
+      );
       Provider.of<ManagerProvider>(context, listen: false).internalScaffoldKey =
         this._internalScaffoldKey;
       _showSheets();
       _checkForUpdates();
     });
     AudioService.runningStream.listen((_) {
+      setState(() {});
+    });
+    AudioService.currentMediaItemStream.listen((event) {
       setState(() {});
     });
   }
@@ -203,19 +216,6 @@ class _LibState extends State<Lib> {
 
   @override
   Widget build(BuildContext context) {
-    Brightness _systemBrightness = Theme.of(context).brightness;
-    Brightness _statusBarBrightness = _systemBrightness == Brightness.light
-      ? Brightness.dark
-      : Brightness.light;
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        statusBarBrightness: _statusBarBrightness,
-        statusBarIconBrightness: _statusBarBrightness,
-        systemNavigationBarColor: Theme.of(context).cardColor,
-        systemNavigationBarIconBrightness: _statusBarBrightness,
-      ),
-    );
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitDown,
       DeviceOrientation.portraitUp,
@@ -227,22 +227,21 @@ class _LibState extends State<Lib> {
   }
 
   Widget _libBody() {
-    return AutoHideScaffold(
+    return FancyScaffold(
       backgroundColor: Theme.of(context).cardColor,
       resizeToAvoidBottomInset: false,
-      key: _scaffoldStateKey,
       internalKey: _internalScaffoldKey,
       body: SafeArea(
         child: Consumer3<MediaProvider, ManagerProvider, VideoPageProvider>(
           builder: (context, mediaProvider, manager, pageProvider, child) {
             return WillPopScope(
               onWillPop: () {
-                if (pageProvider.panelController.isAttached && pageProvider.panelController.isPanelOpen) {
-                  pageProvider.panelController.close();
+                if (pageProvider.fwController.isAttached && pageProvider.fwController.isPanelOpen) {
+                  pageProvider.fwController.close();
                   return Future.value(false);
                 } else if (mediaProvider.slidingPanelOpen) {
                   mediaProvider.slidingPanelOpen = false;
-                  mediaProvider.panelController.close();
+                  mediaProvider.fwController.close();
                   return Future.value(false);
                 } else if (_screenIndex != 0) {
                   setState(() => _screenIndex = 0);
@@ -286,36 +285,9 @@ class _LibState extends State<Lib> {
           setState(() => _screenIndex = index);
         }
       ),
-      floatingWidget: Consumer<VideoPageProvider>(
-        builder: (context, provider, _) {
-          return Stack(
-            children: [
-              AnimatedSwitcher(
-                duration: Duration(milliseconds: 300),
-                child: provider.infoItem == null
-                  ? SlidingPlayerPanel(
-                      callback: (double position) {
-                        _scaffoldStateKey.currentState
-                          .updateInternalController(position);
-                      },
-                    )
-                  : Container(),
-              ),
-              AnimatedSwitcher(
-                duration: Duration(milliseconds: 300),
-                child: provider.infoItem != null
-                  ? SlidableVideoPage(
-                      callback: (double position) {
-                        _scaffoldStateKey.currentState
-                          .updateInternalController(position);
-                      },
-                    )
-                  : Container(),
-              )
-            ],
-          );
-        }
-      )
+      floatingWidgetTwins: _currentFloatingTwins(),
+      floatingWidgetConfig: _currentFloatingWidetConfig(),
+      floatingWidgetController: _currentFloatingWidgetController(),
     );
   }
 
@@ -335,4 +307,90 @@ class _LibState extends State<Lib> {
     }
   }
   
+  FloatingWidgetTwins _currentFloatingTwins() {
+    VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
+    if (pageProvider.infoItem != null) {
+      return _youtubePlayerTwins();
+    } else {
+      if (AudioService?.currentMediaItem != null) {
+        return _musicPlayerTwins();
+      } else {
+        return null;
+      }
+    }
+  }
+  
+  FloatingWidgetConfig _currentFloatingWidetConfig() {
+    VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
+    if (pageProvider.infoItem != null) {
+      return FloatingWidgetConfig(
+        maxHeight: MediaQuery.of(context).size.height,
+      );
+    } else if (AudioService?.currentMediaItem != null) {
+      return _floatingMusicWidgetConfig();
+    } else {
+      return FloatingWidgetConfig(
+        maxHeight: MediaQuery.of(context).size.height,
+      );
+    }
+  }
+
+  FloatingWidgetTwins _musicPlayerTwins() {
+    return FloatingWidgetTwins(
+      expanded: ExpandedPlayer(),
+      collapsed: CollapsedPanel()
+    );
+  }
+
+  FloatingWidgetTwins _youtubePlayerTwins() {
+    return FloatingWidgetTwins(
+      expanded: YoutubePlayerVideoPage(),
+      collapsed: VideoPageCollapsed()
+    );
+  }
+
+  FloatingWidgetConfig _floatingMusicWidgetConfig() {
+    MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
+    return FloatingWidgetConfig(
+      maxHeight: MediaQuery.of(context).size.height,
+      onSlide: (double position) {
+        if (position > 0.95) {
+          SystemChrome.setSystemUIOverlayStyle(
+            SystemUiOverlayStyle(
+              statusBarIconBrightness: mediaProvider.textColor == Colors.black
+                ? Brightness.dark : Brightness.light,
+              systemNavigationBarIconBrightness: mediaProvider.textColor == Colors.black
+                ? Brightness.dark : Brightness.light,
+            ),
+          );
+        } else if (position < 0.95) {
+          SystemChrome.setSystemUIOverlayStyle(
+            SystemUiOverlayStyle(
+              statusBarIconBrightness:
+                Theme.of(context).brightness == Brightness.dark
+                  ? Brightness.light : Brightness.dark,
+              systemNavigationBarIconBrightness:
+                Theme.of(context).brightness == Brightness.dark
+                  ? Brightness.light : Brightness.dark,
+            ),
+          );
+        }
+      }
+    );
+  }
+
+  FloatingWidgetController _currentFloatingWidgetController() {
+    MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
+    VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
+    if (pageProvider.infoItem != null) {
+      return pageProvider.fwController;
+    } else {
+      if (AudioService?.currentMediaItem != null) {
+        return mediaProvider.fwController;
+      } else {
+        return null;
+      }
+    }
+  }
+
 }

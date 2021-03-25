@@ -1,11 +1,11 @@
 // Dart
 import 'dart:io';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
 // Flutter
 import 'package:flutter/material.dart';
 import 'package:palette_generator/palette_generator.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:songtube/internal/database/databaseService.dart';
 import 'package:songtube/internal/ffmpeg/extractor.dart';
 import 'package:songtube/internal/lyricsProviders.dart';
@@ -26,6 +26,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:songtube/internal/nativeMethods.dart';
 import 'package:songtube/internal/randomString.dart';
 import 'package:songtube/internal/tagsManager.dart';
+import 'package:songtube/ui/components/fancyScaffold.dart';
 import 'package:string_validator/string_validator.dart';
 
 class MediaProvider extends ChangeNotifier {
@@ -36,10 +37,13 @@ class MediaProvider extends ChangeNotifier {
     listVideos        = <VideoFile>[];
     listFolders       = <FolderItem>[];
     storagePermission = true;
-    panelController   = PanelController();
+    fwController      = FloatingWidgetController();
     slidingPanelOpen  = false;
     databaseSongs     = <MediaItem>[];
     getDatabase();
+    AudioService.currentMediaItemStream.listen((event) {
+      mediaItem = event;
+    });
   }
 
   // Flutter Audio Query
@@ -57,8 +61,8 @@ class MediaProvider extends ChangeNotifier {
   // List Video Folders
   List<FolderItem> listFolders;
 
-  // Panel Controller
-  PanelController panelController;
+  // Floating Widget Controller
+  FloatingWidgetController fwController;
 
   // SlidingPanel Open/Closed Status
   bool slidingPanelOpen;
@@ -150,6 +154,7 @@ class MediaProvider extends ChangeNotifier {
   File artwork;
   Color dominantColor;
   Color vibrantColor;
+  Color textColor;
 
   MediaItem get mediaItem => _mediaItem;
   set mediaItem(MediaItem newMediaItem) {
@@ -173,6 +178,7 @@ class MediaProvider extends ChangeNotifier {
     if (palette.vibrantColor == null) {
       vibrantColor = dominantColor;
     } else { vibrantColor = palette.vibrantColor.color; }
+    textColor = dominantColor == null ? Colors.white : dominantColor;
     showLyrics = false;
     notifyListeners();
     // Preload Previous and Next Artwork
@@ -190,6 +196,14 @@ class MediaProvider extends ChangeNotifier {
       audioFile: AudioService.queue[indexes[1]].id,
       audioId: AudioService.queue[indexes[1]].extras["albumId"],
     );
+    if (fwController.isAttached && fwController.isPanelOpen) {
+      SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(
+          statusBarIconBrightness: textColor == Colors.black? Brightness.dark : Brightness.light,
+          systemNavigationBarIconBrightness: textColor == Colors.black? Brightness.dark : Brightness.light,
+        ),
+      );
+    }
   }
 
   // Do we have storage Permission?
