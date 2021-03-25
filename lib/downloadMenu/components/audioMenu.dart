@@ -15,12 +15,14 @@ import 'package:songtube/provider/configurationProvider.dart';
 
 class AudioDownloadMenu extends StatefulWidget {
   final YoutubeVideo video;
+  final TagsControllers tags;
   final Function(DownloadItem) onDownload;
   final Function onBack;
   AudioDownloadMenu({
     @required this.video,
     @required this.onDownload,
-    @required this.onBack
+    @required this.onBack,
+    @required this.tags,
   });
   @override
   _AudioDownloadMenuState createState() => _AudioDownloadMenuState();
@@ -35,8 +37,6 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
   bool normalizeAudio = false;
 
   void _onDownload(AudioOnlyStream streamInfo) {
-    TagsControllers tags = TagsControllers();
-    tags.updateTextControllers(widget.video);
     List<dynamic> list = [
       "Audio",
       streamInfo, 
@@ -48,7 +48,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
     DownloadItem item = DownloadItem.fetchData(
       widget.video,
       list, 
-      tags,
+      widget.tags,
       Provider.of<ConfigurationProvider>(context, listen: false)
     );
     widget.onDownload(item);

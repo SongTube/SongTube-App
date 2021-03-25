@@ -103,6 +103,7 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
       case CurrentDownloadMenu.Audio:
         returnWidget = Container(
           child: AudioDownloadMenu(
+            tags: tags,
             video: video,
             onBack: () => setState(() => 
               currentDownloadMenu = CurrentDownloadMenu.Home),

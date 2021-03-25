@@ -259,7 +259,8 @@ class DownloadSet {
     currentAction.add(language.labelSavingFile);
     Permission.storage.request().then((value) async {
       if (value == PermissionStatus.granted) {
-        String outputFile = "${downloadItem.downloadPath}/${downloadItem.tags.title}.${downloadItem.formatSuffix}";
+        String outputFileName = removeToxicSymbols("${downloadItem.tags.title}.${downloadItem.formatSuffix}");
+        String outputFile = "${downloadItem.downloadPath}/$outputFileName";
         var finalFile = await FileOperations.moveFile(downloadedFile.path, outputFile);
         if (finalFile is File) {
           await finishDownload(finalFile);
@@ -455,6 +456,24 @@ class DownloadSet {
       } catch (_) {}
     }
     return size;
+  }
+
+  String removeToxicSymbols(String string) {
+    return string
+      .replaceAll('Container.', '')
+      .replaceAll(r'\', '')
+      .replaceAll('/', '')
+      .replaceAll('*', '')
+      .replaceAll('?', '')
+      .replaceAll('"', '')
+      .replaceAll('<', '')
+      .replaceAll('>', '')
+      .replaceAll('|', '')
+      .replaceAll(':', '')
+      .replaceAll('!', '')
+      .replaceAll('[', '')
+      .replaceAll(']', '')
+      .replaceAll('¡', '');
   }
 
 }
