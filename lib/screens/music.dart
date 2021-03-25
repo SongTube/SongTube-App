@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/provider/managerProvider.dart';
-import 'package:songtube/ui/components/fancyScaffold.dart';
+import 'package:songtube/ui/components/autoHideScaffold.dart';
 import 'package:songtube/ui/components/searchBar.dart';
 import 'package:songtube/ui/layout/streamsLargeThumbnail.dart';
 
@@ -15,7 +15,7 @@ class _MusicScreenState extends State<MusicScreen> {
   @override
   Widget build(BuildContext context) {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
-    return Scaffold(
+    return AutoHideScaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Theme.of(context).cardColor,
       appBar: AppBar(

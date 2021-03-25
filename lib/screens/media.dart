@@ -12,6 +12,7 @@ import 'package:songtube/screens/mediaScreen/tabs/videosTab.dart';
 
 // Packages
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:songtube/ui/components/autoHideScaffold.dart';
 import 'package:songtube/ui/components/searchBar.dart';
 
 // UI
@@ -52,7 +53,7 @@ class _MediaScreenState extends State<MediaScreen> {
     return DefaultTabController(
       initialIndex: 0,
       length: 2,
-      child: Scaffold(
+      child: AutoHideScaffold(
         backgroundColor: Theme.of(context).cardColor,
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
