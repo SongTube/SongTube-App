@@ -1,3 +1,26 @@
+# SongTube 6.2.0:
+
+- Advanced Playlist Download:
+    * New playlist menu where you can choose what to download
+    * You can change each video download type from audio to video or viseversa
+    * You can change all videos to audio/video download type
+    * You can select the quality for all the videos to be downloaded
+
+- Youtube Video Player:
+    * Picture in Picture is now supported!
+    * The player will now remember the chosen quality
+    * Videos should now load faster
+    * Video Player now shows current streaming quality text
+
+- General:
+    * Fixed download saving issues on some devices
+    * Fixed download saving to SDCard
+    * Tags Editor retrieves higher quality Artwork
+    * Music Player background now shows behing system Navigation Bar
+    * Added a "Copy error" button on cancelled downloads (if needed)
+    * Setting's Audio/Video download path option now shows current path
+    * Fixed app crash when disabling audio conversion
+
 # SongTube 6.0.0:
 
 - Playlist Creation/Management Support:
