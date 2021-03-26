@@ -41,7 +41,7 @@ android {
     defaultConfig {
         applicationId "com.artxdev.songtube"
         minSdkVersion 22
-        targetSdkVersion 29
+        targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

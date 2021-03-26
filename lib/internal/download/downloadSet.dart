@@ -135,18 +135,6 @@ class DownloadSet {
     progressBar.close();
   }
 
-  // Check our Download Path
-  Future<void> _checkDownloadPath() async {
-    Directory path = Directory(downloadItem.downloadPath);
-    if (!await path.exists()) {
-      try {
-        await path.create(recursive: true);
-      } catch (_) {
-        _interruptDownload("Couldn't access or create download path");
-      }
-    }
-  }
-
   bool get _applyFilters =>
     downloadItem.filters.volume != 1.0 ||
     downloadItem.filters.bassGain != 0 ||
@@ -168,9 +156,6 @@ class DownloadSet {
 
     // Reset Streams to default values
     _resetStreams();
-
-    // Check our Download Folder
-    await _checkDownloadPath();
 
     // Download File by DownloadType
     File downloadedFile;

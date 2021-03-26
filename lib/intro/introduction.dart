@@ -58,9 +58,11 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
-    Brightness _themeBrightness = Theme.of(context).brightness;
     Brightness _systemBrightness = Theme.of(context).brightness;
     Brightness _statusBarBrightness = _systemBrightness == Brightness.light
+        ? Brightness.dark
+        : Brightness.light;
+    Brightness _themeBrightness = _systemBrightness == Brightness.light
         ? Brightness.dark
         : Brightness.light;
     SystemChrome.setSystemUIOverlayStyle(

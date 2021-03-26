@@ -351,7 +351,9 @@ class _LibState extends State<Lib> {
 
   FloatingWidgetConfig _floatingMusicWidgetConfig() {
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
+    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     return FloatingWidgetConfig(
+      backdropBlurStrength: prefs.enableBlurUI ? 15 : 0,
       maxHeight: MediaQuery.of(context).size.height,
       onSlide: (double position) {
         if (position > 0.95) {
