@@ -227,6 +227,7 @@ class _LibState extends State<Lib> {
   }
 
   Widget _libBody() {
+    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     return FancyScaffold(
       backgroundColor: Theme.of(context).cardColor,
       resizeToAvoidBottomInset: false,
@@ -274,11 +275,12 @@ class _LibState extends State<Lib> {
               );
             },
             duration: Duration(milliseconds: 300),
-            child: _currentScreen(_screenIndex)
+            child: _currentScreen(_screenIndex, prefs.enableYoutubeMusicScreen)
           ),
         ),
       ),
       bottomNavigationBar: AppBottomNavigationBar(
+        enableYoutubeMusicScreen: prefs.enableYoutubeMusicScreen,
         currentIndex: _screenIndex,
         onItemTap: (int index) {
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
@@ -291,19 +293,34 @@ class _LibState extends State<Lib> {
     );
   }
 
-  Widget _currentScreen(screenIndex) {
-    if (screenIndex == 0) {
-      return HomeScreen();
-    } else if (screenIndex == 1) {
-      return MusicScreen();
-    } else if (screenIndex == 2) {
-      return DownloadTab();
-    } else if (screenIndex == 3) {
-      return MediaScreen();
-    } else if (screenIndex == 4) {
-      return LibraryScreen();
+  Widget _currentScreen(screenIndex, bool youtubeMusicEnabled) {
+    if (youtubeMusicEnabled) {
+      if (screenIndex == 0) {
+        return HomeScreen();
+      } else if (screenIndex == 1) {
+        return MusicScreen();
+      } else if (screenIndex == 2) {
+        return DownloadTab();
+      } else if (screenIndex == 3) {
+        return MediaScreen();
+      } else if (screenIndex == 4) {
+        return LibraryScreen();
+      } else {
+        return Container();
+      }
     } else {
-      return Container();
+      if (screenIndex == 0) {
+        return HomeScreen();
+      } else if (screenIndex == 1) {
+        return DownloadTab();
+      } else if (screenIndex == 2) {
+        return MediaScreen();
+      } else if (screenIndex == 3) {
+        return LibraryScreen();
+      } else {
+        setState((){ _screenIndex = 0; });
+        return Container();
+      }
     }
   }
   

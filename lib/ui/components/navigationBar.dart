@@ -6,9 +6,11 @@ import 'package:songtube/internal/languages.dart';
 class AppBottomNavigationBar extends StatelessWidget {
   final int currentIndex;
   final Function(int) onItemTap;
+  final bool enableYoutubeMusicScreen;
   AppBottomNavigationBar({
     @required this.currentIndex,
-    @required this.onItemTap
+    @required this.onItemTap,
+    @required this.enableYoutubeMusicScreen
   });
   @override
   Widget build(BuildContext context) {
@@ -54,6 +56,7 @@ class AppBottomNavigationBar extends StatelessWidget {
             icon: Icon(EvaIcons.homeOutline),
             label: Languages.of(context).labelHome
           ),
+          if (enableYoutubeMusicScreen)
           BottomNavigationBarItem(
             icon: Icon(EvaIcons.musicOutline),
             label: Languages.of(context).labelMusic

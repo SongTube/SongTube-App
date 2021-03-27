@@ -246,4 +246,13 @@ class PreferencesProvider extends ChangeNotifier {
     prefs.setString('youtubePlayerQuality', quality);
     notifyListeners();
   }
+
+  // Enable/Disable Youtube Music Screen
+  bool get enableYoutubeMusicScreen {
+    return prefs.getBool('enableYoutubeMusicScreen') ?? true;
+  }
+  set enableYoutubeMusicScreen(bool value) {
+    prefs.setBool('enableYoutubeMusicScreen', value);
+    notifyListeners();
+  }
 }

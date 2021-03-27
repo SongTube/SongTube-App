@@ -9,8 +9,25 @@ import 'package:songtube/provider/preferencesProvider.dart';
 class GeneralSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     return ListView(
       children: <Widget>[
+        SwitchListTile(
+          onChanged: (bool value) {
+            prefs.enableYoutubeMusicScreen = value;
+          },
+          value: prefs.enableYoutubeMusicScreen,
+          title: Text(
+            Languages.of(context).labelYouTube+" "+Languages.of(context).labelMusic,
+            style: TextStyle(
+              color: Theme.of(context).textTheme.bodyText1.color,
+              fontWeight: FontWeight.w500
+            ),
+          ),
+          subtitle: Text("Enable or disable Youtube Music screen",
+            style: TextStyle(fontSize: 12)
+          ),
+        ),
         FutureBuilder(
           future: DeviceInfoPlugin().androidInfo,
           builder: (context, AsyncSnapshot<AndroidDeviceInfo> info) {
