@@ -6,6 +6,7 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/nativeMethods.dart';
 import 'package:songtube/internal/randomString.dart';
@@ -41,10 +42,11 @@ import 'package:flutter/scheduler.dart' show timeDilation;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   LegacyPreferences preferences = new LegacyPreferences();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
   await preferences.initPreferences();
   if (kDebugMode)
     timeDilation = 1.0;
-  runApp(Main(preloadedFs: preferences));
+  runApp(Main(preloadedFs: preferences, prefs: prefs));
   /* if (dsn.isNotEmpty) {
     runZonedGuarded(() => runApp(Main(preloadedFs: preferences)),
       (error, stackTrace) async {
@@ -76,8 +78,10 @@ class Main extends StatefulWidget {
   }
 
   final LegacyPreferences preloadedFs;
+  final SharedPreferences prefs;
   Main({
-    @required this.preloadedFs
+    @required this.preloadedFs,
+    @required this.prefs
   });
 
   @override
@@ -121,7 +125,7 @@ class _MainState extends State<Main> {
           create: (context) => MediaProvider()
         ),
         ChangeNotifierProvider<PreferencesProvider>(
-          create: (context) => PreferencesProvider(),
+          create: (context) => PreferencesProvider(widget.prefs),
         ),
         ChangeNotifierProvider<VideoPageProvider>(
           create: (context) => VideoPageProvider(),

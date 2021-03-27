@@ -7,13 +7,8 @@ import 'package:songtube/internal/models/playlist.dart';
 
 class PreferencesProvider extends ChangeNotifier {
 
-  PreferencesProvider() {
-    init();
-  }
-
-  // Initialize Shared Preferences
-  void init() async {
-    prefs = await SharedPreferences.getInstance();
+  PreferencesProvider(prefsInstance) {
+    prefs = prefsInstance;
   }
 
   // Preferences Instance
