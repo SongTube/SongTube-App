@@ -12,7 +12,13 @@
     * Videos should now load faster
     * Video Player now shows current streaming quality text
 
+- In-App updates support:
+    * You can now install download/install an update inside the app
+    * The app will check for updates on startup
+    * Redesigned updates UI
+
 - General:
+    * Youtube Music screen can now be hidden from Settings
     * Fixed download saving issues on some devices
     * Fixed download saving to SDCard
     * Tags Editor retrieves higher quality Artwork
