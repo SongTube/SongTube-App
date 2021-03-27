@@ -140,7 +140,7 @@ class _LibState extends State<Lib> {
       bottomSheets.add(DisclaimerSheet());
       config.disclaimerAccepted = true;
     }
-    if (config.showDownloadFixDialog) {
+    if (config.showDownloadFixDialog && config.preferences.sdkInt >= 30) {
       bottomSheets.add(DownloadFixSheet());
       config.showDownloadFixDialog = false;
     }
@@ -352,17 +352,19 @@ class _LibState extends State<Lib> {
   FloatingWidgetConfig _floatingMusicWidgetConfig() {
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
     PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
+    ConfigurationProvider config = Provider.of<ConfigurationProvider>(context, listen: false);
     return FloatingWidgetConfig(
       backdropBlurStrength: prefs.enableBlurUI ? 15 : 0,
       maxHeight: MediaQuery.of(context).size.height,
       onSlide: (double position) {
+        int sdkInt = config.preferences.sdkInt;
         if (position > 0.95) {
           SystemChrome.setSystemUIOverlayStyle(
             SystemUiOverlayStyle(
               statusBarIconBrightness: mediaProvider.textColor == Colors.black
                 ? Brightness.dark : Brightness.light,
-              systemNavigationBarIconBrightness: mediaProvider.textColor == Colors.black
-                ? Brightness.dark : Brightness.light,
+              systemNavigationBarIconBrightness: sdkInt >= 30 ? mediaProvider.textColor == Colors.black
+                ? Brightness.dark : Brightness.light : null,
             ),
           );
         } else if (position < 0.95) {

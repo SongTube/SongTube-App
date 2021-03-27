@@ -232,6 +232,8 @@ class FFmpegConverter {
       return format == "m4a" ? false : true;
     else if (task == FFmpegTask.ConvertToOGGVorbis)
       return format == "ogg" ? false : true;
+    else if (task == FFmpegTask.NONE)
+      return false;
     else
       return true;
   }

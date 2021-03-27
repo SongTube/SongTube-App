@@ -106,20 +106,13 @@ class _MainState extends State<Main> {
 
   @override
   Widget build(BuildContext context) {
-    List lastSearchQuery = (jsonDecode(widget.preloadedFs.getSearchHistory())
-      as List<dynamic>).cast<String>();
-    NativeMethod.exitFullScreen();
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<ConfigurationProvider>(
           create: (context) => ConfigurationProvider(preferences: widget.preloadedFs)
         ),
         ChangeNotifierProvider<ManagerProvider>(
-          create: (context) => ManagerProvider(
-            lastSearchQuery.isNotEmpty
-              ? lastSearchQuery[0]
-              : RandomString.getRandomLetter()
-          )
+          create: (context) => ManagerProvider()
         ),
         ChangeNotifierProvider<DownloadsProvider>(
           create: (context) => DownloadsProvider()

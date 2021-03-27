@@ -54,26 +54,30 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
       if (value != _selectedIndex)
         setState(() => _selectedIndex = value);
     });
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      Brightness _systemBrightness = Theme.of(context).brightness;
+      Brightness _statusBarBrightness = _systemBrightness == Brightness.light
+          ? Brightness.dark
+          : Brightness.light;
+      Brightness _themeBrightness = _systemBrightness == Brightness.light
+          ? Brightness.dark
+          : Brightness.light;
+      SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          statusBarBrightness: _statusBarBrightness,
+          statusBarIconBrightness: _statusBarBrightness,
+          systemNavigationBarColor: Theme.of(context).scaffoldBackgroundColor,
+          systemNavigationBarIconBrightness: _themeBrightness
+        ),
+      );
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    Brightness _systemBrightness = Theme.of(context).brightness;
-    Brightness _statusBarBrightness = _systemBrightness == Brightness.light
-        ? Brightness.dark
-        : Brightness.light;
-    Brightness _themeBrightness = _systemBrightness == Brightness.light
-        ? Brightness.dark
-        : Brightness.light;
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        statusBarBrightness: _statusBarBrightness,
-        statusBarIconBrightness: _statusBarBrightness,
-        systemNavigationBarColor: Theme.of(context).scaffoldBackgroundColor,
-        systemNavigationBarIconBrightness: _themeBrightness
-      ),
-    );
+    
+
     return Scaffold(
       body: Column(
         children: [

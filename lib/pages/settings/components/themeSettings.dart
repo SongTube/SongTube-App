@@ -1,5 +1,6 @@
 // Flutter
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:songtube/internal/languages.dart';
 
 // Internal
@@ -34,8 +35,22 @@ class _ThemeSettingsState extends State<ThemeSettings> with TickerProviderStateM
             style: TextStyle(fontSize: 12),),
           activeColor: Theme.of(context).accentColor,
           value: config.systemThemeEnabled,
-          onChanged: (bool newValue) {
+          onChanged: (bool newValue) async {
             config.systemThemeEnabled = newValue;
+            await Future.delayed(Duration(seconds: 1));
+            Brightness _systemBrightness = Theme.of(context).brightness;
+            Brightness _statusBarBrightness = _systemBrightness == Brightness.light
+              ? Brightness.dark
+              : Brightness.light;
+            SystemChrome.setSystemUIOverlayStyle(
+              SystemUiOverlayStyle(
+                statusBarColor: Colors.transparent,
+                statusBarBrightness: _statusBarBrightness,
+                statusBarIconBrightness: _statusBarBrightness,
+                systemNavigationBarColor: Colors.transparent,
+                systemNavigationBarIconBrightness: _statusBarBrightness,
+              ),
+            );
           },
         ),
         // Enable/Disable Dark Theme
@@ -56,8 +71,22 @@ class _ThemeSettingsState extends State<ThemeSettings> with TickerProviderStateM
                 style: TextStyle(fontSize: 12),),
               activeColor: Theme.of(context).accentColor,
               value: config.darkThemeEnabled,
-              onChanged: (bool newValue) {
+              onChanged: (bool newValue) async {
                 config.darkThemeEnabled = newValue;
+                await Future.delayed(Duration(seconds: 1));
+                Brightness _systemBrightness = Theme.of(context).brightness;
+                Brightness _statusBarBrightness = _systemBrightness == Brightness.light
+                  ? Brightness.dark
+                  : Brightness.light;
+                SystemChrome.setSystemUIOverlayStyle(
+                  SystemUiOverlayStyle(
+                    statusBarColor: Colors.transparent,
+                    statusBarBrightness: _statusBarBrightness,
+                    statusBarIconBrightness: _statusBarBrightness,
+                    systemNavigationBarColor: Colors.transparent,
+                    systemNavigationBarIconBrightness: _statusBarBrightness,
+                  ),
+                );
               },
             )
           : Container()
@@ -75,8 +104,22 @@ class _ThemeSettingsState extends State<ThemeSettings> with TickerProviderStateM
             style: TextStyle(fontSize: 12),),
           activeColor: Theme.of(context).accentColor,
           value: config.blackThemeEnabled,
-          onChanged: (bool newValue) {
+          onChanged: (bool newValue) async {
             config.blackThemeEnabled = newValue;
+            await Future.delayed(Duration(seconds: 1));
+            Brightness _systemBrightness = Theme.of(context).brightness;
+            Brightness _statusBarBrightness = _systemBrightness == Brightness.light
+              ? Brightness.dark
+              : Brightness.light;
+            SystemChrome.setSystemUIOverlayStyle(
+              SystemUiOverlayStyle(
+                statusBarColor: Colors.transparent,
+                statusBarBrightness: _statusBarBrightness,
+                statusBarIconBrightness: _statusBarBrightness,
+                systemNavigationBarColor: Colors.transparent,
+                systemNavigationBarIconBrightness: _statusBarBrightness,
+              ),
+            );
           },
         ),
         // App AccentColor Setting

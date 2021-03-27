@@ -46,11 +46,13 @@ class LegacyPreferences {
   Future<void> initPreferences() async {
     prefs = await SharedPreferences.getInstance();
     AndroidDeviceInfo deviceInfo = await DeviceInfoPlugin().androidInfo;
-    int version = deviceInfo.version.sdkInt;
-    if (version >= 28) {
+    sdkInt = deviceInfo.version.sdkInt;
+    if (sdkInt >= 28) {
       isSystemThemeAvailable = true;
     } else {isSystemThemeAvailable = false;}
   }
+
+  int sdkInt;
 
   bool isSystemThemeAvailable;
 

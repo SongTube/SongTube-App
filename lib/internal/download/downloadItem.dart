@@ -37,7 +37,7 @@ class DownloadItem {
         path += ".m4a";
         break;
       case FFmpegTask.ConvertToMP3:
-        path += ".m4a";
+        path += ".mp3";
         break;
       case FFmpegTask.ConvertToOGG:
         path += ".ogg";
@@ -65,7 +65,7 @@ class DownloadItem {
     @required this.duration
   });
 
-  static DownloadItem fetchData(YoutubeVideo video, dynamic configList, TagsControllers tags, ConfigurationProvider config) {
+  static DownloadItem fetchData(YoutubeVideo video, dynamic configList, TagsControllers inTags, ConfigurationProvider config) {
     DownloadType downloadType = configList[0] == "Audio"
       ? DownloadType.AUDIO : DownloadType.VIDEO;
     VideoOnlyStream videoStream = downloadType == DownloadType.VIDEO
@@ -75,6 +75,13 @@ class DownloadItem {
       : configList[1];
     String downloadPath = downloadType == DownloadType.VIDEO
       ? config.videoDownloadPath : config.audioDownloadPath;
+    TagsControllers tags;
+    if (inTags == null) {
+      tags = TagsControllers();
+      tags.updateTextControllers(video);
+    } else {
+      tags = inTags;
+    }
     DownloadTags downloadTags = DownloadTags(
       title: removeToxicSymbols(tags.titleController.text),
       album: tags.albumController.text,

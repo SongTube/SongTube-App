@@ -17,7 +17,7 @@ class ManagerProvider extends ChangeNotifier {
   // Initialize Class
   // ----------------
   //
-  ManagerProvider(lastSearchQuery) {
+  ManagerProvider() {
     // Variables
     searchBarFocusNode = FocusNode();
     musicSearchBarFocusNode = FocusNode();
@@ -29,7 +29,6 @@ class ManagerProvider extends ChangeNotifier {
     currentHomeTab = HomeScreenTab.Trending;
     homeTrendingVideoList = [];
     homeMusicVideoList = [];
-    youtubeSearchQuery = lastSearchQuery;
     searchRunning = false;
     musicSearchRunning = false;
     TrendingExtractor.getTrendingVideos().then((value) {

@@ -234,11 +234,9 @@ class DownloadSet {
       await writeAllMetadata(downloadedFile.path);
     }
 
-    // Check our download has formatSuffix
-    if (downloadItem.formatSuffix == null) {
-      downloadItem.formatSuffix = 
-        await ffmpegConverter.getMediaFormat(downloadedFile.path);
-    }
+    // Check our formatSuffix
+    downloadItem.formatSuffix = 
+      await ffmpegConverter.getMediaFormat(downloadedFile.path);
 
     // Move file to its Predefined Directory
     currentAction.add(language.labelSavingFile);
