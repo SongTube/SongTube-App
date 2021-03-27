@@ -13,10 +13,10 @@ Future<UpdateDetails> getLatestRelease() async {
         headers: headers);
     var jsonResponse = jsonDecode(response.body);
     UpdateDetails details = UpdateDetails(
-      double.parse(jsonResponse[0]["tag_name"]
-        .split("+").first.trim().replaceRange(3, 5, "")),
+      jsonResponse[0]["tag_name"],
       jsonResponse[0]["published_at"].split("T").first,
-      jsonResponse[0]["body"]
+      jsonResponse[0]["body"],
+      jsonResponse[0]["assets"][0]["browser_download_url"]
     );
     client.close();
     return details;

@@ -169,7 +169,9 @@ class _LibState extends State<Lib> {
       double appVersion = double
         .parse(android.version.replaceRange(3, 5, ""));
       getLatestRelease().then((details) {
-        if (appVersion < details.version) {
+        double newVersion = double.parse(details.version
+          .split("+").first.trim().replaceRange(3, 5, ""));
+        if (appVersion < newVersion) {
           // Show the user an Update is available
           showModalBottomSheet(
             isScrollControlled: true,

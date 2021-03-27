@@ -1,13 +1,15 @@
 class UpdateDetails {
 
-  double version;
+  String version;
   String publishDate;
   String updateDetails;
+  String downloadUrl;
 
   UpdateDetails(
     this.version,
     this.publishDate,
-    this.updateDetails
+    this.updateDetails,
+    this.downloadUrl
   );
 
 }
