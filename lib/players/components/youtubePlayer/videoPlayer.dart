@@ -5,11 +5,13 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:newpipeextractor_dart/models/streams/audioOnlyStream.dart';
 import 'package:newpipeextractor_dart/models/streams/videoOnlyStream.dart';
+import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:flutter_screen/flutter_screen.dart';
 import 'package:songtube/players/components/youtubePlayer/player/playPauseButton.dart';
 import 'package:songtube/players/components/youtubePlayer/player/playerAppBar.dart';
 import 'package:songtube/players/components/youtubePlayer/player/playerProgressBar.dart';
+import 'package:songtube/provider/preferencesProvider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:volume/volume.dart';
 
@@ -17,7 +19,7 @@ class StreamManifestPlayer extends StatefulWidget {
   final String videoTitle;
   final List<VideoOnlyStream> streams;
   final AudioOnlyStream audioStream;
-  final Function onVideoEnded;
+  final Function onAutoPlay;
   final Function onFullscreenTap;
   final bool isFullscreen;
   final Function onEnterPipMode;
@@ -30,7 +32,7 @@ class StreamManifestPlayer extends StatefulWidget {
     @required this.videoTitle,
     @required this.streams,
     @required this.audioStream,
-    this.onVideoEnded,
+    this.onAutoPlay,
     this.onFullscreenTap,
     this.isFullscreen,
     this.onEnterPipMode,
@@ -145,11 +147,12 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
       _controller.addListener(() {
         int currentPosition = _controller?.value?.position?.inSeconds ?? null;
         int totalDuration = _controller?.value?.duration?.inSeconds ?? null;
-        if (currentPosition == totalDuration && currentPosition != null && totalDuration != null) {
+        bool autoPlayEnabled = Provider.of<PreferencesProvider>(context, listen : false).youtubeAutoPlay;
+        if (currentPosition == totalDuration && currentPosition != null && totalDuration != null && autoPlayEnabled) {
           if (!videoEnded) {
             videoEnded = true;
             Future.delayed((Duration(seconds: 2)),
-              () => widget.onVideoEnded());
+              () => widget.onAutoPlay());
           }
         }
       });

@@ -2,6 +2,8 @@ import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:newpipeextractor_dart/models/streams/videoOnlyStream.dart';
+import 'package:provider/provider.dart';
+import 'package:songtube/provider/preferencesProvider.dart';
 import 'package:songtube/ui/internal/popupMenu.dart';
 
 class PlayerAppBar extends StatelessWidget {
@@ -19,6 +21,7 @@ class PlayerAppBar extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
+    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     List<String> qualities = [];
     streams.forEach((stream) {
       qualities.add(stream.formatSuffix + " • " + stream.resolution);
@@ -120,7 +123,19 @@ class PlayerAppBar extends StatelessWidget {
               onStreamSelect(streams[index].url, streams[index].resolution);
             }
           ),
-          SizedBox(width: 8)
+          SizedBox(width: 8),
+          Switch(
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            activeThumbImage: AssetImage('assets/images/playArrow.png'),
+            activeColor: Colors.white,
+            activeTrackColor: Colors.white.withOpacity(0.6),
+            inactiveThumbColor: Colors.white.withOpacity(0.6),
+            inactiveTrackColor: Colors.white.withOpacity(0.2),
+            value: prefs.youtubeAutoPlay,
+            onChanged: (bool value) {
+              prefs.youtubeAutoPlay = value;
+            },
+          ),
         ],
       ),
     );

@@ -122,11 +122,9 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
       ),
       isFullscreen: MediaQuery.of(context).orientation == Orientation.landscape
         ? true : false,
-      onVideoEnded: () async {
-        if (prefs.youtubeAutoPlay) {
-          if (mounted)
-            executeAutoPlay();
-        }
+      onAutoPlay: () async {
+        if (mounted)
+          executeAutoPlay();
       },
       onFullscreenTap: () {
         if (MediaQuery.of(context).orientation == Orientation.landscape) {
@@ -596,8 +594,6 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
 
   Widget _autoPlayWidget() {
     VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
-    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
-    bool isPlaylist = pageProvider.isPlaylist;
     List<StreamInfoItem> related = pageProvider?.currentRelatedVideos == null
       ? [] : pageProvider.currentRelatedVideos;
     return Container(
@@ -607,9 +603,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
         children: [
           SizedBox(width: 16),
           Text(
-            !isPlaylist
-              ? Languages.of(context).labelRelated
-              : Languages.of(context).labelPlaylist,
+            Languages.of(context).labelRelated,
             style: TextStyle(
               fontSize: 14,
               color: Theme.of(context).textTheme.bodyText1.color,
@@ -630,24 +624,6 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                 )
               : Container()
           ),
-          Spacer(),
-          Text(
-            Languages.of(context).labelAutoPlay,
-            style: TextStyle(
-              fontSize: 14,
-              color: Theme.of(context).textTheme.bodyText1.color,
-              fontFamily: 'YTSans'
-            ),
-            textAlign: TextAlign.left,
-          ),
-          Switch(
-            activeColor: Theme.of(context).accentColor,
-            value: prefs.youtubeAutoPlay,
-            onChanged: (bool value) {
-              prefs.youtubeAutoPlay = value;
-            }
-          ),
-          SizedBox(width: 4)
         ],
       ),
     );
