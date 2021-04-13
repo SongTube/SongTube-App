@@ -7,8 +7,10 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_pip/flutter_pip.dart';
 import 'package:flutter_pip/models/pip_ratio.dart';
 import 'package:flutter_pip/platform_channel/channel.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:newpipeextractor_dart/models/infoItems/playlist.dart';
 import 'package:newpipeextractor_dart/models/infoItems/video.dart';
+import 'package:newpipeextractor_dart/models/playlist.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/musicBrainzApi.dart';
@@ -187,6 +189,20 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
     SystemChrome.setEnabledSystemUIOverlays
       ([SystemUiOverlay.top, SystemUiOverlay.bottom]);
     FlutterScreen.resetBrightness();
+    return isPlaylist
+      ? _portraitPlaylistPage()
+      : _portraitVideoPage();
+  }
+
+  Widget _portraitVideoPage() {
+    VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    SystemChrome.setEnabledSystemUIOverlays
+      ([SystemUiOverlay.top, SystemUiOverlay.bottom]);
+    FlutterScreen.resetBrightness();
     return Column(
       children: [
         Expanded(
@@ -243,9 +259,8 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                       child: ListView(
                         padding: EdgeInsets.zero,
                         children: [
-                          SizedBox(height: !isPlaylist ? 4 : 0),
+                          SizedBox(height: 4),
                           // Tags Editor (Not available on Playlists)
-                          if (!isPlaylist)
                           AnimatedSize(
                             vsync: this,
                             duration: Duration(milliseconds: 300),
@@ -298,16 +313,163 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                               },
                             ),
                           ),
-                          SizedBox(height: !isPlaylist ? 4 : 0),
-                          if (!isPlaylist)
+                          SizedBox(height: 4),
                           Divider(height: 1),
-                          SizedBox(height: !isPlaylist ? 8 : 8),
+                          SizedBox(height: 8),
                           // AutoPlay Widget
                           _autoPlayWidget(),
                           // Related Videos
                           StreamsListTileView(
                             shrinkWrap: true,
                             removePhysics: true,
+                            streams: pageProvider?.currentRelatedVideos == null
+                              ? [] : pageProvider.currentRelatedVideos, 
+                            onTap: (stream, index) async {
+                              pageProvider.infoItem =
+                                pageProvider.currentRelatedVideos[index];
+                            },
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ]
+              ),
+            ),
+          ),
+        ),
+        Container(
+          height: MediaQuery.of(context).padding.bottom,
+          color: Theme.of(context).cardColor
+        )
+      ],
+    );
+  }
+
+  Widget _portraitPlaylistPage() {
+    VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
+    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    SystemChrome.setEnabledSystemUIOverlays
+      ([SystemUiOverlay.top, SystemUiOverlay.bottom]);
+    FlutterScreen.resetBrightness();
+    YoutubePlaylist playlist = pageProvider.currentPlaylist;
+    return Column(
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            child: Container(
+              height: MediaQuery.of(context).size.height - MediaQuery.of(context).padding.bottom,
+              padding: EdgeInsets.only(top: 4),
+              child: Column(
+                children: <Widget> [
+                  // Top StatusBar Padding
+                  Container(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    height: MediaQuery.of(context).padding.top,
+                    width: double.infinity,
+                  ),
+                  // Mini-Player
+                  Container(
+                    margin: EdgeInsets.only(left: 12, right: 12),
+                    child: MeasureSize(
+                      onChange: (Size size) {
+                        playerHeight = size.height;
+                      },
+                      child: AspectRatio(
+                        aspectRatio: 16/9,
+                        child: AnimatedSwitcher(
+                          duration: Duration(milliseconds: 400),
+                          child: pageProvider.currentVideo != null
+                            ? _videoPlayerWidget()
+                            : _videoLoading(
+                                pageProvider.infoItem is StreamInfoItem
+                                  ? pageProvider.infoItem.thumbnails.hqdefault
+                                  : pageProvider.infoItem is PlaylistInfoItem
+                                    ? pageProvider.infoItem.thumbnailUrl
+                                    : null,
+                              )
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 12),
+                  // Video Details
+                  VideoDetails(
+                    infoItem: pageProvider.infoItem,
+                    uploaderAvatarUrl: pageProvider.currentChannel?.avatarUrl ?? null,
+                  ),
+                  // ---------------------------------------
+                  // Likes, dislikes, Views and Share button
+                  // ---------------------------------------
+                  _videoEngagementWidget(),
+                  Divider(height: 1),
+                  // Playlist & Videos
+                  Container(
+                    padding: EdgeInsets.only(
+                      top: 16, bottom: 16, right: 24, left: 12),
+                    child: Row(
+                      children: [
+                        Icon(MdiIcons.playlistMusicOutline, size: 28),
+                        SizedBox(width: 8),
+                        Text(
+                          Languages.of(context).labelPlaylist,
+                          style: TextStyle(
+                            fontFamily: 'Product Sans',
+                            fontWeight: FontWeight.w600,
+                            fontSize: 20,
+                            color: Theme.of(context).textTheme.bodyText1.color
+                              .withOpacity(0.7)
+                          ),
+                        ),
+                        Spacer(),
+                        AnimatedSwitcher(
+                          duration: Duration(milliseconds: 300),
+                          child: playlist != null ? Container(
+                            height: 24,
+                            width: 24,
+                            color: Colors.transparent,
+                            child: IconButton(
+                              padding: EdgeInsets.zero,
+                              icon: Icon(EvaIcons.heart,
+                                color: prefs.streamPlaylists.indexWhere((element) =>
+                                  element.author+element.name == playlist.uploaderName
+                                  +playlist.name) == -1 ? Theme.of(context).iconTheme.color
+                                  : Colors.red),
+                              onPressed: () {
+                                if (prefs.streamPlaylists.indexWhere((element) =>
+                                  element.author+element.name == playlist.uploaderName+playlist.name) == -1) {
+                                    prefs.streamPlaylistCreate(playlist.name, playlist.uploaderName, playlist.streams);
+                                    AppSnack.showSnackBar(
+                                      icon: EvaIcons.heart,
+                                      title: Languages.of(context).labelPlaylist,
+                                      message: "${playlist.name}",
+                                      context: context,
+                                      scaffoldKey: scaffoldKey.currentState
+                                    );
+                                  } else {
+                                    prefs.streamPlaylistRemove(playlist.name);
+                                  }
+                              },
+                            ),
+                          ) : Container(),
+                        )
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: AnimatedSwitcher(
+                      duration: Duration(milliseconds: 300),
+                      child: ListView(
+                        padding: EdgeInsets.zero,
+                        children: [
+                          StreamsListTileView(
+                            shrinkWrap: true,
+                            removePhysics: true,
+                            topPadding: false,
                             streams: pageProvider?.currentRelatedVideos == null
                               ? [] : pageProvider.currentRelatedVideos, 
                             onTap: (stream, index) async {

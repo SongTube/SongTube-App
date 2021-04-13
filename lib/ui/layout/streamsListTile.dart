@@ -10,11 +10,13 @@ class StreamsListTileView extends StatelessWidget {
   final Function(StreamInfoItem, int) onTap;
   final bool shrinkWrap;
   final bool removePhysics;
+  final bool topPadding;
   StreamsListTileView({
     @required this.streams,
     @required this.onTap,
     this.shrinkWrap = false,
-    this.removePhysics = false
+    this.removePhysics = false,
+    this.topPadding = true
   });
   @override
   Widget build(BuildContext context) {
@@ -38,7 +40,7 @@ class StreamsListTileView extends StatelessWidget {
                     color: Colors.transparent,
                     margin: EdgeInsets.only(
                       left: 12, right: 12,
-                      top: index == 0 ? 12 : 0,
+                      top: topPadding ? index == 0 ? 12 : 0 : 0,
                       bottom: 12
                     ),
                     child: Row(
