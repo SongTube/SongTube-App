@@ -35,6 +35,7 @@ class VideoPageProvider extends ChangeNotifier {
   TagsControllers currentTags;
   YoutubeChannel currentChannel;
   List<StreamInfoItem> currentRelatedVideos;
+  bool isPlaylist;
   dynamic get infoItem => _infoItem;
   set infoItem(dynamic infoItem) {
     if (_infoItem != null) {
@@ -51,6 +52,7 @@ class VideoPageProvider extends ChangeNotifier {
       _infoItem = infoItem;
       currentVideo = null;
       currentChannel = null;
+      isPlaylist = true;
       notifyListeners();
       _infoItem.getVideo.then((value) { 
         currentVideo = value;
@@ -71,6 +73,7 @@ class VideoPageProvider extends ChangeNotifier {
     currentChannel = null;
     currentPlaylist = null;
     currentTags = null;
+    isPlaylist = false;
     notifyListeners();
     _infoItem.getVideo.then((value) { 
       currentVideo = value;
@@ -110,6 +113,7 @@ class VideoPageProvider extends ChangeNotifier {
     currentChannel = null;
     currentPlaylist = null;
     currentTags = null;
+    isPlaylist = true;
     notifyListeners();
     if (playlist is PlaylistInfoItem) {
       currentPlaylist = await item.getPlaylist;
@@ -146,6 +150,7 @@ class VideoPageProvider extends ChangeNotifier {
     currentPlaylist = null;
     currentTags = null;
     _infoItem = null;
+    isPlaylist = false;
     notifyListeners();
   }
 

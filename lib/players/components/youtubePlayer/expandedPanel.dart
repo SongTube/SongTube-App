@@ -67,8 +67,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
   void executeAutoPlay() {
     VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context, listen: false);
     StreamInfoItem currentStream = pageProvider.infoItem;
-    bool isPlaylist = pageProvider.infoItem is StreamInfoItem &&
-      pageProvider.currentPlaylist != null;
+    bool isPlaylist = pageProvider.isPlaylist;
     if (isPlaylist) {
       int currentIndex = pageProvider.currentRelatedVideos.indexOf(currentStream);
       if (currentIndex + 1 <= pageProvider.currentRelatedVideos.length) {
@@ -180,8 +179,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
 
   Widget _portraitPage() {
     VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
-    bool isPlaylist = pageProvider.infoItem is StreamInfoItem &&
-      pageProvider.currentPlaylist != null;
+    bool isPlaylist = pageProvider.isPlaylist;
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
@@ -437,8 +435,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
   Widget _autoPlayWidget() {
     VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
     PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
-    bool isPlaylist = pageProvider.infoItem is StreamInfoItem &&
-      pageProvider.currentPlaylist != null;
+    bool isPlaylist = pageProvider.isPlaylist;
     List<StreamInfoItem> related = pageProvider?.currentRelatedVideos == null
       ? [] : pageProvider.currentRelatedVideos;
     return Container(
