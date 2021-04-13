@@ -1,10 +1,9 @@
+import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
-
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:newpipeextractor_dart/models/streams/audioOnlyStream.dart';
-import 'package:newpipeextractor_dart/models/streams/videoOnlyStream.dart';
+import 'package:newpipeextractor_dart/newpipeextractor_dart.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:flutter_screen/flutter_screen.dart';
@@ -27,6 +26,7 @@ class StreamManifestPlayer extends StatefulWidget {
   final bool forceHideControls;
   final String quality;
   final Function(String) onQualityChanged;
+  final List<StreamSegment> segments;
   StreamManifestPlayer({
     Key key,
     @required this.videoTitle,
@@ -39,7 +39,8 @@ class StreamManifestPlayer extends StatefulWidget {
     this.borderRadius,
     this.forceHideControls = false,
     @required this.quality,
-    @required this.onQualityChanged
+    @required this.onQualityChanged,
+    this.segments = const []
   }) : super(key: key);
   @override
   StreamManifestPlayerState createState() => StreamManifestPlayerState();
@@ -52,6 +53,7 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
   bool hideControls = false;
   bool videoEnded = false;
   bool buffering = true;
+  bool isSeeking = false;
   String currentQuality;
 
   // Reverse and Forward Animation
@@ -140,7 +142,9 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
       }
       if (!_controller.value.isBuffering && buffering == true) {
         setState(() => buffering = false);
-        setState(() { showControls = false; showBackdrop = false; });
+        if (_controller.value.isPlaying) {
+          setState(() { showControls = false; showBackdrop = false; });
+        }
       }
     });
     Future.delayed(Duration(seconds: 10), () {
@@ -242,7 +246,7 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
       });
       if (controller?.value?.isPlaying ?? false) {
         Future.delayed(Duration(seconds: 5), () {
-          if (currentId == tapId && mounted && showControls == true) {
+          if (currentId == tapId && mounted && showControls == true && !isSeeking) {
             setState(() {
               showControls = false;
               showBackdrop = false;
@@ -483,14 +487,19 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
                           (dragPosition, _) => dragPosition),
                         builder: (context, snapshot) {
                           return PlayerProgressBar(
+                            segments: widget.segments,
                             position: controller.value.position,
                             duration: controller == null
                               ? Duration(seconds: 2)
                               : controller.value.duration,
                             onSeek: (double newPosition) {
                               controller.seekTo(Duration(seconds: newPosition.round()));
+                              setState(() => isSeeking = false);
                             },
                             onFullScreenTap: widget.onFullscreenTap,
+                            onSeekStart: () {
+                              setState(() => isSeeking = true);
+                            },
                           );
                         }
                       ),
