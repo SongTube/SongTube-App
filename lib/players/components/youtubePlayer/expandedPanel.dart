@@ -432,7 +432,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                             color: Colors.transparent,
                             child: IconButton(
                               padding: EdgeInsets.zero,
-                              icon: Icon(EvaIcons.heart,
+                              icon: Icon(EvaIcons.heartOutline,
                                 color: prefs.streamPlaylists.indexWhere((element) =>
                                   element.author+element.name == playlist.uploaderName
                                   +playlist.name) == -1 ? Theme.of(context).iconTheme.color
