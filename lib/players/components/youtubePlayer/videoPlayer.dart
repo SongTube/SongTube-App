@@ -237,14 +237,16 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
         showControls = true;
         showBackdrop = true;
       });
-      Future.delayed(Duration(seconds: 5), () {
-        if (currentId == tapId && mounted && showControls == true) {
-          setState(() {
-            showControls = false;
-            showBackdrop = false;
-          });
-        }
-      });
+      if (controller?.value?.isPlaying ?? false) {
+        Future.delayed(Duration(seconds: 5), () {
+          if (currentId == tapId && mounted && showControls == true) {
+            setState(() {
+              showControls = false;
+              showBackdrop = false;
+            });
+          }
+        });
+      }
     } else {
       setState(() {
         showControls = false;
