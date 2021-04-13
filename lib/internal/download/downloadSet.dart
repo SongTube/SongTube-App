@@ -163,7 +163,7 @@ class DownloadSet {
     // Our download is a Video
     if (downloadItem.downloadType == DownloadType.VIDEO) {
       if (downloadItem.videoStream == null) {
-        YoutubeVideo video = await VideoExtractor.getVideoInfoAndStreams(downloadItem.url);
+        YoutubeVideo video = await VideoExtractor.getStream(downloadItem.url);
         downloadItem.videoStream = video.videoOnlyStreams.firstWhere((element) =>
           element.resolution.split("p").first == downloadItem.downloadQuality,
           orElse: () => video.videoOnlyStreams.first);
@@ -190,7 +190,7 @@ class DownloadSet {
     // Our Download is an Audio
     if (downloadItem.downloadType == DownloadType.AUDIO) {
       if (downloadItem.audioStream == null) {
-        downloadItem.audioStream = (await VideoExtractor.getVideoInfoAndStreams(downloadItem.url))
+        downloadItem.audioStream = (await VideoExtractor.getStream(downloadItem.url))
           .audioWithBestAacQuality;
       }
       // Download specified AudioStream

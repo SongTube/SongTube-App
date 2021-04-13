@@ -70,7 +70,7 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
   }
 
   void getVideo() async {
-    video = await VideoExtractor.getVideoInfoAndStreams(widget.videoUrl);
+    video = await VideoExtractor.getStream(widget.videoUrl);
     tags = TagsControllers();
     tags.updateTextControllers(video);
     setState(() => currentDownloadMenu = CurrentDownloadMenu.Home);

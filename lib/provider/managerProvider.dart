@@ -68,12 +68,12 @@ class ManagerProvider extends ChangeNotifier {
     notifyListeners();
     if (query == null) return null;
     if (youtubeSearch == null) {
-      youtubeSearch = await SearchExtractor.searchYoutube(query);
+      youtubeSearch = await SearchExtractor.searchYoutube(query, List.empty());
       notifyListeners();
     } else if (youtubeSearch != null && forceReload) {
       youtubeSearch = null;
       notifyListeners();
-      youtubeSearch = await SearchExtractor.searchYoutube(query);
+      youtubeSearch = await SearchExtractor.searchYoutube(query, List.empty());
       notifyListeners();
     } else if (youtubeSearch != null) {
       await youtubeSearch.getNextPage();
@@ -93,12 +93,12 @@ class ManagerProvider extends ChangeNotifier {
     notifyListeners();
     if (query == null) return null;
     if (youtubeMusicSearch == null) {
-      youtubeMusicSearch = await SearchExtractor.searchYoutubeMusic(query);
+      youtubeMusicSearch = await SearchExtractor.searchYoutubeMusic(query, List.empty());
       notifyListeners();
     } else if (youtubeMusicSearch != null && forceReload) {
       youtubeMusicSearch = null;
       notifyListeners();
-      youtubeMusicSearch = await SearchExtractor.searchYoutubeMusic(query);
+      youtubeMusicSearch = await SearchExtractor.searchYoutubeMusic(query, List.empty());
       notifyListeners();
     } else if (youtubeMusicSearch != null) {
       await youtubeMusicSearch.getNextPage();

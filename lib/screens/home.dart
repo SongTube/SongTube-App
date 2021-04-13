@@ -87,8 +87,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 context: context,
                 builder: (_) => LoadingDialog()
               );
-              YoutubeVideo video = await VideoExtractor
-                .getVideoInfoAndStreams(id);
+              YoutubeVideo video = await VideoExtractor.getStream(id);
               Provider.of<VideoPageProvider>(context, listen: false)
                 .infoItem = video.toStreamInfoItem();
               Navigator.pop(context);
