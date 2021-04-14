@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/musicBrainzApi.dart';
 import 'package:songtube/players/components/youtubePlayer/ui/comments.dart';
+import 'package:songtube/players/components/youtubePlayer/ui/moreDetails.dart';
 import 'package:songtube/players/components/youtubePlayer/videoPlayer.dart';
 import 'package:songtube/provider/preferencesProvider.dart';
 import 'package:songtube/pages/components/video/shimmer/shimmerVideoEngagement.dart';
@@ -46,10 +47,14 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
   GlobalKey<ScaffoldState> scaffoldKey;
 
   // Player Height
+  double mainBodyHeight = 0;
   double playerHeight = 0;
 
   // Pip Status
   bool isInPictureInPictureMode = false;
+
+  // BottomSheet controller
+  PersistentBottomSheetController bottomSheetController;
 
   @override
   void initState() {
@@ -82,14 +87,32 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
 
   @override
   Widget build(BuildContext context) {
+    VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
+    if (bottomSheetController != null && pageProvider.fwController.panelPosition < 1) {
+      bottomSheetController.close();
+      setState(() => bottomSheetController = null);
+    }
     return PipWidget(
       onResume: (bool pipMode) {
         setState(() => isInPictureInPictureMode = pipMode);
       },
       child: Scaffold(
         key: scaffoldKey,
-        body: _currentWidget(),
-        floatingActionButton: _fab()
+        body: Stack(
+          children: [
+            _currentWidget(),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Container(
+                margin: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).padding.bottom + 16,
+                  right: 16
+                ),
+                child: _fab()
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -193,7 +216,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
       : _portraitVideoPage();
   }
 
-  Widget _portraitVideoPage() {
+  Widget _portraitMainBody() {
     VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
@@ -202,6 +225,57 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
     SystemChrome.setEnabledSystemUIOverlays
       ([SystemUiOverlay.top, SystemUiOverlay.bottom]);
     FlutterScreen.resetBrightness();
+    return MeasureSize(
+      onChange: (Size size) {
+        setState(() => mainBodyHeight = size.height);
+      },
+      child: Column(
+        children: [
+          // Top StatusBar Padding
+          Container(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            height: MediaQuery.of(context).padding.top,
+            width: double.infinity,
+          ),
+          // Mini-Player
+          Container(
+            margin: EdgeInsets.only(left: 12, right: 12),
+            child: MeasureSize(
+              onChange: (Size size) {
+                playerHeight = size.height;
+              },
+              child: AspectRatio(
+                aspectRatio: 16/9,
+                child: AnimatedSwitcher(
+                  duration: Duration(milliseconds: 400),
+                  child: pageProvider.currentVideo != null
+                    ? _videoPlayerWidget()
+                    : _videoLoading(
+                        pageProvider.infoItem is StreamInfoItem
+                          ? pageProvider.infoItem.thumbnails.hqdefault
+                          : pageProvider.infoItem is PlaylistInfoItem
+                            ? pageProvider.infoItem.thumbnailUrl
+                            : null,
+                      )
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: 12),
+          // Video Details
+          _videoDetails(),
+          // ---------------------------------------
+          // Likes, dislikes, Views and Share button
+          // ---------------------------------------
+          _videoEngagementWidget(),
+          Divider(height: 1),
+        ],
+      ),
+    );
+  }
+
+  Widget _portraitVideoPage() {
+    VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
     return Column(
       children: [
         Expanded(
@@ -211,47 +285,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
               padding: EdgeInsets.only(top: 4),
               child: Column(
                 children: <Widget> [
-                  // Top StatusBar Padding
-                  Container(
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                    height: MediaQuery.of(context).padding.top,
-                    width: double.infinity,
-                  ),
-                  // Mini-Player
-                  Container(
-                    margin: EdgeInsets.only(left: 12, right: 12),
-                    child: MeasureSize(
-                      onChange: (Size size) {
-                        playerHeight = size.height;
-                      },
-                      child: AspectRatio(
-                        aspectRatio: 16/9,
-                        child: AnimatedSwitcher(
-                          duration: Duration(milliseconds: 400),
-                          child: pageProvider.currentVideo != null
-                            ? _videoPlayerWidget()
-                            : _videoLoading(
-                                pageProvider.infoItem is StreamInfoItem
-                                  ? pageProvider.infoItem.thumbnails.hqdefault
-                                  : pageProvider.infoItem is PlaylistInfoItem
-                                    ? pageProvider.infoItem.thumbnailUrl
-                                    : null,
-                              )
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 12),
-                  // Video Details
-                  VideoDetails(
-                    infoItem: pageProvider.infoItem,
-                    uploaderAvatarUrl: pageProvider.currentChannel?.avatarUrl ?? null,
-                  ),
-                  // ---------------------------------------
-                  // Likes, dislikes, Views and Share button
-                  // ---------------------------------------
-                  _videoEngagementWidget(),
-                  Divider(height: 1),
+                  _portraitMainBody(),
                   Expanded(
                     child: AnimatedSwitcher(
                       duration: Duration(milliseconds: 300),
@@ -365,47 +399,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
               padding: EdgeInsets.only(top: 4),
               child: Column(
                 children: <Widget> [
-                  // Top StatusBar Padding
-                  Container(
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                    height: MediaQuery.of(context).padding.top,
-                    width: double.infinity,
-                  ),
-                  // Mini-Player
-                  Container(
-                    margin: EdgeInsets.only(left: 12, right: 12),
-                    child: MeasureSize(
-                      onChange: (Size size) {
-                        playerHeight = size.height;
-                      },
-                      child: AspectRatio(
-                        aspectRatio: 16/9,
-                        child: AnimatedSwitcher(
-                          duration: Duration(milliseconds: 400),
-                          child: pageProvider.currentVideo != null
-                            ? _videoPlayerWidget()
-                            : _videoLoading(
-                                pageProvider.infoItem is StreamInfoItem
-                                  ? pageProvider.infoItem.thumbnails.hqdefault
-                                  : pageProvider.infoItem is PlaylistInfoItem
-                                    ? pageProvider.infoItem.thumbnailUrl
-                                    : null,
-                              )
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 12),
-                  // Video Details
-                  VideoDetails(
-                    infoItem: pageProvider.infoItem,
-                    uploaderAvatarUrl: pageProvider.currentChannel?.avatarUrl ?? null,
-                  ),
-                  // ---------------------------------------
-                  // Likes, dislikes, Views and Share button
-                  // ---------------------------------------
-                  _videoEngagementWidget(),
-                  Divider(height: 1),
+                  _portraitMainBody(),
                   // Playlist & Videos
                   Container(
                     padding: EdgeInsets.only(
@@ -536,7 +530,6 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
 
   Widget _videoEngagementWidget() {
     VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
-    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     return AnimatedSize(
       vsync: this,
       duration: Duration(milliseconds: 300),
@@ -569,7 +562,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                   },
                   onOpenComments: () {
                     double topPadding = MediaQuery.of(context).padding.top;
-                    scaffoldKey.currentState.showBottomSheet((context) {
+                    bottomSheetController = scaffoldKey.currentState.showBottomSheet((context) {
                       return VideoComments(
                         infoItem: pageProvider.infoItem,
                         topPadding: topPadding + playerHeight + 8,
@@ -590,6 +583,53 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
               ],
             )
       ),
+    );
+  }
+
+  Widget _videoDetails() {
+    VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
+    return VideoDetails(
+      infoItem: pageProvider.infoItem,
+      uploaderAvatarUrl: pageProvider.currentChannel?.avatarUrl ?? null,
+      onMoreDetails: () {
+        if (pageProvider.currentVideo == null) return;
+        double height = MediaQuery.of(context).size.height;
+        double bottomPadding = MediaQuery.of(context).padding.bottom;
+        bottomSheetController = scaffoldKey.currentState.showBottomSheet((context) {
+          return Wrap(
+            children: [
+              Container(
+                height: height - mainBodyHeight - bottomPadding,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(15),
+                    topRight: Radius.circular(15)
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.02),
+                      blurRadius: 4,
+                      spreadRadius: 0.1,
+                      offset: Offset(0, -10)
+                    )
+                  ]
+                ),
+                child: MoreDetailsSheet(
+                  video: pageProvider.currentVideo,
+                  segments: pageProvider?.currentVideo?.segments ?? [],
+                  onSegmentTap: (position) => pageProvider.playerKey.currentState
+                    .controller.seekTo(Duration(seconds: position)),
+                ),
+              ),
+              Container(
+                height: bottomPadding,
+                color: Colors.transparent,
+              )
+            ],
+          );
+        });
+      },
     );
   }
 

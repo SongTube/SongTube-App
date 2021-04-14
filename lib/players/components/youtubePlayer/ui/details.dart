@@ -13,9 +13,11 @@ import 'package:transparent_image/transparent_image.dart';
 class VideoDetails extends StatelessWidget {
   final dynamic infoItem;
   final String uploaderAvatarUrl;
+  final Function onMoreDetails;
   VideoDetails({
     @required this.infoItem,
     this.uploaderAvatarUrl,
+    this.onMoreDetails
   });
   @override
   Widget build(BuildContext context) {
@@ -105,6 +107,11 @@ class VideoDetails extends StatelessWidget {
                     ),
                   ],
                 ),
+              ),
+              IconButton(
+                icon: Icon(Icons.expand_more_rounded,
+                  color: Theme.of(context).iconTheme.color),
+                onPressed: onMoreDetails,
               )
             ],
           ),
