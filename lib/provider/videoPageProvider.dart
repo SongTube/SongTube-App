@@ -53,9 +53,12 @@ class VideoPageProvider extends ChangeNotifier {
       currentVideo = null;
       currentChannel = null;
       isPlaylist = true;
+      currentTags = null;
       notifyListeners();
       _infoItem.getVideo.then((value) { 
         currentVideo = value;
+        currentTags = TagsControllers();
+        currentTags.updateTextControllers(value);
         saveToHistory(currentVideo.toStreamInfoItem());
         notifyListeners();
       });
@@ -134,6 +137,8 @@ class VideoPageProvider extends ChangeNotifier {
     notifyListeners();
     _infoItem.getVideo.then((value) { 
       currentVideo = value;
+      currentTags = TagsControllers();
+      currentTags.updateTextControllers(value);
       // TODO: Save Playlist to History
       notifyListeners();
     });

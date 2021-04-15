@@ -1,9 +1,15 @@
 // Flutter
+import 'dart:io';
+import 'dart:ui';
+
+import 'package:animations/animations.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 // Packages
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter_xlider/flutter_xlider.dart';
+import 'package:image_fade/image_fade.dart';
 import 'package:newpipeextractor_dart/models/streams/audioOnlyStream.dart';
 import 'package:newpipeextractor_dart/models/video.dart';
 import 'package:newpipeextractor_dart/utils/httpClient.dart';
@@ -11,7 +17,18 @@ import 'package:provider/provider.dart';
 import 'package:songtube/internal/download/downloadItem.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/models/tagsControllers.dart';
+import 'package:songtube/internal/musicBrainzApi.dart';
 import 'package:songtube/provider/configurationProvider.dart';
+import 'package:songtube/provider/preferencesProvider.dart';
+import 'package:songtube/provider/videoPageProvider.dart';
+import 'package:songtube/ui/animations/blurPageRoute.dart';
+import 'package:songtube/ui/animations/fadeIn.dart';
+import 'package:songtube/ui/components/tagsResultsPage.dart';
+import 'package:songtube/ui/components/textfieldTile.dart';
+import 'package:songtube/ui/dialogs/loadingDialog.dart';
+import 'package:songtube/ui/internal/popupMenu.dart';
+import 'package:string_validator/string_validator.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class AudioDownloadMenu extends StatefulWidget {
   final YoutubeVideo video;
@@ -30,17 +47,33 @@ class AudioDownloadMenu extends StatefulWidget {
 
 class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProviderStateMixin {
 
-  // Variables
-  double volumeModifier = 1;
+  // Audio Settings
+  AudioOnlyStream selectedAudio;
+
+  // Audio Features
+  bool showAudioFeatures = false;
+  double volumeModifier = 0;
   int bassGain = 0;
   int trebleGain = 0;
   bool normalizeAudio = false;
 
-  void _onDownload(AudioOnlyStream streamInfo) {
+  // Current Tags
+  bool showTags = false;
+
+  // Converter options
+  bool enableConversion = true;
+
+  @override
+  void initState() {
+    selectedAudio = widget.video.audioWithBestAacQuality;
+    super.initState();
+  }
+
+  void _onDownload() {
     List<dynamic> list = [
       "Audio",
-      streamInfo, 
-      volumeModifier.toString(),
+      selectedAudio, 
+      (1+volumeModifier).toString(),
       bassGain.toString(),
       trebleGain.toString(),
       normalizeAudio
@@ -54,21 +87,10 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
     widget.onDownload(item);
   }
 
-  String volumeString(double value) {
-    if (value == 1) {
-      return "Default";
-    } else if (value < 1) {
-      return "-" + ((1-value)*100).toStringAsFixed(2) + "%";
-    } else if (value > 1) {
-      return "+" + (value*100).toStringAsFixed(2) + "%";
-    } else {
-      return "Not Supported";
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
+    VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
     return SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -87,175 +109,734 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                   onPressed: widget.onBack
                 ),
                 SizedBox(width: 4),
-                Text(Languages.of(context).labelSelectAudio, style: TextStyle(
+                Text(Languages.of(context).labelAudio, style: TextStyle(
                   fontSize: 20,
-                  fontFamily: "YTSans"
+                  fontFamily: "Product Sans",
+                  fontWeight: FontWeight.w600
                 )),
               ],
             ),
           ),
-          // Audio Download Options
-          SizedBox(
-            height: 150,
-            child: ListView.builder(
-              itemCount: widget.video.audioOnlyStreams.length,
-              scrollDirection: Axis.horizontal,
-              shrinkWrap: true,
-              itemBuilder: (BuildContext context, int index) {
-                return GestureDetector(
-                  onTap: () => _onDownload(widget.video.audioOnlyStreams[index]),
-                  child: Container(
-                    width: 125,
-                    margin: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: widget.video.audioOnlyStreams[index] ==
-                          widget.video.audioWithBestAacQuality
-                          ? Theme.of(context).accentColor
-                          : Theme.of(context).iconTheme.color.withOpacity(0.1),
-                        width: 1.5,
-                      ),
-                      color: Theme.of(context).cardColor,
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 12,
-                          color: Colors.black.withOpacity(0.04)
-                        )
-                      ]
-                    ),
+          Divider(
+            height: 1,
+            thickness: 1,
+            color: Colors.grey[600].withOpacity(0.1),
+            indent: 12,
+            endIndent: 12
+          ),
+          GestureDetector(
+            onTap: () async {
+              File image = File((await FilePicker.platform
+                .pickFiles(type: FileType.image))
+                .paths[0]);
+              if (image == null) return;
+              pageProvider.currentTags.artworkController = image.path;
+              setState(() {});
+            },
+            child: Container(
+              height: 110,
+              padding: EdgeInsets.all(12),
+              child: Row(
+                children: [
+                  AspectRatio(
+                    aspectRatio: 1/1,
                     child: Stack(
+                      fit: StackFit.passthrough,
                       alignment: Alignment.center,
                       children: [
-                        if (widget.video.audioOnlyStreams[index] == widget.video.audioWithBestAacQuality)
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Container(
-                            padding: EdgeInsets.all(5),
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).accentColor,
-                              borderRadius: BorderRadius.only(
-                                bottomRight: Radius.circular(10),
-                                topLeft: Radius.circular(5)
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(
+                                blurRadius: 12,
+                                color: Colors.black.withOpacity(0.3)
                               )
-                            ),
-                            child: Text(
-                              Languages.of(context).labelBest,
-                              style: TextStyle(
-                                fontSize: 10,
-                                color: Colors.white
-                              ),
+                            ]
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: ImageFade(
+                              fadeDuration: Duration(milliseconds: 300),
+                              placeholder: Container(color: Theme.of(context).cardColor),
+                              image: isURL(pageProvider.currentTags.artworkController)
+                                ? NetworkImage(pageProvider.currentTags.artworkController)
+                                : FileImage(File(pageProvider.currentTags.artworkController)),
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(EvaIcons.musicOutline, size: 32,
-                              color: Theme.of(context).accentColor),
-                            SizedBox(height: 4),
-                            Column(
-                              children: [
-                                Text(
-                                  "${widget.video.audioOnlyStreams[index].formatName}",
-                                  overflow: TextOverflow.fade,
-                                  textAlign: TextAlign.center,
-                                  softWrap: false,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 14
-                                  ),
-                                ),
-                                Text(
-                                  "${widget.video.audioOnlyStreams[index].averageBitrate} Kbit/s",
-                                  overflow: TextOverflow.fade,
-                                  textAlign: TextAlign.center,
-                                  softWrap: false,
-                                  style: TextStyle(
-                                    fontSize: 10
-                                  ),
-                                ),
-                                FutureBuilder(
-                                  future: ExtractorHttpClient.getContentLength(widget.video.audioOnlyStreams[index].url),
-                                  builder: (context, snapshot) {
-                                    return Text(
-                                      snapshot.hasData
-                                        ? "${((snapshot.data/1024)/1024).toStringAsFixed(2)} MB"
-                                        : "Loading...",
-                                      overflow: TextOverflow.fade,
-                                      textAlign: TextAlign.center,
-                                      softWrap: false,
-                                      style: TextStyle(
-                                        fontSize: 10
-                                      ),
-                                    );
-                                  }
-                                ),
-                              ],
-                            )
-                          ],
+                        Align(
+                          alignment: Alignment.center,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(50),
+                            child: Container(
+                              height: 40,
+                              width: 40,
+                              decoration: BoxDecoration(
+                                color: Colors.black.withOpacity(0.4)
+                              ),
+                              child: Icon(EvaIcons.brushOutline,
+                                color: Colors.white),
+                            ),
+                          ),
                         ),
                       ],
                     )
                   ),
-                );
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 8, left: 12, right: 8),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            pageProvider.currentTags.titleController.text,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontFamily: 'Product Sans',
+                              fontWeight: FontWeight.w600
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          SizedBox(height: 4),
+                          Text(
+                            pageProvider.currentTags.artistController.text,
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: 'Product Sans',
+                              fontWeight: FontWeight.w600,
+                              color: Theme.of(context).textTheme.bodyText1.color
+                                .withOpacity(0.6)
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Row(
+                            children: [
+                              Container(
+                                height: 30,
+                                child: DropdownButton<String>(
+                                  value: selectedAudio.formatName == "m4a" ? "AAC" : "OGG",
+                                  iconSize: 20,
+                                  style: TextStyle(
+                                    color: Theme.of(context).accentColor,
+                                    fontFamily: 'Product Sans',
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14
+                                  ),
+                                  underline: Container(),
+                                  items: [
+                                    DropdownMenuItem(
+                                      child: Text("AAC"),
+                                      value: "AAC",
+                                    ),
+                                    DropdownMenuItem(
+                                      child: Text("OGG"),
+                                      value: "OGG",
+                                    )
+                                  ],
+                                  onChanged: (String value) {
+                                    if (value == "AAC") {
+                                      setState(() => selectedAudio = widget.video.audioWithBestAacQuality);
+                                    } else if (value == "OGG") {
+                                      setState(() => selectedAudio = widget.video.audioWithBestOggQuality);
+                                    }
+                                  },
+                                ),
+                              ),
+                              SizedBox(width: 8),
+                              Container(
+                                height: 30,
+                                child: DropdownButton<String>(
+                                  value: "${selectedAudio.averageBitrate}",
+                                  iconSize: 20,
+                                  style: TextStyle(
+                                    color: Theme.of(context).accentColor,
+                                    fontFamily: 'Product Sans',
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14
+                                  ),
+                                  underline: Container(),
+                                  items: selectedAudio.formatName == "m4a"
+                                    ? List.generate(getSpecificAudioCodecList("m4a").length, (index) => 
+                                        DropdownMenuItem(
+                                          child: Text("${getSpecificAudioCodecList("m4a")[index].averageBitrate} Kbps/s"),
+                                          value: "${getSpecificAudioCodecList("m4a")[index].averageBitrate}",
+                                      )).reversed.toList()
+                                    : List.generate(getSpecificAudioCodecList("ogg").length, (index) => 
+                                        DropdownMenuItem(
+                                          child: Text("${getSpecificAudioCodecList("ogg")[index].averageBitrate} Kbps/s"),
+                                          value: "${getSpecificAudioCodecList("ogg")[index].averageBitrate}",
+                                      )).reversed.toList(),
+                                  onChanged: (String value) {
+                                    String codec = selectedAudio.formatName == "m4a" ? "m4a" : "ogg";
+                                    int index = getSpecificAudioCodecList(codec).indexWhere((element) => element.averageBitrate.toString() == value);
+                                    setState(() => selectedAudio = getSpecificAudioCodecList(codec)[index]);
+                                  },
+                                ),
+                              ),
+                              SizedBox(width: 8),
+                              InkWell(
+                                onTap: () => setState(() => pageProvider.currentTags.updateTextControllers(widget.video)),
+                                borderRadius: BorderRadius.circular(50),
+                                child: Ink(
+                                  color: Colors.transparent,
+                                  child: Icon(EvaIcons.undoOutline,
+                                    color: Theme.of(context).iconTheme.color,
+                                    size: 16),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  FlexiblePopupMenu(
+                    child: Container(
+                      margin: EdgeInsets.only(right: 12),
+                      color: Colors.transparent,
+                      child: Icon(Icons.more_vert_rounded,
+                        color: Theme.of(context).iconTheme.color),
+                    ),
+                    items: [
+                      FlexiblePopupItem(
+                        title: Languages.of(context).labelPerformAutomaticTagging,
+                        value: 'autoTag',
+                      ),
+                      FlexiblePopupItem(
+                        title: Languages.of(context).labelSelectTagsfromMusicBrainz,
+                        value: 'manualTag',
+                      ),
+                    ],
+                    onItemTap: (String value) async {
+                      if (value == 'autoTag') {
+                        showDialog(
+                          context: context,
+                          builder: (_) => LoadingDialog()
+                        );
+                        String lastArtwork = pageProvider.currentTags.artworkController;
+                        var record = await MusicBrainzAPI
+                          .getFirstRecord(pageProvider.currentTags.titleController.text);
+                        pageProvider.currentTags = await MusicBrainzAPI.getSongTags(record);
+                        if (pageProvider.currentTags.artworkController == null)
+                          pageProvider.currentTags.artworkController = lastArtwork;
+                        Navigator.pop(context);
+                        setState(() {});
+                      } else if (value == 'manualTag') {
+                        var record = await Navigator.push(context,
+                          BlurPageRoute(builder: (context) => 
+                            TagsResultsPage(
+                              title: pageProvider.currentTags.titleController.text,
+                              artist: pageProvider.currentTags.artistController.text
+                            ),
+                            blurStrength: Provider.of<PreferencesProvider>
+                              (context, listen: false).enableBlurUI ? 20 : 0));
+                        if (record == null) return;
+                        showDialog(
+                          context: context,
+                          builder: (_) => LoadingDialog()
+                        );
+                        String lastArtwork = pageProvider.currentTags.artworkController;
+                        pageProvider.currentTags = await MusicBrainzAPI.getSongTags(record);
+                        if (pageProvider.currentTags.artworkController == null)
+                          pageProvider.currentTags.artworkController = lastArtwork;
+                        Navigator.pop(context);
+                        setState(() {});
+                      } else {
+                        return;
+                      }
+                    },
+                  )
+                ],
+              ),
+            ),
+          ),
+          Divider(
+            height: 1,
+            thickness: 1,
+            color: Colors.grey[600].withOpacity(0.1),
+            indent: 12,
+            endIndent: 12
+          ),
+          // Tags editor textfields
+          _tagsEditor(),
+          Divider(
+            height: 1,
+            thickness: 1,
+            color: Colors.grey[600].withOpacity(0.1),
+            indent: 12,
+            endIndent: 12
+          ),
+          // Audio features controls
+          _audioFeatures(),
+          Divider(
+            height: 1,
+            thickness: 1,
+            color: Colors.grey[600].withOpacity(0.1),
+            indent: 12,
+            endIndent: 12
+          ),
+          // Enable/Disable audio conversion
+          _converterOptions(),
+          Divider(
+            height: 1,
+            thickness: 1,
+            color: Colors.grey[600].withOpacity(0.1),
+            indent: 12,
+            endIndent: 12
+          ),
+          GestureDetector(
+            onTap: () => _onDownload(),
+            child: Container(
+              padding: EdgeInsets.all(12),
+              width: double.infinity,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Spacer(),
+                  Container(
+                    padding: EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Theme.of(context).scaffoldBackgroundColor,
+                      border: Border.all(color: Colors.grey[600].withOpacity(0.1))
+                    ),
+                    child: Row(
+                      children: [
+                        Text(
+                          Languages.of(context).labelDownload,
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme.bodyText1.color,
+                            fontFamily: 'Product Sans',
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16
+                          ),
+                        ),
+                        SizedBox(width: 4),
+                        Icon(EvaIcons.downloadOutline,
+                          color: Theme.of(context).accentColor)
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Container(
+            height: MediaQuery.of(context).viewInsets.bottom,
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _tagsEditor() {
+    VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
+    return Column(
+      children: [
+        InkWell(
+          onTap: () => setState(() => showTags = !showTags),
+          child: Padding(
+            padding: EdgeInsets.all(12.0),
+            child: Ink(
+              height: 32,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(EvaIcons.editOutline,
+                    color: Theme.of(context).accentColor),
+                  SizedBox(width: 8),
+                  Text(
+                    Languages.of(context).labelTagsEditor.replaceAll("\n", " "),
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontFamily: 'Product Sans',
+                      fontWeight: FontWeight.w600,
+                      color: Theme.of(context).textTheme.bodyText1.color,
+                    ),
+                  ),
+                  Spacer(),
+                  Icon(showTags ? Icons.expand_less : Icons.expand_more,
+                    color: Theme.of(context).iconTheme.color),
+                  SizedBox(width: 12),
+                ],
+              ),
+            ),
+          ),
+        ),
+        AnimatedSize(
+          curve: Curves.easeInOut,
+          duration: Duration(milliseconds: 300),
+          vsync: this,
+          child: showTags ? FadeInTransition(
+            delay: Duration(milliseconds: 300),
+            duration: Duration(milliseconds: 250),
+            child: Column(
+              children: [
+                SizedBox(height: 12),
+                // Title TextField
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: TextFieldTile(
+                        textController: pageProvider.currentTags.titleController,
+                        inputType: TextInputType.text,
+                        labelText: Languages.of(context).labelEditorTitle,
+                        icon: EvaIcons.textOutline,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 12),
+                // Album & Artist TextField Row
+                Row(
+                  children: <Widget>[
+                    // Album TextField
+                    Expanded(
+                      child: TextFieldTile(
+                        textController: pageProvider.currentTags.albumController,
+                        inputType: TextInputType.text,
+                        labelText: Languages.of(context).labelEditorAlbum,
+                        icon: EvaIcons.bookOpenOutline,
+                      ),
+                    ),
+                    SizedBox(width: 12),
+                    // Artist TextField
+                    Expanded(
+                      child: TextFieldTile(
+                        textController: pageProvider.currentTags.artistController,
+                        inputType: TextInputType.text,
+                        labelText: Languages.of(context).labelEditorArtist,
+                        icon: EvaIcons.personOutline,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 12),
+                // Gender & Date TextField Row
+                Row(
+                  children: <Widget>[
+                    // Gender TextField
+                    Expanded(
+                      child: TextFieldTile(
+                        textController: pageProvider.currentTags.genreController,
+                        inputType: TextInputType.text,
+                        labelText: Languages.of(context).labelEditorGenre,
+                        icon: EvaIcons.bookOutline,
+                      ),
+                    ),
+                    SizedBox(width: 12),
+                    // Date TextField
+                    Expanded(
+                      child: TextFieldTile(
+                        textController: pageProvider.currentTags.dateController,
+                        inputType: TextInputType.datetime,
+                        labelText: Languages.of(context).labelEditorDate,
+                        icon: EvaIcons.calendarOutline,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 12),
+                // Disk & Track TextField Row
+                Row(
+                  children: <Widget>[
+                    // Disk TextField
+                    Expanded(
+                      child: TextFieldTile(
+                        textController: pageProvider.currentTags.discController,
+                        inputType: TextInputType.number,
+                        labelText: Languages.of(context).labelEditorDisc,
+                        icon: EvaIcons.playCircleOutline
+                      ),
+                    ),
+                    SizedBox(width: 12),
+                    // Track TextField
+                    Expanded(
+                      child: TextFieldTile(
+                        textController: pageProvider.currentTags.trackController,
+                        inputType: TextInputType.number,
+                        labelText: Languages.of(context).labelEditorTrack,
+                        icon: EvaIcons.musicOutline,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ) : Container(),
+        ),
+      ],
+    );
+  }
+
+  Widget _audioFeatures() {
+    return Column(
+      children: [
+        InkWell(
+          onTap: () => setState(() => showAudioFeatures = !showAudioFeatures),
+          child: Padding(
+            padding: EdgeInsets.all(12),
+            child: Ink(
+              height: 32,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(EvaIcons.musicOutline,
+                    color: Theme.of(context).accentColor),
+                  SizedBox(width: 8),
+                  Text(
+                    "Audio Features",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontFamily: 'Product Sans',
+                      fontWeight: FontWeight.w600,
+                      color: Theme.of(context).textTheme.bodyText1.color,
+                    ),
+                  ),
+                  Spacer(),
+                  Icon(showAudioFeatures ? Icons.expand_less : Icons.expand_more,
+                    color: Theme.of(context).iconTheme.color),
+                  SizedBox(width: 12),
+                ],
+              ),
+            ),
+          ),
+        ),
+        AnimatedSize(
+          curve: Curves.easeInOut,
+          duration: Duration(milliseconds: 300),
+          vsync: this,
+          child: showAudioFeatures ? FadeInTransition(
+            delay: Duration(milliseconds: 300),
+            duration: Duration(milliseconds: 250),
+            child: Padding(
+              padding: EdgeInsets.only(left: 12, right: 12),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 12),
+                  // Volume Gain
+                  Text(
+                    Languages.of(context).labelVolume,
+                    style: TextStyle(
+                      color: Theme.of(context).iconTheme.color,
+                      fontFamily: 'Product Sans',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14
+                    ),
+                  ),
+                  _audioFeatureSlider(
+                    min: 0, max: 100,
+                    limitsSuffix: "%",
+                    onChanged: (double value) {
+                      setState(() => volumeModifier = value/100);
+                    },
+                    value: volumeModifier*100,
+                    tooltip: "${(volumeModifier*100).round()}%"
+                  ),
+                  //
+                  // Bass Gain
+                  Text(
+                    Languages.of(context).labelBassGain,
+                    style: TextStyle(
+                      color: Theme.of(context).iconTheme.color,
+                      fontFamily: 'Product Sans',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14
+                    ),
+                  ),
+                  _audioFeatureSlider(
+                    min: 0, max: 10,
+                    limitsSuffix: "",
+                    onChanged: (double value) {
+                      setState(() => bassGain = value.round());
+                    },
+                    value: bassGain.toDouble()
+                  ),
+                  //
+                  // Treble Gain
+                  Text(
+                    Languages.of(context).labelTrebleGain,
+                    style: TextStyle(
+                      color: Theme.of(context).iconTheme.color,
+                      fontFamily: 'Product Sans',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14
+                    ),
+                  ),
+                  _audioFeatureSlider(
+                    min: 0, max: 10,
+                    limitsSuffix: "",
+                    onChanged: (double value) {
+                      setState(() => trebleGain = value.round());
+                    },
+                    value: trebleGain.toDouble()
+                  ),
+                  // Audio Normalization
+                  InkWell(
+                    child: Ink(
+                      padding: EdgeInsets.only(top: 8, bottom: 16),
+                      child: Row(
+                        children: [
+                          Icon(
+                            normalizeAudio
+                              ? Icons.check_box_outlined
+                              : Icons.check_box_outline_blank,
+                            color: normalizeAudio
+                              ? Theme.of(context).accentColor
+                              : Theme.of(context).iconTheme.color
+                          ),
+                          SizedBox(width: 8),
+                          Text("Normalize Audio", style: TextStyle(
+                            fontSize: 16,
+                            color: Theme.of(context).iconTheme.color,
+                            fontFamily: "Product Sans",
+                            fontWeight: FontWeight.w600
+                          )),
+                        ],
+                      ),
+                    ),
+                    onTap: () => setState(() => normalizeAudio = !normalizeAudio),
+                  ),
+                ],
+              ),
+            ),
+          ) : Container(),
+        ),
+      ],
+    );
+  }
+
+  Widget _audioFeatureSlider({
+    double min, double max, Function(double) onChanged,
+    String limitsSuffix, double value, String tooltip
+  }) {
+    return Row(
+      children: [
+        Expanded(
+          child: Container(
+            height: 10,
+            margin: EdgeInsets.only(top: 20, bottom: 20),
+            child: FlutterSlider(
+              trackBar: FlutterSliderTrackBar(
+                inactiveTrackBar: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50)
+                ),
+                activeTrackBar: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50),
+                  color: Theme.of(context).accentColor
+                ),
+              ),
+              tooltip: FlutterSliderTooltip(
+                format: tooltip != null
+                  ? (_) {
+                      return tooltip;
+                    }
+                  : null,
+              ),
+              handler: FlutterSliderHandler(
+                child: Container(
+                  height: 10,
+                  width: 10,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50),
+                    color: Theme.of(context).accentColor,
+                  ),
+                )
+              ),
+              values: [value],
+              min: min, max: max,
+              onDragging: (_, position, __) {
+                onChanged(position);
               },
             ),
           ),
-          // Enable Disable Conversion
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+        ),
+        Text(
+          "$max$limitsSuffix",
+          style: TextStyle(
+            fontSize: 10,
+            color: Theme.of(context).iconTheme.color,
+            fontFamily: 'Product Sans',
+            fontWeight: FontWeight.w600
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget _converterOptions() {
+    ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
+    return InkWell(
+      onTap: () => setState(() => enableConversion = !enableConversion),
+      child: Padding(
+        padding: EdgeInsets.all(12),
+        child: Ink(
+          height: 32,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              InkWell(
-                onTap: () {
-                  config.enableFFmpegActionType = !config.enableFFmpegActionType;
-                  setState(() {});
-                },
-                borderRadius: BorderRadius.circular(20),
-                child: Ink(
-                  padding: EdgeInsets.only(left: 12, bottom: 12, top: 4),
-                  child: Row(
-                    children: [
-                      Checkbox(
-                        value: config.enableFFmpegActionType,
-                        onChanged: (_) {}
-                      ),
-                      Text(
-                        Languages.of(context).labelEnableAudioConversion,
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500
-                        )
-                      )
-                    ],
-                  ),
+              Icon(
+                enableConversion
+                  ? Icons.check_box_outlined
+                  : Icons.check_box_outline_blank,
+                color: enableConversion
+                  ? Theme.of(context).accentColor
+                  : Theme.of(context).iconTheme.color
+              ),
+              SizedBox(width: 8),
+              Text(
+                Languages.of(context).labelEnableAudioConversion,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontFamily: 'Product Sans',
+                  fontWeight: FontWeight.w600,
+                  color: Theme.of(context).textTheme.bodyText1.color,
                 ),
               ),
               Spacer(),
               AnimatedSwitcher(
-                duration: Duration(milliseconds: 400),
-                child: config.enableFFmpegActionType ? DropdownButtonHideUnderline(
+                duration: Duration(milliseconds: 300),
+                child: enableConversion ? DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
+                    icon: Icon(Icons.expand_more_rounded),
                     items: [
                       DropdownMenuItem<String>(
-                        child: Text('AAC (.m4a)', style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyText1.color,
-                          fontWeight: FontWeight.w500
+                        child: Text('AAC', style: TextStyle(
+                          color: Theme.of(context).accentColor,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
+                          fontFamily: 'Product Sans'
                         )),
                         value: 'AAC',
                       ),
                       DropdownMenuItem<String>(
-                        child: Text('OGG (.ogg)', style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyText1.color,
-                          fontWeight: FontWeight.w500
+                        child: Text('OGG', style: TextStyle(
+                          color: Theme.of(context).accentColor,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
+                          fontFamily: 'Product Sans'
                         )),
                         value: 'OGG Vorbis',
                       ),
                       DropdownMenuItem<String>(
-                        child: Text('MP3 (.mp3)', style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyText1.color,
-                          fontWeight: FontWeight.w500
+                        child: Text('MP3', style: TextStyle(
+                          color: Theme.of(context).accentColor,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
+                          fontFamily: 'Product Sans'
                         )),
                         value: 'MP3',
                       ),
@@ -272,250 +853,24 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
               SizedBox(width: 12)
             ],
           ),
-          // Gain Controls
-          Container(
-            margin: EdgeInsets.only(left: 12, bottom: 16),
-            child: Row(
-              children: [
-                Icon(EvaIcons.barChartOutline, color: Theme.of(context).accentColor),
-                SizedBox(width: 8),
-                Text(Languages.of(context).labelGainControls, style: TextStyle(
-                  fontSize: 20,
-                  fontFamily: "YTSans"
-                )),
-              ],
-            ),
-          ),
-          // Volume Modifier
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              SizedBox(width: 16),
-              Text(
-                Languages.of(context).labelVolume+": ",
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500
-                ),
-              ),
-              Text(
-                volumeString(volumeModifier),
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: Theme.of(context).accentColor
-                ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 50,
-            child: FlutterSlider(
-              values: [volumeModifier*100, 200],
-              min: 0,
-              max: 200,
-              onDragging: (value, currentValue, upperValue) {
-                double value = (currentValue/100);
-                value = double.parse(value.toStringAsFixed(2));
-                setState(() => volumeModifier = value);
-              },
-              step: FlutterSliderStep(
-                isPercentRange: true,
-                rangeList: [
-                  FlutterSliderRangeStep(from: 0, to: 200, step: 5),
-                ]
-              ),
-              trackBar: FlutterSliderTrackBar(
-                inactiveTrackBar: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Theme.of(context).cardColor,
-                ),
-                activeTrackBar: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4),
-                  color: Theme.of(context).accentColor
-                ),
-              ),
-              tooltip: FlutterSliderTooltip(
-                disabled: true,
-              ),
-            ),
-          ),
-          Row(
-            children: <Widget>[
-              SizedBox(width: 16),
-              Text("-100%", style: TextStyle(fontSize: 10)),
-              Spacer(),
-              Text("+200%", style: TextStyle(fontSize: 10)),
-              SizedBox(width: 16),
-            ],
-          ),
-          SizedBox(height: 16),
-          Flex(
-            direction: Axis.horizontal,
-            children: [
-              Flexible(
-                flex: 1,
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        SizedBox(width: 16),
-                        Text(
-                          Languages.of(context).labelBassGain+": ",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500
-                          ),
-                        ),
-                        Text(
-                          bassGain.toString(),
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            color: Theme.of(context).accentColor
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 50,
-                      child: FlutterSlider(
-                        values: [bassGain.toDouble(), 10],
-                        min: -10,
-                        max: 10,
-                        onDragging: (value, currentValue, upperValue) {
-                          setState(() => bassGain = currentValue.toInt());
-                        },
-                        step: FlutterSliderStep(
-                          isPercentRange: true,
-                          rangeList: [
-                            FlutterSliderRangeStep(from: -10, to: 10, step: 1),
-                          ]
-                        ),
-                        trackBar: FlutterSliderTrackBar(
-                          inactiveTrackBar: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Theme.of(context).cardColor,
-                          ),
-                          activeTrackBar: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4),
-                            color: Theme.of(context).accentColor
-                          ),
-                        ),
-                        tooltip: FlutterSliderTooltip(
-                          disabled: true,
-                        ),
-                      ),
-                    ),
-                    Row(
-                      children: <Widget>[
-                        SizedBox(width: 16),
-                        Text("-10", style: TextStyle(fontSize: 10)),
-                        Spacer(),
-                        Text("+10", style: TextStyle(fontSize: 10)),
-                        SizedBox(width: 16),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Flexible(
-                flex: 1,
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        SizedBox(width: 16),
-                        Text(
-                          Languages.of(context).labelTrebleGain+": ",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500
-                          ),
-                        ),
-                        Text(
-                          trebleGain.toString(),
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            color: Theme.of(context).accentColor
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 50,
-                      child: FlutterSlider(
-                        values: [trebleGain.toDouble(), 10],
-                        min: -10,
-                        max: 10,
-                        onDragging: (value, currentValue, upperValue) {
-                          setState(() => trebleGain = currentValue.toInt());
-                        },
-                        step: FlutterSliderStep(
-                          isPercentRange: true,
-                          rangeList: [
-                            FlutterSliderRangeStep(from: -10, to: 10, step: 1),
-                          ]
-                        ),
-                        trackBar: FlutterSliderTrackBar(
-                          inactiveTrackBar: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Theme.of(context).cardColor,
-                          ),
-                          activeTrackBar: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4),
-                            color: Theme.of(context).accentColor
-                          ),
-                        ),
-                        tooltip: FlutterSliderTooltip(
-                          disabled: true,
-                        ),
-                      ),
-                    ),
-                    Row(
-                      children: <Widget>[
-                        SizedBox(width: 16),
-                        Text("-10", style: TextStyle(fontSize: 10)),
-                        Spacer(),
-                        Text("+10", style: TextStyle(fontSize: 10)),
-                        SizedBox(width: 16),
-                      ],
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
-          SizedBox(height: 8),
-          GestureDetector(
-            onTap: () {
-              setState(() => normalizeAudio = !normalizeAudio);
-            },
-            child: SwitchListTile(
-              title: Container(
-                child: Row(
-                  children: [
-                    Icon(EvaIcons.volumeDownOutline, color: Theme.of(context).accentColor),
-                    SizedBox(width: 8),
-                    Text("Normalize Audio", style: TextStyle(
-                      fontSize: 20,
-                      color: Theme.of(context).textTheme.bodyText1.color,
-                      fontFamily: "YTSans"
-                    )),
-                  ],
-                ),
-              ),
-              value: normalizeAudio,
-              onChanged: (bool value) {
-                setState(() => normalizeAudio = value);
-              },
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
+
+  List<AudioOnlyStream> getSpecificAudioCodecList(String codec) {
+    List<AudioOnlyStream> list = [];
+    widget.video.audioOnlyStreams.forEach((element) {
+      if (codec == "ogg") {
+        if (element.formatName == "WebM Opus")
+          list.add(element);
+      }
+      if (codec == "m4a") {
+        if (element.formatName == "m4a")
+          list.add(element);
+      }
+    });
+    return list;
+  }
+
 }

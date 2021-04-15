@@ -289,80 +289,15 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                   Expanded(
                     child: AnimatedSwitcher(
                       duration: Duration(milliseconds: 300),
-                      child: ListView(
-                        padding: EdgeInsets.zero,
-                        children: [
-                          SizedBox(height: 4),
-                          // Tags Editor (Not available on Playlists)
-                          AnimatedSize(
-                            vsync: this,
-                            duration: Duration(milliseconds: 300),
-                            child: VideoTags(
-                              tags: pageProvider.currentTags,
-                              infoItem: pageProvider.infoItem is StreamInfoItem
-                                ? pageProvider.infoItem : null,
-                              onAutoTag: () async {
-                                showDialog(
-                                  context: context,
-                                  builder: (_) => LoadingDialog()
-                                );
-                                String lastArtwork = pageProvider.currentTags.artworkController;
-                                var record = await MusicBrainzAPI
-                                  .getFirstRecord(pageProvider.currentTags.titleController.text);
-                                pageProvider.currentTags = await MusicBrainzAPI.getSongTags(record);
-                                if (pageProvider.currentTags.artworkController == null)
-                                  pageProvider.currentTags.artworkController = lastArtwork;
-                                Navigator.pop(context);
-                                setState(() {});
-                              },
-                              onManualTag: () async {
-                                var record = await Navigator.push(context,
-                                  BlurPageRoute(builder: (context) => 
-                                    TagsResultsPage(
-                                      title: pageProvider.currentTags.titleController.text,
-                                      artist: pageProvider.currentTags.artistController.text
-                                    ),
-                                    blurStrength: Provider.of<PreferencesProvider>
-                                      (context, listen: false).enableBlurUI ? 20 : 0));
-                                if (record == null) return;
-                                showDialog(
-                                  context: context,
-                                  builder: (_) => LoadingDialog()
-                                );
-                                String lastArtwork = pageProvider.currentTags.artworkController;
-                                pageProvider.currentTags = await MusicBrainzAPI.getSongTags(record);
-                                if (pageProvider.currentTags.artworkController == null)
-                                  pageProvider.currentTags.artworkController = lastArtwork;
-                                Navigator.pop(context);
-                                setState(() {});
-                              },
-                              onSearchDevice: () async {
-                                File image = File((await FilePicker.platform
-                                  .pickFiles(type: FileType.image))
-                                  .paths[0]);
-                                if (image == null) return;
-                                pageProvider.currentTags.artworkController = image.path;
-                                setState(() {});
-                              },
-                            ),
-                          ),
-                          SizedBox(height: 4),
-                          Divider(height: 1),
-                          SizedBox(height: 8),
-                          // AutoPlay Widget
-                          _autoPlayWidget(),
-                          // Related Videos
-                          StreamsListTileView(
-                            shrinkWrap: true,
-                            removePhysics: true,
-                            streams: pageProvider?.currentRelatedVideos == null
-                              ? [] : pageProvider.currentRelatedVideos, 
-                            onTap: (stream, index) async {
-                              pageProvider.infoItem =
-                                pageProvider.currentRelatedVideos[index];
-                            },
-                          )
-                        ],
+                      child: StreamsListTileView(
+                        shrinkWrap: true,
+                        removePhysics: false,
+                        streams: pageProvider?.currentRelatedVideos == null
+                          ? [] : pageProvider.currentRelatedVideos, 
+                        onTap: (stream, index) async {
+                          pageProvider.infoItem =
+                            pageProvider.currentRelatedVideos[index];
+                        },
                       ),
                     ),
                   ),
@@ -498,13 +433,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
               FocusScope.of(context).requestFocus(new FocusNode());
               showModalBottomSheet<dynamic>(
                 isScrollControlled: true,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30)
-                  ),
-                ),
-                clipBehavior: Clip.antiAlias,
+                backgroundColor: Colors.transparent,
                 context: context,
                 builder: (context) {
                   return Wrap(
@@ -593,6 +522,11 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
       uploaderAvatarUrl: pageProvider.currentChannel?.avatarUrl ?? null,
       onMoreDetails: () {
         if (pageProvider.currentVideo == null) return;
+        if (bottomSheetController != null) {
+          bottomSheetController.close();
+          bottomSheetController = null;
+          return;
+        }
         double height = MediaQuery.of(context).size.height;
         double bottomPadding = MediaQuery.of(context).padding.bottom;
         bottomSheetController = scaffoldKey.currentState.showBottomSheet((context) {
