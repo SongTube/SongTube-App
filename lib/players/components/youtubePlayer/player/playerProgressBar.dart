@@ -130,7 +130,8 @@ class _PlayerProgressBarState extends State<PlayerProgressBar> with TickerProvid
                       widget.onSeek(seekPosition);
 
                     },
-                    max: widget?.duration?.inSeconds?.toDouble() ?? 1,
+                    max: widget.duration.inSeconds.toDouble() == 0
+                      ? 1 : widget.duration.inSeconds.toDouble(),
                     min: 0,
                     onDragStarted: (handlerIndex, lowerValue, upperValue) {
                       widget.onSeekStart();
