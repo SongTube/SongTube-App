@@ -336,64 +336,64 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                 children: <Widget> [
                   _portraitMainBody(),
                   // Playlist & Videos
-                  Container(
-                    padding: EdgeInsets.only(
-                      top: 16, bottom: 16, right: 24, left: 12),
-                    child: Row(
-                      children: [
-                        Icon(MdiIcons.playlistMusicOutline, size: 28),
-                        SizedBox(width: 8),
-                        Text(
-                          Languages.of(context).labelPlaylist,
-                          style: TextStyle(
-                            fontFamily: 'Product Sans',
-                            fontWeight: FontWeight.w600,
-                            fontSize: 20,
-                            color: Theme.of(context).textTheme.bodyText1.color
-                              .withOpacity(0.7)
-                          ),
-                        ),
-                        Spacer(),
-                        AnimatedSwitcher(
-                          duration: Duration(milliseconds: 300),
-                          child: playlist != null ? Container(
-                            height: 24,
-                            width: 24,
-                            color: Colors.transparent,
-                            child: IconButton(
-                              padding: EdgeInsets.zero,
-                              icon: Icon(EvaIcons.heartOutline,
-                                color: prefs.streamPlaylists.indexWhere((element) =>
-                                  element.author+element.name == playlist.uploaderName
-                                  +playlist.name) == -1 ? Theme.of(context).iconTheme.color
-                                  : Colors.red),
-                              onPressed: () {
-                                if (prefs.streamPlaylists.indexWhere((element) =>
-                                  element.author+element.name == playlist.uploaderName+playlist.name) == -1) {
-                                    prefs.streamPlaylistCreate(playlist.name, playlist.uploaderName, playlist.streams);
-                                    AppSnack.showSnackBar(
-                                      icon: EvaIcons.heart,
-                                      title: Languages.of(context).labelPlaylist,
-                                      message: "${playlist.name}",
-                                      context: context,
-                                      scaffoldKey: scaffoldKey.currentState
-                                    );
-                                  } else {
-                                    prefs.streamPlaylistRemove(playlist.name);
-                                  }
-                              },
-                            ),
-                          ) : Container(),
-                        )
-                      ],
-                    ),
-                  ),
                   Expanded(
                     child: AnimatedSwitcher(
                       duration: Duration(milliseconds: 300),
                       child: ListView(
                         padding: EdgeInsets.zero,
                         children: [
+                          Container(
+                            padding: EdgeInsets.only(
+                              top: 16, bottom: 16, right: 24, left: 12),
+                            child: Row(
+                              children: [
+                                Icon(MdiIcons.playlistMusicOutline, size: 28),
+                                SizedBox(width: 8),
+                                Text(
+                                  Languages.of(context).labelPlaylist,
+                                  style: TextStyle(
+                                    fontFamily: 'Product Sans',
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 20,
+                                    color: Theme.of(context).textTheme.bodyText1.color
+                                      .withOpacity(0.7)
+                                  ),
+                                ),
+                                Spacer(),
+                                AnimatedSwitcher(
+                                  duration: Duration(milliseconds: 300),
+                                  child: playlist != null ? Container(
+                                    height: 24,
+                                    width: 24,
+                                    color: Colors.transparent,
+                                    child: IconButton(
+                                      padding: EdgeInsets.zero,
+                                      icon: Icon(EvaIcons.heartOutline,
+                                        color: prefs.streamPlaylists.indexWhere((element) =>
+                                          element.author+element.name == playlist.uploaderName
+                                          +playlist.name) == -1 ? Theme.of(context).iconTheme.color
+                                          : Colors.red),
+                                      onPressed: () {
+                                        if (prefs.streamPlaylists.indexWhere((element) =>
+                                          element.author+element.name == playlist.uploaderName+playlist.name) == -1) {
+                                            prefs.streamPlaylistCreate(playlist.name, playlist.uploaderName, playlist.streams);
+                                            AppSnack.showSnackBar(
+                                              icon: EvaIcons.heart,
+                                              title: Languages.of(context).labelPlaylist,
+                                              message: "${playlist.name}",
+                                              context: context,
+                                              scaffoldKey: scaffoldKey.currentState
+                                            );
+                                          } else {
+                                            prefs.streamPlaylistRemove(playlist.name);
+                                          }
+                                      },
+                                    ),
+                                  ) : Container(),
+                                )
+                              ],
+                            ),
+                          ),
                           StreamsListTileView(
                             shrinkWrap: true,
                             removePhysics: true,
