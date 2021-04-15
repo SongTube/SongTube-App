@@ -523,7 +523,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
       onMoreDetails: () {
         if (pageProvider.currentVideo == null) return;
         if (bottomSheetController != null) {
-          bottomSheetController.close();
+          bottomSheetController?.close();
           bottomSheetController = null;
           return;
         }
