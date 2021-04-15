@@ -523,7 +523,9 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
       onMoreDetails: () {
         if (pageProvider.currentVideo == null) return;
         if (bottomSheetController != null) {
-          bottomSheetController?.close();
+          try {
+            bottomSheetController?.close();
+          } catch (_) {}
           bottomSheetController = null;
           return;
         }
@@ -533,27 +535,20 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
           return Wrap(
             children: [
               Container(
-                height: height - mainBodyHeight - bottomPadding,
+                height: height - mainBodyHeight - bottomPadding - 4,
                 decoration: BoxDecoration(
                   color: Theme.of(context).scaffoldBackgroundColor,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(15),
                     topRight: Radius.circular(15)
                   ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.02),
-                      blurRadius: 4,
-                      spreadRadius: 0.1,
-                      offset: Offset(0, -10)
-                    )
-                  ]
                 ),
                 child: MoreDetailsSheet(
                   video: pageProvider.currentVideo,
                   segments: pageProvider?.currentVideo?.segments ?? [],
                   onSegmentTap: (position) => pageProvider.playerKey.currentState
                     .controller.seekTo(Duration(seconds: position)),
+                  onDispose: () => bottomSheetController = null,
                 ),
               ),
               Container(

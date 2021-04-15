@@ -10,18 +10,33 @@ import 'package:transparent_image/transparent_image.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:url_launcher/url_launcher.dart';
 
-class MoreDetailsSheet extends StatelessWidget {
+class MoreDetailsSheet extends StatefulWidget {
   final YoutubeVideo video;
   final List<StreamSegment> segments;
   final Function(int) onSegmentTap;
+  final Function onDispose;
   MoreDetailsSheet({
     this.video,
     this.segments = const [],
     this.onSegmentTap,
+    this.onDispose
   });
+
+  @override
+  _MoreDetailsSheetState createState() => _MoreDetailsSheetState();
+}
+
+class _MoreDetailsSheetState extends State<MoreDetailsSheet> {
+  
+  @override
+  void dispose() {
+    widget.onDispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (segments.isEmpty) {
+    if (widget.segments.isEmpty) {
       return _detailsTab(context);
     } else {
       return DefaultTabController(
@@ -113,7 +128,7 @@ class MoreDetailsSheet extends StatelessWidget {
             physics: BouncingScrollPhysics(),
             children: [
               Html(
-                data: video.description,
+                data: widget.video.description,
                 renderNewlines: true,
                 padding: EdgeInsets.all(12),
                 defaultTextStyle: TextStyle(
@@ -130,7 +145,7 @@ class MoreDetailsSheet extends StatelessWidget {
                       return GestureDetector(
                         onTap: () {
                           if (duration != null) {
-                            onSegmentTap(duration.inSeconds);
+                            widget.onSegmentTap(duration.inSeconds);
                           } else {
                             launch(node.attributes['href']);
                           }
@@ -202,9 +217,9 @@ class MoreDetailsSheet extends StatelessWidget {
         Expanded(
           child: ListView.builder(
             physics: BouncingScrollPhysics(),
-            itemCount: segments.length,
+            itemCount: widget.segments.length,
             itemBuilder: (context, index) {
-              StreamSegment segment = segments[index];
+              StreamSegment segment = widget.segments[index];
               return Padding(
                 padding: EdgeInsets.only(bottom: 8.0),
                 child: ListTile(
@@ -240,7 +255,7 @@ class MoreDetailsSheet extends StatelessWidget {
                       fontWeight: FontWeight.w600
                     ),
                   ),
-                  onTap: () => onSegmentTap(segment.startTimeSeconds)
+                  onTap: () => widget.onSegmentTap(segment.startTimeSeconds)
                 ),
               );
             },
@@ -264,5 +279,4 @@ class MoreDetailsSheet extends StatelessWidget {
     micros = (double.parse(parts[parts.length - 1]) * 1000000).round();
     return Duration(hours: hours, minutes: minutes, microseconds: micros);
   }
-
 }
