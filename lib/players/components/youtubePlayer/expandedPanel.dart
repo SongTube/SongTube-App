@@ -101,21 +101,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
       },
       child: Scaffold(
         key: scaffoldKey,
-        body: Stack(
-          children: [
-            _currentWidget(),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: Container(
-                margin: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).padding.bottom + 16,
-                  right: 16
-                ),
-                child: _fab()
-              ),
-            )
-          ],
-        ),
+        body: _currentWidget(),
       ),
     );
   }
@@ -403,41 +389,6 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
     );
   }
 
-  Widget _fab() {
-    VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
-    return OrientationBuilder(
-      builder: (context, orientation) {
-        if (orientation == Orientation.portrait) {
-          return VideoDownloadFab(
-            readyToDownload: pageProvider.currentVideo == null ? false : true,
-            onDownload: () {
-              FocusScope.of(context).requestFocus(new FocusNode());
-              showModalBottomSheet<dynamic>(
-                isScrollControlled: true,
-                backgroundColor: Colors.transparent,
-                context: context,
-                builder: (context) {
-                  return Wrap(
-                    children: [
-                      DownloadMenu(
-                        video: pageProvider.currentVideo,
-                        tags: pageProvider.currentTags,
-                        scaffoldState: scaffoldKey.currentState,
-                        relatedVideos: pageProvider.currentRelatedVideos
-                      ),
-                    ],
-                  );
-                }
-              );
-            },
-          );
-        } else {
-          return Container();
-        }
-      }
-    );
-  }
-
   Widget _videoEngagementWidget() {
     VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
     return AnimatedSize(
@@ -470,13 +421,25 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                       }
                     );
                   },
-                  onOpenComments: () {
-                    double topPadding = MediaQuery.of(context).padding.top;
-                    bottomSheetController = scaffoldKey.currentState.showBottomSheet((context) {
-                      return VideoComments(
-                        topPadding: topPadding + playerHeight + 8,
-                      );
-                    });
+                  onDownload: () {
+                    FocusScope.of(context).requestFocus(new FocusNode());
+                    showModalBottomSheet<dynamic>(
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                      context: context,
+                      builder: (context) {
+                        return Wrap(
+                          children: [
+                            DownloadMenu(
+                              video: pageProvider.currentVideo,
+                              tags: pageProvider.currentTags,
+                              scaffoldState: scaffoldKey.currentState,
+                              relatedVideos: pageProvider.currentRelatedVideos
+                            ),
+                          ],
+                        );
+                      }
+                    );
                   },
                 ),
                 SizedBox(height: 8),

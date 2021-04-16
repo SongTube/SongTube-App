@@ -8,14 +8,14 @@ class VideoEngagement extends StatelessWidget {
   final int likeCount;
   final int dislikeCount;
   final int viewCount;
-  final Function onOpenComments;
   final Function onSaveToPlaylist;
+  final Function onDownload;
   VideoEngagement({
     @required this.likeCount,
     @required this.dislikeCount,
     @required this.viewCount,
-    @required this.onOpenComments,
-    @required this.onSaveToPlaylist
+    @required this.onSaveToPlaylist,
+    @required this.onDownload
   });
   @override
   Widget build(BuildContext context) {
@@ -70,15 +70,15 @@ class VideoEngagement extends StatelessWidget {
         ),
         // Open Comments Button
         _engagementTile(
-          icon: Icon(MdiIcons.messageTextOutline, color: Theme.of(context).iconTheme.color),
+          icon: Icon(MdiIcons.downloadOutline, color: Theme.of(context).iconTheme.color),
           text: Text(
-            "Comments",
+            Languages.of(context).labelDownload,
             style: TextStyle(
               fontFamily: "Varela",
               fontSize: 10
             ),
           ),
-          onPressed: onOpenComments
+          onPressed: onDownload
         ),
       ],
     );
