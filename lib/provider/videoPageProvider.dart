@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'dart:isolate';
 import 'package:flutter/cupertino.dart';
 import 'package:newpipeextractor_dart/extractors/channels.dart';
+import 'package:newpipeextractor_dart/extractors/comments.dart';
 import 'package:newpipeextractor_dart/extractors/videos.dart';
 import 'package:newpipeextractor_dart/models/channel.dart';
+import 'package:newpipeextractor_dart/models/comment.dart';
 import 'package:newpipeextractor_dart/models/infoItems/playlist.dart';
 import 'package:newpipeextractor_dart/models/infoItems/video.dart';
 import 'package:newpipeextractor_dart/models/playlist.dart';
@@ -35,6 +37,7 @@ class VideoPageProvider extends ChangeNotifier {
   TagsControllers currentTags;
   YoutubeChannel currentChannel;
   List<StreamInfoItem> currentRelatedVideos;
+  List<YoutubeComment> currentComments;
   bool isPlaylist;
   dynamic get infoItem => _infoItem;
   set infoItem(dynamic infoItem) {
@@ -52,6 +55,7 @@ class VideoPageProvider extends ChangeNotifier {
       _infoItem = infoItem;
       currentVideo = null;
       currentChannel = null;
+      currentComments = null;
       isPlaylist = true;
       currentTags = null;
       notifyListeners();
@@ -61,6 +65,10 @@ class VideoPageProvider extends ChangeNotifier {
         currentTags.updateTextControllers(value);
         saveToHistory(currentVideo.toStreamInfoItem());
         notifyListeners();
+        CommentsExtractor.getComments(currentVideo.url).then((comments) {
+          currentComments = comments;
+          notifyListeners();
+        });
       });
       _infoItem.getChannel.then((value) {
         currentChannel = value;
@@ -75,6 +83,7 @@ class VideoPageProvider extends ChangeNotifier {
     currentVideo = null;
     currentChannel = null;
     currentPlaylist = null;
+    currentComments = null;
     currentTags = null;
     isPlaylist = false;
     notifyListeners();
@@ -84,6 +93,10 @@ class VideoPageProvider extends ChangeNotifier {
       currentTags.updateTextControllers(value);
       saveToHistory(currentVideo.toStreamInfoItem());
       notifyListeners();
+      CommentsExtractor.getComments(currentVideo.url).then((comments) {
+        currentComments = comments;
+        notifyListeners();
+      });
     });
     _infoItem.getChannel.then((value) async {
       currentChannel = value;
@@ -115,6 +128,7 @@ class VideoPageProvider extends ChangeNotifier {
     currentVideo = null;
     currentChannel = null;
     currentPlaylist = null;
+    currentComments = null;
     currentTags = null;
     isPlaylist = true;
     notifyListeners();
@@ -141,6 +155,10 @@ class VideoPageProvider extends ChangeNotifier {
       currentTags.updateTextControllers(value);
       // TODO: Save Playlist to History
       notifyListeners();
+      CommentsExtractor.getComments(currentVideo.url).then((comments) {
+        currentComments = comments;
+        notifyListeners();
+      });
     });
     _infoItem.getChannel.then((value) {
       currentChannel = value;
@@ -154,6 +172,7 @@ class VideoPageProvider extends ChangeNotifier {
     currentRelatedVideos = null;
     currentPlaylist = null;
     currentTags = null;
+    currentComments = null;
     _infoItem = null;
     isPlaylist = false;
     notifyListeners();
