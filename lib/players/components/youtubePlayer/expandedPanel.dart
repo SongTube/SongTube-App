@@ -267,17 +267,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                         padding: EdgeInsets.zero,
                         children: [
                           // Comments section
-                          InkWell(
-                            onTap: () {
-                              double topPadding = MediaQuery.of(context).padding.top;
-                              bottomSheetController = scaffoldKey.currentState.showBottomSheet((context) {
-                                return VideoComments(
-                                  topPadding: topPadding + playerHeight + 8,
-                                );
-                              });
-                            },
-                            child: _commentTile()
-                          ),
+                          _commentTile(),
                           StreamsListTileView(
                             shrinkWrap: true,
                             removePhysics: true,
@@ -307,7 +297,6 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
 
   Widget _portraitPlaylistPage() {
     VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
-    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
@@ -315,7 +304,6 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
     SystemChrome.setEnabledSystemUIOverlays
       ([SystemUiOverlay.top, SystemUiOverlay.bottom]);
     FlutterScreen.resetBrightness();
-    YoutubePlaylist playlist = pageProvider.currentPlaylist;
     return Column(
       children: [
         Expanded(
@@ -334,17 +322,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                         padding: EdgeInsets.zero,
                         children: [
                           // Comments section
-                          InkWell(
-                            onTap: () {
-                              double topPadding = MediaQuery.of(context).padding.top;
-                              bottomSheetController = scaffoldKey.currentState.showBottomSheet((context) {
-                                return VideoComments(
-                                  topPadding: topPadding + playerHeight + 8,
-                                );
-                              });
-                            },
-                            child: _commentTile()
-                          ),
+                          _commentTile(),
                           SizedBox(height: 12),
                           StreamsListTileView(
                             shrinkWrap: true,
@@ -496,67 +474,85 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
       duration: Duration(milliseconds: 300),
       vsync: this,
       child: pageProvider.currentComments != null
-        ? Row(
-            children: [
-              Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.all(12),
-                      child: Text(
-                        "Comments",
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Theme.of(context).textTheme.bodyText1.color,
-                          fontWeight: FontWeight.w600
+        ? InkWell(
+            onTap: () {
+              if (bottomSheetController != null) {
+                try {
+                  bottomSheetController?.close();
+                } catch (_) {}
+                bottomSheetController = null;
+                return;
+              }
+              double topPadding = MediaQuery.of(context).padding.top;
+              bottomSheetController = scaffoldKey.currentState.showBottomSheet((context) {
+                return VideoComments(
+                  topPadding: topPadding + playerHeight + 8,
+                  onDispose: () => bottomSheetController = null,
+                );
+              });
+            },
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(12),
+                        child: Text(
+                          "Comments",
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Theme.of(context).textTheme.bodyText1.color,
+                            fontWeight: FontWeight.w600
+                          ),
                         ),
                       ),
-                    ),
-                    Row(
-                      children: [
-                        SizedBox(width: 12),
-                        Container(
-                          height: 40,
-                          width: 40,
-                          margin: EdgeInsets.only(right: 8),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(100),
-                            child: FadeInImage(
-                              fadeInDuration: Duration(milliseconds: 300),
-                              placeholder: MemoryImage(kTransparentImage),
-                              image: NetworkImage(pageProvider.currentComments[0].uploaderAvatarUrl),
-                              fit: BoxFit.cover,
+                      Row(
+                        children: [
+                          SizedBox(width: 12),
+                          Container(
+                            height: 40,
+                            width: 40,
+                            margin: EdgeInsets.only(right: 8),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(100),
+                              child: FadeInImage(
+                                fadeInDuration: Duration(milliseconds: 300),
+                                placeholder: MemoryImage(kTransparentImage),
+                                image: NetworkImage(pageProvider.currentComments[0].uploaderAvatarUrl),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
-                        ),
-                        Expanded(
-                          child: Text(
-                            pageProvider.currentComments[0].commentText,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Theme.of(context).iconTheme.color
+                          Expanded(
+                            child: Text(
+                              pageProvider.currentComments[0].commentText,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Theme.of(context).iconTheme.color
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 12),
-                    Divider(height: 1)
-                  ],
+                        ],
+                      ),
+                      SizedBox(height: 12),
+                      Divider(height: 1)
+                    ],
+                  ),
                 ),
-              ),
-              Container(
-                padding: EdgeInsets.only(left: 12, right: 12),
-                child: Icon(EvaIcons.arrowIosForwardOutline,
-                  color: Theme.of(context).iconTheme.color,
-                  size: 18),
-              ),
-            ],
+                Container(
+                  padding: EdgeInsets.only(left: 12, right: 12),
+                  child: Icon(EvaIcons.arrowIosForwardOutline,
+                    color: Theme.of(context).iconTheme.color,
+                    size: 18),
+                ),
+              ],
+            ),
           )
         : Container(),
     );

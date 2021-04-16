@@ -9,17 +9,32 @@ import 'package:provider/provider.dart';
 import 'package:songtube/provider/videoPageProvider.dart';
 import 'package:transparent_image/transparent_image.dart';
 
-class VideoComments extends StatelessWidget {
+class VideoComments extends StatefulWidget {
   final double topPadding;
+  final Function onDispose;
   VideoComments({
-    @required this.topPadding
+    @required this.topPadding,
+    @required this.onDispose
   });
+
+  @override
+  _VideoCommentsState createState() => _VideoCommentsState();
+}
+
+class _VideoCommentsState extends State<VideoComments> {
+
+  @override
+  void initState() {
+    widget.onDispose();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
     return Container(
       height: MediaQuery.of(context).size.height -
-        topPadding,
+        widget.topPadding,
       color: Colors.transparent,
       child: Column(
         children: [
