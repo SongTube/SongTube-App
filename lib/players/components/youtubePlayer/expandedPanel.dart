@@ -568,7 +568,8 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
               Container(
                 padding: EdgeInsets.only(left: 12, right: 12),
                 child: Icon(EvaIcons.arrowIosForwardOutline,
-                  color: Theme.of(context).iconTheme.color),
+                  color: Theme.of(context).iconTheme.color,
+                  size: 18),
               ),
             ],
           )
