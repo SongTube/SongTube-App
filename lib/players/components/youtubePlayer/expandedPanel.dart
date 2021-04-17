@@ -588,11 +588,11 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
       },
       child: Column(
         children: [
-          Padding(
-            padding: EdgeInsets.all(12),
-            child: Row(
-              children: [
-                Container(
+          Row(
+            children: [
+              Padding(
+                padding: EdgeInsets.all(12),
+                child: Container(
                   height: 40,
                   width: 40,
                   child: ClipRRect(
@@ -607,8 +607,10 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                     ),
                   ),
                 ),
-                SizedBox(width: 12),
-                Expanded(
+              ),
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.only(top: 12, bottom: 12),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -637,20 +639,29 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                     ],
                   ),
                 ),
-                Container(
-                  color: Colors.transparent,
-                  child: Text(
-                    Languages.of(context).labelSubscribe.toUpperCase(),
-                    style: TextStyle(
-                      color: Theme.of(context).accentColor,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 16,
+              ),
+              InkWell(
+                onTap: () {
+                  // TODO: Implement subs system
+                },
+                borderRadius: BorderRadius.circular(10),
+                child: Padding(
+                  padding: EdgeInsets.all(12),
+                  child: Ink(
+                    color: Colors.transparent,
+                    child: Text(
+                      Languages.of(context).labelSubscribe.toUpperCase(),
+                      style: TextStyle(
+                        color: Theme.of(context).accentColor,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16,
+                      ),
                     ),
                   ),
                 ),
-                SizedBox(width: 8)
-              ],
-            ),
+              ),
+              SizedBox(width: 8)
+            ],
           ),
           Divider(height: 1)
         ],
