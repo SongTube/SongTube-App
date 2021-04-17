@@ -1,7 +1,9 @@
 import 'dart:isolate';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:newpipeextractor_dart/extractors/channels.dart';
+import 'package:newpipeextractor_dart/models/infoItems/video.dart';
 import 'package:newpipeextractor_dart/utils/url.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/pages/channel.dart';
@@ -12,65 +14,26 @@ import 'package:transparent_image/transparent_image.dart';
 
 class VideoDetails extends StatelessWidget {
   final dynamic infoItem;
-  final String uploaderAvatarUrl;
   final Function onMoreDetails;
   VideoDetails({
     @required this.infoItem,
-    this.uploaderAvatarUrl,
     this.onMoreDetails
   });
   @override
   Widget build(BuildContext context) {
     String title = infoItem?.name ?? "";
-    String author = infoItem?.uploaderName ?? "";
+    String views = "${NumberFormat.compact().format(infoItem?.viewCount)} views" ?? "";
+    String date = infoItem?.uploadDate ?? "";
     return Column(
       children: [
         Container(
           margin: EdgeInsets.only(
-            left: 12, right: 12,
+            left: 14, right: 12,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              AnimatedSwitcher(
-                duration: Duration(milliseconds: 300),
-                child: uploaderAvatarUrl != null
-                  ? GestureDetector(
-                      onTap: () {
-                        Navigator.push(context,
-                          BlurPageRoute(
-                            blurStrength: Provider.of<PreferencesProvider>
-                              (context, listen: false).enableBlurUI ? 20 : 0,
-                            builder: (_) => 
-                            YoutubeChannelPage(
-                              url: infoItem.uploaderUrl,
-                              name: infoItem.uploaderName,
-                              lowResAvatar: uploaderAvatarUrl,
-                        )));
-                      },
-                      child: Container(
-                        height: 60,
-                        width: 60,
-                        margin: EdgeInsets.only(right: 12),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(50),
-                          child: FadeInImage(
-                            fadeInDuration: Duration(milliseconds: 400),
-                            placeholder: MemoryImage(kTransparentImage),
-                            image: uploaderAvatarUrl != null
-                              ? NetworkImage(uploaderAvatarUrl)
-                              : MemoryImage(kTransparentImage),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    )
-                : Container(
-                    margin: EdgeInsets.only(right: 12),
-                    child: const ShimmerChannelLogo()
-                  )
-              ),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,7 +58,7 @@ class VideoDetails extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(right: 16, bottom: 8),
                       child: Text(
-                        author,
+                        views + " • " + date,
                         style: TextStyle(
                           color: Theme.of(context).textTheme.bodyText1.color
                             .withOpacity(0.8),

@@ -360,4 +360,6 @@ class LanguageIgbo extends Languages {
   String get labelPlaylists => "ndepụta egwu";
   @override
   String get labelQuality => "Ezigbo";
+  @override
+  String get labelSubscribe => "soro";
 }

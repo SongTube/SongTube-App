@@ -362,4 +362,6 @@ class LanguageAr extends Languages {
   String get labelPlaylists => "قوائم التشغيل";
   @override
   String get labelQuality => "جودة";
+  @override
+  String get labelSubscribe => "الإشتراك";
 }

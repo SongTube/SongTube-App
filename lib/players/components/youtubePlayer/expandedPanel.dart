@@ -4,10 +4,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_pip/flutter_pip.dart';
 import 'package:flutter_pip/platform_channel/channel.dart';
+import 'package:intl/intl.dart';
 import 'package:newpipeextractor_dart/models/infoItems/playlist.dart';
 import 'package:newpipeextractor_dart/models/infoItems/video.dart';
 import 'package:newpipeextractor_dart/models/playlist.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
+import 'package:songtube/internal/languages.dart';
+import 'package:songtube/pages/channel.dart';
 import 'package:songtube/players/components/youtubePlayer/ui/comments.dart';
 import 'package:songtube/players/components/youtubePlayer/ui/moreDetails.dart';
 import 'package:songtube/players/components/youtubePlayer/videoPlayer.dart';
@@ -15,6 +19,7 @@ import 'package:songtube/provider/preferencesProvider.dart';
 import 'package:songtube/pages/components/video/shimmer/shimmerVideoEngagement.dart';
 import 'package:songtube/downloadMenu/downloadMenu.dart';
 import 'package:songtube/provider/videoPageProvider.dart';
+import 'package:songtube/ui/animations/blurPageRoute.dart';
 import 'package:songtube/ui/components/addToPlaylist.dart';
 import 'package:songtube/ui/components/measureSize.dart';
 import 'package:flutter_screen/flutter_screen.dart';
@@ -266,6 +271,8 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                       child: ListView(
                         padding: EdgeInsets.zero,
                         children: [
+                          // Channel section
+                          _channelInfo(),
                           // Comments section
                           _commentTile(),
                           StreamsListTileView(
@@ -321,6 +328,8 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                       child: ListView(
                         padding: EdgeInsets.zero,
                         children: [
+                          // Channel section
+                          _channelInfo(),
                           // Comments section
                           _commentTile(),
                           SizedBox(height: 12),
@@ -365,7 +374,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
               padding: EdgeInsets.zero,
               physics: NeverScrollableScrollPhysics(),
               children: [
-                SizedBox(height: 8),
+                SizedBox(height: 4),
                 VideoEngagement(
                   likeCount: pageProvider.currentVideo.likeCount,
                   dislikeCount: pageProvider.currentVideo.dislikeCount,
@@ -404,8 +413,11 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                       }
                     );
                   },
+                  onShare: () {
+                    Share.share(pageProvider.currentVideo.url);
+                  },
                 ),
-                SizedBox(height: 8),
+                SizedBox(height: 4),
               ],
             )
           : ListView(
@@ -425,7 +437,6 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
     VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
     return VideoDetails(
       infoItem: pageProvider.infoItem,
-      uploaderAvatarUrl: pageProvider.currentChannel?.avatarUrl ?? null,
       onMoreDetails: () {
         if (pageProvider.currentVideo == null) return;
         if (bottomSheetController != null) {
@@ -506,7 +517,8 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                           style: TextStyle(
                             fontSize: 14,
                             color: Theme.of(context).textTheme.bodyText1.color,
-                            fontWeight: FontWeight.w600
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Product Sans'
                           ),
                         ),
                       ),
@@ -555,6 +567,93 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
             ),
           )
         : Container(),
+    );
+  }
+
+  Widget _channelInfo() {
+    VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
+    return InkWell(
+      onTap: () {
+        Navigator.push(context,
+          BlurPageRoute(
+            blurStrength: Provider.of<PreferencesProvider>
+              (context, listen: false).enableBlurUI ? 20 : 0,
+            builder: (_) => 
+            YoutubeChannelPage(
+              url: pageProvider.currentVideo.uploaderUrl,
+              name: pageProvider.currentVideo.uploaderName,
+              lowResAvatar: pageProvider.currentVideo.uploaderAvatarUrl,
+        )));
+      },
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.all(12),
+            child: Row(
+              children: [
+                Container(
+                  height: 40,
+                  width: 40,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(100),
+                    child: FadeInImage(
+                      fadeInDuration: Duration(milliseconds: 300),
+                      placeholder: MemoryImage(kTransparentImage),
+                      image: pageProvider.currentChannel != null
+                        ? NetworkImage(pageProvider.currentChannel.avatarUrl)
+                        : MemoryImage(kTransparentImage),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        pageProvider?.currentChannel?.name ?? "",
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyText1.color,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'Product Sans',
+                          fontSize: 16,
+                        ),
+                      ),
+                      Text(
+                        pageProvider.currentChannel != null
+                         ? "${NumberFormat.compact().format(pageProvider.currentChannel.subscriberCount)} subs"
+                         : "",
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyText1.color
+                            .withOpacity(0.8),
+                          fontFamily: "Product Sans",
+                          fontSize: 12,
+                          letterSpacing: 0.2
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  color: Colors.transparent,
+                  child: Text(
+                    Languages.of(context).labelSubscribe.toUpperCase(),
+                    style: TextStyle(
+                      color: Theme.of(context).accentColor,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                SizedBox(width: 8)
+              ],
+            ),
+          ),
+          Divider(height: 1)
+        ],
+      ),
     );
   }
 

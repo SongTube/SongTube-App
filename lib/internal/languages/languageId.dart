@@ -360,4 +360,6 @@ class LanguageId extends Languages {
   String get labelPlaylists => "Daftar Putar";
   @override
   String get labelQuality => "Kualitas";
+  @override
+  String get labelSubscribe => "Langganan";
 }

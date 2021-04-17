@@ -360,4 +360,6 @@ class LanguageTr extends Languages {
   String get labelPlaylists => "Çalma listeleri";
   @override
   String get labelQuality => "Kalite";
+  @override
+  String get labelSubscribe => "Abone ol";
 }

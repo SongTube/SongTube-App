@@ -363,4 +363,6 @@ class LanguageEs extends Languages {
   String get labelPlaylists => "Listas de reproducción";
   @override
   String get labelQuality => "Calidad";
+  @override
+  String get labelSubscribe => "Suscribirme";
 }

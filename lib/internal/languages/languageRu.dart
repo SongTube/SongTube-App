@@ -360,4 +360,6 @@ class LanguageRu extends Languages {
   String get labelPlaylists => "Плейлисты";
   @override
   String get labelQuality => "Качественный";
+  @override
+  String get labelSubscribe => "Подписаться";
 }

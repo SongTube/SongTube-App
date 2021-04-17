@@ -360,4 +360,6 @@ class LanguageSo extends Languages {
   String get labelPlaylists => "Liiska Ciyaarta";
   @override
   String get labelQuality => "Tayada";
+  @override
+  String get labelSubscribe => "Subscribe";
 }

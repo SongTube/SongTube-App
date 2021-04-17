@@ -316,8 +316,10 @@ class StreamsLargeThumbnailView extends StatelessWidget {
                   "${infoItem.name}",
                   maxLines: 2,
                   style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyText1.color,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Product Sans',
                     fontSize: 14,
-                    fontWeight: FontWeight.w600
                   ),
                 ),
                 SizedBox(height: 4),

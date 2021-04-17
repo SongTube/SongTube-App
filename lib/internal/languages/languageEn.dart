@@ -360,4 +360,6 @@ class LanguageEn extends Languages {
   String get labelPlaylists => "Playlists";
   @override
   String get labelQuality => "Quality";
+  @override
+  String get labelSubscribe => "Subscribe";
 }

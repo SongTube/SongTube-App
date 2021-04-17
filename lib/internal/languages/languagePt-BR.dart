@@ -362,4 +362,6 @@ class LanguagePtBr extends Languages {
   String get labelPlaylists => "Playlists";
   @override
   String get labelQuality => "Qualidade";
+  @override
+  String get labelSubscribe => "Se inscrever";
 }

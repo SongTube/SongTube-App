@@ -103,8 +103,10 @@ class StreamsListTileView extends StatelessWidget {
                                 child: Text(
                                   video.name,
                                   style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 14
+                                    color: Theme.of(context).textTheme.bodyText1.color,
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily: 'Product Sans',
+                                    fontSize: 14,
                                   ),
                                   overflow: TextOverflow.clip,
                                   maxLines: 2,
@@ -117,9 +119,11 @@ class StreamsListTileView extends StatelessWidget {
                                   "${NumberFormat.compact().format(video.viewCount)}" +
                                   " Views",
                                   style: TextStyle(
-                                    fontSize: 11,
-                                    color: Theme.of(context).textTheme
-                                      .bodyText1.color.withOpacity(0.8)
+                                    color: Theme.of(context).textTheme.bodyText1.color
+                                      .withOpacity(0.8),
+                                    fontFamily: "Product Sans",
+                                    fontSize: 10,
+                                    letterSpacing: 0.2
                                   ),
                                   overflow: TextOverflow.clip,
                                   maxLines: 1,

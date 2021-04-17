@@ -10,12 +10,14 @@ class VideoEngagement extends StatelessWidget {
   final int viewCount;
   final Function onSaveToPlaylist;
   final Function onDownload;
+  final Function onShare;
   VideoEngagement({
     @required this.likeCount,
     @required this.dislikeCount,
     @required this.viewCount,
     @required this.onSaveToPlaylist,
-    @required this.onDownload
+    @required this.onDownload,
+    @required this.onShare,
   });
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,6 @@ class VideoEngagement extends StatelessWidget {
           text: Text(
             NumberFormat.compact().format(likeCount),
             style: TextStyle(
-              fontFamily: "Varela",
               fontSize: 10
             ),
             ),
@@ -40,21 +41,20 @@ class VideoEngagement extends StatelessWidget {
           text: Text(
             NumberFormat.compact().format(dislikeCount),
             style: TextStyle(
-              fontFamily: "Varela",
               fontSize: 10
             ),
             ),
         ),
         //
         _engagementTile(
-          icon: Icon(EvaIcons.eyeOutline, color: Theme.of(context).iconTheme.color),
+          icon: Icon(MdiIcons.shareOutline, color: Theme.of(context).iconTheme.color),
           text: Text(
-            NumberFormat.compact().format(viewCount),
+            Languages.of(context).labelShare,
             style: TextStyle(
-              fontFamily: "Varela",
               fontSize: 10
             ),
           ),
+          onPressed: onShare
         ),
         // Add to Playlist Button
         _engagementTile(
@@ -62,7 +62,6 @@ class VideoEngagement extends StatelessWidget {
           text: Text(
             Languages.of(context).labelPlaylist,
             style: TextStyle(
-              fontFamily: "Varela",
               fontSize: 10
             ),
           ),
@@ -74,7 +73,6 @@ class VideoEngagement extends StatelessWidget {
           text: Text(
             Languages.of(context).labelDownload,
             style: TextStyle(
-              fontFamily: "Varela",
               fontSize: 10
             ),
           ),

@@ -309,6 +309,7 @@ abstract class Languages {
   String get labelCreate;
   String get labelPlaylists;
   String get labelQuality;
+  String get labelSubscribe;
 }
 
 // ----------------------------------------
