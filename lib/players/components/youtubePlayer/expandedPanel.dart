@@ -574,16 +574,17 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
     VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
     return InkWell(
       onTap: () {
-        Navigator.push(context,
-          BlurPageRoute(
-            blurStrength: Provider.of<PreferencesProvider>
-              (context, listen: false).enableBlurUI ? 20 : 0,
-            builder: (_) => 
-            YoutubeChannelPage(
-              url: pageProvider.currentVideo.uploaderUrl,
-              name: pageProvider.currentVideo.uploaderName,
-              lowResAvatar: pageProvider.currentVideo.uploaderAvatarUrl,
-        )));
+        if (pageProvider.currentChannel != null)
+          Navigator.push(context,
+            BlurPageRoute(
+              blurStrength: Provider.of<PreferencesProvider>
+                (context, listen: false).enableBlurUI ? 20 : 0,
+              builder: (_) => 
+              YoutubeChannelPage(
+                url: pageProvider.currentChannel.url,
+                name: pageProvider.currentChannel.name,
+                lowResAvatar: pageProvider.currentChannel.avatarUrl,
+          )));
       },
       child: Column(
         children: [
