@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:newpipeextractor_dart/models/infoItems/video.dart';
 import 'package:songtube/ui/animations/fadeIn.dart';
 import 'package:songtube/ui/components/shimmerContainer.dart';
+import 'package:songtube/ui/layout/components/popupMenu.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class StreamsListTileView extends StatelessWidget {
@@ -11,12 +12,14 @@ class StreamsListTileView extends StatelessWidget {
   final bool shrinkWrap;
   final bool removePhysics;
   final bool topPadding;
+  final Function(dynamic) onDelete;
   StreamsListTileView({
     @required this.streams,
     @required this.onTap,
     this.shrinkWrap = false,
     this.removePhysics = false,
-    this.topPadding = true
+    this.topPadding = true,
+    this.onDelete
   });
   @override
   Widget build(BuildContext context) {
@@ -131,6 +134,10 @@ class StreamsListTileView extends StatelessWidget {
                               ),
                             ],
                           ),
+                        ),
+                        StreamsPopupMenu(
+                          infoItem: video,
+                          onDelete: (item) => onDelete(item),
                         )
                       ],
                     ),
