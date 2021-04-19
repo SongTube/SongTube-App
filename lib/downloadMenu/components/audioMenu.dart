@@ -81,7 +81,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
     DownloadItem item = DownloadItem.fetchData(
       widget.video,
       list, 
-      widget.tags,
+      Provider.of<VideoPageProvider>(context, listen: false).currentTags,
       Provider.of<ConfigurationProvider>(context, listen: false)
     );
     widget.onDownload(item);
@@ -89,8 +89,10 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
 
   @override
   Widget build(BuildContext context) {
-    ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
     VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
+    if (pageProvider.currentTags == null) {
+      pageProvider.currentTags = widget.tags;
+    }
     return SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.min,

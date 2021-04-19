@@ -72,6 +72,7 @@ class StreamsPopupMenu extends StatelessWidget {
           case "Download":
             showModalBottomSheet<dynamic>(
               isScrollControlled: true,
+              backgroundColor: Colors.transparent,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(30),
