@@ -334,7 +334,9 @@ class StreamsLargeThumbnailView extends StatelessWidget {
         ),
         StreamsPopupMenu(
           infoItem: infoItem,
-          onDelete: (item) => onDelete(item),
+          onDelete: onDelete != null
+            ? (item) => onDelete(item)
+            : null,
           scaffoldKey: scaffoldKey,
         )
       ],

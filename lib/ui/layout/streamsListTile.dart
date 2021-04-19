@@ -139,7 +139,9 @@ class StreamsListTileView extends StatelessWidget {
                         ),
                         StreamsPopupMenu(
                           infoItem: video,
-                          onDelete: (item) => onDelete(item),
+                          onDelete: onDelete != null
+                            ? (item) => onDelete(item)
+                            : null,
                           scaffoldKey: scaffoldKey,
                         )
                       ],
