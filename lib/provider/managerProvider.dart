@@ -58,6 +58,9 @@ class ManagerProvider extends ChangeNotifier {
   FocusNode searchBarFocusNode;
   FocusNode musicSearchBarFocusNode;
 
+  // Current search filters
+  List<String> searchFilters = [];
+
   // -----------
   // Home Screen
   // -----------
@@ -68,12 +71,12 @@ class ManagerProvider extends ChangeNotifier {
     notifyListeners();
     if (query == null) return null;
     if (youtubeSearch == null) {
-      youtubeSearch = await SearchExtractor.searchYoutube(query, List.empty());
+      youtubeSearch = await SearchExtractor.searchYoutube(query, searchFilters);
       notifyListeners();
     } else if (youtubeSearch != null && forceReload) {
       youtubeSearch = null;
       notifyListeners();
-      youtubeSearch = await SearchExtractor.searchYoutube(query, List.empty());
+      youtubeSearch = await SearchExtractor.searchYoutube(query, searchFilters);
       notifyListeners();
     } else if (youtubeSearch != null) {
       await youtubeSearch.getNextPage();

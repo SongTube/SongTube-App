@@ -1,11 +1,14 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:newpipeextractor_dart/utils/url.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/provider/configurationProvider.dart';
 import 'package:songtube/provider/managerProvider.dart';
+import 'package:songtube/ui/components/styledBottomSheet.dart';
+import 'package:songtube/ui/sheets/searchFilters.dart';
 
 class HomePageAppBar extends StatefulWidget {
   final Function(String) onLoadVideo;
@@ -138,7 +141,7 @@ class _HomePageAppBarState extends State<HomePageAppBar> with TickerProviderStat
                     builder: (context, dynamic id) {
                       return AnimatedSwitcher(
                         duration: Duration(milliseconds: 300),
-                        child: id.data != null
+                        child: id.data != null && manager.searchController.text.isEmpty
                           ? IconButton(
                               icon: Icon(EvaIcons.linkOutline,
                                 color: Theme.of(context).accentColor,
@@ -154,6 +157,22 @@ class _HomePageAppBarState extends State<HomePageAppBar> with TickerProviderStat
                           : Container()
                       );
                     }
+                  ),
+                  IconButton(
+                    icon: Icon(EvaIcons.dropletOutline,
+                      color: Theme.of(context).iconTheme.color.withOpacity(0.6)),
+                    onPressed: () {
+                      showModalBottomSheet(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(15),
+                            topRight: Radius.circular(15)
+                          )
+                        ),
+                        context: context,
+                        builder: (context) => SearchFiltersSheet()
+                      );
+                    },
                   ),
                 ],
               )
