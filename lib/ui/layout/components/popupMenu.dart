@@ -16,9 +16,11 @@ import 'package:songtube/ui/internal/snackbar.dart';
 class StreamsPopupMenu extends StatelessWidget {
   final dynamic infoItem;
   final Function(dynamic) onDelete;
+  final scaffoldKey;
   StreamsPopupMenu({
     @required this.infoItem,
     this.onDelete,
+    this.scaffoldKey,
   });
   @override
   Widget build(BuildContext context) {
@@ -59,12 +61,12 @@ class StreamsPopupMenu extends StatelessWidget {
             Clipboard.setData(ClipboardData(
               text: infoItem.url
             ));
-            final scaffold = Scaffold.of(context);
             AppSnack.showSnackBar(
               icon: Icons.copy,
               title: "Link copied to Clipboard",
               duration: Duration(seconds: 2),
               context: context,
+              scaffoldKey: scaffoldKey
             );
             break;
           case "Download":

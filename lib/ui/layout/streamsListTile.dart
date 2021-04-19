@@ -13,13 +13,15 @@ class StreamsListTileView extends StatelessWidget {
   final bool removePhysics;
   final bool topPadding;
   final Function(dynamic) onDelete;
+  final scaffoldKey;
   StreamsListTileView({
     @required this.streams,
     @required this.onTap,
     this.shrinkWrap = false,
     this.removePhysics = false,
     this.topPadding = true,
-    this.onDelete
+    this.onDelete,
+    this.scaffoldKey
   });
   @override
   Widget build(BuildContext context) {
@@ -138,6 +140,7 @@ class StreamsListTileView extends StatelessWidget {
                         StreamsPopupMenu(
                           infoItem: video,
                           onDelete: (item) => onDelete(item),
+                          scaffoldKey: scaffoldKey,
                         )
                       ],
                     ),

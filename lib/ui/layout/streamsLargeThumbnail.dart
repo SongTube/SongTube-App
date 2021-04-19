@@ -25,13 +25,15 @@ class StreamsLargeThumbnailView extends StatelessWidget {
   final bool allowSaveToFavorites;
   final bool allowSaveToWatchLater;
   final Function onReachingListEnd;
+  final scaffoldKey;
   StreamsLargeThumbnailView({
     @required this.infoItems,
     this.shrinkWrap = false,
     this.onDelete,
     this.allowSaveToFavorites = true,
     this.allowSaveToWatchLater = true,
-    this.onReachingListEnd
+    this.onReachingListEnd,
+    this.scaffoldKey
   });
   @override
   Widget build(BuildContext context) {
@@ -333,6 +335,7 @@ class StreamsLargeThumbnailView extends StatelessWidget {
         StreamsPopupMenu(
           infoItem: infoItem,
           onDelete: (item) => onDelete(item),
+          scaffoldKey: scaffoldKey,
         )
       ],
     );

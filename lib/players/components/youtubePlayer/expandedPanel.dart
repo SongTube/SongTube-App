@@ -276,6 +276,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                           // Comments section
                           _commentTile(),
                           StreamsListTileView(
+                            scaffoldKey: scaffoldKey.currentState,
                             shrinkWrap: true,
                             removePhysics: true,
                             streams: pageProvider?.currentRelatedVideos == null
@@ -334,6 +335,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                           _commentTile(),
                           SizedBox(height: 12),
                           StreamsListTileView(
+                            scaffoldKey: scaffoldKey.currentState,
                             shrinkWrap: true,
                             removePhysics: true,
                             topPadding: false,
