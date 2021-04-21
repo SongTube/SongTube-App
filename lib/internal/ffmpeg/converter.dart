@@ -284,4 +284,26 @@ class FFmpegConverter {
     return output;
   }
 
+  /// Extracts a specific part from any audio file from start to end duration
+  /// and returns a new File
+  Future<File> extractAudio(String audioFile, int start, int end) async {
+    assert(audioFile != "" || audioFile != null);
+    String outDir = (await getExternalStorageDirectory()).path + "/";
+    String fileFormat = await getMediaFormat(audioFile);
+    File output = File(outDir + RandomString.getRandomString(10) + ".$fileFormat");
+    List<String> _argsList = [
+      "-y", "-i", "$audioFile", "-ss", "$start", "-to",
+      "$end", "-c", "copy", "${output.path}"
+    ];
+    int _result = await flutterFFmpeg.executeWithArguments(_argsList);
+    if (_result == 1)
+      throw Exception(
+        "Audio Extraction Failed\n"
+        "audioFile: $audioFile\n"
+        "argument list: $_argsList\n"
+        "output: $output"
+      );
+    return output;
+  }
+
 }

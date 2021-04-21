@@ -402,15 +402,11 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                       backgroundColor: Colors.transparent,
                       context: context,
                       builder: (context) {
-                        return Wrap(
-                          children: [
-                            DownloadMenu(
-                              video: pageProvider.currentVideo,
-                              tags: pageProvider.currentTags,
-                              scaffoldState: scaffoldKey.currentState,
-                              relatedVideos: pageProvider.currentRelatedVideos
-                            ),
-                          ],
+                        return DownloadMenu(
+                          video: pageProvider.currentVideo,
+                          tags: pageProvider.currentTags,
+                          scaffoldState: scaffoldKey.currentState,
+                          relatedVideos: pageProvider.currentRelatedVideos
                         );
                       }
                     );

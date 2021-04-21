@@ -6,6 +6,7 @@ import 'package:songtube/internal/ffmpeg/converter.dart';
 import 'package:songtube/internal/download/audioFilters.dart';
 import 'package:songtube/internal/download/downloadSet.dart';
 import 'package:songtube/internal/download/tags.dart';
+import 'package:songtube/internal/models/streamSegmentTrack.dart';
 import 'package:songtube/internal/models/tagsControllers.dart';
 import 'package:songtube/provider/configurationProvider.dart';
 
@@ -16,6 +17,8 @@ class DownloadItem {
   DownloadType downloadType;
   VideoOnlyStream videoStream;
   AudioOnlyStream audioStream;
+  List<StreamSegmentTrack> segmentTracks;
+  bool isDownloadSegmented;
   FFmpegTask ffmpegTask;
   AudioFilters filters;
   DownloadTags tags;
@@ -56,6 +59,8 @@ class DownloadItem {
     @required this.downloadType,
     this.videoStream,
     this.audioStream,
+    this.segmentTracks,
+    this.isDownloadSegmented,
     @required this.ffmpegTask,
     @required this.tags,
     @required this.downloadPath,
@@ -106,12 +111,32 @@ class DownloadItem {
       ffmpegTask = FFmpegTask.NONE;
     String downloadQuality = downloadType == DownloadType.VIDEO
       ? videoStream.resolution : "";
+    List<StreamSegmentTrack> segments = configList[6];
+    List<StreamSegmentTrack> segmentTracks = [];
+    bool isDownloadSegmented;
+    if (segments.isEmpty) {
+      isDownloadSegmented = false;
+      segmentTracks = null;
+    } else {
+      isDownloadSegmented = true;
+      segments.forEach((element) {
+        if (element.selected) {
+          segmentTracks.add(element);
+        }
+      });
+      if (segmentTracks.isEmpty) {
+        isDownloadSegmented = false;
+        segmentTracks = null;
+      }
+    }
     return DownloadItem(
       url: video.url,
       downloadType: configList[0] == "Audio"
         ? DownloadType.AUDIO : DownloadType.VIDEO,
       videoStream: videoStream,
       audioStream: audioStream,
+      segmentTracks: segmentTracks,
+      isDownloadSegmented: isDownloadSegmented,
       downloadPath: downloadPath,
       tags: downloadTags,
       formatSuffix: formatSuffix,

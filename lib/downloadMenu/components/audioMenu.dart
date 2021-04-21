@@ -12,10 +12,11 @@ import 'package:flutter_xlider/flutter_xlider.dart';
 import 'package:image_fade/image_fade.dart';
 import 'package:newpipeextractor_dart/models/streams/audioOnlyStream.dart';
 import 'package:newpipeextractor_dart/models/video.dart';
-import 'package:newpipeextractor_dart/utils/httpClient.dart';
+import 'package:newpipeextractor_dart/newpipeextractor_dart.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/download/downloadItem.dart';
 import 'package:songtube/internal/languages.dart';
+import 'package:songtube/internal/models/streamSegmentTrack.dart';
 import 'package:songtube/internal/models/tagsControllers.dart';
 import 'package:songtube/internal/musicBrainzApi.dart';
 import 'package:songtube/provider/configurationProvider.dart';
@@ -28,7 +29,6 @@ import 'package:songtube/ui/components/textfieldTile.dart';
 import 'package:songtube/ui/dialogs/loadingDialog.dart';
 import 'package:songtube/ui/internal/popupMenu.dart';
 import 'package:string_validator/string_validator.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class AudioDownloadMenu extends StatefulWidget {
   final YoutubeVideo video;
@@ -63,20 +63,52 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
   // Converter options
   bool enableConversion = true;
 
+  // Segment tracks
+  List<StreamSegmentTrack> segmentTracks = [];
+
+  // Download by segments, if this is enabled, the final downloaded
+  // audio will be split the choosen segments
+  bool segmentedDownload = false;
+  bool showSegmentedDownload = false;
+
+  // Flag indicating if the auto tagger is running or not, to make
+  // sure we don't run it again and then cause chaos and destruction
+  bool autoTaggerRunning = false;
+
   @override
   void initState() {
     selectedAudio = widget.video.audioWithBestAacQuality;
+    if (widget.video.segments.isNotEmpty) {
+      widget.video.segments.forEach((element) {
+        TagsControllers tags = TagsControllers();
+        tags.updateTextControllersFromStream(
+          StreamInfoItem(
+            widget.video.url,
+            widget.video.id,
+            element.title,
+            widget.video.uploaderName,
+            widget.video.uploaderUrl,
+            widget.video.uploadDate,
+            widget.video.length,
+            widget.video.viewCount
+          )
+        );
+        segmentTracks.add(StreamSegmentTrack(element, tags, true));
+      });
+    }
     super.initState();
   }
 
   void _onDownload() {
     List<dynamic> list = [
       "Audio",
-      selectedAudio, 
+      selectedAudio,
       (1+volumeModifier).toString(),
       bassGain.toString(),
       trebleGain.toString(),
-      normalizeAudio
+      normalizeAudio,
+      segmentedDownload
+        ? segmentTracks : <StreamSegmentTrack>[]
     ];
     DownloadItem item = DownloadItem.fetchData(
       widget.video,
@@ -95,7 +127,6 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
     }
     return SingleChildScrollView(
       child: Column(
-        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           // Menu Title
           Container(
@@ -364,33 +395,10 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
             indent: 12,
             endIndent: 12
           ),
-          // Tags editor textfields
-          _tagsEditor(),
-          Divider(
-            height: 1,
-            thickness: 1,
-            color: Colors.grey[600].withOpacity(0.1),
-            indent: 12,
-            endIndent: 12
-          ),
-          // Audio features controls
-          _audioFeatures(),
-          Divider(
-            height: 1,
-            thickness: 1,
-            color: Colors.grey[600].withOpacity(0.1),
-            indent: 12,
-            endIndent: 12
-          ),
-          // Enable/Disable audio conversion
-          _converterOptions(),
-          Divider(
-            height: 1,
-            thickness: 1,
-            color: Colors.grey[600].withOpacity(0.1),
-            indent: 12,
-            endIndent: 12
-          ),
+
+          // Menu body, contains all the pre-download user controls
+          _menuBody(),
+
           GestureDetector(
             onTap: () => _onDownload(),
             child: Container(
@@ -434,6 +442,52 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
           )
         ],
       ),
+    );
+  }
+
+  Widget _menuBody() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // Tags editor textfields
+        _tagsEditor(),
+        Divider(
+          height: 1,
+          thickness: 1,
+          color: Colors.grey[600].withOpacity(0.1),
+          indent: 12,
+          endIndent: 12
+        ),
+        // Audio features controls
+        _audioFeatures(),
+        Divider(
+          height: 1,
+          thickness: 1,
+          color: Colors.grey[600].withOpacity(0.1),
+          indent: 12,
+          endIndent: 12
+        ),
+        // Enable/Disable audio conversion
+        _converterOptions(),
+        Divider(
+          height: 1,
+          thickness: 1,
+          color: Colors.grey[600].withOpacity(0.1),
+          indent: 12,
+          endIndent: 12
+        ),
+        // Enable/Disable segmented download
+        if (widget.video.segments.isNotEmpty)
+        _segmentsDownload(),
+        if (widget.video.segments.isNotEmpty)
+        Divider(
+          height: 1,
+          thickness: 1,
+          color: Colors.grey[600].withOpacity(0.1),
+          indent: 12,
+          endIndent: 12
+        ),
+      ],
     );
   }
 
@@ -857,6 +911,348 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
           ),
         ),
       ),
+    );
+  }
+
+  Widget _segmentsDownload() {
+    ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
+    return Column(
+      children: [
+        InkWell(
+          onTap: () => setState(() => showSegmentedDownload = !showSegmentedDownload),
+          child: Padding(
+            padding: EdgeInsets.all(12),
+            child: Ink(
+              height: 32,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    EvaIcons.listOutline,
+                    color: Theme.of(context).accentColor
+                  ),
+                  SizedBox(width: 8),
+                  Text(
+                    "Segmented Download",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontFamily: 'Product Sans',
+                      fontWeight: FontWeight.w600,
+                      color: Theme.of(context).textTheme.bodyText1.color,
+                    ),
+                  ),
+                  Spacer(),
+                  Icon(showSegmentedDownload ? Icons.expand_less : Icons.expand_more,
+                    color: Theme.of(context).iconTheme.color),
+                  SizedBox(width: 12),
+                ],
+              ),
+            ),
+          ),
+        ),
+        AnimatedSize(
+          vsync: this,
+          curve: Curves.easeInOut,
+          duration: Duration(milliseconds: 300),
+          child: showSegmentedDownload ? FadeInTransition(
+            delay: Duration(milliseconds: 300),
+            duration: Duration(milliseconds: 250),
+            child: InkWell(
+              child: Ink(
+                padding: EdgeInsets.only(top: 8, bottom: 16),
+                child: Row(
+                  children: [
+                    SizedBox(width: 12),
+                    Icon(
+                      segmentedDownload
+                        ? Icons.check_box_outlined
+                        : Icons.check_box_outline_blank,
+                      color: segmentedDownload
+                        ? Theme.of(context).accentColor
+                        : Theme.of(context).iconTheme.color
+                    ),
+                    SizedBox(width: 8),
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Enable segmented download", style: TextStyle(
+                            fontSize: 16,
+                            color: Theme.of(context).textTheme.bodyText1.color,
+                            fontFamily: "Product Sans",
+                            fontWeight: FontWeight.w600
+                          )),
+                          Text(
+                            "This will download the whole audio file and then split it into the various "
+                            "enabled segments (or audio tracks) from the list below",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Theme.of(context).iconTheme.color,
+                              fontFamily: "Product Sans",
+                              fontWeight: FontWeight.w600
+                            )
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: 24),
+                  ],
+                ),
+              ),
+              onTap: () => setState(() => segmentedDownload = !segmentedDownload),
+            ),
+          ) : Container(),
+        ),
+        AnimatedSize(
+          curve: Curves.easeInOut,
+          duration: Duration(milliseconds: 300),
+          vsync: this,
+          child: segmentedDownload && showSegmentedDownload ? FadeInTransition(
+            delay: Duration(milliseconds: 300),
+            duration: Duration(milliseconds: 250),
+            child: Padding(
+              padding: EdgeInsets.only(left: 4),
+              child: Column(
+                children: [
+                  InkWell(
+                    child: Ink(
+                      padding: EdgeInsets.only(top: 8, bottom: 16),
+                      child: Row(
+                        children: [
+                          SizedBox(width: 8),
+                          Icon(
+                            EvaIcons.edit2Outline,
+                            color: Theme.of(context).accentColor
+                          ),
+                          SizedBox(width: 8),
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Apply Tags", style: TextStyle(
+                                  fontSize: 16,
+                                  color: Theme.of(context).textTheme.bodyText1.color,
+                                  fontFamily: "Product Sans",
+                                  fontWeight: FontWeight.w600
+                                )),
+                                Text(
+                                  "Extract tags from MusicBrainz for all segments",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Theme.of(context).iconTheme.color,
+                                    fontFamily: "Product Sans",
+                                    fontWeight: FontWeight.w600
+                                  )
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(width: 24),
+                        ],
+                      ),
+                    ),
+                    onTap: () async {
+                      if (autoTaggerRunning) return;
+                      setState(() => autoTaggerRunning = true);
+                      for (int i = 0; i < segmentTracks.length; i++) {
+                        if (!mounted) break;
+                        String lastArtwork = segmentTracks[i].tags.artworkController;
+                        var record;
+                        try {
+                        record = await MusicBrainzAPI
+                          .getFirstRecord(segmentTracks[i].tags.titleController.text);
+                        } catch (_) {}
+                        if (!mounted) break;
+                        if (record != null) {
+                          segmentTracks[i].tags = await MusicBrainzAPI.getSongTags(record);
+                          if (segmentTracks[i].tags.artworkController == null)
+                            segmentTracks[i].tags.artworkController = lastArtwork;
+                          await Future.delayed(Duration(seconds: 1));
+                          setState(() {});
+                        }
+                      }
+                      setState(() => autoTaggerRunning = false);
+                    }
+                  ),
+                  AnimatedSize(
+                    vsync: this,
+                    duration: Duration(milliseconds: 300),
+                    child: autoTaggerRunning
+                      ? Padding(
+                        padding: EdgeInsets.only(bottom: 12, left: 24, right: 24),
+                          child: LinearProgressIndicator(value: null,
+                            valueColor: AlwaysStoppedAnimation(
+                              Theme.of(context).accentColor
+                            ),
+                            backgroundColor: Colors.transparent,
+                            minHeight: 1,
+                          ),
+                        )
+                      : Container()
+                  ),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: widget.video.segments.length,
+                    itemBuilder: (context, index) {
+                      return _segmentTile(index);
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ) : Container(),
+        ),
+      ],
+    );
+  }
+
+  Widget _segmentTile(int index) {
+    StreamSegmentTrack segment = segmentTracks[index];
+    return ListTile(
+      onTap: () {
+        setState(() => segmentTracks[index].selected =
+          !segmentTracks[index].selected);
+      },
+      title: Text(
+        segment.tags.titleController.text,
+        style: TextStyle(
+          color: Theme.of(context).textTheme.bodyText1.color,
+          fontFamily: 'Product Sans',
+          fontSize: 14,
+          fontWeight: FontWeight.w600
+        ),
+        maxLines: 2,
+      ),
+      subtitle: Text(
+        segment.tags.artistController.text,
+        style: TextStyle(
+          color: Theme.of(context).textTheme.bodyText1.color
+            .withOpacity(0.6),
+          fontFamily: 'Product Sans',
+          fontSize: 12,
+          fontWeight: FontWeight.w600
+        ),
+      ),
+      leading: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Checkbox(
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            value: segmentTracks[index].selected,
+            onChanged: (value) {
+              setState(() => segmentTracks[index].selected = value);
+            },
+          ),
+          AspectRatio(
+            aspectRatio: 1/1,
+            child: Stack(
+              fit: StackFit.passthrough,
+              alignment: Alignment.center,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        blurRadius: 12,
+                        color: Colors.black.withOpacity(0.3)
+                      )
+                    ]
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: ImageFade(
+                      fadeDuration: Duration(milliseconds: 300),
+                      placeholder: Container(color: Theme.of(context).cardColor),
+                      image: isURL(segment.tags.artworkController)
+                        ? NetworkImage(segment.tags.artworkController)
+                        : FileImage(File(segment.tags.artworkController)),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.center,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(50),
+                    child: Container(
+                      height: 30,
+                      width: 30,
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.4)
+                      ),
+                      child: Icon(EvaIcons.brushOutline,
+                        color: Colors.white,
+                        size: 16),
+                    ),
+                  ),
+                ),
+              ],
+            )
+          ),
+        ],
+      ),
+      contentPadding: EdgeInsets.symmetric(horizontal: 0),
+      trailing: FlexiblePopupMenu(
+        child: Container(
+          margin: EdgeInsets.only(right: 24),
+          color: Colors.transparent,
+          child: Icon(Icons.more_vert_rounded,
+            color: Theme.of(context).iconTheme.color),
+        ),
+        items: [
+          FlexiblePopupItem(
+            title: Languages.of(context).labelPerformAutomaticTagging,
+            value: 'autoTag',
+          ),
+          FlexiblePopupItem(
+            title: Languages.of(context).labelSelectTagsfromMusicBrainz,
+            value: 'manualTag',
+          ),
+        ],
+        onItemTap: (String value) async {
+          if (value == 'autoTag') {
+            showDialog(
+              context: context,
+              builder: (_) => LoadingDialog()
+            );
+            String lastArtwork = segmentTracks[index].tags.artworkController;
+            var record = await MusicBrainzAPI
+              .getFirstRecord(segmentTracks[index].tags.titleController.text);
+            segmentTracks[index].tags = await MusicBrainzAPI.getSongTags(record);
+            if (segmentTracks[index].tags.artworkController == null)
+              segmentTracks[index].tags.artworkController = lastArtwork;
+            Navigator.pop(context);
+            setState(() {});
+          } else if (value == 'manualTag') {
+            var record = await Navigator.push(context,
+              BlurPageRoute(builder: (context) => 
+                TagsResultsPage(
+                  title: segmentTracks[index].tags.titleController.text,
+                  artist: segmentTracks[index].tags.artistController.text
+                ),
+                blurStrength: Provider.of<PreferencesProvider>
+                  (context, listen: false).enableBlurUI ? 20 : 0));
+            if (record == null) return;
+            showDialog(
+              context: context,
+              builder: (_) => LoadingDialog()
+            );
+            String lastArtwork = segmentTracks[index].tags.artworkController;
+            segmentTracks[index].tags = await MusicBrainzAPI.getSongTags(record);
+            if (segmentTracks[index].tags.artworkController == null)
+              segmentTracks[index].tags.artworkController = lastArtwork;
+            Navigator.pop(context);
+            setState(() {});
+          } else {
+            return;
+          }
+        },
+      )
     );
   }
 

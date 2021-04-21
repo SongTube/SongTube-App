@@ -24,6 +24,7 @@ import 'package:songtube/internal/download/downloadItem.dart';
 import 'package:songtube/internal/models/songFile.dart';
 import 'package:songtube/internal/download/tags.dart';
 import 'package:songtube/internal/ffmpeg/converter.dart';
+import 'package:songtube/internal/models/streamSegmentTrack.dart';
 import 'package:songtube/internal/nativeMethods.dart';
 import 'package:songtube/internal/randomString.dart';
 import 'package:songtube/internal/tagsManager.dart';
@@ -226,37 +227,105 @@ class DownloadSet {
     // Rename File
     downloadedFile = await renameFile(downloadedFile, downloadItem.tags.title);
 
-    // Write All Metadata if its Audio
-    if (downloadItem.downloadType == DownloadType.AUDIO) {
-      downloadedFile = await ffmpegConverter.clearFileMetadata(downloadedFile.path);
-      if (downloadedFile == null) return;
-      currentAction.add(language.labelWrittingTagsAndArtwork);
-      await writeAllMetadata(downloadedFile.path);
-    }
-
-    // Check our formatSuffix
-    downloadItem.formatSuffix = 
-      await ffmpegConverter.getMediaFormat(downloadedFile.path);
-
-    // Move file to its Predefined Directory
-    currentAction.add(language.labelSavingFile);
-    Permission.storage.request().then((value) async {
-      if (value == PermissionStatus.granted) {
-        String outputFileName = removeToxicSymbols("${downloadItem.tags.title}.${downloadItem.formatSuffix}");
-        String outputFile = "${downloadItem.downloadPath}/$outputFileName";
-        var finalFile = await FileOperations.moveFile(downloadedFile.path, outputFile);
-        if (finalFile is File) {
-          await finishDownload(finalFile);
-          completedCallback(downloadId, converted);
-        } else {
-          errorReason = finalFile;
-          _interruptDownload(finalFile);
-          saveErrorCallback(downloadId);
-          return;
-        }
+    // If this download is segmented, we can now start splitting the audio file
+    // into various files, in the contrary that this download is not segmented,
+    // we will just write all the metadata to the original file and save it.
+    if (!downloadItem.isDownloadSegmented) {
+      // Process the original file
+      if (downloadItem.downloadType == DownloadType.AUDIO) {
+        downloadedFile = await ffmpegConverter.clearFileMetadata(downloadedFile.path);
+        if (downloadedFile == null) return;
+        currentAction.add(language.labelWrittingTagsAndArtwork);
+        await writeAllMetadata(downloadedFile.path, downloadItem.tags);
       }
-    });
-    
+
+      // Check our formatSuffix
+      downloadItem.formatSuffix = 
+        await ffmpegConverter.getMediaFormat(downloadedFile.path);
+
+      // Move file to its Predefined Directory
+      currentAction.add(language.labelSavingFile);
+      Permission.storage.request().then((value) async {
+        if (value == PermissionStatus.granted) {
+          String outputFileName = removeToxicSymbols("${downloadItem.tags.title}.${downloadItem.formatSuffix}");
+          String outputFile = "${downloadItem.downloadPath}/$outputFileName";
+          var finalFile = await FileOperations.moveFile(downloadedFile.path, outputFile);
+          if (finalFile is File) {
+            await finishDownload(finalFile, downloadItem.tags, downloadItem.duration);
+            completedCallback(downloadId, converted);
+          } else {
+            errorReason = finalFile;
+            _interruptDownload(finalFile);
+            saveErrorCallback(downloadId);
+            return;
+          }
+        }
+      });
+    } else {
+      // Check our formatSuffix
+      downloadItem.formatSuffix = 
+        await ffmpegConverter.getMediaFormat(downloadedFile.path);
+      // Process the segments of the original file
+      List<SegmentFile> segmentFiles = [];
+      // Split and add all SegmentFiles to our list
+      for (int i = 0; i < downloadItem.segmentTracks.length; i++) {
+        currentAction.add("Extracting audio files (${i+1}/${downloadItem.segmentTracks.length})");
+        StreamSegmentTrack segmentTrack = downloadItem.segmentTracks[i];
+        int segmentTracksLength = downloadItem.segmentTracks.length;
+        int start = segmentTrack.segment.startTimeSeconds;
+        int end = segmentTracksLength-1 == i
+          ? downloadItem.duration
+          : downloadItem.segmentTracks[i+1].segment.startTimeSeconds;
+        File extractedAudio = await ffmpegConverter.extractAudio(
+          downloadedFile.path, start, end);
+        segmentFiles.add(
+          SegmentFile(
+            extractedAudio,
+            DownloadTags(
+              title: removeToxicSymbols(segmentTrack.tags.titleController.text),
+              album: segmentTrack.tags.albumController.text,
+              artist: segmentTrack.tags.artistController.text
+                .replaceAll("- Topic", "").trim(),
+              genre: segmentTrack.tags.genreController.text,
+              coverurl: segmentTrack.tags.artworkController,
+              date: segmentTrack.tags.dateController.text,
+              disc: segmentTrack.tags.discController.text,
+              track: segmentTrack.tags.trackController.text
+            ),
+            (end - start).abs(),
+          ),
+        );
+      }
+      // Write all the metadata to all our Segment files
+      for (int i = 0; i < segmentFiles.length; i++) {
+        currentAction.add("Writting audio tags (${i+1}/${segmentFiles.length})");
+        segmentFiles[i].segmentFile = await ffmpegConverter
+          .clearFileMetadata(segmentFiles[i].segmentFile.path);
+        if (segmentFiles[i].segmentFile == null) return;
+        await writeAllMetadata(segmentFiles[i].segmentFile.path, segmentFiles[i].tags);
+      }
+      // Save all our Segment files
+      for (int i = 0; i < segmentFiles.length; i++) {
+        currentAction.add("Saving audio file (${i+1}/${segmentFiles.length})");
+        SegmentFile segment = segmentFiles[i];
+        Permission.storage.request().then((value) async {
+          if (value == PermissionStatus.granted) {
+            String outputFileName = removeToxicSymbols("${segment.tags.title}.${downloadItem.formatSuffix}");
+            String outputFile = "${downloadItem.downloadPath}/$outputFileName";
+            var finalFile = await FileOperations.moveFile(segment.segmentFile.path, outputFile);
+            if (finalFile is File) {
+              await finishDownload(finalFile, segment.tags, segment.duration);
+              completedCallback(downloadId, converted);
+            } else {
+              errorReason = finalFile;
+              _interruptDownload(finalFile);
+              saveErrorCallback(downloadId);
+              return;
+            }
+          }
+        });
+      }
+    }
   }
 
   // Start Downloading our Stream
@@ -353,30 +422,30 @@ class DownloadSet {
   }
 
   // Write Tags & Artwork
-  Future<void> writeAllMetadata(String filePath) async {
+  Future<void> writeAllMetadata(String filePath, DownloadTags tags) async {
     downloadStatusStream.add(DownloadStatus.WrittingTags);
     try {
       await TagsManager.writeAllTags(
         songPath: filePath,
-        title: downloadItem.tags.title,
-        album: downloadItem.tags.album,
-        artist: downloadItem.tags.artist,
-        genre: downloadItem.tags.genre,
-        year: downloadItem.tags.date,
-        disc: downloadItem.tags.disc,
-        track: downloadItem.tags.track
+        title: tags.title,
+        album: tags.album,
+        artist: tags.artist,
+        genre: tags.genre,
+        year: tags.date,
+        disc: tags.disc,
+        track: tags.track
       );
       // Only add Artwork if song is in AAC Format
       if (downloadItem.ffmpegTask == FFmpegTask.ConvertToAAC) {
         File croppedImage;
-        if (isURL(downloadItem.tags.coverurl)) {
+        if (isURL(tags.coverurl)) {
           http.Response response;
           File artwork = new File(
             (await getExternalStorageDirectory()).path +
             "/${RandomString.getRandomString(5)}"
           );
           try {
-            response = await http.get(downloadItem.tags.coverurl)
+            response = await http.get(tags.coverurl)
               .timeout(Duration(seconds: 120));
             await artwork.writeAsBytes(response.bodyBytes);
             var decodedImage = await decodeImageFromList(artwork.readAsBytesSync());
@@ -395,7 +464,7 @@ class DownloadSet {
           }
           croppedImage = await NativeMethod.cropToSquare(artwork);
         } else {
-          croppedImage = await NativeMethod.cropToSquare(File(downloadItem.tags.coverurl));
+          croppedImage = await NativeMethod.cropToSquare(File(tags.coverurl));
         }
         await TagsManager.writeArtwork(
           songPath: filePath,
@@ -403,20 +472,20 @@ class DownloadSet {
         );
         // Copy our CoverArt to default folder
         await croppedImage.copy((await getApplicationDocumentsDirectory()).path +
-          "${downloadItem.tags.title}.jpg");
+          "${tags.title}.jpg");
       }
     } on Exception catch (_) {}
   }
 
   // Finish download by inserting it to the Database
   // and updating Android MediaStore
-  Future<void> finishDownload(File finalFile) async {
+  Future<void> finishDownload(File finalFile, DownloadTags tags, int duration) async {
     final dbHelper = DatabaseService.instance;
     await dbHelper.insertDownload(new SongFile.toDatabase(
-      title: downloadItem.tags.title,
-      album: downloadItem.tags.album,
-      author: downloadItem.tags.artist,
-      duration: downloadItem.duration.toString(),
+      title: tags.title,
+      album: tags.album,
+      author: tags.artist,
+      duration: duration.toString(),
       downloadType: downloadItem.downloadType == DownloadType.AUDIO
         ? "Audio"
         : "Video",
@@ -458,5 +527,19 @@ class DownloadSet {
       .replaceAll(']', '')
       .replaceAll('¡', '');
   }
+
+}
+
+class SegmentFile {
+
+  File segmentFile;
+  DownloadTags tags;
+  int duration;
+
+  SegmentFile(
+    this.segmentFile,
+    this.tags,
+    this.duration
+  );
 
 }

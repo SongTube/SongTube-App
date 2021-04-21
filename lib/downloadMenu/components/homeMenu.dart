@@ -52,136 +52,132 @@ class DownloadMenuHome extends StatelessWidget {
             right: 16,
             bottom: 16
           ),
-          child: Column(
+          child: Flex(
+            direction: Axis.horizontal,
             children: [
-              Flex(
-                direction: Axis.horizontal,
-                children: [
-                  // Audio
-                  Flexible(
-                    fit: FlexFit.tight,
-                    child: GestureDetector(
-                      onTap: onAudioTap,
-                      child: Container(
-                        margin: EdgeInsets.only(right: 8),
-                        height: 80,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: Theme.of(context).iconTheme.color.withOpacity(0.1),
-                            width: 1.5,
-                          ),
-                          color: Theme.of(context).cardColor,
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 12,
-                              color: Colors.black.withOpacity(0.04)
-                            )
-                          ]
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(EvaIcons.musicOutline, size: 35,
-                             color: Theme.of(context).accentColor),
-                            SizedBox(width: 16),
-                            Text(
-                              Languages.of(context).labelAudio,
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.9),
-                                fontFamily: "YTSans"
-                              )
-                            )
-                          ],
-                        ),
+              // Audio
+              Flexible(
+                fit: FlexFit.tight,
+                child: GestureDetector(
+                  onTap: onAudioTap,
+                  child: Container(
+                    margin: EdgeInsets.only(right: 8),
+                    height: 80,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: Theme.of(context).iconTheme.color.withOpacity(0.1),
+                        width: 1.5,
                       ),
+                      color: Theme.of(context).cardColor,
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 12,
+                          color: Colors.black.withOpacity(0.04)
+                        )
+                      ]
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(EvaIcons.musicOutline, size: 35,
+                         color: Theme.of(context).accentColor),
+                        SizedBox(width: 16),
+                        Text(
+                          Languages.of(context).labelAudio,
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.9),
+                            fontFamily: "YTSans"
+                          )
+                        )
+                      ],
                     ),
                   ),
-                  // Video
-                  Flexible(
-                    fit: FlexFit.tight,
-                    child: GestureDetector(
-                      onTap: onVideoTap,
-                      child: Container(
-                        height: 80,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: Theme.of(context).iconTheme.color.withOpacity(0.1),
-                            width: 1.5,
-                          ),
-                          color: Theme.of(context).cardColor,
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 12,
-                              color: Colors.black.withOpacity(0.04)
-                            )
-                          ]
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(EvaIcons.videoOutline, size: 35,
-                              color: Theme.of(context).accentColor),
-                            SizedBox(width: 16),
-                            Text(
-                              Languages.of(context).labelVideo,
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.9),
-                                fontFamily: "YTSans"
-                              )
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  //Playlist
-                  if (playlistVideos != null)
-                  Flexible(
-                    fit: FlexFit.tight,
-                    child: GestureDetector(
-                      onTap: onPlaylistTap,
-                      child: Container(
-                        margin: EdgeInsets.only(left: 8),
-                        height: 80,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: Theme.of(context).iconTheme.color.withOpacity(0.1),
-                            width: 1.5,
-                          ),
-                          color: Theme.of(context).cardColor,
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 12,
-                              color: Colors.black.withOpacity(0.04)
-                            )
-                          ]
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(MdiIcons.playlistMusicOutline, size: 35,
-                              color: Theme.of(context).accentColor),
-                            SizedBox(width: 16),
-                            Text(
-                              Languages.of(context).labelPlaylist,
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.9),
-                                fontFamily: "YTSans"
-                              )
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  )
-                ],
+                ),
               ),
+              // Video
+              Flexible(
+                fit: FlexFit.tight,
+                child: GestureDetector(
+                  onTap: onVideoTap,
+                  child: Container(
+                    height: 80,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: Theme.of(context).iconTheme.color.withOpacity(0.1),
+                        width: 1.5,
+                      ),
+                      color: Theme.of(context).cardColor,
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 12,
+                          color: Colors.black.withOpacity(0.04)
+                        )
+                      ]
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(EvaIcons.videoOutline, size: 35,
+                          color: Theme.of(context).accentColor),
+                        SizedBox(width: 16),
+                        Text(
+                          Languages.of(context).labelVideo,
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.9),
+                            fontFamily: "YTSans"
+                          )
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              //Playlist
+              if (playlistVideos != null)
+              Flexible(
+                fit: FlexFit.tight,
+                child: GestureDetector(
+                  onTap: onPlaylistTap,
+                  child: Container(
+                    margin: EdgeInsets.only(left: 8),
+                    height: 80,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: Theme.of(context).iconTheme.color.withOpacity(0.1),
+                        width: 1.5,
+                      ),
+                      color: Theme.of(context).cardColor,
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 12,
+                          color: Colors.black.withOpacity(0.04)
+                        )
+                      ]
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(MdiIcons.playlistMusicOutline, size: 35,
+                          color: Theme.of(context).accentColor),
+                        SizedBox(width: 16),
+                        Text(
+                          Languages.of(context).labelPlaylist,
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.9),
+                            fontFamily: "YTSans"
+                          )
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              )
             ],
           ),
         )

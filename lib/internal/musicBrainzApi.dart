@@ -58,12 +58,15 @@ class MusicBrainzAPI {
     tagsControllers.discController.text = getDiscNumber(parsedJson);
     tagsControllers.trackController.text = getTrackNumber(parsedJson);
     tagsControllers.genreController.text = getGenre(parsedJson);
+    tagsControllers.artworkController = null;
     if (artworkLink == null) {
       await getThumbnails(parsedJson["releases"][0]["id"]).then((map) {
-        if (map.containsKey("1200x1200"))
-          tagsControllers.artworkController = map["1200x1200"];
-        else
-          tagsControllers.artworkController = map["500x500"];
+        if (map != null) {
+          if (map.containsKey("1200x1200"))
+            tagsControllers.artworkController = map["1200x1200"];
+          else
+            tagsControllers.artworkController = map["500x500"];
+        }
       });
     } else {
       tagsControllers.artworkController = artworkLink;

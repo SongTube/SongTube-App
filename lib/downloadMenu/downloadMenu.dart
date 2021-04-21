@@ -90,17 +90,9 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
             topRight: Radius.circular(15)
           )
         ),
-        child: Column(
-          children: [
-            Material(
-              color: Colors.transparent,
-              child: _currentDownloadMenuWidget()
-            ),
-            Container(
-              height: MediaQuery.of(context).padding.bottom,
-              color: Theme.of(context).cardColor
-            )
-          ],
+        child: Material(
+          color: Colors.transparent,
+          child: _currentDownloadMenuWidget()
         ),
       ),
     );
