@@ -275,23 +275,20 @@ class _FancyScaffoldState extends State<FancyScaffold> with TickerProviderStateM
             AnimatedBuilder(
               animation: _floatingWidgetAnimationController,
               builder: (context, child) {
-                return Positioned(
-                  top: 0.0,
-                  child: ClipRRect(
-                    borderRadius: _floatingWidgetAnimationController.value == 1
-                      ? BorderRadius.zero
-                      : BorderRadius.circular(10),
-                    child: Container(
-                      height: (widget.floatingWidgetConfig.maxHeight *
-                        _floatingWidgetAnimationController.value) +
-                        (widget.floatingWidgetConfig.minHeight *
-                        (1 - _floatingWidgetAnimationController.value)),
-                      width:  MediaQuery.of(context).size.width -
-                        (widget.floatingWidgetConfig.margin.horizontal *
-                        (1 - _floatingWidgetAnimationController.value)),
-                      child: child
-                    ),
-                  )
+                return ClipRRect(
+                  borderRadius: _floatingWidgetAnimationController.value == 1
+                    ? BorderRadius.zero
+                    : BorderRadius.circular(10),
+                  child: Container(
+                    height: (widget.floatingWidgetConfig.maxHeight *
+                      _floatingWidgetAnimationController.value) +
+                      (widget.floatingWidgetConfig.minHeight *
+                      (1 - _floatingWidgetAnimationController.value)),
+                    width:  MediaQuery.of(context).size.width -
+                      (widget.floatingWidgetConfig.margin.horizontal *
+                      (1 - _floatingWidgetAnimationController.value)),
+                    child: child
+                  ),
                 );
               },
               child: widget.floatingWidgetTwins.expanded
