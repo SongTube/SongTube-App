@@ -1,3 +1,4 @@
+import 'dart:developer' as log;
 import 'dart:math';
 import 'dart:ui';
 
@@ -135,6 +136,7 @@ class _FancyScaffoldState extends State<FancyScaffold> with TickerProviderStateM
       updateNavigationBarControllerBasedOnFloatingWidget(_floatingWidgetAnimationController.value);
 
     });
+
     // prevent the panel content from being scrolled only if the widget is
     // draggable and panel scrolling is enabled
     _floatingWidgetScrollController = new ScrollController();
@@ -239,86 +241,81 @@ class _FancyScaffoldState extends State<FancyScaffold> with TickerProviderStateM
   }
 
   Widget _actualSlidingPanel() {
-    return Stack(
-      children: [
-        // The actual sliding part
-        !widget.floatingWidgetConfig.isPanelVisible ? Container() : _gestureHandler(
-          child: AnimatedBuilder(
-            animation: _floatingWidgetAnimationController,
-            builder: (context, child) {
-              return Container(
-                height: _floatingWidgetAnimationController.value *
-                  (widget.floatingWidgetConfig.maxHeight -
-                  widget.floatingWidgetConfig.minHeight) +
-                  widget.floatingWidgetConfig.minHeight,
-                margin: widget.floatingWidgetConfig.margin *
-                  (1 - _floatingWidgetAnimationController.value),
-                padding: widget.floatingWidgetConfig.padding,
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      blurRadius: 5,
-                      offset: Offset(0,-5),
-                      color: Colors.black.withOpacity(0.05)
-                    )
-                  ],
-                  borderRadius: _floatingWidgetAnimationController.value == 1
-                    ? BorderRadius.zero
-                    : BorderRadius.circular(10),
-                  color: Colors.transparent
-                ),
-                child: child 
-              );
-            },
-            child: Stack(
-              children: <Widget>[
-                // Expanded Panel
-                AnimatedBuilder(
-                  animation: _floatingWidgetAnimationController,
-                  builder: (context, child) {
-                    return Positioned(
-                      top: 0.0,
-                      child: ClipRRect(
-                        borderRadius: _floatingWidgetAnimationController.value == 1
-                          ? BorderRadius.zero
-                          : BorderRadius.circular(10),
-                        child: Container(
-                          height: (widget.floatingWidgetConfig.maxHeight *
-                            _floatingWidgetAnimationController.value) +
-                            (widget.floatingWidgetConfig.minHeight *
-                            (1 - _floatingWidgetAnimationController.value)),
-                          width:  MediaQuery.of(context).size.width -
-                            (widget.floatingWidgetConfig.margin.horizontal *
-                            (1 - _floatingWidgetAnimationController.value)),
-                          child: child
-                        ),
-                      )
-                    );
-                  },
-                  child: widget.floatingWidgetTwins.expanded
-                ),
-                // Collapsed Panel
-                AnimatedBuilder(
-                  animation: _floatingWidgetAnimationController,
-                  builder: (context, child) {
-                    return Opacity(
-                      opacity: (1 - _floatingWidgetAnimationController.value),
-                      child: _floatingWidgetAnimationController.value == 1
-                        ? Container()
-                        : child,
-                    );
-                  },
-                  child: Container(
-                    color: Colors.transparent,
-                    height: widget.floatingWidgetConfig.minHeight,
-                    child: widget.floatingWidgetTwins.collapsed
-                  )
-                ),
+    return !widget.floatingWidgetConfig.isPanelVisible ? Container() : _gestureHandler(
+      child: AnimatedBuilder(
+        animation: _floatingWidgetAnimationController,
+        builder: (context, child) {
+          return Container(
+            height: _floatingWidgetAnimationController.value *
+              (widget.floatingWidgetConfig.maxHeight -
+              widget.floatingWidgetConfig.minHeight) +
+              widget.floatingWidgetConfig.minHeight,
+            margin: widget.floatingWidgetConfig.margin *
+              (1 - _floatingWidgetAnimationController.value),
+            padding: widget.floatingWidgetConfig.padding,
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  blurRadius: 5,
+                  offset: Offset(0,-5),
+                  color: Colors.black.withOpacity(0.05)
+                )
               ],
+              borderRadius: _floatingWidgetAnimationController.value == 1
+                ? BorderRadius.zero
+                : BorderRadius.circular(10),
+              color: Colors.transparent
             ),
-          ),
+            child: child 
+          );
+        },
+        child: Stack(
+          children: <Widget>[
+            // Expanded Panel
+            AnimatedBuilder(
+              animation: _floatingWidgetAnimationController,
+              builder: (context, child) {
+                return Positioned(
+                  top: 0.0,
+                  child: ClipRRect(
+                    borderRadius: _floatingWidgetAnimationController.value == 1
+                      ? BorderRadius.zero
+                      : BorderRadius.circular(10),
+                    child: Container(
+                      height: (widget.floatingWidgetConfig.maxHeight *
+                        _floatingWidgetAnimationController.value) +
+                        (widget.floatingWidgetConfig.minHeight *
+                        (1 - _floatingWidgetAnimationController.value)),
+                      width:  MediaQuery.of(context).size.width -
+                        (widget.floatingWidgetConfig.margin.horizontal *
+                        (1 - _floatingWidgetAnimationController.value)),
+                      child: child
+                    ),
+                  )
+                );
+              },
+              child: widget.floatingWidgetTwins.expanded
+            ),
+            // Collapsed Panel
+            AnimatedBuilder(
+              animation: _floatingWidgetAnimationController,
+              builder: (context, child) {
+                return Opacity(
+                  opacity: (1 - _floatingWidgetAnimationController.value),
+                  child: _floatingWidgetAnimationController.value == 1
+                    ? Container()
+                    : child,
+                );
+              },
+              child: Container(
+                color: Colors.transparent,
+                height: widget.floatingWidgetConfig.minHeight,
+                child: widget.floatingWidgetTwins.collapsed
+              )
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 

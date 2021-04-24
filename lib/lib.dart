@@ -229,6 +229,7 @@ class _LibState extends State<Lib> {
 
   Widget _libBody() {
     PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
+    VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
     return FancyScaffold(
       backgroundColor: Theme.of(context).cardColor,
       resizeToAvoidBottomInset: false,
