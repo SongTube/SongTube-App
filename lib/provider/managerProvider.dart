@@ -20,9 +20,7 @@ class ManagerProvider extends ChangeNotifier {
   ManagerProvider() {
     // Variables
     searchBarFocusNode = FocusNode();
-    musicSearchBarFocusNode = FocusNode();
     searchController = new TextEditingController();
-    searchMusicController = new TextEditingController();
     // HomeScreen
     homeScrollController = ScrollController();
     // Home Screen
@@ -30,7 +28,6 @@ class ManagerProvider extends ChangeNotifier {
     homeTrendingVideoList = [];
     homeMusicVideoList = [];
     searchRunning = false;
-    musicSearchRunning = false;
     TrendingExtractor.getTrendingVideos().then((value) {
       homeTrendingVideoList = value;
       notifyListeners();
@@ -56,7 +53,6 @@ class ManagerProvider extends ChangeNotifier {
   String youtubeSearchQuery;
   // SearchBar
   FocusNode searchBarFocusNode;
-  FocusNode musicSearchBarFocusNode;
 
   // Current search filters
   List<String> searchFilters = [];
@@ -86,31 +82,6 @@ class ManagerProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // ------------
-  // Music Screen
-  // ------------
-  bool musicSearchRunning;
-  YoutubeMusicSearch youtubeMusicSearch;
-  Future<void> searchYoutubeMusic({String query, bool forceReload = false}) async {
-    musicSearchRunning = true;      
-    notifyListeners();
-    if (query == null) return null;
-    if (youtubeMusicSearch == null) {
-      youtubeMusicSearch = await SearchExtractor.searchYoutubeMusic(query, List.empty());
-      notifyListeners();
-    } else if (youtubeMusicSearch != null && forceReload) {
-      youtubeMusicSearch = null;
-      notifyListeners();
-      youtubeMusicSearch = await SearchExtractor.searchYoutubeMusic(query, List.empty());
-      notifyListeners();
-    } else if (youtubeMusicSearch != null) {
-      await youtubeMusicSearch.getNextPage();
-      notifyListeners();
-    }
-    musicSearchRunning = false;
-    notifyListeners();
-  }
-
   HomeScreenTab _currentHomeTab;
   HomeScreenTab get currentHomeTab => _currentHomeTab;
   set currentHomeTab(HomeScreenTab tab) {
@@ -126,7 +97,6 @@ class ManagerProvider extends ChangeNotifier {
   // SearchBar TextController
   //
   TextEditingController searchController;
-  TextEditingController searchMusicController;
   // ----------------------------------
 
   void setState() {
@@ -155,17 +125,6 @@ class ManagerProvider extends ChangeNotifier {
     } else if (searchBarFocusNode.hasFocus) {
       return true;
     } else if (searchRunning) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-  bool get showMusicSearchBar {
-    if (youtubeMusicSearch != null) {
-      return true;
-    } else if (musicSearchBarFocusNode.hasFocus) {
-      return true;
-    } else if (musicSearchRunning) {
       return true;
     } else {
       return false;

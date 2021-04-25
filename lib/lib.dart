@@ -32,7 +32,7 @@ import 'package:songtube/screens/library.dart';
 // Packages
 import 'package:provider/provider.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:songtube/screens/music.dart';
+import 'package:songtube/screens/subscriptions.dart';
 import 'package:songtube/ui/components/fancyScaffold.dart';
 import 'package:songtube/ui/components/navigationBar.dart';
 import 'package:songtube/ui/components/styledBottomSheet.dart';
@@ -300,7 +300,7 @@ class _LibState extends State<Lib> {
       if (screenIndex == 0) {
         return HomeScreen();
       } else if (screenIndex == 1) {
-        return MusicScreen();
+        return SubscriptionsScreen();
       } else if (screenIndex == 2) {
         return DownloadTab();
       } else if (screenIndex == 3) {
