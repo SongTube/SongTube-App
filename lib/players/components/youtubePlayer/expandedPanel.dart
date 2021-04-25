@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_pip/flutter_pip.dart';
@@ -47,10 +50,27 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
   // BottomSheet controller
   PersistentBottomSheetController bottomSheetController;
 
+  // Scroll Controller
+  ScrollController scrollController;
+
+  // Restoring Scroll position
+  bool restoringScroll = false;
+  double scrollExcessOffset = 0;
+
+  // Animation controller for hiding Details & Engagement on scroll
+  AnimationController animationController;
+
   @override
   void initState() {
     super.initState();
     scaffoldKey = GlobalKey<ScaffoldState>();
+    scrollController = ScrollController();
+    scrollController.addListener(() {
+      if (!restoringScroll)
+        animationController.value = 1 - (scrollController.position.pixels.clamp(0, 200))/200;
+    });
+    animationController = AnimationController(
+      vsync: this, value: 1, duration: Duration(milliseconds: 250));
     KeyboardVisibility.onChange.listen((bool visible) {
       if (mounted) {
         if (visible == false) FocusScope.of(context).requestFocus(new FocusNode());
@@ -100,7 +120,33 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
     if (isInPictureInPictureMode) {
       return _pipWidget();
     } else if (MediaQuery.of(context).orientation == Orientation.portrait) {
-      return _portraitPage();
+      return NotificationListener<ScrollNotification>(
+        onNotification: (scroll) {
+          if (scroll is ScrollEndNotification) {
+            if (scrollController.position.pixels < 100) {
+              animationController.animateTo(1).then((_) {
+                restoringScroll = true;
+                scrollController.animateTo(0,
+                  duration: Duration(milliseconds: 150),
+                  curve: Curves.ease).then((_) =>
+                    restoringScroll = false);
+              });
+            } else {
+              animationController.animateTo(0).then((_) {
+                restoringScroll = true;
+                if (scrollController.position.pixels < 200) {
+                  scrollController.animateTo(200,
+                    duration: Duration(milliseconds: 150),
+                    curve: Curves.ease).then((_) =>
+                      restoringScroll = false);
+                }
+              });
+            }
+          }
+          return false;
+        },
+        child: _portraitPage()
+      );
     } else {
       return _fullscreenPage();
     }
@@ -240,14 +286,33 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
               ),
             ),
           ),
-          SizedBox(height: 12),
-          // Video Details
-          _videoDetails(),
-          // ---------------------------------------
-          // Likes, dislikes, Views and Share button
-          // ---------------------------------------
-          _videoEngagementWidget(),
-          Divider(height: 1),
+          AnimatedBuilder(
+            animation: animationController,
+            builder: (context, child) {
+              return Opacity(
+                opacity: (animationController.value - (1 - animationController.value)) > 0
+                  ? (animationController.value - (1 - animationController.value)) : 0,
+                child: Align(
+                  heightFactor: animationController.value,
+                  child: child
+                ),
+              );
+            },
+            child: Column(
+              children: [
+                SizedBox(height: 12),
+                // Video Details
+                _videoDetails(),
+                // ---------------------------------------
+                // Likes, dislikes, Views and Share button
+                // ---------------------------------------
+                _videoEngagementWidget(),
+                Divider(height: 1),
+              ],
+            ),
+          ),
+          // Channel section
+          _channelInfo(),
         ],
       ),
     );
@@ -269,10 +334,9 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                     child: AnimatedSwitcher(
                       duration: Duration(milliseconds: 300),
                       child: ListView(
+                        controller: scrollController,
                         padding: EdgeInsets.zero,
                         children: [
-                          // Channel section
-                          _channelInfo(),
                           // Comments section
                           _commentTile(),
                           StreamsListTileView(
@@ -329,8 +393,6 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                       child: ListView(
                         padding: EdgeInsets.zero,
                         children: [
-                          // Channel section
-                          _channelInfo(),
                           // Comments section
                           _commentTile(),
                           SizedBox(height: 12),
