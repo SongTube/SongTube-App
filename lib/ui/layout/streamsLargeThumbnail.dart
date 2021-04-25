@@ -188,10 +188,12 @@ class StreamsLargeThumbnailView extends StatelessWidget {
               placeholder: MemoryImage(kTransparentImage),
               image: NetworkImage(
                 infoItem is StreamInfoItem
-                  ? infoItem.thumbnails.hqdefault
+                  ? infoItem.thumbnails.maxresdefault
                   : (infoItem as PlaylistInfoItem).thumbnailUrl
               ),
               fit: BoxFit.cover,
+              imageErrorBuilder: (context, error, stackTrace) =>
+                Image.network(infoItem.thumbnails.hqdefault, fit: BoxFit.cover),
             ),
           ),
         ),
