@@ -89,6 +89,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
             widget.video.uploaderName,
             widget.video.uploaderUrl,
             widget.video.uploadDate,
+            widget.video.uploadDate,
             widget.video.length,
             widget.video.viewCount
           )

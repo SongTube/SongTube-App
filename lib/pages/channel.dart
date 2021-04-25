@@ -196,7 +196,7 @@ class _YoutubeChannelPageState extends State<YoutubeChannelPage> {
                       ? Hero(
                           tag: widget.heroTag,
                           child: FutureBuilder(
-                            future: pageProvider.getAvatarUrl(widget.url),
+                            future: VideoPageProvider.getAvatarUrl(widget.url),
                             builder: (context, snapshot) {
                               String avatar = snapshot.hasData
                                 ? snapshot.data : widget.lowResAvatar;

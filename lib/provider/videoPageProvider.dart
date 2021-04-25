@@ -209,7 +209,7 @@ class VideoPageProvider extends ChangeNotifier {
     }
   }
 
-  Future<String> getAvatarUrl(String uploaderUrl) async {
+  static Future<String> getAvatarUrl(String uploaderUrl) async {
     String id = (await YoutubeId.getIdFromChannelUrl(uploaderUrl)).split("/").last;
     ReceivePort receivePort = ReceivePort();
     await Isolate.spawn(getChannelLogoUrlIsolate, receivePort.sendPort);

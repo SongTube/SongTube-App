@@ -3,11 +3,14 @@ import 'dart:async';
 
 // Flutter
 import 'package:flutter/material.dart';
+import 'package:newpipeextractor_dart/extractors/channels.dart';
 import 'package:newpipeextractor_dart/extractors/playlist.dart';
 import 'package:newpipeextractor_dart/extractors/search.dart';
 import 'package:newpipeextractor_dart/extractors/trending.dart';
 import 'package:newpipeextractor_dart/models/infoItems/video.dart';
 import 'package:newpipeextractor_dart/models/search.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:songtube/internal/models/subscription.dart';
 
 enum HomeScreenTab { Trending, Music, Favorites, WatchLater }
 
@@ -38,6 +41,7 @@ class ManagerProvider extends ChangeNotifier {
       homeMusicVideoList = value;
       notifyListeners();
     });
+    loadChannelsFeed();
   }
 
   // -------------
@@ -130,4 +134,42 @@ class ManagerProvider extends ChangeNotifier {
       return false;
     }
   }
+
+  // -------------
+  // Channels Feed
+  // -------------
+  // 
+  // Feed list
+  List<StreamInfoItem> channelsFeedList = [];
+  // Extract feed from the first 10 channels
+  // by channel subscription date order
+  Future<void> loadChannelsFeed() async {
+    // Clear current channels feed
+    channelsFeedList = [];
+    notifyListeners();
+    // Extract current subscriptions
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<ChannelSubscription> channels = ChannelSubscription
+      .fromJsonList(prefs.getString('subscriptions'));
+    if (channels.isNotEmpty) {
+      List<StreamInfoItem> videos = [];
+      // Take all uploads from the first 10 channels
+      int loopsDone = 0;
+      for (var channel in channels) {
+        if (loopsDone == 10) break;
+        List<StreamInfoItem> uploads = await ChannelExtractor
+          .getChannelUploads(channel.url);
+        videos.addAll(uploads);
+        loopsDone++;
+      }
+      // Sort by date (Default)
+      videos.sort((a, b) => DateTime.parse(a.date).compareTo(DateTime.parse(b.date)));
+      videos = videos.reversed.toList();
+      // Update our channels feed
+      channelsFeedList = videos;
+      notifyListeners();
+    }
+  }
+  
+
 }

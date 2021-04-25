@@ -6,6 +6,7 @@ import 'package:newpipeextractor_dart/models/channel.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/models/subscription.dart';
+import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/provider/preferencesProvider.dart';
 import 'package:songtube/ui/animations/fadeIn.dart';
 import 'package:songtube/ui/internal/snackbar.dart';
@@ -27,6 +28,7 @@ class _ChannelSubscribeComponentState extends State<ChannelSubscribeComponent> w
   @override
   Widget build(BuildContext context) {
     PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
+    ManagerProvider manager = Provider.of<ManagerProvider>(context);
     bool isSubscribed = prefs.channelSubscriptions.indexWhere((element) =>
       element.name == widget.channelName) == -1
         ? false : true;
@@ -43,6 +45,7 @@ class _ChannelSubscribeComponentState extends State<ChannelSubscribeComponent> w
             if (!isSubscribed && widget.channel != null) {
               prefs.addChannelSubscription(ChannelSubscription
                 .generateFromChannel(widget.channel));
+              manager.loadChannelsFeed();
               AppSnack.showSnackBar(
                 icon: MdiIcons.youtube,
                 title: "Subscribed!",
@@ -52,6 +55,7 @@ class _ChannelSubscribeComponentState extends State<ChannelSubscribeComponent> w
               );
             } else if (widget.channel != null) {
               prefs.removeChannelSubscription(widget.channel.url);
+              manager.loadChannelsFeed();
             }
           },
           borderRadius: BorderRadius.circular(10),
