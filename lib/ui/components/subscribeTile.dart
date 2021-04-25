@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -81,14 +82,32 @@ class _ChannelSubscribeComponentState extends State<ChannelSubscribeComponent> w
             duration: Duration(milliseconds: 300),
             child: isSubscribed ? IconButton(
               padding: EdgeInsets.zero,
-              icon: Icon(
-                notificationsEnabled
-                  ? EvaIcons.bellOutline
-                  : EvaIcons.bellOffOutline,
-                color: notificationsEnabled
-                  ? Theme.of(context).accentColor
-                  : Theme.of(context).iconTheme.color
-                      .withOpacity(0.6)
+              icon: PageTransitionSwitcher(
+                transitionBuilder: (
+                  Widget child,
+                  Animation<double> animation,
+                  Animation<double> secondaryAnimation,
+                ) {
+                  return FadeThroughTransition(
+                    fillColor: Colors.transparent,
+                    animation: animation,
+                    secondaryAnimation: secondaryAnimation,
+                    child: child,
+                  );
+                },
+                duration: Duration(milliseconds: 300),
+                child: notificationsEnabled
+                  ? Icon(
+                      EvaIcons.bellOutline,
+                      key: Key("bellOutline"),
+                      color: Theme.of(context).accentColor,
+                    )
+                  : Icon(
+                      EvaIcons.bellOffOutline,
+                      key: Key("bellOffOutline"),
+                      color: Theme.of(context).iconTheme.color
+                        .withOpacity(0.6)
+                    ),
               ),
               onPressed: () => prefs
                 .enableChannelNotifications(widget.channel.url),
