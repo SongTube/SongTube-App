@@ -243,15 +243,6 @@ class PreferencesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Enable/Disable Youtube Music Screen
-  bool get enableYoutubeMusicScreen {
-    return prefs.getBool('enableYoutubeMusicScreen') ?? true;
-  }
-  set enableYoutubeMusicScreen(bool value) {
-    prefs.setBool('enableYoutubeMusicScreen', value);
-    notifyListeners();
-  }
-
   // Channel Subscriptions
   List<ChannelSubscription> get channelSubscriptions {
     String json = prefs.getString('subscriptions') ?? "";
