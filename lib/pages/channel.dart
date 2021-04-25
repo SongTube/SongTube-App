@@ -2,14 +2,19 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:newpipeextractor_dart/extractors/channels.dart';
 import 'package:newpipeextractor_dart/models/channel.dart';
 import 'package:newpipeextractor_dart/models/infoItems/video.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/languages.dart';
+import 'package:songtube/internal/models/subscription.dart';
+import 'package:songtube/provider/preferencesProvider.dart';
 import 'package:songtube/provider/videoPageProvider.dart';
 import 'package:songtube/ui/animations/fadeIn.dart';
 import 'package:songtube/ui/components/shimmerContainer.dart';
+import 'package:songtube/ui/components/subscribeTile.dart';
+import 'package:songtube/ui/internal/snackbar.dart';
 import 'package:songtube/ui/layout/streamsListTile.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -33,9 +38,12 @@ class _YoutubeChannelPageState extends State<YoutubeChannelPage> {
 
   YoutubeChannel channel;
 
+  GlobalKey<ScaffoldState> scaffoldKey;
+
   @override
   void initState() {
     super.initState();
+    scaffoldKey = GlobalKey<ScaffoldState>();
     ChannelExtractor.channelInfo(widget.url).then((value) {
       setState(() => channel = value);
     });
@@ -55,6 +63,7 @@ class _YoutubeChannelPageState extends State<YoutubeChannelPage> {
       children: [
         Expanded(
           child: Scaffold(
+            key: scaffoldKey,
             appBar: AppBar(
               titleSpacing: 0,
               title: Text("${widget.name}",
@@ -110,22 +119,10 @@ class _YoutubeChannelPageState extends State<YoutubeChannelPage> {
                               ),
                             ),
                             SizedBox(height: 8),
-                            InkWell(
-                              onTap: () {
-                                // TODO: Implement subs system
-                              },
-                              borderRadius: BorderRadius.circular(10),
-                              child: Ink(
-                                color: Colors.transparent,
-                                child: Text(
-                                  Languages.of(context).labelSubscribe.toUpperCase(),
-                                  style: TextStyle(
-                                    color: Theme.of(context).accentColor,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ),
+                            ChannelSubscribeComponent(
+                              channelName: widget.name,
+                              channel: channel,
+                              scaffoldState: scaffoldKey.currentState
                             ),
                             SizedBox(height: 16),
                             Divider(

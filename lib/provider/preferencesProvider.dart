@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:newpipeextractor_dart/models/infoItems/video.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:songtube/internal/models/playlist.dart';
+import 'package:songtube/internal/models/subscription.dart';
 
 class PreferencesProvider extends ChangeNotifier {
 
@@ -250,4 +251,31 @@ class PreferencesProvider extends ChangeNotifier {
     prefs.setBool('enableYoutubeMusicScreen', value);
     notifyListeners();
   }
+
+  // Channel Subscriptions
+  List<ChannelSubscription> get channelSubscriptions {
+    String json = prefs.getString('subscriptions') ?? "";
+    return ChannelSubscription.fromJsonList(json);
+  }
+  set channelSubscriptions(List<ChannelSubscription> subscriptions) {
+    prefs.setString('subscriptions', ChannelSubscription.toJsonList(subscriptions));
+    notifyListeners();
+  }
+  void removeChannelSubscription(String channelUrl) {
+    var subscriptions = channelSubscriptions;
+    subscriptions.removeWhere((element) => element.url == channelUrl);
+    channelSubscriptions = subscriptions;
+  }
+  void addChannelSubscription(ChannelSubscription subscription) {
+    var subscriptions = channelSubscriptions;
+    subscriptions.add(subscription);
+    channelSubscriptions = subscriptions;
+  }
+  void enableChannelNotifications(String channelUrl) {
+    var subscriptions = channelSubscriptions;
+    int index = subscriptions.indexWhere((element) => element.url == channelUrl);
+    subscriptions[index].enableNotifications = !subscriptions[index].enableNotifications;
+    channelSubscriptions = subscriptions;
+  }
+
 }

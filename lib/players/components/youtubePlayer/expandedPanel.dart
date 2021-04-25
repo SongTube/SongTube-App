@@ -8,12 +8,14 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_pip/flutter_pip.dart';
 import 'package:flutter_pip/platform_channel/channel.dart';
 import 'package:intl/intl.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:newpipeextractor_dart/models/infoItems/playlist.dart';
 import 'package:newpipeextractor_dart/models/infoItems/video.dart';
 import 'package:newpipeextractor_dart/models/playlist.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:songtube/internal/languages.dart';
+import 'package:songtube/internal/models/subscription.dart';
 import 'package:songtube/pages/channel.dart';
 import 'package:songtube/players/components/youtubePlayer/ui/comments.dart';
 import 'package:songtube/players/components/youtubePlayer/ui/moreDetails.dart';
@@ -23,9 +25,12 @@ import 'package:songtube/pages/components/video/shimmer/shimmerVideoEngagement.d
 import 'package:songtube/downloadMenu/downloadMenu.dart';
 import 'package:songtube/provider/videoPageProvider.dart';
 import 'package:songtube/ui/animations/blurPageRoute.dart';
+import 'package:songtube/ui/animations/fadeIn.dart';
 import 'package:songtube/ui/components/addToPlaylist.dart';
 import 'package:songtube/ui/components/measureSize.dart';
 import 'package:flutter_screen/flutter_screen.dart';
+import 'package:songtube/ui/components/subscribeTile.dart';
+import 'package:songtube/ui/internal/snackbar.dart';
 import 'package:songtube/ui/layout/streamsListTile.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'ui/details.dart';
@@ -700,27 +705,12 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                   ),
                 ),
               ),
-              InkWell(
-                onTap: () {
-                  // TODO: Implement subs system
-                },
-                borderRadius: BorderRadius.circular(10),
-                child: Padding(
-                  padding: EdgeInsets.all(12),
-                  child: Ink(
-                    color: Colors.transparent,
-                    child: Text(
-                      Languages.of(context).labelSubscribe.toUpperCase(),
-                      style: TextStyle(
-                        color: Theme.of(context).accentColor,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                ),
+              ChannelSubscribeComponent(
+                channelName: pageProvider.infoItem.uploaderName,
+                channel: pageProvider.currentChannel,
+                scaffoldState: scaffoldKey.currentState
               ),
-              SizedBox(width: 8)
+              SizedBox(width: 12)
             ],
           ),
           Divider(height: 1)
