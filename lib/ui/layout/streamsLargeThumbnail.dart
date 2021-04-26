@@ -2,10 +2,12 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:newpipeextractor_dart/extractors/channels.dart';
+import 'package:newpipeextractor_dart/extractors/playlist.dart';
 import 'package:newpipeextractor_dart/models/channel.dart';
 import 'package:newpipeextractor_dart/models/infoItems/channel.dart';
 import 'package:newpipeextractor_dart/models/infoItems/playlist.dart';
 import 'package:newpipeextractor_dart/models/infoItems/video.dart';
+import 'package:newpipeextractor_dart/newpipeextractor_dart.dart';
 import 'package:newpipeextractor_dart/utils/url.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
@@ -183,18 +185,21 @@ class StreamsLargeThumbnailView extends StatelessWidget {
           aspectRatio: 16/9,
           child: Transform.scale(
             scale: 1.01,
-            child: FadeInImage(
-              fadeInDuration: Duration(milliseconds: 200),
-              placeholder: MemoryImage(kTransparentImage),
-              image: NetworkImage(
-                infoItem is StreamInfoItem
-                  ? infoItem.thumbnails.maxresdefault
-                  : (infoItem as PlaylistInfoItem).thumbnailUrl
-              ),
-              fit: BoxFit.cover,
-              imageErrorBuilder: (context, error, stackTrace) =>
-                Image.network(infoItem.thumbnails.hqdefault, fit: BoxFit.cover),
-            ),
+            child: infoItem is StreamInfoItem
+              ? FadeInImage(
+                  fadeInDuration: Duration(milliseconds: 200),
+                  placeholder: MemoryImage(kTransparentImage),
+                  image: NetworkImage(infoItem.thumbnails.maxresdefault),
+                  fit: BoxFit.cover,
+                  imageErrorBuilder: (context, error, stackTrace) =>
+                    Image.network(infoItem.thumbnails.hqdefault, fit: BoxFit.cover),
+                )
+              : FadeInImage(
+                  fadeInDuration: Duration(milliseconds: 200),
+                  placeholder: MemoryImage(kTransparentImage),
+                  image: NetworkImage(infoItem.thumbnailUrl),
+                  fit: BoxFit.cover,
+                )
           ),
         ),
         if (infoItem is StreamInfoItem)
