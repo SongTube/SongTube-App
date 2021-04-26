@@ -20,7 +20,6 @@ import 'package:songtube/ui/animations/blurPageRoute.dart';
 import 'package:songtube/ui/animations/fadeIn.dart';
 import 'package:songtube/ui/components/shimmerContainer.dart';
 import 'package:songtube/ui/layout/components/popupMenu.dart';
-import 'package:string_validator/string_validator.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class StreamsLargeThumbnailView extends StatelessWidget {
@@ -38,8 +37,9 @@ class StreamsLargeThumbnailView extends StatelessWidget {
     this.allowSaveToFavorites = true,
     this.allowSaveToWatchLater = true,
     this.onReachingListEnd,
-    this.scaffoldKey
-  });
+    this.scaffoldKey,
+    Key key,
+  }) : super (key: key);
   @override
   Widget build(BuildContext context) {
     if (infoItems.isNotEmpty) {

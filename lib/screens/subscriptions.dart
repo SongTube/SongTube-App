@@ -1,15 +1,16 @@
 import 'dart:io';
 
+import 'package:animations/animations.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:image_fade/image_fade.dart';
+import 'package:newpipeextractor_dart/newpipeextractor_dart.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/avatarHandler.dart';
 import 'package:songtube/internal/models/subscription.dart';
 import 'package:songtube/pages/channel.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/provider/preferencesProvider.dart';
-import 'package:songtube/provider/videoPageProvider.dart';
 import 'package:songtube/ui/animations/blurPageRoute.dart';
 import 'package:songtube/ui/components/autoHideScaffold.dart';
 import 'package:songtube/ui/components/shimmerContainer.dart';
@@ -21,11 +22,14 @@ class SubscriptionsScreen extends StatefulWidget {
 }
 
 class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
+  
+  String sortBy = "date";
+
   @override
   Widget build(BuildContext context) {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
     PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
-    return Scaffold(
+    return AutoHideScaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Theme.of(context).cardColor,
       appBar: AppBar(
@@ -156,17 +160,96 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
               ],
             ),
           ),
+          if (prefs.channelSubscriptions.isNotEmpty)
+          Container(
+            height: 30,
+            decoration: BoxDecoration(
+              color: Theme.of(context).scaffoldBackgroundColor
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(width: 12),
+                // Sort filters
+                Icon(Icons.sort_rounded),
+                SizedBox(width: 4),
+                DropdownButton<String>(
+                  value: sortBy,
+                  iconSize: 20,
+                  style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyText1.color
+                      .withOpacity(0.8),
+                    fontFamily: 'Product Sans',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14
+                  ),
+                  underline: Container(),
+                  items: [
+                    DropdownMenuItem(
+                      child: Text("Date"),
+                      value: "date",
+                    ),
+                    DropdownMenuItem(
+                      child: Text("Views"),
+                      value: "views",
+                    )
+                  ],
+                  onChanged: (String value) => setState(() => sortBy = value),
+                ),
+                Spacer(),
+                // Manage Subscriptions
+                IconButton(
+                  iconSize: 20,
+                  padding: EdgeInsets.zero,
+                  onPressed: () {
+
+                  },
+                  icon: Icon(EvaIcons.settingsOutline,
+                    color: Theme.of(context).accentColor),
+                ),
+              ],
+            ),
+          ),
           Divider(
             height: 1,
             thickness: 1,
             color: Colors.grey[600].withOpacity(0.1),
-            indent: 12,
-            endIndent: 12
+            indent: prefs.channelSubscriptions.isNotEmpty ? 0 : 12,
+            endIndent: prefs.channelSubscriptions.isNotEmpty ? 0 : 12
           ),
           Expanded(
             child: prefs.channelSubscriptions.isNotEmpty
-              ? StreamsLargeThumbnailView(
-                  infoItems: manager.channelsFeedList
+              ? Builder(
+                  builder: (context) {
+                    List<StreamInfoItem> items = manager.channelsFeedList;
+                    if (manager.channelsFeedList.isNotEmpty) {
+                      if (sortBy == "date") {
+                        items.sort((a, b) => DateTime.parse(b.date).compareTo(DateTime.parse(a.date)));
+                      } else if (sortBy == "views") {
+                        items.sort((a, b) => b.viewCount.compareTo(a.viewCount));
+                      }
+                    }
+                    return PageTransitionSwitcher(
+                      transitionBuilder: (
+                        Widget child,
+                        Animation<double> animation,
+                        Animation<double> secondaryAnimation,
+                      ) {
+                        return FadeThroughTransition(
+                          fillColor: Theme.of(context).cardColor,
+                          animation: animation,
+                          secondaryAnimation: secondaryAnimation,
+                          child: child,
+                        );
+                      },
+                      duration: Duration(milliseconds: 300),
+                      child: StreamsLargeThumbnailView(
+                        key: Key(sortBy),
+                        infoItems: manager.channelsFeedList
+                      ),
+                    ); 
+                  }
                 )
               : Center(
                   child: Padding(
