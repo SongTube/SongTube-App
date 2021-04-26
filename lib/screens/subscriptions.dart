@@ -13,6 +13,7 @@ import 'package:songtube/pages/channel.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/provider/preferencesProvider.dart';
 import 'package:songtube/screens/subscriptions/channelRecommendations.dart';
+import 'package:songtube/screens/subscriptions/manageChannels.dart';
 import 'package:songtube/ui/animations/blurPageRoute.dart';
 import 'package:songtube/ui/components/autoHideScaffold.dart';
 import 'package:songtube/ui/components/shimmerContainer.dart';
@@ -222,8 +223,20 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
                 IconButton(
                   iconSize: 20,
                   padding: EdgeInsets.zero,
-                  onPressed: () {
-                    // TODO: Manage subscriptions (Sheet)
+                  onPressed: () async {
+                    await showModalBottomSheet(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          topRight: Radius.circular(15)
+                        )
+                      ),
+                      context: context,
+                      builder: (context) {
+                        return ManageChannelsSheet();
+                      }
+                    );
+                    manager.loadChannelsFeed();
                   },
                   icon: Icon(EvaIcons.settingsOutline,
                     color: Theme.of(context).accentColor),
