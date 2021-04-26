@@ -78,6 +78,7 @@ dependencies:
       ref: master
   image_fade: ^0.2.1
   animations: ^1.1.2
+  loading_indicator: ^2.0.1
 
   # Tools
   share: ^0.6.4+3
