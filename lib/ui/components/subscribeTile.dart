@@ -14,10 +14,12 @@ import 'package:songtube/ui/internal/snackbar.dart';
 class ChannelSubscribeComponent extends StatefulWidget {
   final String channelName;
   final YoutubeChannel channel;
+  final bool autoUpdate;
   final scaffoldState;
   ChannelSubscribeComponent({
     this.channelName,
     this.channel,
+    this.autoUpdate = true,
     this.scaffoldState
   });
   @override
@@ -45,17 +47,19 @@ class _ChannelSubscribeComponentState extends State<ChannelSubscribeComponent> w
             if (!isSubscribed && widget.channel != null) {
               prefs.addChannelSubscription(ChannelSubscription
                 .generateFromChannel(widget.channel));
-              manager.loadChannelsFeed();
-              AppSnack.showSnackBar(
-                icon: MdiIcons.youtube,
-                title: "Subscribed!",
-                message: "${widget.channelName}",
-                context: context,
-                scaffoldKey: widget.scaffoldState,
-              );
+              if (widget.autoUpdate) manager.loadChannelsFeed();
+              if (widget.scaffoldState != null) {
+                AppSnack.showSnackBar(
+                  icon: MdiIcons.youtube,
+                  title: "Subscribed!",
+                  message: "${widget.channelName}",
+                  context: context,
+                  scaffoldKey: widget.scaffoldState,
+                );
+              }
             } else if (widget.channel != null) {
               prefs.removeChannelSubscription(widget.channel.url);
-              manager.loadChannelsFeed();
+              if (widget.autoUpdate) manager.loadChannelsFeed();
             }
           },
           borderRadius: BorderRadius.circular(10),

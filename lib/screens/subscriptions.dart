@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:animations/animations.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_fade/image_fade.dart';
 import 'package:newpipeextractor_dart/newpipeextractor_dart.dart';
@@ -11,6 +12,7 @@ import 'package:songtube/internal/models/subscription.dart';
 import 'package:songtube/pages/channel.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/provider/preferencesProvider.dart';
+import 'package:songtube/screens/subscriptions/channelRecommendations.dart';
 import 'package:songtube/ui/animations/blurPageRoute.dart';
 import 'package:songtube/ui/components/autoHideScaffold.dart';
 import 'package:songtube/ui/components/shimmerContainer.dart';
@@ -78,8 +80,20 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
                 SizedBox(width: 12),
                 if (prefs.channelSubscriptions.isNotEmpty)
                 GestureDetector(
-                  onTap: () {
-                    // TODO: Add new channel
+                  onTap: () async {
+                    await showModalBottomSheet(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          topRight: Radius.circular(15)
+                        )
+                      ),
+                      context: context,
+                      builder: (context) {
+                        return ChannelRecommendationsSheet();
+                      }
+                    );
+                    manager.loadChannelsFeed();
                   },
                   child: Container(
                     height: 50,
@@ -209,7 +223,7 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
                   iconSize: 20,
                   padding: EdgeInsets.zero,
                   onPressed: () {
-
+                    // TODO: Manage subscriptions (Sheet)
                   },
                   icon: Icon(EvaIcons.settingsOutline,
                     color: Theme.of(context).accentColor),
@@ -277,8 +291,20 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
                         ),
                         SizedBox(height: 16),
                         GestureDetector(
-                          onTap: () {
-                            // TODO: Add new channel
+                          onTap: () async {
+                            await showModalBottomSheet(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(15),
+                                  topRight: Radius.circular(15)
+                                )
+                              ),
+                              context: context,
+                              builder: (context) {
+                                return ChannelRecommendationsSheet();
+                              }
+                            );
+                            manager.loadChannelsFeed();
                           },
                           child: Container(
                             height: 50,
