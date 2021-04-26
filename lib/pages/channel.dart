@@ -243,7 +243,9 @@ class _YoutubeChannelPageState extends State<YoutubeChannelPage> {
         width: double.infinity
       );
     } else if (channel?.bannerUrl == null) {
-      return Container();
+      return Container(
+        color: Theme.of(context).accentColor
+      );
     } else {
       return FadeInImage(
         placeholder: MemoryImage(kTransparentImage),
