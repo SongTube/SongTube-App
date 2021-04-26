@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:isolate';
 import 'package:flutter/cupertino.dart';
 import 'package:newpipeextractor_dart/extractors/channels.dart';
@@ -11,7 +12,9 @@ import 'package:newpipeextractor_dart/models/infoItems/video.dart';
 import 'package:newpipeextractor_dart/models/playlist.dart';
 import 'package:newpipeextractor_dart/models/video.dart';
 import 'package:newpipeextractor_dart/utils/url.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:songtube/internal/avatarHandler.dart';
 import 'package:songtube/internal/models/playlist.dart';
 import 'package:songtube/internal/models/tagsControllers.dart';
 import 'package:songtube/players/components/youtubePlayer/videoPlayer.dart';
@@ -102,7 +105,7 @@ class VideoPageProvider extends ChangeNotifier {
       currentChannel = value;
       notifyListeners();
       currentChannel.avatarUrl = await
-        getAvatarUrl(currentChannel.url);
+        AvatarHandler.getAvatarUrl(currentChannel.name, currentChannel.url);
       notifyListeners();
     });
     VideoExtractor.getRelatedStreams(_infoItem.url).then((value) async {
@@ -208,35 +211,4 @@ class VideoPageProvider extends ChangeNotifier {
       prefs.setString('newWatchHistory', jsonEncode(map));
     }
   }
-
-  static Future<String> getAvatarUrl(String uploaderUrl) async {
-    String id = (await YoutubeId.getIdFromChannelUrl(uploaderUrl)).split("/").last;
-    ReceivePort receivePort = ReceivePort();
-    await Isolate.spawn(getChannelLogoUrlIsolate, receivePort.sendPort);
-    SendPort childSendPort = await receivePort.first;
-    ReceivePort responsePort = ReceivePort();
-    childSendPort.send([id, responsePort.sendPort]);
-    String url = await responsePort.first;
-    if (url == "") return null;
-    return url;
-  }
-
-  static void getChannelLogoUrlIsolate(SendPort mainSendPort) async {
-    ReceivePort childReceivePort = ReceivePort();
-    mainSendPort.send(childReceivePort.sendPort);
-    await for (var message in childReceivePort) {
-      String videoId = message[0];
-      SendPort replyPort = message[1];
-      String avatarUrl;
-      try {
-        avatarUrl = await ChannelExtractor.getAvatarUrl(videoId);
-      } catch (_) {
-        replyPort.send("");
-        break;
-      }
-      replyPort.send(avatarUrl);
-      break;
-    }
-  }
-
 }

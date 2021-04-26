@@ -1,8 +1,9 @@
+import 'dart:io';
+
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:newpipeextractor_dart/extractors/channels.dart';
-import 'package:newpipeextractor_dart/extractors/playlist.dart';
 import 'package:newpipeextractor_dart/models/channel.dart';
 import 'package:newpipeextractor_dart/models/infoItems/channel.dart';
 import 'package:newpipeextractor_dart/models/infoItems/playlist.dart';
@@ -11,6 +12,7 @@ import 'package:newpipeextractor_dart/newpipeextractor_dart.dart';
 import 'package:newpipeextractor_dart/utils/url.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:songtube/internal/avatarHandler.dart';
 import 'package:songtube/pages/channel.dart';
 import 'package:songtube/provider/preferencesProvider.dart';
 import 'package:songtube/provider/videoPageProvider.dart';
@@ -18,6 +20,7 @@ import 'package:songtube/ui/animations/blurPageRoute.dart';
 import 'package:songtube/ui/animations/fadeIn.dart';
 import 'package:songtube/ui/components/shimmerContainer.dart';
 import 'package:songtube/ui/layout/components/popupMenu.dart';
+import 'package:string_validator/string_validator.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class StreamsLargeThumbnailView extends StatelessWidget {
@@ -124,7 +127,7 @@ class StreamsLargeThumbnailView extends StatelessWidget {
     return Row(
       children: [
         FutureBuilder(
-          future: _getChannelLogoUrl(channel.url, highRes: true),
+          future: AvatarHandler.getAvatarUrl(channel.name, channel.url),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return ClipRRect(
@@ -132,7 +135,7 @@ class StreamsLargeThumbnailView extends StatelessWidget {
                 child: FadeInImage(
                   fadeInDuration: Duration(milliseconds: 300),
                   placeholder: MemoryImage(kTransparentImage),
-                  image: NetworkImage(snapshot.data),
+                  image: FileImage(File(snapshot.data)),
                   height: 80,
                   width: 80,
                 ),
@@ -350,14 +353,9 @@ class StreamsLargeThumbnailView extends StatelessWidget {
     );
   }
 
-  Future<String> _getChannelLogoUrl(url, {bool highRes = false}) async {
-    if (highRes) {
-      String id = (await YoutubeId.getIdFromChannelUrl(url)).split("/").last;
-      return await ChannelExtractor.getAvatarUrl(id);
-    } else {
-      YoutubeChannel channel = await ChannelExtractor.channelInfo(url);
-      return channel.avatarUrl;
-    }
+  Future<String> _getChannelLogoUrl(url) async {
+    YoutubeChannel channel = await ChannelExtractor.channelInfo(url);
+    return channel.avatarUrl;
   }
 
   Widget _shimmerTile(context) {

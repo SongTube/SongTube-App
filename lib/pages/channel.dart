@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,6 +9,7 @@ import 'package:newpipeextractor_dart/extractors/channels.dart';
 import 'package:newpipeextractor_dart/models/channel.dart';
 import 'package:newpipeextractor_dart/models/infoItems/video.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/internal/avatarHandler.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/models/subscription.dart';
 import 'package:songtube/provider/preferencesProvider.dart';
@@ -16,6 +19,7 @@ import 'package:songtube/ui/components/shimmerContainer.dart';
 import 'package:songtube/ui/components/subscribeTile.dart';
 import 'package:songtube/ui/internal/snackbar.dart';
 import 'package:songtube/ui/layout/streamsListTile.dart';
+import 'package:string_validator/string_validator.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class YoutubeChannelPage extends StatefulWidget {
@@ -196,7 +200,7 @@ class _YoutubeChannelPageState extends State<YoutubeChannelPage> {
                       ? Hero(
                           tag: widget.heroTag,
                           child: FutureBuilder(
-                            future: VideoPageProvider.getAvatarUrl(widget.url),
+                            future: AvatarHandler.getAvatarUrl(widget.name, widget.url),
                             builder: (context, snapshot) {
                               String avatar = snapshot.hasData
                                 ? snapshot.data : widget.lowResAvatar;
@@ -208,7 +212,9 @@ class _YoutubeChannelPageState extends State<YoutubeChannelPage> {
                                   child: FadeInImage(
                                     fadeInDuration: Duration(milliseconds: 300),
                                     placeholder: MemoryImage(kTransparentImage),
-                                    image: NetworkImage(avatar),
+                                    image: isURL(avatar)
+                                      ? NetworkImage(avatar)
+                                      : FileImage(File(avatar)),
                                     fit: BoxFit.cover,
                                   ),
                                 ),

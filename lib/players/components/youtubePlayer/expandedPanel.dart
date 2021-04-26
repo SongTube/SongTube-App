@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +33,7 @@ import 'package:flutter_screen/flutter_screen.dart';
 import 'package:songtube/ui/components/subscribeTile.dart';
 import 'package:songtube/ui/internal/snackbar.dart';
 import 'package:songtube/ui/layout/streamsListTile.dart';
+import 'package:string_validator/string_validator.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'ui/details.dart';
 import 'ui/engagement.dart';
@@ -666,7 +668,9 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                       fadeInDuration: Duration(milliseconds: 300),
                       placeholder: MemoryImage(kTransparentImage),
                       image: pageProvider.currentChannel != null
-                        ? NetworkImage(pageProvider.currentChannel.avatarUrl)
+                        ? isURL(pageProvider.currentChannel.avatarUrl)
+                            ? NetworkImage(pageProvider.currentChannel.avatarUrl)
+                            : FileImage(File(pageProvider.currentChannel.avatarUrl))
                         : MemoryImage(kTransparentImage),
                       fit: BoxFit.cover,
                     ),

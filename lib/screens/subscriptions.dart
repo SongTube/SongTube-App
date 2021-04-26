@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:image_fade/image_fade.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/internal/avatarHandler.dart';
 import 'package:songtube/internal/models/subscription.dart';
 import 'package:songtube/pages/channel.dart';
 import 'package:songtube/provider/managerProvider.dart';
@@ -56,7 +59,7 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
       body: Column(
         children: [
           Container(
-            height: prefs.channelSubscriptions.isNotEmpty ? 60 : 0,
+            height: prefs.channelSubscriptions.isNotEmpty ? 50 : 0,
             width: double.infinity,
             color: Theme.of(context).cardColor,
             margin: prefs.channelSubscriptions.isNotEmpty
@@ -75,7 +78,7 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
                   },
                   child: Container(
                     height: 50,
-                    width: 60,
+                    width: 50,
                     margin: EdgeInsets.only(left: 8, right: 8),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(100),
@@ -129,18 +132,20 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(100),
                           child: FutureBuilder(
-                            future: VideoPageProvider.getAvatarUrl(subscription.url),
+                            future: AvatarHandler.getAvatarUrl(subscription.name, subscription.url),
                             builder: (context, snapshot) {
-                              return ImageFade(
-                                placeholder: Image.network(subscription.avatarUrl),
-                                fit: BoxFit.cover,
-                                image: NetworkImage(
-                                  snapshot.hasData && snapshot.data != null
-                                    ? snapshot.data
-                                    : subscription.avatarUrl
-                                ),
-                                fadeDuration: Duration(milliseconds: 300),
-                              );
+                              if (snapshot.hasData) {
+                                return ImageFade(
+                                  fit: BoxFit.cover,
+                                  image: FileImage(File(snapshot.data)),
+                                  fadeDuration: Duration(milliseconds: 300),
+                                );
+                              } else {
+                                return ShimmerContainer(
+                                  aspectRatio: 1,
+                                  borderRadius: BorderRadius.circular(100),
+                                );
+                              }
                             }
                           ),
                         ),
