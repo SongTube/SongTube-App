@@ -15,6 +15,7 @@ import 'package:songtube/ui/animations/blurPageRoute.dart';
 import 'package:songtube/ui/components/autoHideScaffold.dart';
 import 'package:songtube/ui/components/shimmerContainer.dart';
 import 'package:songtube/ui/layout/streamsLargeThumbnail.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class SubscriptionsScreen extends StatefulWidget {
   @override
@@ -116,6 +117,7 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
                               (context, listen: false).enableBlurUI ? 20 : 0,
                             builder: (_) => 
                             YoutubeChannelPage(
+                              heroTag: subscription.url,
                               url: subscription.url,
                               name: subscription.name,
                               lowResAvatar: subscription.avatarUrl,
@@ -133,24 +135,28 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
                             )
                           ]
                         ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(100),
-                          child: FutureBuilder(
-                            future: AvatarHandler.getAvatarUrl(subscription.name, subscription.url),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                return ImageFade(
-                                  fit: BoxFit.cover,
-                                  image: FileImage(File(snapshot.data)),
-                                  fadeDuration: Duration(milliseconds: 300),
-                                );
-                              } else {
-                                return ShimmerContainer(
-                                  aspectRatio: 1,
-                                  borderRadius: BorderRadius.circular(100),
-                                );
+                        child: Hero(
+                          tag: subscription.url,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: FutureBuilder(
+                              future: AvatarHandler.getAvatarUrl(subscription.name, subscription.url),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return FadeInImage(
+                                    fit: BoxFit.cover,
+                                    placeholder: MemoryImage(kTransparentImage),
+                                    image: FileImage(File(snapshot.data)),
+                                    fadeInDuration: Duration(milliseconds: 300),
+                                  );
+                                } else {
+                                  return ShimmerContainer(
+                                    aspectRatio: 1,
+                                    borderRadius: BorderRadius.circular(100),
+                                  );
+                                }
                               }
-                            }
+                            ),
                           ),
                         ),
                       ),
