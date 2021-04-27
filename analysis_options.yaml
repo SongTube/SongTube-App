@@ -1,0 +1,44 @@
+include: package:effective_dart/analysis_options.yaml
+#include: package:pedantic/analysis_options.yaml
+
+analyzer:
+  exclude:
+    - "_lib/**"
+    - "_s/**"
+
+linter:
+  rules:
+    curly_braces_in_flow_control_structures: false
+    public_member_api_docs: false
+    lines_longer_than_80_chars: false
+    annotate_overrides: false
+    prefer_relative_imports: false
+    avoid_types_on_closure_parameters: false
+#    constant_identifier_names: false
+    file_names: false
+    omit_local_variable_types: false
+    prefer_collection_literals: false
+    non_constant_identifier_names: true
+    avoid_function_literals_in_foreach_calls: false
+    type_annotate_public_apis: true
+    avoid_positional_boolean_parameters: false
+    prefer_single_quotes: true
+    prefer_final_fields: true
+    prefer_mixin: true
+    prefer_interpolation_to_compose_strings: true
+    directives_ordering: true
+    #    unnecessary_getters: false
+    #    prefer_expression_function_bodies: false
+    prefer_expression_function_bodies: false
+    use_function_type_syntax_for_parameters: true
+    camel_case_types: true
+    avoid_unnecessary_containers: false
+    avoid_return_types_on_setters: true
+    avoid_implementing_value_types: true
+    avoid_catching_errors: true
+    always_declare_return_types: true
+    always_specify_types: true
+    avoid_types_as_parameter_names: true
+    constant_identifier_names: false
+
+#include: package:effective_dart/analysis_options.1.2.0.yaml

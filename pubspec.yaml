@@ -103,7 +103,8 @@ dependencies:
     git:
       url: https://github.com/SongTube/apk_installer
       ref: main
-  
+  flutter_html:
+
   # Database
   sqflite: ^1.3.0
 
@@ -115,6 +116,10 @@ dependencies:
   palette_generator: ^0.2.3
   flutter_markdown: ^0.5.0
   md2_tab_indicator: ^1.0.2
+
+dev_dependencies:
+  #  pedantic: ^1.9.2
+  effective_dart: ^1.2.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
