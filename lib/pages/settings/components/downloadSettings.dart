@@ -15,6 +15,8 @@ import 'package:provider/provider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:songtube/provider/downloadsProvider.dart';
+import 'package:songtube/provider/preferencesProvider.dart';
 
 // UI
 import 'package:songtube/ui/dialogs/alertDialog.dart';
@@ -23,6 +25,8 @@ class DownloadSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
+    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
+    DownloadsProvider downloadsProvider = Provider.of<DownloadsProvider>(context);
     return ListView(
       children: <Widget>[
         ListTile(
@@ -233,6 +237,53 @@ class DownloadSettings extends StatelessWidget {
                 );
               },
             ), 
+          )
+        ),
+        Divider(),
+        ListTile(
+          title: Text(
+            "Maximum simultaneous downloads",
+            style: TextStyle(
+              color: Theme.of(context).textTheme.bodyText1.color,
+              fontWeight: FontWeight.w500
+            ),
+          ),
+          subtitle: Row(
+            children: [
+              Text(
+                "${prefs.maxSimultaneousDownloads}",
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.bodyText1.color
+                ),
+              ),
+              Expanded(
+                child: SliderTheme(
+                  data: SliderThemeData(
+                    thumbColor: Theme.of(context).accentColor,
+                    activeTrackColor: Theme.of(context).accentColor,
+                    inactiveTrackColor: Colors.black.withOpacity(0.1)
+                  ),
+                  child: Slider(
+                    value: prefs.maxSimultaneousDownloads.toDouble(),
+                    min: 1,
+                    max: 10,
+                    onChanged: (value) {
+                      prefs.maxSimultaneousDownloads = value.round();
+                    },
+                    onChangeEnd: (value) {
+                      downloadsProvider.maxSimultaneousDownloads = value.round();
+                      downloadsProvider.checkQueue();
+                    },
+                  ),
+                ),
+              ),
+              Text(
+                "10",
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.bodyText1.color
+                ),
+              ),
+            ],
           )
         ),
       ],

@@ -269,4 +269,13 @@ class PreferencesProvider extends ChangeNotifier {
     channelSubscriptions = subscriptions;
   }
 
+  // Maximum simultaneous downloads
+  int get maxSimultaneousDownloads {
+    return prefs.getInt('maxSimultaneousDownloads') ?? 2;
+  }
+  set maxSimultaneousDownloads(int value) {
+    prefs.setInt('maxSimultaneousDownloads', value);
+    notifyListeners();
+  }
+
 }

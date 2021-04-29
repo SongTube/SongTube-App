@@ -3,6 +3,7 @@ import 'package:newpipeextractor_dart/models/infoItems/video.dart';
 import 'package:newpipeextractor_dart/models/streams/audioOnlyStream.dart';
 import 'package:newpipeextractor_dart/models/streams/videoOnlyStream.dart';
 import 'package:newpipeextractor_dart/models/video.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:songtube/internal/ffmpeg/converter.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/download/audioFilters.dart';
@@ -18,8 +19,14 @@ class DownloadsProvider extends ChangeNotifier {
     downloadingList = <DownloadSet>[];
     completedList   = <DownloadSet>[];
     cancelledList   = <DownloadSet>[];
-    
+    SharedPreferences.getInstance().then((instance) {
+      maxSimultaneousDownloads = instance
+        .getInt('maxSimultaneousDownloads') ?? 2;
+    });
   }
+
+  // Max simultaneous downloads
+  int maxSimultaneousDownloads = 2;
 
   // Downloading List
   List<DownloadSet> downloadingList;
@@ -92,9 +99,9 @@ class DownloadsProvider extends ChangeNotifier {
 
   void checkQueue() {
     if (downloadingList.isEmpty) return;
-    int maxSimultaneousDownloads = downloadingList.length <= 2
-      ? downloadingList.length : 2;
-    for (int i = 0; i < maxSimultaneousDownloads; i++) {
+    int maxDownloads = downloadingList.length <= maxSimultaneousDownloads
+      ? downloadingList.length : maxSimultaneousDownloads;
+    for (int i = 0; i < maxDownloads; i++) {
       if (downloadingList[i].downloadStatusStream.value == DownloadStatus.Loading)
         downloadingList[i].downloadMedia();
     }
