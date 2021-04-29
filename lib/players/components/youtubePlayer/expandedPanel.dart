@@ -514,12 +514,12 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
           return;
         }
         double height = MediaQuery.of(context).size.height;
-        double bottomPadding = MediaQuery.of(context).padding.bottom;
+        double topPadding = MediaQuery.of(context).padding.top;
         bottomSheetController = scaffoldKey.currentState.showBottomSheet((context) {
           return Wrap(
             children: [
               Container(
-                height: height - mainBodyHeight - bottomPadding - 4,
+                height: height - (topPadding + playerHeight + 8),
                 decoration: BoxDecoration(
                   color: Theme.of(context).scaffoldBackgroundColor,
                   borderRadius: BorderRadius.only(
@@ -535,13 +535,9 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                   onDispose: () => bottomSheetController = null,
                 ),
               ),
-              Container(
-                height: bottomPadding,
-                color: Colors.transparent,
-              )
             ],
           );
-        });
+        }, backgroundColor: Colors.transparent);
       },
     );
   }
