@@ -131,20 +131,21 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
       widget.streams[indexToPlay].url, audioDataSource: widget.audioStream.url,
       formatHint: VideoFormat.other
     )..initialize().then((value) {
-      _controller.play().then((_) {
-        setState(() {isPlaying = true; buffering = false;});
-      });
+      if (Provider.of<PreferencesProvider>(context, listen: false).videoPageAutoPlay) {
+        _controller.play().then((_) {
+          setState(() {isPlaying = true; buffering = false;});
+          setState(() { showControls = false; showBackdrop = false; });
+        });
+      } else {
+        setState(() {isPlaying = false; buffering = false;});
+      }
     });
     _controller.addListener(() {
       if (_controller.value.isBuffering && buffering == false) {
         setState(() => buffering = true);
-        setState(() { showControls = true; showBackdrop = true; });
       }
       if (!_controller.value.isBuffering && buffering == true) {
         setState(() => buffering = false);
-        if (_controller.value.isPlaying) {
-          setState(() { showControls = false; showBackdrop = false; });
-        }
       }
     });
     Future.delayed(Duration(seconds: 10), () {
@@ -465,7 +466,6 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
                     ),
                     // Play/Pause Buttons
                     PlayPauseButton(
-                      isBuffering: buffering,
                       isPlaying: isPlaying,
                       onPlayPause: () async {
                         if (controller.value.isPlaying) {
@@ -508,6 +508,13 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
                 ),
               ) : Container()
             ),
+            Center(
+              child: buffering
+                ? CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation(Colors.white),
+                    strokeWidth: 2)
+                : Container()
+            )
           ],
         ),
       ),

@@ -278,4 +278,13 @@ class PreferencesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Enable/Disable Video Autoplay (Video page)
+  bool get videoPageAutoPlay {
+    return prefs.getBool('videoPageAutoPlay') ?? true;
+  }
+  set videoPageAutoPlay(bool value) {
+    prefs.setBool('videoPageAutoPlay', value);
+    notifyListeners();
+  }
+
 }

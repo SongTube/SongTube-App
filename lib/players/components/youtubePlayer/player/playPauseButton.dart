@@ -1,34 +1,31 @@
 import 'package:flutter/material.dart';
 
 class PlayPauseButton extends StatelessWidget {
-  final bool isBuffering;
   final bool isPlaying;
   final Function onPlayPause;
   PlayPauseButton({
-    @required this.isBuffering,
     @required this.isPlaying,
     @required this.onPlayPause
   });
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
       onTap: onPlayPause,
-      child: isBuffering
-        ? CircularProgressIndicator(
-            value: null,
-            valueColor: AlwaysStoppedAnimation(Colors.white),
-          )
-        : isPlaying
+      borderRadius: BorderRadius.circular(100),
+      child: Ink(
+        padding: const EdgeInsets.all(16.0),
+        child: isPlaying
           ? Icon(
               Icons.pause,
-              size: 42,
+              size: 32,
               color: Colors.white,
             )
           : Icon(
               Icons.play_arrow,
-              size: 42,
+              size: 32,
               color: Colors.white,
             ),
+      ),
     );
   }
 }
