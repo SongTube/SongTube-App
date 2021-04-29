@@ -15,22 +15,14 @@ import 'package:songtube/provider/configurationProvider.dart';
 class DownloadsProvider extends ChangeNotifier {
 
   DownloadsProvider() {
-    queueList       = <DownloadSet>[];
     downloadingList = <DownloadSet>[];
-    convertingList  = <DownloadSet>[];
     completedList   = <DownloadSet>[];
     cancelledList   = <DownloadSet>[];
     
   }
 
-  // Queue List
-  List<DownloadSet> queueList;
-
   // Downloading List
   List<DownloadSet> downloadingList;
-
-  // Converting List
-  List<DownloadSet> convertingList;
 
   // Completed List
   List<DownloadSet> completedList;
@@ -47,58 +39,66 @@ class DownloadsProvider extends ChangeNotifier {
       language: language,
       downloadItem: item,
       downloadId: RandomString.getRandomString(6),
-      convertingCallback: (String downloadId) {
-        moveToConverting(downloadId);
-      },
       completedCallback: (String downloadId, bool converted) {
-        moveToCompleted(downloadId, converted);
+        int index = downloadingList.indexWhere((element)
+          => element.downloadId == downloadId);
+        downloadingList.removeAt(index);
+        notifyListeners();
         checkQueue();
       },
       cancelledCallback: (String downloadId) {
         moveToCancelled(downloadId);
+        checkQueue();
       },
       saveErrorCallback: (String downloadId) {
         moveToCancelled(downloadId);
+        checkQueue();
       }
     );
-    queueList.add(download);
+    downloadingList.add(download);
+    checkQueue();
+  }
+
+  // Handle Playlist Download
+  void handleDownloadItems({
+    @required Languages language,
+    List<DownloadItem> items
+  }) {
+    items.forEach((item) {
+      DownloadSet download = new DownloadSet(
+        language: language,
+        downloadItem: item,
+        downloadId: RandomString.getRandomString(6),
+        completedCallback: (String downloadId, bool converted) {
+          int index = downloadingList.indexWhere((element)
+            => element.downloadId == downloadId);
+          downloadingList.removeAt(index);
+          notifyListeners();
+          checkQueue();
+        },
+        cancelledCallback: (String downloadId) {
+          moveToCancelled(downloadId);
+          checkQueue();
+        },
+        saveErrorCallback: (String downloadId) {
+          moveToCancelled(downloadId);
+          checkQueue();
+        }
+      );
+      downloadingList.add(download);
+    });
     checkQueue();
   }
 
   void checkQueue() {
-    if (queueList.isNotEmpty && downloadingList.length < 2) {
-      DownloadSet download = queueList[0];
-      downloadingList.add(download);
-      int index = downloadingList.indexWhere((element)
-        => element.downloadId == download.downloadId);
-      downloadingList[index].downloadMedia();
-      queueList.remove(queueList[0]);
-      checkQueue();
+    if (downloadingList.isEmpty) return;
+    int maxSimultaneousDownloads = downloadingList.length <= 2
+      ? downloadingList.length : 2;
+    for (int i = 0; i < maxSimultaneousDownloads; i++) {
+      if (downloadingList[i].downloadStatusStream.value == DownloadStatus.Loading)
+        downloadingList[i].downloadMedia();
     }
     notifyListeners();
-  }
-
-  void moveToConverting(String id) {
-    int index = downloadingList.indexWhere((element)
-      => element.downloadId == id);
-    convertingList.add(downloadingList[index]);
-    downloadingList.removeAt(index);
-    checkQueue();
-  }
-
-  void moveToCompleted(String id, bool converted) {
-    if (converted) {
-      int index = convertingList.indexWhere((element)
-        => element.downloadId == id);
-      completedList.add(convertingList[index]);
-      convertingList.removeAt(index);
-    } else {
-      int index = downloadingList.indexWhere((element)
-        => element.downloadId == id);
-      completedList.add(downloadingList[index]);
-      downloadingList.removeAt(index);
-    }
-    checkQueue();
   }
 
   void moveToCancelled(String id) {
@@ -112,7 +112,9 @@ class DownloadsProvider extends ChangeNotifier {
   void retryDownload(String id) {
     int index = cancelledList.indexWhere((element)
       => element.downloadId == id);
-    queueList.add(cancelledList[index]);
+    cancelledList[index].downloadStatusStream
+      .add(DownloadStatus.Loading);
+    downloadingList.add(cancelledList[index]);
     cancelledList.removeAt(index);
     checkQueue();
   }

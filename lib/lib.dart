@@ -75,9 +75,7 @@ class _LibState extends State<Lib> {
         setState(() {});
         PreferencesProvider prefs = Provider.of<PreferencesProvider>(context, listen: false);
         DownloadsProvider downloads = Provider.of<DownloadsProvider>(context, listen: false);
-        if (downloads.queueList.isNotEmpty ||
-          downloads.downloadingList.isNotEmpty ||
-          downloads.convertingList.isNotEmpty ||
+        if (downloads.downloadingList.isNotEmpty ||
           downloads.completedList.isNotEmpty
         ) {
           if (prefs.showJoinTelegramDialog && prefs.remindTelegramLater == false) {

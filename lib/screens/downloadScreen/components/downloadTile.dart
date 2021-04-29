@@ -31,10 +31,12 @@ class DownloadTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.all(12),
       padding: EdgeInsets.all(8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: Theme.of(context).cardColor
+        color: Theme.of(context).cardColor,
+        border: Border.all(color: Colors.grey[600].withOpacity(0.1))
       ),
       // Tile main Body
       child: Column(
@@ -170,7 +172,7 @@ class DownloadTile extends StatelessWidget {
               stream: progressBar,
               builder: (context, snapshot) {
                 return Container(
-                  padding: EdgeInsets.all(8),
+                  padding: EdgeInsets.only(top: 8, bottom: 8),
                   height: 20,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),

@@ -7,6 +7,9 @@ import 'package:device_info/device_info.dart';
 import 'package:file_operations/file_operations.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
+import 'package:flutter_ffmpeg/log.dart';
+import 'package:flutter_ffmpeg/statistics.dart';
 import 'package:newpipeextractor_dart/extractors/videos.dart';
 import 'package:newpipeextractor_dart/models/infoItems/video.dart';
 import 'package:newpipeextractor_dart/models/streams/audioOnlyStream.dart';
@@ -58,7 +61,6 @@ class DownloadSet {
   int totalDownloaded = 0;
   Function(String, bool) completedCallback;
   Function(String) cancelledCallback;
-  Function(String) convertingCallback;
   Function(String) saveErrorCallback;
   String errorReason;
 
@@ -74,7 +76,6 @@ class DownloadSet {
     @required this.downloadId,
     @required this.completedCallback,
     @required this.cancelledCallback,
-    @required this.convertingCallback,
     @required this.saveErrorCallback,
   }) {
     ffmpegConverter = new FFmpegConverter();
@@ -208,17 +209,20 @@ class DownloadSet {
       // Apply Audio Normalizer
       if (downloadItem.filters.normalizeAudio) {
         currentAction.add(language.labelPatchingAudio + (_applyFilters ? " (1/2)" : ""));
+        downloadStatusStream.add(DownloadStatus.Converting);
         downloadedFile = await ffmpegConverter.normalizeAudio(downloadedFile.path);
         if (downloadedFile == null) return;
       }
       // Apply Audio Filters
       if (_applyFilters) {
         currentAction.add(language.labelPatchingAudio + (downloadItem.filters.normalizeAudio ? " (2/2)" : ""));
+        downloadStatusStream.add(DownloadStatus.Converting);
         downloadedFile = await ffmpegConverter.applyAudioModifiers(downloadedFile.path, downloadItem.filters);
       }
       if (downloadedFile == null) return;
       // Check if Conversion is needed
       if (await ffmpegConverter.audioConversionRequired(downloadItem.ffmpegTask, downloadedFile.path)) {
+        downloadStatusStream.add(DownloadStatus.Converting);
         downloadedFile = await _convertAudio(downloadItem.ffmpegTask, downloadedFile.path);
         if (downloadedFile == null) return;
       }
@@ -232,6 +236,7 @@ class DownloadSet {
     // we will just write all the metadata to the original file and save it.
     if (!downloadItem.isDownloadSegmented) {
       // Process the original file
+      downloadStatusStream.add(DownloadStatus.WrittingTags);
       if (downloadItem.downloadType == DownloadType.AUDIO) {
         downloadedFile = await ffmpegConverter.clearFileMetadata(downloadedFile.path);
         if (downloadedFile == null) return;
@@ -263,6 +268,7 @@ class DownloadSet {
       });
     } else {
       // Check our formatSuffix
+      downloadStatusStream.add(DownloadStatus.WrittingTags);
       downloadItem.formatSuffix = 
         await ffmpegConverter.getMediaFormat(downloadedFile.path);
       // Process the segments of the original file
@@ -381,7 +387,6 @@ class DownloadSet {
     downloadStatusStream.add(DownloadStatus.Converting);
     progressBar.add(null);
     currentAction.add(language.labelConverting);
-    convertingCallback(downloadId);
     converted = true;
     File convertedAudio = await ffmpegConverter.convertAudio(
       audioFile: path,
@@ -397,7 +402,6 @@ class DownloadSet {
   // Path Audio to video
   Future<File> _pathAudioToVideo(String videoPath, String audioPath) async {
     currentAction.add(language.labelPatchingAudio);
-    convertingCallback(downloadId);
     converted = true;
     File patchedVideo = await ffmpegConverter.writeAudioToVideo(
       videoFormat: await ffmpegConverter.getMediaFormat(videoPath),

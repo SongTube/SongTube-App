@@ -551,7 +551,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
     return AnimatedSize(
       duration: Duration(milliseconds: 300),
       vsync: this,
-      child: pageProvider.currentComments != null
+      child: pageProvider.currentComments != null && pageProvider.currentComments.isNotEmpty
         ? InkWell(
             onTap: () {
               if (bottomSheetController != null) {
@@ -710,7 +710,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                 ),
               ),
               ChannelSubscribeComponent(
-                channelName: pageProvider.infoItem.uploaderName,
+                channelName: pageProvider?.infoItem?.uploaderName ?? "",
                 channel: pageProvider.currentChannel,
                 scaffoldState: scaffoldKey.currentState
               ),

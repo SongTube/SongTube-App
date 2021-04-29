@@ -1,16 +1,6 @@
-import 'dart:isolate';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:newpipeextractor_dart/extractors/channels.dart';
 import 'package:newpipeextractor_dart/models/infoItems/video.dart';
-import 'package:newpipeextractor_dart/utils/url.dart';
-import 'package:provider/provider.dart';
-import 'package:songtube/pages/channel.dart';
-import 'package:songtube/pages/components/video/shimmer/shimmerChannelLogo.dart';
-import 'package:songtube/provider/preferencesProvider.dart';
-import 'package:songtube/ui/animations/blurPageRoute.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class VideoDetails extends StatelessWidget {
   final dynamic infoItem;
@@ -22,8 +12,8 @@ class VideoDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String title = infoItem?.name ?? "";
-    String views = "${NumberFormat.compact().format(infoItem?.viewCount)} views" ?? "";
-    String date = infoItem?.uploadDate ?? "";
+    String views = "${NumberFormat.compact().format(infoItem is StreamInfoItem ? infoItem?.viewCount : 0)} views" ?? "";
+    String date = (infoItem is StreamInfoItem ? infoItem?.uploadDate : "") ?? "";
     return Column(
       children: [
         Container(

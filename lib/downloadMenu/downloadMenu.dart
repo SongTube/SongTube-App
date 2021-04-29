@@ -154,13 +154,16 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
   }
 
   void _initializeDownload(List<DownloadItem> items) async {
-    items.forEach((item) {
+    if (items.length > 1) {
+      Provider.of<DownloadsProvider>(context, listen: false)
+        .handleDownloadItems(language: Languages.of(context), items: items);
+    } else {
       Provider.of<DownloadsProvider>(context, listen: false)
         .handleDownloadItem(
           language: Languages.of(context),
-          item: item
+          item: items[0]
         );
-      });
+    }
     Navigator.of(context).pop();
     if (widget.scaffoldState != null) {
       String message;

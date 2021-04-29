@@ -11,6 +11,7 @@ import 'package:songtube/internal/download/downloadSet.dart';
 import 'package:songtube/internal/download/tags.dart';
 import 'package:songtube/internal/ffmpeg/converter.dart';
 import 'package:songtube/internal/languages.dart';
+import 'package:songtube/internal/models/streamSegmentTrack.dart';
 import 'package:songtube/internal/models/tagsControllers.dart';
 import 'package:songtube/provider/configurationProvider.dart';
 import 'package:string_validator/string_validator.dart';
@@ -85,6 +86,8 @@ class _PlaylistDownloadMenuState extends State<PlaylistDownloadMenu> {
         downloadType: DownloadType.AUDIO,
         duration: element.duration,
         filters: AudioFilters(),
+        isDownloadSegmented: false,
+        segmentTracks: <StreamSegmentTrack>[]
       ));
       enabledVideos.add(true);
     });
@@ -314,7 +317,14 @@ class _PlaylistDownloadMenuState extends State<PlaylistDownloadMenu> {
                     ),
                     Spacer(),
                     InkWell(
-                      onTap: () => widget.onDownload(downloadItems),
+                      onTap: () {
+                        List<DownloadItem> items = [];
+                        for (int i = 0; i < downloadItems.length; i++) {
+                          if (enabledVideos[i])
+                            items.add(downloadItems[i]);
+                        }
+                        widget.onDownload(items);
+                      },
                       borderRadius: BorderRadius.circular(15),
                       child: Ink(
                         padding: EdgeInsets.all(12),
