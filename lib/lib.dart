@@ -112,7 +112,7 @@ class _LibState extends State<Lib> {
           statusBarColor: Colors.transparent,
           statusBarBrightness: _statusBarBrightness,
           statusBarIconBrightness: _statusBarBrightness,
-          systemNavigationBarColor: Colors.transparent,
+          systemNavigationBarColor: Theme.of(context).cardColor,
           systemNavigationBarIconBrightness: _statusBarBrightness,
         ),
       );
@@ -225,8 +225,6 @@ class _LibState extends State<Lib> {
   }
 
   Widget _libBody() {
-    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
-    VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
     return FancyScaffold(
       backgroundColor: Theme.of(context).cardColor,
       resizeToAvoidBottomInset: false,

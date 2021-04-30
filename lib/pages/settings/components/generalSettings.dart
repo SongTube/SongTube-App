@@ -79,6 +79,22 @@ class GeneralSettings extends StatelessWidget {
         ),
         SwitchListTile(
           title: Text(
+            "Picture in Picture",
+            style: TextStyle(
+              color: Theme.of(context).textTheme.bodyText1.color,
+              fontWeight: FontWeight.w500
+            ),
+          ),
+          subtitle: Text(
+            "Automatically enters PiP mode upon tapping Home button while watching a video",
+            style: TextStyle(fontSize: 12)
+          ),
+          value: prefs.autoPipMode,
+          onChanged: (value) => prefs.autoPipMode = value,
+        ),
+        // AutoPlay
+        SwitchListTile(
+          title: Text(
             "Auto-play videos",
             style: TextStyle(
               color: Theme.of(context).textTheme.bodyText1.color,

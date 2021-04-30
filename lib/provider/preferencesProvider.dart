@@ -287,4 +287,13 @@ class PreferencesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Enable/Disable Automatic PiP Mode
+  bool get autoPipMode {
+    return prefs.getBool('autoPipMode') ?? true;
+  }
+  set autoPipMode(bool value) {
+    prefs.setBool('autoPipMode', value);
+    notifyListeners();
+  }
+  
 }

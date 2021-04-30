@@ -106,6 +106,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
   @override
   Widget build(BuildContext context) {
     VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
+    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     if (bottomSheetController != null && pageProvider.fwController.panelPosition < 1) {
       try {
         bottomSheetController.close();
@@ -115,6 +116,17 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
     return PipWidget(
       onResume: (bool pipMode) {
         setState(() => isInPictureInPictureMode = pipMode);
+      },
+      onSuspending: () {
+        if (pageProvider?.playerKey?.currentState?.isPlaying ?? false) {
+          if (prefs.autoPipMode) {
+            pageProvider.fwController.open();
+            setState(() => isInPictureInPictureMode = true);
+            FlutterPip.enterPictureInPictureMode();
+          } else {
+            pageProvider.playerKey.currentState.controller.pause();
+          }
+        }
       },
       child: Scaffold(
         key: scaffoldKey,
