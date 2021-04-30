@@ -37,20 +37,6 @@ class _ThemeSettingsState extends State<ThemeSettings> with TickerProviderStateM
           value: config.systemThemeEnabled,
           onChanged: (bool newValue) async {
             config.systemThemeEnabled = newValue;
-            await Future.delayed(Duration(seconds: 1));
-            Brightness _systemBrightness = Theme.of(context).brightness;
-            Brightness _statusBarBrightness = _systemBrightness == Brightness.light
-              ? Brightness.dark
-              : Brightness.light;
-            SystemChrome.setSystemUIOverlayStyle(
-              SystemUiOverlayStyle(
-                statusBarColor: Colors.transparent,
-                statusBarBrightness: _statusBarBrightness,
-                statusBarIconBrightness: _statusBarBrightness,
-                systemNavigationBarColor: Colors.transparent,
-                systemNavigationBarIconBrightness: _statusBarBrightness,
-              ),
-            );
           },
         ),
         // Enable/Disable Dark Theme
@@ -73,20 +59,6 @@ class _ThemeSettingsState extends State<ThemeSettings> with TickerProviderStateM
               value: config.darkThemeEnabled,
               onChanged: (bool newValue) async {
                 config.darkThemeEnabled = newValue;
-                await Future.delayed(Duration(seconds: 1));
-                Brightness _systemBrightness = Theme.of(context).brightness;
-                Brightness _statusBarBrightness = _systemBrightness == Brightness.light
-                  ? Brightness.dark
-                  : Brightness.light;
-                SystemChrome.setSystemUIOverlayStyle(
-                  SystemUiOverlayStyle(
-                    statusBarColor: Colors.transparent,
-                    statusBarBrightness: _statusBarBrightness,
-                    statusBarIconBrightness: _statusBarBrightness,
-                    systemNavigationBarColor: Colors.transparent,
-                    systemNavigationBarIconBrightness: _statusBarBrightness,
-                  ),
-                );
               },
             )
           : Container()
@@ -106,20 +78,6 @@ class _ThemeSettingsState extends State<ThemeSettings> with TickerProviderStateM
           value: config.blackThemeEnabled,
           onChanged: (bool newValue) async {
             config.blackThemeEnabled = newValue;
-            await Future.delayed(Duration(seconds: 1));
-            Brightness _systemBrightness = Theme.of(context).brightness;
-            Brightness _statusBarBrightness = _systemBrightness == Brightness.light
-              ? Brightness.dark
-              : Brightness.light;
-            SystemChrome.setSystemUIOverlayStyle(
-              SystemUiOverlayStyle(
-                statusBarColor: Colors.transparent,
-                statusBarBrightness: _statusBarBrightness,
-                statusBarIconBrightness: _statusBarBrightness,
-                systemNavigationBarColor: Colors.transparent,
-                systemNavigationBarIconBrightness: _statusBarBrightness,
-              ),
-            );
           },
         ),
         // App AccentColor Setting
