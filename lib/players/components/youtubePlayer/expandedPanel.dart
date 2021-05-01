@@ -176,7 +176,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
     PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     return StreamManifestPlayer(
       segments: pageProvider.currentVideo.segments,
-      quality: prefs.youtubePlayerQuality,
+      quality: prefs.youtubePlayerQuality.split("•").last.trim().split('p').first,
       onQualityChanged: (String quality) {
         prefs.youtubePlayerQuality = quality;
       },
