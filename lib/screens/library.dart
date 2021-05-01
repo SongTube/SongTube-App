@@ -2,6 +2,7 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:songtube/internal/languages.dart';
+import 'package:songtube/pages/localVideos.dart';
 import 'package:songtube/pages/playlists.dart';
 
 // Internal
@@ -113,6 +114,25 @@ class LibraryScreen extends StatelessWidget {
                           (context, listen: false).enableBlurUI ? 20 : 0,
                         builder: (_) => 
                         WatchHistoryPage()));
+                  },
+                ),
+                // Local Videos
+                ListTile(
+                  leading: Icon(EvaIcons.videoOutline),
+                  title: Text(
+                    "Local Videos",
+                    style: TextStyle(
+                      fontFamily: 'Product Sans',
+                      color: Theme.of(context).textTheme.bodyText1.color
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.push(context,
+                      BlurPageRoute(
+                        blurStrength: Provider.of<PreferencesProvider>
+                          (context, listen: false).enableBlurUI ? 20 : 0,
+                        builder: (_) => 
+                        LocalVideosPage()));
                   },
                 ),
                 // Playlist History

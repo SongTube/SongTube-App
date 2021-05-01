@@ -37,7 +37,7 @@ class FolderGridView extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
                 color: Theme.of(context).scaffoldBackgroundColor,
-                border: Border.all(color: Colors.grey[300].withOpacity(0.2))
+                border: Border.all(color: Colors.grey[600].withOpacity(0.1))
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -58,7 +58,9 @@ class FolderGridView extends StatelessWidget {
                       maxLines: 1,
                       style: TextStyle(
                         color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.8),
-                        fontSize: 12
+                        fontSize: 14,
+                        fontFamily: 'Product Sans',
+                        fontWeight: FontWeight.w600
                       ),
                       textAlign: TextAlign.center,
                     ),

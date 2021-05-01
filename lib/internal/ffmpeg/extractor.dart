@@ -221,17 +221,21 @@ class FFmpegExtractor {
       return File(coverPath);
     }
     List<String> ffmpegArgs = [
-      "-y", "-i", "${videoFile.path}", "-ss", "00:00:01.000", "-vframes", "1", "$coverPath"
+      "-y", "-i", "${videoFile.path}", "-vcodec", "mjpeg", "-ss", "00:00:03.000", "-vframes", "1", "$coverPath"
     ];
     await FlutterFFmpeg().executeWithArguments(ffmpegArgs);
-    return File(coverPath);
+    if (await File(coverPath).exists()) { 
+      return File(coverPath);
+    } else {
+      return null;
+    }
   }
 
   /// Get Video Duration in [Milliseconds]
   static Future<int> getVideoDuration(File video) async {
     assert(video.path != "" || video != null);
     var json = await FlutterFFprobe().getMediaInformation(video.path);
-    return json.getMediaProperties()['duration'];
+    return double.parse(json.getMediaProperties()['duration']).round();
   }
 
   /// Get Audio Date

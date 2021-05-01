@@ -25,7 +25,7 @@ import 'package:songtube/provider/preferencesProvider.dart';
 import 'package:songtube/provider/videoPageProvider.dart';
 import 'package:songtube/screens/downloads.dart';
 import 'package:songtube/screens/home.dart';
-import 'package:songtube/screens/media.dart';
+import 'package:songtube/screens/music.dart';
 import 'package:songtube/screens/library.dart';
 
 // Packages
