@@ -10,6 +10,7 @@ import 'package:flutter_screen/flutter_screen.dart';
 import 'package:songtube/players/components/youtubePlayer/player/playPauseButton.dart';
 import 'package:songtube/players/components/youtubePlayer/player/playerAppBar.dart';
 import 'package:songtube/players/components/youtubePlayer/player/playerProgressBar.dart';
+import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/provider/preferencesProvider.dart';
 import 'package:songtube/provider/videoPageProvider.dart';
 import 'package:video_player/video_player.dart';
@@ -28,6 +29,7 @@ class StreamManifestPlayer extends StatefulWidget {
   final String quality;
   final Function(String) onQualityChanged;
   final List<StreamSegment> segments;
+  final Function(double) onAspectRatioInit;
   StreamManifestPlayer({
     Key key,
     @required this.videoTitle,
@@ -41,7 +43,8 @@ class StreamManifestPlayer extends StatefulWidget {
     this.forceHideControls = false,
     @required this.quality,
     @required this.onQualityChanged,
-    this.segments = const []
+    this.segments = const [],
+    this.onAspectRatioInit
   }) : super(key: key);
   @override
   StreamManifestPlayerState createState() => StreamManifestPlayerState();
@@ -60,6 +63,9 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
   // Reverse and Forward Animation
   bool showReverse = false;
   bool showForward = false;
+
+  // Current Aspect Ratio
+  double aspectRatio;
 
   // UI
   bool _showControls   = true;
@@ -143,6 +149,11 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
         });
       } else {
         setState(() {isPlaying = false; buffering = false;});
+      }
+      if (aspectRatio != controller?.value?.aspectRatio ?? null) {
+        widget.onAspectRatioInit(controller?.value?.aspectRatio ?? 16/9);
+        setState(() =>
+          aspectRatio = controller?.value?.aspectRatio ?? null);
       }
     });
     _controller.addListener(() {

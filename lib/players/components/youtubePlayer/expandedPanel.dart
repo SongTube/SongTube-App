@@ -64,6 +64,9 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
   bool restoringScroll = false;
   double scrollExcessOffset = 0;
 
+  // Portrait player Aspect Ratio
+  double aspectRatio = 16/9;
+
   // Animation controller for hiding Details & Engagement on scroll
   AnimationController animationController;
 
@@ -176,6 +179,9 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
     PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     return StreamManifestPlayer(
       segments: pageProvider.currentVideo.segments,
+      onAspectRatioInit: (value) => setState(() {
+        aspectRatio = value;
+      }),
       quality: prefs.youtubePlayerQuality.split("•").last.trim().split('p').first,
       onQualityChanged: (String quality) {
         prefs.youtubePlayerQuality = quality;
@@ -295,8 +301,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                   playerHeight = size.height;
                 },
                 child: AspectRatio(
-                  aspectRatio: (pageProvider?.playerKey?.currentState?.controller?.value?.aspectRatio ?? 16/9) < 16/9
-                    ? 16/9 : pageProvider?.playerKey?.currentState?.controller?.value?.aspectRatio ?? 16/9,
+                  aspectRatio: aspectRatio < 16/9 ? 16/9 : aspectRatio,
                   child: AnimatedSwitcher(
                     duration: Duration(milliseconds: 400),
                     child: pageProvider.currentVideo != null
