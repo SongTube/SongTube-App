@@ -107,6 +107,22 @@ class GeneralSettings extends StatelessWidget {
           ),
           value: prefs.videoPageAutoPlay,
           onChanged: (value) => prefs.videoPageAutoPlay = value,
+        ),
+        // SearchBar Auto-Correct
+        SwitchListTile(
+          title: Text(
+            "Text Correction",
+            style: TextStyle(
+              color: Theme.of(context).textTheme.bodyText1.color,
+              fontWeight: FontWeight.w500
+            ),
+          ),
+          subtitle: Text(
+            "Enable or disable text correction in the Home screen search bar",
+            style: TextStyle(fontSize: 12)
+          ),
+          value: prefs.autocorrectSearchBar,
+          onChanged: (value) => prefs.autocorrectSearchBar = value,
         )
       ],
     );

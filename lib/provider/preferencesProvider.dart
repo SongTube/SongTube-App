@@ -296,4 +296,13 @@ class PreferencesProvider extends ChangeNotifier {
     notifyListeners();
   }
   
+  // Enable/Disable Autocorrect in Home search bar
+  bool get autocorrectSearchBar {
+    return prefs.getBool('autocorrectSearchBar') ?? true;
+  }
+  set autocorrectSearchBar(bool value) {
+    prefs.setBool('autocorrectSearchBar', value);
+    notifyListeners();
+  }
+
 }

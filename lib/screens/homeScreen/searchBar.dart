@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/provider/configurationProvider.dart';
 import 'package:songtube/provider/managerProvider.dart';
+import 'package:songtube/provider/preferencesProvider.dart';
 import 'package:songtube/ui/components/styledBottomSheet.dart';
 import 'package:songtube/ui/sheets/searchFilters.dart';
 
@@ -239,9 +240,12 @@ class _HomePageAppBarState extends State<HomePageAppBar> with TickerProviderStat
   Widget _searchBarTextField() {
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
     ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
+    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     return Padding(
       padding: EdgeInsets.only(left: 12, right: 12),
       child: TextFormField(
+        autocorrect: prefs.autocorrectSearchBar,
+        enableSuggestions: prefs.autocorrectSearchBar,
         controller: manager.searchController,
         focusNode: manager.searchBarFocusNode,
         onTap: () => manager.searchBarFocusNode.requestFocus(),
