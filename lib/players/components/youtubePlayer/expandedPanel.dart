@@ -285,25 +285,30 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
             width: double.infinity,
           ),
           // Mini-Player
-          Container(
-            margin: EdgeInsets.only(left: 12, right: 12),
-            child: MeasureSize(
-              onChange: (Size size) {
-                playerHeight = size.height;
-              },
-              child: AspectRatio(
-                aspectRatio: 16/9,
-                child: AnimatedSwitcher(
-                  duration: Duration(milliseconds: 400),
-                  child: pageProvider.currentVideo != null
-                    ? _videoPlayerWidget()
-                    : _videoLoading(
-                        pageProvider.infoItem is StreamInfoItem
-                          ? pageProvider.infoItem.thumbnails.hqdefault
-                          : pageProvider.infoItem is PlaylistInfoItem
-                            ? pageProvider.infoItem.thumbnailUrl
-                            : null,
-                      )
+          AnimatedSize(
+            duration: Duration(milliseconds: 250),
+            vsync: this,
+            child: Container(
+              margin: EdgeInsets.only(left: 12, right: 12),
+              child: MeasureSize(
+                onChange: (Size size) {
+                  playerHeight = size.height;
+                },
+                child: AspectRatio(
+                  aspectRatio: (pageProvider?.playerKey?.currentState?.controller?.value?.aspectRatio ?? 16/9) < 16/9
+                    ? 16/9 : pageProvider?.playerKey?.currentState?.controller?.value?.aspectRatio ?? 16/9,
+                  child: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 400),
+                    child: pageProvider.currentVideo != null
+                      ? _videoPlayerWidget()
+                      : _videoLoading(
+                          pageProvider.infoItem is StreamInfoItem
+                            ? pageProvider.infoItem.thumbnails.hqdefault
+                            : pageProvider.infoItem is PlaylistInfoItem
+                              ? pageProvider.infoItem.thumbnailUrl
+                              : null,
+                        )
+                  ),
                 ),
               ),
             ),
