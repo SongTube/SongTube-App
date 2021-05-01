@@ -2,11 +2,15 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:md2_tab_indicator/md2_tab_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/provider/mediaProvider.dart';
 import 'package:songtube/screens/musicScreen/components/mediaListBase.dart';
-import 'package:songtube/screens/musicScreen/components/songsListView.dart';
+import 'package:songtube/screens/musicScreen/tabs/albums.dart';
+import 'package:songtube/screens/musicScreen/tabs/artist.dart';
+import 'package:songtube/screens/musicScreen/tabs/genre.dart';
+import 'package:songtube/screens/musicScreen/tabs/songs.dart';
 
 // Packages
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
@@ -32,6 +36,11 @@ class _MediaScreenState extends State<MediaScreen> {
   void initState() {
     searchController = new TextEditingController();
     searchNode = new FocusNode();
+    searchNode.addListener(() {
+      if (!searchNode.hasFocus && searchQuery.isEmpty) {
+        setState(() => showSearchBar = false);
+      }
+    });
     KeyboardVisibility.onChange.listen((bool visible) {
         if (visible == false) {
           searchNode.unfocus();
@@ -94,42 +103,93 @@ class _MediaScreenState extends State<MediaScreen> {
                 ),
                 onPressed: () {
                   setState(() => showSearchBar = !showSearchBar);
+                  searchNode.requestFocus();
                 },
               ),
             ],
           ) : CommonSearchBar(
             textController: searchController,
-            onClear: () => setState(() {
-              searchController.clear();
-              searchQuery = "";
-            }),
+            onClear: () {
+              setState(() {
+                searchController.clear();
+                searchQuery = "";
+              });
+            },
             focusNode: searchNode,
             onChanged: (String search) => setState(() => searchQuery = search),
             hintText: Languages.of(context).labelSearchMedia,
           )
         ),
       ),
-      body: Column(
-        children: [
-          Divider(
-            height: 1,
-            thickness: 1,
-            color: Colors.grey[600].withOpacity(0.1),
-            indent: 12,
-            endIndent: 12
-          ),
-          Expanded(
-            child: MediaListBase(
-              isLoading: mediaProvider.loadingMusic,
-              isEmpty: mediaProvider.listMediaItems.isEmpty,
-              listType: MediaListBaseType.Any,
-              child: SongsListView(
-                songs: songs,
-                searchQuery: searchQuery,
+      body: DefaultTabController(
+        initialIndex: 0,
+        length: 4,
+        child: Column(
+          children: [
+            Container(
+              height: 40,
+              color: Theme.of(context).cardColor,
+              child: TabBar(
+                labelStyle: TextStyle(
+                  fontSize: 13,
+                  fontFamily: 'Product Sans',
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 0.3
+                ),
+                unselectedLabelStyle: TextStyle(
+                    fontSize: 13,
+                    fontFamily: 'Product Sans',
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 0.2
+                ),
+                labelColor: Theme.of(context).accentColor,
+                unselectedLabelColor: Theme.of(context).textTheme.bodyText1
+                  .color.withOpacity(0.4),
+                indicator: MD2Indicator(
+                  indicatorSize: MD2IndicatorSize.tiny,
+                  indicatorHeight: 4,
+                  indicatorColor: Theme.of(context).accentColor,
+                ),
+                tabs: [
+                  Tab(child: Text(
+                    "Songs"
+                  )),
+                  Tab(child: Text(
+                    "Albums"
+                  )),
+                  Tab(child: Text(
+                    "Artists"
+                  )),
+                  Tab(child: Text(
+                    "Genres"
+                  ))
+                ],
               ),
             ),
-          ),
-        ],
+            Divider(
+              height: 1,
+              thickness: 1,
+              color: Colors.grey[600].withOpacity(0.1),
+              indent: 12,
+              endIndent: 12
+            ),
+            Expanded(
+              child: MediaListBase(
+                isLoading: mediaProvider.loadingMusic,
+                isEmpty: mediaProvider.listMediaItems.isEmpty,
+                listType: MediaListBaseType.Any,
+                child: TabBarView(
+                  children: [
+                    MusicScreenSongsTab(songs: songs, searchQuery: searchQuery),
+                    MusicScreenAlbumsTab(),
+                    MusicScreenArtistTab(),
+                    MusicScreenGenreTab()
+                  ],
+                )
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -9,7 +9,7 @@ import 'package:songtube/screens/musicScreen/components/mediaListBase.dart';
 import 'package:provider/provider.dart';
 
 // UI
-import 'package:songtube/screens/musicScreen/components/songsListView.dart';
+import 'package:songtube/screens/musicScreen/tabs/songs.dart';
 
 class DownloadsTab extends StatefulWidget {
   @override
@@ -31,7 +31,7 @@ class _DownloadsTabState extends State<DownloadsTab> {
       isLoading: mediaProvider.loadingDownloads,
       isEmpty: mediaProvider.databaseSongs.isEmpty,
       listType: MediaListBaseType.Downloads,
-      child: SongsListView(
+      child: MusicScreenSongsTab(
         songs: mediaProvider.databaseSongs,
         hasDownloadType: true,
       ),
