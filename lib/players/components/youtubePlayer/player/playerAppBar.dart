@@ -9,23 +9,19 @@ import 'package:songtube/ui/internal/popupMenu.dart';
 class PlayerAppBar extends StatelessWidget {
   final List<VideoOnlyStream> streams;
   final String videoTitle;
-  final Function(String, String) onStreamSelect;
+  final Function onChangeQuality;
   final Function onEnterPipMode;
   final String currentQuality;
   PlayerAppBar({
     @required this.streams,
     @required this.videoTitle,
-    @required this.onStreamSelect,
+    @required this.onChangeQuality,
     @required this.currentQuality,
     this.onEnterPipMode
   });
   @override
   Widget build(BuildContext context) {
     PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
-    List<String> qualities = [];
-    streams.forEach((stream) {
-      qualities.add(stream.formatSuffix + " • " + stream.resolution);
-    });
     return Container(
       margin: EdgeInsets.all(16),
       child: Row(
@@ -96,13 +92,16 @@ class PlayerAppBar extends StatelessWidget {
             }
           ),
           SizedBox(width: 8),
-          FlexiblePopupMenu(
-            borderRadius: 10,
+          GestureDetector(
+            onTap: () => onChangeQuality(),
             child: Container(
               padding: EdgeInsets.all(4),
               color: Colors.transparent,
               child: Text(
-                currentQuality+"p",
+                (
+                  "${currentQuality.split('p').first+"p"}".split('•').last.trim() +
+                  "${currentQuality.split('p').last.contains("60") ? " • 60 FPS" : ""}"
+                ),
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w600,
@@ -110,18 +109,6 @@ class PlayerAppBar extends StatelessWidget {
                 ),
               )
             ),
-            items: List<FlexiblePopupItem>.generate(qualities.length, (index) {
-              return FlexiblePopupItem(
-                title: qualities[index],
-                value: qualities[index]
-              );
-            }),
-            onItemTap: (String value) {
-              if (value == null) return;
-              int index = streams.indexWhere((element) =>
-                element.formatSuffix + " • " + element.resolution == value);
-              onStreamSelect(streams[index].url, streams[index].resolution);
-            }
           ),
           SizedBox(width: 8),
           Switch(
