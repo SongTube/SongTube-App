@@ -184,10 +184,13 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
         ? 0 : 10,
       key: pageProvider.playerKey,
       videoTitle: pageProvider?.currentVideo?.name ?? "",
-      streams: pageProvider.currentVideo.videoOnlyStreams,
-      audioStream: pageProvider.currentVideo.getAudioStreamWithBestMatchForVideoStream(
-        pageProvider.currentVideo.videoOnlyWithHighestQuality
-      ),
+      streams: pageProvider.currentVideo.videoOnlyStreams.isNotEmpty
+        ? pageProvider.currentVideo.videoOnlyStreams
+        : pageProvider.currentVideo.videoStreams,
+      audioStream: pageProvider.currentVideo.videoOnlyStreams.isNotEmpty
+        ? pageProvider.currentVideo.getAudioStreamWithBestMatchForVideoStream(
+            pageProvider.currentVideo.videoOnlyWithHighestQuality
+          ) : null,
       isFullscreen: MediaQuery.of(context).orientation == Orientation.landscape
         ? true : false,
       onAutoPlay: () async {

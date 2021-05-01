@@ -7,7 +7,7 @@ import 'package:songtube/provider/preferencesProvider.dart';
 import 'package:songtube/ui/internal/popupMenu.dart';
 
 class PlayerAppBar extends StatelessWidget {
-  final List<VideoOnlyStream> streams;
+  final List<dynamic> streams;
   final String videoTitle;
   final Function onChangeQuality;
   final Function onEnterPipMode;

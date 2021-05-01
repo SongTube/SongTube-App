@@ -16,7 +16,7 @@ import 'package:volume/volume.dart';
 
 class StreamManifestPlayer extends StatefulWidget {
   final String videoTitle;
-  final List<VideoOnlyStream> streams;
+  final List<dynamic> streams;
   final AudioOnlyStream audioStream;
   final Function onAutoPlay;
   final Function onFullscreenTap;
@@ -131,7 +131,8 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
       currentQuality = widget.streams[indexToPlay].resolution.split("p").first;
     }
     _controller = VideoPlayerController.network(
-      widget.streams[indexToPlay].url, audioDataSource: widget.audioStream.url,
+      widget.streams[indexToPlay].url, audioDataSource: widget.streams[indexToPlay]
+        is VideoOnlyStream ? widget.audioStream.url : null,
       formatHint: VideoFormat.other
     )..initialize().then((value) {
       if (Provider.of<PreferencesProvider>(context, listen: false).videoPageAutoPlay) {
