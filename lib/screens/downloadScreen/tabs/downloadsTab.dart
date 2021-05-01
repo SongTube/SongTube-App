@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 
 // Internal
 import 'package:songtube/provider/mediaProvider.dart';
-import 'package:songtube/screens/mediaScreen/components/mediaListBase.dart';
+import 'package:songtube/screens/musicScreen/components/mediaListBase.dart';
 
 // Packages
 import 'package:provider/provider.dart';
 
 // UI
-import 'package:songtube/screens/mediaScreen/components/songsListView.dart';
+import 'package:songtube/screens/musicScreen/components/songsListView.dart';
 
 class DownloadsTab extends StatefulWidget {
   @override

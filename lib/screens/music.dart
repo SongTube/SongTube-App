@@ -5,8 +5,8 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/provider/mediaProvider.dart';
-import 'package:songtube/screens/mediaScreen/components/mediaListBase.dart';
-import 'package:songtube/screens/mediaScreen/components/songsListView.dart';
+import 'package:songtube/screens/musicScreen/components/mediaListBase.dart';
+import 'package:songtube/screens/musicScreen/components/songsListView.dart';
 
 // Packages
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';

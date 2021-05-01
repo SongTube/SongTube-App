@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/provider/mediaProvider.dart';
-import 'package:songtube/screens/mediaScreen/components/downloadsEmpty.dart';
-import 'package:songtube/screens/mediaScreen/components/loadingListWidget.dart';
-import 'package:songtube/screens/mediaScreen/components/noPermissionWidget.dart';
-import 'package:songtube/screens/mediaScreen/components/playlistEmpty.dart';
+import 'package:songtube/screens/musicScreen/components/downloadsEmpty.dart';
+import 'package:songtube/screens/musicScreen/components/loadingListWidget.dart';
+import 'package:songtube/screens/musicScreen/components/noPermissionWidget.dart';
+import 'package:songtube/screens/musicScreen/components/playlistEmpty.dart';
 
 enum MediaListBaseType { Downloads, Any }
 
