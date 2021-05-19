@@ -238,8 +238,6 @@ class DownloadSet {
       // Process the original file
       downloadStatusStream.add(DownloadStatus.WrittingTags);
       if (downloadItem.downloadType == DownloadType.AUDIO) {
-        downloadedFile = await ffmpegConverter.clearFileMetadata(downloadedFile.path);
-        if (downloadedFile == null) return;
         currentAction.add(language.labelWrittingTagsAndArtwork);
         await writeAllMetadata(downloadedFile.path, downloadItem.tags);
       }
