@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/pages/localVideos.dart';
 import 'package:songtube/pages/playlists.dart';
+import 'package:songtube/provider/mediaProvider.dart';
 
 // Internal
 import 'package:songtube/provider/preferencesProvider.dart';
@@ -24,6 +25,7 @@ class LibraryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
+    MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
     return Scaffold(
       backgroundColor: Theme.of(context).cardColor,
       appBar: AppBar(
@@ -117,6 +119,7 @@ class LibraryScreen extends StatelessWidget {
                   },
                 ),
                 // Local Videos
+                if (!mediaProvider.loadingVideos || mediaProvider.listVideos.isNotEmpty) 
                 ListTile(
                   leading: Icon(EvaIcons.videoOutline),
                   title: Text(
