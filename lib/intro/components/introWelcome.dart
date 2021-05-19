@@ -69,13 +69,18 @@ class IntroWelcome extends StatelessWidget {
                         ),
                         children: [
                           TextSpan(
-                            text: Languages.of(context).labelAppWelcome + "\n"
+                            text: Languages.of(context).labelAppWelcome + "\n",
+                            style: TextStyle(
+                              fontFamily: 'Product Sans',
+                              fontWeight: FontWeight.w600
+                            )
                           ),
                           TextSpan(
                             text: "SongTube",
                             style: TextStyle(
                               color: Theme.of(context).accentColor,
-                              fontWeight: FontWeight.w600
+                              fontWeight: FontWeight.w700,
+                              fontFamily: 'Product Sans'
                             )
                           )
                         ]
@@ -118,12 +123,17 @@ class IntroWelcome extends StatelessWidget {
                           ),
                           children: [
                             TextSpan(
-                              text: "Powered by\n"
+                              text: "Powered by\n",
+                              style: TextStyle(
+                                fontFamily: 'Product Sans',
+                                fontWeight: FontWeight.w600
+                              )
                             ),
                             TextSpan(
                               text: "NewPipe Extractor",
                               style: TextStyle(
                                 color: Theme.of(context).accentColor,
+                                fontFamily: 'Product Sans',
                                 fontWeight: FontWeight.w600
                               )
                             )
@@ -183,8 +193,8 @@ class IntroWelcome extends StatelessWidget {
             Languages.of(context).labelLanguage,
             style: TextStyle(
               fontSize: 14,
-              fontFamily: 'YTSans',
-              fontWeight: FontWeight.w400,
+              fontFamily: 'Product Sans',
+              fontWeight: FontWeight.w600,
               color: Theme.of(context).textTheme.bodyText1.color
             ),
           ),

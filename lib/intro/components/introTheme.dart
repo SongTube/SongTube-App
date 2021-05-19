@@ -76,8 +76,8 @@ class _IntroThemeState extends State<IntroTheme> {
                       text: TextSpan(
                         style: TextStyle(
                           fontSize: 22,
-                          fontFamily: 'YTSans',
-                          fontWeight: FontWeight.w400,
+                          fontFamily: 'Product Sans',
+                          fontWeight: FontWeight.w600,
                           color: Theme.of(context).textTheme.bodyText1.color
                         ),
                         children: [
@@ -116,7 +116,8 @@ class _IntroThemeState extends State<IntroTheme> {
                       text: TextSpan(
                         style: TextStyle(
                           fontSize: 18,
-                          fontFamily: 'YTSans',
+                          fontFamily: 'Product Sans',
+                          fontWeight: FontWeight.w600,
                           color: Theme.of(context).textTheme.bodyText1.color
                         ),
                         children: [
@@ -141,136 +142,155 @@ class _IntroThemeState extends State<IntroTheme> {
           Container(
             alignment: Alignment.bottomCenter,
             margin: EdgeInsets.only(bottom: 32),
-            child: Row(
+            child: Flex(
+              direction: Axis.horizontal,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                ShowUpTransition(
-                  duration: Duration(milliseconds: 600),
-                  delay: Duration(milliseconds: 600),
-                  forward: true,
-                  slideSide: SlideFromSlide.BOTTOM,
-                  child: GestureDetector(
-                    onTap: () {
-                      config.systemThemeEnabled = true;
-                      config.darkThemeEnabled = false;
-                    },
-                    child: AnimatedContainer(
-                      padding: EdgeInsets.all(8),
-                      duration: Duration(milliseconds: 300),
-                      height: 50,
-                      width: 80,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: theme == ThemeSelected.System
-                          ? Theme.of(context).accentColor
-                          : Theme.of(context).cardColor,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black12.withOpacity(0.08),
-                            offset: Offset(0,0),
-                            spreadRadius: 0.01,
-                            blurRadius: 20.0
-                          )
-                        ]
-                      ),
-                      child: Center(
-                        child: Text(
-                          Languages.of(context).labelSystem,
-                          style: TextStyle(
-                            fontSize: 16,
+                Flexible(
+                  flex: 1,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 30, right: 15),
+                    child: ShowUpTransition(
+                      duration: Duration(milliseconds: 600),
+                      delay: Duration(milliseconds: 600),
+                      forward: true,
+                      slideSide: SlideFromSlide.BOTTOM,
+                      child: GestureDetector(
+                        onTap: () {
+                          config.systemThemeEnabled = true;
+                          config.darkThemeEnabled = false;
+                        },
+                        child: AnimatedContainer(
+                          padding: EdgeInsets.all(8),
+                          duration: Duration(milliseconds: 300),
+                          height: 50,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
                             color: theme == ThemeSelected.System
-                              ? Colors.white
-                              : Theme.of(context).textTheme.bodyText1.color,
-                            fontWeight: FontWeight.w600
-                          )
+                              ? Theme.of(context).accentColor
+                              : Theme.of(context).cardColor,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12.withOpacity(0.08),
+                                offset: Offset(0,0),
+                                spreadRadius: 0.01,
+                                blurRadius: 20.0
+                              )
+                            ]
+                          ),
+                          child: Center(
+                            child: Text(
+                              Languages.of(context).labelSystem,
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: theme == ThemeSelected.System
+                                  ? Colors.white
+                                  : Theme.of(context).textTheme.bodyText1.color,
+                                fontWeight: FontWeight.w700,
+                                fontFamily: 'Product Sans'
+                              )
+                            ),
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-                ShowUpTransition(
-                  duration: Duration(milliseconds: 600),
-                  delay: Duration(milliseconds: 700),
-                  forward: true,
-                  slideSide: SlideFromSlide.BOTTOM,
-                  child: GestureDetector(
-                    onTap: () {
-                      config.systemThemeEnabled = false;
-                      config.darkThemeEnabled = false;
-                    },
-                    child: AnimatedContainer(
-                      padding: EdgeInsets.all(8),
-                      duration: Duration(milliseconds: 300),
-                      height: 50,
-                      width: 80,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: theme == ThemeSelected.Light
-                          ? Theme.of(context).accentColor
-                          : Theme.of(context).cardColor,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black12.withOpacity(0.08),
-                            offset: Offset(0,0),
-                            spreadRadius: 0.01,
-                            blurRadius: 20.0
-                          )
-                        ]
-                      ),
-                      child: Center(
-                        child: Text(
-                          "Light",
-                          style: TextStyle(
-                            fontSize: 16,
+                Flexible(
+                  flex: 1,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 15, right: 15),
+                    child: ShowUpTransition(
+                      duration: Duration(milliseconds: 600),
+                      delay: Duration(milliseconds: 700),
+                      forward: true,
+                      slideSide: SlideFromSlide.BOTTOM,
+                      child: GestureDetector(
+                        onTap: () {
+                          config.systemThemeEnabled = false;
+                          config.darkThemeEnabled = false;
+                        },
+                        child: AnimatedContainer(
+                          padding: EdgeInsets.all(8),
+                          duration: Duration(milliseconds: 300),
+                          height: 50,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
                             color: theme == ThemeSelected.Light
-                              ? Colors.white
-                              : Theme.of(context).textTheme.bodyText1.color,
-                            fontWeight: FontWeight.w600
-                          )
+                              ? Theme.of(context).accentColor
+                              : Theme.of(context).cardColor,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12.withOpacity(0.08),
+                                offset: Offset(0,0),
+                                spreadRadius: 0.01,
+                                blurRadius: 20.0
+                              )
+                            ]
+                          ),
+                          child: Center(
+                            child: Text(
+                              "Light",
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: theme == ThemeSelected.Light
+                                  ? Colors.white
+                                  : Theme.of(context).textTheme.bodyText1.color,
+                                fontWeight: FontWeight.w700,
+                                fontFamily: 'Product Sans'
+                              )
+                            ),
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-                ShowUpTransition(
-                  duration: Duration(milliseconds: 600),
-                  delay: Duration(milliseconds: 800),
-                  forward: true,
-                  slideSide: SlideFromSlide.BOTTOM,
-                  child: GestureDetector(
-                    onTap: () {
-                      config.systemThemeEnabled = false;
-                      config.darkThemeEnabled = true;
-                    },
-                    child: AnimatedContainer(
-                      padding: EdgeInsets.all(16),
-                      duration: Duration(milliseconds: 300),
-                      height: 50,
-                      width: 80,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: theme == ThemeSelected.Dark
-                          ? Theme.of(context).accentColor
-                          : Theme.of(context).cardColor,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black12.withOpacity(0.08),
-                            offset: Offset(0,0),
-                            spreadRadius: 0.01,
-                            blurRadius: 20.0
-                          )
-                        ]
-                      ),
-                      child: Center(
-                        child: Text(
-                          "Dark",
-                          style: TextStyle(
-                            fontSize: 16,
+                Flexible(
+                  flex: 1,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 15, right: 30),
+                    child: ShowUpTransition(
+                      duration: Duration(milliseconds: 600),
+                      delay: Duration(milliseconds: 800),
+                      forward: true,
+                      slideSide: SlideFromSlide.BOTTOM,
+                      child: GestureDetector(
+                        onTap: () {
+                          config.systemThemeEnabled = false;
+                          config.darkThemeEnabled = true;
+                        },
+                        child: AnimatedContainer(
+                          padding: EdgeInsets.all(8),
+                          duration: Duration(milliseconds: 300),
+                          height: 50,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
                             color: theme == ThemeSelected.Dark
-                              ? Colors.white
-                              : Theme.of(context).textTheme.bodyText1.color,
-                            fontWeight: FontWeight.w600
-                          )
+                              ? Theme.of(context).accentColor
+                              : Theme.of(context).cardColor,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12.withOpacity(0.08),
+                                offset: Offset(0,0),
+                                spreadRadius: 0.01,
+                                blurRadius: 20.0
+                              )
+                            ]
+                          ),
+                          child: Center(
+                            child: Text(
+                              "Dark",
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: theme == ThemeSelected.Dark
+                                  ? Colors.white
+                                  : Theme.of(context).textTheme.bodyText1.color,
+                                fontWeight: FontWeight.w700,
+                                fontFamily: 'Product Sans'
+                              )
+                            ),
+                          ),
                         ),
                       ),
                     ),

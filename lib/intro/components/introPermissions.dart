@@ -71,8 +71,8 @@ class _IntroPermissionsState extends State<IntroPermissions> {
                       text: TextSpan(
                         style: TextStyle(
                           fontSize: 22,
-                          fontFamily: 'YTSans',
-                          fontWeight: FontWeight.w400,
+                          fontFamily: 'Product Sans',
+                          fontWeight: FontWeight.w600,
                           color: Theme.of(context).textTheme.bodyText1.color
                         ),
                         children: [
@@ -119,11 +119,18 @@ class _IntroPermissionsState extends State<IntroPermissions> {
                             text: "SongTube ",
                             style: TextStyle(
                               color: Theme.of(context).accentColor,
+                              fontFamily: 'Product Sans',
                               fontWeight: FontWeight.w600
                             )
                           ),
                           TextSpan(
                             text: Languages.of(context).labelExternalAccessJustification,
+                            style: TextStyle(
+                              fontFamily: 'Product Sans',
+                              fontWeight: FontWeight.w600,
+                              color: Theme.of(context).textTheme.bodyText1.color
+                                .withOpacity(0.8)
+                            )
                           )
                         ]
                       ),
@@ -155,9 +162,7 @@ class _IntroPermissionsState extends State<IntroPermissions> {
                   duration: Duration(milliseconds: 500),
                   height: 50,
                   decoration: BoxDecoration(
-                    borderRadius: accessGranted
-                      ? BorderRadius.circular(50)
-                      : BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(50),
                     color: Theme.of(context).accentColor
                   ),
                   child: accessGranted

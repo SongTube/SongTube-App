@@ -177,7 +177,7 @@ class _MainState extends State<Main> {
           darkTheme: config.systemThemeEnabled
                      ? darkTheme
                      : customTheme,
-          initialRoute: config.preferences.showIntroductionPages()
+          initialRoute: !config.preferences.showIntroductionPages()
             ? 'introScreen'
             : 'homeScreen',
           routes: {

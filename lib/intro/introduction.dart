@@ -108,8 +108,9 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
                       child: Text(
                         Languages.of(context).labelSkip,
                         style: TextStyle(
-                          fontFamily: 'YTSans',
-                          fontSize: 15,
+                          fontFamily: 'Product Sans',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
                           color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.7),
                         ),
                       ),
@@ -157,8 +158,9 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
                         child: Text(
                           Languages.of(context).labelNext,
                           style: TextStyle(
-                            fontFamily: 'YTSans',
-                            fontSize: 15,
+                            fontFamily: 'Product Sans',
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
                             color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.7),
                           ),
                         ),

@@ -46,8 +46,8 @@ class IntroReady extends StatelessWidget {
                         text: TextSpan(
                           style: TextStyle(
                             fontSize: 22,
-                            fontFamily: 'YTSans',
-                            fontWeight: FontWeight.w400,
+                            fontFamily: 'Product Sans',
+                            fontWeight: FontWeight.w600,
                             color: Theme.of(context).textTheme.bodyText1.color
                           ),
                           children: [
@@ -79,7 +79,8 @@ class IntroReady extends StatelessWidget {
                         text: TextSpan(
                           style: TextStyle(
                             fontSize: 18,
-                            fontFamily: 'YTSans',
+                            fontFamily: 'Product Sans',
+                            fontWeight: FontWeight.w600,
                             color: Theme.of(context).textTheme.bodyText1.color
                           ),
                           children: [
