@@ -23,6 +23,9 @@ class _AutoHideScaffoldState extends State<AutoHideScaffold> with TickerProvider
   AnimationController _hideAnimationController;
   bool navigationBarScrolledDown = false;
 
+  // Pixels Scrolled
+  double pixelsScrolled = 0;
+
   @override
   void initState() {
     _hideAnimationController = AnimationController(
@@ -58,16 +61,29 @@ class _AutoHideScaffoldState extends State<AutoHideScaffold> with TickerProvider
           body: child,
         );
       },
-      child: ScrollDetector(
-        onScrollDown: () {
-          _hideAnimationController.reverse();
-          navigationBarScrolledDown = true;
+      child: Listener(
+        onPointerUp: (_) {
+          pixelsScrolled = 0;
+          if (_hideAnimationController.value > 0.5) {
+            _hideAnimationController.animateTo(1);
+            navigationBarScrolledDown = false;
+          } else {
+            _hideAnimationController.animateTo(0);
+            navigationBarScrolledDown = true;
+          }
         },
-        onScrollUp: () {
-          _hideAnimationController.forward();
-          navigationBarScrolledDown = false;
-        },
-        child: widget.body
+        child: NotificationListener<ScrollUpdateNotification>(
+          onNotification: (ScrollUpdateNotification details) {
+            pixelsScrolled = (pixelsScrolled + details.scrollDelta.abs()).clamp(0, 100)/100;
+            if (details.scrollDelta > 0.0 && details.metrics.axis == Axis.vertical) {
+              _hideAnimationController.value -= pixelsScrolled;
+            } else {
+              _hideAnimationController.value += pixelsScrolled;
+            }
+            return false;
+          },
+          child: widget.body
+        ),
       ),
     );
   }

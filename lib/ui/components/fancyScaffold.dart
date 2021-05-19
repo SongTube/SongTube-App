@@ -106,6 +106,9 @@ class _FancyScaffoldState extends State<FancyScaffold> with TickerProviderStateM
   // Configuration
   bool navigationBarScrolledDown = false;
 
+  // Pixels Scrolled
+  double pixelsScrolled = 0;
+
   @override
   void initState() {
     super.initState();
@@ -133,7 +136,9 @@ class _FancyScaffoldState extends State<FancyScaffold> with TickerProviderStateM
         widget.floatingWidgetConfig.onClosed();
 
       // Adjust navigation bar animation controller based on floating widget
-      updateNavigationBarControllerBasedOnFloatingWidget(_floatingWidgetAnimationController.value);
+      if (!navigationBarScrolledDown)
+        _navigationBarAnimationController.value =
+          ((1 - _floatingWidgetAnimationController.value));
 
     });
 
@@ -144,12 +149,6 @@ class _FancyScaffoldState extends State<FancyScaffold> with TickerProviderStateM
       if(!_scrollingEnabled)
         _floatingWidgetScrollController.jumpTo(0);
     });
-  }
-
-  void updateNavigationBarControllerBasedOnFloatingWidget(double position) {
-    if (!navigationBarScrolledDown) {
-      _navigationBarAnimationController.animateTo((1 - position));
-    }
   }
 
   @override
@@ -187,6 +186,8 @@ class _FancyScaffoldState extends State<FancyScaffold> with TickerProviderStateM
                         body: child,
                         bottomNavigationBar: widget.bottomNavigationBar != null ? Container(
                           width: double.infinity,
+                          color: Colors.transparent,
+                          padding: EdgeInsets.only(top: 16 * (1 - _navigationBarAnimationController.value)),
                           height: (kBottomNavigationBarHeight) *
                             _navigationBarAnimationController.value,
                           child: SingleChildScrollView(
@@ -223,16 +224,29 @@ class _FancyScaffoldState extends State<FancyScaffold> with TickerProviderStateM
               ],
             );
           },
-          child: ScrollDetector(
-            onScrollDown: () {
-              _navigationBarAnimationController.reverse();
-              navigationBarScrolledDown = true;
+          child: Listener(
+            onPointerUp: (_) {
+              pixelsScrolled = 0;
+              if (_navigationBarAnimationController.value > 0.5) {
+                _navigationBarAnimationController.animateTo(1);
+                navigationBarScrolledDown = false;
+              } else {
+                _navigationBarAnimationController.animateTo(0);
+                navigationBarScrolledDown = true;
+              }
             },
-            onScrollUp: () {
-              _navigationBarAnimationController.forward();
-              navigationBarScrolledDown = false;
-            },
-            child: mainChild
+            child: NotificationListener<ScrollUpdateNotification>(
+              onNotification: (ScrollUpdateNotification details) {
+                pixelsScrolled = (pixelsScrolled + details.scrollDelta.abs()).clamp(0, 100)/100;
+                if (details.scrollDelta > 0.0 && details.metrics.axis == Axis.vertical) {
+                  _navigationBarAnimationController.value -= pixelsScrolled;
+                } else {
+                  _navigationBarAnimationController.value += pixelsScrolled;
+                }
+                return false;
+              },
+              child: mainChild,
+            ),
           ),
         );
       },
