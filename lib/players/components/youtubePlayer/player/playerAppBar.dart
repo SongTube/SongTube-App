@@ -1,10 +1,8 @@
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:newpipeextractor_dart/models/streams/videoOnlyStream.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/provider/preferencesProvider.dart';
-import 'package:songtube/ui/internal/popupMenu.dart';
 
 class PlayerAppBar extends StatelessWidget {
   final List<dynamic> streams;

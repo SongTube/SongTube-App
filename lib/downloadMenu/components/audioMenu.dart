@@ -2,7 +2,6 @@
 import 'dart:io';
 import 'dart:ui';
 
-import 'package:animations/animations.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
@@ -916,7 +915,6 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
   }
 
   Widget _segmentsDownload() {
-    ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
     return Column(
       children: [
         InkWell(

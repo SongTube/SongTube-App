@@ -1,15 +1,11 @@
 // Flutter
 import 'dart:async';
-import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:songtube/internal/languages.dart';
-import 'package:songtube/internal/nativeMethods.dart';
-import 'package:songtube/internal/randomString.dart';
 
 // Internal
 import 'package:songtube/intro/introduction.dart';

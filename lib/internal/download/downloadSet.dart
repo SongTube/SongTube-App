@@ -3,23 +3,14 @@ import 'dart:async';
 import 'dart:io';
 
 // Flutter
-import 'package:device_info/device_info.dart';
 import 'package:file_operations/file_operations.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
-import 'package:flutter_ffmpeg/log.dart';
-import 'package:flutter_ffmpeg/statistics.dart';
 import 'package:newpipeextractor_dart/extractors/videos.dart';
-import 'package:newpipeextractor_dart/models/infoItems/video.dart';
-import 'package:newpipeextractor_dart/models/streams/audioOnlyStream.dart';
-import 'package:newpipeextractor_dart/models/streams/videoOnlyStream.dart';
 import 'package:newpipeextractor_dart/models/video.dart';
 import 'package:newpipeextractor_dart/utils/httpClient.dart';
 import 'package:newpipeextractor_dart/utils/url.dart';
-import 'package:path/path.dart';
 import 'package:songtube/internal/languages.dart';
-import 'package:songtube/internal/download/audioFilters.dart';
 
 // Internal
 import 'package:songtube/internal/database/databaseService.dart';

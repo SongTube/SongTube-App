@@ -1,18 +1,14 @@
-import 'dart:developer';
 import 'dart:io';
-
 import 'package:apk_installer/apk_installer.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:dio/dio.dart';
 import 'package:ext_storage/ext_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:newpipeextractor_dart/utils/httpClient.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/models/updateDetails.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:http/http.dart' as http;
 
 class AppUpdateSheet extends StatelessWidget {
   final UpdateDetails details;

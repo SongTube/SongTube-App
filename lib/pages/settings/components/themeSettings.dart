@@ -1,6 +1,5 @@
 // Flutter
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:songtube/internal/languages.dart';
 
 // Internal

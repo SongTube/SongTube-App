@@ -2,12 +2,7 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:newpipeextractor_dart/models/infoItems/video.dart';
-import 'package:provider/provider.dart';
 import 'package:songtube/internal/languages.dart';
-import 'package:songtube/provider/configurationProvider.dart';
-import 'package:songtube/provider/downloadsProvider.dart';
-import 'package:songtube/provider/managerProvider.dart';
-import 'package:songtube/ui/internal/snackbar.dart';
 
 class DownloadMenuHome extends StatelessWidget {
   final Function onBack;

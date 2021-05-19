@@ -1,11 +1,9 @@
-import 'dart:developer' as log;
 import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
-import 'package:songtube/ui/internal/scrollDetector.dart';
 
 enum FloatingWidgetState{
   OPEN,

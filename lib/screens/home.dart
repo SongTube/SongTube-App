@@ -19,7 +19,6 @@ import 'package:songtube/screens/homeScreen/pages/favorites.dart';
 import 'package:songtube/screens/homeScreen/pages/trending.dart';
 import 'package:songtube/screens/homeScreen/pages/watchLater.dart';
 import 'package:songtube/ui/components/autoHideScaffold.dart';
-import 'package:songtube/ui/components/fancyScaffold.dart';
 import 'package:songtube/ui/components/searchHistory.dart';
 import 'package:songtube/ui/dialogs/loadingDialog.dart';
 import 'package:songtube/ui/layout/streamsLargeThumbnail.dart';

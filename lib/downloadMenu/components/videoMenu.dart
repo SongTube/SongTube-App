@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 // Packages
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:grouped_list/grouped_list.dart';
-import 'package:newpipeextractor_dart/models/infoItems/video.dart';
 import 'package:newpipeextractor_dart/models/streams/audioOnlyStream.dart';
 import 'package:newpipeextractor_dart/models/streams/videoOnlyStream.dart';
 import 'package:newpipeextractor_dart/models/video.dart';

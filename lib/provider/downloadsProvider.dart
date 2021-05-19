@@ -1,17 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:newpipeextractor_dart/models/infoItems/video.dart';
-import 'package:newpipeextractor_dart/models/streams/audioOnlyStream.dart';
-import 'package:newpipeextractor_dart/models/streams/videoOnlyStream.dart';
-import 'package:newpipeextractor_dart/models/video.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:songtube/internal/ffmpeg/converter.dart';
 import 'package:songtube/internal/languages.dart';
-import 'package:songtube/internal/download/audioFilters.dart';
 import 'package:songtube/internal/download/downloadItem.dart';
 import 'package:songtube/internal/download/downloadSet.dart';
-import 'package:songtube/internal/download/tags.dart';
 import 'package:songtube/internal/randomString.dart';
-import 'package:songtube/provider/configurationProvider.dart';
 
 class DownloadsProvider extends ChangeNotifier {
 

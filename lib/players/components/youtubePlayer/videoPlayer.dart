@@ -10,9 +10,7 @@ import 'package:flutter_screen/flutter_screen.dart';
 import 'package:songtube/players/components/youtubePlayer/player/playPauseButton.dart';
 import 'package:songtube/players/components/youtubePlayer/player/playerAppBar.dart';
 import 'package:songtube/players/components/youtubePlayer/player/playerProgressBar.dart';
-import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/provider/preferencesProvider.dart';
-import 'package:songtube/provider/videoPageProvider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:volume/volume.dart';
 
