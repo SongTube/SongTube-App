@@ -11,6 +11,7 @@ import 'package:newpipeextractor_dart/utils/httpClient.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/download/downloadItem.dart';
 import 'package:songtube/internal/languages.dart';
+import 'package:songtube/internal/models/streamSegmentTrack.dart';
 import 'package:songtube/internal/models/tagsControllers.dart';
 import 'package:songtube/provider/configurationProvider.dart';
 
@@ -112,7 +113,8 @@ class _VideoDownloadMenuState extends State<VideoDownloadMenu> {
                   var configList = [
                     "Video",
                     element,
-                    "1.0", "0", "0", false
+                    "1.0", "0", "0",
+                    false, <StreamSegmentTrack>[]
                   ];
                   TagsControllers tags = TagsControllers();
                   tags.updateTextControllers(widget.video);
