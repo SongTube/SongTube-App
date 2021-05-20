@@ -3,14 +3,10 @@ import 'dart:io';
 import 'package:animations/animations.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_audio_query/flutter_audio_query.dart';
 import 'package:image_fade/image_fade.dart';
-import 'package:path/path.dart';
 import 'package:songtube/internal/ffmpeg/extractor.dart';
-import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/models/mediaItemSorts.dart';
 import 'package:songtube/screens/musicScreen/components/songsList.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class MusicScreenAlbumsTab extends StatefulWidget {
   final List<MediaItem> songs;
