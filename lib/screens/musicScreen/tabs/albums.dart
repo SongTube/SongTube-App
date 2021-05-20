@@ -81,95 +81,16 @@ class _MusicScreenAlbumsTabState extends State<MusicScreenAlbumsTab> {
   Widget _albumView(BuildContext context) {
     return Column(
       children: [
-        Padding(
-          padding: EdgeInsets.all(12),
-          child: Row(
-            children: [
-              Container(
-                height: 100,
-                width: 100,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 8,
-                      offset: Offset(0, 4)
-                    )
-                  ]
-                ),
-                child: _highResArtwork(currentAlbum)
-              ),
-              SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(left: 8, right: 8),
-                      child: Text(
-                        currentAlbum.albumTitle,
-                        maxLines: 1,
-                        overflow: TextOverflow.fade,
-                        softWrap: false,
-                        style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyText1.color,
-                          fontFamily: 'Product Sans',
-                          fontWeight: FontWeight.w600,
-                          fontSize: 20
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(left: 8, right: 8),
-                      child: Text(
-                        currentAlbum.albumAuthor,
-                        maxLines: 1,
-                        style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyText1.color
-                            .withOpacity(0.7),
-                          fontFamily: 'Product Sans',
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 4),
-                    Container(
-                      margin: EdgeInsets.only(left: 8, right: 8),
-                      padding: EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).accentColor,
-                        borderRadius: BorderRadius.circular(50),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Theme.of(context).accentColor
-                              .withOpacity(0.4),
-                            blurRadius: 8,
-                            offset: Offset(0, 4)
-                          )
-                        ]
-                      ),
-                      child: Text(
-                        "${currentAlbum.mediaItems.length} Songs",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 10,
-                          fontFamily: 'Product Sans',
-                          fontWeight: FontWeight.w700
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              IconButton(
-                icon: Icon(Icons.clear,
-                  color: Theme.of(context).iconTheme.color),
-                onPressed: () => setState(() => currentAlbum = null),
-              )
-            ],
-          ),
+        Row(
+          children: [
+            Expanded(child: _albumTile(context, currentAlbum, true)),
+            IconButton(
+              icon: Icon(Icons.clear,
+                color: Theme.of(context).iconTheme.color),
+              onPressed: () => setState(() => currentAlbum = null),
+            ),
+            SizedBox(width: 12)
+          ],
         ),
         Divider(
           height: 1,
@@ -188,82 +109,114 @@ class _MusicScreenAlbumsTabState extends State<MusicScreenAlbumsTab> {
     );
   }
 
+  Widget _albumTile(BuildContext context, MediaItemAlbum album, bool shinySongsCount) {
+    return Padding(
+      padding: EdgeInsets.all(12),
+      child: Row(
+        children: [
+          Container(
+            height: 100,
+            width: 100,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  blurRadius: 8,
+                  offset: Offset(0, 4)
+                )
+              ]
+            ),
+            child: _highResArtwork(album)
+          ),
+          SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  margin: EdgeInsets.only(left: 8, right: 8),
+                  child: Text(
+                    album.albumTitle,
+                    maxLines: 1,
+                    overflow: TextOverflow.fade,
+                    softWrap: false,
+                    style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyText1.color,
+                      fontFamily: 'Product Sans',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 20
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(left: 8, right: 8),
+                  child: Text(
+                    album.albumAuthor,
+                    maxLines: 1,
+                    style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyText1.color
+                        .withOpacity(0.7),
+                      fontFamily: 'Product Sans',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16
+                    ),
+                  ),
+                ),
+                SizedBox(height: 4),
+                Container(
+                  margin: EdgeInsets.only(left: 8, right: 8),
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    color: shinySongsCount
+                      ? Theme.of(context).accentColor
+                      : Theme.of(context).cardColor,
+                    borderRadius: BorderRadius.circular(50),
+                    boxShadow: [
+                      BoxShadow(
+                        color: shinySongsCount 
+                          ? Theme.of(context).accentColor
+                              .withOpacity(0.4)
+                          : Colors.black.withOpacity(0.05),
+                        blurRadius: 8,
+                        offset: Offset(0, 4)
+                      )
+                    ]
+                  ),
+                  child: Text(
+                    "${album.mediaItems.length} Songs",
+                    style: TextStyle(
+                      color: shinySongsCount
+                        ? Colors.white
+                        : Theme.of(context).textTheme.bodyText1.color,
+                      fontSize: 10,
+                      fontFamily: 'Product Sans',
+                      fontWeight: FontWeight.w700
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _gridView() {
     List<MediaItemAlbum> albums = [];
     for (int i = 0; i < _albums.length; i++) {
       if (widget.searchQuery == "" || getSearchQueryMatch(_albums[i]))
         albums.add(_albums[i]);
     }
-    return GridView.builder(
+    return ListView.builder(
       key: albumsGridKey,
       itemCount: albums.length,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2
-      ),
-      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       itemBuilder: (context, index) {
         MediaItemAlbum album = albums[index];
-        return Padding(
-          padding: index.isEven
-            ? EdgeInsets.only(bottom: 12, right: 6)
-            : EdgeInsets.only(bottom: 12, left: 6),
-          child: GestureDetector(
-            onTap: () => setState(() => currentAlbum = album),
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                _highResArtwork(album),
-                Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Colors.transparent,
-                        Colors.black.withOpacity(0.8)
-                      ],
-                      begin: const Alignment(0.0, -0.05),
-                      end: const Alignment(0.0, 1),
-                      tileMode: TileMode.clamp
-                    ),
-                    borderRadius: BorderRadius.circular(15)
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(left: 8, right: 8),
-                        child: Text(
-                          album.albumTitle,
-                          maxLines: 1,
-                          overflow: TextOverflow.fade,
-                          softWrap: false,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'Product Sans',
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(left: 8, right: 8),
-                        child: Text(
-                          album.albumAuthor,
-                          maxLines: 1,
-                          style: TextStyle(
-                            color: Colors.white.withOpacity(0.8),
-                            fontFamily: 'Product Sans',
-                            fontWeight: FontWeight.w600,
-                            fontSize: 12
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 8)
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ),
+        return GestureDetector(
+          onTap: () => setState(() => currentAlbum = album),
+          child: _albumTile(context, album, false)
         );
       }
     );
