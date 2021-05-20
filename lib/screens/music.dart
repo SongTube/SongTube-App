@@ -181,7 +181,7 @@ class _MediaScreenState extends State<MediaScreen> {
                 child: TabBarView(
                   children: [
                     MusicScreenSongsTab(songs: songs, searchQuery: searchQuery),
-                    MusicScreenAlbumsTab(),
+                    MusicScreenAlbumsTab(songs: songs, searchQuery: searchQuery),
                     MusicScreenArtistTab(),
                     MusicScreenGenreTab()
                   ],
