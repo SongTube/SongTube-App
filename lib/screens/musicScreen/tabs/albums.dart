@@ -102,7 +102,7 @@ class _MusicScreenAlbumsTabState extends State<MusicScreenAlbumsTab> {
         Expanded(
           child: SongsListView(
             songs: currentAlbum.mediaItems,
-            searchQuery: widget.searchQuery
+            searchQuery: ""
           ),
         )
       ],
