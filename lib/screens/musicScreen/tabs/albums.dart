@@ -4,6 +4,7 @@ import 'package:animations/animations.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_audio_query/flutter_audio_query.dart';
+import 'package:image_fade/image_fade.dart';
 import 'package:path/path.dart';
 import 'package:songtube/internal/ffmpeg/extractor.dart';
 import 'package:songtube/internal/languages.dart';
@@ -231,9 +232,9 @@ class _MusicScreenAlbumsTabState extends State<MusicScreenAlbumsTab> {
       builder: (context, snapshot) {
         return ClipRRect(
           borderRadius: BorderRadius.circular(15),
-          child: FadeInImage(
-            fadeInDuration: Duration(milliseconds: 300),
-            placeholder: MemoryImage(kTransparentImage),
+          child: ImageFade(
+            fadeDuration: Duration(milliseconds: 300),
+            placeholder: Image.file(File(album.mediaItems[0].extras['artwork'])),
             image: FileImage(File(
               snapshot.hasData
                 ? snapshot.data.path
