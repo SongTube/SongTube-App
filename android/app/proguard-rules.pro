@@ -11,6 +11,7 @@
 -dontwarn android.arch.persistence.room.paging.LimitOffsetDataSource
 -keep class com.artxdev.** { *; }
 -keep class androidx.lifecycle.** { *; }
+-keep class org.jaudiotagger.** { *; }
 
 -dontobfuscate
 
