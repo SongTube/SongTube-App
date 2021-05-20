@@ -182,8 +182,8 @@ class _MediaScreenState extends State<MediaScreen> {
                   children: [
                     MusicScreenSongsTab(songs: songs, searchQuery: searchQuery),
                     MusicScreenAlbumsTab(songs: songs, searchQuery: searchQuery),
-                    MusicScreenArtistTab(),
-                    MusicScreenGenreTab()
+                    MusicScreenArtistTab(songs: songs, searchQuery: searchQuery),
+                    MusicScreenGenreTab(songs: songs, searchQuery: searchQuery),
                   ],
                 )
               ),
