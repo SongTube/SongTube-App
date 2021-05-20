@@ -256,4 +256,18 @@ class FFmpegExtractor {
     return "${json.getMediaProperties()["tags"]["track"]}";
   }
 
+  /// Get Audio Genre
+  static Future<String> getAudioGenre(String audioPath) async {
+    var json = await FlutterFFprobe().getMediaInformation(audioPath);
+    var mediaProperties = json.getMediaProperties();
+    if (
+      mediaProperties != null &&
+      mediaProperties.containsKey("tags") &&
+      mediaProperties["tags"].containsKey("genre"))
+    {
+      return "${mediaProperties["tags"]["genre"]}";
+    }
+    return null;
+  }
+
 }

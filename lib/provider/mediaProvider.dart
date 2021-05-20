@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:songtube/internal/database/databaseService.dart';
+import 'package:songtube/internal/ffmpeg/converter.dart';
 import 'package:songtube/internal/ffmpeg/extractor.dart';
 import 'package:songtube/internal/lyricsProviders.dart';
 
@@ -227,6 +228,7 @@ class MediaProvider extends ChangeNotifier {
         audioFile: song.filePath,
         audioId: song.id
       );
+      String genre = await FFmpegExtractor.getAudioGenre(song.filePath);
       // Avoid this Method from stopping this function on
       // exception (Most probably because a corrupted audio)
       try {
@@ -236,6 +238,7 @@ class MediaProvider extends ChangeNotifier {
             album:    song.album,
             title:    song.title,
             artist:   song.artist,
+            genre:    genre ?? "unknown",
             duration: Duration(milliseconds: int.parse(song.duration)),
             artUri:   "file://${artworkFile.path}",
             extras:   {
