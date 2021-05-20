@@ -107,8 +107,9 @@ class _MusicScreenAlbumsTabState extends State<MusicScreenAlbumsTab> {
   }
 
   Widget _albumTile(BuildContext context, MediaItemAlbum album, bool shinySongsCount) {
-    return Padding(
+    return Container(
       padding: EdgeInsets.all(12),
+      color: Colors.transparent,
       child: Row(
         children: [
           Container(
