@@ -29,7 +29,7 @@ class FFmpegExtractor {
     bool forceExtraction = false
   }) async {
     assert(audioFile != "" || audioFile != null);
-    String artworkDir = (await getApplicationDocumentsDirectory()).path + "/Artworks/";
+    String artworkDir = (await getExternalStorageDirectory()).path + "/Artworks/";
     if (!await Directory(artworkDir).exists())
       await Directory(artworkDir).create();
     File artwork = File("$artworkDir${audioFile.split("/").last.replaceAll("/", "_")}.jpg");
