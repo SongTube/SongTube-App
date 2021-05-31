@@ -45,6 +45,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
   double playerHeight = 0;
 
   // Pip Status
+  bool enablePip = true;
   bool isInPictureInPictureMode = false;
 
   // BottomSheet controller
@@ -114,9 +115,11 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
         setState(() => isInPictureInPictureMode = pipMode);
       },
       onSuspending: () {
-        if (pageProvider?.playerKey?.currentState?.isPlaying ?? false) {
+        if (
+          (pageProvider?.playerKey?.currentState?.isPlaying ?? false) &&
+          pageProvider.fwController.isPanelOpen
+        ) {
           if (prefs.autoPipMode) {
-            pageProvider.fwController.open();
             setState(() => isInPictureInPictureMode = true);
             FlutterPip.enterPictureInPictureMode();
           } else {
