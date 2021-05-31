@@ -747,7 +747,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                         children: [
                           Icon(
                             normalizeAudio
-                              ? Icons.check_box_outlined
+                              ? Icons.check_box
                               : Icons.check_box_outline_blank,
                             color: normalizeAudio
                               ? Theme.of(context).accentColor
@@ -846,7 +846,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
             children: [
               Icon(
                 enableConversion
-                  ? Icons.check_box_outlined
+                  ? Icons.check_box
                   : Icons.check_box_outline_blank,
                 color: enableConversion
                   ? Theme.of(context).accentColor
@@ -965,7 +965,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                     SizedBox(width: 12),
                     Icon(
                       segmentedDownload
-                        ? Icons.check_box_outlined
+                        ? Icons.check_box
                         : Icons.check_box_outline_blank,
                       color: segmentedDownload
                         ? Theme.of(context).accentColor
