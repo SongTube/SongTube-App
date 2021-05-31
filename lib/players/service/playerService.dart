@@ -107,7 +107,8 @@ class SongTubePlayerService extends BackgroundAudioTask {
             _player.setVolume(1);
             break;
           case AudioInterruptionType.pause:
-            onPlay();
+            // This causes some issues, better not resume music
+            // onPlay();
             break;
           case AudioInterruptionType.unknown:
             // The interruption ended but we should not resume.
