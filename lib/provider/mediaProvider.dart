@@ -349,7 +349,7 @@ class MediaProvider extends ChangeNotifier {
         "/${RandomString.getRandomString(5)}"
       );
       try {
-        response = await http.get(tags.artworkController)
+        response = await http.get(Uri.parse(tags.artworkController))
           .timeout(Duration(seconds: 120));
         await artwork.writeAsBytes(response.bodyBytes);
       } catch (_) {}

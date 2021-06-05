@@ -37,7 +37,7 @@ class AvatarHandler {
     // Create our avatar image file
     http.Client client = http.Client();
     try {
-      var response = await client.get(imageUrl);
+      var response = await client.get(Uri.parse(imageUrl));
       if (response.statusCode != 200) return null;
       await avatarImage.writeAsBytes(response.bodyBytes);
       client.close();

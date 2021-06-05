@@ -9,7 +9,7 @@ Future<UpdateDetails> getLatestRelease() async {
       "Accept": "application/vnd.github.v3+json"
     };
     var response = await client
-      .get("https://api.github.com/repos/SongTube/SongTube-App/releases",
+      .get(Uri.parse("https://api.github.com/repos/SongTube/SongTube-App/releases"),
         headers: headers);
     var jsonResponse = jsonDecode(response.body);
     UpdateDetails details = UpdateDetails(

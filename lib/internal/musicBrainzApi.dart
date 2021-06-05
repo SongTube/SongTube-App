@@ -18,18 +18,18 @@ class MusicBrainzAPI {
 
   static Future<dynamic> getFirstRecord(String title) async {
     http.Client client = new http.Client();
-    var response = await client.get(
+    var response = await client.get(Uri.parse(
       "http://musicbrainz.org/ws/2/recording?query="
       "${title.trim()}&dismax=true"
-      "&fmt=json"
+      "&fmt=json")
     );
     await Future.delayed(Duration(milliseconds: 1));
     var parsedJson = jsonDecode(utf8.decode(response.bodyBytes))["recordings"][0];
-    response = await client.get(
+    response = await client.get(Uri.parse(
       "http://musicbrainz.org/ws/2/recording/"
       "${parsedJson['id']}?inc=aliases+"
       "artist-credits+releases+genres+tags+media"
-      "&fmt=json"
+      "&fmt=json")
     );
     await Future.delayed(Duration(milliseconds: 1));
     client.close();
@@ -39,10 +39,10 @@ class MusicBrainzAPI {
 
   static Future<List<dynamic>> getRecordings(String title) async {
     http.Client client = new http.Client();
-    var response = await client.get(
+    var response = await client.get(Uri.parse(
       "http://musicbrainz.org/ws/2/recording?query="
       "${title.trim()}&dismax=true"
-      "&fmt=json",
+      "&fmt=json"),
       headers: headers,
     );
     client.close();
@@ -121,8 +121,8 @@ class MusicBrainzAPI {
   static Future<String> getArtwork(mbid, 
   {ArtworkQuality quality = ArtworkQuality.Large}) async {
     http.Client client = new http.Client();
-    var response = await client.get(
-      "http://coverartarchive.org/release/$mbid"
+    var response = await client.get(Uri.parse(
+      "http://coverartarchive.org/release/$mbid")
     );
     client.close();
     if (response.body.contains("Not Found")) {
@@ -135,8 +135,8 @@ class MusicBrainzAPI {
 
   static Future<String> getThumbnail(mbid) async {
     http.Client client = new http.Client();
-    var response = await client.get(
-      "http://coverartarchive.org/release/$mbid"
+    var response = await client.get(Uri.parse(
+      "http://coverartarchive.org/release/$mbid")
     );
     client.close();
     if (response.body.contains("Not Found")) {
@@ -150,8 +150,8 @@ class MusicBrainzAPI {
   static Future<Map<String, String>> getThumbnails(mbid) async {
     http.Client client = new http.Client();
     Map<String, String> thumbnails = Map<String, String>();
-    var response = await client.get(
-      "http://coverartarchive.org/release/$mbid"
+    var response = await client.get(Uri.parse(
+      "http://coverartarchive.org/release/$mbid")
     );
     client.close();
     if (response.body.contains("Not Found")) {

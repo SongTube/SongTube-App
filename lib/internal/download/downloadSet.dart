@@ -438,7 +438,7 @@ class DownloadSet {
             "/${RandomString.getRandomString(5)}"
           );
           try {
-            response = await http.get(tags.coverurl)
+            response = await http.get(Uri.parse(tags.coverurl))
               .timeout(Duration(seconds: 120));
             await artwork.writeAsBytes(response.bodyBytes);
             var decodedImage = await decodeImageFromList(artwork.readAsBytesSync());
@@ -449,7 +449,7 @@ class DownloadSet {
           if (response == null || response.bodyBytes == null) {
             try {
               String id = await YoutubeId.getIdFromStreamUrl(downloadItem.url);
-              response = await http.get("https://img.youtube.com/vi/$id/mqdefault.jpg")
+              response = await http.get(Uri.parse("https://img.youtube.com/vi/$id/mqdefault.jpg"))
                 .timeout(Duration(seconds: 30));
               await artwork.writeAsBytes(response.bodyBytes);
               downloadItem.tags.coverurl = "https://img.youtube.com/vi/$id/mqdefault.jpg";
