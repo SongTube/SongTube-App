@@ -49,7 +49,7 @@ class ExpandedPlayer extends StatelessWidget {
           : Theme.of(context).accentColor;
         return PlayerBackground(
           backgroundImage: File(AudioService.currentMediaItem
-            .artUri.replaceAll("file://", "")),
+            .artUri.toString().replaceAll("file://", "")),
           enableBlur: prefs.enablePlayerBlurBackground,
           blurIntensity: 50,
           backdropColor: prefs.enablePlayerBlurBackground
