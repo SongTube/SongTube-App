@@ -59,9 +59,10 @@ class _LibState extends State<Lib> {
   void initState() {
     super.initState();
     _screenIndex = 0;
+    var keyboardVisibilityController = KeyboardVisibilityController();
     _internalScaffoldKey = GlobalKey<ScaffoldState>();
     WidgetsBinding.instance.renderView.automaticSystemUiAdjustment=false;
-    KeyboardVisibility.onChange.listen((bool visible) {
+    keyboardVisibilityController.onChange.listen((bool visible) {
         if (visible == false) FocusScope.of(context).unfocus();
       }
     );
