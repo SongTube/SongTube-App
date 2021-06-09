@@ -13,8 +13,8 @@ class LanguageEs extends Languages {
   String get labelNext => "Siguiente";
   @override
   String get labelExternalAccessJustification =>
-    "Necesita acceder a tu memoria External para guardar " +
-    "tus Videos y Musica";
+    "Necesita acceder a tu memoria Externa para guardar " +
+    "tus Videos y Música";
   @override
   String get labelAppCustomization => "Personalización";
   @override
@@ -22,7 +22,7 @@ class LanguageEs extends Languages {
   @override
   String get labelConfigReady => "Configuración Lista";
   @override
-  String get labelIntroductionIsOver => "La Introduccion ha terminado";
+  String get labelIntroductionIsOver => "La Introducción ha terminado";
   @override
   String get labelEnjoy => "Disfruta";
   @override 
@@ -94,7 +94,7 @@ class LanguageEs extends Languages {
   @override
   String get labelSavingFile => "Guardando Archivo...";
   @override
-  String get labelAndroid11FixNeeded => "Se necesita el Parche para Android 11, revisa Configuración";
+  String get labelAndroid11FixNeeded => "Se necesita el Parche para Android 11, revisa la Configuración";
   @override
   String get labelErrorSavingDownload => "No se pudo guardar tu Descarga, revisa los Permisos";
   @override
@@ -106,17 +106,17 @@ class LanguageEs extends Languages {
   @override
   String get labelAudioNoDataRecieved => "No se pudo extraer el Stream de Audio";
   @override
-  String get labelDownloadStarting => "Descarga Comenzando...";
+  String get labelDownloadStarting => "Comenzando Descarga...";
   @override
   String get labelDownloadCancelled => "Descarga Cancelada";
   @override
-  String get labelAnIssueOcurredConvertingAudio => "El convertidor falló";
+  String get labelAnIssueOcurredConvertingAudio => "Conversión fallida";
   @override
   String get labelPatchingAudio => "Parcheando el Audio...";
 
   // Download Menu
   @override
-  String get labelEnableAudioConversion => "Activar conversion de audio";
+  String get labelEnableAudioConversion => "Activar conversión de audio";
   @override
   String get labelGainControls => "Controles de Ganancia";
   @override
@@ -130,11 +130,11 @@ class LanguageEs extends Languages {
   @override
   String get labelSelectAudio => "Selecciona un Audio";
   @override
-  String get labelGlobalParameters => "Parametros globales";
+  String get labelGlobalParameters => "Parámetros globales";
 
   // Media Screen
   @override
-  String get labelMusic => "Musica";
+  String get labelMusic => "Música";
   @override
   String get labelVideos => "Videos";
   @override
@@ -221,7 +221,7 @@ class LanguageEs extends Languages {
   @override
   String get labelRestoreJustification => "Restaura tu colección de Descargas";
   @override
-  String get labelBackupLibraryEmpty => "Tu libraría esta vacía";
+  String get labelBackupLibraryEmpty => "Tu librería esta vacía";
   @override
   String get labelBackupCompleted => "Respaldo completado";
   @override
@@ -265,11 +265,11 @@ class LanguageEs extends Languages {
   @override
   String get labelExpandArtwork => "Expandir Caratula";
   @override
-  String get labelArtworkRoundedCorners => "Bordes redondeados de Caratula";
+  String get labelArtworkRoundedCorners => "Carátula con bordes redondeados";
   @override
   String get labelPlayingFrom => "Reproduciendo desde";
   @override
-  String get labelBlurBackground => "Fondo Blur";
+  String get labelBlurBackground => "Fondo desenfocado";
 
   // Video Page
   @override
@@ -297,16 +297,16 @@ class LanguageEs extends Languages {
 
   // Telegram Join Channel Dialog
   @override
-  String get labelJoinTelegramChannel => "¡Uneté al canal de Telegram!";
+  String get labelJoinTelegramChannel => "¡Unete al canal de Telegram!";
   @override
   String get labelJoinTelegramJustification =>
-    "¿Te gusta SongTube? Entra a nuestro canal! Vas a encontrar " +
+    "¿Te gusta SongTube? ¡Entra a nuestro canal! Vas a encontrar " +
     "Actualizaciones, Información, Desarrollo, link del Group " +
-    "y las redes sociales." +
+    "redes sociales." +
     "\n\n" +
-    "En caso de que tengas un problema o una gran recomendacion que hacer, " +
-    "eres bienvenido de entrar al grupo desde el canal y hacermelo saber! "+ 
-    "Pero ten en cuenta, solo esta permitido hablar en ingles, gracias!";
+    "En caso de que tengas un problema o una gran recomendación que hacer, " +
+    "¡eres bienvenido de entrar al grupo desde el canal y hacermelo saber! "+ 
+    "Pero ten en cuenta que solo esta permitido hablar en inglés, ¡gracias!";
   @override
   String get labelRemindLater => "Recordar mas tarde";
 
@@ -356,7 +356,7 @@ class LanguageEs extends Languages {
   @override
   String get labelNo => "No";
   @override
-  String get labelLibrary => "Libraria";
+  String get labelLibrary => "Librería";
   @override
   String get labelCreate => "Crear";
   @override
