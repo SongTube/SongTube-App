@@ -8,9 +8,9 @@ class LyricsProviders {
     Client client = Client();
     var response;
     try {
-      response = await client.get(
+      response = await client.get(Uri.parse(
         "https://api.lyrics.ovh/v1/"
-        "$author/$title"
+        "$author/$title")
       ).timeout(Duration(seconds: 5));
     } catch (_) {
       return "";
@@ -23,9 +23,9 @@ class LyricsProviders {
 
   static Future<String> lyricsHappiDev({String title}) async {
     Client client = Client();
-    var response = await client.get(
+    var response = await client.get(Uri.parse(
       "https://api.happi.dev/v1/music?q=$title"
-      "&limit=1&apikey=$happiDevKey&type=track"
+      "&limit=1&apikey=$happiDevKey&type=track")
     );
     var responseJson = jsonDecode(response.body);
     if (responseJson["success"] == true) {

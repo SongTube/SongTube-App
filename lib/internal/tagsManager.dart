@@ -68,7 +68,7 @@ class TagsManager {
     if (fromUrl == true) {
       directory    = await getExternalStorageDirectory();
       artworkFile  = new File(directory.path + "/" + _randomString());
-      response     = await http.get(artwork);
+      response     = await http.get(Uri.parse(artwork));
       artwork      = artworkFile.path;
       if (response.statusCode != 200) {
         throw Exception("Error downloading artwork, check your Url or internet connection");
@@ -98,7 +98,7 @@ class TagsManager {
       new File((await getApplicationDocumentsDirectory()).path +
         "/${RandomString.getRandomString(5)}.jpg");
     var response; try {
-      response = await http.get(url);
+      response = await http.get(Uri.parse(url));
     } catch (_) {return null;}
     await artwork.writeAsBytes(response.bodyBytes);
     File croppedImage = await NativeMethod.cropToSquare(artwork);

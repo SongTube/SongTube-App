@@ -40,8 +40,8 @@ class _SearchHistoryListState extends State<SearchHistoryList> {
     List<String> suggestionsList = [];
     List<String> finalList = [];
     return FutureBuilder(
-      future: widget.searchQuery != "" ? client.get(
-        'http://suggestqueries.google.com/complete/search?client=firefox&q=${widget.searchQuery}',
+      future: widget.searchQuery != "" ? client.get(Uri.parse(
+        'http://suggestqueries.google.com/complete/search?client=firefox&q=${widget.searchQuery}'),
         headers: {
           'user-agent':
             'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'

@@ -67,6 +67,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
   @override
   void initState() {
     super.initState();
+    var keyboardVisibilityController = KeyboardVisibilityController();
     scaffoldKey = GlobalKey<ScaffoldState>();
     scrollController = ScrollController();
     scrollController.addListener(() {
@@ -75,7 +76,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
     });
     animationController = AnimationController(
       vsync: this, value: 1, duration: Duration(milliseconds: 250));
-    KeyboardVisibility.onChange.listen((bool visible) {
+    keyboardVisibilityController.onChange.listen((bool visible) {
       if (mounted) {
         if (visible == false) FocusScope.of(context).requestFocus(new FocusNode());
       }

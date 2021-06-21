@@ -112,7 +112,7 @@ class MediaProvider extends ChangeNotifier {
           title: element.title,
           album: element.album,
           artist: element.author,
-          artUri: "file://${element.coverPath}",
+          artUri: Uri.parse("file://${element.coverPath}"),
           duration: duration,
           extras: {
             "downloadType": element.downloadType,
@@ -173,7 +173,7 @@ class MediaProvider extends ChangeNotifier {
     );
     PaletteGenerator palette = await PaletteGenerator
       .fromImageProvider(
-        FileImage(File(AudioService.currentMediaItem.artUri
+        FileImage(File(AudioService.currentMediaItem.artUri.toString()
           .replaceAll("file://", ""))));
     dominantColor = palette.dominantColor.color;
     if (palette.vibrantColor == null) {
@@ -240,7 +240,7 @@ class MediaProvider extends ChangeNotifier {
             artist:   song.artist,
             genre:    genre ?? "unknown",
             duration: Duration(milliseconds: int.parse(song.duration)),
-            artUri:   "file://${artworkFile.path}",
+            artUri:   Uri.parse("file://${artworkFile.path}"),
             extras:   {
               "albumId": song.id,
               "artwork": artworkFile.path
@@ -349,7 +349,7 @@ class MediaProvider extends ChangeNotifier {
         "/${RandomString.getRandomString(5)}"
       );
       try {
-        response = await http.get(tags.artworkController)
+        response = await http.get(Uri.parse(tags.artworkController))
           .timeout(Duration(seconds: 120));
         await artwork.writeAsBytes(response.bodyBytes);
       } catch (_) {}
@@ -380,7 +380,7 @@ class MediaProvider extends ChangeNotifier {
       artist: tags.artistController.text,
       genre: tags.genreController.text,
       duration: song.duration,
-      artUri: "file://" + thumbnail.path,
+      artUri: Uri.parse("file://${thumbnail.path}"),
       extras: {
         "artwork": thumbnail.path,
         "albumId": song.extras["albumId"],

@@ -36,12 +36,13 @@ class _MediaScreenState extends State<MediaScreen> {
   void initState() {
     searchController = new TextEditingController();
     searchNode = new FocusNode();
+    var keyboardVisibilityController = KeyboardVisibilityController();
     searchNode.addListener(() {
       if (!searchNode.hasFocus && searchQuery.isEmpty) {
         setState(() => showSearchBar = false);
       }
     });
-    KeyboardVisibility.onChange.listen((bool visible) {
+    keyboardVisibilityController.onChange.listen((bool visible) {
         if (visible == false) {
           searchNode.unfocus();
         }
