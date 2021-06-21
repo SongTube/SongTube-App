@@ -12,7 +12,7 @@ import 'languages/languageIgbo-NG.dart';
 import 'languages/languageId.dart';
 import 'languages/languageTr.dart';
 import 'languages/languageSo.dart';
-import 'languanges/languageDe.dart';
+import 'languages/languageDe.dart';
 
 /// Multi-Language Support for SongTube, for new Languages to be supported
 /// a new [File] in this project [internal/languages] folder needs to be

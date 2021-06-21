@@ -1,4 +1,9 @@
- @override
+import 'package:songtube/internal/languages.dart';
+
+class LanguageDe extends Languages {
+
+  // Introduction Screens
+  @override
   String get labelAppWelcome => "Willkomen";
   @override
   String get labelStart => "Anfangen";
@@ -353,4 +358,6 @@
   String get labelPlaylists => "Wiedergabelisten";
   @override
   String get labelQuality => "Qualität";
+  @override
+  String get labelSubscribe => "Abonnieren";
 }
