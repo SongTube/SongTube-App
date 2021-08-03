@@ -141,7 +141,7 @@ class LanguageSo extends Languages {
   String get labelNoMediaYet => "Meel Madhan";
   @override
   String get labelNoMediaYetJustification => "Waxa gudaha aalada kuugu Jiroo dhan" +
-    "halkan ayaad ka arki";
+     "halkan ayaad ka arki";
   @override
   String get labelSearchMedia => "Raadi...";
   @override
@@ -357,7 +357,7 @@ class LanguageSo extends Languages {
   @override
   String get labelCreate => "Abuur";
   @override
-  String get labelPlaylists => "Liiska Ciyaarta";
+  String get labelPlaylists => "Xulalka";
   @override
   String get labelQuality => "Tayada";
   @override
