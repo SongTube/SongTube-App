@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 class FadeRoute extends PageRouteBuilder {
-  final Widget page;
+  final Widget? page;
   FadeRoute({this.page})
       : super(
           pageBuilder: (
@@ -10,7 +10,7 @@ class FadeRoute extends PageRouteBuilder {
             Animation<double> animation,
             Animation<double> secondaryAnimation,
           ) =>
-              page,
+              page!,
           transitionDuration: Duration(milliseconds: 300),
           transitionsBuilder: (
             BuildContext context,

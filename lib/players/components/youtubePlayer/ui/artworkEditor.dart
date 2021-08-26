@@ -9,8 +9,8 @@ class VideoArtworkEditor extends StatelessWidget {
   final Function onArtworkTap;
   final String artworkUrl;
   VideoArtworkEditor({
-    @required this.onArtworkTap,
-    @required this.artworkUrl
+    required this.onArtworkTap,
+    required this.artworkUrl
   });
   @override
   Widget build(BuildContext context) {
@@ -46,7 +46,7 @@ class VideoArtworkEditor extends StatelessWidget {
                 width: 50,
                 margin: EdgeInsets.only(left: 8),
                 child: Text(
-                  Languages.of(context).labelTagsEditor,
+                  Languages.of(context)!.labelTagsEditor,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 12
@@ -58,7 +58,7 @@ class VideoArtworkEditor extends StatelessWidget {
         ),
         Spacer(),
         GestureDetector(
-          onTap: onArtworkTap,
+          onTap: onArtworkTap as void Function()?,
           child: Container(
             padding: EdgeInsets.only(left: 8),
             decoration: BoxDecoration(
@@ -77,7 +77,7 @@ class VideoArtworkEditor extends StatelessWidget {
                   width: 50,
                   margin: EdgeInsets.only(right: 8),
                   child: Text(
-                    Languages.of(context).labelEditArtwork,
+                    Languages.of(context)!.labelEditArtwork,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 12
@@ -95,9 +95,9 @@ class VideoArtworkEditor extends StatelessWidget {
                         child: FadeInImage(
                           fadeInDuration: Duration(milliseconds: 300),
                           placeholder: MemoryImage(kTransparentImage),
-                          image: isURL(artworkUrl)
+                          image: (isURL(artworkUrl)
                             ? NetworkImage(artworkUrl)
-                            : FileImage(File(artworkUrl)),
+                            : FileImage(File(artworkUrl))) as ImageProvider<Object>,
                           fit: BoxFit.cover,
                         ),
                       )

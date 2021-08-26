@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ShimmerContainer extends StatelessWidget {
-  final double height;
-  final double width;
-  final BorderRadiusGeometry borderRadius;
-  final EdgeInsetsGeometry margin;
-  final double aspectRatio;
+  final double? height;
+  final double? width;
+  final BorderRadiusGeometry? borderRadius;
+  final EdgeInsetsGeometry? margin;
+  final double? aspectRatio;
   ShimmerContainer({
     this.height,
     this.width,
@@ -21,7 +21,7 @@ class ShimmerContainer extends StatelessWidget {
       highlightColor: Theme.of(context).cardColor,
       child: aspectRatio != null
         ? AspectRatio(
-            aspectRatio: aspectRatio,
+            aspectRatio: aspectRatio!,
             child: Container(
               height: height,
               width: width,

@@ -20,18 +20,18 @@ import 'package:songtube/ui/animations/blurPageRoute.dart';
 
 class PlayerControls extends StatelessWidget {
   final MediaItem mediaItem;
-  final Color dominantColor;
-  final Color vibrantColor;
-  final Color textColor;
+  final Color? dominantColor;
+  final Color? vibrantColor;
+  final Color? textColor;
   final bool playing;
-  final PlaybackState state;
+  final PlaybackState? state;
   PlayerControls({
-    @required this.mediaItem,
-    @required this.dominantColor,
-    @required this.vibrantColor,
-    @required this.textColor,
-    @required this.playing,
-    @required this.state
+    required this.mediaItem,
+    required this.dominantColor,
+    required this.vibrantColor,
+    required this.textColor,
+    required this.playing,
+    required this.state
   });
   @override
   Widget build(BuildContext context) {
@@ -69,7 +69,7 @@ class PlayerControls extends StatelessWidget {
             child: Text(
               mediaItem.artist ?? "",
               style: TextStyle(
-                color: textColor.withOpacity(0.6),
+                color: textColor!.withOpacity(0.6),
                 fontFamily: "YTSans",
                 fontSize: 16
               ),
@@ -99,7 +99,7 @@ class PlayerControls extends StatelessWidget {
                 icon: Icon(
                   Icons.arrow_back_ios,
                   size: 18,
-                  color: textColor.withOpacity(0.7)
+                  color: textColor!.withOpacity(0.7)
                 ),
                 onPressed: () => AudioService.skipToPrevious(),
               ),
@@ -129,11 +129,11 @@ class PlayerControls extends StatelessWidget {
                   ),
                   child: playing
                     ? Icon(Icons.pause, size: 25, 
-                        color: dominantColor.computeLuminance() > 0.5
+                        color: dominantColor!.computeLuminance() > 0.5
                           ? Colors.black : Colors.white
                       )
                     : Icon(Icons.play_arrow, size: 25,
-                        color: dominantColor.computeLuminance() > 0.5
+                        color: dominantColor!.computeLuminance() > 0.5
                           ? Colors.black : Colors.white
                       )
                 ),
@@ -145,7 +145,7 @@ class PlayerControls extends StatelessWidget {
                 icon: Icon(
                   Icons.arrow_forward_ios,
                   size: 18,
-                  color: textColor.withOpacity(0.7)
+                  color: textColor!.withOpacity(0.7)
                 ),
                 onPressed: () => AudioService.skipToNext(),
               ),
@@ -165,7 +165,7 @@ class PlayerControls extends StatelessWidget {
                   child: IconButton(
                     icon: Icon(
                       MdiIcons.playlistMusicOutline,
-                      color: textColor.withOpacity(0.6)
+                      color: textColor!.withOpacity(0.6)
                     ),
                     onPressed: () {
                       Navigator.push(context, 
@@ -190,7 +190,7 @@ class PlayerControls extends StatelessWidget {
                   child: IconButton(
                     icon: Icon(
                       EvaIcons.dropletOutline,
-                      color: textColor.withOpacity(0.6)
+                      color: textColor!.withOpacity(0.6)
                     ),
                     onPressed: () {
                       showDialog(

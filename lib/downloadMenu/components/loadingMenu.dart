@@ -18,7 +18,7 @@ class LoadingDownloadMenu extends StatelessWidget {
           "Loading...",
           style: TextStyle(
             fontFamily: 'YTSans',
-            color: Theme.of(context).textTheme.bodyText1.color,
+            color: Theme.of(context).textTheme.bodyText1!.color,
             fontWeight: FontWeight.w600,
             fontSize: 18
           ),

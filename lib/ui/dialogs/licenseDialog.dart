@@ -7,15 +7,15 @@ class LicenseDialog extends StatelessWidget {
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       title: Text("LICENSE", style: TextStyle(
-        color: Theme.of(context).textTheme.bodyText1.color,
+        color: Theme.of(context).textTheme.bodyText1!.color,
       )),
       content: FutureBuilder(
         future: getLicense(),
         builder: (context, AsyncSnapshot<String> license) {
           if (license.hasData) {
             return SingleChildScrollView(
-              child: Text(license.data, style: TextStyle(
-                color: Theme.of(context).textTheme.bodyText1.color,
+              child: Text(license.data!, style: TextStyle(
+                color: Theme.of(context).textTheme.bodyText1!.color,
               )),
             );
           } else {

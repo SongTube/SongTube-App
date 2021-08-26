@@ -5,8 +5,8 @@ class ConfirmDialog extends StatelessWidget {
   final Function onConfirm;
   final Function onCancel;
   ConfirmDialog({
-    @required this.onConfirm,
-    @required this.onCancel
+    required this.onConfirm,
+    required this.onCancel
   });
   @override
   Widget build(BuildContext context) {
@@ -16,20 +16,20 @@ class ConfirmDialog extends StatelessWidget {
       ),
       title: Text(
         "Are you sure?",
-        style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color)
+        style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color)
       ),
       content: Text(
         "You are going to permanently delete this Song",
-        style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color)
+        style: TextStyle(color: Theme.of(context).textTheme.bodyText1!.color)
       ),
       actions: [
         TextButton(
           child: Text("OK", style: TextStyle(color: Theme.of(context).accentColor)),
-          onPressed: onConfirm
+          onPressed: onConfirm as void Function()?
         ),
         TextButton(
           child: Text("Cancel", style: TextStyle(color: Theme.of(context).accentColor)),
-          onPressed: onCancel,
+          onPressed: onCancel as void Function()?,
         )
       ],
     );

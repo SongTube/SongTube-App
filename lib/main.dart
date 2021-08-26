@@ -69,15 +69,15 @@ Future<void> main() async {
 class Main extends StatefulWidget {
 
   static void setLocale(BuildContext context, Locale newLocale) {
-    var state = context.findAncestorStateOfType<_MainState>();
+    var state = context.findAncestorStateOfType<_MainState>()!;
     state.setLocale(newLocale);
   }
 
   final LegacyPreferences preloadedFs;
   final SharedPreferences prefs;
   Main({
-    @required this.preloadedFs,
-    @required this.prefs
+    required this.preloadedFs,
+    required this.prefs
   });
 
   @override
@@ -87,7 +87,7 @@ class Main extends StatefulWidget {
 class _MainState extends State<Main> {
 
   // Language
-  Locale _locale;
+  Locale? _locale;
   void setLocale(Locale locale) {
     setState(() {
       _locale = locale;
@@ -156,17 +156,17 @@ class _MainState extends State<Main> {
           ],
           localeResolutionCallback: (locale, supportedLocales) {
             for (var supportedLocale in supportedLocales) {
-              if (supportedLocale?.languageCode == locale?.languageCode &&
-                  supportedLocale?.countryCode == locale?.countryCode) {
+              if (supportedLocale.languageCode == locale?.languageCode &&
+                  supportedLocale.countryCode == locale?.countryCode) {
                 return supportedLocale;
               }
             }
-            return supportedLocales?.first;
+            return supportedLocales.first;
           },
           builder: (context, child) {
             return ScrollConfiguration(
               behavior: CustomScrollBehavior(),
-              child: child,
+              child: child!,
             );
           },
           navigatorKey: NavigationService.instance.navigationKey,

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
 class AutoHideScaffold extends StatefulWidget {
-  final Widget appBar;
+  final Widget? appBar;
   final Widget body;
-  final bool resizeToAvoidBottomInset;
-  final Color backgroundColor;
+  final bool? resizeToAvoidBottomInset;
+  final Color? backgroundColor;
   AutoHideScaffold({
     this.appBar,
-    @required this.body,
+    required this.body,
     this.resizeToAvoidBottomInset,
     this.backgroundColor,
-    Key key
+    Key? key
   }) : super(key: key);
 
   @override
@@ -19,7 +19,7 @@ class AutoHideScaffold extends StatefulWidget {
 
 class _AutoHideScaffoldState extends State<AutoHideScaffold> with TickerProviderStateMixin {
 
-  AnimationController _hideAnimationController;
+  late AnimationController _hideAnimationController;
   bool navigationBarScrolledDown = false;
 
   // Pixels Scrolled
@@ -73,8 +73,8 @@ class _AutoHideScaffoldState extends State<AutoHideScaffold> with TickerProvider
         },
         child: NotificationListener<ScrollUpdateNotification>(
           onNotification: (ScrollUpdateNotification details) {
-            pixelsScrolled = (pixelsScrolled + details.scrollDelta.abs()).clamp(0, 100)/100;
-            if (details.scrollDelta > 0.0 && details.metrics.axis == Axis.vertical) {
+            pixelsScrolled = (pixelsScrolled + details.scrollDelta!.abs()).clamp(0, 100)/100;
+            if (details.scrollDelta! > 0.0 && details.metrics.axis == Axis.vertical) {
               _hideAnimationController.value -= pixelsScrolled;
             } else {
               _hideAnimationController.value += pixelsScrolled;

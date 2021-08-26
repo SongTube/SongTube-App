@@ -9,8 +9,8 @@ class MediaOptionsMenuDialog extends StatelessWidget {
   final MediaItem song;
   final Function onDelete;
   MediaOptionsMenuDialog({
-    @required this.song,
-    @required this.onDelete
+    required this.song,
+    required this.onDelete
   });
   @override
   Widget build(BuildContext context) {
@@ -24,13 +24,13 @@ class MediaOptionsMenuDialog extends StatelessWidget {
           ListTile(
             leading: Icon(EvaIcons.trashOutline, color: Theme.of(context).accentColor),
             title: Text(
-              Languages.of(context).labelDeleteSong,
+              Languages.of(context)!.labelDeleteSong,
               style: TextStyle(
                 fontFamily: 'YTSans',
-                color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6)
+                color: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.6)
               ),
             ),
-            onTap: onDelete
+            onTap: onDelete as void Function()?
           ),
         ],
       ),

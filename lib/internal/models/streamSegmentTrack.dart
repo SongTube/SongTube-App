@@ -5,7 +5,7 @@ class StreamSegmentTrack {
 
   StreamSegment segment;
   TagsControllers tags;
-  bool selected;
+  bool? selected;
 
   StreamSegmentTrack(this.segment, this.tags, this.selected);
 

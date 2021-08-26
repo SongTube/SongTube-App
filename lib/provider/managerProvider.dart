@@ -49,14 +49,14 @@ class ManagerProvider extends ChangeNotifier {
   // -------------
   //
   // Library
-  GlobalKey _internalScaffoldKey;
-  GlobalKey _scaffoldStateKey;
+  GlobalKey? _internalScaffoldKey;
+  GlobalKey? _scaffoldStateKey;
   // Home Screen
-  ScrollController homeScrollController;
+  ScrollController? homeScrollController;
   // Navitate Screen
-  String youtubeSearchQuery;
+  String? youtubeSearchQuery;
   // SearchBar
-  FocusNode searchBarFocusNode;
+  FocusNode? searchBarFocusNode;
 
   // Current search filters
   List<String> searchFilters = [];
@@ -64,9 +64,9 @@ class ManagerProvider extends ChangeNotifier {
   // -----------
   // Home Screen
   // -----------
-  bool searchRunning;
-  YoutubeSearch youtubeSearch;
-  Future<void> searchYoutube({String query, bool forceReload = false}) async {
+  late bool searchRunning;
+  YoutubeSearch? youtubeSearch;
+  Future<void> searchYoutube({String? query, bool forceReload = false}) async {
     searchRunning = true;      
     notifyListeners();
     if (query == null) return null;
@@ -79,28 +79,28 @@ class ManagerProvider extends ChangeNotifier {
       youtubeSearch = await SearchExtractor.searchYoutube(query, searchFilters);
       notifyListeners();
     } else if (youtubeSearch != null) {
-      await youtubeSearch.getNextPage();
+      await youtubeSearch!.getNextPage();
       notifyListeners();
     }
     searchRunning = false;
     notifyListeners();
   }
 
-  HomeScreenTab _currentHomeTab;
-  HomeScreenTab get currentHomeTab => _currentHomeTab;
-  set currentHomeTab(HomeScreenTab tab) {
+  HomeScreenTab? _currentHomeTab;
+  HomeScreenTab? get currentHomeTab => _currentHomeTab;
+  set currentHomeTab(HomeScreenTab? tab) {
     _currentHomeTab = tab;
     notifyListeners();
   }
   // Trending Video List
-  List<StreamInfoItem> homeTrendingVideoList;
+  List<StreamInfoItem>? homeTrendingVideoList;
   // Music Video List
-  List<StreamInfoItem> homeMusicVideoList;
+  List<StreamInfoItem>? homeMusicVideoList;
 
   // ---------------
   // SearchBar TextController
   //
-  TextEditingController searchController;
+  TextEditingController? searchController;
   // ----------------------------------
 
   void setState() {
@@ -112,21 +112,21 @@ class ManagerProvider extends ChangeNotifier {
   // -------------------
   //
   // Library
-  GlobalKey get internalScaffoldKey => _internalScaffoldKey;
-  set internalScaffoldKey(GlobalKey key) {
+  GlobalKey? get internalScaffoldKey => _internalScaffoldKey;
+  set internalScaffoldKey(GlobalKey? key) {
     _internalScaffoldKey = key;
     notifyListeners();
   }
   // Library
-  GlobalKey get scaffoldStateKey => _scaffoldStateKey;
-  set scaffoldStateKey(GlobalKey key) {
+  GlobalKey? get scaffoldStateKey => _scaffoldStateKey;
+  set scaffoldStateKey(GlobalKey? key) {
     _scaffoldStateKey = key;
     notifyListeners();
   }
   bool get showSearchBar {
     if (youtubeSearch != null) {
       return true;
-    } else if (searchBarFocusNode.hasFocus) {
+    } else if (searchBarFocusNode!.hasFocus) {
       return true;
     } else if (searchRunning) {
       return true;
@@ -158,12 +158,12 @@ class ManagerProvider extends ChangeNotifier {
       for (var channel in channels) {
         if (loopsDone == 10) break;
         List<StreamInfoItem> uploads = await ChannelExtractor
-          .getChannelUploads(channel.url);
+          .getChannelUploads(channel.url!);
         videos.addAll(uploads);
         loopsDone++;
       }
       // Sort by date (Default)
-      videos.sort((a, b) => DateTime.parse(a.date).compareTo(DateTime.parse(b.date)));
+      videos.sort((a, b) => DateTime.parse(a.date!).compareTo(DateTime.parse(b.date!)));
       videos = videos.reversed.toList();
       // Update our channels feed
       channelsFeedList = videos;

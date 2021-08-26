@@ -24,17 +24,17 @@ class TagsManager {
   static const _channel = const MethodChannel("tagsChannel");
 
   // Write all (available) Tags into the audio file
-  static Future<int> writeAllTags({
-    String songPath,
-    String title,
-    String album,
-    String artist,
-    String genre,
-    String year,
-    String disc,
-    String track
+  static Future<int?> writeAllTags({
+    String? songPath,
+    String? title,
+    String? album,
+    String? artist,
+    String? genre,
+    String? year,
+    String? disc,
+    String? track
   }) async {
-    int result = await _channel.invokeMethod("writeAllTags", {
+    int? result = await _channel.invokeMethod("writeAllTags", {
       "songPath":   songPath,
       "tagsTitle":  title,
       "tagsAlbum":  album,
@@ -48,34 +48,34 @@ class TagsManager {
   }
 
   // Write artwork using local Image or from Url
-  static Future<int> writeArtwork({
-    String songPath,
-    String artworkPath,
-    String artworkUrl,
+  static Future<int?> writeArtwork({
+    String? songPath,
+    String? artworkPath,
+    String? artworkUrl,
   }) async {
     if (artworkPath != null && artworkUrl != null)
       throw Exception("Both artworkPath and artworkUrl defined, please define only one");
     if (artworkPath != null) {
       if (!await File(artworkPath).exists()) throw Exception("artworkPath provided path doesnt exist or is invalid");
     }
-    String artwork;
-    bool fromUrl;
-    Directory directory;
+    String? artwork;
+    bool? fromUrl;
+    Directory? directory;
     File artworkFile;
     http.Response response;
     if (artworkPath != null) {artwork = artworkPath; fromUrl = false;}
     if (artworkUrl  != null) {artwork = artworkUrl; fromUrl = true;}
     if (fromUrl == true) {
       directory    = await getExternalStorageDirectory();
-      artworkFile  = new File(directory.path + "/" + _randomString());
-      response     = await http.get(Uri.parse(artwork));
+      artworkFile  = new File(directory!.path + "/" + _randomString());
+      response     = await http.get(Uri.parse(artwork!));
       artwork      = artworkFile.path;
       if (response.statusCode != 200) {
         throw Exception("Error downloading artwork, check your Url or internet connection");
       }
       await artworkFile.writeAsBytes(response.bodyBytes);
     }
-    int result = await _channel.invokeMethod("writeArtwork", {
+    int? result = await _channel.invokeMethod("writeArtwork", {
       "songPath": songPath,
       "artworkPath": artwork
     });
@@ -93,7 +93,7 @@ class TagsManager {
   }
 
   // Generate a Square Cover Image
-  static Future<File> generateCover(String url) async {
+  static Future<File?> generateCover(String url) async {
     File artwork =
       new File((await getApplicationDocumentsDirectory()).path +
         "/${RandomString.getRandomString(5)}.jpg");
@@ -101,7 +101,7 @@ class TagsManager {
       response = await http.get(Uri.parse(url));
     } catch (_) {return null;}
     await artwork.writeAsBytes(response.bodyBytes);
-    File croppedImage = await NativeMethod.cropToSquare(artwork);
+    File? croppedImage = await NativeMethod.cropToSquare(artwork);
     return croppedImage;
   }
 }

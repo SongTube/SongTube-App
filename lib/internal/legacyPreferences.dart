@@ -41,20 +41,20 @@ String fixStatus = "download_fix_status";
 
 class LegacyPreferences {
   
-  SharedPreferences prefs;
+  late SharedPreferences prefs;
 
   Future<void> initPreferences() async {
     prefs = await SharedPreferences.getInstance();
     AndroidDeviceInfo deviceInfo = await DeviceInfoPlugin().androidInfo;
     sdkInt = deviceInfo.version.sdkInt;
-    if (sdkInt >= 28) {
+    if (sdkInt! >= 28) {
       isSystemThemeAvailable = true;
     } else {isSystemThemeAvailable = false;}
   }
 
-  int sdkInt;
+  int? sdkInt;
 
-  bool isSystemThemeAvailable;
+  bool? isSystemThemeAvailable;
 
   Color getAccentColor() {
     return Color(prefs.getInt(accentKey) ?? Colors.redAccent.value);
@@ -112,11 +112,11 @@ class LegacyPreferences {
     return prefs.getString(ffmpegActionTypeingFormat) ?? "AAC";
   }
 
-  String getAudioDownloadPath() {
+  String? getAudioDownloadPath() {
     return prefs.getString(audioDownloadPath);
   }
 
-  String getVideoDownloadPath() {
+  String? getVideoDownloadPath() {
     return prefs.getString(videoDownloadPath);
   }
 

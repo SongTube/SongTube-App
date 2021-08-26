@@ -9,16 +9,16 @@ class VideoPlayerControls extends StatelessWidget {
   final Widget progressBar;
   final Function onPlayPause;
   final Function onExit;
-  final String videoTitle;
+  final String? videoTitle;
   final bool showControls;
   final bool playing;
   VideoPlayerControls({
-    @required this.progressBar,
-    @required this.onPlayPause,
-    @required this.onExit,
-    @required this.videoTitle,
-    @required this.showControls,
-    @required this.playing
+    required this.progressBar,
+    required this.onPlayPause,
+    required this.onExit,
+    required this.videoTitle,
+    required this.showControls,
+    required this.playing
   });
   @override
   Widget build(BuildContext context) {
@@ -49,7 +49,7 @@ class VideoPlayerControls extends StatelessWidget {
                       Container(
                         margin: EdgeInsets.only(top: 8, left: 8),
                         child: Text(
-                          videoTitle.replaceAll(".webm", '')
+                          videoTitle!.replaceAll(".webm", '')
                             .replaceAll(".mp4", '')
                             .replaceAll(".avi", '')
                             .replaceAll(".3gpp", '')
@@ -76,7 +76,7 @@ class VideoPlayerControls extends StatelessWidget {
                 children: [
                   InkWell(
                     borderRadius: BorderRadius.circular(50),
-                    onTap: onPlayPause,
+                    onTap: onPlayPause as void Function()?,
                     child: Ink(
                       child: Icon(
                         playing

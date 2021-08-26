@@ -1,44 +1,41 @@
 // Dart
 import 'dart:core';
 
-// Flutter
-import 'package:flutter/material.dart';
-
 class SongFile {
 
-  String id;
-  String title;
-  String album;
-  String author;
-  String duration;
-  String downloadType;
-  String path;
-  String fileSize;
-  String coverUrl;
-  String coverPath;
+  String? id;
+  String? title;
+  String? album;
+  String? author;
+  String? duration;
+  String? downloadType;
+  String? path;
+  String? fileSize;
+  String? coverUrl;
+  String? coverPath;
 
   SongFile({
-    @required this.id,
-    @required this.title,
-    @required this.album,
-    @required this.author,
-    @required this.duration,
-    @required this.downloadType,
-    @required this.path,
-    @required this.fileSize,
-    @required this.coverUrl,
+    required this.id,
+    required this.title,
+    required this.album,
+    required this.author,
+    required this.duration,
+    required this.downloadType,
+    required this.path,
+    required this.fileSize,
+    required this.coverUrl,
     this.coverPath,
   });
 
   SongFile.toDatabase({
-    @required this.title,
-    @required this.album,
-    @required this.author,
-    @required this.duration,
-    @required this.downloadType,
-    @required this.path,
-    @required this.fileSize,
-    @required this.coverUrl,
+    required this.title,
+    required this.album,
+    required this.author,
+    required this.duration,
+    required this.downloadType,
+    required this.path,
+    required this.fileSize,
+    required this.coverUrl,
   });
 
   SongFile.fromMap(Map<String, dynamic> map) {

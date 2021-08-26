@@ -5,16 +5,16 @@ import 'package:provider/provider.dart';
 import 'package:songtube/provider/preferencesProvider.dart';
 
 class PlayerAppBar extends StatelessWidget {
-  final List<dynamic> streams;
+  final List<dynamic>? streams;
   final String videoTitle;
   final Function onChangeQuality;
-  final Function onEnterPipMode;
-  final String currentQuality;
+  final Function? onEnterPipMode;
+  final String? currentQuality;
   PlayerAppBar({
-    @required this.streams,
-    @required this.videoTitle,
-    @required this.onChangeQuality,
-    @required this.currentQuality,
+    required this.streams,
+    required this.videoTitle,
+    required this.onChangeQuality,
+    required this.currentQuality,
     this.onEnterPipMode
   });
   @override
@@ -52,9 +52,9 @@ class PlayerAppBar extends StatelessWidget {
             future: DeviceInfoPlugin().androidInfo, 
             builder: (context, AsyncSnapshot<AndroidDeviceInfo> info) {
               if (info.hasData) {
-                if (info.data.version.sdkInt >= 26) {
+                if (info.data!.version.sdkInt >= 26) {
                   return GestureDetector(
-                    onTap: onEnterPipMode,
+                    onTap: onEnterPipMode as void Function()?,
                     child: Container(
                       padding: EdgeInsets.all(4),
                       color: Colors.transparent,
@@ -97,8 +97,8 @@ class PlayerAppBar extends StatelessWidget {
               color: Colors.transparent,
               child: Text(
                 (
-                  "${currentQuality.split('p').first+"p"}".split('•').last.trim() +
-                  "${currentQuality.split('p').last.contains("60") ? " • 60 FPS" : ""}"
+                  "${currentQuality!.split("•").last.trim().split("p").first+"p"}"
+                  "${currentQuality!.split("p").last.contains("60") ? " • 60 FPS" : ""}"
                 ),
                 style: TextStyle(
                   color: Colors.white,

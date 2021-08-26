@@ -23,14 +23,14 @@ class PlaylistEmptyWidget extends StatelessWidget {
               Icon(EvaIcons.loaderOutline, size: 100, color: Theme.of(context).accentColor),
               SizedBox(height: 8),
               Text(
-                Languages.of(context).labelNoMediaYet,
+                Languages.of(context)!.labelNoMediaYet,
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontFamily: 'Varela'
                 ),
               ),
               SizedBox(height: 4),
-              Text(Languages.of(context).labelNoMediaYetJustification,
+              Text(Languages.of(context)!.labelNoMediaYetJustification,
                 textAlign: TextAlign.center),
             ],
           ),

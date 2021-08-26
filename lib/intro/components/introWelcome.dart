@@ -12,7 +12,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:songtube/ui/animations/showUp.dart';
 
 class IntroWelcome extends StatelessWidget {
-  final Function onNext;
+  final Function? onNext;
   IntroWelcome({
     this.onNext
   });
@@ -65,11 +65,11 @@ class IntroWelcome extends StatelessWidget {
                           fontSize: 26,
                           fontFamily: 'YTSans',
                           fontWeight: FontWeight.w400,
-                          color: Theme.of(context).textTheme.bodyText1.color
+                          color: Theme.of(context).textTheme.bodyText1!.color
                         ),
                         children: [
                           TextSpan(
-                            text: Languages.of(context).labelAppWelcome + "\n",
+                            text: Languages.of(context)!.labelAppWelcome + "\n",
                             style: TextStyle(
                               fontFamily: 'Product Sans',
                               fontWeight: FontWeight.w600
@@ -119,7 +119,7 @@ class IntroWelcome extends StatelessWidget {
                             fontSize: 16,
                             fontFamily: 'YTSans',
                             fontWeight: FontWeight.w400,
-                            color: Theme.of(context).textTheme.bodyText1.color
+                            color: Theme.of(context).textTheme.bodyText1!.color
                           ),
                           children: [
                             TextSpan(
@@ -166,7 +166,7 @@ class IntroWelcome extends StatelessWidget {
             child: FloatingActionButton.extended(
               backgroundColor: Colors.red,
               label: Text(
-                Languages.of(context).labelStart,
+                Languages.of(context)!.labelStart,
                 style: TextStyle(
                   color: Colors.white,
                   fontFamily: 'YTSans',
@@ -174,7 +174,7 @@ class IntroWelcome extends StatelessWidget {
                 ),
               ),
               icon: Icon(EvaIcons.arrowForward, color: Colors.white),
-              onPressed: onNext,
+              onPressed: onNext as void Function()?,
             ),
           ),
         ),
@@ -190,19 +190,19 @@ class IntroWelcome extends StatelessWidget {
         hint: Padding(
           padding: EdgeInsets.only(right: 8.0),
           child: Text(
-            Languages.of(context).labelLanguage,
+            Languages.of(context)!.labelLanguage,
             style: TextStyle(
               fontSize: 14,
               fontFamily: 'Product Sans',
               fontWeight: FontWeight.w600,
-              color: Theme.of(context).textTheme.bodyText1.color
+              color: Theme.of(context).textTheme.bodyText1!.color
             ),
           ),
         ),
         icon: Icon(EvaIcons.globe2Outline,
           color: Theme.of(context).accentColor),
-        onChanged: (LanguageData language) {
-          changeLanguage(context, language.languageCode);
+        onChanged: (LanguageData? language) {
+          changeLanguage(context, language!.languageCode);
         },
         underline: DropdownButtonHideUnderline(child: Container()),
         items: supportedLanguages
@@ -219,7 +219,7 @@ class IntroWelcome extends StatelessWidget {
                       fontSize: 16,
                       fontFamily: 'YTSans',
                       fontWeight: FontWeight.w400,
-                      color: Theme.of(context).textTheme.bodyText1.color
+                      color: Theme.of(context).textTheme.bodyText1!.color
                     ),
                   )
                 ],

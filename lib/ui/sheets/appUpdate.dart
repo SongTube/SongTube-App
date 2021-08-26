@@ -11,7 +11,7 @@ import 'package:songtube/internal/models/updateDetails.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
 class AppUpdateSheet extends StatelessWidget {
-  final UpdateDetails details;
+  final UpdateDetails? details;
   AppUpdateSheet(this.details);
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,7 @@ class AppUpdateSheet extends StatelessWidget {
               Text(
                 "SongTube",
                 style: TextStyle(
-                  color: Theme.of(context).textTheme.bodyText1.color,
+                  color: Theme.of(context).textTheme.bodyText1!.color,
                   fontFamily: 'Product Sans',
                   fontWeight: FontWeight.w600,
                   fontSize: 24
@@ -56,7 +56,7 @@ class AppUpdateSheet extends StatelessWidget {
               Text(
                 "New version available",
                 style: TextStyle(
-                  color: Theme.of(context).textTheme.bodyText1.color
+                  color: Theme.of(context).textTheme.bodyText1!.color!
                     .withOpacity(0.8),
                   fontSize: 18,
                   fontFamily: 'Product Sans',
@@ -65,7 +65,7 @@ class AppUpdateSheet extends StatelessWidget {
               ),
               Spacer(),
               Text(
-                "${details.version}",
+                "${details!.version}",
                 style: TextStyle(
                   color: Theme.of(context).accentColor,
                   fontSize: 18,
@@ -101,7 +101,7 @@ class AppUpdateSheet extends StatelessWidget {
                   top: 16
                 ),
                 child: MarkdownBody(
-                  data: details.updateDetails),
+                  data: details!.updateDetails!),
               )
             )
           ),
@@ -119,7 +119,7 @@ class AppUpdateSheet extends StatelessWidget {
                 child: Text(
                   "Later",
                   style: TextStyle(
-                    color: Theme.of(context).textTheme.bodyText1.color
+                    color: Theme.of(context).textTheme.bodyText1!.color!
                       .withOpacity(0.8),
                     fontFamily: 'Product Sans',
                     fontSize: 16,
@@ -144,8 +144,8 @@ class AppUpdateSheet extends StatelessWidget {
                       return Wrap(
                         children: [
                           AppUpdateDownloadSheet(
-                            newVersion: details.version,
-                            downloadUrl: details.downloadUrl
+                            newVersion: details!.version,
+                            downloadUrl: details!.downloadUrl
                           ),
                         ],
                       );
@@ -162,13 +162,13 @@ class AppUpdateSheet extends StatelessWidget {
                   ),
                   child: Center(
                     child: FutureBuilder(
-                      future: ExtractorHttpClient.getContentLength(details.downloadUrl),
-                      builder: (context, AsyncSnapshot<int> data) {
+                      future: ExtractorHttpClient.getContentLength(details!.downloadUrl!),
+                      builder: (context, AsyncSnapshot<int?> data) {
                         return Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              Languages.of(context).labelDownload,
+                              Languages.of(context)!.labelDownload,
                               style: TextStyle(
                                 color: Theme.of(context).accentColor,
                                 fontFamily: 'Product Sans',
@@ -178,7 +178,7 @@ class AppUpdateSheet extends StatelessWidget {
                             ),
                             data.hasData
                               ? Text(
-                                  " (${((data.data/1024)/1024).toStringAsFixed(0)} MB)",
+                                  " (${((data.data!/1024)/1024).toStringAsFixed(0)} MB)",
                                   style: TextStyle(
                                     color: Theme.of(context).accentColor,
                                     fontFamily: 'Product Sans',
@@ -211,11 +211,11 @@ class AppUpdateSheet extends StatelessWidget {
 }
 
 class AppUpdateDownloadSheet extends StatefulWidget {
-  final String newVersion;
-  final String downloadUrl;
+  final String? newVersion;
+  final String? downloadUrl;
   AppUpdateDownloadSheet({
-    @required this.newVersion,
-    @required this.downloadUrl
+    required this.newVersion,
+    required this.downloadUrl
   });
   @override
   _AppUpdateDownloadSheetState createState() => _AppUpdateDownloadSheetState();
@@ -228,7 +228,7 @@ class _AppUpdateDownloadSheetState extends State<AppUpdateDownloadSheet> {
   CancelToken cancelToken = CancelToken();
 
   // Download Path
-  File downloadFile;
+  late File downloadFile;
 
   @override
   void initState() {
@@ -241,10 +241,10 @@ class _AppUpdateDownloadSheetState extends State<AppUpdateDownloadSheet> {
     if (permissionStatus == PermissionStatus.granted) {
       Dio dio = Dio();
       downloadFile = File((await ExtStorage
-        .getExternalStoragePublicDirectory(ExtStorage.DIRECTORY_DOWNLOADS))
+        .getExternalStoragePublicDirectory(ExtStorage.DIRECTORY_DOWNLOADS))!
         + "/update.apk");
       dio.download(
-        widget.downloadUrl, downloadFile.path,
+        widget.downloadUrl!, downloadFile.path,
         onReceiveProgress: (recieved, total) {
           setState(() {
             progress = recieved/total;
@@ -290,8 +290,8 @@ class _AppUpdateDownloadSheetState extends State<AppUpdateDownloadSheet> {
                 backgroundColor: Theme.of(context).cardColor,
                 elevation: 0,
                 automaticallyImplyLeading: false,
-                title: Text(Languages.of(context).labelDownloading, style: TextStyle(
-                  color: Theme.of(context).textTheme.bodyText1.color,
+                title: Text(Languages.of(context)!.labelDownloading, style: TextStyle(
+                  color: Theme.of(context).textTheme.bodyText1!.color,
                   fontWeight: FontWeight.w600,
                   fontFamily: 'Product Sans'
                 )),
@@ -328,7 +328,7 @@ class _AppUpdateDownloadSheetState extends State<AppUpdateDownloadSheet> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "${widget.newVersion.split("+").first}",
+                            "${widget.newVersion!.split("+").first}",
                             style: TextStyle(
                               color: Theme.of(context).accentColor,
                               fontSize: 18,

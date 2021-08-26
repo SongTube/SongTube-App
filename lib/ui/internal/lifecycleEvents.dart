@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 // Add this to any Widget in the App to detect if
 // the app is inactive, paused, detached or resumed
 class LifecycleEventHandler extends WidgetsBindingObserver {
-  final AsyncCallback resumeCallBack;
-  final AsyncCallback suspendingCallBack;
+  final AsyncCallback? resumeCallBack;
+  final AsyncCallback? suspendingCallBack;
 
   LifecycleEventHandler({
     this.resumeCallBack,
@@ -18,14 +18,14 @@ class LifecycleEventHandler extends WidgetsBindingObserver {
     switch (state) {
       case AppLifecycleState.resumed:
         if (resumeCallBack != null) {
-          await resumeCallBack();
+          await resumeCallBack!();
         }
         break;
       case AppLifecycleState.inactive:
       case AppLifecycleState.paused:
       case AppLifecycleState.detached:
         if (suspendingCallBack != null) {
-          await suspendingCallBack();
+          await suspendingCallBack!();
         }
         break;
     }

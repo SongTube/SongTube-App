@@ -28,12 +28,12 @@ class _SettingsPageState extends State<SettingsPage> {
           titleSpacing: 0,
           backgroundColor: Theme.of(context).cardColor,
           title: Text(
-            Languages.of(context).labelSettings,
+            Languages.of(context)!.labelSettings,
             style: TextStyle(
               fontFamily: 'Product Sans',
               fontWeight: FontWeight.w700,
               fontSize: 20,
-              color: Theme.of(context).textTheme.bodyText1.color
+              color: Theme.of(context).textTheme.bodyText1!.color
             ),
           ),
           leading: IconButton(
@@ -61,8 +61,8 @@ class _SettingsPageState extends State<SettingsPage> {
                     letterSpacing: 0.2
                 ),
                 labelColor: Theme.of(context).accentColor,
-                unselectedLabelColor: Theme.of(context).textTheme.bodyText1
-                  .color.withOpacity(0.4),
+                unselectedLabelColor: Theme.of(context).textTheme.bodyText1!
+                  .color!.withOpacity(0.4),
                 indicator: MD2Indicator(
                   indicatorSize: MD2IndicatorSize.tiny,
                   indicatorHeight: 4,
@@ -70,13 +70,13 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
                 tabs: [
                   Tab(child: Text(
-                    Languages.of(context).labelTheme
+                    Languages.of(context)!.labelTheme
                   )),
                   Tab(child: Text(
-                    Languages.of(context).labelGeneral
+                    Languages.of(context)!.labelGeneral
                   )),
                   Tab(child: Text(
-                    Languages.of(context).labelDownload
+                    Languages.of(context)!.labelDownload
                   ))
                 ],
               ),
@@ -84,7 +84,7 @@ class _SettingsPageState extends State<SettingsPage> {
             Divider(
               height: 1,
               thickness: 1,
-              color: Colors.grey[600].withOpacity(0.1),
+              color: Colors.grey[600]!.withOpacity(0.1),
               indent: 12,
               endIndent: 12
             ),

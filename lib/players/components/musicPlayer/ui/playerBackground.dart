@@ -13,13 +13,13 @@ class PlayerBackground extends StatelessWidget {
   final bool enableBlur;
   final double blurIntensity;
   final Widget child;
-  final Color backdropColor;
+  final Color? backdropColor;
   final double backdropOpacity;
   PlayerBackground({
-    @required this.backgroundImage,
+    required this.backgroundImage,
     this.enableBlur = true,
     this.blurIntensity = 22.0,
-    @required this.child,
+    required this.child,
     this.backdropColor = Colors.black,
     this.backdropOpacity = 0.4
   });
@@ -42,7 +42,7 @@ class PlayerBackground extends StatelessWidget {
           duration: Duration(milliseconds: 400),
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          color: backdropColor.withOpacity(backdropOpacity),
+          color: backdropColor!.withOpacity(backdropOpacity),
           child: BackdropFilter(
             filter: ImageFilter.blur(
               tileMode: TileMode.mirror,

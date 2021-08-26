@@ -26,7 +26,7 @@ class SubscriptionsScreen extends StatefulWidget {
 
 class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
   
-  String sortBy = "date";
+  String? sortBy = "date";
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +55,7 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
                   fontFamily: 'Product Sans',
                   fontWeight: FontWeight.w700,
                   fontSize: 20,
-                  color: Theme.of(context).textTheme.bodyText1.color
+                  color: Theme.of(context).textTheme.bodyText1!.color
                 ),
               ),
               Spacer(),
@@ -150,17 +150,17 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
                           ]
                         ),
                         child: Hero(
-                          tag: subscription.url,
+                          tag: subscription.url!,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(100),
-                            child: FutureBuilder(
+                            child: FutureBuilder<String?>(
                               future: AvatarHandler.getAvatarUrl(subscription.name, subscription.url),
-                              builder: (context, snapshot) {
+                              builder: (context, AsyncSnapshot<String?> snapshot) {
                                 if (snapshot.hasData) {
                                   return FadeInImage(
                                     fit: BoxFit.cover,
                                     placeholder: MemoryImage(kTransparentImage),
-                                    image: FileImage(File(snapshot.data)),
+                                    image: FileImage(File(snapshot.data!)),
                                     fadeInDuration: Duration(milliseconds: 300),
                                   );
                                 } else {
@@ -198,7 +198,7 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
                   value: sortBy,
                   iconSize: 20,
                   style: TextStyle(
-                    color: Theme.of(context).textTheme.bodyText1.color
+                    color: Theme.of(context).textTheme.bodyText1!.color!
                       .withOpacity(0.8),
                     fontFamily: 'Product Sans',
                     fontWeight: FontWeight.w600,
@@ -215,7 +215,7 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
                       value: "views",
                     )
                   ],
-                  onChanged: (String value) => setState(() => sortBy = value),
+                  onChanged: (String? value) => setState(() => sortBy = value),
                 ),
                 Spacer(),
                 // Manage Subscriptions
@@ -246,7 +246,7 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
           Divider(
             height: 1,
             thickness: 1,
-            color: Colors.grey[600].withOpacity(0.1),
+            color: Colors.grey[600]!.withOpacity(0.1),
             indent: prefs.channelSubscriptions.isNotEmpty ? 0 : 12,
             endIndent: prefs.channelSubscriptions.isNotEmpty ? 0 : 12
           ),
@@ -257,9 +257,9 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
                     List<StreamInfoItem> items = manager.channelsFeedList;
                     if (manager.channelsFeedList.isNotEmpty) {
                       if (sortBy == "date") {
-                        items.sort((a, b) => DateTime.parse(b.date).compareTo(DateTime.parse(a.date)));
+                        items.sort((a, b) => DateTime.parse(b.date!).compareTo(DateTime.parse(a.date!)));
                       } else if (sortBy == "views") {
-                        items.sort((a, b) => b.viewCount.compareTo(a.viewCount));
+                        items.sort((a, b) => b.viewCount!.compareTo(a.viewCount!));
                       }
                     }
                     return PageTransitionSwitcher(
@@ -277,7 +277,7 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
                       },
                       duration: Duration(milliseconds: 300),
                       child: StreamsLargeThumbnailView(
-                        key: Key(sortBy),
+                        key: Key(sortBy!),
                         infoItems: manager.channelsFeedList
                       ),
                     ); 
@@ -294,7 +294,7 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
                           "Discover new Channels to start building your feed!",
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            color: Theme.of(context).iconTheme.color
+                            color: Theme.of(context).iconTheme.color!
                               .withOpacity(0.6),
                             fontSize: 22,
                             fontWeight: FontWeight.w600,

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class FlexiblePopupItem {
 
-  String title;
-  String value;
+  String? title;
+  String? value;
 
   FlexiblePopupItem({
     this.title,
@@ -15,13 +15,13 @@ class FlexiblePopupItem {
 class FlexiblePopupMenu extends StatelessWidget {
   final Widget child;
   final List<FlexiblePopupItem> items;
-  final Function(String) onItemTap;
-  final double borderRadius;
-  final EdgeInsetsGeometry padding;
+  final Function(String?) onItemTap;
+  final double? borderRadius;
+  final EdgeInsetsGeometry? padding;
   FlexiblePopupMenu({
-    @required this.child,
-    @required this.items,
-    @required this.onItemTap,
+    required this.child,
+    required this.items,
+    required this.onItemTap,
     this.borderRadius,
     this.padding
   });
@@ -34,7 +34,7 @@ class FlexiblePopupMenu extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: borderRadius == null
               ? BorderRadius.zero
-              : BorderRadius.circular(borderRadius),
+              : BorderRadius.circular(borderRadius!),
           ),
           context: context,
           position: RelativeRect.fromLTRB(
@@ -45,9 +45,9 @@ class FlexiblePopupMenu extends StatelessWidget {
           items: items.map((e) {
             return PopupMenuItem<String>(
               child: Text(
-                e.title, style: TextStyle(
+                e.title!, style: TextStyle(
                   color: Theme.of(context)
-                    .textTheme.bodyText1.color,
+                    .textTheme.bodyText1!.color,
                   fontSize: 14
                 ),
               ),
@@ -59,7 +59,7 @@ class FlexiblePopupMenu extends StatelessWidget {
         });
       },
       child: Padding(
-        padding: padding == null ? EdgeInsets.zero : padding,
+        padding: padding == null ? EdgeInsets.zero : padding!,
         child: child
       ),
     );

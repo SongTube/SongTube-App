@@ -10,9 +10,9 @@ import 'package:songtube/ui/animations/fadeIn.dart';
 import 'package:songtube/ui/animations/showUp.dart';
 
 class AccentPicker extends StatefulWidget {
-  final ValueChanged<Color> onColorChanged;
+  final ValueChanged<Color?> onColorChanged;
   AccentPicker({
-    @required this.onColorChanged
+    required this.onColorChanged
   });
   @override
   _AccentPickerState createState() => _AccentPickerState();
@@ -54,7 +54,7 @@ class _AccentPickerState extends State<AccentPicker> {
                   delay: Duration(milliseconds: 100),
                   duration: Duration(milliseconds: 200),
                   child: Text(
-                    Languages.of(context).labelChooseColor,
+                    Languages.of(context)!.labelChooseColor,
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
                       fontSize: 22,

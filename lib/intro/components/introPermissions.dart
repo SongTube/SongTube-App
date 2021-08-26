@@ -18,7 +18,7 @@ class IntroPermissions extends StatefulWidget {
 class _IntroPermissionsState extends State<IntroPermissions> {
 
   // Permission Granted
-  bool accessGranted;
+  bool? accessGranted;
 
   @override
   void initState() {
@@ -53,7 +53,7 @@ class _IntroPermissionsState extends State<IntroPermissions> {
                       padding: EdgeInsets.only(right: 8),
                       child: AnimatedSwitcher(
                         duration: Duration(milliseconds: 300),
-                        child: accessGranted
+                        child: accessGranted!
                           ? Icon(
                               MdiIcons.lockOpen,
                               size: 40,
@@ -73,14 +73,14 @@ class _IntroPermissionsState extends State<IntroPermissions> {
                           fontSize: 22,
                           fontFamily: 'Product Sans',
                           fontWeight: FontWeight.w600,
-                          color: Theme.of(context).textTheme.bodyText1.color
+                          color: Theme.of(context).textTheme.bodyText1!.color
                         ),
                         children: [
                           TextSpan(
-                            text: Languages.of(context).labelGrant + " "
+                            text: Languages.of(context)!.labelGrant + " "
                           ),
                           TextSpan(
-                            text: Languages.of(context).labelAccess,
+                            text: Languages.of(context)!.labelAccess,
                             style: TextStyle(
                               color: Theme.of(context).accentColor,
                               fontWeight: FontWeight.w600
@@ -112,7 +112,7 @@ class _IntroPermissionsState extends State<IntroPermissions> {
                         style: TextStyle(
                           fontSize: 18,
                           fontFamily: 'YTSans',
-                          color: Theme.of(context).textTheme.bodyText1.color
+                          color: Theme.of(context).textTheme.bodyText1!.color
                         ),
                         children: [
                           TextSpan(
@@ -124,11 +124,11 @@ class _IntroPermissionsState extends State<IntroPermissions> {
                             )
                           ),
                           TextSpan(
-                            text: Languages.of(context).labelExternalAccessJustification,
+                            text: Languages.of(context)!.labelExternalAccessJustification,
                             style: TextStyle(
                               fontFamily: 'Product Sans',
                               fontWeight: FontWeight.w600,
-                              color: Theme.of(context).textTheme.bodyText1.color
+                              color: Theme.of(context).textTheme.bodyText1!.color!
                                 .withOpacity(0.8)
                             )
                           )
@@ -165,7 +165,7 @@ class _IntroPermissionsState extends State<IntroPermissions> {
                     borderRadius: BorderRadius.circular(50),
                     color: Theme.of(context).accentColor
                   ),
-                  child: accessGranted
+                  child: accessGranted!
                     ? Container(
                         margin: EdgeInsets.only(left: 14, right: 14),
                         child: Icon(

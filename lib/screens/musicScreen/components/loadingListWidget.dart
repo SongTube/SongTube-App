@@ -16,7 +16,7 @@ class MediaLoadingWidget extends StatelessWidget {
           Container(
             margin: EdgeInsets.only(top: 16),
             child: Text(
-              Languages.of(context).labelGettingYourMedia,
+              Languages.of(context)!.labelGettingYourMedia,
               style: TextStyle(
                 fontFamily: 'YTSans',
                 fontSize: 20

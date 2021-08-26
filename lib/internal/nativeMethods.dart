@@ -1,4 +1,5 @@
 // Dart
+import 'dart:async';
 import 'dart:io';
 
 // Flutter
@@ -12,8 +13,8 @@ class NativeMethod {
   static const imageProcessing = const MethodChannel("imageProcessing");
 
   // Handle Intent (Ej: when you share a YouTube link to this app)
-  static Future<String> handleIntent() async {
-    String _intent = await platform.invokeMethod('getSharedText');
+  static Future<String?> handleIntent() async {
+    String? _intent = await platform.invokeMethod('getSharedText');
     await platform.invokeMethod('clearSharedText');
     if (_intent == null) return null;
     print("IntentHandler: Result: " + _intent);
@@ -39,10 +40,10 @@ class NativeMethod {
   }
 
   // Crop image to Square
-  static Future<File> cropToSquare(File image) async {
+  static Future<File?> cropToSquare(File image) async {
     if (await image.exists()) {
       String croppedImagePath =
-        await imageProcessing.invokeMethod('cropToSquare', {"imagePath": image.path});
+        await (imageProcessing.invokeMethod('cropToSquare', {"imagePath": image.path}) as FutureOr<String>);
       return File(croppedImagePath);
     }
     return null;

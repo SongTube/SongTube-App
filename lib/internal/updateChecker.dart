@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:songtube/internal/models/updateDetails.dart';
 
-Future<UpdateDetails> getLatestRelease() async {
+Future<UpdateDetails?> getLatestRelease() async {
   try {
     var client = http.Client();
     var headers = {

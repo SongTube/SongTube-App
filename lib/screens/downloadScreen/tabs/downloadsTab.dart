@@ -29,7 +29,7 @@ class _DownloadsTabState extends State<DownloadsTab> {
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
     return MediaListBase(
       isLoading: mediaProvider.loadingDownloads,
-      isEmpty: mediaProvider.databaseSongs.isEmpty,
+      isEmpty: mediaProvider.databaseSongs!.isEmpty,
       listType: MediaListBaseType.Downloads,
       child: MusicScreenSongsTab(
         songs: mediaProvider.databaseSongs,

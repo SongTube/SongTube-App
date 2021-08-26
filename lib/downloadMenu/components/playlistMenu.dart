@@ -20,13 +20,13 @@ import 'package:transparent_image/transparent_image.dart';
 enum _PlaylistMenuDownloadType { Video, Audio }
 
 class PlaylistDownloadMenu extends StatefulWidget {
-  final List<StreamInfoItem> playlistStreams;
+  final List<StreamInfoItem?>? playlistStreams;
   final Function(List<DownloadItem>) onDownload;
   final Function onBack;
   PlaylistDownloadMenu({
-    @required this.playlistStreams,
-    @required this.onDownload,
-    @required this.onBack
+    required this.playlistStreams,
+    required this.onDownload,
+    required this.onBack
   });
   @override
   _PlaylistDownloadMenuState createState() => _PlaylistDownloadMenuState();
@@ -41,7 +41,7 @@ class _PlaylistDownloadMenuState extends State<PlaylistDownloadMenu> {
   List<bool> enabledVideos = [];
 
   // Default quality for downloading videos
-  String videosQuality = "720";
+  String? videosQuality = "720";
 
   void changeDownloadTypeAllStreams(_PlaylistMenuDownloadType type) {
     if (type == _PlaylistMenuDownloadType.Video) {
@@ -64,20 +64,20 @@ class _PlaylistDownloadMenuState extends State<PlaylistDownloadMenu> {
 
   @override
   void initState() {
-    widget.playlistStreams.forEach((element) {
+    widget.playlistStreams!.forEach((element) {
       TagsControllers tags = TagsControllers();
-      tags.updateTextControllersFromStream(element);
+      tags.updateTextControllersFromStream(element!);
       downloadItems.add(DownloadItem(
         url: element.url,
         tags: DownloadTags(
-          title: tags.titleController.text,
-          album: tags.albumController.text,
-          artist: tags.artistController.text,
-          genre: tags.genreController.text,
+          title: tags.titleController!.text,
+          album: tags.albumController!.text,
+          artist: tags.artistController!.text,
+          genre: tags.genreController!.text,
           coverurl: tags.artworkController,
-          date: tags.dateController.text,
-          track: tags.trackController.text,
-          disc: tags.discController.text
+          date: tags.dateController!.text,
+          track: tags.trackController!.text,
+          disc: tags.discController!.text
         ),
         downloadQuality: videosQuality,
         ffmpegTask: FFmpegTask.NONE,
@@ -110,10 +110,10 @@ class _PlaylistDownloadMenuState extends State<PlaylistDownloadMenu> {
             children: [
               IconButton(
                 icon: Icon(EvaIcons.arrowBackOutline),
-                onPressed: widget.onBack
+                onPressed: widget.onBack as void Function()?
               ),
               SizedBox(width: 4),
-              Text(Languages.of(context).labelPlaylist, style: TextStyle(
+              Text(Languages.of(context)!.labelPlaylist, style: TextStyle(
                 fontSize: 20,
                 fontFamily: "YTSans"
               )),
@@ -123,7 +123,7 @@ class _PlaylistDownloadMenuState extends State<PlaylistDownloadMenu> {
         Divider(
           height: 1,
           thickness: 1,
-          color: Colors.grey[600].withOpacity(0.1),
+          color: Colors.grey[600]!.withOpacity(0.1),
           indent: 12,
           endIndent: 12
         ),
@@ -188,9 +188,9 @@ class _PlaylistDownloadMenuState extends State<PlaylistDownloadMenu> {
                                 child: FadeInImage(
                                   fadeInDuration: Duration(milliseconds: 300),
                                   placeholder: MemoryImage(kTransparentImage),
-                                  image: isURL(item.tags.coverurl)
-                                    ? NetworkImage(item.tags.coverurl)
-                                    : FileImage(File(item.tags.coverurl)),
+                                  image: (isURL(item.tags.coverurl!)
+                                    ? NetworkImage(item.tags.coverurl!)
+                                    : FileImage(File(item.tags.coverurl!))) as ImageProvider<Object>,
                                     fit: BoxFit.cover,
                                 ),
                               ),
@@ -219,22 +219,22 @@ class _PlaylistDownloadMenuState extends State<PlaylistDownloadMenu> {
                     ],
                   ),
                   title: Text(
-                    item.tags.title,
+                    item.tags.title!,
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 14,
                       color: Theme.of(context).textTheme
-                        .bodyText1.color
+                        .bodyText1!.color
                     ),
                     overflow: TextOverflow.clip,
                     maxLines: 2,
                   ),
                   subtitle: Text(
-                    item.tags.artist,
+                    item.tags.artist!,
                     style: TextStyle(
                       fontSize: 11,
                       color: Theme.of(context).textTheme
-                        .bodyText1.color.withOpacity(0.8)
+                        .bodyText1!.color!.withOpacity(0.8)
                     ),
                     overflow: TextOverflow.clip,
                     maxLines: 1,
@@ -247,7 +247,7 @@ class _PlaylistDownloadMenuState extends State<PlaylistDownloadMenu> {
         Divider(
           height: 1,
           thickness: 1,
-          color: Colors.grey[600].withOpacity(0.1),
+          color: Colors.grey[600]!.withOpacity(0.1),
           indent: 12,
           endIndent: 12
         ),
@@ -259,11 +259,11 @@ class _PlaylistDownloadMenuState extends State<PlaylistDownloadMenu> {
               Align(
                 alignment: Alignment.topLeft,
                 child: Text(
-                  Languages.of(context).labelGlobalParameters,
+                  Languages.of(context)!.labelGlobalParameters,
                   style: TextStyle(
                     fontFamily: 'Product Sans',
                     fontWeight: FontWeight.w600,
-                    color: Theme.of(context).textTheme.bodyText1.color
+                    color: Theme.of(context).textTheme.bodyText1!.color!
                       .withOpacity(0.8)
                   ),
                 )
@@ -304,11 +304,11 @@ class _PlaylistDownloadMenuState extends State<PlaylistDownloadMenu> {
                         DropdownMenuItem(
                           child: Text(_qualityList[index]+"p",
                             style: TextStyle(color: Theme.of(context)
-                              .textTheme.bodyText1.color
+                              .textTheme.bodyText1!.color
                           )),
                         value: _qualityList[index],
                       )),
-                      onChanged: (String quality) {
+                      onChanged: (String? quality) {
                         for (int i = 0; i < downloadItems.length; i++) {
                           downloadItems[i].downloadQuality = quality;
                         }
@@ -337,11 +337,11 @@ class _PlaylistDownloadMenuState extends State<PlaylistDownloadMenu> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              Languages.of(context).labelDownloadAll,
+                              Languages.of(context)!.labelDownloadAll,
                               style: TextStyle(
                                 fontFamily: 'Product Sans',
                                 fontWeight: FontWeight.w600,
-                                color: Theme.of(context).textTheme.bodyText1.color
+                                color: Theme.of(context).textTheme.bodyText1!.color!
                                   .withOpacity(0.8)
                               ),
                             ),

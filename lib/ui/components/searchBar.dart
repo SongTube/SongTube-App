@@ -2,17 +2,17 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 
 class CommonSearchBar extends StatelessWidget {
-  final TextEditingController textController;
-  final FocusNode focusNode;
+  final TextEditingController? textController;
+  final FocusNode? focusNode;
   final Function(String) onChanged;
-  final Function(String) onSubmit;
+  final Function(String)? onSubmit;
   final Function onClear;
   final String hintText;
   CommonSearchBar({
-    @required this.textController,
-    @required this.focusNode,
-    @required this.onChanged,
-    @required this.onClear,
+    required this.textController,
+    required this.focusNode,
+    required this.onChanged,
+    required this.onClear,
     this.onSubmit,
     this.hintText = ""
   });
@@ -36,7 +36,7 @@ class CommonSearchBar extends StatelessWidget {
               TextField(
                 keyboardType: TextInputType.url,
                 style: TextStyle(
-                  color: Theme.of(context).textTheme.bodyText1.color,
+                  color: Theme.of(context).textTheme.bodyText1!.color,
                   fontSize: 14
                 ),
                 focusNode: focusNode,
@@ -46,7 +46,7 @@ class CommonSearchBar extends StatelessWidget {
                   prefixIcon: Icon(EvaIcons.searchOutline, size: 22, color: Colors.red),
                   hintText: hintText,
                   hintStyle: TextStyle(
-                    color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.4),
+                    color: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.4),
                     fontSize: 14
                   ),
                   border: UnderlineInputBorder(
@@ -59,20 +59,20 @@ class CommonSearchBar extends StatelessWidget {
                 ),
                 onChanged: (String searchQuery) => onChanged(searchQuery),
                 onSubmitted: (searchQuery) {
-                  onSubmit(searchQuery);
+                  onSubmit!(searchQuery);
                   FocusScope.of(context).unfocus();
                 }
               ),
               Align(
                 alignment: Alignment.centerRight,
-                child: textController.text != ""
+                child: textController!.text != ""
                   ? IconButton(
                       icon: Icon(
                         Icons.clear,
                         size: 20,
                         color: Theme.of(context).iconTheme.color
                       ),
-                      onPressed: onClear
+                      onPressed: onClear as void Function()?
                     )
                   : Container(),
               )

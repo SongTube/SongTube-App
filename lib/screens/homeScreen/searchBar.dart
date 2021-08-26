@@ -10,8 +10,8 @@ import 'package:songtube/provider/preferencesProvider.dart';
 import 'package:songtube/ui/sheets/searchFilters.dart';
 
 class HomePageAppBar extends StatefulWidget {
-  final Function(String) onLoadVideo;
-  final Function(String) onLoadPlaylist;
+  final Function(String?)? onLoadVideo;
+  final Function(String?)? onLoadPlaylist;
   HomePageAppBar({
     this.onLoadPlaylist,
     this.onLoadVideo
@@ -22,7 +22,7 @@ class HomePageAppBar extends StatefulWidget {
 
 class _HomePageAppBarState extends State<HomePageAppBar> with TickerProviderStateMixin {
 
-  AnimationController _animationController;
+  late AnimationController _animationController;
 
   @override
   void initState() {
@@ -58,7 +58,7 @@ class _HomePageAppBarState extends State<HomePageAppBar> with TickerProviderStat
                     FocusScope.of(context).unfocus();
                   } else {
                     manager.youtubeSearch = null;
-                    manager.searchController.clear();
+                    manager.searchController!.clear();
                     manager.setState();
                   }
                 },
@@ -77,7 +77,7 @@ class _HomePageAppBarState extends State<HomePageAppBar> with TickerProviderStat
               margin: EdgeInsets.only(left: 18, right: 18),
               height: kToolbarHeight*0.9,
               decoration: BoxDecoration(
-                color: Theme.of(context).iconTheme.color
+                color: Theme.of(context).iconTheme.color!
                   .withOpacity(0.03),
                 borderRadius: BorderRadius.circular(15)
               ),
@@ -123,13 +123,13 @@ class _HomePageAppBarState extends State<HomePageAppBar> with TickerProviderStat
                   ),
                   AnimatedSwitcher(
                     duration: Duration(milliseconds: 300),
-                    child: manager.searchController.text.isNotEmpty && manager.showSearchBar
+                    child: manager.searchController!.text.isNotEmpty && manager.showSearchBar
                       ? IconButton(
                           icon: Icon(EvaIcons.trashOutline,
-                            color: Theme.of(context).iconTheme.color.withOpacity(0.6),
+                            color: Theme.of(context).iconTheme.color!.withOpacity(0.6),
                             size: 20),
                           onPressed: () {
-                            manager.searchController.clear();
+                            manager.searchController!.clear();
                             setState(() {});
                           },
                         )
@@ -140,17 +140,17 @@ class _HomePageAppBarState extends State<HomePageAppBar> with TickerProviderStat
                     builder: (context, dynamic id) {
                       return AnimatedSwitcher(
                         duration: Duration(milliseconds: 300),
-                        child: id.data != null && manager.searchController.text.isEmpty
+                        child: id.data != null && manager.searchController!.text.isEmpty
                           ? IconButton(
                               icon: Icon(EvaIcons.linkOutline,
                                 color: Theme.of(context).accentColor,
                                 size: 20),
                               onPressed: () {
-                                manager.searchBarFocusNode.unfocus();
+                                manager.searchBarFocusNode!.unfocus();
                                 if (id.data is _VideoId)
-                                  widget.onLoadVideo(id.data.id);
+                                  widget.onLoadVideo!(id.data.id);
                                 if (id.data is _PlaylistId)
-                                  widget.onLoadPlaylist(id.data.id);
+                                  widget.onLoadPlaylist!(id.data.id);
                               },
                             )
                           : Container()
@@ -159,7 +159,7 @@ class _HomePageAppBarState extends State<HomePageAppBar> with TickerProviderStat
                   ),
                   IconButton(
                     icon: Icon(EvaIcons.dropletOutline,
-                      color: Theme.of(context).iconTheme.color.withOpacity(0.6)),
+                      color: Theme.of(context).iconTheme.color!.withOpacity(0.6)),
                     onPressed: () {
                       showModalBottomSheet(
                         shape: RoundedRectangleBorder(
@@ -183,7 +183,7 @@ class _HomePageAppBarState extends State<HomePageAppBar> with TickerProviderStat
   }
 
   Future<dynamic> _getClipboardData() async {
-    String data = (await Clipboard.getData("text/plain")).text ?? "";
+    String data = (await Clipboard.getData("text/plain"))!.text ?? "";
     _VideoId videoId = _VideoId(await YoutubeId.getIdFromStreamUrl(data));
     _PlaylistId playlistId = _PlaylistId(await YoutubeId.getIdFromPlaylistUrl(data));
     if (videoId.id != null) {
@@ -199,7 +199,7 @@ class _HomePageAppBarState extends State<HomePageAppBar> with TickerProviderStat
     ManagerProvider manager = Provider.of<ManagerProvider>(context);
     return GestureDetector(
       onTap: () {
-        manager.searchBarFocusNode.requestFocus();
+        manager.searchBarFocusNode!.requestFocus();
       },
       child: Container(
         color: Colors.transparent,
@@ -221,7 +221,7 @@ class _HomePageAppBarState extends State<HomePageAppBar> with TickerProviderStat
                 child: Text(
                   "SongTube",
                     style: TextStyle(
-                    color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6),
+                    color: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.6),
                     fontFamily: 'Product Sans',
                     fontWeight: FontWeight.w700,
                     fontSize: 20,
@@ -246,15 +246,15 @@ class _HomePageAppBarState extends State<HomePageAppBar> with TickerProviderStat
         enableSuggestions: prefs.autocorrectSearchBar,
         controller: manager.searchController,
         focusNode: manager.searchBarFocusNode,
-        onTap: () => manager.searchBarFocusNode.requestFocus(),
+        onTap: () => manager.searchBarFocusNode!.requestFocus(),
         style: TextStyle(
-          color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6),
+          color: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.6),
           fontSize: 14
         ),
         decoration: InputDecoration(
-          hintText: Languages.of(context).labelSearchYoutube,
+          hintText: Languages.of(context)!.labelSearchYoutube,
           hintStyle: TextStyle(
-            color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6),
+            color: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.6),
           ),
           border: UnderlineInputBorder(
             borderRadius: BorderRadius.circular(10),
@@ -283,11 +283,11 @@ class _HomePageAppBarState extends State<HomePageAppBar> with TickerProviderStat
 }
 
 class _VideoId {
-  String id;
+  String? id;
   _VideoId(this.id);
 }
 
 class _PlaylistId {
-  String id;
+  String? id;
   _PlaylistId(this.id);
 }
