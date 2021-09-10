@@ -1,9 +1,9 @@
 class UpdateDetails {
 
-  String version;
-  String publishDate;
-  String updateDetails;
-  String downloadUrl;
+  String? version;
+  String? publishDate;
+  String? updateDetails;
+  String? downloadUrl;
 
   UpdateDetails(
     this.version,

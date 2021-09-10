@@ -38,7 +38,7 @@ class YoutubePlayerVideoPage extends StatefulWidget {
 
 class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with TickerProviderStateMixin {
 
-  GlobalKey<ScaffoldState> scaffoldKey;
+  GlobalKey<ScaffoldState>? scaffoldKey;
 
   // Player Height
   double mainBodyHeight = 0;
@@ -46,13 +46,13 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
 
   // Pip Status
   bool enablePip = true;
-  bool isInPictureInPictureMode = false;
+  bool? isInPictureInPictureMode = false;
 
   // BottomSheet controller
-  PersistentBottomSheetController bottomSheetController;
+  PersistentBottomSheetController? bottomSheetController;
 
   // Scroll Controller
-  ScrollController scrollController;
+  ScrollController? scrollController;
 
   // Restoring Scroll position
   bool restoringScroll = false;
@@ -62,7 +62,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
   double aspectRatio = 16/9;
 
   // Animation controller for hiding Details & Engagement on scroll
-  AnimationController animationController;
+  late AnimationController animationController;
 
   @override
   void initState() {
@@ -70,9 +70,9 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
     var keyboardVisibilityController = KeyboardVisibilityController();
     scaffoldKey = GlobalKey<ScaffoldState>();
     scrollController = ScrollController();
-    scrollController.addListener(() {
+    scrollController!.addListener(() {
       if (!restoringScroll)
-        animationController.value = 1 - (scrollController.position.pixels.clamp(0, 200))/200;
+        animationController.value = 1 - (scrollController!.position.pixels.clamp(0, 200))/200;
     });
     animationController = AnimationController(
       vsync: this, value: 1, duration: Duration(milliseconds: 250));
@@ -81,23 +81,23 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
         if (visible == false) FocusScope.of(context).requestFocus(new FocusNode());
       }
     });
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       Provider.of<VideoPageProvider>(context, listen: false)
-        .fwController.open();
+        .fwController!.open();
     });
   }
 
   void executeAutoPlay() {
     VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context, listen: false);
-    StreamInfoItem currentStream = pageProvider.infoItem;
+    StreamInfoItem? currentStream = pageProvider.infoItem;
     bool isPlaylist = pageProvider.isPlaylist;
     if (isPlaylist) {
-      int currentIndex = pageProvider.currentRelatedVideos.indexOf(currentStream);
-      if (currentIndex + 1 <= pageProvider.currentRelatedVideos.length) {
-        pageProvider.infoItem = pageProvider.currentRelatedVideos[currentIndex+1];
+      int currentIndex = pageProvider.currentRelatedVideos!.indexOf(currentStream);
+      if (currentIndex + 1 <= pageProvider.currentRelatedVideos!.length) {
+        pageProvider.infoItem = pageProvider.currentRelatedVideos![currentIndex+1];
       }
     } else {
-      pageProvider.infoItem = pageProvider.currentRelatedVideos[0];
+      pageProvider.infoItem = pageProvider.currentRelatedVideos![0];
     }
   }
 
@@ -105,26 +105,26 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
   Widget build(BuildContext context) {
     VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
     PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
-    if (bottomSheetController != null && pageProvider.fwController.panelPosition < 1) {
+    if (bottomSheetController != null && pageProvider.fwController!.panelPosition < 1) {
       try {
-        bottomSheetController.close();
+        bottomSheetController!.close();
       } catch (_) {}
       setState(() => bottomSheetController = null);
     }
     return PipWidget(
-      onResume: (bool pipMode) {
+      onResume: (bool? pipMode) {
         setState(() => isInPictureInPictureMode = pipMode);
       },
       onSuspending: () {
         if (
-          (pageProvider?.playerKey?.currentState?.isPlaying ?? false) &&
-          pageProvider.fwController.isPanelOpen
+          (pageProvider.playerKey.currentState?.isPlaying ?? false) &&
+          pageProvider.fwController!.isPanelOpen
         ) {
           if (prefs.autoPipMode) {
             setState(() => isInPictureInPictureMode = true);
             FlutterPip.enterPictureInPictureMode();
           } else {
-            pageProvider.playerKey.currentState.controller.pause();
+            pageProvider.playerKey.currentState!.controller!.pause();
           }
         }
       },
@@ -136,16 +136,16 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
   }
 
   Widget _currentWidget() {
-    if (isInPictureInPictureMode) {
+    if (isInPictureInPictureMode!) {
       return _pipWidget();
     } else if (MediaQuery.of(context).orientation == Orientation.portrait) {
       return NotificationListener<ScrollNotification>(
         onNotification: (scroll) {
           if (scroll is ScrollEndNotification) {
-            if (scrollController.position.pixels < 100) {
+            if (scrollController!.position.pixels < 100) {
               animationController.animateTo(1).then((_) {
                 restoringScroll = true;
-                scrollController.animateTo(0,
+                scrollController!.animateTo(0,
                   duration: Duration(milliseconds: 150),
                   curve: Curves.ease).then((_) =>
                     restoringScroll = false);
@@ -153,8 +153,8 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
             } else {
               animationController.animateTo(0).then((_) {
                 restoringScroll = true;
-                if (scrollController.position.pixels < 200) {
-                  scrollController.animateTo(200,
+                if (scrollController!.position.pixels < 200) {
+                  scrollController!.animateTo(200,
                     duration: Duration(milliseconds: 150),
                     curve: Curves.ease).then((_) =>
                       restoringScroll = false);
@@ -175,7 +175,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
     VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
     PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     return StreamManifestPlayer(
-      segments: pageProvider.currentVideo.segments,
+      segments: pageProvider.currentVideo!.segments,
       onAspectRatioInit: (value) => setState(() {
         aspectRatio = value;
       }),
@@ -186,13 +186,13 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
       borderRadius: MediaQuery.of(context).orientation == Orientation.landscape
         ? 0 : 10,
       key: pageProvider.playerKey,
-      videoTitle: pageProvider?.currentVideo?.name ?? "",
-      streams: pageProvider.currentVideo.videoOnlyStreams.isNotEmpty
-        ? pageProvider.currentVideo.videoOnlyStreams
-        : pageProvider.currentVideo.videoStreams,
-      audioStream: pageProvider.currentVideo.videoOnlyStreams.isNotEmpty
-        ? pageProvider.currentVideo.getAudioStreamWithBestMatchForVideoStream(
-            pageProvider.currentVideo.videoOnlyWithHighestQuality
+      videoTitle: pageProvider.currentVideo?.name ?? "",
+      streams: pageProvider.currentVideo!.videoOnlyStreams!.isNotEmpty
+        ? pageProvider.currentVideo!.videoOnlyStreams
+        : pageProvider.currentVideo!.videoStreams,
+      audioStream: pageProvider.currentVideo!.videoOnlyStreams!.isNotEmpty
+        ? pageProvider.currentVideo!.getAudioStreamWithBestMatchForVideoStream(
+            pageProvider.currentVideo!.videoOnlyWithHighestQuality!
           ) : null,
       isFullscreen: MediaQuery.of(context).orientation == Orientation.landscape
         ? true : false,
@@ -225,8 +225,8 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
 
   Widget _pipWidget() {
     VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
-    pageProvider.playerKey?.currentState?.controller?.play();
-    pageProvider.fwController.open();
+    pageProvider.playerKey.currentState?.controller?.play();
+    pageProvider.fwController!.open();
     FlutterScreen.resetBrightness();
     return AnimatedSwitcher(
       duration: Duration(milliseconds: 400),
@@ -276,8 +276,8 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
       ([SystemUiOverlay.top, SystemUiOverlay.bottom]);
     FlutterScreen.resetBrightness();
     return MeasureSize(
-      onChange: (Size size) {
-        setState(() => mainBodyHeight = size.height);
+      onChange: (Size? size) {
+        setState(() => mainBodyHeight = size?.height ?? 0);
       },
       child: Column(
         children: [
@@ -294,8 +294,8 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
             child: Container(
               margin: EdgeInsets.only(left: 12, right: 12),
               child: MeasureSize(
-                onChange: (Size size) {
-                  playerHeight = size.height;
+                onChange: (Size? size) {
+                  playerHeight = size?.height ?? 0;
                 },
                 child: AspectRatio(
                   aspectRatio: aspectRatio < 16/9 ? 16/9 : aspectRatio,
@@ -369,14 +369,14 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                           // Comments section
                           _commentTile(),
                           StreamsListTileView(
-                            scaffoldKey: scaffoldKey.currentState,
+                            scaffoldKey: scaffoldKey!.currentState,
                             shrinkWrap: true,
                             removePhysics: true,
-                            streams: pageProvider?.currentRelatedVideos == null
+                            streams: pageProvider.currentRelatedVideos == null
                               ? [] : pageProvider.currentRelatedVideos, 
                             onTap: (stream, index) async {
                               pageProvider.infoItem =
-                                pageProvider.currentRelatedVideos[index];
+                                pageProvider.currentRelatedVideos![index];
                             },
                           ),
                         ],
@@ -426,15 +426,15 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                           _commentTile(),
                           SizedBox(height: 12),
                           StreamsListTileView(
-                            scaffoldKey: scaffoldKey.currentState,
+                            scaffoldKey: scaffoldKey!.currentState,
                             shrinkWrap: true,
                             removePhysics: true,
                             topPadding: false,
-                            streams: pageProvider?.currentRelatedVideos == null
+                            streams: pageProvider.currentRelatedVideos == null
                               ? [] : pageProvider.currentRelatedVideos, 
                             onTap: (stream, index) async {
                               pageProvider.infoItem =
-                                pageProvider.currentRelatedVideos[index];
+                                pageProvider.currentRelatedVideos![index];
                             },
                           )
                         ],
@@ -469,9 +469,9 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
               children: [
                 SizedBox(height: 4),
                 VideoEngagement(
-                  likeCount: pageProvider.currentVideo.likeCount,
-                  dislikeCount: pageProvider.currentVideo.dislikeCount,
-                  viewCount: pageProvider.currentVideo.viewCount,
+                  likeCount: pageProvider.currentVideo!.likeCount,
+                  dislikeCount: pageProvider.currentVideo!.dislikeCount,
+                  viewCount: pageProvider.currentVideo!.viewCount,
                   onSaveToPlaylist: () {
                     showModalBottomSheet(
                       context: context,
@@ -496,14 +496,14 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                         return DownloadMenu(
                           video: pageProvider.currentVideo,
                           tags: pageProvider.currentTags,
-                          scaffoldState: scaffoldKey.currentState,
+                          scaffoldState: scaffoldKey!.currentState,
                           relatedVideos: pageProvider.currentRelatedVideos
                         );
                       }
                     );
                   },
                   onShare: () {
-                    Share.share(pageProvider.currentVideo.url);
+                    Share.share(pageProvider.currentVideo!.url!);
                   },
                 ),
                 SizedBox(height: 4),
@@ -537,7 +537,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
         }
         double height = MediaQuery.of(context).size.height;
         double topPadding = MediaQuery.of(context).padding.top;
-        bottomSheetController = scaffoldKey.currentState.showBottomSheet((context) {
+        bottomSheetController = scaffoldKey!.currentState!.showBottomSheet((context) {
           return Wrap(
             children: [
               Container(
@@ -551,9 +551,9 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                 ),
                 child: MoreDetailsSheet(
                   video: pageProvider.currentVideo,
-                  segments: pageProvider?.currentVideo?.segments ?? [],
-                  onSegmentTap: (position) => pageProvider.playerKey.currentState
-                    .controller.seekTo(Duration(seconds: position)),
+                  segments: pageProvider.currentVideo?.segments ?? [],
+                  onSegmentTap: (position) => pageProvider.playerKey.currentState!
+                    .controller!.seekTo(Duration(seconds: position)),
                   onDispose: () => bottomSheetController = null,
                 ),
               ),
@@ -569,7 +569,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
     return AnimatedSize(
       duration: Duration(milliseconds: 300),
       vsync: this,
-      child: pageProvider.currentComments != null && pageProvider.currentComments.isNotEmpty
+      child: pageProvider.currentComments != null && pageProvider.currentComments!.isNotEmpty
         ? InkWell(
             onTap: () {
               if (bottomSheetController != null) {
@@ -580,7 +580,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                 return;
               }
               double topPadding = MediaQuery.of(context).padding.top;
-              bottomSheetController = scaffoldKey.currentState.showBottomSheet((context) {
+              bottomSheetController = scaffoldKey!.currentState!.showBottomSheet((context) {
                 return VideoComments(
                   topPadding: topPadding + playerHeight + 8,
                   onDispose: () => bottomSheetController = null,
@@ -601,7 +601,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                           "Comments",
                           style: TextStyle(
                             fontSize: 14,
-                            color: Theme.of(context).textTheme.bodyText1.color,
+                            color: Theme.of(context).textTheme.bodyText1!.color,
                             fontWeight: FontWeight.w600,
                             fontFamily: 'Product Sans'
                           ),
@@ -619,14 +619,14 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                               child: FadeInImage(
                                 fadeInDuration: Duration(milliseconds: 300),
                                 placeholder: MemoryImage(kTransparentImage),
-                                image: NetworkImage(pageProvider.currentComments[0].uploaderAvatarUrl),
+                                image: NetworkImage(pageProvider.currentComments![0].uploaderAvatarUrl!),
                                 fit: BoxFit.cover,
                               ),
                             ),
                           ),
                           Expanded(
                             child: Text(
-                              pageProvider.currentComments[0].commentText,
+                              pageProvider.currentComments![0].commentText!,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
@@ -666,9 +666,9 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                 (context, listen: false).enableBlurUI ? 20 : 0,
               builder: (_) => 
               YoutubeChannelPage(
-                url: pageProvider.currentChannel.url,
-                name: pageProvider.currentChannel.name,
-                lowResAvatar: pageProvider.currentChannel.avatarUrl,
+                url: pageProvider.currentChannel!.url,
+                name: pageProvider.currentChannel!.name,
+                lowResAvatar: pageProvider.currentChannel!.avatarUrl,
           )));
       },
       child: Column(
@@ -686,9 +686,9 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                       fadeInDuration: Duration(milliseconds: 300),
                       placeholder: MemoryImage(kTransparentImage),
                       image: pageProvider.currentChannel != null
-                        ? isURL(pageProvider.currentChannel.avatarUrl)
-                            ? NetworkImage(pageProvider.currentChannel.avatarUrl)
-                            : FileImage(File(pageProvider.currentChannel.avatarUrl))
+                        ? (isURL(pageProvider.currentChannel!.avatarUrl!)
+                            ? NetworkImage(pageProvider.currentChannel!.avatarUrl!)
+                            : FileImage(File(pageProvider.currentChannel!.avatarUrl!))) as ImageProvider<Object>
                         : MemoryImage(kTransparentImage),
                       fit: BoxFit.cover,
                     ),
@@ -703,9 +703,9 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        pageProvider?.currentChannel?.name ?? "",
+                        pageProvider.currentChannel?.name ?? "",
                         style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyText1.color,
+                          color: Theme.of(context).textTheme.bodyText1!.color,
                           fontWeight: FontWeight.w600,
                           fontFamily: 'Product Sans',
                           fontSize: 16,
@@ -713,10 +713,10 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                       ),
                       Text(
                         pageProvider.currentChannel != null
-                         ? "${NumberFormat.compact().format(pageProvider.currentChannel.subscriberCount)} subs"
+                         ? "${NumberFormat.compact().format(pageProvider.currentChannel!.subscriberCount)} subs"
                          : "",
                         style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyText1.color
+                          color: Theme.of(context).textTheme.bodyText1!.color!
                             .withOpacity(0.8),
                           fontFamily: "Product Sans",
                           fontSize: 12,
@@ -728,9 +728,9 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                 ),
               ),
               ChannelSubscribeComponent(
-                channelName: pageProvider?.infoItem?.uploaderName ?? "",
+                channelName: pageProvider.infoItem?.uploaderName ?? "",
                 channel: pageProvider.currentChannel,
-                scaffoldState: scaffoldKey.currentState
+                scaffoldState: scaffoldKey!.currentState
               ),
               SizedBox(width: 12)
             ],
@@ -741,7 +741,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
     );
   }
 
-  Widget _videoLoading(String thumbnailUrl) {
+  Widget _videoLoading(String? thumbnailUrl) {
     return Stack(
       fit: StackFit.expand,
       children: [
@@ -750,9 +750,9 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
           child: FadeInImage(
             fadeInDuration: Duration(milliseconds: 250),
             placeholder: MemoryImage(kTransparentImage),
-            image: thumbnailUrl == null
+            image: (thumbnailUrl == null
               ? MemoryImage(kTransparentImage)
-              : NetworkImage(thumbnailUrl),
+              : NetworkImage(thumbnailUrl)) as ImageProvider<Object>,
             fit: BoxFit.cover,
           ),
         ),

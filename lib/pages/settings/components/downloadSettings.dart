@@ -43,9 +43,9 @@ class DownloadSettings extends StatelessWidget {
             });
           },
           title: Text(
-            Languages.of(context).labelAudioFolder,
+            Languages.of(context)!.labelAudioFolder,
             style: TextStyle(
-              color: Theme.of(context).textTheme.bodyText1.color,
+              color: Theme.of(context).textTheme.bodyText1!.color,
               fontWeight: FontWeight.w500
             ),
           ),
@@ -54,9 +54,9 @@ class DownloadSettings extends StatelessWidget {
               style: TextStyle(fontSize: 12),
               children: [
                 TextSpan(
-                  text: Languages.of(context).labelAudioFolderJustification+"\n",
+                  text: Languages.of(context)!.labelAudioFolderJustification+"\n",
                   style: TextStyle(
-                    color: Theme.of(context).textTheme.bodyText1.color
+                    color: Theme.of(context).textTheme.bodyText1!.color!
                       .withOpacity(0.8),
                   )
                 ),
@@ -65,7 +65,7 @@ class DownloadSettings extends StatelessWidget {
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 13,
-                    color: Theme.of(context).textTheme.bodyText1.color
+                    color: Theme.of(context).textTheme.bodyText1!.color!
                       .withOpacity(0.8),
                   )
                 )
@@ -99,9 +99,9 @@ class DownloadSettings extends StatelessWidget {
             });
           },
           title: Text(
-            Languages.of(context).labelVideoFolder,
+            Languages.of(context)!.labelVideoFolder,
             style: TextStyle(
-              color: Theme.of(context).textTheme.bodyText1.color,
+              color: Theme.of(context).textTheme.bodyText1!.color,
               fontWeight: FontWeight.w500
             ),
           ),
@@ -110,9 +110,9 @@ class DownloadSettings extends StatelessWidget {
               style: TextStyle(fontSize: 12),
               children: [
                 TextSpan(
-                  text: Languages.of(context).labelVideoFolderJustification+"\n",
+                  text: Languages.of(context)!.labelVideoFolderJustification+"\n",
                   style: TextStyle(
-                    color: Theme.of(context).textTheme.bodyText1.color
+                    color: Theme.of(context).textTheme.bodyText1!.color!
                       .withOpacity(0.8),
                   )
                 ),
@@ -121,7 +121,7 @@ class DownloadSettings extends StatelessWidget {
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 13,
-                    color: Theme.of(context).textTheme.bodyText1.color
+                    color: Theme.of(context).textTheme.bodyText1!.color!
                       .withOpacity(0.8),
                   )
                 )
@@ -143,32 +143,32 @@ class DownloadSettings extends StatelessWidget {
         ),
         ListTile(
           title: Text(
-            Languages.of(context).labelAlbumFolder,
+            Languages.of(context)!.labelAlbumFolder,
             style: TextStyle(
-              color: Theme.of(context).textTheme.bodyText1.color,
+              color: Theme.of(context).textTheme.bodyText1!.color,
               fontWeight: FontWeight.w500
             ),
           ),
-          subtitle: Text(Languages.of(context).labelAlbumFolderJustification,
+          subtitle: Text(Languages.of(context)!.labelAlbumFolderJustification,
             style: TextStyle(fontSize: 12)
           ),
           trailing: Checkbox(
             activeColor: Theme.of(context).accentColor,
             value: config.enableAlbumFolder,
-            onChanged: (bool newValue) async {
-              config.enableAlbumFolder = newValue;
+            onChanged: (bool? newValue) async {
+              config.enableAlbumFolder = newValue!;
             },
           ),
         ),
         ListTile(
           title: Text(
-            Languages.of(context).labelDeleteCache,
+            Languages.of(context)!.labelDeleteCache,
             style: TextStyle(
-              color: Theme.of(context).textTheme.bodyText1.color,
+              color: Theme.of(context).textTheme.bodyText1!.color,
               fontWeight: FontWeight.w500
             ),
           ),
-          subtitle: Text(Languages.of(context).labelDeleteCacheJustification,
+          subtitle: Text(Languages.of(context)!.labelDeleteCacheJustification,
             style: TextStyle(fontSize: 12)
           ),
           trailing: Container(
@@ -180,7 +180,7 @@ class DownloadSettings extends StatelessWidget {
               icon: Icon(EvaIcons.trashOutline, color: Theme.of(context).iconTheme.color),
               onPressed: () async {
                 double totalSize = 0;
-                String tmpPath = (await getExternalStorageDirectory()).path;
+                String tmpPath = (await getExternalStorageDirectory())!.path;
                 List<FileSystemEntity> listFiles = Directory(tmpPath).listSync();
                 listFiles.forEach((element) {
                   if (element is File) {
@@ -194,8 +194,8 @@ class DownloadSettings extends StatelessWidget {
                     builder: (context) {
                       return CustomAlert(
                         leadingIcon: Icon(MdiIcons.trashCan),
-                        title: Languages.of(context).labelCleaning,
-                        content: Languages.of(context).labelCacheIsEmpty,
+                        title: Languages.of(context)!.labelCleaning,
+                        content: Languages.of(context)!.labelCacheIsEmpty,
                         actions: <Widget>[
                           TextButton(
                             onPressed: () {
@@ -214,8 +214,8 @@ class DownloadSettings extends StatelessWidget {
                   builder: (context) {
                     return CustomAlert(
                       leadingIcon: Icon(MdiIcons.trashCan),
-                      title: Languages.of(context).labelCleaning,
-                      content: Languages.of(context).labelYouAreAboutToClear +
+                      title: Languages.of(context)!.labelCleaning,
+                      content: Languages.of(context)!.labelYouAreAboutToClear +
                         ": " + totalSize.toStringAsFixed(2) + "MB",
                       actions: <Widget>[
                         TextButton(
@@ -229,7 +229,7 @@ class DownloadSettings extends StatelessWidget {
                           onPressed: () {
                             Navigator.pop(context);
                           },
-                          child: Text(Languages.of(context).labelCancel),
+                          child: Text(Languages.of(context)!.labelCancel),
                         )
                       ],
                     );
@@ -244,7 +244,7 @@ class DownloadSettings extends StatelessWidget {
           title: Text(
             "Maximum simultaneous downloads",
             style: TextStyle(
-              color: Theme.of(context).textTheme.bodyText1.color,
+              color: Theme.of(context).textTheme.bodyText1!.color,
               fontWeight: FontWeight.w500
             ),
           ),
@@ -253,7 +253,7 @@ class DownloadSettings extends StatelessWidget {
               Text(
                 "${prefs.maxSimultaneousDownloads}",
                 style: TextStyle(
-                  color: Theme.of(context).textTheme.bodyText1.color
+                  color: Theme.of(context).textTheme.bodyText1!.color
                 ),
               ),
               Expanded(
@@ -280,7 +280,7 @@ class DownloadSettings extends StatelessWidget {
               Text(
                 "10",
                 style: TextStyle(
-                  color: Theme.of(context).textTheme.bodyText1.color
+                  color: Theme.of(context).textTheme.bodyText1!.color
                 ),
               ),
             ],

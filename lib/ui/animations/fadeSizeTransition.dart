@@ -4,8 +4,8 @@ class FadeSizeTransition extends StatelessWidget {
   final Animation<double> animator;
   final Widget child;
   FadeSizeTransition({
-    @required this.animator,
-    @required this.child
+    required this.animator,
+    required this.child
   });
   @override
   Widget build(BuildContext context) {

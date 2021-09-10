@@ -8,14 +8,14 @@ class FadeInTransition extends StatefulWidget {
   /// [child] to be Animated
   final Widget child;
   /// Animation Duration, default is 200 Milliseconds
-  final Duration duration;
+  final Duration? duration;
   /// Animation Curve, default is Linear
-  final Curve curve;
+  final Curve? curve;
   /// Delay before starting Animation
-  final Duration delay;
+  final Duration? delay;
 
   FadeInTransition({
-    @required this.child,
+    required this.child,
     this.duration,
     this.curve,
     this.delay
@@ -26,7 +26,7 @@ class FadeInTransition extends StatefulWidget {
 }
 
 class _FadeInTransitionState extends State<FadeInTransition> with TickerProviderStateMixin {
-  AnimationController _animController;
+  late AnimationController _animController;
 
   @override
   void initState() {
@@ -39,7 +39,7 @@ class _FadeInTransitionState extends State<FadeInTransition> with TickerProvider
     if (widget.delay == null) {
       _animController.forward();
     } else {
-      Timer(widget.delay, () {
+      Timer(widget.delay!, () {
         _animController.forward();
       });
     }
@@ -58,7 +58,7 @@ class _FadeInTransitionState extends State<FadeInTransition> with TickerProvider
         parent: _animController,
         curve: widget.curve == null
           ? Curves.linear
-          : widget.curve
+          : widget.curve!
       ),
       child: widget.child,
     );

@@ -40,8 +40,8 @@ class _DownloadsQueueTabState extends State<DownloadsQueueTab> {
                     dataProgress: infoset.dataProgress.stream,
                     progressBar: infoset.progressBar.stream,
                     currentAction: infoset.currentAction.stream,
-                    metadata: infoset.downloadItem.tags,
-                    downloadType: infoset.downloadItem.downloadType,
+                    metadata: infoset.downloadItem!.tags,
+                    downloadType: infoset.downloadItem!.downloadType,
                     onDownloadCancel: snapshot.data == DownloadStatus.Downloading
                       ? () {
                         infoset.cancelDownload = true;

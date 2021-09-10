@@ -41,12 +41,12 @@ class LibraryScreen extends StatelessWidget {
               ),
             ),
             Text(
-              Languages.of(context).labelLibrary,
+              Languages.of(context)!.labelLibrary,
               style: TextStyle(
                 fontFamily: 'Product Sans',
                 fontWeight: FontWeight.w700,
                 fontSize: 20,
-                color: Theme.of(context).textTheme.bodyText1.color
+                color: Theme.of(context).textTheme.bodyText1!.color
               ),
             ),
           ],
@@ -84,10 +84,10 @@ class LibraryScreen extends StatelessWidget {
                 ListTile(
                   leading: Icon(Icons.playlist_play_rounded),
                   title: Text(
-                    Languages.of(context).labelPlaylists,
+                    Languages.of(context)!.labelPlaylists,
                     style: TextStyle(
                       fontFamily: 'Product Sans',
-                      color: Theme.of(context).textTheme.bodyText1.color
+                      color: Theme.of(context).textTheme.bodyText1!.color
                     ),
                   ),
                   onTap: () {
@@ -106,7 +106,7 @@ class LibraryScreen extends StatelessWidget {
                     "Watch History",
                     style: TextStyle(
                       fontFamily: 'Product Sans',
-                      color: Theme.of(context).textTheme.bodyText1.color
+                      color: Theme.of(context).textTheme.bodyText1!.color
                     ),
                   ),
                   onTap: () {
@@ -126,7 +126,7 @@ class LibraryScreen extends StatelessWidget {
                     "Local Videos",
                     style: TextStyle(
                       fontFamily: 'Product Sans',
-                      color: Theme.of(context).textTheme.bodyText1.color
+                      color: Theme.of(context).textTheme.bodyText1!.color
                     ),
                   ),
                   onTap: () {
@@ -176,7 +176,7 @@ class LibraryScreen extends StatelessWidget {
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontFamily: 'Product Sans',
-                      color: Theme.of(context).textTheme.bodyText1.color
+                      color: Theme.of(context).textTheme.bodyText1!.color
                     )
                   ),
                 ),
@@ -194,24 +194,24 @@ class LibraryScreen extends StatelessWidget {
                     size: 36,
                   ),
                   title: Text(
-                    Languages.of(context).labelDonate,
+                    Languages.of(context)!.labelDonate,
                     textAlign: TextAlign.start,
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w600,
                       fontFamily: 'Product Sans',
-                      color: Theme.of(context).textTheme.bodyText1.color
+                      color: Theme.of(context).textTheme.bodyText1!.color
                     )
                   ),
                   subtitle: Text(
                     "Support Development!",
                     style: TextStyle(
                       fontFamily: 'Product Sans',
-                      color: Theme.of(context).textTheme.bodyText1.color
+                      color: Theme.of(context).textTheme.bodyText1!.color
                     ),
                   ),
                 ),
-                if (AudioService?.currentMediaItem != null || pageProvider.infoItem != null)
+                if (AudioService.currentMediaItem != null || pageProvider.infoItem != null)
                 // About us
                 ListTile(
                   onTap: () {
@@ -234,23 +234,23 @@ class LibraryScreen extends StatelessWidget {
                       fontSize: 22,
                       fontWeight: FontWeight.w600,
                       fontFamily: 'Product Sans',
-                      color: Theme.of(context).textTheme.bodyText1.color
+                      color: Theme.of(context).textTheme.bodyText1!.color
                     )
                   ),
                   subtitle: Text(
                     "Licenses, Contact Info and more",
                     style: TextStyle(
                       fontFamily: 'Product Sans',
-                      color: Theme.of(context).textTheme.bodyText1.color
+                      color: Theme.of(context).textTheme.bodyText1!.color
                     ),
                   ),
                 ),
-                if (AudioService?.currentMediaItem != null || pageProvider.infoItem != null)
+                if (AudioService.currentMediaItem != null || pageProvider.infoItem != null)
                 SizedBox(height: kBottomNavigationBarHeight*1.5)
               ],
             ),
           ),
-          if (AudioService?.currentMediaItem == null && pageProvider.infoItem == null)
+          if (AudioService.currentMediaItem == null && pageProvider.infoItem == null)
           GestureDetector(
             onTap: () {
               Navigator.push(context,

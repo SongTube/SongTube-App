@@ -4,8 +4,8 @@ class VideoDownloadFab extends StatelessWidget {
   final bool readyToDownload;
   final Function onDownload;
   VideoDownloadFab({
-    @required this.readyToDownload,
-    @required this.onDownload,
+    required this.readyToDownload,
+    required this.onDownload,
   });
   @override
   Widget build(BuildContext context) {

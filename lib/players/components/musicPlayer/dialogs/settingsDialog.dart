@@ -22,10 +22,10 @@ class MusicPlayerSettingsDialog extends StatelessWidget {
           ),
           SizedBox(width: 8),
           Text(
-            Languages.of(context).labelPlayerSettings,
+            Languages.of(context)!.labelPlayerSettings,
             style: TextStyle(
               fontFamily: 'YTSans',
-              color: Theme.of(context).textTheme.bodyText1.color
+              color: Theme.of(context).textTheme.bodyText1!.color
             ),
           ),
         ],
@@ -36,10 +36,10 @@ class MusicPlayerSettingsDialog extends StatelessWidget {
           // Expanded Artwork
           ListTile(
             title: Text(
-              Languages.of(context).labelExpandArtwork,
+              Languages.of(context)!.labelExpandArtwork,
               style: TextStyle(
                 fontFamily: 'YTSans',
-                color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6)
+                color: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.6)
               ),
             ),
             onTap: () {
@@ -52,10 +52,10 @@ class MusicPlayerSettingsDialog extends StatelessWidget {
           ),
           ListTile(
             title: Text(
-              Languages.of(context).labelBlurBackground,
+              Languages.of(context)!.labelBlurBackground,
               style: TextStyle(
                 fontFamily: 'YTSans',
-                color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6)
+                color: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.6)
               ),
             ),
             onTap: () {
@@ -68,10 +68,10 @@ class MusicPlayerSettingsDialog extends StatelessWidget {
           ),
           ListTile(
             title: Text(
-              Languages.of(context).labelArtworkRoundedCorners,
+              Languages.of(context)!.labelArtworkRoundedCorners,
               style: TextStyle(
                 fontFamily: 'YTSans',
-                color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6)
+                color: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.6)
               ),
             ),
             subtitle: Row(

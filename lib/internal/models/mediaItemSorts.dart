@@ -2,9 +2,9 @@ import 'package:audio_service/audio_service.dart';
 
 class MediaItemAlbum {
 
-  String albumTitle;
-  String albumAuthor;
-  List<MediaItem> mediaItems;
+  String? albumTitle;
+  String? albumAuthor;
+  List<MediaItem>? mediaItems;
   
   MediaItemAlbum({
     this.albumAuthor,
@@ -16,8 +16,8 @@ class MediaItemAlbum {
 
 class MediaItemArtist {
 
-  String artistName;
-  List<MediaItem> mediaItems;
+  String? artistName;
+  List<MediaItem>? mediaItems;
   
   MediaItemArtist({
     this.artistName,
@@ -28,8 +28,8 @@ class MediaItemArtist {
 
 class MediaItemGenre {
 
-  String genreName;
-  List<MediaItem> mediaItems;
+  String? genreName;
+  List<MediaItem>? mediaItems;
 
   MediaItemGenre({
     this.genreName,

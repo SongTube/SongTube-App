@@ -30,7 +30,7 @@ class EmptyIndicator extends StatelessWidget {
         ),
         child: Center(
           child: Text(
-            Languages.of(context).labelEmpty,
+            Languages.of(context)!.labelEmpty,
             style: TextStyle(
               color: Colors.white,
               fontFamily: 'YTSans'

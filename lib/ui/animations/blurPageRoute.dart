@@ -17,8 +17,8 @@ class BlurPageRoute<T> extends PageRoute<T> with MaterialRouteTransitionMixin<T>
     this.duration = const Duration(milliseconds: 500),
     this.keepState = false,
     this.blurStrength = 0,
-    @required this.builder,
-    RouteSettings settings,
+    required this.builder,
+    RouteSettings? settings,
     this.maintainState = true,
     bool fullscreenDialog = false,
     this.animationCurve = Curves.fastLinearToSlowEaseIn,
@@ -26,10 +26,7 @@ class BlurPageRoute<T> extends PageRoute<T> with MaterialRouteTransitionMixin<T>
     this.slideOffset = const Offset(0.0, 10.0),
     this.useCardExit = true,
     this.backdropColor = Colors.transparent
-  }) : assert(builder != null),
-       assert(maintainState != null),
-       assert(fullscreenDialog != null),
-       super(settings: settings, fullscreenDialog: fullscreenDialog);
+  }) : super(settings: settings, fullscreenDialog: fullscreenDialog);
 
   /// Builds the primary contents of the route.
   final WidgetBuilder builder;

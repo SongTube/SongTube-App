@@ -13,19 +13,19 @@ import 'package:songtube/internal/models/videoFile.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class VideosOnFolderListView extends StatelessWidget {
-  final List<VideoFile> list;
+  final List<VideoFile>? list;
   final Function(VideoFile) onVideoTap;
   VideosOnFolderListView({
-    @required this.list,
-    @required this.onVideoTap,
+    required this.list,
+    required this.onVideoTap,
   });
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView.builder(
-        itemCount: list.length,
+        itemCount: list!.length,
         itemBuilder: (context, index) {
-          VideoFile video = list[index];
+          VideoFile video = list![index];
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: InkWell(
@@ -46,9 +46,9 @@ class VideosOnFolderListView extends StatelessWidget {
                       ),
                       child: AspectRatio(
                         aspectRatio: 16/9,
-                        child: FutureBuilder<File>(
-                          future: FFmpegExtractor.getVideoThumbnail(File(video.path)),
-                          builder: (context, AsyncSnapshot<File> thumbnail) {
+                        child: FutureBuilder<File?>(
+                          future: FFmpegExtractor.getVideoThumbnail(File(video.path!)),
+                          builder: (context, AsyncSnapshot<File?> thumbnail) {
                             return ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: Stack(
@@ -57,9 +57,9 @@ class VideosOnFolderListView extends StatelessWidget {
                                   FadeInImage(
                                     fadeInDuration: Duration(milliseconds: 300),
                                     placeholder: MemoryImage(kTransparentImage),
-                                    image: thumbnail.hasData && thumbnail.data != null
-                                      ? FileImage(thumbnail.data)
-                                      : MemoryImage(kTransparentImage),
+                                    image: (thumbnail.hasData && thumbnail.data != null
+                                      ? FileImage(thumbnail.data!)
+                                      : MemoryImage(kTransparentImage)) as ImageProvider<Object>,
                                     fit: BoxFit.cover,
                                   ),
                                   Align(
@@ -72,12 +72,12 @@ class VideosOnFolderListView extends StatelessWidget {
                                         borderRadius: BorderRadius.circular(20)
                                       ),
                                       child: FutureBuilder(
-                                        future: FFmpegExtractor.getVideoDuration(File(video.path)),
+                                        future: FFmpegExtractor.getVideoDuration(File(video.path!)),
                                         builder: (context, AsyncSnapshot<int> videoDuration) {
                                           return Text(
                                             videoDuration.hasData
-                                              ? "${Duration(seconds: videoDuration.data).inMinutes}min"
-                                              : Languages.of(context).labelCalculating,
+                                              ? "${Duration(seconds: videoDuration.data!).inMinutes}min"
+                                              : Languages.of(context)!.labelCalculating,
                                             style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 12,
@@ -100,7 +100,7 @@ class VideosOnFolderListView extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.only(left: 16, right: 16),
                     child: Text(
-                      video.name.replaceAll(".webm", '')
+                      video.name!.replaceAll(".webm", '')
                         .replaceAll(".mp4", '')
                         .replaceAll(".avi", '')
                         .replaceAll(".3gpp", '')
@@ -118,11 +118,11 @@ class VideosOnFolderListView extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.only(left: 16, right: 16, top: 4),
                     child: Text(
-                      "${video.lastModified.month}/${video.lastModified.day}/${video.lastModified.year}  •  " +
-                      "${(int.parse(video.size)/1000000).toStringAsFixed(2)}MB",
+                      "${video.lastModified!.month}/${video.lastModified!.day}/${video.lastModified!.year}  •  " +
+                      "${(int.parse(video.size!)/1000000).toStringAsFixed(2)}MB",
                       style: TextStyle(
                         fontSize: 12,
-                        color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6),
+                        color: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.6),
                         fontFamily: 'Product Sans',
                         fontWeight: FontWeight.w600
                       ),

@@ -3,7 +3,7 @@ class AudioFilters {
   double volume;
   int bassGain;
   int trebleGain;
-  bool normalizeAudio;
+  bool? normalizeAudio;
 
   AudioFilters({
     this.volume = 1,

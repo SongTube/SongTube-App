@@ -16,10 +16,10 @@ class MediaListBase extends StatelessWidget {
   final bool isEmpty;
   final MediaListBaseType listType;
   MediaListBase({
-    @required this.child,
-    @required this.isLoading,
-    @required this.isEmpty,
-    @required this.listType,
+    required this.child,
+    required this.isLoading,
+    required this.isEmpty,
+    required this.listType,
   });
   @override
   Widget build(BuildContext context) {

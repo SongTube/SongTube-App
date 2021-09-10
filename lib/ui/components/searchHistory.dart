@@ -9,7 +9,7 @@ class SearchHistoryList extends StatefulWidget {
   final Function(String) onItemTap;
   final String searchQuery;
   SearchHistoryList({
-    @required this.onItemTap,
+    required this.onItemTap,
     this.searchQuery = ""
   });
 
@@ -19,7 +19,7 @@ class SearchHistoryList extends StatefulWidget {
 
 class _SearchHistoryListState extends State<SearchHistoryList> {
 
-  http.Client client;
+  late http.Client client;
 
   @override
   void initState() {
@@ -36,7 +36,7 @@ class _SearchHistoryListState extends State<SearchHistoryList> {
   @override
   Widget build(BuildContext context) {
     ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
-    List<String> searchHistory = config.getSearchHistory();
+    List<String>? searchHistory = config.getSearchHistory();
     List<String> suggestionsList = [];
     List<String> finalList = [];
     return FutureBuilder(
@@ -52,13 +52,13 @@ class _SearchHistoryListState extends State<SearchHistoryList> {
       builder: (context, AsyncSnapshot<http.Response> suggestions) {
         suggestionsList.clear();
         if (suggestions.hasData && widget.searchQuery != "") {
-          var map = jsonDecode(suggestions.data.body);
+          var map = jsonDecode(suggestions.data!.body);
           var mapList = map[1];
           mapList.forEach((result) {
             suggestionsList.add(result);
           });
         }
-        finalList = suggestionsList + searchHistory;
+        finalList = suggestionsList + searchHistory!;
         return ListView.builder(
           itemExtent: 40,
           itemCount: finalList.length,
@@ -68,7 +68,7 @@ class _SearchHistoryListState extends State<SearchHistoryList> {
               title: Text(
                 "$item",
                 style: TextStyle(
-                  color: Theme.of(context).textTheme.bodyText1.color,
+                  color: Theme.of(context).textTheme.bodyText1!.color,
                   fontSize: 14
                 ),
                 maxLines: 1,

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
@@ -12,8 +13,8 @@ class TagsResultsPage extends StatefulWidget {
   final String title;
   final String artist;
   TagsResultsPage({
-    @required this.title,
-    @required this.artist
+    required this.title,
+    required this.artist
   });
 
   @override
@@ -21,11 +22,11 @@ class TagsResultsPage extends StatefulWidget {
 }
 
 class _TagsResultsPageState extends State<TagsResultsPage> {
-  TextEditingController searchController;
+  TextEditingController? searchController;
   @override
   void initState() {
     searchController = TextEditingController();
-    searchController.text = widget.title;
+    searchController!.text = widget.title;
     super.initState();
   }
   @override
@@ -35,7 +36,7 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
         title: Text(
           "MusicBrainz",
           style: TextStyle(
-            color: Theme.of(context).textTheme.bodyText1.color
+            color: Theme.of(context).textTheme.bodyText1!.color
           ),
         ),
         iconTheme: IconThemeData(
@@ -53,13 +54,13 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
                   child: TextFormField(
                     controller: searchController,
                     style: TextStyle(
-                      color: Theme.of(context).textTheme.bodyText1.color
+                      color: Theme.of(context).textTheme.bodyText1!.color
                     ),
                     decoration: InputDecoration(
                       enabledBorder: InputBorder.none
                     ),
                     onFieldSubmitted: (searchQuery) {
-                      setState(() => searchController.text = searchQuery);
+                      setState(() => searchController!.text = searchQuery);
                     },
                   ),
                 ),
@@ -68,7 +69,7 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
                 padding: EdgeInsets.only(right: 20, left: 12),
                 icon: Icon(EvaIcons.searchOutline),
                 onPressed: () {
-                  setState(() => searchController.text = searchController.text);
+                  setState(() => searchController!.text = searchController!.text);
                 }
               )
             ],
@@ -79,11 +80,11 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
         
         children: [
           SizedBox(height: 16),
-          FutureBuilder(
-            future: MusicBrainzAPI.getRecordings(searchController.text),
+          FutureBuilder<List<dynamic>?>(
+            future: MusicBrainzAPI.getRecordings(searchController!.text),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                var records = snapshot.data;
+                List<dynamic>? records = snapshot.data;
                 return GridView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
@@ -94,9 +95,9 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
                     crossAxisSpacing: 16.0,
                     mainAxisSpacing: 16.0,
                   ),
-                  itemCount: records.length,
+                  itemCount: records?.length ?? 0,
                   itemBuilder: (context, index) {
-                    var record = records[index];
+                    var record = records![index];
                     return FutureBuilder(
                       future: _getArtworkLink(record, index),
                       builder: (context, image) {
@@ -133,20 +134,20 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
                                                   text: TextSpan(
                                                     children: [
                                                       TextSpan(
-                                                        text: Languages.of(context).labelEditorTitle + ": ",
+                                                        text: Languages.of(context)!.labelEditorTitle + ": ",
                                                         style: TextStyle(
                                                           fontWeight: FontWeight.w600,
                                                           fontFamily: 'Product Sans',
                                                           fontSize: 16,
                                                           color: Theme.of(context).textTheme
-                                                            .bodyText1.color
+                                                            .bodyText1!.color
                                                         )
                                                       ),
                                                       TextSpan(
                                                         text: "${record['title']}",
                                                         style: TextStyle(
                                                           color: Theme.of(context).textTheme
-                                                            .bodyText1.color
+                                                            .bodyText1!.color
                                                         )
                                                       ),
                                                     ]
@@ -156,20 +157,20 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
                                                   text: TextSpan(
                                                     children: [
                                                       TextSpan(
-                                                        text: Languages.of(context).labelEditorArtist + ": ",
+                                                        text: Languages.of(context)!.labelEditorArtist + ": ",
                                                         style: TextStyle(
                                                           fontWeight: FontWeight.w600,
                                                           fontFamily: 'Product Sans',
                                                           fontSize: 16,
                                                           color: Theme.of(context).textTheme
-                                                            .bodyText1.color
+                                                            .bodyText1!.color
                                                         )
                                                       ),
                                                       TextSpan(
                                                         text: "${MusicBrainzAPI.getArtist(record)}",
                                                         style: TextStyle(
                                                           color: Theme.of(context).textTheme
-                                                            .bodyText1.color
+                                                            .bodyText1!.color
                                                         )
                                                       ),
                                                     ]
@@ -179,20 +180,20 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
                                                   text: TextSpan(
                                                     children: [
                                                       TextSpan(
-                                                        text: Languages.of(context).labelEditorAlbum + ": ",
+                                                        text: Languages.of(context)!.labelEditorAlbum + ": ",
                                                         style: TextStyle(
                                                           fontWeight: FontWeight.w600,
                                                           fontFamily: 'Product Sans',
                                                           fontSize: 16,
                                                           color: Theme.of(context).textTheme
-                                                            .bodyText1.color
+                                                            .bodyText1!.color
                                                         )
                                                       ),
                                                       TextSpan(
                                                         text: "${record['releases'][0]['title']}",
                                                         style: TextStyle(
                                                           color: Theme.of(context).textTheme
-                                                            .bodyText1.color
+                                                            .bodyText1!.color
                                                         ),
                                                       ),
                                                     ]
@@ -202,20 +203,20 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
                                                   text: TextSpan(
                                                     children: [
                                                       TextSpan(
-                                                        text: Languages.of(context).labelEditorDate + ": ",
+                                                        text: Languages.of(context)!.labelEditorDate + ": ",
                                                         style: TextStyle(
                                                           fontWeight: FontWeight.w600,
                                                           fontFamily: 'Product Sans',
                                                           fontSize: 16,
                                                           color: Theme.of(context).textTheme
-                                                            .bodyText1.color
+                                                            .bodyText1!.color
                                                         )
                                                       ),
                                                       TextSpan(
                                                         text: "${MusicBrainzAPI.getDate(record)}",
                                                         style: TextStyle(
                                                           color: Theme.of(context).textTheme
-                                                            .bodyText1.color
+                                                            .bodyText1!.color
                                                         ),
                                                       ),
                                                     ]
@@ -225,22 +226,22 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
                                                   text: TextSpan(
                                                     children: [
                                                       TextSpan(
-                                                        text: Languages.of(context).labelEditorGenre + ": ",
+                                                        text: Languages.of(context)!.labelEditorGenre + ": ",
                                                         style: TextStyle(
                                                           fontWeight: FontWeight.w600,
                                                           fontFamily: 'Product Sans',
                                                           fontSize: 16,
                                                           color: Theme.of(context).textTheme
-                                                            .bodyText1.color
+                                                            .bodyText1!.color
                                                         )
                                                       ),
                                                       TextSpan(
                                                         text: MusicBrainzAPI.getGenre(record) == "Any"
-                                                          ? Languages.of(context).labelNotSpecified
+                                                          ? Languages.of(context)!.labelNotSpecified
                                                           : "${MusicBrainzAPI.getGenre(record)}",
                                                         style: TextStyle(
                                                           color: Theme.of(context).textTheme
-                                                            .bodyText1.color
+                                                            .bodyText1!.color
                                                         ),
                                                       ),
                                                     ]
@@ -266,7 +267,7 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
                                                               fontFamily: 'Product Sans',
                                                               fontSize: 16,
                                                               color: Theme.of(context).textTheme
-                                                                .bodyText1.color
+                                                                .bodyText1!.color
                                                             ),
                                                           ),
                                                           SizedBox(width: 8),
@@ -308,18 +309,18 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
                                       text: TextSpan(
                                         children: [
                                           TextSpan(
-                                            text: Languages.of(context).labelEditorTitle + ": ",
+                                            text: Languages.of(context)!.labelEditorTitle + ": ",
                                             style: TextStyle(
                                               fontWeight: FontWeight.w600,
                                               color: Theme.of(context).textTheme
-                                                .bodyText1.color
+                                                .bodyText1!.color
                                             )
                                           ),
                                           TextSpan(
                                             text: "${record['title']}",
                                             style: TextStyle(
                                               color: Theme.of(context).textTheme
-                                                .bodyText1.color
+                                                .bodyText1!.color
                                             )
                                           ),
                                         ]
@@ -332,18 +333,18 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
                                       text: TextSpan(
                                         children: [
                                           TextSpan(
-                                            text: Languages.of(context).labelEditorArtist + ": ",
+                                            text: Languages.of(context)!.labelEditorArtist + ": ",
                                             style: TextStyle(
                                               fontWeight: FontWeight.w600,
                                               color: Theme.of(context).textTheme
-                                                .bodyText1.color
+                                                .bodyText1!.color
                                             )
                                           ),
                                           TextSpan(
                                             text: "${MusicBrainzAPI.getArtist(record)}",
                                             style: TextStyle(
                                               color: Theme.of(context).textTheme
-                                                .bodyText1.color
+                                                .bodyText1!.color
                                             )
                                           ),
                                         ]
@@ -356,18 +357,18 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
                                       text: TextSpan(
                                         children: [
                                           TextSpan(
-                                            text: Languages.of(context).labelEditorAlbum + ": ",
+                                            text: Languages.of(context)!.labelEditorAlbum + ": ",
                                             style: TextStyle(
                                               fontWeight: FontWeight.w600,
                                               color: Theme.of(context).textTheme
-                                                .bodyText1.color
+                                                .bodyText1!.color
                                             )
                                           ),
                                           TextSpan(
                                             text: "${record['releases'][0]['title']}",
                                             style: TextStyle(
                                               color: Theme.of(context).textTheme
-                                                .bodyText1.color
+                                                .bodyText1!.color
                                             ),
                                           ),
                                         ]
@@ -436,11 +437,11 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
     );
   }
 
-  Future<String> _getArtworkLink(record, int index) async {
+  Future<String?> _getArtworkLink(record, int index) async {
     await Future.delayed(Duration(seconds: index));
-    Map<String, String> map = await MusicBrainzAPI
-      .getThumbnails(record['releases'][0]['id']);
-    String url;
+    Map<String, String> map = await (MusicBrainzAPI
+      .getThumbnails(record['releases'][0]['id']) as FutureOr<Map<String, String>>);
+    String? url;
     if (map.containsKey("1200x1200")) {
       url = map["1200x1200"];
     } else {

@@ -5,8 +5,8 @@ import 'package:songtube/internal/models/mediaItemSorts.dart';
 import 'package:songtube/screens/musicScreen/components/songsList.dart';
 
 class MusicScreenGenreTab extends StatefulWidget {
-  final List<MediaItem> songs;
-  final String searchQuery;
+  final List<MediaItem>? songs;
+  final String? searchQuery;
   MusicScreenGenreTab({
     this.songs,
     this.searchQuery
@@ -20,33 +20,33 @@ class _MusicScreenGenreTabState extends State<MusicScreenGenreTab> {
   List<MediaItemGenre> _genres = [];
 
   // Current Genre
-  MediaItemGenre currentGenre;
+  MediaItemGenre? currentGenre;
 
   // Genres GridView Key
   final genresGridKey = const PageStorageKey<String>('songsGenreList');
 
   @override
   void initState() {
-    widget.songs.forEach((song) => songCreateOrAssignToGenre(song));
+    widget.songs!.forEach((song) => songCreateOrAssignToGenre(song));
     super.initState();
   }
 
   void songCreateOrAssignToGenre(MediaItem song) {
     // Check if Genre exist and create it
-    if (_genres.indexWhere((genre) => genre.genreName == (song?.genre ?? "unknown")) == -1) {
+    if (_genres.indexWhere((genre) => genre.genreName == (song.genre ?? "unknown")) == -1) {
       // Create Genre and add the song
       _genres.add(
         MediaItemGenre(
-          genreName: song?.genre ?? "unknown",
+          genreName: song.genre ?? "unknown",
           mediaItems: []
         )
       );
     }
     // Add song to Genre
     int indexToGenre = _genres.indexWhere((genre) {
-      return genre.genreName == (song?.genre ?? "unknown");
+      return genre.genreName == (song.genre ?? "unknown");
     });
-    _genres[indexToGenre].mediaItems.add(song);
+    _genres[indexToGenre].mediaItems!.add(song);
   }
 
   Widget build(BuildContext context) {
@@ -75,7 +75,7 @@ class _MusicScreenGenreTabState extends State<MusicScreenGenreTab> {
       children: [
         Row(
           children: [
-            Expanded(child: _genreTile(context, currentGenre, true)),
+            Expanded(child: _genreTile(context, currentGenre!, true)),
             IconButton(
               icon: Icon(Icons.clear,
                 color: Theme.of(context).iconTheme.color),
@@ -87,13 +87,13 @@ class _MusicScreenGenreTabState extends State<MusicScreenGenreTab> {
         Divider(
           height: 1,
           thickness: 1,
-          color: Colors.grey[600].withOpacity(0.1),
+          color: Colors.grey[600]!.withOpacity(0.1),
           indent: 12,
           endIndent: 12
         ),
         Expanded(
           child: SongsListView(
-            songs: currentGenre.mediaItems,
+            songs: currentGenre!.mediaItems,
             searchQuery: ""
           ),
         )
@@ -114,12 +114,12 @@ class _MusicScreenGenreTabState extends State<MusicScreenGenreTab> {
                 Container(
                   margin: EdgeInsets.only(left: 8, right: 8),
                   child: Text(
-                    genre?.genreName ?? "unknown",
+                    genre.genreName ?? "unknown",
                     maxLines: 1,
                     overflow: TextOverflow.fade,
                     softWrap: false,
                     style: TextStyle(
-                      color: Theme.of(context).textTheme.bodyText1.color,
+                      color: Theme.of(context).textTheme.bodyText1!.color,
                       fontFamily: 'Product Sans',
                       fontWeight: FontWeight.w600,
                       fontSize: 20
@@ -147,11 +147,11 @@ class _MusicScreenGenreTabState extends State<MusicScreenGenreTab> {
                     ]
                   ),
                   child: Text(
-                    "${genre.mediaItems.length} Songs",
+                    "${genre.mediaItems!.length} Songs",
                     style: TextStyle(
                       color: shinySongsCount
                         ? Colors.white
-                        : Theme.of(context).textTheme.bodyText1.color,
+                        : Theme.of(context).textTheme.bodyText1!.color,
                       fontSize: 10,
                       fontFamily: 'Product Sans',
                       fontWeight: FontWeight.w700
@@ -187,9 +187,9 @@ class _MusicScreenGenreTabState extends State<MusicScreenGenreTab> {
 
   bool getSearchQueryMatch(MediaItemGenre genre) {
     if (widget.searchQuery != "") {
-      if (genre.genreName.toLowerCase().contains(widget.searchQuery.toLowerCase())) {
+      if (genre.genreName!.toLowerCase().contains(widget.searchQuery!.toLowerCase())) {
         return true;
-      } else if (genre.genreName.toLowerCase().contains(widget.searchQuery.toLowerCase())) {
+      } else if (genre.genreName!.toLowerCase().contains(widget.searchQuery!.toLowerCase())) {
         return true;
       } else {
         return false;

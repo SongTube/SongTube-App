@@ -20,7 +20,7 @@ class PlaylistsPage extends StatefulWidget {
 class _PlaylistsPageState extends State<PlaylistsPage> {
   
   // Current Playlist Selected
-  StreamPlaylist currentPlaylist;
+  StreamPlaylist? currentPlaylist;
 
   @override
   Widget build(BuildContext context) {
@@ -42,13 +42,13 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
           backgroundColor: Theme.of(context).cardColor,
           title: Text(
             currentPlaylist == null
-              ? Languages.of(context).labelPlaylists
-              : currentPlaylist.name,
+              ? Languages.of(context)!.labelPlaylists
+              : currentPlaylist!.name!,
             style: TextStyle(
               fontFamily: 'Product Sans',
               fontWeight: FontWeight.w700,
               fontSize: 20,
-              color: Theme.of(context).textTheme.bodyText1.color
+              color: Theme.of(context).textTheme.bodyText1!.color
             ),
           ),
           leading: IconButton(
@@ -64,7 +64,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
               child: Divider(
                 height: 1,
                 thickness: 1,
-                color: Colors.grey[600].withOpacity(0.1),
+                color: Colors.grey[600]!.withOpacity(0.1),
                 indent: 12,
                 endIndent: 12
               ),
@@ -118,7 +118,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
                     color: Colors.white),
                   SizedBox(width: 8),
                   Text(
-                    Languages.of(context).labelStart,
+                    Languages.of(context)!.labelStart,
                     style: TextStyle(
                       color: Colors.white
                     ),
@@ -139,7 +139,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
     return AutoList(
       duration: Duration(milliseconds: 300),
       items: listPlaylists,
-      itemBuilder: (context, playlist) {
+      itemBuilder: (context, dynamic playlist) {
         return Padding(
           padding: EdgeInsets.only(
             top: 12,
@@ -170,7 +170,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
               scale: 1.01,
               child: FadeInImage(
                 fadeInDuration: Duration(milliseconds: 300),
-                image: NetworkImage(playlist.streams[0].thumbnails.hqdefault),
+                image: NetworkImage(playlist.streams![0]!.thumbnails!.hqdefault),
                 placeholder: MemoryImage(kTransparentImage),
                 fit: BoxFit.cover,
               ),
@@ -220,7 +220,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            playlist.name,
+                            playlist.name!,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
@@ -232,8 +232,8 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
                           ),
                           SizedBox(height: 4),
                           Text(
-                            playlist.author + " • ${playlist.streams.length} " +
-                            Languages.of(context).labelVideos,
+                            playlist.author! + " • ${playlist.streams!.length} " +
+                            Languages.of(context)!.labelVideos,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
@@ -267,11 +267,11 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
   Widget _playlistStreamsListView() {
     PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     int playlistIndex = prefs.streamPlaylists.indexWhere((element)
-      => element.name == currentPlaylist.name);
+      => element.name == currentPlaylist!.name);
     return AutoList(
       duration: Duration(milliseconds: 300),
-      items: prefs.streamPlaylists[playlistIndex].streams,
-      itemBuilder: (context, stream) {
+      items: prefs.streamPlaylists[playlistIndex].streams!,
+      itemBuilder: (context, dynamic stream) {
         return Padding(
           padding: EdgeInsets.only(
             top: 12,
@@ -328,7 +328,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
                         style: TextStyle(
                           fontSize: 11,
                           color: Theme.of(context).textTheme
-                            .bodyText1.color.withOpacity(0.8)
+                            .bodyText1!.color!.withOpacity(0.8)
                         ),
                         overflow: TextOverflow.clip,
                         maxLines: 1,
@@ -341,7 +341,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
                 icon: Icon(EvaIcons.trash2Outline,
                   size: 16),
                 onPressed: () {
-                  prefs.streamPlaylistRemoveStream(currentPlaylist.name, stream);
+                  prefs.streamPlaylistRemoveStream(currentPlaylist!.name, stream);
                 },
               )
             ],

@@ -11,8 +11,8 @@ class VideoComments extends StatefulWidget {
   final double topPadding;
   final Function onDispose;
   VideoComments({
-    @required this.topPadding,
-    @required this.onDispose
+    required this.topPadding,
+    required this.onDispose
   });
 
   @override
@@ -72,7 +72,7 @@ class _VideoCommentsState extends State<VideoComments> {
           Divider(
             height: 1,
             thickness: 1,
-            color: Colors.grey[600].withOpacity(0.1),
+            color: Colors.grey[600]!.withOpacity(0.1),
             indent: 12,
             endIndent: 12
           ),
@@ -80,12 +80,12 @@ class _VideoCommentsState extends State<VideoComments> {
             child: AnimatedSwitcher(
               duration: Duration(milliseconds: 200),
               child: ListView.separated(
-                itemCount: pageProvider.currentComments.length,
+                itemCount: pageProvider.currentComments!.length,
                 separatorBuilder: (context,_) {
                   return Divider();
                 },
                 itemBuilder: (context, index) {
-                  YoutubeComment comment = pageProvider.currentComments[index];
+                  YoutubeComment comment = pageProvider.currentComments![index];
                   return Padding(
                     padding: EdgeInsets.only(
                       top: index == 0 ? 12 : 0,
@@ -98,7 +98,7 @@ class _VideoCommentsState extends State<VideoComments> {
                             borderRadius: BorderRadius.circular(100),
                             child: FadeInImage(
                               placeholder: MemoryImage(kTransparentImage),
-                              image: NetworkImage(comment.uploaderAvatarUrl),
+                              image: NetworkImage(comment.uploaderAvatarUrl!),
                               height: 40,
                               width: 40,
                             ),
@@ -106,10 +106,10 @@ class _VideoCommentsState extends State<VideoComments> {
                           SizedBox(width: 12),
                           Expanded(
                             child: Text(
-                              comment.author,
+                              comment.author!,
                               style: TextStyle(
                                 color: Theme.of(context)
-                                  .textTheme.bodyText1.color,
+                                  .textTheme.bodyText1!.color,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
                                 fontFamily: 'Product Sans'
@@ -129,10 +129,10 @@ class _VideoCommentsState extends State<VideoComments> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              comment.commentText,
+                              comment.commentText!,
                               style: TextStyle(
                                 color: Theme.of(context)
-                                  .textTheme.bodyText1.color,
+                                  .textTheme.bodyText1!.color,
                                 fontSize: 12,
                               ),
                             ),
@@ -159,7 +159,7 @@ class _VideoCommentsState extends State<VideoComments> {
                                   ),
                                 ),
                                 SizedBox(width: 8),
-                                if (comment.hearted)
+                                if (comment.hearted!)
                                 Icon(
                                   MdiIcons.heart,
                                   size: 18,

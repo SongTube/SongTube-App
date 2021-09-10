@@ -9,11 +9,11 @@ import 'package:songtube/provider/mediaProvider.dart';
 import 'package:songtube/provider/preferencesProvider.dart';
 
 class PlayerArtwork extends StatelessWidget {
-  final File image;
-  final Color textColor;
+  final File? image;
+  final Color? textColor;
   PlayerArtwork({
-    @required this.image,
-    @required this.textColor
+    required this.image,
+    required this.textColor
   });
   @override
   Widget build(BuildContext context) {
@@ -51,7 +51,7 @@ class PlayerArtwork extends StatelessWidget {
                 opacity: mediaProvider.showLyrics
                   ? 0.2 : 1.0,
                 child: ImageFade(
-                  image: FileImage(image),
+                  image: FileImage(image!),
                   fadeDuration: Duration(milliseconds: 400),
                   height: double.infinity,
                   width: double.infinity,
@@ -85,7 +85,7 @@ class PlayerArtwork extends StatelessWidget {
                             return LinearGradient(
                               begin: Alignment.topCenter,
                               end: Alignment.bottomCenter,
-                              colors: [textColor, Colors.transparent],
+                              colors: [textColor!, Colors.transparent],
                             ).createShader(Rect.fromLTRB(0, rect.height-40, rect.width, rect.height));
                           },
                           blendMode: BlendMode.dstIn,
@@ -94,7 +94,7 @@ class PlayerArtwork extends StatelessWidget {
                               return LinearGradient(
                                 begin: Alignment.bottomCenter,
                                 end: Alignment.topCenter,
-                                colors: [textColor, Colors.transparent],
+                                colors: [textColor!, Colors.transparent],
                               ).createShader(Rect.fromLTRB(0, 0, 0, 20));
                             },
                             blendMode: BlendMode.dstIn,

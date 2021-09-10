@@ -40,11 +40,11 @@ void songtubePlayer() async {
 
 class SongTubePlayerService extends BackgroundAudioTask {
   
-  List<MediaItem> _queue;
-  List<MediaItem> get queue => _queue;
-  AudioPlayer _player;
-  StreamSubscription<PlaybackEvent> _eventSubscription;
-  AudioProcessingState _skipState;
+  List<MediaItem>? _queue;
+  List<MediaItem>? get queue => _queue;
+  late AudioPlayer _player;
+  late StreamSubscription<PlaybackEvent> _eventSubscription;
+  AudioProcessingState? _skipState;
   int timesPositionChanged = 0;
   int _index = 0;
   int lastPlayerPosition = 0;
@@ -54,9 +54,9 @@ class SongTubePlayerService extends BackgroundAudioTask {
   bool enableRandom = false;
 
   // Audio Session
-  AudioSession session;
+  late AudioSession session;
 
-  bool get hasNext => _index + 1 < _queue.length;
+  bool get hasNext => _index + 1 < _queue!.length;
   bool get hasPrevious => _index > 0;
 
   @override
@@ -70,8 +70,8 @@ class SongTubePlayerService extends BackgroundAudioTask {
   @override
   Future<void> onSkipToNext() async {
     if (enableRandom) {
-      _index = Random().nextInt(_queue.length);
-      await AudioServiceBackground.setMediaItem(_queue[_index]);
+      _index = Random().nextInt(_queue!.length);
+      await AudioServiceBackground.setMediaItem(_queue![_index]);
       await _player.setUrl(mediaItem.id);
       onPlay();
       return;
@@ -80,11 +80,11 @@ class SongTubePlayerService extends BackgroundAudioTask {
     _skip(1);
   }
 
-  MediaItem get mediaItem => _queue[_index];
+  MediaItem get mediaItem => _queue![_index];
 
   // Initialise your audio task.
   @override
-  Future<void> onStart(Map<String, dynamic> params) async {
+  Future<void> onStart(Map<String, dynamic>? params) async {
     _queue = <MediaItem>[];
     session = await AudioSession.instance;
     await session.configure(AudioSessionConfiguration.music());
@@ -149,9 +149,9 @@ class SongTubePlayerService extends BackgroundAudioTask {
 
   @override
   Future<void> onPlayMediaItem(MediaItem item) async {
-    _index = queue.indexOf(item);
-    AudioServiceBackground.setMediaItem(queue[_index]);
-    await _player.setUrl(queue[_index].id);
+    _index = queue!.indexOf(item);
+    AudioServiceBackground.setMediaItem(queue![_index]);
+    await _player.setUrl(queue![_index].id);
     onPlay();
   }
 
@@ -162,8 +162,8 @@ class SongTubePlayerService extends BackgroundAudioTask {
       return;
     }
     if (enableRandom) {
-      _index = Random().nextInt(_queue.length);
-      await AudioServiceBackground.setMediaItem(_queue[_index]);
+      _index = Random().nextInt(_queue!.length);
+      await AudioServiceBackground.setMediaItem(_queue![_index]);
       await _player.setUrl(mediaItem.id);
       onPlay();
       return;
@@ -177,14 +177,14 @@ class SongTubePlayerService extends BackgroundAudioTask {
 
   Future<void> _skip(int offset) async {
     final newPos = _index + offset;
-    if (!(newPos >= 0 && newPos < _queue.length)) return;
+    if (!(newPos >= 0 && newPos < _queue!.length)) return;
     if (_player.playing) {
       // Stop current item
       await _player.stop();
     }
     // Load next item
     _index = newPos;
-    await AudioServiceBackground.setMediaItem(_queue[_index]);
+    await AudioServiceBackground.setMediaItem(_queue![_index]);
     _skipState = offset > 0
       ? AudioProcessingState.skippingToNext
       : AudioProcessingState.skippingToPrevious;
@@ -218,7 +218,7 @@ class SongTubePlayerService extends BackgroundAudioTask {
   Future<void> onPlayFromMediaId(String index) async {
     int ind = int.parse(index);
     _index = ind;
-    await AudioServiceBackground.setMediaItem(_queue[ind]);
+    await AudioServiceBackground.setMediaItem(_queue![ind]);
     await _player.setUrl(mediaItem.id);
     onPlay();
   }
@@ -286,7 +286,7 @@ class SongTubePlayerService extends BackgroundAudioTask {
 
   /// Maps just_audio's processing state into into audio_service's playing
   /// state. If we are in the middle of a skip, we use [_skipState] instead.
-  AudioProcessingState _getProcessingState() {
+  AudioProcessingState? _getProcessingState() {
     if (_skipState != null) return _skipState;
     switch (_player.processingState) {
       case ProcessingState.idle:
@@ -307,8 +307,8 @@ class SongTubePlayerService extends BackgroundAudioTask {
 }
 
 class ScreenState {
-  final List<MediaItem> queue;
-  final MediaItem mediaItem;
+  final List<MediaItem>? queue;
+  final MediaItem? mediaItem;
   final PlaybackState playbackState;
 
   ScreenState(this.queue, this.mediaItem, this.playbackState);

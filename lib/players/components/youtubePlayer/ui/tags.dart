@@ -10,11 +10,11 @@ import 'package:string_validator/string_validator.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class VideoTags extends StatelessWidget {
-  final TagsControllers tags;
-  final StreamInfoItem infoItem;
-  final Function onAutoTag;
-  final Function onManualTag;
-  final Function onSearchDevice;
+  final TagsControllers? tags;
+  final StreamInfoItem? infoItem;
+  final Function? onAutoTag;
+  final Function? onManualTag;
+  final Function? onSearchDevice;
   VideoTags({
     this.tags,
     this.infoItem,
@@ -38,11 +38,11 @@ class VideoTags extends StatelessWidget {
             ),
             SizedBox(width: 8),
             Text(
-              Languages.of(context).labelTags,
+              Languages.of(context)!.labelTags,
               style: TextStyle(
                 fontWeight: FontWeight.w400,
                 fontSize: 15,
-                color: Theme.of(context).textTheme.bodyText1.color
+                color: Theme.of(context).textTheme.bodyText1!.color
               ),
             ),
           ],
@@ -51,28 +51,28 @@ class VideoTags extends StatelessWidget {
           borderRadius: 15,
           items: [
             FlexiblePopupItem(
-              title: Languages.of(context).labelPerformAutomaticTagging,
+              title: Languages.of(context)!.labelPerformAutomaticTagging,
               value: "AutoTag",
             ),
             FlexiblePopupItem(
-              title: Languages.of(context).labelSelectTagsfromMusicBrainz,
+              title: Languages.of(context)!.labelSelectTagsfromMusicBrainz,
               value: "SearchMB",
             ),
             FlexiblePopupItem(
-              title: Languages.of(context).labelSelectArtworkFromDevice,
+              title: Languages.of(context)!.labelSelectArtworkFromDevice,
               value: "FromDevice",
             )
           ],
           onItemTap: (value) async {
             switch (value) {
               case "AutoTag":
-                onAutoTag();
+                onAutoTag!();
                 break;
               case "SearchMB":
-                onManualTag();
+                onManualTag!();
                 break;
               case "FromDevice":
-                onSearchDevice();
+                onSearchDevice!();
                 break;
             }
           },
@@ -84,7 +84,7 @@ class VideoTags extends StatelessWidget {
                 Container(
                   margin: EdgeInsets.only(right: 8),
                   child: Text(
-                    Languages.of(context).labelTagsEditor,
+                    Languages.of(context)!.labelTagsEditor,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 12
@@ -102,13 +102,13 @@ class VideoTags extends StatelessWidget {
                         child: FadeInImage(
                           fadeInDuration: Duration(milliseconds: 300),
                           placeholder: MemoryImage(kTransparentImage),
-                          image: isURL(tags.artworkController)
+                          image: (isURL(tags!.artworkController!)
                             ? NetworkImage(
-                                tags.artworkController == infoItem.thumbnails.hqdefault
-                                  ? infoItem.thumbnails.hqdefault
-                                  : tags.artworkController
+                                tags!.artworkController == infoItem!.thumbnails!.hqdefault
+                                  ? infoItem!.thumbnails!.hqdefault
+                                  : tags!.artworkController!
                               )
-                            : FileImage(File(tags.artworkController)),
+                            : FileImage(File(tags!.artworkController!))) as ImageProvider<Object>,
                           fit: BoxFit.cover,
                         ),
                       )
@@ -142,9 +142,9 @@ class VideoTags extends StatelessWidget {
             children: [
               Expanded(
                 child: TextFieldTile(
-                  textController: tags.titleController,
+                  textController: tags!.titleController,
                   inputType: TextInputType.text,
-                  labelText: Languages.of(context).labelEditorTitle,
+                  labelText: Languages.of(context)!.labelEditorTitle,
                   icon: EvaIcons.textOutline,
                 ),
               ),
@@ -157,9 +157,9 @@ class VideoTags extends StatelessWidget {
               // Album TextField
               Expanded(
                 child: TextFieldTile(
-                  textController: tags.albumController,
+                  textController: tags!.albumController,
                   inputType: TextInputType.text,
-                  labelText: Languages.of(context).labelEditorAlbum,
+                  labelText: Languages.of(context)!.labelEditorAlbum,
                   icon: EvaIcons.bookOpenOutline,
                 ),
               ),
@@ -167,9 +167,9 @@ class VideoTags extends StatelessWidget {
               // Artist TextField
               Expanded(
                 child: TextFieldTile(
-                  textController: tags.artistController,
+                  textController: tags!.artistController,
                   inputType: TextInputType.text,
-                  labelText: Languages.of(context).labelEditorArtist,
+                  labelText: Languages.of(context)!.labelEditorArtist,
                   icon: EvaIcons.personOutline,
                 ),
               ),
@@ -182,9 +182,9 @@ class VideoTags extends StatelessWidget {
               // Gender TextField
               Expanded(
                 child: TextFieldTile(
-                  textController: tags.genreController,
+                  textController: tags!.genreController,
                   inputType: TextInputType.text,
-                  labelText: Languages.of(context).labelEditorGenre,
+                  labelText: Languages.of(context)!.labelEditorGenre,
                   icon: EvaIcons.bookOutline,
                 ),
               ),
@@ -192,9 +192,9 @@ class VideoTags extends StatelessWidget {
               // Date TextField
               Expanded(
                 child: TextFieldTile(
-                  textController: tags.dateController,
+                  textController: tags!.dateController,
                   inputType: TextInputType.datetime,
-                  labelText: Languages.of(context).labelEditorDate,
+                  labelText: Languages.of(context)!.labelEditorDate,
                   icon: EvaIcons.calendarOutline,
                 ),
               ),
@@ -207,9 +207,9 @@ class VideoTags extends StatelessWidget {
               // Disk TextField
               Expanded(
                 child: TextFieldTile(
-                  textController: tags.discController,
+                  textController: tags!.discController,
                   inputType: TextInputType.number,
-                  labelText: Languages.of(context).labelEditorDisc,
+                  labelText: Languages.of(context)!.labelEditorDisc,
                   icon: EvaIcons.playCircleOutline
                 ),
               ),
@@ -217,9 +217,9 @@ class VideoTags extends StatelessWidget {
               // Track TextField
               Expanded(
                 child: TextFieldTile(
-                  textController: tags.trackController,
+                  textController: tags!.trackController,
                   inputType: TextInputType.number,
-                  labelText: Languages.of(context).labelEditorTrack,
+                  labelText: Languages.of(context)!.labelEditorTrack,
                   icon: EvaIcons.musicOutline,
                 ),
               ),

@@ -15,15 +15,15 @@ class DownloadTile extends StatelessWidget {
   final Stream progressBar;
   final DownloadTags metadata;
   final DownloadType downloadType;
-  final Function onDownloadCancel;
-  final Widget cancelDownloadIcon;
-  final String errorReason;
+  final Function? onDownloadCancel;
+  final Widget? cancelDownloadIcon;
+  final String? errorReason;
   DownloadTile({
-    @required this.dataProgress,
-    @required this.currentAction,
-    @required this.progressBar,
-    @required this.metadata,
-    @required this.downloadType,
+    required this.dataProgress,
+    required this.currentAction,
+    required this.progressBar,
+    required this.metadata,
+    required this.downloadType,
     this.onDownloadCancel,
     this.cancelDownloadIcon,
     this.errorReason
@@ -36,7 +36,7 @@ class DownloadTile extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: Theme.of(context).cardColor,
-        border: Border.all(color: Colors.grey[600].withOpacity(0.1))
+        border: Border.all(color: Colors.grey[600]!.withOpacity(0.1))
       ),
       // Tile main Body
       child: Column(
@@ -56,9 +56,9 @@ class DownloadTile extends StatelessWidget {
                       child: FadeInImage(
                         fadeInDuration: Duration(milliseconds: 250),
                         placeholder: MemoryImage(kTransparentImage),
-                        image: isURL(metadata.coverurl)
-                          ? NetworkImage(metadata.coverurl)
-                          : FileImage(File(metadata.coverurl)),
+                        image: (isURL(metadata.coverurl!)
+                          ? NetworkImage(metadata.coverurl!)
+                          : FileImage(File(metadata.coverurl!))) as ImageProvider<Object>,
                         fit: BoxFit.fitWidth,
                       ),
                     ),
@@ -75,7 +75,7 @@ class DownloadTile extends StatelessWidget {
                         child: Icon(downloadType == DownloadType.VIDEO
                           ? EvaIcons.videoOutline
                           : EvaIcons.musicOutline,
-                          color: Theme.of(context).textTheme.bodyText1.color,
+                          color: Theme.of(context).textTheme.bodyText1!.color,
                           size: 20,
                         ),
                       ),
@@ -95,7 +95,7 @@ class DownloadTile extends StatelessWidget {
                         child: Text(
                           "${metadata.title}",
                           style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1.color,
+                            color: Theme.of(context).textTheme.bodyText1!.color,
                           ),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
@@ -105,7 +105,7 @@ class DownloadTile extends StatelessWidget {
                       Text(
                         "${metadata.artist}",
                         style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6),
+                          color: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.6),
                           fontSize: 12
                         ),
                         overflow: TextOverflow.fade,
@@ -122,8 +122,8 @@ class DownloadTile extends StatelessWidget {
                               child: cancelDownloadIcon == null
                                 ? Container()
                                 : IconButton(
-                                    icon: cancelDownloadIcon,
-                                    onPressed: onDownloadCancel
+                                    icon: cancelDownloadIcon!,
+                                    onPressed: onDownloadCancel as void Function()?
                                   )
                             ),
                             if (errorReason != null)
@@ -177,7 +177,7 @@ class DownloadTile extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: LinearProgressIndicator(
-                      value: snapshot.data,
+                      value: snapshot.data as double?,
                       backgroundColor: Theme.of(context).cardColor,
                       valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).accentColor),
                     ),
@@ -190,12 +190,12 @@ class DownloadTile extends StatelessWidget {
               child: Row(
                 children: <Widget> [
                   StreamBuilder<Object>(
-                    stream: dataProgress,
+                    stream: dataProgress as Stream<Object>?,
                     builder: (context, snapshot) {
                       return snapshot.data == null 
                       ? Container()
                       : Text(
-                        snapshot.data,
+                        snapshot.data as String,
                         style: TextStyle(
                           fontSize: 12
                         ),
@@ -204,12 +204,12 @@ class DownloadTile extends StatelessWidget {
                   ),
                   Spacer(),
                   if (errorReason == null)
-                  StreamBuilder<String>(
-                    stream: currentAction,
+                  StreamBuilder<String?>(
+                    stream: currentAction as Stream<String?>?,
                     builder: (context, snapshot) {
                       return snapshot.data == null 
                       ? Text(
-                        Languages.of(context).labelDownloading,
+                        Languages.of(context)!.labelDownloading,
                         style: TextStyle(
                           fontSize: 12,
                         ),

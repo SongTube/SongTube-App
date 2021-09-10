@@ -19,8 +19,8 @@ class HomePageFavorites extends StatelessWidget {
             allowSaveToFavorites: false,
             allowSaveToWatchLater: true,
             onDelete: (infoItem) {
-              List<StreamInfoItem> videos = prefs.favoriteVideos;
-              videos.removeWhere((element) => element.url == infoItem.url);
+              List<StreamInfoItem?> videos = prefs.favoriteVideos;
+              videos.removeWhere((element) => element!.url == infoItem.url);
               prefs.favoriteVideos = videos;
               AppSnack.showSnackBar(
                 icon: EvaIcons.alertCircleOutline,

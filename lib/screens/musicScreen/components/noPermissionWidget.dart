@@ -8,7 +8,7 @@ import 'package:songtube/internal/languages.dart';
 class NoPermissionWidget extends StatelessWidget {
   final Function onPermissionRequest;
   NoPermissionWidget({
-    @required this.onPermissionRequest
+    required this.onPermissionRequest
   });
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class NoPermissionWidget extends StatelessWidget {
           Container(
             margin: EdgeInsets.only(top: 16, bottom: 16),
             child: Text(
-              Languages.of(context).labelNoPermissionJustification,
+              Languages.of(context)!.labelNoPermissionJustification,
               style: TextStyle(
                 fontFamily: 'YTSans',
                 fontSize: 20
@@ -43,8 +43,8 @@ class NoPermissionWidget extends StatelessWidget {
                   Container(
                     margin: EdgeInsets.only(left: 16, right: 8),
                     child: Text(
-                      Languages.of(context).labelAllow + " " +
-                      Languages.of(context).labelAccess,
+                      Languages.of(context)!.labelAllow + " " +
+                      Languages.of(context)!.labelAccess,
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.white,

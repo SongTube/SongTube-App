@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 
 class PlayPauseButton extends StatelessWidget {
-  final bool isPlaying;
+  final bool? isPlaying;
   final Function onPlayPause;
   PlayPauseButton({
-    @required this.isPlaying,
-    @required this.onPlayPause
+    required this.isPlaying,
+    required this.onPlayPause
   });
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onPlayPause,
+      onTap: onPlayPause as void Function()?,
       borderRadius: BorderRadius.circular(100),
       child: Ink(
         padding: const EdgeInsets.all(16.0),
-        child: isPlaying
+        child: isPlaying!
           ? Icon(
               Icons.pause,
               size: 32,

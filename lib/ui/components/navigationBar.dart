@@ -4,11 +4,11 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:songtube/internal/languages.dart';
 
 class AppBottomNavigationBar extends StatelessWidget {
-  final int currentIndex;
+  final int? currentIndex;
   final Function(int) onItemTap;
   AppBottomNavigationBar({
-    @required this.currentIndex,
-    @required this.onItemTap,
+    required this.currentIndex,
+    required this.onItemTap,
   });
   @override
   Widget build(BuildContext context) {
@@ -24,13 +24,13 @@ class AppBottomNavigationBar extends StatelessWidget {
         border: Border(
           top: BorderSide(
             width: 1,
-            color: Colors.grey[600].withOpacity(0.1)
+            color: Colors.grey[600]!.withOpacity(0.1)
           )
         )
       ),
       child: BottomNavigationBar(
         backgroundColor: Theme.of(context).cardColor,
-        currentIndex: currentIndex,
+        currentIndex: currentIndex!,
         selectedLabelStyle: TextStyle(
           fontFamily: 'Product Sans',
           fontWeight: FontWeight.w600,
@@ -52,7 +52,7 @@ class AppBottomNavigationBar extends StatelessWidget {
         items: [
           BottomNavigationBarItem(
             icon: Icon(EvaIcons.homeOutline),
-            label: Languages.of(context).labelHome
+            label: Languages.of(context)!.labelHome
           ),
           BottomNavigationBarItem(
             icon: Icon(EvaIcons.bookOpenOutline),
@@ -60,15 +60,15 @@ class AppBottomNavigationBar extends StatelessWidget {
           ),
           BottomNavigationBarItem(
             icon: Icon(EvaIcons.cloudDownloadOutline),
-            label: Languages.of(context).labelDownloads
+            label: Languages.of(context)!.labelDownloads
           ),
           BottomNavigationBarItem(
             icon: Icon(EvaIcons.musicOutline),
-            label: Languages.of(context).labelMusic
+            label: Languages.of(context)!.labelMusic
           ),
           BottomNavigationBarItem(
             icon: Icon(MdiIcons.folderOutline),
-            label: Languages.of(context).labelLibrary
+            label: Languages.of(context)!.labelLibrary
           )
         ]
       ),

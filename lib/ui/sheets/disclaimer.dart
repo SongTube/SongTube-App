@@ -15,7 +15,7 @@ class DisclaimerSheet extends StatelessWidget {
         "other pecuniary loss) arising out of the use of inability to use this product, even if "  +
         "Author of this Sotware is aware of the possibility of such damages and known defect.",
         style: TextStyle(
-          color: Theme.of(context).textTheme.bodyText1.color,
+          color: Theme.of(context).textTheme.bodyText1!.color,
           fontSize: 16,
         ),
       ),

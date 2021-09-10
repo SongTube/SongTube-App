@@ -22,7 +22,7 @@ import 'package:songtube/ui/internal/snackbar.dart';
 class TagsEditorPage extends StatefulWidget {
   final MediaItem song;
   TagsEditorPage({
-    @required this.song
+    required this.song
   });
 
   @override
@@ -31,8 +31,8 @@ class TagsEditorPage extends StatefulWidget {
 
 class _TagsEditorPageState extends State<TagsEditorPage> {
 
-  TagsControllers tagsControllers;
-  String originalArtwork;
+  late TagsControllers tagsControllers;
+  String? originalArtwork;
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -43,16 +43,16 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
   }
 
   void loadTagsControllers() async {
-    tagsControllers.titleController.text = widget.song.title;
-    tagsControllers.albumController.text = widget.song.album;
-    tagsControllers.artistController.text = widget.song.artist;
-    tagsControllers.genreController.text = widget.song.genre == null
-      ? "Any" : widget.song.genre;
-    tagsControllers.dateController.text = await FFmpegExtractor
+    tagsControllers.titleController!.text = widget.song.title;
+    tagsControllers.albumController!.text = widget.song.album;
+    tagsControllers.artistController!.text = widget.song.artist!;
+    tagsControllers.genreController!.text = widget.song.genre == null
+      ? "Any" : widget.song.genre!;
+    tagsControllers.dateController!.text = await FFmpegExtractor
       .getAudioDate(widget.song.id);
-    tagsControllers.discController.text = await FFmpegExtractor
+    tagsControllers.discController!.text = await FFmpegExtractor
       .getAudioDisc(widget.song.id);
-    tagsControllers.trackController.text = await FFmpegExtractor
+    tagsControllers.trackController!.text = await FFmpegExtractor
       .getAudioTrack(widget.song.id);
     setState(() {});
     tagsControllers.artworkController = (await FFmpegExtractor
@@ -75,9 +75,9 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
         elevation: 0,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         title: Text(
-          Languages.of(context).labelTagsEditor.replaceAll("\n", " "),
+          Languages.of(context)!.labelTagsEditor.replaceAll("\n", " "),
           style: TextStyle(
-            color: Theme.of(context).textTheme.bodyText1.color
+            color: Theme.of(context).textTheme.bodyText1!.color
           ),
         ),
         iconTheme: IconThemeData(
@@ -88,11 +88,11 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
             borderRadius: 15,
             items: [
               FlexiblePopupItem(
-                title: Languages.of(context).labelPerformAutomaticTagging,
+                title: Languages.of(context)!.labelPerformAutomaticTagging,
                 value: "AutoTag"
               ),
               FlexiblePopupItem(
-                title: Languages.of(context).labelSelectTagsfromMusicBrainz,
+                title: Languages.of(context)!.labelSelectTagsfromMusicBrainz,
                 value: "SearchMB"
               ),
             ],
@@ -103,9 +103,9 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
                     context: context,
                     builder: (_) => LoadingDialog()
                   );
-                  String lastArtwork = tagsControllers.artworkController;
+                  String? lastArtwork = tagsControllers.artworkController;
                   var record = await MusicBrainzAPI
-                    .getFirstRecord(tagsControllers.titleController.text);
+                    .getFirstRecord(tagsControllers.titleController!.text);
                   tagsControllers = await MusicBrainzAPI.getSongTags(record);
                   if (tagsControllers.artworkController == null)
                     tagsControllers.artworkController = lastArtwork;
@@ -116,8 +116,8 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
                   var record = await Navigator.push(context,
                     BlurPageRoute(builder: (context) => 
                       TagsResultsPage(
-                        title: tagsControllers.titleController.text,
-                        artist: tagsControllers.artistController.text),
+                        title: tagsControllers.titleController!.text,
+                        artist: tagsControllers.artistController!.text),
                       blurStrength: Provider.of<PreferencesProvider>
                         (context, listen: false).enableBlurUI ? 20 : 0));
                   if (record == null) return;
@@ -125,7 +125,7 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
                     context: context,
                     builder: (_) => LoadingDialog()
                   );
-                  String lastArtwork = tagsControllers.artworkController;
+                  String? lastArtwork = tagsControllers.artworkController;
                   tagsControllers = await MusicBrainzAPI.getSongTags(record);
                   if (tagsControllers.artworkController == null)
                     tagsControllers.artworkController = lastArtwork;
@@ -160,14 +160,14 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
                     alignment: Alignment.center,
                     children: [
                       Image.file(
-                        File(widget.song.extras["artwork"]),
+                        File(widget.song.extras!["artwork"]),
                         fit: BoxFit.cover,
                       ),
                       if (tagsControllers.artworkController != null)
                       FadeInImage(
-                        image: isURL(tagsControllers.artworkController)
-                          ? NetworkImage(tagsControllers.artworkController)
-                          : FileImage(File(tagsControllers.artworkController)),
+                        image: (isURL(tagsControllers.artworkController!)
+                          ? NetworkImage(tagsControllers.artworkController!)
+                          : FileImage(File(tagsControllers.artworkController!))) as ImageProvider<Object>,
                         placeholder: MemoryImage(kTransparentImage),
                         fit: BoxFit.cover,
                       ),
@@ -176,9 +176,8 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
                         child: GestureDetector(
                           onTap: () async {
                             File image = File((await FilePicker.platform
-                              .pickFiles(type: FileType.image))
-                              .paths[0]);
-                            if (image == null) return;
+                              .pickFiles(type: FileType.image))!
+                              .paths[0]!);
                             tagsControllers.artworkController = image.path;
                             setState(() {});
                           },
@@ -209,7 +208,7 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
                 child: TextFieldTile(
                   textController: tagsControllers.titleController,
                   inputType: TextInputType.text,
-                  labelText: Languages.of(context).labelEditorTitle,
+                  labelText: Languages.of(context)!.labelEditorTitle,
                   icon: EvaIcons.textOutline,
                 ),
               ),
@@ -224,7 +223,7 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
                 child: TextFieldTile(
                   textController: tagsControllers.albumController,
                   inputType: TextInputType.text,
-                  labelText: Languages.of(context).labelEditorAlbum,
+                  labelText: Languages.of(context)!.labelEditorAlbum,
                   icon: EvaIcons.bookOpenOutline,
                 ),
               ),
@@ -234,7 +233,7 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
                 child: TextFieldTile(
                   textController: tagsControllers.artistController,
                   inputType: TextInputType.text,
-                  labelText: Languages.of(context).labelEditorArtist,
+                  labelText: Languages.of(context)!.labelEditorArtist,
                   icon: EvaIcons.personOutline,
                 ),
               ),
@@ -249,7 +248,7 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
                 child: TextFieldTile(
                   textController: tagsControllers.genreController,
                   inputType: TextInputType.text,
-                  labelText: Languages.of(context).labelEditorGenre,
+                  labelText: Languages.of(context)!.labelEditorGenre,
                   icon: EvaIcons.bookOutline,
                 ),
               ),
@@ -259,7 +258,7 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
                 child: TextFieldTile(
                   textController: tagsControllers.dateController,
                   inputType: TextInputType.datetime,
-                  labelText: Languages.of(context).labelEditorDate,
+                  labelText: Languages.of(context)!.labelEditorDate,
                   icon: EvaIcons.calendarOutline,
                 ),
               ),
@@ -274,7 +273,7 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
                 child: TextFieldTile(
                   textController: tagsControllers.discController,
                   inputType: TextInputType.number,
-                  labelText: Languages.of(context).labelEditorDisc,
+                  labelText: Languages.of(context)!.labelEditorDisc,
                   icon: EvaIcons.playCircleOutline
                 ),
               ),
@@ -284,7 +283,7 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
                 child: TextFieldTile(
                   textController: tagsControllers.trackController,
                   inputType: TextInputType.number,
-                  labelText: Languages.of(context).labelEditorTrack,
+                  labelText: Languages.of(context)!.labelEditorTrack,
                   icon: EvaIcons.musicOutline,
                 ),
               ),
@@ -305,7 +304,7 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
             title: Text(
               "Restore Artwork",
               style: TextStyle(
-                color: Theme.of(context).textTheme.bodyText1.color
+                color: Theme.of(context).textTheme.bodyText1!.color
               ),
             ),
           ),
@@ -329,7 +328,7 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
             Navigator.pop(context);
             AppSnack.showSnackBar(
               icon: Icons.warning,
-              title: Languages.of(context).labelAudioFormatNotCompatible,
+              title: Languages.of(context)!.labelAudioFormatNotCompatible,
               duration: Duration(seconds: 2),
               context: context,
             );

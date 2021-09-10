@@ -21,7 +21,7 @@ class SearchFiltersSheet extends StatelessWidget {
               (filter[0].toUpperCase() + filter.substring(1))
                 .replaceAll("_", " "),
               style: TextStyle(
-                color: Theme.of(context).textTheme.bodyText1.color,
+                color: Theme.of(context).textTheme.bodyText1!.color,
                 fontSize: 16,
                 fontFamily: 'Product Sans',
                 fontWeight: FontWeight.w600

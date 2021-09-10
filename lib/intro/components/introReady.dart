@@ -9,7 +9,7 @@ import 'package:songtube/internal/languages.dart';
 import 'package:songtube/ui/animations/showUp.dart';
 
 class IntroReady extends StatelessWidget {
-  final Function onEnd;
+  final Function? onEnd;
   IntroReady({
     this.onEnd
   });
@@ -48,11 +48,11 @@ class IntroReady extends StatelessWidget {
                             fontSize: 22,
                             fontFamily: 'Product Sans',
                             fontWeight: FontWeight.w600,
-                            color: Theme.of(context).textTheme.bodyText1.color
+                            color: Theme.of(context).textTheme.bodyText1!.color
                           ),
                           children: [
                             TextSpan(
-                              text: Languages.of(context).labelConfigReady
+                              text: Languages.of(context)!.labelConfigReady
                             )
                           ]
                         ),
@@ -81,14 +81,14 @@ class IntroReady extends StatelessWidget {
                             fontSize: 18,
                             fontFamily: 'Product Sans',
                             fontWeight: FontWeight.w600,
-                            color: Theme.of(context).textTheme.bodyText1.color
+                            color: Theme.of(context).textTheme.bodyText1!.color
                           ),
                           children: [
                             TextSpan(
                               text: 
-                                Languages.of(context).labelIntroductionIsOver
+                                Languages.of(context)!.labelIntroductionIsOver
                                 + "\n" +
-                                Languages.of(context).labelEnjoy + " "
+                                Languages.of(context)!.labelEnjoy + " "
                             ),
                             TextSpan(
                               text: "SongTube!",
@@ -117,7 +117,7 @@ class IntroReady extends StatelessWidget {
             child: FloatingActionButton.extended(
               backgroundColor: Colors.red,
               label: Text(
-                Languages.of(context).labelGoHome,
+                Languages.of(context)!.labelGoHome,
                 style: TextStyle(
                   color: Colors.white,
                   fontFamily: 'YTSans',
@@ -125,7 +125,7 @@ class IntroReady extends StatelessWidget {
                 ),
               ),
               icon: Icon(EvaIcons.homeOutline, color: Colors.white),
-              onPressed: onEnd,
+              onPressed: onEnd as void Function()?,
             ),
           ),
         ),

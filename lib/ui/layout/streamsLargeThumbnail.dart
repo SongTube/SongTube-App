@@ -22,39 +22,39 @@ import 'package:songtube/ui/layout/components/popupMenu.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class StreamsLargeThumbnailView extends StatelessWidget {
-  final List<dynamic> infoItems;
+  final List<dynamic>? infoItems;
   final bool shrinkWrap;
-  final Function(dynamic) onDelete;
+  final Function(dynamic)? onDelete;
   final bool allowSaveToFavorites;
   final bool allowSaveToWatchLater;
-  final Function onReachingListEnd;
+  final Function? onReachingListEnd;
   final scaffoldKey;
   StreamsLargeThumbnailView({
-    @required this.infoItems,
+    required this.infoItems,
     this.shrinkWrap = false,
     this.onDelete,
     this.allowSaveToFavorites = true,
     this.allowSaveToWatchLater = true,
     this.onReachingListEnd,
     this.scaffoldKey,
-    Key key,
+    Key? key,
   }) : super (key: key);
   @override
   Widget build(BuildContext context) {
-    if (infoItems.isNotEmpty) {
+    if (infoItems!.isNotEmpty) {
       return NotificationListener<ScrollNotification>(
         onNotification: (notification) {
           double maxScroll = notification.metrics.maxScrollExtent;
           double currentScroll = notification.metrics.pixels;
           double delta = 200.0;
           if ( maxScroll - currentScroll <= delta)
-            onReachingListEnd();
+            onReachingListEnd!();
           return false;
         },
         child: ListView.builder(
-          itemCount: infoItems.length,
+          itemCount: infoItems!.length,
           itemBuilder: (context, index) {
-            dynamic infoItem = infoItems[index];
+            dynamic infoItem = infoItems![index];
             return FadeInTransition(
               duration: Duration(milliseconds: 300),
               child: Padding(
@@ -125,7 +125,7 @@ class StreamsLargeThumbnailView extends StatelessWidget {
     ChannelInfoItem channel = infoItem;
     return Row(
       children: [
-        FutureBuilder(
+        FutureBuilder<String?>(
           future: AvatarHandler.getAvatarUrl(channel.name, channel.url),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
@@ -134,7 +134,7 @@ class StreamsLargeThumbnailView extends StatelessWidget {
                 child: FadeInImage(
                   fadeInDuration: Duration(milliseconds: 300),
                   placeholder: MemoryImage(kTransparentImage),
-                  image: FileImage(File(snapshot.data)),
+                  image: FileImage(File(snapshot.data!)),
                   height: 80,
                   width: 80,
                 ),
@@ -155,9 +155,9 @@ class StreamsLargeThumbnailView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                channel.name,
+                channel.name!,
                 style: TextStyle(
-                  color: Theme.of(context).textTheme.bodyText1.color,
+                  color: Theme.of(context).textTheme.bodyText1!.color,
                   fontSize: 18,
                   fontFamily: 'Product Sans',
                   fontWeight: FontWeight.w600,
@@ -167,7 +167,7 @@ class StreamsLargeThumbnailView extends StatelessWidget {
               Text(
                 "${NumberFormat().format(channel.subscriberCount)} Subs • ${channel.streamCount} videos",
                 style: TextStyle(
-                  color: Theme.of(context).textTheme.bodyText1.color,
+                  color: Theme.of(context).textTheme.bodyText1!.color,
                   fontSize: 12,
                   fontFamily: 'Product Sans',
                 ),
@@ -191,10 +191,10 @@ class StreamsLargeThumbnailView extends StatelessWidget {
               ? FadeInImage(
                   fadeInDuration: Duration(milliseconds: 200),
                   placeholder: MemoryImage(kTransparentImage),
-                  image: NetworkImage(infoItem.thumbnails.maxresdefault),
+                  image: NetworkImage(infoItem.thumbnails!.maxresdefault),
                   fit: BoxFit.cover,
                   imageErrorBuilder: (context, error, stackTrace) =>
-                    Image.network(infoItem.thumbnails.hqdefault, fit: BoxFit.cover),
+                    Image.network(infoItem.thumbnails!.hqdefault, fit: BoxFit.cover),
                 )
               : FadeInImage(
                   fadeInDuration: Duration(milliseconds: 200),
@@ -215,8 +215,8 @@ class StreamsLargeThumbnailView extends StatelessWidget {
               borderRadius: BorderRadius.circular(3)
             ),
             child: Text(
-              "${Duration(seconds: infoItem.duration).inMinutes}:" +
-              "${Duration(seconds: infoItem.duration).inSeconds.remainder(60).toString().padRight(2, "0")}",
+              "${Duration(seconds: infoItem.duration!).inMinutes}:" +
+              "${Duration(seconds: infoItem.duration!).inSeconds.remainder(60).toString().padRight(2, "0")}",
               style: TextStyle(
                 fontFamily: 'Product Sans',
                 fontWeight: FontWeight.w600,
@@ -251,7 +251,7 @@ class StreamsLargeThumbnailView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         infoItem is StreamInfoItem
-          ? FutureBuilder(
+          ? FutureBuilder<String?>(
               future: _getChannelLogoUrl(infoItem.uploaderUrl),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
@@ -266,17 +266,17 @@ class StreamsLargeThumbnailView extends StatelessWidget {
                             url: infoItem.uploaderUrl,
                             name: infoItem.uploaderName,
                             lowResAvatar: snapshot.data,
-                            heroTag: infoItem.uploaderUrl + infoItem.id,
+                            heroTag: infoItem.uploaderUrl! + infoItem.id!,
                       )));
                     },
                     child: Hero(
-                      tag: infoItem.uploaderUrl + infoItem.id,
+                      tag: infoItem.uploaderUrl! + infoItem.id!,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(100),
                         child: FadeInImage(
                           fadeInDuration: Duration(milliseconds: 300),
                           placeholder: MemoryImage(kTransparentImage),
-                          image: NetworkImage(snapshot.data),
+                          image: NetworkImage(snapshot.data!),
                           fit: BoxFit.cover,
                           height: 50,
                           width: 50,
@@ -318,7 +318,7 @@ class StreamsLargeThumbnailView extends StatelessWidget {
                   "${infoItem.name}",
                   maxLines: 2,
                   style: TextStyle(
-                    color: Theme.of(context).textTheme.bodyText1.color,
+                    color: Theme.of(context).textTheme.bodyText1!.color,
                     fontWeight: FontWeight.w600,
                     fontFamily: 'Product Sans',
                     fontSize: 14,
@@ -329,11 +329,11 @@ class StreamsLargeThumbnailView extends StatelessWidget {
                   "${infoItem.uploaderName}" +
                   (infoItem is StreamInfoItem
                     ? "${infoItem.viewCount != -1 ? " • " + NumberFormat.compact().format(infoItem.viewCount) + " views" : ""}"
-                      " ${infoItem.uploadDate == null ? "" : " • " + infoItem.uploadDate}"
+                      " ${infoItem.uploadDate == null ? "" : " • " + infoItem.uploadDate!}"
                     : ""),
                   style: TextStyle(
                     fontSize: 12,
-                    color: Theme.of(context).textTheme.bodyText1.color
+                    color: Theme.of(context).textTheme.bodyText1!.color!
                       .withOpacity(0.8)
                   ),
                 )
@@ -344,7 +344,7 @@ class StreamsLargeThumbnailView extends StatelessWidget {
         StreamsPopupMenu(
           infoItem: infoItem,
           onDelete: onDelete != null
-            ? (item) => onDelete(item)
+            ? (item) => onDelete!(item)
             : null,
           scaffoldKey: scaffoldKey,
         )
@@ -352,7 +352,7 @@ class StreamsLargeThumbnailView extends StatelessWidget {
     );
   }
 
-  Future<String> _getChannelLogoUrl(url) async {
+  Future<String?> _getChannelLogoUrl(url) async {
     YoutubeChannel channel = await ChannelExtractor.channelInfo(url);
     return channel.avatarUrl;
   }
