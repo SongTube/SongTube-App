@@ -36,12 +36,12 @@ class DownloadTab extends StatelessWidget {
                 ),
               ),
               Text(
-                Languages.of(context)!.labelDownloads,
+                Languages.of(context).labelDownloads,
                 style: TextStyle(
                   fontFamily: 'Product Sans',
                   fontWeight: FontWeight.w700,
                   fontSize: 20,
-                  color: Theme.of(context).textTheme.bodyText1!.color
+                  color: Theme.of(context).textTheme.bodyText1.color
                 ),
               ),
             ],
@@ -66,8 +66,8 @@ class DownloadTab extends StatelessWidget {
                     letterSpacing: 0.2
                 ),
                 labelColor: Theme.of(context).accentColor,
-                unselectedLabelColor: Theme.of(context).textTheme.bodyText1!
-                  .color!.withOpacity(0.4),
+                unselectedLabelColor: Theme.of(context).textTheme.bodyText1
+                  .color.withOpacity(0.4),
                 indicator: MD2Indicator(
                   indicatorSize: MD2IndicatorSize.tiny,
                   indicatorHeight: 4,
@@ -75,13 +75,13 @@ class DownloadTab extends StatelessWidget {
                 ),
                 tabs: [
                   Tab(child: Text(
-                    Languages.of(context)!.labelQueued
+                    Languages.of(context).labelQueued
                   )),
                   Tab(child: Text(
-                    Languages.of(context)!.labelCompleted
+                    Languages.of(context).labelCompleted
                   )),
                   Tab(child: Text(
-                    Languages.of(context)!.labelCancelled
+                    Languages.of(context).labelCancelled
                   ))
                 ],
               ),
@@ -89,7 +89,7 @@ class DownloadTab extends StatelessWidget {
             Divider(
               height: 1,
               thickness: 1,
-              color: Colors.grey[600]!.withOpacity(0.1),
+              color: Colors.grey[600].withOpacity(0.1),
               indent: 12,
               endIndent: 12
             ),

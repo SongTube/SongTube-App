@@ -127,7 +127,7 @@ class FallbackLocalizationDelegate extends LocalizationsDelegate<MaterialLocaliz
 
 abstract class Languages {
   
-  static Languages? of(BuildContext context) {
+  static Languages of(BuildContext context) {
     return Localizations.of<Languages>(context, Languages);
   }
 
@@ -337,7 +337,7 @@ Future<Locale> getLocale() async {
 }
 
 Locale _locale(String languageCode) {
-  return languageCode.isNotEmpty
+  return languageCode != null && languageCode.isNotEmpty
       ? Locale(languageCode, '')
       : Locale('en', '');
 }

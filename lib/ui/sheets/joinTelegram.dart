@@ -16,17 +16,17 @@ class JoinTelegramSheet extends StatelessWidget {
       ),
       addBottomPadding: true,
       leading: Icon(MdiIcons.telegram, color: Colors.blue),
-      title: Languages.of(context)!.labelJoinTelegramChannel,
+      title: Languages.of(context).labelJoinTelegramChannel,
       content: Text(
-        Languages.of(context)!.labelJoinTelegramJustification,
+        Languages.of(context).labelJoinTelegramJustification,
         style: TextStyle(
-          color: Theme.of(context).textTheme.bodyText1!.color,
+          color: Theme.of(context).textTheme.bodyText1.color,
           fontSize: 16
         ),
       ),
       actions: [
         TextButton(
-          child: Text(Languages.of(context)!.labelJoin,
+          child: Text(Languages.of(context).labelJoin,
             style: TextStyle(
               fontWeight: FontWeight.w600
             )),
@@ -37,7 +37,7 @@ class JoinTelegramSheet extends StatelessWidget {
           },
         ),
         TextButton(
-          child: Text(Languages.of(context)!.labelRemindLater,
+          child: Text(Languages.of(context).labelRemindLater,
             style: TextStyle(
               fontWeight: FontWeight.w600
             )),
@@ -47,7 +47,7 @@ class JoinTelegramSheet extends StatelessWidget {
           },
         ),
         TextButton(
-          child: Text(Languages.of(context)!.labelNo,
+          child: Text(Languages.of(context).labelNo,
             style: TextStyle(
               fontWeight: FontWeight.w600
             )),

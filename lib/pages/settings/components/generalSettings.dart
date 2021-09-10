@@ -15,16 +15,16 @@ class GeneralSettings extends StatelessWidget {
         FutureBuilder(
           future: DeviceInfoPlugin().androidInfo,
           builder: (context, AsyncSnapshot<AndroidDeviceInfo> info) {
-            if (info.hasData && info.data!.version.sdkInt > 29) {
+            if (info.hasData && info.data.version.sdkInt > 29) {
               return ListTile(
                 title: Text(
-                  Languages.of(context)!.labelAndroid11Fix,
+                  Languages.of(context).labelAndroid11Fix,
                   style: TextStyle(
-                    color: Theme.of(context).textTheme.bodyText1!.color,
+                    color: Theme.of(context).textTheme.bodyText1.color,
                     fontWeight: FontWeight.w500
                   ),
                 ),
-                subtitle: Text(Languages.of(context)!.labelAndroid11FixJustification,
+                subtitle: Text(Languages.of(context).labelAndroid11FixJustification,
                   style: TextStyle(fontSize: 12)
                 ),
                 onTap: () {
@@ -38,9 +38,9 @@ class GeneralSettings extends StatelessWidget {
         ),
         ListTile(
           title: Text(
-            Languages.of(context)!.labelLanguage,
+            Languages.of(context).labelLanguage,
             style: TextStyle(
-              color: Theme.of(context).textTheme.bodyText1!.color,
+              color: Theme.of(context).textTheme.bodyText1.color,
               fontWeight: FontWeight.w500
             ),
           ),
@@ -48,8 +48,8 @@ class GeneralSettings extends StatelessWidget {
             color: Colors.transparent,
             child: DropdownButton<LanguageData>(
               iconSize: 30,
-              onChanged: (LanguageData? language) {
-                changeLanguage(context, language!.languageCode);
+              onChanged: (LanguageData language) {
+                changeLanguage(context, language.languageCode);
               },
               underline: DropdownButtonHideUnderline(child: Container()),
               items: supportedLanguages
@@ -66,7 +66,7 @@ class GeneralSettings extends StatelessWidget {
                             fontSize: 16,
                             fontFamily: 'YTSans',
                             fontWeight: FontWeight.w400,
-                            color: Theme.of(context).textTheme.bodyText1!.color
+                            color: Theme.of(context).textTheme.bodyText1.color
                           ),
                         )
                       ],
@@ -81,7 +81,7 @@ class GeneralSettings extends StatelessWidget {
           title: Text(
             "Picture in Picture",
             style: TextStyle(
-              color: Theme.of(context).textTheme.bodyText1!.color,
+              color: Theme.of(context).textTheme.bodyText1.color,
               fontWeight: FontWeight.w500
             ),
           ),
@@ -97,7 +97,7 @@ class GeneralSettings extends StatelessWidget {
           title: Text(
             "Auto-play videos",
             style: TextStyle(
-              color: Theme.of(context).textTheme.bodyText1!.color,
+              color: Theme.of(context).textTheme.bodyText1.color,
               fontWeight: FontWeight.w500
             ),
           ),
@@ -113,7 +113,7 @@ class GeneralSettings extends StatelessWidget {
           title: Text(
             "Text Correction",
             style: TextStyle(
-              color: Theme.of(context).textTheme.bodyText1!.color,
+              color: Theme.of(context).textTheme.bodyText1.color,
               fontWeight: FontWeight.w500
             ),
           ),

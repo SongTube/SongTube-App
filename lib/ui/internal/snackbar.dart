@@ -12,11 +12,11 @@ class AppSnack {
 
   // Show SnackBar with Icon, Title and Message
   static void showSnackBar({
-    required IconData icon,
-    required String title,
-    String? message,
+    @required IconData icon,
+    @required String title,
+    String message,
     Duration duration = const Duration(seconds: 2),
-    required context,
+    @required context,
     scaffoldKey
   }) {
     if (scaffoldKey == null)
@@ -47,14 +47,14 @@ class AppSnack {
                       title,
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
-                        color: Theme.of(context).textTheme.bodyText1!.color
+                        color: Theme.of(context).textTheme.bodyText1.color
                       )
                     ),
                     if (message != null)
                     Text(
                       message,
                       style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyText1!.color
+                        color: Theme.of(context).textTheme.bodyText1.color
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.clip,
@@ -81,7 +81,7 @@ class AppSnack {
           ),
         ],
       ),
-      duration: duration,
+      duration: duration == null ? 3 : duration,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(10),

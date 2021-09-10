@@ -7,16 +7,16 @@ import 'package:songtube/ui/layout/components/popupMenu.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class StreamsListTileView extends StatelessWidget {
-  final List<StreamInfoItem?>? streams;
+  final List<StreamInfoItem> streams;
   final Function(StreamInfoItem, int) onTap;
   final bool shrinkWrap;
   final bool removePhysics;
   final bool topPadding;
-  final Function(dynamic)? onDelete;
+  final Function(dynamic) onDelete;
   final scaffoldKey;
   StreamsListTileView({
-    required this.streams,
-    required this.onTap,
+    @required this.streams,
+    @required this.onTap,
     this.shrinkWrap = false,
     this.removePhysics = false,
     this.topPadding = true,
@@ -27,16 +27,16 @@ class StreamsListTileView extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
       duration: Duration(milliseconds: 300),
-      child: streams!.isNotEmpty
+      child: streams.isNotEmpty
         ? ListView.builder(
             physics: removePhysics
               ? NeverScrollableScrollPhysics()
               : AlwaysScrollableScrollPhysics(),
             shrinkWrap: shrinkWrap,
             padding: EdgeInsets.zero,
-            itemCount: streams!.length,
+            itemCount: streams.length,
             itemBuilder: (context, index) {
-              StreamInfoItem video = streams![index]!;
+              StreamInfoItem video = streams[index];
               return FadeInTransition(
                 duration: Duration(milliseconds: 300),
                 child: GestureDetector(
@@ -64,7 +64,7 @@ class StreamsListTileView extends StatelessWidget {
                                   child: FadeInImage(
                                     fadeInDuration: Duration(milliseconds: 300),
                                     placeholder: MemoryImage(kTransparentImage),
-                                    image: NetworkImage(video.thumbnails!.hqdefault),
+                                    image: NetworkImage(video.thumbnails.hqdefault),
                                     fit: BoxFit.fitWidth,
                                   ),
                                 ),
@@ -79,8 +79,8 @@ class StreamsListTileView extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(3)
                                   ),
                                   child: Text(
-                                    "${Duration(seconds: video.duration!).inMinutes}:" +
-                                    "${Duration(seconds: video.duration!).inSeconds.remainder(60).toString().padRight(2, "0")}",
+                                    "${Duration(seconds: video.duration).inMinutes}:" +
+                                    "${Duration(seconds: video.duration).inSeconds.remainder(60).toString().padRight(2, "0")}",
                                     style: TextStyle(
                                       fontFamily: 'Product Sans',
                                       fontWeight: FontWeight.w600,
@@ -106,9 +106,9 @@ class StreamsListTileView extends StatelessWidget {
                                   bottom: 4
                                 ),
                                 child: Text(
-                                  video.name!,
+                                  video.name,
                                   style: TextStyle(
-                                    color: Theme.of(context).textTheme.bodyText1!.color,
+                                    color: Theme.of(context).textTheme.bodyText1.color,
                                     fontWeight: FontWeight.w600,
                                     fontFamily: 'Product Sans',
                                     fontSize: 14,
@@ -120,11 +120,11 @@ class StreamsListTileView extends StatelessWidget {
                               Container(
                                 padding: EdgeInsets.only(left: 8),
                                 child: Text(
-                                  video.uploaderName! + " • " +
+                                  video.uploaderName + " • " +
                                   "${NumberFormat.compact().format(video.viewCount)}" +
                                   " Views",
                                   style: TextStyle(
-                                    color: Theme.of(context).textTheme.bodyText1!.color!
+                                    color: Theme.of(context).textTheme.bodyText1.color
                                       .withOpacity(0.8),
                                     fontFamily: "Product Sans",
                                     fontSize: 10,
@@ -140,7 +140,7 @@ class StreamsListTileView extends StatelessWidget {
                         StreamsPopupMenu(
                           infoItem: video,
                           onDelete: onDelete != null
-                            ? (item) => onDelete!(item)
+                            ? (item) => onDelete(item)
                             : null,
                           scaffoldKey: scaffoldKey,
                         )

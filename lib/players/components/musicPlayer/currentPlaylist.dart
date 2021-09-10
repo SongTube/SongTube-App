@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:songtube/provider/mediaProvider.dart';
 
 class MusicPlayerCurrentPlaylist extends StatefulWidget {
-  final bool? blurUIEnabled;
+  final bool blurUIEnabled;
   MusicPlayerCurrentPlaylist({
     this.blurUIEnabled
   });
@@ -18,34 +18,34 @@ class MusicPlayerCurrentPlaylist extends StatefulWidget {
 
 class _MusicPlayerCurrentPlaylistState extends State<MusicPlayerCurrentPlaylist> {
 
-  ScrollController? controller;
+  ScrollController controller;
   double bodyOpacity = 1.0;
 
   @override
   void initState() {
     super.initState();
     controller = ScrollController();
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       animateToCurrentPlaying();
     });
   }
 
   void animateToCurrentPlaying() {
-    int index = AudioService.queue!.indexOf(AudioService.currentMediaItem!);
+    int index = AudioService.queue.indexOf(AudioService.currentMediaItem);
     double offset = index.toDouble()*75;
-    controller!.jumpTo(offset);
+    controller.jumpTo(offset);
   }
 
   @override
   Widget build(BuildContext context) {
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
-    Color? dominantColor = widget.blurUIEnabled!
+    Color dominantColor = widget.blurUIEnabled
       ? mediaProvider.dominantColor == null ? Colors.white : mediaProvider.dominantColor
       : Theme.of(context).accentColor;
-    Color? textColor = widget.blurUIEnabled!
-      ? dominantColor!.computeLuminance() > 0.5 ? Colors.black : Colors.white
-      : Theme.of(context).textTheme.bodyText1!.color;
-    Color? vibrantColor = widget.blurUIEnabled!
+    Color textColor = widget.blurUIEnabled
+      ? dominantColor.computeLuminance() > 0.5 ? Colors.black : Colors.white
+      : Theme.of(context).textTheme.bodyText1.color;
+    Color vibrantColor = widget.blurUIEnabled
       ? mediaProvider.vibrantColor == null ? Colors.white : mediaProvider.vibrantColor
       : Theme.of(context).accentColor;
     return WillPopScope(
@@ -70,8 +70,8 @@ class _MusicPlayerCurrentPlaylistState extends State<MusicPlayerCurrentPlaylist>
             topRight: Radius.circular(10)
           ),
           child: Container(
-            color: widget.blurUIEnabled!
-              ? dominantColor!.withOpacity(0.4)
+            color: widget.blurUIEnabled
+              ? dominantColor.withOpacity(0.4)
               : Theme.of(context).scaffoldBackgroundColor
                 .withOpacity(0.96),
             child: AnimatedOpacity(
@@ -82,9 +82,9 @@ class _MusicPlayerCurrentPlaylistState extends State<MusicPlayerCurrentPlaylist>
                 
                 itemExtent: 75,
                 padding: EdgeInsets.only(top: 12, left: 12, right: 12),
-                itemCount: AudioService.queue!.length,
+                itemCount: AudioService.queue.length,
                 itemBuilder: (context, index) {
-                  MediaItem song = AudioService.queue![index];
+                  MediaItem song = AudioService.queue[index];
                   return ListTile(
                     title: Text(
                       song.title,
@@ -96,7 +96,7 @@ class _MusicPlayerCurrentPlaylistState extends State<MusicPlayerCurrentPlaylist>
                       ),
                     ),
                     subtitle: Text(
-                      song.artist!,
+                      song.artist,
                       style: TextStyle(
                         fontSize: 12,
                         color: textColor,
@@ -108,7 +108,7 @@ class _MusicPlayerCurrentPlaylistState extends State<MusicPlayerCurrentPlaylist>
                       ? Container(
                           padding: EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: vibrantColor!.withOpacity(0.05),
+                            color: vibrantColor.withOpacity(0.05),
                             borderRadius: BorderRadius.circular(50)
                           ),
                           child: Icon(

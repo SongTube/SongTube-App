@@ -4,10 +4,10 @@ import 'package:newpipeextractor_dart/newpipeextractor_dart.dart';
 
 class ChannelSubscription {
 
-  String? url;
-  String? id;
-  String? name;
-  String? avatarUrl;
+  String url;
+  String id;
+  String name;
+  String avatarUrl;
   DateTime date;
   bool enableNotifications;
 
@@ -31,7 +31,7 @@ class ChannelSubscription {
     );
   }
 
-  Map<String, String?> toMap() {
+  Map<String, String> toMap() {
     return {
       'url': url,
       'id': id,
@@ -54,13 +54,13 @@ class ChannelSubscription {
   }
 
   static String toJsonList(List<ChannelSubscription> channels) {
-    if (channels.isEmpty) return "";
+    if (channels == null || channels.isEmpty) return "";
     return jsonEncode(List.generate(channels.length, (index) {
       return channels[index].toMap();
     }).toList());
   }
 
-  static List<ChannelSubscription> fromJsonList(String? json) {
+  static List<ChannelSubscription> fromJsonList(String json) {
     if (json == null || json == "") return <ChannelSubscription>[];
     var channelsMap = jsonDecode(json);
     return channelsMap.isNotEmpty

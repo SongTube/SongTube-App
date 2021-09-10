@@ -9,14 +9,14 @@ class QuickAccessTile extends StatelessWidget {
   final String title;
   final Function onTap;
   QuickAccessTile({
-    required this.tileIcon,
-    required this.title,
-    required this.onTap
+    @required this.tileIcon,
+    @required this.title,
+    @required this.onTap
   });
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap as void Function()?,
+      onTap: onTap,
       child: Padding(
         padding: EdgeInsets.only(
           left: 32,

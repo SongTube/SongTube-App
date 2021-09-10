@@ -21,11 +21,11 @@ class IntroScreen extends StatefulWidget {
 
 class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin {
 
-  TabController? _controller;
+  TabController _controller;
   int _selectedIndex = 0;
 
   // IntroWelcome Widget
-  Widget? introWelcome;
+  Widget introWelcome;
 
   List<Widget> screens = [];
 
@@ -35,7 +35,7 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
     screens = [
       IntroWelcome(
         onNext: () => setState(() {
-          _selectedIndex += 1; _controller!.index = _selectedIndex;
+          _selectedIndex += 1; _controller.index = _selectedIndex;
         })
       ),
       IntroPermissions(),
@@ -49,12 +49,12 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
     ];
     // Create TabController for getting the index of current tab
     _controller = TabController(length: screens.length, vsync: this);
-    _controller!.animation!.addListener(() {
-      int value = _controller!.animation!.value.round();
+    _controller.animation.addListener(() {
+      int value = _controller.animation.value.round();
       if (value != _selectedIndex)
         setState(() => _selectedIndex = value);
     });
-    WidgetsBinding.instance!.addPostFrameCallback((_) async {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       Brightness _systemBrightness = Theme.of(context).brightness;
       Brightness _statusBarBrightness = _systemBrightness == Brightness.light
           ? Brightness.dark
@@ -106,12 +106,12 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
                         ),
                       ),
                       child: Text(
-                        Languages.of(context)!.labelSkip,
+                        Languages.of(context).labelSkip,
                         style: TextStyle(
                           fontFamily: 'Product Sans',
                           fontWeight: FontWeight.w600,
                           fontSize: 14,
-                          color: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.7),
+                          color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.7),
                         ),
                       ),
                       onPressed: () {
@@ -136,7 +136,7 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
                           borderRadius: BorderRadius.circular(50),
                           color: _selectedIndex == index
                             ? Theme.of(context).accentColor
-                            : Theme.of(context).iconTheme.color!.withOpacity(0.08)
+                            : Theme.of(context).iconTheme.color.withOpacity(0.08)
                         ),
                       ),
                     );
@@ -156,17 +156,17 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
                           ),
                         ),
                         child: Text(
-                          Languages.of(context)!.labelNext,
+                          Languages.of(context).labelNext,
                           style: TextStyle(
                             fontFamily: 'Product Sans',
                             fontWeight: FontWeight.w600,
                             fontSize: 14,
-                            color: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.7),
+                            color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.7),
                           ),
                         ),
-                        onPressed: _selectedIndex < _controller!.length-1
+                        onPressed: _selectedIndex < _controller.length-1
                           ? () => setState(() {
-                              _selectedIndex += 1; _controller!.index = _selectedIndex;
+                              _selectedIndex += 1; _controller.index = _selectedIndex;
                             })
                           : null
                       ),

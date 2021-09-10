@@ -5,7 +5,7 @@ class StyledBottomSheetList extends StatefulWidget {
   /// List of [StyledBottomSheet] that will be displayed
   final List<Widget> children;
   StyledBottomSheetList({
-    required this.children
+    @required this.children
   });
 
   @override
@@ -44,7 +44,7 @@ class _StyledBottomSheetListState extends State<StyledBottomSheetList> with Tick
             Divider(
                 height: 1,
                 thickness: 1,
-                color: Colors.grey[600]!.withOpacity(0.1),
+                color: Colors.grey[600].withOpacity(0.1),
                 indent: 12,
                 endIndent: 12
               ),
@@ -90,7 +90,7 @@ class _StyledBottomSheetListState extends State<StyledBottomSheetList> with Tick
                             borderRadius: BorderRadius.circular(50),
                             color: _selectedIndex == index
                               ? Theme.of(context).accentColor
-                              : Theme.of(context).iconTheme.color!.withOpacity(0.08)
+                              : Theme.of(context).iconTheme.color.withOpacity(0.08)
                           ),
                         ),
                       );
@@ -113,8 +113,8 @@ class _StyledBottomSheetListState extends State<StyledBottomSheetList> with Tick
                         ),
                         child: Text(
                           _selectedIndex+1 == widget.children.length
-                            ? Languages.of(context)!.labelExit
-                            : Languages.of(context)!.labelNext,
+                            ? Languages.of(context).labelExit
+                            : Languages.of(context).labelNext,
                           style: TextStyle(
                             fontFamily: 'Product Sans',
                             fontSize: 16,
@@ -141,25 +141,25 @@ class _StyledBottomSheetListState extends State<StyledBottomSheetList> with Tick
 
 class StyledBottomSheet extends StatelessWidget {
   /// Title Widget
-  final String? title;
+  final String title;
   /// Title leading Widget
-  final Widget? leading;
+  final Widget leading;
   /// BottomSheet Body
   final Widget content;
   /// BottomSheet Actions
-  final List<Widget>? actions;
+  final List<Widget> actions;
   /// Content Padding
   final EdgeInsetsGeometry contentPadding;
   /// Actions Padding
   final EdgeInsetsGeometry actionsPadding;
   /// On dismiss
-  final Function? onDismiss;
+  final Function onDismiss;
   /// Add padding at the bottom of the sheet
   final bool addBottomPadding;
   StyledBottomSheet({
     this.title,
     this.leading,
-    required this.content,
+    @required this.content,
     this.actions,
     this.contentPadding = const EdgeInsets.only(
       top: 24, right: 24, left: 24, bottom: 12
@@ -191,8 +191,8 @@ class StyledBottomSheet extends StatelessWidget {
                 backgroundColor: Theme.of(context).cardColor,
                 elevation: 0,
                 automaticallyImplyLeading: false,
-                title: Text(title!, style: TextStyle(
-                  color: Theme.of(context).textTheme.bodyText1!.color,
+                title: Text(title, style: TextStyle(
+                  color: Theme.of(context).textTheme.bodyText1.color,
                   fontWeight: FontWeight.w600
                 )),
                 leading: leading,
@@ -202,7 +202,7 @@ class StyledBottomSheet extends StatelessWidget {
             Divider(
               height: 1,
               thickness: 1,
-              color: Colors.grey[600]!.withOpacity(0.1),
+              color: Colors.grey[600].withOpacity(0.1),
               indent: 12,
               endIndent: 12
             ),
@@ -219,7 +219,7 @@ class StyledBottomSheet extends StatelessWidget {
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: actions!
+                  children: actions
                 )
               ),
             ),

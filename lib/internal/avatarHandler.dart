@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
 
@@ -16,7 +15,7 @@ class AvatarHandler {
   /// 
   /// If you want to update the cached image, save and return a new image,
   /// set [updateAvatar] to true.
-  static Future<String?> getAvatarUrl(String? channelName, String? channelUrl, {bool updateAvatar = false}) async {
+  static Future<String> getAvatarUrl(String channelName, String channelUrl, {bool updateAvatar = false}) async {
 
     // Create our dirs and define our avatar file path
     Directory avatarDir = Directory((await getApplicationDocumentsDirectory()).path + "/avatarDir/");
@@ -27,13 +26,13 @@ class AvatarHandler {
     if (await avatarImage.exists() && !updateAvatar) return avatarImage.path;
 
     // Extract the avatar image from the channel url provided using our Isolate
-    String id = (await YoutubeId.getIdFromChannelUrl(channelUrl!))!.split("/").last;
+    String id = (await YoutubeId.getIdFromChannelUrl(channelUrl)).split("/").last;
     ReceivePort receivePort = ReceivePort();
     await Isolate.spawn(_getChannelLogoUrlIsolate, receivePort.sendPort);
-    SendPort childSendPort = await (receivePort.first as FutureOr<SendPort>);
+    SendPort childSendPort = await receivePort.first;
     ReceivePort responsePort = ReceivePort();
     childSendPort.send([id, responsePort.sendPort]);
-    String imageUrl = await (responsePort.first as FutureOr<String>);
+    String imageUrl = await responsePort.first;
 
     // Create our avatar image file
     http.Client client = http.Client();
@@ -56,15 +55,15 @@ class AvatarHandler {
     mainSendPort.send(childReceivePort.sendPort);
     await for (var message in childReceivePort) {
       String videoId = message[0];
-      SendPort? replyPort = message[1];
-      String? avatarUrl;
+      SendPort replyPort = message[1];
+      String avatarUrl;
       try {
         avatarUrl = await ChannelExtractor.getAvatarUrl(videoId);
       } catch (_) {
-        replyPort!.send("");
+        replyPort.send("");
         break;
       }
-      replyPort!.send(avatarUrl);
+      replyPort.send(avatarUrl);
       break;
     }
   }

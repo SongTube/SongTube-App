@@ -30,14 +30,14 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
-  TabController? controller;
+  TabController controller;
 
   @override
   void initState() {
     ManagerProvider manager = Provider.of<ManagerProvider>(context, listen: false);
     controller = TabController(length: 3, vsync: this);
-    controller!.addListener(() {
-      int tabIndex = controller!.index;
+    controller.addListener(() {
+      int tabIndex = controller.index;
       if (tabIndex == 0) {
         manager.currentHomeTab = HomeScreenTab.Trending;
       } else if (tabIndex == 1) {
@@ -51,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    controller!.dispose();
+    controller.dispose();
     super.dispose();
   }
 
@@ -135,17 +135,17 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             letterSpacing: 0.2
                         ),
                         labelColor: Theme.of(context).accentColor,
-                        unselectedLabelColor: Theme.of(context).textTheme.bodyText1!
-                          .color!.withOpacity(0.4),
+                        unselectedLabelColor: Theme.of(context).textTheme.bodyText1
+                          .color.withOpacity(0.4),
                         indicator: MD2Indicator(
                           indicatorSize: MD2IndicatorSize.normal,
                           indicatorHeight: 4,
                           indicatorColor: Theme.of(context).accentColor,
                         ),
                         tabs: [
-                          Tab(text: Languages.of(context)!.labelTrending),
-                          Tab(text: Languages.of(context)!.labelFavorites),
-                          Tab(text: Languages.of(context)!.labelWatchLater)
+                          Tab(text: Languages.of(context).labelTrending),
+                          Tab(text: Languages.of(context).labelFavorites),
+                          Tab(text: Languages.of(context).labelWatchLater)
                         ],
                       ),
                     ),
@@ -155,7 +155,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               Divider(
                 height: 1,
                 thickness: 1,
-                color: Colors.grey[600]!.withOpacity(0.1),
+                color: Colors.grey[600].withOpacity(0.1),
                 indent: 12,
                 endIndent: 12
               ),
@@ -164,10 +164,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     ? Container(
                         color: Theme.of(context).cardColor,
                         child: StreamsLargeThumbnailView(
-                            infoItems: manager.youtubeSearch?.dynamicSearchResultsList ?? [],
+                            infoItems: manager?.youtubeSearch?.dynamicSearchResultsList ?? [],
                             onReachingListEnd: () {
                               manager.searchYoutube(
-                                query: manager.youtubeSearch!.query
+                                query: manager.youtubeSearch.query
                               );
                             },
                           ),
@@ -185,7 +185,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           ),
           AnimatedSwitcher(
             duration: Duration(milliseconds: 300),
-            child: manager.searchBarFocusNode!.hasFocus
+            child: manager.searchBarFocusNode.hasFocus
               ? Column(
                 children: [
                   Container(
@@ -198,12 +198,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       child: Consumer<ManagerProvider>(
                         builder: (context, manager, _) {
                           return SearchHistoryList(
-                            searchQuery: manager.searchController!.text,
+                            searchQuery: manager.searchController.text,
                             onItemTap: (String item) {
-                              manager.searchController!.text = item;
-                              manager.searchBarFocusNode!.unfocus();
+                              manager.searchController.text = item;
+                              manager.searchBarFocusNode.unfocus();
                               manager.youtubeSearchQuery = item;
-                              controller!.animateTo(0);
+                              controller.animateTo(0);
                               manager.searchYoutube(query: item, forceReload: true);
                               if (item.length > 1) {
                                 Future.delayed(Duration(milliseconds: 400), () =>

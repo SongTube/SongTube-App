@@ -4,7 +4,7 @@ import 'package:http/http.dart';
 
 class LyricsProviders {
 
-  static Future<String?> lyricsOvh({String? author, String? title}) async {
+  static Future<String> lyricsOvh({String author, String title}) async {
     Client client = Client();
     var response;
     try {
@@ -21,7 +21,7 @@ class LyricsProviders {
 
   static final happiDevKey = "e1de5fbTOztuNxXBGZ1m39MbY0SPfUUQQm2pbLSdEADsMMm1duk4xQBa";
 
-  static Future<String?> lyricsHappiDev({String? title}) async {
+  static Future<String> lyricsHappiDev({String title}) async {
     Client client = Client();
     var response = await client.get(Uri.parse(
       "https://api.happi.dev/v1/music?q=$title"

@@ -21,18 +21,18 @@ class DownloadsProvider extends ChangeNotifier {
   int maxSimultaneousDownloads = 2;
 
   // Downloading List
-  late List<DownloadSet> downloadingList;
+  List<DownloadSet> downloadingList;
 
   // Completed List
-  late List<DownloadSet> completedList;
+  List<DownloadSet> completedList;
 
   // Cancelled List
-  late List<DownloadSet> cancelledList;
+  List<DownloadSet> cancelledList;
 
   // Handle Single Video Download
   void handleDownloadItem({
-    required Languages? language,
-    DownloadItem? item
+    @required Languages language,
+    DownloadItem item
   }) {
     DownloadSet download = new DownloadSet(
       language: language,
@@ -60,8 +60,8 @@ class DownloadsProvider extends ChangeNotifier {
 
   // Handle Playlist Download
   void handleDownloadItems({
-    required Languages? language,
-    required List<DownloadItem> items
+    @required Languages language,
+    List<DownloadItem> items
   }) {
     items.forEach((item) {
       DownloadSet download = new DownloadSet(

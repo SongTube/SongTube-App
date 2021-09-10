@@ -21,10 +21,10 @@ import 'package:songtube/ui/internal/snackbar.dart';
 enum CurrentDownloadMenu { Home, Audio, Video, Playlist, Loading }
 
 class DownloadMenu extends StatefulWidget {
-  final YoutubeVideo? video;
-  final TagsControllers? tags;
-  final String? videoUrl;
-  final List<StreamInfoItem?>? relatedVideos;
+  final YoutubeVideo video;
+  final TagsControllers tags;
+  final String videoUrl;
+  final List<StreamInfoItem> relatedVideos;
   final scaffoldState;
   DownloadMenu({
     this.video,
@@ -40,11 +40,11 @@ class DownloadMenu extends StatefulWidget {
 class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMixin {
 
   // Current Download Menu Sub-Menu
-  CurrentDownloadMenu? currentDownloadMenu;
+  CurrentDownloadMenu currentDownloadMenu;
 
   // Download Menu StreamManifest
-  YoutubeVideo? video;
-  TagsControllers? tags;
+  YoutubeVideo video;
+  TagsControllers tags;
 
   @override
   void initState() {
@@ -64,7 +64,7 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
   void getVideo() async {
     video = await VideoExtractor.getStream(widget.videoUrl);
     tags = TagsControllers();
-    tags!.updateTextControllers(video!);
+    tags.updateTextControllers(video);
     setState(() => currentDownloadMenu = CurrentDownloadMenu.Home);
   }
 
@@ -91,8 +91,8 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
   }
 
   // Current Menu Widget
-  Widget? _currentDownloadMenuWidget() {
-    Widget? returnWidget;
+  Widget _currentDownloadMenuWidget() {
+    Widget returnWidget;
     switch (currentDownloadMenu) {
       case CurrentDownloadMenu.Home:
         returnWidget = DownloadMenuHome(
@@ -121,7 +121,7 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
           child: VideoDownloadMenu(
             video: video,
             onOptionSelect: (item) => _initializeDownload([item]),
-            audioStream: video!.audioWithBestAacQuality,
+            audioStream: video.audioWithBestAacQuality,
             onBack: () => setState(() => 
               currentDownloadMenu = CurrentDownloadMenu.Home),
           ),
@@ -141,8 +141,6 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
           margin: EdgeInsets.only(top: 12, bottom: 12),
           child: LoadingDownloadMenu(),
         ); break;
-      default:
-        break;
     }
     return returnWidget;
   }
@@ -162,7 +160,7 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
     if (widget.scaffoldState != null) {
       String message;
       if (items.length == 1) {
-        message = "${video!.name}";
+        message = "${video.name}";
       } else {
         message = "${items[0].tags.title}, ${items[1].tags.title}, ${items[2].tags.title}...";
       }

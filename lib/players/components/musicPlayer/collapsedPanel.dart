@@ -16,12 +16,12 @@ import 'package:transparent_image/transparent_image.dart';
 import 'package:rxdart/rxdart.dart';
 
 class CollapsedPanel extends StatelessWidget {
-  final double? borderRadius;
+  final double borderRadius;
   CollapsedPanel({
     this.borderRadius
   });
   //ignore: close_sinks
-  final BehaviorSubject<double?> _dragPositionSubject =
+  final BehaviorSubject<double> _dragPositionSubject =
     BehaviorSubject.seeded(null);
   @override
   Widget build(BuildContext context) {
@@ -47,7 +47,7 @@ class CollapsedPanel extends StatelessWidget {
                       width: 50,
                       fadeInDuration: Duration(milliseconds: 400),
                       placeholder: MemoryImage(kTransparentImage),
-                      image: FileImage(File(AudioService.currentMediaItem!
+                      image: FileImage(File(AudioService.currentMediaItem
                         .artUri.toString().replaceAll("file://", ""))),
                       fit: BoxFit.cover,
                     ),
@@ -66,7 +66,7 @@ class CollapsedPanel extends StatelessWidget {
                           pauseDuration: Duration(seconds: 2),
                           direction: Axis.horizontal,
                           child: Text(
-                            "${AudioService.currentMediaItem!.title}",
+                            "${AudioService.currentMediaItem.title}",
                             style: TextStyle(
                               fontFamily: 'YTSans',
                               fontSize: 16
@@ -78,11 +78,11 @@ class CollapsedPanel extends StatelessWidget {
                         ),
                         SizedBox(height: 2),
                         Text(
-                          "${AudioService.currentMediaItem!.artist}",
+                          "${AudioService.currentMediaItem.artist}",
                           style: TextStyle(
                             fontFamily: 'YTSans',
                             fontSize: 11,
-                            color: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.6)
+                            color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6)
                           ),
                           overflow: TextOverflow.fade,
                           softWrap: false,
@@ -107,7 +107,7 @@ class CollapsedPanel extends StatelessWidget {
                 alignment: Alignment.center,
                 children: [
                   StreamBuilder(
-                    stream: Rx.combineLatest2<double?, double, double?>(
+                    stream: Rx.combineLatest2<double, double, double>(
                       _dragPositionSubject.stream,
                       Stream.periodic(Duration(milliseconds: 1000)),
                       (dragPosition, _) => dragPosition),

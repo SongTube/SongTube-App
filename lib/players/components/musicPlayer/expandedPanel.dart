@@ -31,24 +31,24 @@ class ExpandedPlayer extends StatelessWidget {
       stream: screenStateStream,
       builder: (context, snapshot) {
         final screenState = snapshot.data;
-        final mediaItem = screenState?.mediaItem!;
+        final mediaItem = screenState?.mediaItem;
         final state = screenState?.playbackState;
         final playing = state?.playing ?? false;
         PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
         ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
         MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
-        File? image = mediaProvider.artwork;
-        Color? dominantColor = prefs.enablePlayerBlurBackground
+        File image = mediaProvider.artwork;
+        Color dominantColor = prefs.enablePlayerBlurBackground
           ? mediaProvider.dominantColor == null ? Colors.white : mediaProvider.dominantColor
           : Theme.of(context).accentColor;
-        Color? textColor = prefs.enablePlayerBlurBackground
-          ? dominantColor!.computeLuminance() > 0.5 ? Colors.black : Colors.white
-          : Theme.of(context).textTheme.bodyText1!.color;
-        Color? vibrantColor = prefs.enablePlayerBlurBackground
+        Color textColor = prefs.enablePlayerBlurBackground
+          ? dominantColor.computeLuminance() > 0.5 ? Colors.black : Colors.white
+          : Theme.of(context).textTheme.bodyText1.color;
+        Color vibrantColor = prefs.enablePlayerBlurBackground
           ? mediaProvider.vibrantColor == null ? Colors.white : mediaProvider.vibrantColor
           : Theme.of(context).accentColor;
         return PlayerBackground(
-          backgroundImage: File(AudioService.currentMediaItem!
+          backgroundImage: File(AudioService.currentMediaItem
             .artUri.toString().replaceAll("file://", "")),
           enableBlur: prefs.enablePlayerBlurBackground,
           blurIntensity: 50,
@@ -58,12 +58,12 @@ class ExpandedPlayer extends StatelessWidget {
           backdropOpacity: 0.4,
           child: PlayerBody(
             controller: mediaProvider.fwController,
-            playingFrom: mediaItem?.album ?? '',
+            playingFrom: mediaItem.album,
             textColor: textColor,
             artworkFile: image,
             vibrantColor: vibrantColor,
             playing: playing,
-            mediaItem: mediaItem!,
+            mediaItem: mediaItem,
             dominantColor: dominantColor,
             state: state,
             expandArtwork: config.useExpandedArtwork,

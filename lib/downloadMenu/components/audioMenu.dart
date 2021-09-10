@@ -30,15 +30,15 @@ import 'package:songtube/ui/internal/popupMenu.dart';
 import 'package:string_validator/string_validator.dart';
 
 class AudioDownloadMenu extends StatefulWidget {
-  final YoutubeVideo? video;
-  final TagsControllers? tags;
+  final YoutubeVideo video;
+  final TagsControllers tags;
   final Function(DownloadItem) onDownload;
   final Function onBack;
   AudioDownloadMenu({
-    required this.video,
-    required this.onDownload,
-    required this.onBack,
-    required this.tags,
+    @required this.video,
+    @required this.onDownload,
+    @required this.onBack,
+    @required this.tags,
   });
   @override
   _AudioDownloadMenuState createState() => _AudioDownloadMenuState();
@@ -47,7 +47,7 @@ class AudioDownloadMenu extends StatefulWidget {
 class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProviderStateMixin {
 
   // Audio Settings
-  AudioOnlyStream? selectedAudio;
+  AudioOnlyStream selectedAudio;
 
   // Audio Features
   bool showAudioFeatures = false;
@@ -76,21 +76,21 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
 
   @override
   void initState() {
-    selectedAudio = widget.video!.audioWithBestAacQuality;
-    if (widget.video!.segments!.isNotEmpty) {
-      widget.video!.segments!.forEach((element) {
+    selectedAudio = widget.video.audioWithBestAacQuality;
+    if (widget.video.segments.isNotEmpty) {
+      widget.video.segments.forEach((element) {
         TagsControllers tags = TagsControllers();
         tags.updateTextControllersFromStream(
           StreamInfoItem(
-            widget.video!.url,
-            widget.video!.id,
+            widget.video.url,
+            widget.video.id,
             element.title,
-            widget.video!.uploaderName,
-            widget.video!.uploaderUrl,
-            widget.video!.uploadDate,
-            widget.video!.uploadDate,
-            widget.video!.length,
-            widget.video!.viewCount
+            widget.video.uploaderName,
+            widget.video.uploaderUrl,
+            widget.video.uploadDate,
+            widget.video.uploadDate,
+            widget.video.length,
+            widget.video.viewCount
           )
         );
         segmentTracks.add(StreamSegmentTrack(element, tags, true));
@@ -111,7 +111,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
         ? segmentTracks : <StreamSegmentTrack>[]
     ];
     DownloadItem item = DownloadItem.fetchData(
-      widget.video!,
+      widget.video,
       list, 
       Provider.of<VideoPageProvider>(context, listen: false).currentTags,
       Provider.of<ConfigurationProvider>(context, listen: false)
@@ -139,10 +139,10 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
               children: [
                 IconButton(
                   icon: Icon(EvaIcons.arrowBackOutline),
-                  onPressed: widget.onBack as void Function()?
+                  onPressed: widget.onBack
                 ),
                 SizedBox(width: 4),
-                Text(Languages.of(context)!.labelAudio, style: TextStyle(
+                Text(Languages.of(context).labelAudio, style: TextStyle(
                   fontSize: 20,
                   fontFamily: "Product Sans",
                   fontWeight: FontWeight.w600
@@ -153,16 +153,17 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
           Divider(
             height: 1,
             thickness: 1,
-            color: Colors.grey[600]!.withOpacity(0.1),
+            color: Colors.grey[600].withOpacity(0.1),
             indent: 12,
             endIndent: 12
           ),
           GestureDetector(
             onTap: () async {
               File image = File((await FilePicker.platform
-                .pickFiles(type: FileType.image))!
-                .paths[0]!);
-              pageProvider.currentTags!.artworkController = image.path;
+                .pickFiles(type: FileType.image))
+                .paths[0]);
+              if (image == null) return;
+              pageProvider.currentTags.artworkController = image.path;
               setState(() {});
             },
             child: Container(
@@ -191,9 +192,9 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                             child: ImageFade(
                               fadeDuration: Duration(milliseconds: 300),
                               placeholder: Container(color: Theme.of(context).cardColor),
-                              image: (isURL(pageProvider.currentTags!.artworkController!)
-                                ? NetworkImage(pageProvider.currentTags!.artworkController!)
-                                : FileImage(File(pageProvider.currentTags!.artworkController!))) as ImageProvider<Object>?,
+                              image: isURL(pageProvider.currentTags.artworkController)
+                                ? NetworkImage(pageProvider.currentTags.artworkController)
+                                : FileImage(File(pageProvider.currentTags.artworkController)),
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -224,7 +225,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            pageProvider.currentTags!.titleController!.text,
+                            pageProvider.currentTags.titleController.text,
                             style: TextStyle(
                               fontSize: 16,
                               fontFamily: 'Product Sans',
@@ -235,12 +236,12 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                           ),
                           SizedBox(height: 4),
                           Text(
-                            pageProvider.currentTags!.artistController!.text,
+                            pageProvider.currentTags.artistController.text,
                             style: TextStyle(
                               fontSize: 14,
                               fontFamily: 'Product Sans',
                               fontWeight: FontWeight.w600,
-                              color: Theme.of(context).textTheme.bodyText1!.color!
+                              color: Theme.of(context).textTheme.bodyText1.color
                                 .withOpacity(0.6)
                             ),
                             maxLines: 1,
@@ -251,7 +252,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                               Container(
                                 height: 30,
                                 child: DropdownButton<String>(
-                                  value: selectedAudio!.formatName == "m4a" ? "AAC" : "OGG",
+                                  value: selectedAudio.formatName == "m4a" ? "AAC" : "OGG",
                                   iconSize: 20,
                                   style: TextStyle(
                                     color: Theme.of(context).accentColor,
@@ -270,11 +271,11 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                                       value: "OGG",
                                     )
                                   ],
-                                  onChanged: (String? value) {
+                                  onChanged: (String value) {
                                     if (value == "AAC") {
-                                      setState(() => selectedAudio = widget.video!.audioWithBestAacQuality);
+                                      setState(() => selectedAudio = widget.video.audioWithBestAacQuality);
                                     } else if (value == "OGG") {
-                                      setState(() => selectedAudio = widget.video!.audioWithBestOggQuality);
+                                      setState(() => selectedAudio = widget.video.audioWithBestOggQuality);
                                     }
                                   },
                                 ),
@@ -283,7 +284,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                               Container(
                                 height: 30,
                                 child: DropdownButton<String>(
-                                  value: "${selectedAudio!.averageBitrate}",
+                                  value: "${selectedAudio.averageBitrate}",
                                   iconSize: 20,
                                   style: TextStyle(
                                     color: Theme.of(context).accentColor,
@@ -292,7 +293,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                                     fontSize: 14
                                   ),
                                   underline: Container(),
-                                  items: selectedAudio!.formatName == "m4a"
+                                  items: selectedAudio.formatName == "m4a"
                                     ? List.generate(getSpecificAudioCodecList("m4a").length, (index) => 
                                         DropdownMenuItem(
                                           child: Text("${getSpecificAudioCodecList("m4a")[index].averageBitrate} Kbps/s"),
@@ -303,8 +304,8 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                                           child: Text("${getSpecificAudioCodecList("ogg")[index].averageBitrate} Kbps/s"),
                                           value: "${getSpecificAudioCodecList("ogg")[index].averageBitrate}",
                                       )).reversed.toList(),
-                                  onChanged: (String? value) {
-                                    String codec = selectedAudio!.formatName == "m4a" ? "m4a" : "ogg";
+                                  onChanged: (String value) {
+                                    String codec = selectedAudio.formatName == "m4a" ? "m4a" : "ogg";
                                     int index = getSpecificAudioCodecList(codec).indexWhere((element) => element.averageBitrate.toString() == value);
                                     setState(() => selectedAudio = getSpecificAudioCodecList(codec)[index]);
                                   },
@@ -312,7 +313,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                               ),
                               SizedBox(width: 8),
                               InkWell(
-                                onTap: () => setState(() => pageProvider.currentTags!.updateTextControllers(widget.video!)),
+                                onTap: () => setState(() => pageProvider.currentTags.updateTextControllers(widget.video)),
                                 borderRadius: BorderRadius.circular(50),
                                 child: Ink(
                                   color: Colors.transparent,
@@ -336,34 +337,34 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                     ),
                     items: [
                       FlexiblePopupItem(
-                        title: Languages.of(context)!.labelPerformAutomaticTagging,
+                        title: Languages.of(context).labelPerformAutomaticTagging,
                         value: 'autoTag',
                       ),
                       FlexiblePopupItem(
-                        title: Languages.of(context)!.labelSelectTagsfromMusicBrainz,
+                        title: Languages.of(context).labelSelectTagsfromMusicBrainz,
                         value: 'manualTag',
                       ),
                     ],
-                    onItemTap: (String? value) async {
+                    onItemTap: (String value) async {
                       if (value == 'autoTag') {
                         showDialog(
                           context: context,
                           builder: (_) => LoadingDialog()
                         );
-                        String? lastArtwork = pageProvider.currentTags!.artworkController;
+                        String lastArtwork = pageProvider.currentTags.artworkController;
                         var record = await MusicBrainzAPI
-                          .getFirstRecord(pageProvider.currentTags!.titleController!.text);
+                          .getFirstRecord(pageProvider.currentTags.titleController.text);
                         pageProvider.currentTags = await MusicBrainzAPI.getSongTags(record);
-                        if (pageProvider.currentTags!.artworkController == null)
-                          pageProvider.currentTags!.artworkController = lastArtwork;
+                        if (pageProvider.currentTags.artworkController == null)
+                          pageProvider.currentTags.artworkController = lastArtwork;
                         Navigator.pop(context);
                         setState(() {});
                       } else if (value == 'manualTag') {
                         var record = await Navigator.push(context,
                           BlurPageRoute(builder: (context) => 
                             TagsResultsPage(
-                              title: pageProvider.currentTags!.titleController!.text,
-                              artist: pageProvider.currentTags!.artistController!.text
+                              title: pageProvider.currentTags.titleController.text,
+                              artist: pageProvider.currentTags.artistController.text
                             ),
                             blurStrength: Provider.of<PreferencesProvider>
                               (context, listen: false).enableBlurUI ? 20 : 0));
@@ -372,10 +373,10 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                           context: context,
                           builder: (_) => LoadingDialog()
                         );
-                        String? lastArtwork = pageProvider.currentTags!.artworkController;
+                        String lastArtwork = pageProvider.currentTags.artworkController;
                         pageProvider.currentTags = await MusicBrainzAPI.getSongTags(record);
-                        if (pageProvider.currentTags!.artworkController == null)
-                          pageProvider.currentTags!.artworkController = lastArtwork;
+                        if (pageProvider.currentTags.artworkController == null)
+                          pageProvider.currentTags.artworkController = lastArtwork;
                         Navigator.pop(context);
                         setState(() {});
                       } else {
@@ -390,7 +391,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
           Divider(
             height: 1,
             thickness: 1,
-            color: Colors.grey[600]!.withOpacity(0.1),
+            color: Colors.grey[600].withOpacity(0.1),
             indent: 12,
             endIndent: 12
           ),
@@ -413,14 +414,14 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
                       color: Theme.of(context).scaffoldBackgroundColor,
-                      border: Border.all(color: Colors.grey[600]!.withOpacity(0.1))
+                      border: Border.all(color: Colors.grey[600].withOpacity(0.1))
                     ),
                     child: Row(
                       children: [
                         Text(
-                          Languages.of(context)!.labelDownload,
+                          Languages.of(context).labelDownload,
                           style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText1!.color,
+                            color: Theme.of(context).textTheme.bodyText1.color,
                             fontFamily: 'Product Sans',
                             fontWeight: FontWeight.w600,
                             fontSize: 16
@@ -453,7 +454,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
         Divider(
           height: 1,
           thickness: 1,
-          color: Colors.grey[600]!.withOpacity(0.1),
+          color: Colors.grey[600].withOpacity(0.1),
           indent: 12,
           endIndent: 12
         ),
@@ -462,7 +463,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
         Divider(
           height: 1,
           thickness: 1,
-          color: Colors.grey[600]!.withOpacity(0.1),
+          color: Colors.grey[600].withOpacity(0.1),
           indent: 12,
           endIndent: 12
         ),
@@ -471,18 +472,18 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
         Divider(
           height: 1,
           thickness: 1,
-          color: Colors.grey[600]!.withOpacity(0.1),
+          color: Colors.grey[600].withOpacity(0.1),
           indent: 12,
           endIndent: 12
         ),
         // Enable/Disable segmented download
-        if (widget.video!.segments!.isNotEmpty)
+        if (widget.video.segments.isNotEmpty)
         _segmentsDownload(),
-        if (widget.video!.segments!.isNotEmpty)
+        if (widget.video.segments.isNotEmpty)
         Divider(
           height: 1,
           thickness: 1,
-          color: Colors.grey[600]!.withOpacity(0.1),
+          color: Colors.grey[600].withOpacity(0.1),
           indent: 12,
           endIndent: 12
         ),
@@ -508,12 +509,12 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                     color: Theme.of(context).accentColor),
                   SizedBox(width: 8),
                   Text(
-                    Languages.of(context)!.labelTagsEditor.replaceAll("\n", " "),
+                    Languages.of(context).labelTagsEditor.replaceAll("\n", " "),
                     style: TextStyle(
                       fontSize: 16,
                       fontFamily: 'Product Sans',
                       fontWeight: FontWeight.w600,
-                      color: Theme.of(context).textTheme.bodyText1!.color,
+                      color: Theme.of(context).textTheme.bodyText1.color,
                     ),
                   ),
                   Spacer(),
@@ -542,9 +543,9 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                   children: [
                     Expanded(
                       child: TextFieldTile(
-                        textController: pageProvider.currentTags!.titleController,
+                        textController: pageProvider.currentTags.titleController,
                         inputType: TextInputType.text,
-                        labelText: Languages.of(context)!.labelEditorTitle,
+                        labelText: Languages.of(context).labelEditorTitle,
                         icon: EvaIcons.textOutline,
                       ),
                     ),
@@ -557,9 +558,9 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                     // Album TextField
                     Expanded(
                       child: TextFieldTile(
-                        textController: pageProvider.currentTags!.albumController,
+                        textController: pageProvider.currentTags.albumController,
                         inputType: TextInputType.text,
-                        labelText: Languages.of(context)!.labelEditorAlbum,
+                        labelText: Languages.of(context).labelEditorAlbum,
                         icon: EvaIcons.bookOpenOutline,
                       ),
                     ),
@@ -567,9 +568,9 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                     // Artist TextField
                     Expanded(
                       child: TextFieldTile(
-                        textController: pageProvider.currentTags!.artistController,
+                        textController: pageProvider.currentTags.artistController,
                         inputType: TextInputType.text,
-                        labelText: Languages.of(context)!.labelEditorArtist,
+                        labelText: Languages.of(context).labelEditorArtist,
                         icon: EvaIcons.personOutline,
                       ),
                     ),
@@ -582,9 +583,9 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                     // Gender TextField
                     Expanded(
                       child: TextFieldTile(
-                        textController: pageProvider.currentTags!.genreController,
+                        textController: pageProvider.currentTags.genreController,
                         inputType: TextInputType.text,
-                        labelText: Languages.of(context)!.labelEditorGenre,
+                        labelText: Languages.of(context).labelEditorGenre,
                         icon: EvaIcons.bookOutline,
                       ),
                     ),
@@ -592,9 +593,9 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                     // Date TextField
                     Expanded(
                       child: TextFieldTile(
-                        textController: pageProvider.currentTags!.dateController,
+                        textController: pageProvider.currentTags.dateController,
                         inputType: TextInputType.datetime,
-                        labelText: Languages.of(context)!.labelEditorDate,
+                        labelText: Languages.of(context).labelEditorDate,
                         icon: EvaIcons.calendarOutline,
                       ),
                     ),
@@ -607,9 +608,9 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                     // Disk TextField
                     Expanded(
                       child: TextFieldTile(
-                        textController: pageProvider.currentTags!.discController,
+                        textController: pageProvider.currentTags.discController,
                         inputType: TextInputType.number,
-                        labelText: Languages.of(context)!.labelEditorDisc,
+                        labelText: Languages.of(context).labelEditorDisc,
                         icon: EvaIcons.playCircleOutline
                       ),
                     ),
@@ -617,9 +618,9 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                     // Track TextField
                     Expanded(
                       child: TextFieldTile(
-                        textController: pageProvider.currentTags!.trackController,
+                        textController: pageProvider.currentTags.trackController,
                         inputType: TextInputType.number,
-                        labelText: Languages.of(context)!.labelEditorTrack,
+                        labelText: Languages.of(context).labelEditorTrack,
                         icon: EvaIcons.musicOutline,
                       ),
                     ),
@@ -655,7 +656,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                       fontSize: 16,
                       fontFamily: 'Product Sans',
                       fontWeight: FontWeight.w600,
-                      color: Theme.of(context).textTheme.bodyText1!.color,
+                      color: Theme.of(context).textTheme.bodyText1.color,
                     ),
                   ),
                   Spacer(),
@@ -683,7 +684,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                   SizedBox(height: 12),
                   // Volume Gain
                   Text(
-                    Languages.of(context)!.labelVolume,
+                    Languages.of(context).labelVolume,
                     style: TextStyle(
                       color: Theme.of(context).iconTheme.color,
                       fontFamily: 'Product Sans',
@@ -694,8 +695,8 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                   _audioFeatureSlider(
                     min: 0, max: 100,
                     limitsSuffix: "%",
-                    onChanged: (double? value) {
-                      setState(() => volumeModifier = value!/100);
+                    onChanged: (double value) {
+                      setState(() => volumeModifier = value/100);
                     },
                     value: volumeModifier*100,
                     tooltip: "${(volumeModifier*100).round()}%"
@@ -703,7 +704,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                   //
                   // Bass Gain
                   Text(
-                    Languages.of(context)!.labelBassGain,
+                    Languages.of(context).labelBassGain,
                     style: TextStyle(
                       color: Theme.of(context).iconTheme.color,
                       fontFamily: 'Product Sans',
@@ -714,15 +715,15 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                   _audioFeatureSlider(
                     min: 0, max: 10,
                     limitsSuffix: "",
-                    onChanged: (double? value) {
-                      setState(() => bassGain = value!.round());
+                    onChanged: (double value) {
+                      setState(() => bassGain = value.round());
                     },
                     value: bassGain.toDouble()
                   ),
                   //
                   // Treble Gain
                   Text(
-                    Languages.of(context)!.labelTrebleGain,
+                    Languages.of(context).labelTrebleGain,
                     style: TextStyle(
                       color: Theme.of(context).iconTheme.color,
                       fontFamily: 'Product Sans',
@@ -733,8 +734,8 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                   _audioFeatureSlider(
                     min: 0, max: 10,
                     limitsSuffix: "",
-                    onChanged: (double? value) {
-                      setState(() => trebleGain = value!.round());
+                    onChanged: (double value) {
+                      setState(() => trebleGain = value.round());
                     },
                     value: trebleGain.toDouble()
                   ),
@@ -774,8 +775,8 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
   }
 
   Widget _audioFeatureSlider({
-    double? min, double? max, Function(double?)? onChanged,
-    String? limitsSuffix, double? value, String? tooltip
+    double min, double max, Function(double) onChanged,
+    String limitsSuffix, double value, String tooltip
   }) {
     return Row(
       children: [
@@ -810,10 +811,10 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                   ),
                 )
               ),
-              values: [value!],
+              values: [value],
               min: min, max: max,
               onDragging: (_, position, __) {
-                onChanged!(position);
+                onChanged(position);
               },
             ),
           ),
@@ -853,12 +854,12 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
               ),
               SizedBox(width: 8),
               Text(
-                Languages.of(context)!.labelEnableAudioConversion,
+                Languages.of(context).labelEnableAudioConversion,
                 style: TextStyle(
                   fontSize: 16,
                   fontFamily: 'Product Sans',
                   fontWeight: FontWeight.w600,
-                  color: Theme.of(context).textTheme.bodyText1!.color,
+                  color: Theme.of(context).textTheme.bodyText1.color,
                 ),
               ),
               Spacer(),
@@ -896,8 +897,8 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                         value: 'MP3',
                       ),
                     ],
-                    onChanged: (String? value) {
-                      config.ffmpegActionTypeFormat = value!;
+                    onChanged: (String value) {
+                      config.ffmpegActionTypeFormat = value;
                     },
                     value: config.ffmpegActionTypeFormat,
                     elevation: 1,
@@ -937,7 +938,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                       fontSize: 16,
                       fontFamily: 'Product Sans',
                       fontWeight: FontWeight.w600,
-                      color: Theme.of(context).textTheme.bodyText1!.color,
+                      color: Theme.of(context).textTheme.bodyText1.color,
                     ),
                   ),
                   Spacer(),
@@ -978,7 +979,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                         children: [
                           Text("Enable segmented download", style: TextStyle(
                             fontSize: 16,
-                            color: Theme.of(context).textTheme.bodyText1!.color,
+                            color: Theme.of(context).textTheme.bodyText1.color,
                             fontFamily: "Product Sans",
                             fontWeight: FontWeight.w600
                           )),
@@ -1032,7 +1033,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                               children: [
                                 Text("Apply Tags", style: TextStyle(
                                   fontSize: 16,
-                                  color: Theme.of(context).textTheme.bodyText1!.color,
+                                  color: Theme.of(context).textTheme.bodyText1.color,
                                   fontFamily: "Product Sans",
                                   fontWeight: FontWeight.w600
                                 )),
@@ -1057,11 +1058,11 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                       setState(() => autoTaggerRunning = true);
                       for (int i = 0; i < segmentTracks.length; i++) {
                         if (!mounted) break;
-                        String? lastArtwork = segmentTracks[i].tags.artworkController;
+                        String lastArtwork = segmentTracks[i].tags.artworkController;
                         var record;
                         try {
                         record = await MusicBrainzAPI
-                          .getFirstRecord(segmentTracks[i].tags.titleController!.text);
+                          .getFirstRecord(segmentTracks[i].tags.titleController.text);
                         } catch (_) {}
                         if (!mounted) break;
                         if (record != null) {
@@ -1094,7 +1095,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                   ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
-                    itemCount: widget.video!.segments!.length,
+                    itemCount: widget.video.segments.length,
                     itemBuilder: (context, index) {
                       return _segmentTile(index);
                     },
@@ -1113,12 +1114,12 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
     return ListTile(
       onTap: () {
         setState(() => segmentTracks[index].selected =
-          !segmentTracks[index].selected!);
+          !segmentTracks[index].selected);
       },
       title: Text(
-        segment.tags.titleController!.text,
+        segment.tags.titleController.text,
         style: TextStyle(
-          color: Theme.of(context).textTheme.bodyText1!.color,
+          color: Theme.of(context).textTheme.bodyText1.color,
           fontFamily: 'Product Sans',
           fontSize: 14,
           fontWeight: FontWeight.w600
@@ -1126,9 +1127,9 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
         maxLines: 2,
       ),
       subtitle: Text(
-        segment.tags.artistController!.text,
+        segment.tags.artistController.text,
         style: TextStyle(
-          color: Theme.of(context).textTheme.bodyText1!.color!
+          color: Theme.of(context).textTheme.bodyText1.color
             .withOpacity(0.6),
           fontFamily: 'Product Sans',
           fontSize: 12,
@@ -1166,9 +1167,9 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                     child: ImageFade(
                       fadeDuration: Duration(milliseconds: 300),
                       placeholder: Container(color: Theme.of(context).cardColor),
-                      image: (isURL(segment.tags.artworkController!)
-                        ? NetworkImage(segment.tags.artworkController!)
-                        : FileImage(File(segment.tags.artworkController!))) as ImageProvider<Object>?,
+                      image: isURL(segment.tags.artworkController)
+                        ? NetworkImage(segment.tags.artworkController)
+                        : FileImage(File(segment.tags.artworkController)),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -1204,23 +1205,23 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
         ),
         items: [
           FlexiblePopupItem(
-            title: Languages.of(context)!.labelPerformAutomaticTagging,
+            title: Languages.of(context).labelPerformAutomaticTagging,
             value: 'autoTag',
           ),
           FlexiblePopupItem(
-            title: Languages.of(context)!.labelSelectTagsfromMusicBrainz,
+            title: Languages.of(context).labelSelectTagsfromMusicBrainz,
             value: 'manualTag',
           ),
         ],
-        onItemTap: (String? value) async {
+        onItemTap: (String value) async {
           if (value == 'autoTag') {
             showDialog(
               context: context,
               builder: (_) => LoadingDialog()
             );
-            String? lastArtwork = segmentTracks[index].tags.artworkController;
+            String lastArtwork = segmentTracks[index].tags.artworkController;
             var record = await MusicBrainzAPI
-              .getFirstRecord(segmentTracks[index].tags.titleController!.text);
+              .getFirstRecord(segmentTracks[index].tags.titleController.text);
             segmentTracks[index].tags = await MusicBrainzAPI.getSongTags(record);
             if (segmentTracks[index].tags.artworkController == null)
               segmentTracks[index].tags.artworkController = lastArtwork;
@@ -1230,8 +1231,8 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
             var record = await Navigator.push(context,
               BlurPageRoute(builder: (context) => 
                 TagsResultsPage(
-                  title: segmentTracks[index].tags.titleController!.text,
-                  artist: segmentTracks[index].tags.artistController!.text
+                  title: segmentTracks[index].tags.titleController.text,
+                  artist: segmentTracks[index].tags.artistController.text
                 ),
                 blurStrength: Provider.of<PreferencesProvider>
                   (context, listen: false).enableBlurUI ? 20 : 0));
@@ -1240,7 +1241,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
               context: context,
               builder: (_) => LoadingDialog()
             );
-            String? lastArtwork = segmentTracks[index].tags.artworkController;
+            String lastArtwork = segmentTracks[index].tags.artworkController;
             segmentTracks[index].tags = await MusicBrainzAPI.getSongTags(record);
             if (segmentTracks[index].tags.artworkController == null)
               segmentTracks[index].tags.artworkController = lastArtwork;
@@ -1256,7 +1257,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
 
   List<AudioOnlyStream> getSpecificAudioCodecList(String codec) {
     List<AudioOnlyStream> list = [];
-    widget.video!.audioOnlyStreams!.forEach((element) {
+    widget.video.audioOnlyStreams.forEach((element) {
       if (codec == "ogg") {
         if (element.formatName == "WebM Opus")
           list.add(element);

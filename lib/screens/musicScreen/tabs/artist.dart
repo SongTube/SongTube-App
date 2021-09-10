@@ -5,8 +5,8 @@ import 'package:songtube/internal/models/mediaItemSorts.dart';
 import 'package:songtube/screens/musicScreen/components/songsList.dart';
 
 class MusicScreenArtistTab extends StatefulWidget {
-  final List<MediaItem>? songs;
-  final String? searchQuery;
+  final List<MediaItem> songs;
+  final String searchQuery;
   MusicScreenArtistTab({
     this.songs,
     this.searchQuery
@@ -21,31 +21,31 @@ class _MusicScreenArtistTabState extends State<MusicScreenArtistTab> {
   List<MediaItemArtist> _artists = [];
 
   // Current Artist
-  MediaItemArtist? currentArtist;
+  MediaItemArtist currentArtist;
 
   // Artists GridView Key
   final artistsGridKey = const PageStorageKey<String>('songsArtistList');
 
   @override
   void initState() {
-    widget.songs!.forEach((song) => songCreateOrAssignToArtist(song));
+    widget.songs.forEach((song) => songCreateOrAssignToArtist(song));
     super.initState();
   }
 
   void songCreateOrAssignToArtist(MediaItem song) {
     // Check if Artist exist and create it
-    if (_artists.indexWhere((artist) => artist.artistName == (song.artist ?? "unknown")) == -1) {
+    if (_artists.indexWhere((artist) => artist.artistName == (song?.artist ?? "unknown")) == -1) {
       // Create Artist and add the song
       _artists.add(
         MediaItemArtist(
-          artistName: song.artist ?? "unknown",
+          artistName: song?.artist ?? "unknown",
           mediaItems: []
         )
       );
     }
     // Add song to Artist
-    int indexToArtist = _artists.indexWhere((artist) => artist.artistName == (song.artist ?? "unknown"));
-    _artists[indexToArtist].mediaItems!.add(song);
+    int indexToArtist = _artists.indexWhere((artist) => artist.artistName == (song?.artist ?? "unknown"));
+    _artists[indexToArtist].mediaItems.add(song);
   }
 
   Widget build(BuildContext context) {
@@ -74,7 +74,7 @@ class _MusicScreenArtistTabState extends State<MusicScreenArtistTab> {
       children: [
         Row(
           children: [
-            Expanded(child: _artistTile(context, currentArtist!, true)),
+            Expanded(child: _artistTile(context, currentArtist, true)),
             IconButton(
               icon: Icon(Icons.clear,
                 color: Theme.of(context).iconTheme.color),
@@ -86,13 +86,13 @@ class _MusicScreenArtistTabState extends State<MusicScreenArtistTab> {
         Divider(
           height: 1,
           thickness: 1,
-          color: Colors.grey[600]!.withOpacity(0.1),
+          color: Colors.grey[600].withOpacity(0.1),
           indent: 12,
           endIndent: 12
         ),
         Expanded(
           child: SongsListView(
-            songs: currentArtist!.mediaItems,
+            songs: currentArtist.mediaItems,
             searchQuery: ""
           ),
         )
@@ -113,12 +113,12 @@ class _MusicScreenArtistTabState extends State<MusicScreenArtistTab> {
                 Container(
                   margin: EdgeInsets.only(left: 8, right: 8),
                   child: Text(
-                    artist.artistName!,
+                    artist.artistName,
                     maxLines: 1,
                     overflow: TextOverflow.fade,
                     softWrap: false,
                     style: TextStyle(
-                      color: Theme.of(context).textTheme.bodyText1!.color,
+                      color: Theme.of(context).textTheme.bodyText1.color,
                       fontFamily: 'Product Sans',
                       fontWeight: FontWeight.w600,
                       fontSize: 20
@@ -146,11 +146,11 @@ class _MusicScreenArtistTabState extends State<MusicScreenArtistTab> {
                     ]
                   ),
                   child: Text(
-                    "${artist.mediaItems!.length} Songs",
+                    "${artist.mediaItems.length} Songs",
                     style: TextStyle(
                       color: shinySongsCount
                         ? Colors.white
-                        : Theme.of(context).textTheme.bodyText1!.color,
+                        : Theme.of(context).textTheme.bodyText1.color,
                       fontSize: 10,
                       fontFamily: 'Product Sans',
                       fontWeight: FontWeight.w700
@@ -186,9 +186,9 @@ class _MusicScreenArtistTabState extends State<MusicScreenArtistTab> {
 
   bool getSearchQueryMatch(MediaItemArtist artist) {
     if (widget.searchQuery != "") {
-      if (artist.artistName!.toLowerCase().contains(widget.searchQuery!.toLowerCase())) {
+      if (artist.artistName.toLowerCase().contains(widget.searchQuery.toLowerCase())) {
         return true;
-      } else if (artist.artistName!.toLowerCase().contains(widget.searchQuery!.toLowerCase())) {
+      } else if (artist.artistName.toLowerCase().contains(widget.searchQuery.toLowerCase())) {
         return true;
       } else {
         return false;

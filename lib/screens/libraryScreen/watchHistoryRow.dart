@@ -57,7 +57,7 @@ class WatchHistoryRow extends StatelessWidget {
                                 child: ImageFade(
                                   fit: BoxFit.cover,
                                   fadeDuration: Duration(milliseconds: 200),
-                                  image: NetworkImage(video.thumbnails!.hqdefault),
+                                  image: NetworkImage(video.thumbnails.hqdefault),
                                 ),
                               ),
                             ),

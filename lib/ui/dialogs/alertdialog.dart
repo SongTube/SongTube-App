@@ -7,10 +7,10 @@ class CustomAlert extends StatelessWidget {
   final String content;
   final List<Widget> actions;
   CustomAlert({
-    required this.leadingIcon,
-    required this.title,
-    required this.content,
-    required this.actions
+    this.leadingIcon,
+    @required this.title,
+    @required this.content,
+    @required this.actions
   });
   @override
   Widget build(BuildContext context) {
@@ -23,12 +23,12 @@ class CustomAlert extends StatelessWidget {
           leadingIcon,
           SizedBox(width: 6),
           Text(title, style: TextStyle(
-            color: Theme.of(context).textTheme.bodyText1!.color
+            color: Theme.of(context).textTheme.bodyText1.color
           )),
         ],
       ),
       content: Text(content, style: TextStyle(
-        color: Theme.of(context).textTheme.bodyText1!.color
+        color: Theme.of(context).textTheme.bodyText1.color
       )),
       actions: actions
     );

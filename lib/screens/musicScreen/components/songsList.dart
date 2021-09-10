@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
@@ -19,11 +20,11 @@ import 'package:songtube/ui/internal/snackbar.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class SongsListView extends StatelessWidget {
-  final List<MediaItem>? songs;
+  final List<MediaItem> songs;
   final bool hasDownloadType;
   final String searchQuery;
   SongsListView({
-    required this.songs,
+    @required this.songs,
     this.hasDownloadType = false,
     this.searchQuery = ""
   });
@@ -32,9 +33,9 @@ class SongsListView extends StatelessWidget {
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
     return ListView.builder(
       physics: AlwaysScrollableScrollPhysics(),
-      itemCount: songs!.length,
+      itemCount: songs.length,
       itemBuilder: (context, index) {
-        MediaItem song = songs![index];
+        MediaItem song = songs[index];
         if (searchQuery == "" || getSearchQueryMatch(song)) {
           return ListTile(
             title: Text(
@@ -43,17 +44,17 @@ class SongsListView extends StatelessWidget {
               overflow: TextOverflow.fade,
               softWrap: false,
               style: TextStyle(
-                color: Theme.of(context).textTheme.bodyText1!.color,
+                color: Theme.of(context).textTheme.bodyText1.color,
               ),
             ),
             subtitle: Text(
-              song.artist!,
+              song.artist,
               maxLines: 1,
               overflow: TextOverflow.fade,
               softWrap: false,
               style: TextStyle(
                 fontSize: 12,
-                color: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.6)
+                color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6)
               ),
             ),
             leading: Row(
@@ -69,7 +70,7 @@ class SongsListView extends StatelessWidget {
                     color: Colors.black12.withOpacity(0.04)
                   ),
                   child: Icon(
-                    song.extras!["downloadType"] == "Audio"
+                    song.extras["downloadType"] == "Audio"
                       ? EvaIcons.musicOutline
                       : EvaIcons.videoOutline,
                     color: Theme.of(context).iconTheme.color,
@@ -89,7 +90,7 @@ class SongsListView extends StatelessWidget {
                       child: FadeInImage(
                         fadeInDuration: Duration(milliseconds: 200),
                         placeholder: MemoryImage(kTransparentImage),
-                        image: FileImage(File(song.extras!["artwork"])),
+                        image: FileImage(File(song.extras["artwork"])),
                         fit: BoxFit.cover,
                       )
                     ),
@@ -101,18 +102,18 @@ class SongsListView extends StatelessWidget {
               borderRadius: 10,
               items: [
                 FlexiblePopupItem(
-                  title: Languages.of(context)!.labelEditTags,
+                  title: Languages.of(context).labelEditTags,
                   value: "Edit Tags"
                 ),
                 FlexiblePopupItem(
-                  title: Languages.of(context)!.labelDeleteSong,
+                  title: Languages.of(context).labelDeleteSong,
                   value: "Delete"
                 )
               ],
-              onItemTap: (String? value) async {
+              onItemTap: (String value) async {
                 if (value != null) {
                   if (AudioService.running && AudioService.playbackState.playing) {
-                    if (AudioService.currentMediaItem!.id == song.id) {
+                    if (AudioService.currentMediaItem.id == song.id) {
                       AudioService.stop();
                     }
                   }
@@ -157,7 +158,7 @@ class SongsListView extends StatelessWidget {
               )
             ),
             onTap: () async {
-              if (hasDownloadType == false || song.extras!["downloadType"] == "Audio") {
+              if (hasDownloadType == false || song.extras["downloadType"] == "Audio") {
                 if (!AudioService.running) {
                   await AudioService.start(
                     backgroundTaskEntrypoint: songtubePlayer,
@@ -170,9 +171,9 @@ class SongsListView extends StatelessWidget {
                   );
                 }
                 if (listEquals(songs, AudioService.queue) == false) {
-                  await AudioService.updateQueue(songs!);
+                  await AudioService.updateQueue(songs);
                 }
-                await AudioService.playMediaItem(songs![index]);
+                await AudioService.playMediaItem(songs[index]);
               } else {
                 Navigator.push(
                   context,
@@ -196,7 +197,7 @@ class SongsListView extends StatelessWidget {
     if (searchQuery != "") {
       if (song.title.toLowerCase().contains(searchQuery.toLowerCase())) {
         return true;
-      } else if (song.artist!.toLowerCase().contains(searchQuery.toLowerCase())) {
+      } else if (song.artist.toLowerCase().contains(searchQuery.toLowerCase())) {
         return true;
       } else {
         return false;

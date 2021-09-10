@@ -50,10 +50,10 @@ class Lib extends StatefulWidget {
 class _LibState extends State<Lib> {
 
   // Current Screen Index
-  int? _screenIndex;
+  int _screenIndex;
 
   // This Widget ScaffoldKey
-  GlobalKey<ScaffoldState>? _internalScaffoldKey;
+  GlobalKey<ScaffoldState> _internalScaffoldKey;
 
   @override
   void initState() {
@@ -61,7 +61,7 @@ class _LibState extends State<Lib> {
     _screenIndex = 0;
     var keyboardVisibilityController = KeyboardVisibilityController();
     _internalScaffoldKey = GlobalKey<ScaffoldState>();
-    WidgetsBinding.instance!.renderView.automaticSystemUiAdjustment=false;
+    WidgetsBinding.instance.renderView.automaticSystemUiAdjustment=false;
     keyboardVisibilityController.onChange.listen((bool visible) {
         if (visible == false) FocusScope.of(context).unfocus();
       }
@@ -71,7 +71,7 @@ class _LibState extends State<Lib> {
         _handleIntent(intent);
       }
     });
-    WidgetsBinding.instance!.addObserver(
+    WidgetsBinding.instance.addObserver(
       new LifecycleEventHandler(resumeCallBack: () async {
         setState(() {});
         PreferencesProvider prefs = Provider.of<PreferencesProvider>(context, listen: false);
@@ -94,7 +94,7 @@ class _LibState extends State<Lib> {
             );
           }
         }
-        String? intent = await NativeMethod.handleIntent();
+        String intent = await NativeMethod.handleIntent();
         if (intent == null) return;
         _handleIntent(intent);
         return;
@@ -103,7 +103,7 @@ class _LibState extends State<Lib> {
     Provider.of<MediaProvider>(context, listen: false).loadSongList();
     Provider.of<MediaProvider>(context, listen: false).loadVideoList();
     // Disclaimer
-    WidgetsBinding.instance!.addPostFrameCallback((_) async {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       Provider.of<ManagerProvider>(context, listen: false).internalScaffoldKey =
         this._internalScaffoldKey;
       _showSheets();
@@ -125,7 +125,7 @@ class _LibState extends State<Lib> {
       bottomSheets.add(DisclaimerSheet());
       config.disclaimerAccepted = true;
     }
-    if (config.showDownloadFixDialog && config.preferences.sdkInt! >= 30) {
+    if (config.showDownloadFixDialog && config.preferences.sdkInt >= 30) {
       bottomSheets.add(DownloadFixSheet());
       config.showDownloadFixDialog = false;
     }
@@ -154,7 +154,7 @@ class _LibState extends State<Lib> {
       double appVersion = double
         .parse(android.version.replaceRange(3, 5, ""));
       getLatestRelease().then((details) {
-        double newVersion = double.parse(details!.version!
+        double newVersion = double.parse(details.version
           .split("+").first.trim().replaceRange(3, 5, ""));
         if (appVersion < newVersion) {
           // Show the user an Update is available
@@ -175,8 +175,8 @@ class _LibState extends State<Lib> {
   }
 
   void _handleIntent(String intent) async {
-    String? streamId = await YoutubeId.getIdFromStreamUrl(intent);
-    String? playlistId = await YoutubeId.getIdFromPlaylistUrl(intent);
+    String streamId = await YoutubeId.getIdFromStreamUrl(intent);
+    String playlistId = await YoutubeId.getIdFromPlaylistUrl(intent);
     if (streamId != null) {
       showDialog(
         context: context,
@@ -219,12 +219,12 @@ class _LibState extends State<Lib> {
           builder: (context, mediaProvider, manager, pageProvider, child) {
             return WillPopScope(
               onWillPop: () {
-                if (pageProvider.fwController!.isAttached && pageProvider.fwController!.isPanelOpen) {
-                  pageProvider.fwController!.close();
+                if (pageProvider.fwController.isAttached && pageProvider.fwController.isPanelOpen) {
+                  pageProvider.fwController.close();
                   return Future.value(false);
                 } else if (mediaProvider.slidingPanelOpen) {
                   mediaProvider.slidingPanelOpen = false;
-                  mediaProvider.fwController!.close();
+                  mediaProvider.fwController.close();
                   return Future.value(false);
                 } else if (_screenIndex != 0) {
                   setState(() => _screenIndex = 0);
@@ -240,7 +240,7 @@ class _LibState extends State<Lib> {
                   return Future.value(true);
                 }
               },
-              child: child!,
+              child: child,
             );
           },
           child: PageTransitionSwitcher(
@@ -290,12 +290,12 @@ class _LibState extends State<Lib> {
     }
   }
   
-  FloatingWidgetTwins? _currentFloatingTwins() {
+  FloatingWidgetTwins _currentFloatingTwins() {
     VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
     if (pageProvider.infoItem != null) {
       return _youtubePlayerTwins();
     } else {
-      if (AudioService.currentMediaItem != null) {
+      if (AudioService?.currentMediaItem != null) {
         return _musicPlayerTwins();
       } else {
         return null;
@@ -309,7 +309,7 @@ class _LibState extends State<Lib> {
       return FloatingWidgetConfig(
         maxHeight: MediaQuery.of(context).size.height,
       );
-    } else if (AudioService.currentMediaItem != null) {
+    } else if (AudioService?.currentMediaItem != null) {
       return _floatingMusicWidgetConfig();
     } else {
       return FloatingWidgetConfig(
@@ -340,13 +340,13 @@ class _LibState extends State<Lib> {
       backdropBlurStrength: prefs.enableBlurUI ? 15 : 0,
       maxHeight: MediaQuery.of(context).size.height,
       onSlide: (double position) {
-        int? sdkInt = config.preferences.sdkInt;
+        int sdkInt = config.preferences.sdkInt;
         if (position > 0.95) {
           SystemChrome.setSystemUIOverlayStyle(
             SystemUiOverlayStyle(
               statusBarIconBrightness: mediaProvider.textColor == Colors.black
                 ? Brightness.dark : Brightness.light,
-              systemNavigationBarIconBrightness: sdkInt! >= 30 ? mediaProvider.textColor == Colors.black
+              systemNavigationBarIconBrightness: sdkInt >= 30 ? mediaProvider.textColor == Colors.black
                 ? Brightness.dark : Brightness.light : null,
             ),
           );
@@ -366,13 +366,13 @@ class _LibState extends State<Lib> {
     );
   }
 
-  FloatingWidgetController? _currentFloatingWidgetController() {
+  FloatingWidgetController _currentFloatingWidgetController() {
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
     VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
     if (pageProvider.infoItem != null) {
       return pageProvider.fwController;
     } else {
-      if (AudioService.currentMediaItem != null) {
+      if (AudioService?.currentMediaItem != null) {
         return mediaProvider.fwController;
       } else {
         return null;
@@ -383,7 +383,7 @@ class _LibState extends State<Lib> {
   void setSystemUiColor() {
     ConfigurationProvider config = Provider.of<ConfigurationProvider>(context, listen: false);
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
-    if (!mediaProvider.fwController!.isAttached) {
+    if (!mediaProvider.fwController.isAttached) {
       Brightness _systemBrightness = Theme.of(context).brightness;
       Brightness _statusBarBrightness = _systemBrightness == Brightness.light
         ? Brightness.dark
@@ -398,14 +398,14 @@ class _LibState extends State<Lib> {
         ),
       );
     } else {
-      double position = mediaProvider.fwController!.panelPosition;
-      int? sdkInt = config.preferences.sdkInt;
+      double position = mediaProvider.fwController.panelPosition;
+      int sdkInt = config.preferences.sdkInt;
       if (position > 0.95) {
         SystemChrome.setSystemUIOverlayStyle(
           SystemUiOverlayStyle(
             statusBarIconBrightness: mediaProvider.textColor == Colors.black
               ? Brightness.dark : Brightness.light,
-            systemNavigationBarIconBrightness: sdkInt! >= 30 ? mediaProvider.textColor == Colors.black
+            systemNavigationBarIconBrightness: sdkInt >= 30 ? mediaProvider.textColor == Colors.black
               ? Brightness.dark : Brightness.light : null,
           ),
         );

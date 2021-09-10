@@ -16,8 +16,8 @@ class FloatingWidgetTwins {
   final Widget collapsed;
 
   FloatingWidgetTwins({
-    required this.expanded,
-    required this.collapsed
+    @required this.expanded,
+    @required this.collapsed
   });
 
 }
@@ -25,18 +25,18 @@ class FloatingWidgetTwins {
 class FloatingWidgetConfig {
 
   final bool backdropEnabled;
-  final void Function(double position)? onSlide;
-  final VoidCallback? onOpened;
-  final VoidCallback? onClosed;
+  final void Function(double position) onSlide;
+  final VoidCallback onOpened;
+  final VoidCallback onClosed;
   final FloatingWidgetState defaultState;
   final double backdropBlurStrength;
   final Color backdropColor;
   final double backdropOpacity;
-  final double? maxHeight;
+  final double maxHeight;
   final double minHeight;
   final bool isPanelVisible;
   final EdgeInsetsGeometry margin;
-  final EdgeInsetsGeometry? padding;
+  final EdgeInsetsGeometry padding;
 
   FloatingWidgetConfig({
     this.backdropEnabled = true,
@@ -62,21 +62,21 @@ class FloatingWidgetConfig {
 class FancyScaffold extends StatefulWidget {
 
   // Scaffold values
-  final Widget? appBar;
+  final Widget appBar;
   final Widget body;
-  final Widget? bottomNavigationBar;
-  final bool? resizeToAvoidBottomInset;
-  final Color? backgroundColor;
-  final GlobalKey<ScaffoldState>? internalKey;
+  final Widget bottomNavigationBar;
+  final bool resizeToAvoidBottomInset;
+  final Color backgroundColor;
+  final GlobalKey<ScaffoldState> internalKey;
 
   // Floating Widget values
-  final FloatingWidgetTwins? floatingWidgetTwins;
-  final FloatingWidgetController? floatingWidgetController;
-  final FloatingWidgetConfig? floatingWidgetConfig;
+  final FloatingWidgetTwins floatingWidgetTwins;
+  final FloatingWidgetController floatingWidgetController;
+  final FloatingWidgetConfig floatingWidgetConfig;
 
   FancyScaffold({
     this.appBar,
-    required this.body,
+    @required this.body,
     this.bottomNavigationBar,
     this.floatingWidgetTwins,
     this.resizeToAvoidBottomInset,
@@ -93,11 +93,11 @@ class FancyScaffold extends StatefulWidget {
 class _FancyScaffoldState extends State<FancyScaffold> with TickerProviderStateMixin {
 
   // Navigation bar animation controller
-  late AnimationController _navigationBarAnimationController;
+  AnimationController _navigationBarAnimationController;
 
   // Floating Widget values
-  late AnimationController _floatingWidgetAnimationController;
-  late ScrollController _floatingWidgetScrollController;
+  AnimationController _floatingWidgetAnimationController;
+  ScrollController _floatingWidgetScrollController;
   VelocityTracker _vt = new VelocityTracker.withKind(PointerDeviceKind.touch);
   bool _scrollingEnabled = false;
 
@@ -121,17 +121,17 @@ class _FancyScaffoldState extends State<FancyScaffold> with TickerProviderStateM
     _floatingWidgetAnimationController = new AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 300),
-      value: widget.floatingWidgetConfig!.defaultState == FloatingWidgetState.CLOSED ? 0.0 : 1.0
+      value: widget.floatingWidgetConfig.defaultState == FloatingWidgetState.CLOSED ? 0.0 : 1.0
     )..addListener((){
 
-      if(widget.floatingWidgetConfig!.onSlide != null)
-        widget.floatingWidgetConfig!.onSlide!(_floatingWidgetAnimationController.value);
+      if(widget.floatingWidgetConfig.onSlide != null)
+        widget.floatingWidgetConfig.onSlide(_floatingWidgetAnimationController.value);
 
-      if(widget.floatingWidgetConfig!.onOpened != null && _floatingWidgetAnimationController.value == 1.0)
-        widget.floatingWidgetConfig!.onOpened!();
+      if(widget.floatingWidgetConfig.onOpened != null && _floatingWidgetAnimationController.value == 1.0)
+        widget.floatingWidgetConfig.onOpened();
 
-      if(widget.floatingWidgetConfig!.onClosed != null && _floatingWidgetAnimationController.value == 0.0)
-        widget.floatingWidgetConfig!.onClosed!();
+      if(widget.floatingWidgetConfig.onClosed != null && _floatingWidgetAnimationController.value == 0.0)
+        widget.floatingWidgetConfig.onClosed();
 
       // Adjust navigation bar animation controller based on floating widget
       if (!navigationBarScrolledDown)
@@ -235,15 +235,15 @@ class _FancyScaffoldState extends State<FancyScaffold> with TickerProviderStateM
             },
             child: NotificationListener<ScrollUpdateNotification>(
               onNotification: (ScrollUpdateNotification details) {
-                pixelsScrolled = (pixelsScrolled + details.scrollDelta!.abs()).clamp(0, 100)/100;
-                if (details.scrollDelta! > 0.0 && details.metrics.axis == Axis.vertical) {
+                pixelsScrolled = (pixelsScrolled + details.scrollDelta.abs()).clamp(0, 100)/100;
+                if (details.scrollDelta > 0.0 && details.metrics.axis == Axis.vertical) {
                   _navigationBarAnimationController.value -= pixelsScrolled;
                 } else {
                   _navigationBarAnimationController.value += pixelsScrolled;
                 }
                 return false;
               },
-              child: mainChild!,
+              child: mainChild,
             ),
           ),
         );
@@ -253,18 +253,18 @@ class _FancyScaffoldState extends State<FancyScaffold> with TickerProviderStateM
   }
 
   Widget _actualSlidingPanel() {
-    return !widget.floatingWidgetConfig!.isPanelVisible ? Container() : _gestureHandler(
+    return !widget.floatingWidgetConfig.isPanelVisible ? Container() : _gestureHandler(
       child: AnimatedBuilder(
         animation: _floatingWidgetAnimationController,
         builder: (context, child) {
           return Container(
             height: _floatingWidgetAnimationController.value *
-              (widget.floatingWidgetConfig!.maxHeight! -
-              widget.floatingWidgetConfig!.minHeight) +
-              widget.floatingWidgetConfig!.minHeight,
-            margin: widget.floatingWidgetConfig!.margin *
+              (widget.floatingWidgetConfig.maxHeight -
+              widget.floatingWidgetConfig.minHeight) +
+              widget.floatingWidgetConfig.minHeight,
+            margin: widget.floatingWidgetConfig.margin *
               (1 - _floatingWidgetAnimationController.value),
-            padding: widget.floatingWidgetConfig!.padding,
+            padding: widget.floatingWidgetConfig.padding,
             decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(
@@ -292,18 +292,18 @@ class _FancyScaffoldState extends State<FancyScaffold> with TickerProviderStateM
                     ? BorderRadius.zero
                     : BorderRadius.circular(10),
                   child: Container(
-                    height: (widget.floatingWidgetConfig!.maxHeight! *
+                    height: (widget.floatingWidgetConfig.maxHeight *
                       _floatingWidgetAnimationController.value) +
-                      (widget.floatingWidgetConfig!.minHeight *
+                      (widget.floatingWidgetConfig.minHeight *
                       (1 - _floatingWidgetAnimationController.value)),
                     width:  MediaQuery.of(context).size.width -
-                      (widget.floatingWidgetConfig!.margin.horizontal *
+                      (widget.floatingWidgetConfig.margin.horizontal *
                       (1 - _floatingWidgetAnimationController.value)),
                     child: child
                   ),
                 );
               },
-              child: widget.floatingWidgetTwins!.expanded
+              child: widget.floatingWidgetTwins.expanded
             ),
             // Collapsed Panel
             AnimatedBuilder(
@@ -318,8 +318,8 @@ class _FancyScaffoldState extends State<FancyScaffold> with TickerProviderStateM
               },
               child: Container(
                 color: Colors.transparent,
-                height: widget.floatingWidgetConfig!.minHeight,
-                child: widget.floatingWidgetTwins!.collapsed
+                height: widget.floatingWidgetConfig.minHeight,
+                child: widget.floatingWidgetTwins.collapsed
               )
             ),
           ],
@@ -329,16 +329,16 @@ class _FancyScaffoldState extends State<FancyScaffold> with TickerProviderStateM
   }
 
   Widget _backdropWidget() {
-    return !widget.floatingWidgetConfig!.backdropEnabled ? Container() : AnimatedBuilder(
+    return !widget.floatingWidgetConfig.backdropEnabled ? Container() : AnimatedBuilder(
       animation: _floatingWidgetAnimationController,
       builder: (context, _) {
-        if (widget.floatingWidgetConfig!.backdropBlurStrength != 0) {
+        if (widget.floatingWidgetConfig.backdropBlurStrength != 0) {
           return BackdropFilter(
             filter: ImageFilter.blur(
               sigmaX: _floatingWidgetAnimationController.value *
-                widget.floatingWidgetConfig!.backdropBlurStrength,
+                widget.floatingWidgetConfig.backdropBlurStrength,
               sigmaY: _floatingWidgetAnimationController.value *
-                widget.floatingWidgetConfig!.backdropBlurStrength
+                widget.floatingWidgetConfig.backdropBlurStrength
             ),
             child: Container(
               height: MediaQuery.of(context).size.height,
@@ -348,8 +348,8 @@ class _FancyScaffoldState extends State<FancyScaffold> with TickerProviderStateM
               //to the body when the panel is closed, otherwise,
               //if a color exists, then touch events won't go through
               color: _floatingWidgetAnimationController.value == 0.0 ? null
-                : widget.floatingWidgetConfig!.backdropColor.withOpacity(
-                    widget.floatingWidgetConfig!.backdropOpacity *
+                : widget.floatingWidgetConfig.backdropColor.withOpacity(
+                    widget.floatingWidgetConfig.backdropOpacity *
                     _floatingWidgetAnimationController.value),
             ),
           );
@@ -362,8 +362,8 @@ class _FancyScaffoldState extends State<FancyScaffold> with TickerProviderStateM
             //to the body when the panel is closed, otherwise,
             //if a color exists, then touch events won't go through
             color: _floatingWidgetAnimationController.value == 0.0 ? null
-              : widget.floatingWidgetConfig!.backdropColor.withOpacity(
-                  widget.floatingWidgetConfig!.backdropOpacity *
+              : widget.floatingWidgetConfig.backdropColor.withOpacity(
+                  widget.floatingWidgetConfig.backdropOpacity *
                   _floatingWidgetAnimationController.value),
           );
         }
@@ -375,7 +375,7 @@ class _FancyScaffoldState extends State<FancyScaffold> with TickerProviderStateM
   // and a listener if panelBuilder is used.
   // this is because the listener is designed only for use with linking the scrolling of
   // panels and using it for panels that don't want to linked scrolling yields odd results
-  Widget _gestureHandler({Widget? child}){
+  Widget _gestureHandler({Widget child}){
     if (widget.floatingWidgetTwins != null){
       return GestureDetector(
         onVerticalDragUpdate: (DragUpdateDetails dets) => _onGestureSlide(dets.delta.dy),
@@ -401,7 +401,7 @@ class _FancyScaffoldState extends State<FancyScaffold> with TickerProviderStateM
     // only slide the panel if scrolling is not enabled
     if(!_scrollingEnabled){
       _floatingWidgetAnimationController.value -= dy /
-        (widget.floatingWidgetConfig!.maxHeight! - widget.floatingWidgetConfig!.minHeight);
+        (widget.floatingWidgetConfig.maxHeight - widget.floatingWidgetConfig.minHeight);
     }
 
     // if the panel is open and the user hasn't scrolled, we need to determine
@@ -434,7 +434,7 @@ class _FancyScaffoldState extends State<FancyScaffold> with TickerProviderStateM
 
     //check if the velocity is sufficient to constitute fling to end
     double visualVelocity = -v.pixelsPerSecond.dy /
-      (widget.floatingWidgetConfig!.maxHeight! - widget.floatingWidgetConfig!.minHeight);
+      (widget.floatingWidgetConfig.maxHeight - widget.floatingWidgetConfig.minHeight);
 
     // get minimum distances to figure out where the panel is at
     double d2Close = _floatingWidgetAnimationController.value;
@@ -489,7 +489,7 @@ class _FancyScaffoldState extends State<FancyScaffold> with TickerProviderStateM
 
   //animate the panel position to value - must
   //be between 0.0 and 1.0
-  Future<void> _animatePanelToPosition(double value, {Duration? duration, Curve curve = Curves.linear}){
+  Future<void> _animatePanelToPosition(double value, {Duration duration, Curve curve = Curves.linear}){
     assert(0.0 <= value && value <= 1.0);
     return _floatingWidgetAnimationController.animateTo(value, duration: duration, curve: curve);
   }
@@ -521,7 +521,7 @@ class _FancyScaffoldState extends State<FancyScaffold> with TickerProviderStateM
 }
 
 class FloatingWidgetController{
-  _FancyScaffoldState? _scaffoldState;
+  _FancyScaffoldState _scaffoldState;
 
   void _addState(_FancyScaffoldState panelState){
     this._scaffoldState = panelState;
@@ -535,14 +535,14 @@ class FloatingWidgetController{
   /// Closes the sliding panel to its collapsed state (i.e. to the  minHeight)
   Future<void> close(){
     assert(isAttached, "PanelController must be attached to a SlidingUpPanel");
-    return _scaffoldState!._close();
+    return _scaffoldState._close();
   }
 
   /// Opens the sliding panel fully
   /// (i.e. to the maxHeight)
   Future<void> open(){
     assert(isAttached, "PanelController must be attached to a SlidingUpPanel");
-    return _scaffoldState!._open();
+    return _scaffoldState._open();
   }
 
   /// Animates the panel position to the value.
@@ -550,10 +550,10 @@ class FloatingWidgetController{
   /// where 0.0 is fully collapsed and 1.0 is completely open.
   /// (optional) duration specifies the time for the animation to complete
   /// (optional) curve specifies the easing behavior of the animation.
-  Future<void> animatePanelToPosition(double value, {Duration? duration, Curve curve = Curves.linear}){
+  Future<void> animatePanelToPosition(double value, {Duration duration, Curve curve = Curves.linear}){
     assert(isAttached, "PanelController must be attached to a SlidingUpPanel");
     assert(0.0 <= value && value <= 1.0);
-    return _scaffoldState!._animatePanelToPosition(value, duration: duration, curve: curve);
+    return _scaffoldState._animatePanelToPosition(value, duration: duration, curve: curve);
   }
 
   /// Sets the panel position (without animation).
@@ -562,7 +562,7 @@ class FloatingWidgetController{
   set panelPosition(double value){
     assert(isAttached, "PanelController must be attached to a SlidingUpPanel");
     assert(0.0 <= value && value <= 1.0);
-    _scaffoldState!._panelPosition = value;
+    _scaffoldState._panelPosition = value;
   }
 
   /// Gets the current panel position.
@@ -573,28 +573,28 @@ class FloatingWidgetController{
   /// 1.0 is full open.
   double get panelPosition{
     assert(isAttached, "PanelController must be attached to a SlidingUpPanel");
-    return _scaffoldState!._panelPosition;
+    return _scaffoldState._panelPosition;
   }
 
   /// Returns whether or not the panel is
   /// currently animating.
   bool get isPanelAnimating{
     assert(isAttached, "PanelController must be attached to a SlidingUpPanel");
-    return _scaffoldState!._isPanelAnimating;
+    return _scaffoldState._isPanelAnimating;
   }
 
   /// Returns whether or not the
   /// panel is open.
   bool get isPanelOpen{
     assert(isAttached, "PanelController must be attached to a SlidingUpPanel");
-    return _scaffoldState!._isPanelOpen;
+    return _scaffoldState._isPanelOpen;
   }
 
   /// Returns whether or not the
   /// panel is closed.
   bool get isPanelClosed{
     assert(isAttached, "PanelController must be attached to a SlidingUpPanel");
-    return _scaffoldState!._isPanelClosed;
+    return _scaffoldState._isPanelClosed;
   }
 
 }

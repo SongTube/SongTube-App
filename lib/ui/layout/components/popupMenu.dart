@@ -15,10 +15,10 @@ import 'package:songtube/ui/internal/snackbar.dart';
 
 class StreamsPopupMenu extends StatelessWidget {
   final dynamic infoItem;
-  final Function(dynamic)? onDelete;
+  final Function(dynamic) onDelete;
   final scaffoldKey;
   StreamsPopupMenu({
-    required this.infoItem,
+    @required this.infoItem,
     this.onDelete,
     this.scaffoldKey,
   });
@@ -28,29 +28,29 @@ class StreamsPopupMenu extends StatelessWidget {
     return FlexiblePopupMenu(
       items: [
         FlexiblePopupItem(
-          title: Languages.of(context)!.labelShare,
+          title: Languages.of(context).labelShare,
           value: "Share"
         ),
         FlexiblePopupItem(
-          title: Languages.of(context)!.labelCopyLink,
+          title: Languages.of(context).labelCopyLink,
           value: "CopyLink"
         ),
         if (infoItem is StreamInfoItem)
         FlexiblePopupItem(
-          title: Languages.of(context)!.labelDownload,
+          title: Languages.of(context).labelDownload,
           value: "Download"
         ),
         if (onDelete != null)
         FlexiblePopupItem(
-          title: Languages.of(context)!.labelRemove,
+          title: Languages.of(context).labelRemove,
           value: "Remove"
         ),
         FlexiblePopupItem(
-          title: Languages.of(context)!.labelAddToPlaylist,
+          title: Languages.of(context).labelAddToPlaylist,
           value: "AddPlaylist"
         ),
       ],
-      onItemTap: (String? value) async {
+      onItemTap: (String value) async {
         switch(value) {
           case "Share":
             Share.share(
@@ -82,7 +82,7 @@ class StreamsPopupMenu extends StatelessWidget {
               clipBehavior: Clip.antiAlias,
               context: context,
               builder: (context) {
-                String? url = infoItem.url;
+                String url = infoItem.url;
                 return Wrap(
                   children: [
                     Consumer<ManagerProvider>(
@@ -90,7 +90,7 @@ class StreamsPopupMenu extends StatelessWidget {
                         return DownloadMenu(
                           videoUrl: url,
                           scaffoldState: provider
-                            .internalScaffoldKey!.currentState,
+                            .internalScaffoldKey.currentState,
                         );
                       }
                     ),
@@ -100,7 +100,7 @@ class StreamsPopupMenu extends StatelessWidget {
             );
             break;
           case "Remove":
-            onDelete!(infoItem);
+            onDelete(infoItem);
             break;
           case "AddPlaylist":
             if (infoItem is StreamInfoItem) {
@@ -121,7 +121,7 @@ class StreamsPopupMenu extends StatelessWidget {
               if (prefs.streamPlaylists.indexWhere((element) => element.name == playlist.name) != -1) {
                 AppSnack.showSnackBar(
                   icon: Icons.warning_rounded,
-                  title: Languages.of(context)!.labelCancelled,
+                  title: Languages.of(context).labelCancelled,
                   message: "Playlist already exists!",
                   context: context,
                 );
@@ -142,7 +142,7 @@ class StreamsPopupMenu extends StatelessWidget {
               Navigator.pop(context);
               AppSnack.showSnackBar(
                 icon: Icons.playlist_add_check_rounded,
-                title: Languages.of(context)!.labelCompleted,
+                title: Languages.of(context).labelCompleted,
                 message: "Playlist saved successfully!",
                 context: context,
               );

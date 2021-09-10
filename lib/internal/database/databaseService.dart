@@ -1,5 +1,4 @@
 // Dart
-import 'dart:async';
 import 'dart:io';
 
 // Internal
@@ -21,8 +20,8 @@ class DatabaseService {
   static final DatabaseService instance = DatabaseService._privateConstructor();
 
   // only have a single app-wide reference to the database
-  static Database? _database;
-  Future<Database?> get database async {
+  static Database _database;
+  Future<Database> get database async {
     if (_database != null) return _database;
     // lazily instantiate the db the first time it is accessed
     _database = await _initDatabase();
@@ -55,25 +54,25 @@ class DatabaseService {
   }
 
   Future<void> insertDownload(SongFile download) async {
-    Database db = await (database as FutureOr<Database>);
+    Database db = await database;
     await db.insert(table, download.toMap());
   }
 
-  Future<SongFile?> getDownload(String id) async {
-    Database db = await (database as FutureOr<Database>);
+  Future<SongFile> getDownload(String id) async {
+    Database db = await database;
     List<Map> data = await db.query(table,
       where: 'id = ?',
       whereArgs: [id]
     );
     if (data.length > 0) {
-      return SongFile.fromMap(data.first as Map<String, dynamic>);
+      return SongFile.fromMap(data.first);
     }
     return null;
   }
 
   Future<List<SongFile>> getDownloadList() async {
     List<SongFile> list = [];
-    Database db = await (database as FutureOr<Database>);
+    Database db = await database;
     var result = await db.query(table, columns: [
       "id",
       "title",
@@ -85,22 +84,22 @@ class DatabaseService {
       "fileSize",
       "coverUrl"
     ]);
-    await Future.forEach(result, (dynamic element) async {
+    await Future.forEach(result, (element) async {
       SongFile songFile = SongFile.fromMap(element);
-      if (await File(songFile.path!).exists()) {
+      if (await File(songFile.path).exists()) {
         String thumbnailsPath = (await getApplicationDocumentsDirectory()).path + "/Thumbnails/";
-        File coverPath = File("$thumbnailsPath/${songFile.title!.replaceAll("/", "_")}.jpg");
+        File coverPath = File("$thumbnailsPath/${songFile.title.replaceAll("/", "_")}.jpg");
         if (!await coverPath.exists()) {
           File coverImage =
             await FFmpegExtractor.getAudioThumbnail(
-              audioFile: songFile.path!,
+              audioFile: songFile.path,
               extractionMethod: ArtworkExtractMethod.FFmpeg
             );
           if (!await coverImage.exists()) {
-            if (isURL(songFile.coverUrl!)) {
-              coverImage = await (TagsManager.generateCover(songFile.coverUrl!) as FutureOr<File>);
+            if (isURL(songFile.coverUrl)) {
+              coverImage = await TagsManager.generateCover(songFile.coverUrl);
             } else {
-              coverImage = File(songFile.coverUrl!);
+              coverImage = File(songFile.coverUrl);
             }
           }
           await coverImage.copy(coverPath.path);
@@ -113,7 +112,7 @@ class DatabaseService {
   }
 
   Future<int> deleteDownload(int id) async {
-    Database db = await (database as FutureOr<Database>);
+    Database db = await database;
     return await db.delete(table, where: 'id = ?', whereArgs: [id]);
   }
 

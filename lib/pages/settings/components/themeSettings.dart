@@ -24,13 +24,13 @@ class _ThemeSettingsState extends State<ThemeSettings> with TickerProviderStateM
       children: <Widget>[
         SwitchListTile(
           title: Text(
-            Languages.of(context)!.labelUseSystemTheme,
+            Languages.of(context).labelUseSystemTheme,
             style: TextStyle(
-              color: Theme.of(context).textTheme.bodyText1!.color,
+              color: Theme.of(context).textTheme.bodyText1.color,
               fontWeight: FontWeight.w500
             ),
           ),
-          subtitle: Text(Languages.of(context)!.labelUseSystemThemeJustification,
+          subtitle: Text(Languages.of(context).labelUseSystemThemeJustification,
             style: TextStyle(fontSize: 12),),
           activeColor: Theme.of(context).accentColor,
           value: config.systemThemeEnabled,
@@ -46,13 +46,13 @@ class _ThemeSettingsState extends State<ThemeSettings> with TickerProviderStateM
           child: config.systemThemeEnabled == false
           ? SwitchListTile(
               title: Text(
-                Languages.of(context)!.labelEnableDarkTheme,
+                Languages.of(context).labelEnableDarkTheme,
                 style: TextStyle(
-                  color: Theme.of(context).textTheme.bodyText1!.color,
+                  color: Theme.of(context).textTheme.bodyText1.color,
                   fontWeight: FontWeight.w500
                 ),
               ),
-              subtitle: Text(Languages.of(context)!.labelEnableDarkThemeJustification,
+              subtitle: Text(Languages.of(context).labelEnableDarkThemeJustification,
                 style: TextStyle(fontSize: 12),),
               activeColor: Theme.of(context).accentColor,
               value: config.darkThemeEnabled,
@@ -65,13 +65,13 @@ class _ThemeSettingsState extends State<ThemeSettings> with TickerProviderStateM
         // Enable/Disable Black Theme
         SwitchListTile(
           title: Text(
-            Languages.of(context)!.labelEnableBlackTheme,
+            Languages.of(context).labelEnableBlackTheme,
             style: TextStyle(
-              color: Theme.of(context).textTheme.bodyText1!.color,
+              color: Theme.of(context).textTheme.bodyText1.color,
               fontWeight: FontWeight.w500
             ),
           ),
-          subtitle: Text(Languages.of(context)!.labelEnableBlackThemeJustification,
+          subtitle: Text(Languages.of(context).labelEnableBlackThemeJustification,
             style: TextStyle(fontSize: 12),),
           activeColor: Theme.of(context).accentColor,
           value: config.blackThemeEnabled,
@@ -83,13 +83,13 @@ class _ThemeSettingsState extends State<ThemeSettings> with TickerProviderStateM
         ListTile(
           onTap: () => config.systemThemeEnabled = !config.systemThemeEnabled,
           title: Text(
-            Languages.of(context)!.labelAccentColor,
+            Languages.of(context).labelAccentColor,
             style: TextStyle(
-              color: Theme.of(context).textTheme.bodyText1!.color,
+              color: Theme.of(context).textTheme.bodyText1.color,
               fontWeight: FontWeight.w500
             ),
           ),
-          subtitle: Text(Languages.of(context)!.labelAccentColorJustification,
+          subtitle: Text(Languages.of(context).labelAccentColorJustification,
             style: TextStyle(fontSize: 12),),
           trailing: Container(
             decoration: BoxDecoration(
@@ -103,8 +103,7 @@ class _ThemeSettingsState extends State<ThemeSettings> with TickerProviderStateM
                   context: context,
                   builder: (context) {
                     return AccentPicker(
-                      onColorChanged: (Color? color) {
-                        if (color == null) return;
+                      onColorChanged: (Color color) {
                         config.accentColor = color;
                         Navigator.pop(context);
                       },
@@ -119,7 +118,7 @@ class _ThemeSettingsState extends State<ThemeSettings> with TickerProviderStateM
           title: Text(
             "Blur UI",
             style: TextStyle(
-              color: Theme.of(context).textTheme.bodyText1!.color,
+              color: Theme.of(context).textTheme.bodyText1.color,
               fontWeight: FontWeight.w500
             ),
           ),

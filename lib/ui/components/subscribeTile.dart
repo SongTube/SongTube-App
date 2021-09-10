@@ -12,8 +12,8 @@ import 'package:songtube/ui/animations/fadeIn.dart';
 import 'package:songtube/ui/internal/snackbar.dart';
 
 class ChannelSubscribeComponent extends StatefulWidget {
-  final String? channelName;
-  final YoutubeChannel? channel;
+  final String channelName;
+  final YoutubeChannel channel;
   final bool autoUpdate;
   final scaffoldState;
   ChannelSubscribeComponent({
@@ -46,7 +46,7 @@ class _ChannelSubscribeComponentState extends State<ChannelSubscribeComponent> w
           onTap: () {
             if (!isSubscribed && widget.channel != null) {
               prefs.addChannelSubscription(ChannelSubscription
-                .generateFromChannel(widget.channel!));
+                .generateFromChannel(widget.channel));
               if (widget.autoUpdate) manager.loadChannelsFeed();
               if (widget.scaffoldState != null) {
                 AppSnack.showSnackBar(
@@ -58,7 +58,7 @@ class _ChannelSubscribeComponentState extends State<ChannelSubscribeComponent> w
                 );
               }
             } else if (widget.channel != null) {
-              prefs.removeChannelSubscription(widget.channel!.url);
+              prefs.removeChannelSubscription(widget.channel.url);
               if (widget.autoUpdate) manager.loadChannelsFeed();
             }
           },
@@ -68,10 +68,10 @@ class _ChannelSubscribeComponentState extends State<ChannelSubscribeComponent> w
             child: Ink(
               color: Colors.transparent,
               child: Text(
-                Languages.of(context)!.labelSubscribe.toUpperCase(),
+                Languages.of(context).labelSubscribe.toUpperCase(),
                 style: TextStyle(
                   color: isSubscribed || widget.channel == null
-                    ? Theme.of(context).iconTheme.color!
+                    ? Theme.of(context).iconTheme.color
                         .withOpacity(0.6)
                     : Theme.of(context).accentColor,
                   fontWeight: FontWeight.w700,
@@ -113,12 +113,12 @@ class _ChannelSubscribeComponentState extends State<ChannelSubscribeComponent> w
                   : Icon(
                       EvaIcons.bellOffOutline,
                       key: Key("bellOffOutline"),
-                      color: Theme.of(context).iconTheme.color!
+                      color: Theme.of(context).iconTheme.color
                         .withOpacity(0.6)
                     ),
               ),
               onPressed: () => prefs
-                .enableChannelNotifications(widget.channel!.url),
+                .enableChannelNotifications(widget.channel.url),
             ) : Container(width: 12),
           ),
         ),

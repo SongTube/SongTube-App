@@ -16,31 +16,31 @@ import 'package:volume/volume.dart';
 
 class StreamManifestPlayer extends StatefulWidget {
   final String videoTitle;
-  final List<dynamic>? streams;
-  final AudioOnlyStream? audioStream;
-  final Function? onAutoPlay;
-  final Function? onFullscreenTap;
-  final bool? isFullscreen;
-  final Function? onEnterPipMode;
-  final double? borderRadius;
+  final List<dynamic> streams;
+  final AudioOnlyStream audioStream;
+  final Function onAutoPlay;
+  final Function onFullscreenTap;
+  final bool isFullscreen;
+  final Function onEnterPipMode;
+  final double borderRadius;
   final bool forceHideControls;
   final String quality;
   final Function(String) onQualityChanged;
-  final List<StreamSegment>? segments;
-  final Function(double)? onAspectRatioInit;
+  final List<StreamSegment> segments;
+  final Function(double) onAspectRatioInit;
   StreamManifestPlayer({
-    Key? key,
-    required this.videoTitle,
-    required this.streams,
-    required this.audioStream,
+    Key key,
+    @required this.videoTitle,
+    @required this.streams,
+    @required this.audioStream,
     this.onAutoPlay,
     this.onFullscreenTap,
     this.isFullscreen,
     this.onEnterPipMode,
     this.borderRadius,
     this.forceHideControls = false,
-    required this.quality,
-    required this.onQualityChanged,
+    @required this.quality,
+    @required this.onQualityChanged,
     this.segments = const [],
     this.onAspectRatioInit
   }) : super(key: key);
@@ -51,19 +51,19 @@ class StreamManifestPlayer extends StatefulWidget {
 class StreamManifestPlayerState extends State<StreamManifestPlayer> {
 
   // Player Variables (width is set automatically)
-  bool? isPlaying;
+  bool isPlaying;
   bool hideControls = false;
   bool videoEnded = false;
   bool buffering = true;
   bool isSeeking = false;
-  String? currentQuality;
+  String currentQuality;
 
   // Reverse and Forward Animation
   bool showReverse = false;
   bool showForward = false;
 
   // Current Aspect Ratio
-  double? aspectRatio;
+  double aspectRatio;
 
   // UI
   bool _showControls   = true;
@@ -92,8 +92,8 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
   // Show quality menu
   bool showStreamQualityMenu = false;
 
-  String? currentVolumePercentage;
-  String? currentBrightnessPercentage;
+  String currentVolumePercentage;
+  String currentBrightnessPercentage;
 
   // Gestures
   bool showVolumeUI     = false;
@@ -101,12 +101,12 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
   int tapId = 0;
 
   // ignore: close_sinks
-  final BehaviorSubject<double?> _dragPositionSubject =
+  final BehaviorSubject<double> _dragPositionSubject =
     BehaviorSubject.seeded(null);
 
   // Player Controller
-  VideoPlayerController? _controller;
-  VideoPlayerController? get controller => _controller;
+  VideoPlayerController _controller;
+  VideoPlayerController get controller => _controller;
 
   @override
   void initState() {
@@ -115,64 +115,63 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
     currentQuality = widget.quality;
     Volume.controlVolume(AudioManager.STREAM_MUSIC).then((value) async {
       currentVolumePercentage =
-        "${(((await Volume.getVol)!/(await (Volume.getMaxVol as FutureOr<num>))) * 100).round()}";
+        "${(((await Volume.getVol)/(await Volume.getMaxVol)) * 100).round()}";
     });
     FlutterScreen.brightness.then((value) {
       currentBrightnessPercentage =
-        "${((value!/1) * 100).round()}";
+        "${((value/1) * 100).round()}";
     });
     FlutterScreen.keepOn(true);
     Future.delayed(Duration(seconds: 2), () {
       setState(() => hideControls = true);
     });
-    List<String?> playerStreamsUrls = [];
-    widget.streams!.forEach((element) {
+    List<String> playerStreamsUrls = [];
+    widget.streams.forEach((element) {
       playerStreamsUrls.add(element.url);
     });
-    int indexToPlay = widget.streams!.indexWhere((element)
+    int indexToPlay = widget.streams.indexWhere((element)
       => element.resolution.contains(widget.quality));
     if (indexToPlay == -1) {
       indexToPlay = 0;
-      currentQuality = widget.streams![indexToPlay].formatSuffix +
-        " • " +  widget.streams![indexToPlay].resolution;
+      currentQuality = widget.streams[indexToPlay].resolution.split("p").first;
     }
     _controller = VideoPlayerController.network(
-      widget.streams![indexToPlay].url, audioDataSource: widget.streams![indexToPlay]
-        is VideoOnlyStream ? widget.audioStream!.url : null,
+      widget.streams[indexToPlay].url, audioDataSource: widget.streams[indexToPlay]
+        is VideoOnlyStream ? widget.audioStream.url : null,
       formatHint: VideoFormat.other
     )..initialize().then((value) {
       if (Provider.of<PreferencesProvider>(context, listen: false).videoPageAutoPlay) {
-        _controller!.play().then((_) {
+        _controller.play().then((_) {
           setState(() {isPlaying = true; buffering = false;});
           setState(() { showControls = false; showBackdrop = false; });
         });
       } else {
         setState(() {isPlaying = false; buffering = false;});
       }
-      if (aspectRatio != controller?.value.aspectRatio) {
-        widget.onAspectRatioInit!(controller?.value.aspectRatio ?? 16/9);
+      if (aspectRatio != controller?.value?.aspectRatio ?? null) {
+        widget.onAspectRatioInit(controller?.value?.aspectRatio ?? 16/9);
         setState(() =>
-          aspectRatio = controller?.value.aspectRatio ?? null);
+          aspectRatio = controller?.value?.aspectRatio ?? null);
       }
     });
-    _controller!.addListener(() {
-      if (_controller!.value.isBuffering && buffering == false) {
+    _controller.addListener(() {
+      if (_controller.value.isBuffering && buffering == false) {
         setState(() => buffering = true);
       }
-      if (!_controller!.value.isBuffering && buffering == true) {
+      if (!_controller.value.isBuffering && buffering == true) {
         setState(() => buffering = false);
       }
     });
     Future.delayed(Duration(seconds: 10), () {
-      _controller!.addListener(() {
-        int? currentPosition = _controller?.value.position.inSeconds ?? null;
-        int? totalDuration = _controller?.value.duration.inSeconds ?? null;
+      _controller.addListener(() {
+        int currentPosition = _controller?.value?.position?.inSeconds ?? null;
+        int totalDuration = _controller?.value?.duration?.inSeconds ?? null;
         bool autoPlayEnabled = Provider.of<PreferencesProvider>(context, listen : false).youtubeAutoPlay;
         if (currentPosition == totalDuration && currentPosition != null && totalDuration != null && autoPlayEnabled) {
           if (!videoEnded) {
             videoEnded = true;
             Future.delayed((Duration(seconds: 2)),
-              () => widget.onAutoPlay!());
+              () => widget.onAutoPlay());
           }
         }
       });
@@ -183,15 +182,15 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
   void dispose() {
     FlutterScreen.keepOn(false);
     if (_controller != null)
-      _controller!.dispose();
+      _controller.dispose();
     super.dispose();
   }
 
   Future<void> handleVolumeGesture(double primaryDelta) async {
     tapId = Random().nextInt(10);
     int currentId = tapId;
-    int maxVolume = await (Volume.getMaxVol as FutureOr<int>);
-    int currentVolume = await (Volume.getVol as FutureOr<int>);
+    int maxVolume = await Volume.getMaxVol;
+    int currentVolume = await Volume.getVol;
     int newVolume = (currentVolume +
       primaryDelta * 0.2 *
       (-1)).round();
@@ -223,7 +222,7 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
   void handleBrightnessGesture(double primaryDelta) async {
     tapId = Random().nextInt(10);
     int currentId = tapId;
-    double currentBrightness = await (FlutterScreen.brightness as FutureOr<double>);
+    double currentBrightness = await FlutterScreen.brightness;
     double newBrightness =
       currentBrightness + ((primaryDelta*-1)*0.01);
     currentBrightnessPercentage = newBrightness > 1 ? "100" :
@@ -260,7 +259,7 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
         showControls = true;
         showBackdrop = true;
       });
-      if (controller?.value.isPlaying ?? false) {
+      if (controller?.value?.isPlaying ?? false) {
         Future.delayed(Duration(seconds: 5), () {
           if (currentId == tapId && mounted && showControls == true && !isSeeking) {
             setState(() {
@@ -281,7 +280,7 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(widget.borderRadius!),
+      borderRadius: BorderRadius.circular(widget.borderRadius),
       child: Material(
         color: Colors.black,
         child: Stack(
@@ -289,10 +288,10 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
           children: [
             // Video Beign Played
             Container(
-              child: _controller!.value.isInitialized
+              child: _controller.value.isInitialized
                 ? AspectRatio(
-                    aspectRatio: _controller?.value.aspectRatio ?? 16/9,
-                    child: VideoPlayer(_controller!)
+                    aspectRatio: _controller?.value?.aspectRatio ?? 16/9,
+                    child: VideoPlayer(_controller)
                   )
                 : Container(color: Colors.black),
             ),
@@ -322,14 +321,14 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
               child: GestureDetector(
                 onTap: () => showControlsHandler(),
                 onDoubleTap: () {
-                  if (_controller!.value.isInitialized) {
+                  if (_controller.value.isInitialized) {
                     Duration seekNewPosition;
-                    if (_controller!.value.position < Duration(seconds: 10)) {
+                    if (_controller.value.position < Duration(seconds: 10)) {
                       seekNewPosition = Duration.zero;
                     } else {
-                      seekNewPosition = _controller!.value.position - Duration(seconds: 10);
+                      seekNewPosition = _controller.value.position - Duration(seconds: 10);
                     }
-                    _controller!.seekTo(seekNewPosition);
+                    _controller.seekTo(seekNewPosition);
                     setState(() => showReverse = true);
                     Future.delayed(Duration(milliseconds: 250), ()
                       => setState(() => showReverse = false));
@@ -337,7 +336,7 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
                 },
                 onVerticalDragUpdate: MediaQuery.of(context).orientation == Orientation.landscape
                   ? (update) {
-                      handleBrightnessGesture(update.primaryDelta!);
+                      handleBrightnessGesture(update.primaryDelta);
                     }
                   : null,
                 child: AnimatedContainer(
@@ -382,8 +381,8 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
               child: GestureDetector(
                 onTap: () => showControlsHandler(),
                 onDoubleTap: () {
-                  if (_controller!.value.isInitialized) {
-                    _controller!.seekTo(_controller!.value.position + Duration(seconds: 10));
+                  if (_controller.value.isInitialized) {
+                    _controller.seekTo(_controller.value.position + Duration(seconds: 10));
                     setState(() => showForward = true);
                     Future.delayed(Duration(milliseconds: 250), ()
                       => setState(() => showForward = false));
@@ -391,7 +390,7 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
                 },
                 onVerticalDragUpdate: MediaQuery.of(context).orientation == Orientation.landscape
                   ? (update) {
-                      handleVolumeGesture(update.primaryDelta!);
+                      handleVolumeGesture(update.primaryDelta);
                     }
                   : null,
                 child: AnimatedContainer(
@@ -500,11 +499,11 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
                 PlayPauseButton(
                   isPlaying: isPlaying,
                   onPlayPause: () async {
-                    if (controller!.value.isPlaying) {
-                      await controller!.pause();
+                    if (controller.value.isPlaying) {
+                      await controller.pause();
                       isPlaying = false;
                     } else {
-                      await controller!.play();
+                      await controller.play();
                       isPlaying = true;
                     }
                     setState(() {});
@@ -512,20 +511,20 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
                 ),
                 Align(
                   alignment: Alignment.bottomCenter,
-                  child: StreamBuilder<Object?>(
-                    stream: Rx.combineLatest2<double?, double, double?>(
+                  child: StreamBuilder<Object>(
+                    stream: Rx.combineLatest2<double, double, double>(
                       _dragPositionSubject.stream,
                       Stream.periodic(Duration(milliseconds: 1000)),
                       (dragPosition, _) => dragPosition),
                     builder: (context, snapshot) {
                       return PlayerProgressBar(
                         segments: widget.segments,
-                        position: controller!.value.position,
+                        position: controller.value.position,
                         duration: controller == null
                           ? Duration(seconds: 2)
-                          : controller!.value.duration,
-                        onSeek: (double? newPosition) {
-                          controller!.seekTo(Duration(seconds: newPosition?.round() ?? 0));
+                          : controller.value.duration,
+                        onSeek: (double newPosition) {
+                          controller.seekTo(Duration(seconds: newPosition.round()));
                           setState(() => isSeeking = false);
                         },
                         onFullScreenTap: widget.onFullscreenTap,
@@ -553,8 +552,8 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
   }
 
   Widget _playbackQualityOverlay() {
-    List<String?> qualities = [];
-    widget.streams!.forEach((stream) {
+    List<String> qualities = [];
+    widget.streams.forEach((stream) {
       if (stream.formatSuffix.contains('webm'))
         qualities.add(stream.formatSuffix + " • " + stream.resolution);
     });
@@ -582,12 +581,12 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
           padding: EdgeInsets.only(top: 40),
           itemCount: qualities.length,
           itemBuilder: (context, index) {
-            String quality = qualities[index]!;
+            String quality = qualities[index];
             return GestureDetector(
               onTap: () {
-                int index = widget.streams!.indexWhere((element) =>
+                int index = widget.streams.indexWhere((element) =>
                   element.formatSuffix + " • " + element.resolution == quality);
-                _controller!.changeVideoUrl(widget.streams![index].url);
+                _controller.changeVideoUrl(widget.streams[index].url);
                 widget.onQualityChanged(quality.split("p").first);
                 setState(() => currentQuality = quality);
                 setState(() => showStreamQualityMenu = false);

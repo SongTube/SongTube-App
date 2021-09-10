@@ -9,8 +9,8 @@ import 'package:songtube/internal/models/mediaItemSorts.dart';
 import 'package:songtube/screens/musicScreen/components/songsList.dart';
 
 class MusicScreenAlbumsTab extends StatefulWidget {
-  final List<MediaItem>? songs;
-  final String? searchQuery;
+  final List<MediaItem> songs;
+  final String searchQuery;
   MusicScreenAlbumsTab({
     this.songs,
     this.searchQuery
@@ -25,14 +25,14 @@ class _MusicScreenAlbumsTabState extends State<MusicScreenAlbumsTab> {
   List<MediaItemAlbum> _albums = [];
 
   // Current album
-  MediaItemAlbum? currentAlbum;
+  MediaItemAlbum currentAlbum;
 
   // Albums GridView Key
   final albumsGridKey = const PageStorageKey<String>('albumsGrid');
 
   @override
   void initState() {
-    widget.songs!.forEach((song) => songCreateOrAssignToAlbum(song));
+    widget.songs.forEach((song) => songCreateOrAssignToAlbum(song));
     super.initState();
   }
 
@@ -50,7 +50,7 @@ class _MusicScreenAlbumsTabState extends State<MusicScreenAlbumsTab> {
     }
     // Add song to Album
     int indexToAlbum = _albums.indexWhere((album) => album.albumTitle == song.album);
-    _albums[indexToAlbum].mediaItems!.add(song);
+    _albums[indexToAlbum].mediaItems.add(song);
   }
 
   @override
@@ -80,7 +80,7 @@ class _MusicScreenAlbumsTabState extends State<MusicScreenAlbumsTab> {
       children: [
         Row(
           children: [
-            Expanded(child: _albumTile(context, currentAlbum!, true)),
+            Expanded(child: _albumTile(context, currentAlbum, true)),
             IconButton(
               icon: Icon(Icons.clear,
                 color: Theme.of(context).iconTheme.color),
@@ -92,13 +92,13 @@ class _MusicScreenAlbumsTabState extends State<MusicScreenAlbumsTab> {
         Divider(
           height: 1,
           thickness: 1,
-          color: Colors.grey[600]!.withOpacity(0.1),
+          color: Colors.grey[600].withOpacity(0.1),
           indent: 12,
           endIndent: 12
         ),
         Expanded(
           child: SongsListView(
-            songs: currentAlbum!.mediaItems,
+            songs: currentAlbum.mediaItems,
             searchQuery: ""
           ),
         )
@@ -135,12 +135,12 @@ class _MusicScreenAlbumsTabState extends State<MusicScreenAlbumsTab> {
                 Container(
                   margin: EdgeInsets.only(left: 8, right: 8),
                   child: Text(
-                    album.albumTitle!,
+                    album.albumTitle,
                     maxLines: 1,
                     overflow: TextOverflow.fade,
                     softWrap: false,
                     style: TextStyle(
-                      color: Theme.of(context).textTheme.bodyText1!.color,
+                      color: Theme.of(context).textTheme.bodyText1.color,
                       fontFamily: 'Product Sans',
                       fontWeight: FontWeight.w600,
                       fontSize: 20
@@ -150,10 +150,10 @@ class _MusicScreenAlbumsTabState extends State<MusicScreenAlbumsTab> {
                 Container(
                   margin: EdgeInsets.only(left: 8, right: 8),
                   child: Text(
-                    album.albumAuthor!,
+                    album.albumAuthor,
                     maxLines: 1,
                     style: TextStyle(
-                      color: Theme.of(context).textTheme.bodyText1!.color!
+                      color: Theme.of(context).textTheme.bodyText1.color
                         .withOpacity(0.7),
                       fontFamily: 'Product Sans',
                       fontWeight: FontWeight.w600,
@@ -182,11 +182,11 @@ class _MusicScreenAlbumsTabState extends State<MusicScreenAlbumsTab> {
                     ]
                   ),
                   child: Text(
-                    "${album.mediaItems!.length} Songs",
+                    "${album.mediaItems.length} Songs",
                     style: TextStyle(
                       color: shinySongsCount
                         ? Colors.white
-                        : Theme.of(context).textTheme.bodyText1!.color,
+                        : Theme.of(context).textTheme.bodyText1.color,
                       fontSize: 10,
                       fontFamily: 'Product Sans',
                       fontWeight: FontWeight.w700
@@ -221,21 +221,21 @@ class _MusicScreenAlbumsTabState extends State<MusicScreenAlbumsTab> {
   }
 
   Widget _highResArtwork(MediaItemAlbum album) {
-    return FutureBuilder<File>(
+    return FutureBuilder(
       future: FFmpegExtractor.getAudioArtwork(
-        audioFile: album.mediaItems![0].id,
-        audioId: album.mediaItems![0].extras!['albumId'],
+        audioFile: album.mediaItems[0].id,
+        audioId: album.mediaItems[0].extras['albumId'],
       ),
       builder: (context, snapshot) {
         return ClipRRect(
           borderRadius: BorderRadius.circular(15),
           child: ImageFade(
             fadeDuration: Duration(milliseconds: 300),
-            placeholder: Image.file(File(album.mediaItems![0].extras!['artwork'])),
+            placeholder: Image.file(File(album.mediaItems[0].extras['artwork'])),
             image: FileImage(File(
               snapshot.hasData
-                ? snapshot.data!.path
-                : album.mediaItems![0].extras!['artwork']
+                ? snapshot.data.path
+                : album.mediaItems[0].extras['artwork']
             )),
             fit: BoxFit.cover,
           ),
@@ -246,9 +246,9 @@ class _MusicScreenAlbumsTabState extends State<MusicScreenAlbumsTab> {
 
   bool getSearchQueryMatch(MediaItemAlbum album) {
     if (widget.searchQuery != "") {
-      if (album.albumTitle!.toLowerCase().contains(widget.searchQuery!.toLowerCase())) {
+      if (album.albumTitle.toLowerCase().contains(widget.searchQuery.toLowerCase())) {
         return true;
-      } else if (album.albumTitle!.toLowerCase().contains(widget.searchQuery!.toLowerCase())) {
+      } else if (album.albumTitle.toLowerCase().contains(widget.searchQuery.toLowerCase())) {
         return true;
       } else {
         return false;

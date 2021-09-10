@@ -11,11 +11,11 @@ class VideoPageCollapsed extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
-    String title = pageProvider.infoItem?.name ?? "";
-    String author = pageProvider.infoItem?.uploaderName ?? "";
+    String title = pageProvider?.infoItem?.name ?? "";
+    String author = pageProvider?.infoItem?.uploaderName ?? "";
     String thumbnailUrl = pageProvider.infoItem is StreamInfoItem
-      ? pageProvider.infoItem?.thumbnails?.hqdefault ?? ""
-      : pageProvider.infoItem?.thumbnailUrl ?? "";
+      ? pageProvider?.infoItem?.thumbnails?.hqdefault ?? ""
+      : pageProvider?.infoItem?.thumbnailUrl ?? "";
     return Container(
       height: kBottomNavigationBarHeight * 1.15,
       decoration: BoxDecoration(
@@ -84,7 +84,7 @@ class VideoPageCollapsed extends StatelessWidget {
                           style: TextStyle(
                             fontFamily: 'YTSans',
                             fontSize: 11,
-                            color: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.6)
+                            color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6)
                           ),
                           overflow: TextOverflow.fade,
                           softWrap: false,
@@ -102,12 +102,12 @@ class VideoPageCollapsed extends StatelessWidget {
           Container(
             color: Colors.transparent,
             child: IconButton(
-              icon: pageProvider.playerKey.currentState?.controller?.value.isPlaying ?? false
+              icon: pageProvider?.playerKey?.currentState?.controller?.value?.isPlaying ?? false
                 ? Icon(MdiIcons.pause, size: 22)
                 : Icon(MdiIcons.play, size: 22),
-              onPressed: pageProvider.playerKey.currentState?.controller?.value.isPlaying ?? false
-                ? () { pageProvider.playerKey.currentState!.controller!.pause(); pageProvider.setState(); }
-                : () { pageProvider.playerKey.currentState!.controller!.play(); pageProvider.setState(); }
+              onPressed: pageProvider?.playerKey?.currentState?.controller?.value?.isPlaying ?? false
+                ? () { pageProvider.playerKey.currentState.controller.pause(); pageProvider.setState(); }
+                : () { pageProvider.playerKey.currentState.controller.play(); pageProvider.setState(); }
             ),
           ),
           InkWell(

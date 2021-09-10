@@ -9,14 +9,14 @@ class DownloadMenuHome extends StatelessWidget {
   final Function onAudioTap;
   final Function onVideoTap;
   final Function onPlaylistTap;
-  final List<StreamInfoItem?>? playlistVideos;
+  final List<StreamInfoItem> playlistVideos;
   final scaffoldState;
   DownloadMenuHome({
-    required this.onBack,
-    required this.onAudioTap,
-    required this.onVideoTap,
-    required this.onPlaylistTap,
-    required this.playlistVideos,
+    @required this.onBack,
+    @required this.onAudioTap,
+    @required this.onVideoTap,
+    @required this.onPlaylistTap,
+    @required this.playlistVideos,
     this.scaffoldState
   });
   @override
@@ -30,10 +30,10 @@ class DownloadMenuHome extends StatelessWidget {
             children: [
               IconButton(
                 icon: Icon(EvaIcons.arrowBackOutline),
-                onPressed: onBack as void Function()?
+                onPressed: onBack
               ),
               SizedBox(width: 16),
-              Text(Languages.of(context)!.labelDownload, style: TextStyle(
+              Text(Languages.of(context).labelDownload, style: TextStyle(
                 fontSize: 20,
                 fontFamily: "YTSans"
               )),
@@ -54,14 +54,14 @@ class DownloadMenuHome extends StatelessWidget {
               Flexible(
                 fit: FlexFit.tight,
                 child: GestureDetector(
-                  onTap: onAudioTap as void Function()?,
+                  onTap: onAudioTap,
                   child: Container(
                     margin: EdgeInsets.only(right: 8),
                     height: 80,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                        color: Theme.of(context).iconTheme.color!.withOpacity(0.1),
+                        color: Theme.of(context).iconTheme.color.withOpacity(0.1),
                         width: 1.5,
                       ),
                       color: Theme.of(context).cardColor,
@@ -79,10 +79,10 @@ class DownloadMenuHome extends StatelessWidget {
                          color: Theme.of(context).accentColor),
                         SizedBox(width: 16),
                         Text(
-                          Languages.of(context)!.labelAudio,
+                          Languages.of(context).labelAudio,
                           style: TextStyle(
                             fontSize: 15,
-                            color: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.9),
+                            color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.9),
                             fontFamily: "YTSans"
                           )
                         )
@@ -95,13 +95,13 @@ class DownloadMenuHome extends StatelessWidget {
               Flexible(
                 fit: FlexFit.tight,
                 child: GestureDetector(
-                  onTap: onVideoTap as void Function()?,
+                  onTap: onVideoTap,
                   child: Container(
                     height: 80,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                        color: Theme.of(context).iconTheme.color!.withOpacity(0.1),
+                        color: Theme.of(context).iconTheme.color.withOpacity(0.1),
                         width: 1.5,
                       ),
                       color: Theme.of(context).cardColor,
@@ -119,10 +119,10 @@ class DownloadMenuHome extends StatelessWidget {
                           color: Theme.of(context).accentColor),
                         SizedBox(width: 16),
                         Text(
-                          Languages.of(context)!.labelVideo,
+                          Languages.of(context).labelVideo,
                           style: TextStyle(
                             fontSize: 15,
-                            color: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.9),
+                            color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.9),
                             fontFamily: "YTSans"
                           )
                         )
@@ -136,14 +136,14 @@ class DownloadMenuHome extends StatelessWidget {
               Flexible(
                 fit: FlexFit.tight,
                 child: GestureDetector(
-                  onTap: onPlaylistTap as void Function()?,
+                  onTap: onPlaylistTap,
                   child: Container(
                     margin: EdgeInsets.only(left: 8),
                     height: 80,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                        color: Theme.of(context).iconTheme.color!.withOpacity(0.1),
+                        color: Theme.of(context).iconTheme.color.withOpacity(0.1),
                         width: 1.5,
                       ),
                       color: Theme.of(context).cardColor,
@@ -161,10 +161,10 @@ class DownloadMenuHome extends StatelessWidget {
                           color: Theme.of(context).accentColor),
                         SizedBox(width: 16),
                         Text(
-                          Languages.of(context)!.labelPlaylist,
+                          Languages.of(context).labelPlaylist,
                           style: TextStyle(
                             fontSize: 15,
-                            color: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.9),
+                            color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.9),
                             fontFamily: "YTSans"
                           )
                         )

@@ -2,15 +2,15 @@
 import 'package:flutter/material.dart';
 
 class TextFieldTile extends StatelessWidget {
-  final TextEditingController? textController;
+  final TextEditingController textController;
   final String labelText;
   final IconData icon;
   final TextInputType inputType;
   TextFieldTile({
-    required this.textController,
-    required this.labelText,
-    required this.icon,
-    required this.inputType
+    @required this.textController,
+    @required this.labelText,
+    @required this.icon,
+    @required this.inputType
   });
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class TextFieldTile extends StatelessWidget {
         labelText: labelText,
       ),
       style: TextStyle(
-        color: Theme.of(context).textTheme.bodyText1!.color,
+        color: Theme.of(context).textTheme.bodyText1.color,
         fontSize: 14,
       ),
     );

@@ -9,8 +9,8 @@ class SongTubeBanner extends StatelessWidget {
   final String appName;
   final String appVersion;
   SongTubeBanner({
-    required this.appName,
-    required this.appVersion
+    @required this.appName,
+    @required this.appVersion
   });
   @override
   Widget build(BuildContext context) {
@@ -52,51 +52,53 @@ class SongTubeBanner extends StatelessWidget {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(left: 16),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  // App Name
-                  Container(
-                    child: Text(
-                      appName,
-                      style: TextStyle(
-                        fontSize: 26,
-                        fontFamily: "YTSans",
-                        fontWeight: FontWeight.w700,
-                        color: Theme.of(context).accentColor
-                      ),
-                    )
-                  ),
-                  SizedBox(height: 8),
-                  // App Version
-                  Container(
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Text(
-                          Languages.of(context)!.labelVersion+": ",
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontFamily: "YTSans",
-                            fontWeight: FontWeight.w700,
-                            color: Theme.of(context).iconTheme.color
-                          ),
+              child: appName != null
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    // App Name
+                    Container(
+                      child: Text(
+                        appName,
+                        style: TextStyle(
+                          fontSize: 26,
+                          fontFamily: "YTSans",
+                          fontWeight: FontWeight.w700,
+                          color: Theme.of(context).accentColor
                         ),
-                        Text(
-                          appVersion,
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontFamily: "Varela",
-                            fontWeight: FontWeight.w700,
-                            color: Theme.of(context).accentColor
+                      )
+                    ),
+                    SizedBox(height: 8),
+                    // App Version
+                    Container(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text(
+                            Languages.of(context).labelVersion+": ",
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontFamily: "YTSans",
+                              fontWeight: FontWeight.w700,
+                              color: Theme.of(context).iconTheme.color
+                            ),
                           ),
-                        ),
-                      ],
+                          Text(
+                            appVersion,
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontFamily: "Varela",
+                              fontWeight: FontWeight.w700,
+                              color: Theme.of(context).accentColor
+                            ),
+                          ),
+                        ],
+                      )
                     )
-                  )
-                ],
-              )
+                  ],
+                )
+              : Container(),
             ),
           )
         ],

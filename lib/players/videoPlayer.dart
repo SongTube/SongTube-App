@@ -27,11 +27,11 @@ class AppVideoPlayer extends StatefulWidget {
 class _AppVideoPlayerState extends State<AppVideoPlayer> {
 
   // Video Player Controller
-  VideoPlayerController? _controller;
+  VideoPlayerController _controller;
 
   // Player Variables (width is set automatically)
-  double? width;
-  bool? isLandscape;
+  double width;
+  bool isLandscape;
   bool hideControls = false;
 
   // Position Controller
@@ -42,14 +42,14 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
   void initState() {
     super.initState();
     _controller = VideoPlayerController.file(
-        File(widget.video.path!))
+        File(widget.video.path))
       ..initialize().then((_) {
         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-        if (_controller!.value.duration < Duration(seconds: 15)) {
-          _controller!.setLooping(true);
+        if (_controller.value.duration < Duration(seconds: 15)) {
+          _controller.setLooping(true);
         }
         // Check if we need to rotate the screen or not
-        if (_controller!.value.aspectRatio <= 1) {
+        if (_controller.value.aspectRatio <= 1) {
           isLandscape = false;
           SystemChrome.setPreferredOrientations([
             DeviceOrientation.portraitDown,
@@ -65,7 +65,7 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
         // Prevent the screen of beign turned off automatically
         FlutterScreen.keepOn(true);
         setState(() {
-          _controller!.play();
+          _controller.play();
         });
         // Update current Playback Position
         updater();
@@ -81,13 +81,13 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
               title: Text(
                 "Not Supported",
                 style: TextStyle(
-                  color: Theme.of(context).textTheme.bodyText1!.color
+                  color: Theme.of(context).textTheme.bodyText1.color
                 ),
               ),
               content: Text(
                 "This video is not natively supported by your device",
                 style: TextStyle(
-                  color: Theme.of(context).textTheme.bodyText1!.color
+                  color: Theme.of(context).textTheme.bodyText1.color
                 ),
               ),
               actions: [
@@ -122,7 +122,7 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
       await Future.delayed(Duration(seconds: 1), () {
         try {
           if (!positionController.isClosed && mounted) {
-            positionController.add(_controller!.value.position);
+            positionController.add(_controller.value.position);
           }
         } catch (_) {}
       });
@@ -133,7 +133,7 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
   void dispose() {
     super.dispose();
     positionController.close();
-    _controller!.dispose();
+    _controller.dispose();
     // Show Top, Bottom system Bars and rotate screen
     // to portrait on VideoPlayer dispose
     SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top, SystemUiOverlay.bottom]);
@@ -158,10 +158,10 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
           children: <Widget>[
             // Video Player
             Container(
-              child: _controller!.value.isInitialized
+              child: _controller.value.isInitialized
                 ? AspectRatio(
-                    aspectRatio: _controller!.value.aspectRatio,
-                    child: VideoPlayer(_controller!),
+                    aspectRatio: _controller.value.aspectRatio,
+                    child: VideoPlayer(_controller),
                   )
                 : Container(),
             ),
@@ -171,10 +171,10 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
               child: VideoPlayerControls(
                 progressBar: videoPlayerProgressBar(),
                 videoTitle: widget.video.name,
-                playing: _controller!.value.isPlaying,
-                onPlayPause: _controller!.value.isPlaying
-                  ? () => setState(() => _controller!.pause())
-                  : () => setState(() => _controller!.play()),
+                playing: _controller.value.isPlaying,
+                onPlayPause: _controller.value.isPlaying
+                  ? () => setState(() => _controller.pause())
+                  : () => setState(() => _controller.play()),
                 onExit: () => Navigator.pop(context),
                 showControls: hideControls,
               ),
