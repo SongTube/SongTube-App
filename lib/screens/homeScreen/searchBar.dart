@@ -142,7 +142,7 @@ class _HomePageAppBarState extends State<HomePageAppBar> with TickerProviderStat
                         duration: Duration(milliseconds: 300),
                         child: id.data != null && manager.searchController.text.isEmpty
                           ? IconButton(
-                              icon: Icon(EvaIcons.linkOutline,
+                              icon: Icon(EvaIcons.link,
                                 color: Theme.of(context).accentColor,
                                 size: 20),
                               onPressed: () {
