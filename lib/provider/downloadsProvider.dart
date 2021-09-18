@@ -94,7 +94,7 @@ class DownloadsProvider extends ChangeNotifier {
     int maxDownloads = downloadingList.length <= maxSimultaneousDownloads
       ? downloadingList.length : maxSimultaneousDownloads;
     for (int i = 0; i < maxDownloads; i++) {
-      if (downloadingList[i].downloadStatusStream.value == DownloadStatus.Loading)
+      if (downloadingList[i].downloadStatusStream.valueWrapper.value == DownloadStatus.Loading)
         downloadingList[i].downloadMedia();
     }
     notifyListeners();
