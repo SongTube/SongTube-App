@@ -173,8 +173,7 @@ class MediaProvider extends ChangeNotifier {
     );
     PaletteGenerator palette = await PaletteGenerator
       .fromImageProvider(
-        FileImage(File(AudioService.currentMediaItem.artUri.toString()
-          .replaceAll("file://", ""))));
+        FileImage(File(AudioService.currentMediaItem.extras["artwork"])));
     dominantColor = palette.dominantColor.color;
     if (palette.vibrantColor == null) {
       vibrantColor = dominantColor;
