@@ -41,7 +41,10 @@ dependencies:
             path: packages/video_player/video_player
             ref: master
     just_audio: ^0.7.5
-    audio_service: ^0.17.1
+    audio_service:
+        git:
+            url: https://github.com/SongTube/audio_service-1
+            ref: master
 
 
     # NewPipe Extractor
@@ -69,7 +72,9 @@ dependencies:
     dio: ^4.0.0
     http: ^0.13.3
     flutter_inappwebview: ^5.3.2
-    flutter_html: ^0.9.6
+    flutter_html:
+        git:
+            url: https://github.com/SongTube/flutter_html
 
     # Icons
     material_design_icons_flutter: ^4.0.5955
