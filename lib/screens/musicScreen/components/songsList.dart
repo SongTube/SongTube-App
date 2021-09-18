@@ -6,6 +6,7 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/globals/globals.dart';
 import 'package:songtube/internal/ffmpeg/converter.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/models/videoFile.dart';
@@ -112,10 +113,8 @@ class SongsListView extends StatelessWidget {
               ],
               onItemTap: (String value) async {
                 if (value != null) {
-                  if (AudioService.running && AudioService.playbackState.playing) {
-                    if (AudioService.currentMediaItem.id == song.id) {
-                      AudioService.stop();
-                    }
+                  if (audioHandler.playbackState.value.playing && audioHandler.mediaItem.value.id == song.id) {
+                    audioHandler.stop();
                   }
                   switch (value) {
                     case "Delete":
@@ -159,21 +158,11 @@ class SongsListView extends StatelessWidget {
             ),
             onTap: () async {
               if (hasDownloadType == false || song.extras["downloadType"] == "Audio") {
-                if (!AudioService.running) {
-                  await AudioService.start(
-                    backgroundTaskEntrypoint: songtubePlayer,
-                    androidNotificationChannelName: 'SongTube',
-                    // Enable this if you want the Android service to exit the foreground state on pause.
-                    //androidStopForegroundOnPause: true,
-                    androidNotificationColor: 0xFF2196f3,
-                    androidNotificationIcon: 'drawable/ic_stat_music_note',
-                    androidEnableQueue: true,
-                  );
+                if (listEquals(songs, audioHandler.queue.value) == false) {
+                  audioHandler.queue.value.clear();
+                  audioHandler.queue.value.addAll(songs);
                 }
-                if (listEquals(songs, AudioService.queue) == false) {
-                  await AudioService.updateQueue(songs);
-                }
-                await AudioService.playMediaItem(songs[index]);
+                await audioHandler.playMediaItem(song);
               } else {
                 Navigator.push(
                   context,

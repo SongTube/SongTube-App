@@ -1,9 +1,6 @@
 // Flutter
 import 'package:flutter/material.dart';
-
-// Internal
-import 'package:songtube/players/service/screenStateStream.dart';
-import 'package:songtube/players/service/playerService.dart';
+import 'package:songtube/globals/globals.dart';
 
 // Packages
 import 'package:audio_service/audio_service.dart';
@@ -13,19 +10,13 @@ class MusicPlayerPadding extends StatelessWidget {
   MusicPlayerPadding(this.searchBarOpen);
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<ScreenState>(
-      stream: screenStateStream,
+    return StreamBuilder<PlaybackState>(
+      stream: audioHandler.playbackState,
       builder: (context, snapshot) {
-        final screenState = snapshot.data;
-        final state = screenState?.playbackState;
-        final processingState =
-          state?.processingState ?? AudioProcessingState.none;
+        final playbackState = snapshot.data;
         return Container(
-          height: searchBarOpen
-            ? 0 : processingState == AudioProcessingState.stopped ||
-              processingState == AudioProcessingState.none
-                ? 0
-                : kToolbarHeight * 1.15
+          height: searchBarOpen ? 0 : playbackState.processingState == AudioProcessingState.idle
+            ? 0 : kToolbarHeight * 1.15
         );
       }
     );

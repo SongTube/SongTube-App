@@ -3,6 +3,7 @@ import 'dart:io';
 
 // Flutter
 import 'package:flutter/material.dart';
+import 'package:songtube/globals/globals.dart';
 
 // Internal
 import 'package:songtube/players/service/playerService.dart';
@@ -11,7 +12,6 @@ import 'package:songtube/players/components/musicPlayer/ui/marqueeWidget.dart';
 // Packages
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:audio_service/audio_service.dart';
-import 'package:songtube/players/service/screenStateStream.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -47,7 +47,7 @@ class CollapsedPanel extends StatelessWidget {
                       width: 50,
                       fadeInDuration: Duration(milliseconds: 400),
                       placeholder: MemoryImage(kTransparentImage),
-                      image: FileImage(File(AudioService.currentMediaItem
+                      image: FileImage(File(audioHandler.mediaItem.value
                         .artUri.toString().replaceAll("file://", ""))),
                       fit: BoxFit.cover,
                     ),
@@ -66,7 +66,7 @@ class CollapsedPanel extends StatelessWidget {
                           pauseDuration: Duration(seconds: 2),
                           direction: Axis.horizontal,
                           child: Text(
-                            "${AudioService.currentMediaItem.title}",
+                            "${audioHandler.mediaItem.value.title}",
                             style: TextStyle(
                               fontFamily: 'YTSans',
                               fontSize: 16
@@ -78,7 +78,7 @@ class CollapsedPanel extends StatelessWidget {
                         ),
                         SizedBox(height: 2),
                         Text(
-                          "${AudioService.currentMediaItem.artist}",
+                          "${audioHandler.mediaItem.value.artist}",
                           style: TextStyle(
                             fontFamily: 'YTSans',
                             fontSize: 11,
@@ -97,12 +97,11 @@ class CollapsedPanel extends StatelessWidget {
           ),
           // Play/Pause
           SizedBox(width: 8),
-          StreamBuilder<ScreenState>(
-            stream: screenStateStream,
+          StreamBuilder<PlaybackState>(
+            stream: audioHandler.playbackState,
             builder: (context, snapshot) {
-              final screenState = snapshot.data;
-              final state = screenState?.playbackState;
-              final playing = state?.playing ?? false;
+              final playbackState = snapshot.data;
+              final playing = playbackState.playing;
               return Stack(
                 alignment: Alignment.center,
                 children: [
@@ -112,8 +111,8 @@ class CollapsedPanel extends StatelessWidget {
                       Stream.periodic(Duration(milliseconds: 1000)),
                       (dragPosition, _) => dragPosition),
                     builder: (context, snapshot) {
-                      Duration position = state?.currentPosition ?? Duration.zero;
-                      Duration duration = AudioService.currentMediaItem?.duration ?? Duration.zero;
+                      Duration position = playbackState.position ?? Duration.zero;
+                      Duration duration = audioHandler.mediaItem.value.duration ?? Duration.zero;
                       return CircularProgressIndicator(
                         strokeWidth: 3,
                         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -127,8 +126,8 @@ class CollapsedPanel extends StatelessWidget {
                       ? Icon(MdiIcons.pause, size: 22)
                       : Icon(MdiIcons.play, size: 22),
                     onPressed: playing
-                      ? () => AudioService.pause()
-                      : () => AudioService.play(),
+                      ? () => audioHandler.pause()
+                      : () => audioHandler.play(),
                   ),
                 ],
               );

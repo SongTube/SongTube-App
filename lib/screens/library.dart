@@ -1,6 +1,7 @@
 // Flutter
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
+import 'package:songtube/globals/globals.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/pages/localVideos.dart';
 import 'package:songtube/pages/playlists.dart';
@@ -211,7 +212,7 @@ class LibraryScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (AudioService?.currentMediaItem != null || pageProvider.infoItem != null)
+                if (audioHandler.mediaItem.value != null || pageProvider.infoItem != null)
                 // About us
                 ListTile(
                   onTap: () {
@@ -245,12 +246,12 @@ class LibraryScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (AudioService?.currentMediaItem != null || pageProvider.infoItem != null)
+                if (audioHandler.mediaItem.value != null || pageProvider.infoItem != null)
                 SizedBox(height: kBottomNavigationBarHeight*1.5)
               ],
             ),
           ),
-          if (AudioService?.currentMediaItem == null && pageProvider.infoItem == null)
+          if (audioHandler.mediaItem.value == null && pageProvider.infoItem == null)
           GestureDetector(
             onTap: () {
               Navigator.push(context,

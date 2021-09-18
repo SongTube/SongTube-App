@@ -1,9 +1,9 @@
 // Flutter
 import 'package:flutter/material.dart';
+import 'package:songtube/globals/globals.dart';
 
 // Internal
 import 'package:songtube/players/service/playerService.dart';
-import 'package:songtube/players/service/screenStateStream.dart';
 
 // Packages
 import 'package:audio_service/audio_service.dart';
@@ -65,17 +65,13 @@ class AppSnack {
               ),
             ],
           ),
-          StreamBuilder<ScreenState>(
-            stream: screenStateStream,
+          StreamBuilder<PlaybackState>(
+            stream: audioHandler.playbackState,
             builder: (context, snapshot) {
-              final screenState = snapshot.data;
-              final state = screenState?.playbackState;
-              final processingState =
-                state?.processingState ?? AudioProcessingState.none;
+              final playbackState = snapshot.data;
               return Container(
-                height: processingState != AudioProcessingState.none
-                  ? kToolbarHeight * 1.15
-                  : 0
+                height: playbackState.processingState == AudioProcessingState.idle
+                  ? 0 : kToolbarHeight * 1.15
               );
             }
           ),

@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:songtube/globals/globals.dart';
 
 class PlayerSlider extends StatelessWidget {
   final PlaybackState state;
@@ -25,8 +26,8 @@ class PlayerSlider extends StatelessWidget {
           Stream.periodic(Duration(milliseconds: 1000)),
           (dragPosition, _) => dragPosition),
       builder: (context, snapshot) {
-        Duration position = state.currentPosition;
-        Duration duration = mediaItem?.duration;
+        Duration position = state.position;
+        Duration duration = mediaItem.duration;
         return duration != null
           ? Column(
             children: <Widget>[
@@ -54,7 +55,7 @@ class PlayerSlider extends StatelessWidget {
                       _dragPositionSubject.add(value);
                     },
                     onChangeEnd: (value) {
-                      AudioService.seekTo(Duration(milliseconds: value.toInt()));
+                      audioHandler.seek(Duration(milliseconds: value.toInt()));
                       _dragPositionSubject.add(null);
                     },
                   )

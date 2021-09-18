@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/globals/globals.dart';
 import 'package:songtube/players/components/musicPlayer/currentPlaylist.dart';
 
 // Internal
@@ -101,15 +102,15 @@ class PlayerControls extends StatelessWidget {
                   size: 18,
                   color: textColor.withOpacity(0.7)
                 ),
-                onPressed: () => AudioService.skipToPrevious(),
+                onPressed: () => audioHandler.skipToPrevious(),
               ),
               // Padding
               SizedBox(width: 20),
               // Play/Pause button
               GestureDetector(
                 onTap: playing
-                  ? () => AudioService.pause()
-                  : () => AudioService.play(),
+                  ? () => audioHandler.pause()
+                  : () => audioHandler.play(),
                 child: AnimatedContainer(
                   duration: Duration(milliseconds: 600),
                   height: 60,
@@ -147,7 +148,7 @@ class PlayerControls extends StatelessWidget {
                   size: 18,
                   color: textColor.withOpacity(0.7)
                 ),
-                onPressed: () => AudioService.skipToNext(),
+                onPressed: () => audioHandler.skipToNext(),
               ),
               // Repeat Button
               MusicPlayerRepeatButton(

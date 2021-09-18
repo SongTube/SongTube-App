@@ -118,7 +118,7 @@ class VideoPageCollapsed extends StatelessWidget {
               color: Colors.transparent,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Icon(EvaIcons.closeOutline),
+                child: Icon(EvaIcons.close),
               )
             ),
           ),

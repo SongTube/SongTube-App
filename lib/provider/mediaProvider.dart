@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 // Flutter
 import 'package:flutter/material.dart';
 import 'package:palette_generator/palette_generator.dart';
+import 'package:songtube/globals/globals.dart';
 import 'package:songtube/internal/database/databaseService.dart';
 import 'package:songtube/internal/ffmpeg/converter.dart';
 import 'package:songtube/internal/ffmpeg/extractor.dart';
@@ -42,7 +43,7 @@ class MediaProvider extends ChangeNotifier {
     slidingPanelOpen  = false;
     databaseSongs     = <MediaItem>[];
     getDatabase();
-    AudioService.currentMediaItemStream.listen((event) {
+    audioHandler.mediaItem.listen((event) {
       mediaItem = event;
     });
   }
@@ -165,15 +166,15 @@ class MediaProvider extends ChangeNotifier {
   }
 
   Future<void> updateUIElements() async {
-    if (AudioService.currentMediaItem == null) return;
-    String currentAlbumId = await AudioService.currentMediaItem.extras["albumId"];
+    if (audioHandler.mediaItem.value == null) return;
+    String currentAlbumId = await audioHandler.mediaItem.value.extras["albumId"];
     artwork = await FFmpegExtractor.getAudioArtwork(
       audioFile: mediaItem.id,
       audioId: currentAlbumId,
     );
     PaletteGenerator palette = await PaletteGenerator
       .fromImageProvider(
-        FileImage(File(AudioService.currentMediaItem.artUri.toString()
+        FileImage(File(audioHandler.mediaItem.value.artUri.toString()
           .replaceAll("file://", ""))));
     dominantColor = palette.dominantColor.color;
     if (palette.vibrantColor == null) {
@@ -186,17 +187,17 @@ class MediaProvider extends ChangeNotifier {
     // Preload Previous and Next Artwork
     List<int> indexes = [
       // Previous
-      AudioService.queue.indexOf(AudioService.currentMediaItem)-1,
+      audioHandler.queue.value.indexOf(audioHandler.mediaItem.value)-1,
       // Next
-      AudioService.queue.indexOf(AudioService.currentMediaItem)+1,
+      audioHandler.queue.value.indexOf(audioHandler.mediaItem.value)+1,
     ];
     FFmpegExtractor.getAudioArtwork(
-      audioFile: AudioService.queue[indexes[0]].id,
-      audioId: AudioService.queue[indexes[0]].extras["albumId"],
+      audioFile: audioHandler.queue.value[indexes[0]].id,
+      audioId: audioHandler.queue.value[indexes[0]].extras["albumId"],
     );
     FFmpegExtractor.getAudioArtwork(
-      audioFile: AudioService.queue[indexes[1]].id,
-      audioId: AudioService.queue[indexes[1]].extras["albumId"],
+      audioFile: audioHandler.queue.value[indexes[1]].id,
+      audioId: audioHandler.queue.value[indexes[1]].extras["albumId"],
     );
     if (fwController.isAttached && fwController.isPanelOpen) {
       SystemChrome.setSystemUIOverlayStyle(

@@ -4,6 +4,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/globals/globals.dart';
 import 'package:songtube/provider/mediaProvider.dart';
 
 class MusicPlayerCurrentPlaylist extends StatefulWidget {
@@ -31,7 +32,7 @@ class _MusicPlayerCurrentPlaylistState extends State<MusicPlayerCurrentPlaylist>
   }
 
   void animateToCurrentPlaying() {
-    int index = AudioService.queue.indexOf(AudioService.currentMediaItem);
+    int index = audioHandler.queue.value.indexOf(audioHandler.mediaItem.value);
     double offset = index.toDouble()*75;
     controller.jumpTo(offset);
   }
@@ -82,9 +83,9 @@ class _MusicPlayerCurrentPlaylistState extends State<MusicPlayerCurrentPlaylist>
                 
                 itemExtent: 75,
                 padding: EdgeInsets.only(top: 12, left: 12, right: 12),
-                itemCount: AudioService.queue.length,
+                itemCount: audioHandler.queue.value.length,
                 itemBuilder: (context, index) {
-                  MediaItem song = AudioService.queue[index];
+                  MediaItem song = audioHandler.queue.value[index];
                   return ListTile(
                     title: Text(
                       song.title,
@@ -104,7 +105,7 @@ class _MusicPlayerCurrentPlaylistState extends State<MusicPlayerCurrentPlaylist>
                         fontWeight: FontWeight.w400
                       ),
                     ),
-                    trailing: song == AudioService.currentMediaItem
+                    trailing: song == audioHandler.mediaItem.value
                       ? Container(
                           padding: EdgeInsets.all(8),
                           decoration: BoxDecoration(
@@ -120,7 +121,7 @@ class _MusicPlayerCurrentPlaylistState extends State<MusicPlayerCurrentPlaylist>
                           height: 10, width: 10,
                         ),
                     onTap: () async {
-                      await AudioService.playMediaItem(song);
+                      await audioHandler.playMediaItem(song);
                       setState(() {});
                     },
                   );

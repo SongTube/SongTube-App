@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 // Packages
 import 'package:audio_service/audio_service.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:songtube/globals/globals.dart';
 
 class MusicPlayerRepeatButton extends StatefulWidget {
   final Color iconColor;
@@ -47,7 +48,7 @@ class _MusicPlayerRepeatButtonState extends State<MusicPlayerRepeatButton> {
             : widget.iconColor.withOpacity(0.7)
         ),
         onPressed: () async {
-          enabled = await AudioService.customAction("enableRepeat");
+          enabled = await audioHandler.customAction("enableRepeat");
           setState(() {});
         }
       ),

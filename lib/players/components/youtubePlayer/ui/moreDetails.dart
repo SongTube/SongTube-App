@@ -127,47 +127,43 @@ class _MoreDetailsSheetState extends State<MoreDetailsSheet> {
             children: [
               Html(
                 data: widget.video.description,
-                renderNewlines: true,
-                padding: EdgeInsets.all(12),
-                defaultTextStyle: TextStyle(
-                  color: Theme.of(context).textTheme.bodyText1.color
-                ),
-                customRender: (node, children) {
-                  if (node is dom.Element) {
-                    if (node.localName == "a") {
-                      String text = node.text;
-                      Duration duration;
-                      try {
-                        duration = parseDuration(text);
-                      } catch (_) {}
-                      return GestureDetector(
-                        onTap: () {
-                          if (duration != null) {
-                            widget.onSegmentTap(duration.inSeconds);
-                          } else {
-                            launch(node.attributes['href']);
-                          }
-                        },
-                        child: Container(
-                          color: Colors.transparent,
-                          child: Text(
-                            text,
-                            style: TextStyle(
-                              color: Theme.of(context).accentColor,
-                              fontWeight: FontWeight.w600,
-                              decoration: TextDecoration.underline,
-                              decorationStyle: TextDecorationStyle.dotted,
-                            ),
+                style: {
+                  "html": Style(
+                    padding: const EdgeInsets.all(12),
+                    color: Theme.of(context).textTheme.bodyText1.color,
+                    whiteSpace: WhiteSpace.PRE
+                  ),
+                },
+                customRender: {
+                  'a': (context, child) {
+                    String text = context.parser.htmlData.text;
+                    Duration duration;
+                    try {
+                      duration = parseDuration(text);
+                    } catch (_) {}
+                    return GestureDetector(
+                      onTap: () {
+                        if (duration != null) {
+                          widget.onSegmentTap(duration.inSeconds);
+                        } else {
+                          launch(context.parser.htmlData.attributes['href']);
+                        }
+                      },
+                      child: Container(
+                        color: Colors.transparent,
+                        child: Text(
+                          text,
+                          style: TextStyle(
+                            color: Theme.of(context.buildContext).accentColor,
+                            fontWeight: FontWeight.w600,
+                            decoration: TextDecoration.underline,
+                            decorationStyle: TextDecorationStyle.dotted,
                           ),
                         ),
-                      );
-                    } else {
-                      return null;
-                    }
-                  } else {
-                    return null;
+                      ),
+                    );
                   }
-                },
+                }
               )
             ],
           ),

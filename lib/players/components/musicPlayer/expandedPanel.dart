@@ -6,12 +6,12 @@ import 'dart:ui';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/globals/globals.dart';
 
 // Internal
 import 'package:songtube/players/service/playerService.dart';
 import 'package:songtube/players/components/musicPlayer/ui/playerBackground.dart';
 import 'package:songtube/players/components/musicPlayer/ui/playerBody.dart';
-import 'package:songtube/players/service/screenStateStream.dart';
 import 'package:songtube/provider/configurationProvider.dart';
 import 'package:songtube/provider/mediaProvider.dart';
 
@@ -27,12 +27,12 @@ class ExpandedPlayer extends StatelessWidget {
   }
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<ScreenState>(
-      stream: screenStateStream,
+    return StreamBuilder<PlaybackState>(
+      stream: audioHandler.playbackState,
       builder: (context, snapshot) {
         final screenState = snapshot.data;
-        final mediaItem = screenState?.mediaItem;
-        final state = screenState?.playbackState;
+        final mediaItem = audioHandler.mediaItem;
+        final state = snapshot.data;
         final playing = state?.playing ?? false;
         PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
         ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
@@ -48,7 +48,7 @@ class ExpandedPlayer extends StatelessWidget {
           ? mediaProvider.vibrantColor == null ? Colors.white : mediaProvider.vibrantColor
           : Theme.of(context).accentColor;
         return PlayerBackground(
-          backgroundImage: File(AudioService.currentMediaItem
+          backgroundImage: File(audioHandler.mediaItem.value
             .artUri.toString().replaceAll("file://", "")),
           enableBlur: prefs.enablePlayerBlurBackground,
           blurIntensity: 50,
@@ -58,12 +58,12 @@ class ExpandedPlayer extends StatelessWidget {
           backdropOpacity: 0.4,
           child: PlayerBody(
             controller: mediaProvider.fwController,
-            playingFrom: mediaItem.album,
+            playingFrom: mediaItem.value.album,
             textColor: textColor,
             artworkFile: image,
             vibrantColor: vibrantColor,
             playing: playing,
-            mediaItem: mediaItem,
+            mediaItem: mediaItem.value,
             dominantColor: dominantColor,
             state: state,
             expandArtwork: config.useExpandedArtwork,

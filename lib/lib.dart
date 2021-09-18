@@ -9,6 +9,7 @@ import 'package:newpipeextractor_dart/models/playlist.dart';
 import 'package:newpipeextractor_dart/models/video.dart';
 import 'package:newpipeextractor_dart/utils/url.dart';
 import 'package:package_info/package_info.dart';
+import 'package:songtube/globals/globals.dart';
 import 'package:songtube/internal/nativeMethods.dart';
 
 // Internal
@@ -109,10 +110,10 @@ class _LibState extends State<Lib> {
       _showSheets();
       _checkForUpdates();
     });
-    AudioService.runningStream.listen((_) {
+    audioHandler.playbackState.listen((_) {
       setState(() {});
     });
-    AudioService.currentMediaItemStream.listen((event) {
+    audioHandler.mediaItem.listen((event) {
       setState(() {});
     });
   }
@@ -295,7 +296,7 @@ class _LibState extends State<Lib> {
     if (pageProvider.infoItem != null) {
       return _youtubePlayerTwins();
     } else {
-      if (AudioService?.currentMediaItem != null) {
+      if (audioHandler.mediaItem.value != null) {
         return _musicPlayerTwins();
       } else {
         return null;
@@ -309,7 +310,7 @@ class _LibState extends State<Lib> {
       return FloatingWidgetConfig(
         maxHeight: MediaQuery.of(context).size.height,
       );
-    } else if (AudioService?.currentMediaItem != null) {
+    } else if (audioHandler.mediaItem.value != null) {
       return _floatingMusicWidgetConfig();
     } else {
       return FloatingWidgetConfig(
@@ -372,7 +373,7 @@ class _LibState extends State<Lib> {
     if (pageProvider.infoItem != null) {
       return pageProvider.fwController;
     } else {
-      if (AudioService?.currentMediaItem != null) {
+      if (audioHandler.mediaItem.value != null) {
         return mediaProvider.fwController;
       } else {
         return null;

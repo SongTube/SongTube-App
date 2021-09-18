@@ -5,10 +5,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:songtube/globals/globals.dart';
 import 'package:songtube/internal/languages.dart';
 
 // Internal
 import 'package:songtube/intro/introduction.dart';
+import 'package:songtube/players/service/playerService.dart';
 import 'package:songtube/provider/downloadsProvider.dart';
 import 'package:songtube/provider/managerProvider.dart';
 import 'package:songtube/provider/configurationProvider.dart';
@@ -40,6 +42,17 @@ Future<void> main() async {
   LegacyPreferences preferences = new LegacyPreferences();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   await preferences.initPreferences();
+  // store this in a singleton
+  audioHandler = await AudioService.init(
+    builder: () => SongTubePlayerHandler(),
+    config: AudioServiceConfig(
+      androidNotificationChannelName: 'SongTube',
+      // Enable this if you want the Android service to exit the foreground state on pause.
+      //androidStopForegroundOnPause: true,
+      notificationColor: Colors.black,
+      androidNotificationIcon: 'drawable/ic_stat_music_note',
+    ),
+  );
   if (kDebugMode)
     timeDilation = 1.0;
   runApp(Main(preloadedFs: preferences, prefs: prefs));
@@ -181,7 +194,7 @@ class _MainState extends State<Main> {
             ? 'introScreen'
             : 'homeScreen',
           routes: {
-            'homeScreen':  (context) => AudioServiceWidget(child: Material(child: Lib())),
+            'homeScreen':  (context) => Material(child: Lib()),
             'introScreen': (context) => IntroScreen(),
             'reCaptcha': (context) => ReCaptchaPage(),
           },

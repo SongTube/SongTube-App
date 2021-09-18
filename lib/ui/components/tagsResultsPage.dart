@@ -270,7 +270,7 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
                                                             ),
                                                           ),
                                                           SizedBox(width: 8),
-                                                          Icon(EvaIcons.checkmarkOutline,
+                                                          Icon(EvaIcons.checkmark,
                                                             color: Theme.of(context).accentColor),
                                                         ],
                                                       ),

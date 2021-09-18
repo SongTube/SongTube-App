@@ -33,143 +33,72 @@ MediaControl stopControl = MediaControl(
   action: MediaAction.stop,
 );
 
-// NOTE: Your entrypoint MUST be a top-level function.
-void songtubePlayer() async {
-  AudioServiceBackground.run(() => SongTubePlayerService());
-}
-
-class SongTubePlayerService extends BackgroundAudioTask {
+class SongTubePlayerHandler extends BaseAudioHandler {
   
+  SongTubePlayerHandler() {
+    _player = AudioPlayer();
+    _setState();
+    playbackState.listen((value) {
+      if (value.processingState == AudioProcessingState.completed) {
+        _handlePlaybackCompleted();
+      }
+    });
+  }
+
   List<MediaItem> _queue;
-  List<MediaItem> get queue => _queue;
   AudioPlayer _player;
-  StreamSubscription<PlaybackEvent> _eventSubscription;
-  AudioProcessingState _skipState;
-  int timesPositionChanged = 0;
   int _index = 0;
-  int lastPlayerPosition = 0;
 
   // Enable Repeat & Random
   bool enableRepeat = false;
   bool enableRandom = false;
 
-  // Audio Session
-  AudioSession session;
-
   bool get hasNext => _index + 1 < _queue.length;
   bool get hasPrevious => _index > 0;
 
   @override
-  Future<void> onSkipToPrevious() async {
+  Future<void> skipToPrevious() async {
     if (_player.position < Duration(seconds: 3)) {
       _skip(-1);
     } else {
       _player.seek(Duration(seconds: 0));
     }
   }
+
   @override
-  Future<void> onSkipToNext() async {
+  Future<void> skipToNext() async {
     if (enableRandom) {
-      _index = Random().nextInt(_queue.length);
-      await AudioServiceBackground.setMediaItem(_queue[_index]);
-      await _player.setUrl(mediaItem.id);
-      onPlay();
+      _index = Random().nextInt(queue.value.length);
+      await _player.setUrl(queue.value[_index].id);
+      play();
       return;
     } 
-    _skipState = AudioProcessingState.skippingToNext;
     _skip(1);
   }
 
-  MediaItem get mediaItem => _queue[_index];
-
-  // Initialise your audio task.
   @override
-  Future<void> onStart(Map<String, dynamic> params) async {
-    _queue = <MediaItem>[];
-    session = await AudioSession.instance;
-    await session.configure(AudioSessionConfiguration.music());
-    session.interruptionEventStream.listen((event) {
-      if (event.begin) {
-        switch (event.type) {
-          case AudioInterruptionType.duck:
-            _player.setVolume(0.4);
-            break;
-          case AudioInterruptionType.pause:
-            onPause();
-            break;
-          case AudioInterruptionType.unknown:
-            onPause();
-            break;
-        }
-      } else {
-        switch (event.type) {
-          case AudioInterruptionType.duck:
-            _player.setVolume(1);
-            break;
-          case AudioInterruptionType.pause:
-            // This causes some issues, better not resume music
-            // onPlay();
-            break;
-          case AudioInterruptionType.unknown:
-            // The interruption ended but we should not resume.
-            break;
-        }
-      }
-    });
-    session.becomingNoisyEventStream.listen((_) {
-      _player.pause();
-    });
-    _player = new AudioPlayer();
-    _eventSubscription = _player.playbackEventStream.listen((event) {
-      _broadcastState();
-    });
-    // Special processing for state transitions.
-    _player.processingStateStream.listen((state) {
-      switch (state) {
-        case ProcessingState.completed:
-          _handlePlaybackCompleted();
-          break;
-        case ProcessingState.ready:
-          // If we just came from skipping between tracks, clear the skip
-          // state now that we're ready to play.
-          _skipState = null;
-          break;
-        default:
-          break;
-      }
-    });
-  }
-
-  @override
-  Future<void> onUpdateQueue(List<MediaItem> newqueue) async {
-    _queue = newqueue;
-    AudioServiceBackground.setQueue(newqueue);
-    super.onUpdateQueue(newqueue);
-  }
-
-  @override
-  Future<void> onPlayMediaItem(MediaItem item) async {
-    _index = queue.indexOf(item);
-    AudioServiceBackground.setMediaItem(queue[_index]);
-    await _player.setUrl(queue[_index].id);
-    onPlay();
+  Future<void> playMediaItem(MediaItem item) async {
+    _index = queue.value.indexOf(item);
+    mediaItem.add(item);
+    await _player.setUrl(queue.value[_index].id);
+    play();
   }
 
   Future<void> _handlePlaybackCompleted() async {
     if (enableRepeat) {
-      await _player.setUrl(mediaItem.id);
-      onPlay();
+      await _player.setUrl(mediaItem.value.id);
+      play();
       return;
     }
     if (enableRandom) {
-      _index = Random().nextInt(_queue.length);
-      await AudioServiceBackground.setMediaItem(_queue[_index]);
-      await _player.setUrl(mediaItem.id);
-      onPlay();
+      _index = Random().nextInt(queue.value.length);
+      mediaItem.add(queue.value[_index]);
+      await _player.setUrl(mediaItem.value.id);
+      play();
       return;
     } 
     if (hasNext) {
-      onSkipToNext();
+      skipToNext();
     } else {
       _player.stop();
     }
@@ -184,59 +113,43 @@ class SongTubePlayerService extends BackgroundAudioTask {
     }
     // Load next item
     _index = newPos;
-    await AudioServiceBackground.setMediaItem(_queue[_index]);
-    _skipState = offset > 0
-      ? AudioProcessingState.skippingToNext
-      : AudioProcessingState.skippingToPrevious;
-    await _player.setUrl(mediaItem.id);
-    _skipState = null;
-    onPlay();
+    mediaItem.add(queue.value[_index]);
+    _player.setUrl(mediaItem.value.id);
+    play();
   }
 
   // Handle a request to stop audio and finish the task.
   @override
-  Future<void> onStop() async {
+  Future<void> stop() async {
     await _player.pause();
     await _player.dispose();
-    _eventSubscription.cancel();
-    // It is important to wait for this state to be broadcast before we shut
-    // down the task. If we don't, the background task will be destroyed before
-    // the message gets sent to the UI.
-    await _broadcastState();
     // Shut down this task
-    await super.onStop();
+    await super.stop();
   }
 
   // Handle a request to play audio.
   @override
-  Future<void> onPlay() async {
-    await session.setActive(true);
+  Future<void> play() async {
     await _player.play();
   }
 
   @override
-  Future<void> onPlayFromMediaId(String index) async {
+  Future<void> playFromMediaId(String index, [Map<String, dynamic> map]) async {
     int ind = int.parse(index);
     _index = ind;
-    await AudioServiceBackground.setMediaItem(_queue[ind]);
-    await _player.setUrl(mediaItem.id);
-    onPlay();
+    mediaItem.add(queue.value[ind]);
+    await _player.setUrl(mediaItem.value.id);
+    play();
   }
 
   // Handle a request to pause audio.
   @override
-  Future<void> onPause() async {
+  Future<void> pause() async {
     await _player.pause();
   }
 
-  // Handle a request to seek to a position.
   @override
-  Future<void> onSeekTo(Duration position) async {
-    _player.seek(position);
-  }
-
-  @override
-  Future<dynamic> onCustomAction(String action, dynamic object) async {
+  Future<dynamic> customAction(String action, [Map<String, dynamic> object]) async {
     if (action == "enableRepeat") {
       enableRepeat = !enableRepeat;
       return enableRepeat;
@@ -268,31 +181,51 @@ class SongTubePlayerService extends BackgroundAudioTask {
   }
 
   /// Broadcasts the current state to all clients.
-  Future<void> _broadcastState() async {
-    await AudioServiceBackground.setState(
-      controls: getControls(),
-      systemActions: [
-        MediaAction.seekTo,
+  Future<void> _setState() async {
+    playbackState.add(PlaybackState(
+      // Which buttons should appear in the notification now
+      controls: [
+        MediaControl.skipToPrevious,
+        MediaControl.pause,
+        MediaControl.stop,
+        MediaControl.skipToNext,
+      ],
+      // Which other actions should be enabled in the notification
+      systemActions: const {
+        MediaAction.seek,
         MediaAction.seekForward,
         MediaAction.seekBackward,
-      ],
+      },
+      // Which controls to show in Android's compact view.
+      androidCompactActionIndices: const [0, 1, 3],
+      // Whether audio is ready, buffering, ...
       processingState: _getProcessingState(),
+      // Whether audio is playing
       playing: _player.playing,
-      position: _player.position,
+      // The current position as of this update. You should not broadcast
+      // position changes continuously because listeners will be able to
+      // project the current position after any elapsed time based on the
+      // current speed and whether audio is playing and ready. Instead, only
+      // broadcast position updates when they are different from expected (e.g.
+      // buffering, or seeking).
+      updatePosition: _player.position,
+      // The current buffered position as of this update
       bufferedPosition: _player.bufferedPosition,
-      speed: _player.speed,
-    );
+      // The current speed
+      speed: 1.0,
+      // The current queue position
+      queueIndex: _player.currentIndex,
+    ));
   }
 
   /// Maps just_audio's processing state into into audio_service's playing
   /// state. If we are in the middle of a skip, we use [_skipState] instead.
   AudioProcessingState _getProcessingState() {
-    if (_skipState != null) return _skipState;
     switch (_player.processingState) {
       case ProcessingState.idle:
-        return AudioProcessingState.stopped;
+        return AudioProcessingState.idle;
       case ProcessingState.loading:
-        return AudioProcessingState.connecting;
+        return AudioProcessingState.loading;
       case ProcessingState.buffering:
         return AudioProcessingState.buffering;
       case ProcessingState.ready:
