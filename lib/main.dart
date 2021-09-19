@@ -40,9 +40,14 @@ Future<void> main() async {
   LegacyPreferences preferences = new LegacyPreferences();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   await preferences.initPreferences();
+  final cachedSongs = await preferences.getCachedSongs();
   if (kDebugMode)
     timeDilation = 1.0;
-  runApp(Main(preloadedFs: preferences, prefs: prefs));
+  runApp(Main(
+    preloadedFs: preferences,
+    prefs: prefs,
+    cachedSongs: cachedSongs,
+  ));
   /* if (dsn.isNotEmpty) {
     runZonedGuarded(() => runApp(Main(preloadedFs: preferences)),
       (error, stackTrace) async {
@@ -75,9 +80,11 @@ class Main extends StatefulWidget {
 
   final LegacyPreferences preloadedFs;
   final SharedPreferences prefs;
+  final List<MediaItem> cachedSongs;
   Main({
     @required this.preloadedFs,
-    @required this.prefs
+    @required this.prefs,
+    @required this.cachedSongs
   });
 
   @override
@@ -118,7 +125,9 @@ class _MainState extends State<Main> {
           create: (context) => DownloadsProvider()
         ),
         ChangeNotifierProvider<MediaProvider>(
-          create: (context) => MediaProvider()
+          create: (context) => MediaProvider(
+            cachedSongs: widget.cachedSongs
+          )
         ),
         ChangeNotifierProvider<PreferencesProvider>(
           create: (context) => PreferencesProvider(widget.prefs),

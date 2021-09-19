@@ -12,6 +12,7 @@ class MediaLoadingWidget extends StatelessWidget {
         children: [
           CircularProgressIndicator(
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            valueColor: AlwaysStoppedAnimation(Theme.of(context).accentColor),
           ),
           Container(
             margin: EdgeInsets.only(top: 16),

@@ -32,9 +32,14 @@ import 'package:string_validator/string_validator.dart';
 
 class MediaProvider extends ChangeNotifier {
 
-  MediaProvider() {
+  MediaProvider({
+    List<MediaItem> cachedSongs
+  }) {
     audioQuery        = FlutterAudioQuery();
     listMediaItems    = <MediaItem>[];
+    if (cachedSongs.isNotEmpty) {
+      listMediaItems.addAll(cachedSongs);
+    }
     listVideos        = <VideoFile>[];
     listFolders       = <FolderItem>[];
     storagePermission = true;
@@ -215,41 +220,44 @@ class MediaProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void loadSongList() async {
+  Future<List<MediaItem>> loadSongList() async {
     var storageStatus = await Permission.storage.status;
     if (storageStatus != PermissionStatus.granted) {
       storagePermission = false;
-      return;
+      return listMediaItems;
     }
     List<SongInfo> songInfoList = await audioQuery.getSongs();
     for (SongInfo song in songInfoList) {
-      File artworkFile = await FFmpegExtractor.getAudioThumbnail(
-        audioFile: song.filePath,
-        audioId: song.id
-      );
-      String genre = await FFmpegExtractor.getAudioGenre(song.filePath);
-      // Avoid this Method from stopping this function on
-      // exception (Most probably because a corrupted audio)
-      try {
-        listMediaItems.add(
-          MediaItem(
-            id:       song.filePath,
-            album:    song.album,
-            title:    song.title,
-            artist:   song.artist,
-            genre:    genre ?? "unknown",
-            duration: Duration(milliseconds: int.parse(song.duration)),
-            artUri:   Uri.parse("file://${artworkFile.path}"),
-            extras:   {
-              "albumId": song.id,
-              "artwork": artworkFile.path
-            }
-          )
+      if (!(listMediaItems.any((element) => element.id == song.filePath))) {
+        File artworkFile = await FFmpegExtractor.getAudioThumbnail(
+          audioFile: song.filePath,
+          audioId: song.id
         );
-      } catch (_) {}
+        String genre = await FFmpegExtractor.getAudioGenre(song.filePath);
+        // Avoid this Method from stopping this function on
+        // exception (Most probably because a corrupted audio)
+        try {
+          listMediaItems.add(
+            MediaItem(
+              id:       song.filePath,
+              album:    song.album,
+              title:    song.title,
+              artist:   song.artist,
+              genre:    genre ?? "unknown",
+              duration: Duration(milliseconds: int.parse(song.duration)),
+              artUri:   Uri.parse("file://${artworkFile.path}"),
+              extras:   {
+                "albumId": song.id,
+                "artwork": artworkFile.path
+              }
+            )
+          );
+        } catch (_) {}
+      }
     }
     loadingMusic = false;
     notifyListeners();
+    return listMediaItems;
   }
 
   // Load list of Videos from device

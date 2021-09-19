@@ -42,16 +42,16 @@ class MediaListBase extends StatelessWidget {
           });
         }
       );
-    } else if (isLoading) {
+    } else if (!isEmpty) {
+      return child;
+    } else if (isLoading) {  
       return MediaLoadingWidget();
-    } else if (!isLoading && isEmpty) {
+    } else {
       if (listType == MediaListBaseType.Downloads) {
         return MediaDownloadsEmpty();
       } else {
         return PlaylistEmptyWidget();
       }
-    } else {
-      return child;
     }
   }
 

@@ -100,7 +100,9 @@ class _LibState extends State<Lib> {
         return;
       })
     );
-    Provider.of<MediaProvider>(context, listen: false).loadSongList();
+    Provider.of<MediaProvider>(context, listen: false).loadSongList().then((value) {
+      Provider.of<ConfigurationProvider>(context, listen: false).preferences.saveCachedSongs(value);
+    });
     Provider.of<MediaProvider>(context, listen: false).loadVideoList();
     // Disclaimer
     WidgetsBinding.instance.addPostFrameCallback((_) async {

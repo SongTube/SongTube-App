@@ -1,7 +1,10 @@
 // Dart
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
 // Flutter
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 
 // Packages
@@ -121,11 +124,11 @@ class LegacyPreferences {
   }
 
   void saveAudioDownloadPath(String path) {
-    prefs.setString(audioDownloadPath, path);
+    prefs.setString(audioDownloadPath, path ?? '');
   }
 
   void saveVideoDownloadPath(String path) {
-    prefs.setString(videoDownloadPath, path);
+    prefs.setString(videoDownloadPath, path ?? '');
   }
 
   bool getUseYoutubeWebview() {
@@ -200,4 +203,60 @@ class LegacyPreferences {
   void saveShowDownloadFixDialog(bool value) {
     prefs.setBool(fixStatus, value);
   }
+
+  // Set/Get cached device songs
+  Future<List<MediaItem>> getCachedSongs() async {
+    final songs = <MediaItem>[];
+    final cached = prefs.getString('cachedSongs') ?? '';
+    if (cached.isNotEmpty) {
+      final map = jsonDecode(cached);
+      for (final song in map) {
+        if (await File(song['id']).exists()) {
+          songs.add(MediaItem(
+            id: song['id'],
+            title: song['title'],
+            album: song['album'],
+            artist: song['artist'],
+            genre: song['genre'],
+            artUri: Uri.parse(song['artUri']),
+            duration: Duration(seconds: int.parse(song['duration'])),
+            extras: {
+              "downloadType": song['extras']['downloadType'],
+              "artwork": song['extras']['artwork'],
+            }
+          ));
+        }
+      }
+    }
+    return songs;
+  }
+  void saveCachedSongs(List<MediaItem> list) {
+    final songs = List.generate(list.length, (index) {
+      if (File(list[index].id).existsSync()) {
+        return list[index];
+      }
+    });
+    if (songs.isEmpty) {
+      prefs.setString('cachedSongs', '');
+    } else {
+      final map = List.generate(songs.length, (index) {
+        final song = songs[index];
+        return {
+          'id': song.id,
+          'album': song.album,
+          'title': song.title,
+          'artist': song.artist,
+          'genre': song.genre,
+          'duration': song.duration.inSeconds.toString(),
+          'artUri': song.artUri.toString(),
+          'extras': {
+            'downloadType': song.extras['downloadType'],
+            'artwork': song.extras['artwork']
+          }
+        };
+      });
+      prefs.setString('cachedSongs', jsonEncode(map));
+    }
+  }
+
 }

@@ -22,11 +22,11 @@ class ConfigurationProvider extends ChangeNotifier {
 
   void initProvider() {
     loadSavedData();
-    if (_audioDownloadPath == null)
+    if (_audioDownloadPath.isEmpty)
       ExtStorage.getExternalStorageDirectory().then((value) {
         _audioDownloadPath = value + "/SongTube";
       });
-    if (_videoDownloadPath == null)
+    if (_videoDownloadPath.isEmpty)
       ExtStorage.getExternalStorageDirectory().then((value) {
         _videoDownloadPath = value + "/SongTube";
       });
@@ -161,13 +161,13 @@ class ConfigurationProvider extends ChangeNotifier {
 
   // Download paths
   set audioDownloadPath(String path) {
-    _audioDownloadPath = path;
-    preferences.saveAudioDownloadPath(path);
+    _audioDownloadPath = path ?? '';
+    preferences.saveAudioDownloadPath(path?? '');
     notifyListeners();
   }
   set videoDownloadPath(String path) {
-    _videoDownloadPath = path;
-    preferences.saveVideoDownloadPath(path);
+    _videoDownloadPath = path ?? '';
+    preferences.saveVideoDownloadPath(path ?? '');
     notifyListeners();
   }
 

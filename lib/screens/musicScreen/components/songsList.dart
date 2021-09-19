@@ -38,6 +38,8 @@ class SongsListView extends StatelessWidget {
         MediaItem song = songs[index];
         if (searchQuery == "" || getSearchQueryMatch(song)) {
           return ListTile(
+            tileColor: AudioService.currentMediaItem == song
+              ? Theme.of(context).accentColor.withOpacity(0.08) : null,
             title: Text(
               song.title,
               maxLines: 1,
