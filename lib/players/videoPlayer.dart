@@ -42,7 +42,7 @@ class _AppVideoPlayerState extends State<AppVideoPlayer> {
   void initState() {
     super.initState();
     _controller = VideoPlayerController.file(
-        File(widget.video.path))
+        video: File(widget.video.path))
       ..initialize().then((_) {
         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
         if (_controller.value.duration < Duration(seconds: 15)) {

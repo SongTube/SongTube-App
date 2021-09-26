@@ -29,7 +29,11 @@ class CollapsedPanel extends StatelessWidget {
       height: kBottomNavigationBarHeight * 1.15,
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(10)
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(10),
+          topLeft: Radius.circular(10)
+
+        )
       ),
       child: Row(
         children: [

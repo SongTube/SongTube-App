@@ -136,7 +136,8 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
       currentQuality = widget.streams[indexToPlay].resolution.split("p").first;
     }
     _controller = VideoPlayerController.network(
-      widget.streams[indexToPlay].url, audioDataSource: widget.streams[indexToPlay]
+      videoDataSource: widget.streams[indexToPlay].url,
+      audioDataSource: widget.streams[indexToPlay]
         is VideoOnlyStream ? widget.audioStream.url : null,
       formatHint: VideoFormat.other
     )..initialize().then((value) {
@@ -586,7 +587,7 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
               onTap: () {
                 int index = widget.streams.indexWhere((element) =>
                   element.formatSuffix + " • " + element.resolution == quality);
-                _controller.changeVideoUrl(widget.streams[index].url);
+                _controller.setVideoUrl(widget.streams[index].url);
                 widget.onQualityChanged(quality.split("p").first);
                 setState(() => currentQuality = quality);
                 setState(() => showStreamQualityMenu = false);

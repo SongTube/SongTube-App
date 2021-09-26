@@ -50,10 +50,7 @@ class FloatingWidgetConfig {
     this.maxHeight,
     this.minHeight = kToolbarHeight * 1.15,
     this.isPanelVisible = true,
-    this.margin = const EdgeInsets.only(
-      left: 12, right: 12,
-      bottom: 12
-    ),
+    this.margin = EdgeInsets.zero,
     this.padding
   });
 
@@ -185,12 +182,14 @@ class _FancyScaffoldState extends State<FancyScaffold> with TickerProviderStateM
                         bottomNavigationBar: widget.bottomNavigationBar != null ? Container(
                           width: double.infinity,
                           color: Colors.transparent,
-                          padding: EdgeInsets.only(top: 16 * (1 - _navigationBarAnimationController.value)),
                           height: (kBottomNavigationBarHeight) *
                             _navigationBarAnimationController.value,
                           child: SingleChildScrollView(
                             physics: NeverScrollableScrollPhysics(),
-                            child: widget.bottomNavigationBar
+                            child: Opacity(
+                              opacity: (_navigationBarAnimationController.value - (1 - _navigationBarAnimationController.value)) > 0
+                                ? (_navigationBarAnimationController.value - (1 - _navigationBarAnimationController.value)) : 0,
+                              child: widget.bottomNavigationBar)
                           ),
                         ) : null,
                       ),
@@ -275,7 +274,10 @@ class _FancyScaffoldState extends State<FancyScaffold> with TickerProviderStateM
               ],
               borderRadius: _floatingWidgetAnimationController.value == 1
                 ? BorderRadius.zero
-                : BorderRadius.circular(10),
+                : BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10),
+                  ),
               color: Colors.transparent
             ),
             child: child 
@@ -290,7 +292,10 @@ class _FancyScaffoldState extends State<FancyScaffold> with TickerProviderStateM
                 return ClipRRect(
                   borderRadius: _floatingWidgetAnimationController.value == 1
                     ? BorderRadius.zero
-                    : BorderRadius.circular(10),
+                    : BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10),
+                      ),
                   child: Container(
                     height: (widget.floatingWidgetConfig.maxHeight *
                       _floatingWidgetAnimationController.value) +
@@ -310,7 +315,8 @@ class _FancyScaffoldState extends State<FancyScaffold> with TickerProviderStateM
               animation: _floatingWidgetAnimationController,
               builder: (context, child) {
                 return Opacity(
-                  opacity: (1 - _floatingWidgetAnimationController.value),
+                  opacity: (( 1 - _floatingWidgetAnimationController.value) - _floatingWidgetAnimationController.value) > 0
+                    ? (( 1 - _floatingWidgetAnimationController.value) - _floatingWidgetAnimationController.value) : 0,
                   child: _floatingWidgetAnimationController.value == 1
                     ? Container()
                     : child,
