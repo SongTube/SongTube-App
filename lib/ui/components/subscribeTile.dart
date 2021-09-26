@@ -64,7 +64,7 @@ class _ChannelSubscribeComponentState extends State<ChannelSubscribeComponent> w
           },
           borderRadius: BorderRadius.circular(10),
           child: Padding(
-            padding: EdgeInsets.only(top: 12, bottom: 12, left: 12),
+            padding: EdgeInsets.only(top: 12, bottom: 12),
             child: Ink(
               color: Colors.transparent,
               child: Text(
