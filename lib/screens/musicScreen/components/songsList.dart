@@ -23,22 +23,27 @@ class SongsListView extends StatelessWidget {
   final List<MediaItem> songs;
   final bool hasDownloadType;
   final String searchQuery;
+  final bool shrinkWrap;
   SongsListView({
     @required this.songs,
     this.hasDownloadType = false,
-    this.searchQuery = ""
+    this.searchQuery = "",
+    this.shrinkWrap = false,
   });
   @override
   Widget build(BuildContext context) {
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
+    
     return ListView.builder(
-      physics: AlwaysScrollableScrollPhysics(),
+      shrinkWrap: shrinkWrap,
+      physics: shrinkWrap ? NeverScrollableScrollPhysics() : AlwaysScrollableScrollPhysics(),
       itemCount: songs.length,
       itemBuilder: (context, index) {
         MediaItem song = songs[index];
+        bool selected = AudioService.currentMediaItem == song;
         if (searchQuery == "" || getSearchQueryMatch(song)) {
           return ListTile(
-            tileColor: AudioService.currentMediaItem == song
+            tileColor: selected
               ? Theme.of(context).accentColor.withOpacity(0.08) : null,
             title: Text(
               song.title,
@@ -69,7 +74,7 @@ class SongsListView extends StatelessWidget {
                   margin: EdgeInsets.only(right: 16),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: Colors.black12.withOpacity(0.04)
+                    color: Colors.black12.withOpacity(0.04),
                   ),
                   child: Icon(
                     song.extras["downloadType"] == "Audio"
@@ -81,11 +86,23 @@ class SongsListView extends StatelessWidget {
                 ),
                 Hero(
                   tag: song.title,
-                  child: Container(
+                  child: AnimatedContainer(
+                    duration: Duration(milliseconds: 300),
                     height: 50,
                     width: 50,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        selected
+                          ? BoxShadow(
+                              color: Theme.of(context).accentColor.withOpacity(0.4),
+                              blurRadius: 8
+                            )
+                          : BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              blurRadius: 8
+                            )
+                        ],
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
