@@ -50,16 +50,11 @@ class _MusicScreenTypeExpandableState extends State<MusicScreenTypeExpandable> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
                     boxShadow: [
-                      selected
-                        ? BoxShadow(
-                            color: Theme.of(context).accentColor.withOpacity(0.4),
-                            blurRadius: 8
-                          )
-                        : BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          blurRadius: 8,
-                          offset: Offset(0, 4)
-                        )
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 8,
+                        offset: Offset(0, 4)
+                      )
                     ]
                   ),
                   child: ClipRRect(
