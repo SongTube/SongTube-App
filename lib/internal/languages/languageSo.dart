@@ -32,7 +32,7 @@ class LanguageSo extends Languages {
   @override
   String get labelHome => "Bogga Hore";
   @override
-  String get labelDownloads => "Soodajinta";
+  String get labelDownloads => "Dajinta";
   @override
   String get labelMedia => "Gudaha";
   @override
@@ -44,9 +44,9 @@ class LanguageSo extends Languages {
   @override
   String get labelQuickSearch => "Raadin...";
   @override
-  String get labelTagsEditor => "Shaanbad\nTifatire";
+  String get labelTagsEditor => "Shaambad\nTifatire";
   @override
-  String get labelEditArtwork => "Waxkabadal\nAFarshaxanka";
+  String get labelEditArtwork => "Waxkabaddal\nAFarshaxanka";
   @override
   String get labelDownloadAll => "Wada Daji";
   @override 
@@ -56,7 +56,7 @@ class LanguageSo extends Languages {
   @override
   String get labelTrending => "Shiddan";
   @override
-  String get labelFavorites => "Lajecelyahay";
+  String get labelFavorites => "Laga helay";
   @override
   String get labelWatchLater => "Hadhow Daawo";
 
@@ -64,11 +64,11 @@ class LanguageSo extends Languages {
   @override
   String get labelCopyLink => "Koobiyee Tixraaca";
   @override
-  String get labelAddToFavorites => "Ku dar Lajecelyahay";
+  String get labelAddToFavorites => "Ku dar Laga helay";
   @override
   String get labelAddToWatchLater => "Ku dar Hadhow Daawo";
   @override
-  String get labelAddToPlaylist => "Добавить в плейлист";
+  String get labelAddToPlaylist => "Ku dar xul";
 
   // Downloads Screen
   @override
@@ -76,7 +76,7 @@ class LanguageSo extends Languages {
   @override
   String get labelDownloading => "Dajinaya";
   @override
-  String get labelConverting => "Badalaya";
+  String get labelConverting => "Baddalaya";
   @override
   String get labelCancelled => "Lajoojiyay";
   @override
@@ -90,7 +90,7 @@ class LanguageSo extends Languages {
   @override
   String get labelClearingExistingMetadata => "Nadiifinaya Xogihii Yaryaraa ee horay ujiray...";
   @override
-  String get labelWrittingTagsAndArtwork => "Kudaraya Shaambadaha & Farshaxanka...";
+  String get labelWrittingTagsAndArtwork => "Ku daraya Shaambadaha & Farshaxanka...";
   @override
   String get labelSavingFile => "Kaydinaya...";
   @override
@@ -122,9 +122,9 @@ class LanguageSo extends Languages {
   @override
   String get labelVolume => "Codka";
   @override
-  String get labelBassGain => "Kudar Bass";
+  String get labelBassGain => "Ku dar Bass";
   @override
-  String get labelTrebleGain => "Kudar Dheeraynta";
+  String get labelTrebleGain => "Ku dar Dheeraynta";
   @override
   String get labelSelectVideo => "Dooro Muuqaalka";
   @override
@@ -141,7 +141,7 @@ class LanguageSo extends Languages {
   String get labelNoMediaYet => "Meel Madhan";
   @override
   String get labelNoMediaYetJustification => "Waxa gudaha aalada kuugu Jiroo dhan" +
-    "halkan ayaad ka arki";
+     "halkan ayaad ka arki";
   @override
   String get labelSearchMedia => "Raadi...";
   @override
@@ -152,7 +152,7 @@ class LanguageSo extends Languages {
   @override
   String get labelGettingYourMedia => "Raadinaya gudaha aalada waxa kuugujira...";
   @override
-  String get labelEditTags => "Waxkabadal Shaambadaha";
+  String get labelEditTags => "Waxkabaddal Shaambadaha";
 
   // Navigate Screen
   @override
@@ -189,12 +189,12 @@ class LanguageSo extends Languages {
   @override
   String get labelAccentColorJustification => "Nashqadee midabka shaashada";
   @override
-  String get labelAudioFolder => "Galka Dhagaysiga";
+  String get labelAudioFolder => "Khaanada Dhagaysiga";
   @override
   String get labelAudioFolderJustification => "U fadhiisi galka" +
     "Dajinta dhagaysiga";
   @override
-  String get labelVideoFolder => "Galka Muuqaalka";
+  String get labelVideoFolder => "Khaanada Muuqaalka";
   @override
   String get labelVideoFolderJustification => "U fadhiisi galka" +
     "Dajinta muuqaalka";
@@ -265,9 +265,9 @@ class LanguageSo extends Languages {
   @override
   String get labelArtworkRoundedCorners => "Farshaxanka Geesihiisa Qalooci";
   @override
-  String get labelPlayingFrom => "Kadaaraya";
+  String get labelPlayingFrom => "Ka daarraya";
   @override
-  String get labelBlurBackground => "Xaga Dambe shucaac gali";
+  String get labelBlurBackground => "Gadaal shucaac gali";
 
   // Video Page
   @override
@@ -285,10 +285,10 @@ class LanguageSo extends Languages {
   String get labelNotSpecified => "Lama Cayimin";
   @override
   String get labelPerformAutomaticTagging => 
-    "Samee Shaambadayn isutalisa";
+    "Samee shaambadayn isutalisa";
   @override
   String get labelSelectTagsfromMusicBrainz => 
-    "Shaambadaha kasoo dooro MusicBrainz";
+    "Shaambadaha MusicBrainz";
   @override
   String get labelSelectArtworkFromDevice =>
     "Farshaxanka Aalada kasoo dooro";
@@ -337,7 +337,7 @@ class LanguageSo extends Languages {
   @override
   String get labelAccess => "Fasaxa";
   @override
-  String get labelEmpty => "Madhan";
+  String get labelEmpty => "madhan";
   @override
   String get labelCalculating => "Xisaabinaya";
   @override
@@ -357,7 +357,7 @@ class LanguageSo extends Languages {
   @override
   String get labelCreate => "Abuur";
   @override
-  String get labelPlaylists => "Liiska Ciyaarta";
+  String get labelPlaylists => "Xulalka";
   @override
   String get labelQuality => "Tayada";
   @override
