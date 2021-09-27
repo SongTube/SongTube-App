@@ -211,7 +211,6 @@ class LibraryScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (AudioService?.currentMediaItem != null || pageProvider.infoItem != null)
                 // About us
                 ListTile(
                   onTap: () {
@@ -248,35 +247,6 @@ class LibraryScreen extends StatelessWidget {
                 if (AudioService?.currentMediaItem != null || pageProvider.infoItem != null)
                 SizedBox(height: kBottomNavigationBarHeight*1.5)
               ],
-            ),
-          ),
-          if (AudioService?.currentMediaItem == null && pageProvider.infoItem == null)
-          GestureDetector(
-            onTap: () {
-              Navigator.push(context,
-                BlurPageRoute(
-                  blurStrength: Provider.of<PreferencesProvider>
-                    (context, listen: false).enableBlurUI ? 20 : 0,
-                  builder: (_) => 
-                  AboutPage()));
-            },
-            child: Container(
-              height: 50,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: Theme.of(context).brightness == Brightness.light
-                  ? Theme.of(context).accentColor : Theme.of(context).accentColor
-                  .withOpacity(0.4)
-              ),
-              child: Text(
-                "About  •  Contact us",
-                style: TextStyle(
-                  fontSize: 15,
-                  fontFamily: 'Product Sans',
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white
-                ),
-              ),
             ),
           ),
         ],
