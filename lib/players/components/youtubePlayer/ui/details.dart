@@ -48,7 +48,7 @@ class VideoDetails extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(right: 16, bottom: 8),
                       child: Text(
-                        views + " • " + date,
+                        (views.contains('-1') ? "" : (views + " • ")) + date,
                         style: TextStyle(
                           color: Theme.of(context).textTheme.bodyText1.color
                             .withOpacity(0.8),
