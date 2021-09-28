@@ -1,22 +1,24 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:newpipeextractor_dart/models/infoItems/video.dart';
 
 class LocalPlaylist {
 
+  String id;
   String name;
   List<MediaItem> songs;
-  bool favorited;
 
   LocalPlaylist({
+    this.id,
     this.name,
     this.songs,
-    this.favorited
   });
 
   Map<dynamic, dynamic> toMap() {
     return {
+      'id': id,
       'name': name,
       'songs': songs.map((e) {
           return {
@@ -26,17 +28,17 @@ class LocalPlaylist {
             'artist': e.artist,
             'genre': e.genre,
             'duration': e.duration.inSeconds.toString(),
-            'artUri': e.artUri,
+            'artUri': e.artUri.toString(),
             "artwork": e.extras['artwork'],
             "albumId": e.extras["albumId"]
           };
         }).toList(),
-      'favorited': favorited.toString()
     };
   }
 
   static LocalPlaylist fromMap(Map<dynamic, dynamic> map) {
     return LocalPlaylist(
+      id: map['id'],
       name: map['name'],
       songs: List.generate(map['songs'].length, (index) {
         Map<dynamic, dynamic> song = map['songs'][index];
@@ -44,17 +46,16 @@ class LocalPlaylist {
           id: song['id'],
           title: song['title'],
           album: song['album'],
-          artist: song['artists'],
+          artist: song['artist'],
           genre: song['genre'],
           duration: Duration(seconds: int.parse(song['duration'])),
-          artUri: song['artUri'],
+          artUri: Uri.parse(song['artUri']),
           extras: {
             'artwork': song['artwork'],
             'albumId': song['albumId']
           }
         );
       }),
-      favorited: map['favorited'] == "true" ? true : false
     );
   }
 
@@ -66,11 +67,12 @@ class LocalPlaylist {
   }
 
   static List<LocalPlaylist> fromJsonList(String json) {
-    if (json == "") return [];
+    if (json == null || json == "") return [];
     var map = jsonDecode(json);
     return List.generate(map.length, (index) {
       Map<dynamic, dynamic> playlist = map[index];
       return LocalPlaylist(
+        id: playlist['id'],
         name: playlist['name'],
         songs: List.generate(playlist['songs'].length, (index) {
           Map<dynamic, dynamic> song = playlist['songs'][index];
@@ -78,17 +80,16 @@ class LocalPlaylist {
             id: song['id'],
             title: song['title'],
             album: song['album'],
-            artist: song['artists'],
+            artist: song['artist'],
             genre: song['genre'],
             duration: Duration(seconds: int.parse(song['duration'])),
-            artUri: song['artUri'],
+            artUri: Uri.parse(song['artUri']),
             extras: {
               'artwork': song['artwork'],
               'albumId': song['albumId']
             }
           );
         }),
-        favorited: playlist['favorited'] == "true" ? true : false
       );
     });
   }

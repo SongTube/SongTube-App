@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/cupertino.dart';
@@ -305,6 +306,58 @@ class PreferencesProvider extends ChangeNotifier {
   set autocorrectSearchBar(bool value) {
     prefs.setBool('autocorrectSearchBar', value);
     notifyListeners();
+  }
+
+  // Retrieve/Set Song Playlists
+  List<LocalPlaylist> get localPlaylists {
+    String json = prefs.getString('localPlaylists');
+    return LocalPlaylist.fromJsonList(json);
+  }
+  set localPlaylists(List<LocalPlaylist> playlists) {
+    prefs.setString('localPlaylists', LocalPlaylist.listToJson(playlists));
+    notifyListeners();
+  }
+  // -----------------------
+  // Manage Local Playlists
+  // -----------------------
+  //
+  // Create Playlist
+  void createLocalPlaylist(String name, List<MediaItem> songs) {
+    final list = List<LocalPlaylist>.from(localPlaylists);
+    list.add(LocalPlaylist(
+      id: Random().nextInt(999999).toString(),
+      name: name,
+      songs: songs
+    ));
+    localPlaylists = list;
+  }
+  // Delete Playlist
+  void deleteLocalPlaylist(String id) {
+    if (localPlaylists.isNotEmpty) {
+      final list = List<LocalPlaylist>.from(localPlaylists);
+      list.removeWhere((element) => element.id == id);
+      localPlaylists = list;
+    }
+  }
+  // Delete Song from Playlist
+  void localPlaylistDeleteSong(String id, MediaItem song) {
+    if (localPlaylists.isNotEmpty) {
+      final list = List<LocalPlaylist>.from(localPlaylists);
+      final index = list.indexWhere((element) => element.id == id);
+      if (list[index].songs.any((element) => element.id == song.id)) {
+        list[index].songs.removeWhere((element) => element.id == song.id);
+      }
+      localPlaylists = list;
+    }
+  }
+  // Add song to Playlist
+  void localPlaylistAddSong(String id, MediaItem song) {
+    if (localPlaylists.isNotEmpty) {
+      final list = List<LocalPlaylist>.from(localPlaylists);
+      final index = list.indexWhere((element) => element.id == id);
+      list[index].songs.add(song);
+      localPlaylists = list;
+    }
   }
 
 }

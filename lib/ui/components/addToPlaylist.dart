@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/models/playlist.dart';
 import 'package:songtube/provider/preferencesProvider.dart';
+import 'package:songtube/ui/sheets/createPlaylist.dart';
 
 class AddStreamToPlaylistSheet extends StatefulWidget {
   final StreamInfoItem stream;
@@ -146,10 +147,17 @@ class _AddStreamToPlaylistSheetState extends State<AddStreamToPlaylistSheet> wit
               ),
               GestureDetector(
                 onTap: () async {
-                  String name = await showDialog(
+                  String name = await showModalBottomSheet(
+                    isScrollControlled: true,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(15),
+                        topRight: Radius.circular(15)
+                      )
+                    ),
                     context: context,
                     builder: (context) {
-                      return CreatePlaylistDialog();
+                      return CreatePlaylistSheet();
                     }
                   );
                   if (name != null)
@@ -228,90 +236,6 @@ class _AddStreamToPlaylistSheetState extends State<AddStreamToPlaylistSheet> wit
         Container(
           height: MediaQuery.of(context).padding.bottom,
           color: Theme.of(context).cardColor
-        )
-      ],
-    );
-  }
-}
-
-class CreatePlaylistDialog extends StatefulWidget {
-  @override
-  _CreatePlaylistDialogState createState() => _CreatePlaylistDialogState();
-}
-
-class _CreatePlaylistDialogState extends State<CreatePlaylistDialog> {
-  TextEditingController controller = TextEditingController();
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      backgroundColor: Theme.of(context).cardColor,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10)
-      ),
-      title: Text(
-        Languages.of(context).labelCreate +
-        " " + Languages.of(context).labelPlaylist,
-        style: TextStyle(
-          color: Theme.of(context).textTheme.bodyText1.color
-        ),
-      ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).scaffoldBackgroundColor,
-              borderRadius: BorderRadius.circular(10)
-            ),
-            child: TextField(
-              style: TextStyle(
-                color: Theme.of(context).textTheme.bodyText1.color,
-                fontSize: 14
-              ),
-              controller: controller,
-              onChanged: (_) => setState(() {}),
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.all(14.0),
-                hintText: Languages.of(context).labelEditorTitle,
-                hintStyle: TextStyle(
-                  color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.4),
-                  fontSize: 14
-                ),
-                border: UnderlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(
-                    width: 0, 
-                    style: BorderStyle.none,
-                  ),
-                ),
-              ),
-            ),
-          )
-        ],
-      ),
-      actions: [
-        TextButton(
-          child: Text(
-            Languages.of(context).labelCreate,
-            style: TextStyle(
-              color: controller.text.isNotEmpty && controller.text.length > 3
-                ? Theme.of(context).accentColor
-                : Theme.of(context).textTheme.bodyText1.color 
-                    .withOpacity(0.4)
-            ),
-          ),
-          onPressed: controller.text.isNotEmpty && controller.text.length > 3
-            ? () => Navigator.pop(context, controller.text)
-            : null
-        ),
-        TextButton(
-          child: Text(
-            Languages.of(context).labelCancel,
-            style: TextStyle(
-              color: Theme.of(context).accentColor
-            ),
-          ),
-          onPressed: () => Navigator.pop(context),
         )
       ],
     );

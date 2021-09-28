@@ -28,13 +28,23 @@ class FFmpegExtractor {
       ArtworkExtractMethod.Automatic,
     bool forceExtraction = false
   }) async {
-    assert(audioFile != "" || audioFile != null);
+    assert(audioFile != "");
     String artworkDir = (await getExternalStorageDirectory()).path + "/Artworks/";
     if (!await Directory(artworkDir).exists())
       await Directory(artworkDir).create();
-    File artwork = File("$artworkDir${audioFile.split("/").last.replaceAll("/", "_")}.jpg");
+    File artwork = File("$artworkDir${audioFile != null ? audioFile.split("/").last.replaceAll("/", "_") : "default"}.jpg");
     if (await artwork.exists() && forceExtraction == false) return artwork;
     if (await artwork.exists()) await artwork.delete();
+    if (audioFile == null) {
+      var assetBytes = await rootBundle
+        .load('assets/images/artworkPlaceholder_big.png');
+      return await artwork.writeAsBytes(
+        assetBytes.buffer
+          .asUint8List(
+            assetBytes.offsetInBytes,
+            assetBytes.lengthInBytes
+      ));
+    }
     // FFmpeg Arguments
     var _argsList = [
       "-y", "-i", "$audioFile", "-an",

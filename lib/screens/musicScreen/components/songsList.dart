@@ -17,6 +17,7 @@ import 'package:songtube/ui/animations/blurPageRoute.dart';
 import 'package:songtube/ui/internal/popupMenu.dart';
 import 'package:songtube/ui/components/tagsEditorPage.dart';
 import 'package:songtube/ui/internal/snackbar.dart';
+import 'package:songtube/ui/sheets/localPlaylistSheet.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class SongsListView extends StatelessWidget {
@@ -24,11 +25,13 @@ class SongsListView extends StatelessWidget {
   final bool hasDownloadType;
   final String searchQuery;
   final bool shrinkWrap;
+  final bool tintNowPlaying;
   SongsListView({
     @required this.songs,
     this.hasDownloadType = false,
     this.searchQuery = "",
     this.shrinkWrap = false,
+    this.tintNowPlaying = true,
   });
   @override
   Widget build(BuildContext context) {
@@ -43,7 +46,7 @@ class SongsListView extends StatelessWidget {
         bool selected = AudioService.currentMediaItem == song;
         if (searchQuery == "" || getSearchQueryMatch(song)) {
           return ListTile(
-            tileColor: selected
+            tileColor: selected && tintNowPlaying
               ? Theme.of(context).accentColor.withOpacity(0.08) : null,
             title: Text(
               song.title,
@@ -116,6 +119,10 @@ class SongsListView extends StatelessWidget {
               borderRadius: 10,
               items: [
                 FlexiblePopupItem(
+                  title: Languages.of(context).labelAddToPlaylist,
+                  value: "Add Playlist"
+                ),
+                FlexiblePopupItem(
                   title: Languages.of(context).labelEditTags,
                   value: "Edit Tags"
                 ),
@@ -125,44 +132,58 @@ class SongsListView extends StatelessWidget {
                 )
               ],
               onItemTap: (String value) async {
-                if (value != null) {
+                if (value == "Edit Tags" || value == "Delete") {
                   if (AudioService.running && AudioService.playbackState.playing) {
                     if (AudioService.currentMediaItem.id == song.id) {
                       AudioService.stop();
                     }
                   }
-                  switch (value) {
-                    case "Delete":
-                      mediaProvider.deleteSong(song);
-                      break;
-                    case "Edit Tags":
-                      FFmpegConverter().getMediaFormat(song.id). then((format) {
-                        if (format == "m4a") {
-                          Navigator.of(context).push(
-                            BlurPageRoute(
-                              builder: (_) {
-                                return TagsEditorPage(
-                                  song: song,
-                                );
-                              },
-                              blurStrength: Provider.of<PreferencesProvider>
-                                (context, listen: false).enableBlurUI ? 20 : 0,
-                            )
-                          );
-                        } else {
-                          AppSnack.showSnackBar(
-                            icon: EvaIcons.alertCircleOutline,
-                            title: "Cannot Edit Tags",
-                            message: "Audio format not supported ($format)",
-                            context: context,
-                          );
-                        }
-                      });
-                      break;
-                    case "Apply Filters":
-                      // TODO: Allow Audio Filters application
-                      break;
-                  }
+                }
+                switch (value) {
+                  case "Add Playlist":
+                    showModalBottomSheet(
+                      context: context,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          topRight: Radius.circular(15)
+                        )
+                      ),
+                      builder: (context) {
+                        return LocalPlaylistSheet(song: song);
+                      }
+                    );
+                    break;
+                  case "Delete":
+                    mediaProvider.deleteSong(song);
+                    break;
+                  case "Edit Tags":
+                    FFmpegConverter().getMediaFormat(song.id). then((format) {
+                      if (format == "m4a") {
+                        Navigator.of(context).push(
+                          BlurPageRoute(
+                            builder: (_) {
+                              return TagsEditorPage(
+                                song: song,
+                              );
+                            },
+                            blurStrength: Provider.of<PreferencesProvider>
+                              (context, listen: false).enableBlurUI ? 20 : 0,
+                          )
+                        );
+                      } else {
+                        AppSnack.showSnackBar(
+                          icon: EvaIcons.alertCircleOutline,
+                          title: "Cannot Edit Tags",
+                          message: "Audio format not supported ($format)",
+                          context: context,
+                        );
+                      }
+                    });
+                    break;
+                  case "Apply Filters":
+                    // TODO: Allow Audio Filters application
+                    break;
                 }
               },
               child: Container(

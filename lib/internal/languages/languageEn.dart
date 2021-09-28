@@ -140,7 +140,7 @@ class LanguageEn extends Languages {
   @override
   String get labelNoMediaYet => "No Media Yet";
   @override
-  String get labelNoMediaYetJustification => "All your Media" +
+  String get labelNoMediaYetJustification => "All your Media " +
     "will be shown here";
   @override
   String get labelSearchMedia => "Search Media...";

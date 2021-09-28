@@ -4,21 +4,26 @@ import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:image_fade/image_fade.dart';
 import 'package:songtube/screens/musicScreen/components/songsList.dart';
-import 'package:songtube/ui/animations/FadeIn.dart';
+import 'package:songtube/ui/animations/fadeIn.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class MusicScreenTypeExpandable extends StatefulWidget {
   const MusicScreenTypeExpandable({
+    this.id,
     @required this.title,
     @required this.songs,
     this.description,
     this.thumbnail,
     this.lowResThumbnail,
+    this.onDeletePlaylist,
     Key key }) : super(key: key);
+  final String id;
   final String title;
   final String description;
   final String thumbnail;
   final String lowResThumbnail;
   final List<MediaItem> songs;
+  final Function() onDeletePlaylist;
 
   @override
   _MusicScreenTypeExpandableState createState() => _MusicScreenTypeExpandableState();
@@ -28,6 +33,9 @@ class _MusicScreenTypeExpandableState extends State<MusicScreenTypeExpandable> {
 
   // Indicates if this tile is selected, on selected, expand itself to show all the songs
   bool selected = false;
+
+  // Indicate if this Expandable Collection of songs is a playlist
+  bool get isPlaylist => widget.id != null;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +51,7 @@ class _MusicScreenTypeExpandableState extends State<MusicScreenTypeExpandable> {
             color: selected ? Theme.of(context).accentColor.withOpacity(0.08) : Colors.transparent,
             child: Row(
               children: [
-                if (widget.lowResThumbnail != null)
+                if (widget.lowResThumbnail != null || isPlaylist)
                 Container(
                   height: 100,
                   width: 100,
@@ -61,9 +69,15 @@ class _MusicScreenTypeExpandableState extends State<MusicScreenTypeExpandable> {
                     borderRadius: BorderRadius.circular(15),
                     child: ImageFade(
                       fadeDuration: Duration(milliseconds: 300),
-                      placeholder: Image.file(File(widget.lowResThumbnail)),
-                      image: FileImage(File(widget.thumbnail == null
-                        ? widget.lowResThumbnail : widget.thumbnail)),
+                      placeholder: !isPlaylist
+                        ? Image.file(File(widget.lowResThumbnail))
+                        : Image.memory(kTransparentImage),
+                      image: !isPlaylist
+                        ? FileImage(File(widget.thumbnail == null
+                          ? widget.lowResThumbnail : widget.thumbnail))
+                        : widget.lowResThumbnail != null
+                          ? FileImage(File(widget.lowResThumbnail))
+                          : MemoryImage(kTransparentImage),
                       fit: BoxFit.cover,
                     ),
                   )
@@ -139,6 +153,11 @@ class _MusicScreenTypeExpandableState extends State<MusicScreenTypeExpandable> {
                     ],
                   ),
                 ),
+                if (isPlaylist)
+                IconButton(
+                  onPressed: widget.onDeletePlaylist,
+                  icon: Icon(Icons.delete_outline)
+                )
               ],
             ),
           ),
@@ -150,7 +169,11 @@ class _MusicScreenTypeExpandableState extends State<MusicScreenTypeExpandable> {
           child: selected ? FadeInTransition(
             delay: Duration(milliseconds: 300),
             duration: Duration(milliseconds: 250),
-            child: SongsListView(songs: widget.songs, searchQuery: "", shrinkWrap: true),
+            child: SongsListView(
+              songs: widget.songs,
+              searchQuery: "",
+              shrinkWrap: true,
+              tintNowPlaying: false),
           ) : SizedBox()
         )
       ],

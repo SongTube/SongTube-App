@@ -10,6 +10,7 @@ import 'package:songtube/screens/musicScreen/components/mediaListBase.dart';
 import 'package:songtube/screens/musicScreen/tabs/albums.dart';
 import 'package:songtube/screens/musicScreen/tabs/artist.dart';
 import 'package:songtube/screens/musicScreen/tabs/genre.dart';
+import 'package:songtube/screens/musicScreen/tabs/playlists.dart';
 import 'package:songtube/screens/musicScreen/tabs/songs.dart';
 
 // Packages
@@ -124,13 +125,14 @@ class _MediaScreenState extends State<MediaScreen> {
       ),
       body: DefaultTabController(
         initialIndex: 0,
-        length: 4,
+        length: 5,
         child: Column(
           children: [
             Container(
               height: 40,
               color: Theme.of(context).cardColor,
               child: TabBar(
+                isScrollable: true,
                 labelStyle: TextStyle(
                   fontSize: 13,
                   fontFamily: 'Product Sans',
@@ -154,6 +156,9 @@ class _MediaScreenState extends State<MediaScreen> {
                 tabs: [
                   Tab(child: Text(
                     "Songs"
+                  )),
+                  Tab(child: Text(
+                    "Playlists"
                   )),
                   Tab(child: Text(
                     "Albums"
@@ -182,6 +187,7 @@ class _MediaScreenState extends State<MediaScreen> {
                 child: TabBarView(
                   children: [
                     MusicScreenSongsTab(songs: songs, searchQuery: searchQuery),
+                    MusicScreenPlaylistTab(),
                     MusicScreenAlbumsTab(songs: songs, searchQuery: searchQuery),
                     MusicScreenArtistTab(songs: songs, searchQuery: searchQuery),
                     MusicScreenGenreTab(songs: songs, searchQuery: searchQuery),
