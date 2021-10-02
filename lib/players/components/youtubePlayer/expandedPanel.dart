@@ -568,7 +568,6 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
     VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
     return AnimatedSize(
       duration: Duration(milliseconds: 300),
-      vsync: this,
       child: pageProvider.currentComments != null && pageProvider.currentComments.isNotEmpty
         ? InkWell(
             onTap: () {
@@ -587,67 +586,86 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                 );
               });
             },
-            child: Row(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.all(12),
-                        child: Text(
-                          "Comments",
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Theme.of(context).textTheme.bodyText1.color,
-                            fontWeight: FontWeight.w600,
-                            fontFamily: 'Product Sans'
-                          ),
+                Row(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.only(
+                        left: 12, right: 12, top: 12, bottom: 8
+                      ),
+                      child: Text(
+                        "Comments",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Theme.of(context).textTheme.bodyText1.color,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'Product Sans'
                         ),
                       ),
-                      Row(
-                        children: [
-                          SizedBox(width: 12),
-                          Container(
-                            height: 40,
-                            width: 40,
-                            margin: EdgeInsets.only(right: 8),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(100),
-                              child: FadeInImage(
-                                fadeInDuration: Duration(milliseconds: 300),
-                                placeholder: MemoryImage(kTransparentImage),
-                                image: NetworkImage(pageProvider.currentComments[0].uploaderAvatarUrl),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Text(
-                              pageProvider.currentComments[0].commentText,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Theme.of(context).iconTheme.color
-                              ),
-                            ),
-                          ),
-                        ],
+                    ),
+                    Spacer(),
+                    Icon(Icons.expand_more,
+                      color: Theme.of(context).iconTheme.color,
+                      size: 18,
+                    ),
+                    SizedBox(width: 16),
+                  ],
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(width: 12),
+                    Container(
+                      height: 30,
+                      width: 30,
+                      margin: EdgeInsets.only(right: 8),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(100),
+                        child: FadeInImage(
+                          fadeInDuration: Duration(milliseconds: 300),
+                          placeholder: MemoryImage(kTransparentImage),
+                          image: NetworkImage(pageProvider.currentComments[0].uploaderAvatarUrl),
+                          fit: BoxFit.cover,
+                        ),
                       ),
-                      SizedBox(height: 12),
-                      Divider(height: 1)
-                    ],
-                  ),
+                    ),
+                    Expanded(
+                      child: RichText(
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        text: TextSpan(
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Theme.of(context).iconTheme.color
+                          ),
+                          children: [
+                            // Author name
+                            TextSpan(
+                              text: pageProvider.currentComments.first.author + ' • ',
+                              style: TextStyle(
+                                color: Theme.of(context).textTheme.bodyText1.color,
+                                fontWeight: FontWeight.w600
+                              )
+                            ),
+                            // Author message
+                            TextSpan(
+                              text: pageProvider.currentComments.first.commentText,
+                            )
+                          ]
+                        )
+                        
+                        
+                      ),
+                    ),
+                  ],
                 ),
-                Container(
-                  padding: EdgeInsets.only(left: 12, right: 12),
-                  child: Icon(EvaIcons.arrowIosForwardOutline,
-                    color: Theme.of(context).iconTheme.color,
-                    size: 18),
-                ),
+                SizedBox(height: 12),
+                Divider(height: 1)
               ],
             ),
           )
