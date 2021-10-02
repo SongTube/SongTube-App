@@ -103,12 +103,15 @@ class _PlayerProgressBarState extends State<PlayerProgressBar> with TickerProvid
                       },
                     ),
                     handler: FlutterSliderHandler(
-                      child: Container(
-                        height: 10,
-                        width: 10,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          color: Theme.of(context).accentColor,
+                      child: ClipRRect(
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                        borderRadius: BorderRadius.circular(100),
+                        child: Container(
+                          height: 10,
+                          width: 10,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).accentColor,
+                          ),
                         ),
                       )
                     ),
