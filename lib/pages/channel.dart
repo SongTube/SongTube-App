@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_fade/image_fade.dart';
 import 'package:intl/intl.dart';
 import 'package:newpipeextractor_dart/extractors/channels.dart';
 import 'package:newpipeextractor_dart/models/channel.dart';
@@ -212,9 +213,9 @@ class _YoutubeChannelPageState extends State<YoutubeChannelPage> {
                                   width: 100,
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(100),
-                                    child: FadeInImage(
-                                      fadeInDuration: Duration(milliseconds: 300),
-                                      placeholder: MemoryImage(kTransparentImage),
+                                    child: ImageFade(
+                                      fadeDuration: Duration(milliseconds: 300),
+                                      placeholder: Image.memory(kTransparentImage),
                                       image: isURL(avatar)
                                         ? NetworkImage(avatar)
                                         : FileImage(File(avatar)),
