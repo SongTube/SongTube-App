@@ -28,7 +28,8 @@ class VideoEngagement extends StatelessWidget {
         _engagementTile(
           icon: Icon(MdiIcons.thumbUpOutline, color: Theme.of(context).iconTheme.color),
           text: Text(
-            NumberFormat.compact().format(likeCount),
+            likeCount != -1
+              ? NumberFormat.compact().format(likeCount) : 'Likes',
             style: TextStyle(
               fontSize: 10
             ),
@@ -38,7 +39,8 @@ class VideoEngagement extends StatelessWidget {
         _engagementTile(
           icon: Icon(MdiIcons.thumbDownOutline, color: Theme.of(context).iconTheme.color),
           text: Text(
-            NumberFormat.compact().format(dislikeCount),
+            dislikeCount != -1
+              ? NumberFormat.compact().format(dislikeCount) : 'Dislikes',
             style: TextStyle(
               fontSize: 10
             ),
