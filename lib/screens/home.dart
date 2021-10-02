@@ -138,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         unselectedLabelColor: Theme.of(context).textTheme.bodyText1
                           .color.withOpacity(0.4),
                         indicator: MD2Indicator(
-                          indicatorSize: MD2IndicatorSize.normal,
+                          indicatorSize: MD2IndicatorSize.tiny,
                           indicatorHeight: 4,
                           indicatorColor: Theme.of(context).accentColor,
                         ),
