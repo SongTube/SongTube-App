@@ -39,6 +39,9 @@ android {
     }
 
     defaultConfig {
+        configurations.all {
+            resolutionStrategy { force 'androidx.core:core-ktx:1.6.0' }
+        }
         applicationId "com.artxdev.songtube"
         minSdkVersion 22
         targetSdkVersion 28
