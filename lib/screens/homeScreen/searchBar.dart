@@ -158,21 +158,24 @@ class _HomePageAppBarState extends State<HomePageAppBar> with TickerProviderStat
                       );
                     }
                   ),
-                  IconButton(
-                    icon: Icon(EvaIcons.dropletOutline,
-                      color: Theme.of(context).iconTheme.color.withOpacity(0.6)),
-                    onPressed: () {
-                      showModalBottomSheet(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(15),
-                            topRight: Radius.circular(15)
-                          )
-                        ),
-                        context: context,
-                        builder: (context) => SearchFiltersSheet()
-                      );
-                    },
+                  AnimatedSwitcher(
+                    duration: Duration(milliseconds: 300),
+                    child: manager.searchBarFocusNode.hasFocus || manager.youtubeSearch != null ? IconButton(
+                      icon: Icon(EvaIcons.dropletOutline,
+                        color: Theme.of(context).iconTheme.color.withOpacity(0.6)),
+                      onPressed: () {
+                        showModalBottomSheet(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(15),
+                              topRight: Radius.circular(15)
+                            )
+                          ),
+                          context: context,
+                          builder: (context) => SearchFiltersSheet()
+                        );
+                      },
+                    ) : SizedBox(),
                   ),
                 ],
               )
