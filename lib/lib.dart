@@ -204,7 +204,7 @@ class _LibState extends State<Lib> {
 
   @override
   Widget build(BuildContext context) {
-    setSystemUiColor();
+    setSystemUiColor(context);
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
       child: _libBody()
@@ -378,53 +378,6 @@ class _LibState extends State<Lib> {
         return mediaProvider.fwController;
       } else {
         return null;
-      }
-    }
-  }
-
-  void setSystemUiColor() {
-    ConfigurationProvider config = Provider.of<ConfigurationProvider>(context, listen: false);
-    MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
-    if (!mediaProvider.fwController.isAttached) {
-      Brightness _systemBrightness = Theme.of(context).brightness;
-      Brightness _statusBarBrightness = _systemBrightness == Brightness.light
-        ? Brightness.dark
-        : Brightness.light;
-      SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(
-          statusBarColor: Colors.transparent,
-          statusBarBrightness: _statusBarBrightness,
-          statusBarIconBrightness: _statusBarBrightness,
-          systemNavigationBarColor: Theme.of(context).cardColor,
-          systemNavigationBarIconBrightness: _statusBarBrightness,
-        ),
-      );
-    } else {
-      double position = mediaProvider.fwController.panelPosition;
-      int sdkInt = config.preferences.sdkInt;
-      if (position > 0.95) {
-        SystemChrome.setSystemUIOverlayStyle(
-          SystemUiOverlayStyle(
-            statusBarIconBrightness: mediaProvider.textColor == Colors.black
-              ? Brightness.dark : Brightness.light,
-            systemNavigationBarIconBrightness: sdkInt >= 30 ? mediaProvider.textColor == Colors.black
-              ? Brightness.dark : Brightness.light : null,
-          ),
-        );
-      } else if (position < 0.95) {
-        Brightness _systemBrightness = Theme.of(context).brightness;
-        Brightness _statusBarBrightness = _systemBrightness == Brightness.light
-          ? Brightness.dark
-          : Brightness.light;
-        SystemChrome.setSystemUIOverlayStyle(
-          SystemUiOverlayStyle(
-            statusBarColor: Colors.transparent,
-            statusBarBrightness: _statusBarBrightness,
-            statusBarIconBrightness: _statusBarBrightness,
-            systemNavigationBarColor: Theme.of(context).cardColor,
-            systemNavigationBarIconBrightness: _statusBarBrightness,
-          ),
-        );
       }
     }
   }
