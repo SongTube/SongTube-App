@@ -122,9 +122,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
   @override
   Widget build(BuildContext context) {
     VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
-    if (pageProvider.currentTags == null) {
-      pageProvider.currentTags = widget.tags;
-    }
+    pageProvider.currentTags = widget.tags;
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
