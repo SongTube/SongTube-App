@@ -136,7 +136,7 @@ class _MoreDetailsSheetState extends State<MoreDetailsSheet> {
                 },
                 customRender: {
                   'a': (context, child) {
-                    String text = context.parser.htmlData.text;
+                    String text = context.tree.element.text;
                     Duration duration;
                     try {
                       duration = parseDuration(text);
@@ -146,13 +146,13 @@ class _MoreDetailsSheetState extends State<MoreDetailsSheet> {
                         if (duration != null) {
                           widget.onSegmentTap(duration.inSeconds);
                         } else {
-                          launch(context.parser.htmlData.attributes['href']);
+                          launch(context.tree.element.attributes['href']);
                         }
                       },
                       child: Container(
                         color: Colors.transparent,
                         child: Text(
-                          text,
+                          text ?? '',
                           style: TextStyle(
                             color: Theme.of(context.buildContext).accentColor,
                             fontWeight: FontWeight.w600,
@@ -162,7 +162,7 @@ class _MoreDetailsSheetState extends State<MoreDetailsSheet> {
                         ),
                       ),
                     );
-                  }
+                  },
                 }
               )
             ],
