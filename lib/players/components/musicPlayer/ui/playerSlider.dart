@@ -25,8 +25,8 @@ class PlayerSlider extends StatelessWidget {
           Stream.periodic(Duration(milliseconds: 1000)),
           (dragPosition, _) => dragPosition),
       builder: (context, snapshot) {
-        Duration position = state.currentPosition;
-        Duration duration = mediaItem?.duration;
+        Duration position = state?.currentPosition ?? Duration.zero;
+        Duration duration = mediaItem?.duration ?? Duration(seconds: 1);
         return duration != null
           ? Column(
             children: <Widget>[

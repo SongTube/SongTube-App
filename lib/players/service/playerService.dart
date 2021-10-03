@@ -56,6 +56,11 @@ class SongTubePlayerService extends BackgroundAudioTask {
   // Audio Session
   AudioSession session;
 
+  // Audio Effects
+  AndroidEqualizer equalizer = AndroidEqualizer();
+  AndroidLoudnessEnhancer loudnessEnhancer = AndroidLoudnessEnhancer();
+
+
   bool get hasNext => _index + 1 < _queue.length;
   bool get hasPrevious => _index > 0;
 
@@ -119,7 +124,8 @@ class SongTubePlayerService extends BackgroundAudioTask {
     session.becomingNoisyEventStream.listen((_) {
       _player.pause();
     });
-    _player = new AudioPlayer();
+    _player = new AudioPlayer(audioPipeline: AudioPipeline(
+      androidAudioEffects: [ equalizer, loudnessEnhancer ]));
     _eventSubscription = _player.playbackEventStream.listen((event) {
       _broadcastState();
     });
@@ -143,7 +149,7 @@ class SongTubePlayerService extends BackgroundAudioTask {
   @override
   Future<void> onUpdateQueue(List<MediaItem> newqueue) async {
     _queue = newqueue;
-    AudioServiceBackground.setQueue(newqueue);
+    await AudioServiceBackground.setQueue(newqueue);
     super.onUpdateQueue(newqueue);
   }
 
@@ -244,6 +250,52 @@ class SongTubePlayerService extends BackgroundAudioTask {
     if (action == "enableRandom") {
       enableRandom = !enableRandom;
       return enableRandom;
+    }
+    if (action == "retrieveEqualizer") {
+      final parameters = await equalizer.parameters;
+      final map = {
+        'enabled': equalizer.enabled ? 'true' : 'false',
+        'bands': List.generate(parameters.bands.length, (index) {
+          final band = parameters.bands[index];
+          return {
+            'centerFrequency': band.centerFrequency,
+            'minFreq': parameters.minDecibels,
+            'maxFreq': parameters.maxDecibels,
+            'gain': band.gain
+          };
+        })
+      };
+      return map;
+    }
+    if (action == "updateEqualizer") {
+      final enabled = object['enabled'] == 'true' ? true : false;
+      if (enabled) {
+        await equalizer.setEnabled(true);
+      } else {
+        await equalizer.setEnabled(false);
+      }
+      final bands = List.from(object['bands']);
+      final parameters = await equalizer.parameters;
+      for (int i = 0; parameters.bands.length > i; i++) {
+        final bandMap = Map<String, dynamic>.from(bands[i]);
+        parameters.bands[i].setGain(bandMap["gain"]);
+      }
+    }
+    if (action == 'retrieveLoudnessGain') {
+      return {
+        'enabled': loudnessEnhancer.enabled ? 'true' : 'false',
+        'gain': loudnessEnhancer.targetGain
+      };
+    }
+    if (action == 'updateLoudnessGain') {
+      final enabled = object['enabled'] == 'true' ? true : false;
+      if (enabled) {
+        await loudnessEnhancer.setEnabled(true);
+      } else {
+        await loudnessEnhancer.setEnabled(false);
+      }
+      final gain = object['gain'] as double;
+      loudnessEnhancer.setTargetGain(gain);
     }
     return null;
   }

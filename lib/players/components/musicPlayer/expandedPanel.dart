@@ -48,7 +48,7 @@ class ExpandedPlayer extends StatelessWidget {
           ? mediaProvider.vibrantColor == null ? Colors.white : mediaProvider.vibrantColor
           : Theme.of(context).accentColor;
         return PlayerBackground(
-          backgroundImage: File(AudioService.currentMediaItem.extras["artwork"]),
+          backgroundImage: File(AudioService.currentMediaItem?.extras["artwork"] ?? ''),
           enableBlur: prefs.enablePlayerBlurBackground,
           blurIntensity: 50,
           backdropColor: prefs.enablePlayerBlurBackground
@@ -57,7 +57,7 @@ class ExpandedPlayer extends StatelessWidget {
           backdropOpacity: 0.4,
           child: PlayerBody(
             controller: mediaProvider.fwController,
-            playingFrom: mediaItem.album,
+            playingFrom: mediaItem?.album ?? '',
             textColor: textColor,
             artworkFile: image,
             vibrantColor: vibrantColor,

@@ -188,21 +188,21 @@ class MediaProvider extends ChangeNotifier {
     showLyrics = false;
     notifyListeners();
     // Preload Previous and Next Artwork
-    List<int> indexes = [
-      // Previous
-      AudioService.queue.indexOf(AudioService.currentMediaItem)-1,
-      // Next
-      AudioService.queue.indexOf(AudioService.currentMediaItem)+1,
-    ];
-    FFmpegExtractor.getAudioArtwork(
-      audioFile: AudioService.queue[indexes[0]].id,
-      audioId: AudioService.queue[indexes[0]].extras["albumId"],
-    );
-    FFmpegExtractor.getAudioArtwork(
-      audioFile: AudioService.queue[indexes[1]].id,
-      audioId: AudioService.queue[indexes[1]].extras["albumId"],
-    );
-    
+    int currentIndex = AudioService.queue.indexOf(AudioService.currentMediaItem);
+    int previousIndex = currentIndex == 0 ? null : currentIndex-1;
+    int nextIndex = currentIndex == AudioService.queue.length-1 ? null : currentIndex+1;
+    if (previousIndex != null) {
+      await FFmpegExtractor.getAudioArtwork(
+        audioFile: AudioService.queue[previousIndex].id,
+        audioId: AudioService.queue[previousIndex].extras["albumId"],
+      );
+    }
+    if (nextIndex != null) {
+      await FFmpegExtractor.getAudioArtwork(
+        audioFile: AudioService.queue[nextIndex].id,
+        audioId: AudioService.queue[nextIndex].extras["albumId"],
+      );
+    }
     if (fwController.isAttached && fwController.isPanelOpen) {
       SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle(

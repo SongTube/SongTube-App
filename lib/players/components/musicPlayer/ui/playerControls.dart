@@ -50,7 +50,7 @@ class PlayerControls extends StatelessWidget {
               pauseDuration: Duration(seconds: 2),
               direction: Axis.horizontal,
               child: Text(
-                mediaItem.title,
+                mediaItem?.title ?? '',
                 style: TextStyle(
                   fontSize: 26,
                   fontWeight: FontWeight.w500,
@@ -67,7 +67,7 @@ class PlayerControls extends StatelessWidget {
           Container(
             margin: EdgeInsets.only(left: 20, right: 20, top: 4, bottom: 8),
             child: Text(
-              mediaItem.artist ?? "",
+              mediaItem?.artist ?? "",
               style: TextStyle(
                 color: textColor.withOpacity(0.6),
                 fontFamily: "YTSans",

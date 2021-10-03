@@ -6,6 +6,7 @@ import 'package:songtube/internal/languages.dart';
 import 'package:songtube/players/components/musicPlayer/ui/playerArtwork.dart';
 import 'package:songtube/players/components/musicPlayer/ui/playerControls.dart';
 import 'package:songtube/ui/components/fancyScaffold.dart';
+import 'package:songtube/ui/sheets/musicEqualizer.dart';
 
 class PlayerBody extends StatelessWidget {
   final File artworkFile;
@@ -75,6 +76,30 @@ class PlayerBody extends StatelessWidget {
                     ]
                   ),
                 ),
+                actions: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: IconButton(
+                      onPressed: () async {
+                        final equalizerMap = await AudioService.customAction('retrieveEqualizer');
+                        final loudnessMap = await AudioService.customAction('retrieveLoudnessGain');
+                        showModalBottomSheet(
+                          isScrollControlled: true,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(20),
+                              topLeft: Radius.circular(20)
+                            )
+                          ),
+                          context: context,
+                          builder: (context) => MusicEqualizerSheet(
+                            equalizerMap: equalizerMap, loudnessMap: loudnessMap)
+                        );
+                      },
+                      icon: Icon(Icons.equalizer_rounded, color: textColor),
+                    ),
+                  )
+                ],
               ),
               expandArtwork
                 ? Expanded(
