@@ -52,6 +52,7 @@ class StreamsLargeThumbnailView extends StatelessWidget {
           return false;
         },
         child: ListView.builder(
+          padding: EdgeInsets.only(bottom: kToolbarHeight*2),
           itemCount: infoItems.length,
           itemBuilder: (context, index) {
             dynamic infoItem = infoItems[index];

@@ -26,12 +26,14 @@ class SongsListView extends StatelessWidget {
   final String searchQuery;
   final bool shrinkWrap;
   final bool tintNowPlaying;
+  final bool addBottomPadding;
   SongsListView({
     @required this.songs,
     this.hasDownloadType = false,
     this.searchQuery = "",
     this.shrinkWrap = false,
     this.tintNowPlaying = true,
+    this.addBottomPadding = true
   });
   @override
   Widget build(BuildContext context) {
@@ -41,6 +43,7 @@ class SongsListView extends StatelessWidget {
       shrinkWrap: shrinkWrap,
       physics: shrinkWrap ? NeverScrollableScrollPhysics() : AlwaysScrollableScrollPhysics(),
       itemCount: songs.length,
+      padding: addBottomPadding ? EdgeInsets.only(bottom: kToolbarHeight*2) : null,
       itemBuilder: (context, index) {
         MediaItem song = songs[index];
         bool selected = AudioService.currentMediaItem == song;

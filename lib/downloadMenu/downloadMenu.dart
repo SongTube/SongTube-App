@@ -75,6 +75,7 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
       duration: Duration(milliseconds: 200),
       child: Container(
         margin: EdgeInsets.only(top: 50),
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.only(

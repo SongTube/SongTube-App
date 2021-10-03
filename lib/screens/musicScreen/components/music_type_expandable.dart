@@ -173,6 +173,7 @@ class _MusicScreenTypeExpandableState extends State<MusicScreenTypeExpandable> {
               songs: widget.songs,
               searchQuery: "",
               shrinkWrap: true,
+              addBottomPadding: false,
               tintNowPlaying: false),
           ) : SizedBox()
         )
