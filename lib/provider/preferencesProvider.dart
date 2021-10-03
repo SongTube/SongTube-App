@@ -168,7 +168,7 @@ class PreferencesProvider extends ChangeNotifier {
     return history;
   }
   set watchHistory(List<StreamInfoItem> history) {
-    List<Map<String, dynamic>> map =
+    List<Map<dynamic, dynamic>> map =
       history.map((e) => e.toMap()).toList();
     prefs.setString('newWatchHistory', jsonEncode(map));
     notifyListeners();
@@ -179,6 +179,14 @@ class PreferencesProvider extends ChangeNotifier {
       history.add(video);
       watchHistory = history;
     }
+  }
+  // Delete an video from Watch History
+  void deleteFromWatchHistory(StreamInfoItem item) {
+    final history = List<StreamInfoItem>.from(watchHistory);
+    if (history.any((element) => element.id == item.id)) {
+      history.removeWhere((element) => element.id == item.id);
+    }
+    watchHistory = history;
   }
   // Enable/Disable Watch History
   bool get enableWatchHistory {

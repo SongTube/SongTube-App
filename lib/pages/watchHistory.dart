@@ -43,7 +43,8 @@ class WatchHistoryPage extends StatelessWidget {
                   onTap: (stream, index) {
                     Navigator.of(context).pop();
                     pageProvider.infoItem = stream;
-                  }
+                  },
+                  onDelete: (item) => prefs.deleteFromWatchHistory(item as StreamInfoItem)
                 ) 
               : Center(
                   child: Text(
