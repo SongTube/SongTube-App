@@ -42,6 +42,7 @@
     * Added option to Enable/Disable Home SearchBar Text Correction
 
 - Screen & Pages:
+    * All content retrieved from Youtube now uses the user default Location
     * Replaced Youtube Music Tab with a new Channels Screen
     * Tweaked a bit the UI for consistency
     * Fused Floating Video/Music Widget with the app Bottom Navigation Bar
