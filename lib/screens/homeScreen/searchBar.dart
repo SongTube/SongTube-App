@@ -131,6 +131,7 @@ class _HomePageAppBarState extends State<HomePageAppBar> with TickerProviderStat
                           onPressed: () {
                             manager.searchController.clear();
                             setState(() {});
+                            manager.searchBarFocusNode.requestFocus();
                           },
                         )
                       : Container()
