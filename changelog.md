@@ -1,3 +1,69 @@
+# SongTube 6.3.0:
+
+- Playlists & Music Screen:
+    * You can now create Playlists using your Music!
+    * All music on all Tabs should now load instantly after the first time
+    * New Playlists Tab
+    * New Albums Tab
+    * New Artists Tab
+    * New Genres Tab
+
+- New In-App Equalizer
+    * New button on the Music Player to open up the Equalizer
+    * Supports Loudness Equalization Gain
+    * Supports 6 Band Equalizer
+    * Loudness Equalization & Equalizer can be Enabled/Disabled
+
+- Subscriptions:
+    * You can now subscribe to Channels
+    * Replaced Youtube Music Tab with Channels
+    * Added Plus button on Channel Screen to Discover new Channels
+    * Channels screen will show your subscriptions feed by selected Filter (Default by Date)
+
+- Segmented Downloads:
+    * Segmented downloads is now a new download option inside the Audio Download Menu.
+    * Videos with Chapters can be downloaded and splitted into separated audio files named Segments
+    * New Audio Download menu allow each Segment to have their own tags
+    * New Audio Download menu has a button to automatically retrieve all Segments Tags (useful for Mixes)
+
+- Youtube Video Player:
+    * Prioritize video initialization for faster video load time
+    * Added button to show Video Description and Chapters
+    * Videos should now switch between Qualities and load faster
+    * Moved auto-play button to the Video Player
+    * Video Player now shows the Chapter name while seeking above Progress Bar
+    * Tweaked Comments tile to save a bit of space
+    * New collapse animation when scrolling down the suggested videos
+
+- Settings:
+    * Added option to pause you Watch History
+    * Added option to Enable/Disable Autoplay upon opening a video
+    * Added option to set maximum simultaneous downloads
+    * Added option to Enable/Disable Home SearchBar Text Correction
+
+- Screen & Pages:
+    * Replaced Youtube Music Tab with a new Channels Screen
+    * Tweaked a bit the UI for consistency
+    * Fused Floating Video/Music Widget with the app Bottom Navigation Bar
+    * Re-Designed Channel Page
+    * You can now delete individual videos on your Watch History page
+    * Moved local videos to a new page on accesible from Library Screen
+    
+- Languages:
+    * Added German language (Thanks @Paduu29)
+    * Added Bengali language (Thanks @pieas-asif)
+    * Added Ukrainian language (Thanks @redman-dev29)
+    * Updated Somali language
+
+- General:
+    * Improved Videos thumbnails quality
+    * Optimized downloader a bit
+    * Fixed Music Player resuming music if it was interrupted
+    * Fixes for Picture in Picture mode
+    * Extracting Tags Automatically or Manually should now be more accurate
+    * Getting song's lyrics should work better
+    * Fixed Download audio menu tags when downloading outside video page
+
 # SongTube 6.2.0:
 
 - Advanced Playlist Download:
