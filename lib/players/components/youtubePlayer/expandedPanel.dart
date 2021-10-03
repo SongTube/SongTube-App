@@ -64,6 +64,9 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
   // Animation controller for hiding Details & Engagement on scroll
   AnimationController animationController;
 
+  // Sharing
+  bool sharing = false;
+
   @override
   void initState() {
     super.initState();
@@ -113,6 +116,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
     }
     return PipWidget(
       onResume: (bool pipMode) {
+        sharing = false;
         setState(() => isInPictureInPictureMode = pipMode);
       },
       onSuspending: () {
@@ -120,11 +124,9 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
           (pageProvider?.playerKey?.currentState?.isPlaying ?? false) &&
           pageProvider.fwController.isPanelOpen
         ) {
-          if (prefs.autoPipMode) {
+          if (prefs.autoPipMode && !sharing) {
             setState(() => isInPictureInPictureMode = true);
             FlutterPip.enterPictureInPictureMode();
-          } else {
-            pageProvider.playerKey.currentState.controller.pause();
           }
         }
       },
@@ -503,6 +505,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                     );
                   },
                   onShare: () {
+                    sharing = true;
                     Share.share(pageProvider.currentVideo.url);
                   },
                 ),
