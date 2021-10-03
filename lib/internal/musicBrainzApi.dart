@@ -20,7 +20,7 @@ class MusicBrainzAPI {
     http.Client client = new http.Client();
     var response = await client.get(Uri.parse(
       "http://musicbrainz.org/ws/2/recording?query="
-      "${title.trim()}&dismax=true"
+      "${title.trim().replaceAll('&', '')}&dismax=true"
       "&fmt=json")
     );
     await Future.delayed(Duration(milliseconds: 1));
@@ -41,7 +41,7 @@ class MusicBrainzAPI {
     http.Client client = new http.Client();
     var response = await client.get(Uri.parse(
       "http://musicbrainz.org/ws/2/recording?query="
-      "${title.trim()}&dismax=true"
+      "${title.trim().replaceAll('&', '')}&dismax=true"
       "&fmt=json"),
       headers: headers,
     );

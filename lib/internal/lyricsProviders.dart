@@ -10,7 +10,8 @@ class LyricsProviders {
     try {
       response = await client.get(Uri.parse(
         "https://api.lyrics.ovh/v1/"
-        "$author/$title")
+        "${author.replaceAll('&', '')}/"
+        "${title.replaceAll('&', '')}")
       ).timeout(Duration(seconds: 5));
     } catch (_) {
       return "";
@@ -24,7 +25,7 @@ class LyricsProviders {
   static Future<String> lyricsHappiDev({String title}) async {
     Client client = Client();
     var response = await client.get(Uri.parse(
-      "https://api.happi.dev/v1/music?q=$title"
+      "https://api.happi.dev/v1/music?q=${title.replaceAll('&', '')}"
       "&limit=1&apikey=$happiDevKey&type=track")
     );
     var responseJson = jsonDecode(response.body);
