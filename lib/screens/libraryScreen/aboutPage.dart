@@ -206,33 +206,6 @@ class AboutPage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 16),
-            ListTile(
-              onTap: () {
-                launch('tel://+58 (414) 3521458');
-              },
-              leading: Icon(
-                EvaIcons.phoneOutline,
-                color: Colors.blue,
-                size: 28,
-              ),
-              title: Text(
-                "Phone Number",
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'Product Sans',
-                  color: Theme.of(context).textTheme.bodyText1.color
-                )
-              ),
-              subtitle: Text(
-                "+58 (414) 3521458",
-                style: TextStyle(
-                  fontFamily: 'Product Sans',
-                  color: Theme.of(context).textTheme.bodyText1.color
-                ),
-              ),
-            ),
           ],
         ),
       ),
