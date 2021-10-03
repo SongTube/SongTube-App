@@ -665,6 +665,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                         
                       ),
                     ),
+                    SizedBox(width: 16),
                   ],
                 ),
                 SizedBox(height: 12),
