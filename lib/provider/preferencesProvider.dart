@@ -6,21 +6,15 @@ import 'package:audio_service/audio_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:newpipeextractor_dart/models/infoItems/video.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:songtube/internal/globals.dart';
 import 'package:songtube/internal/models/playlist.dart';
 import 'package:songtube/internal/models/subscription.dart';
 
 class PreferencesProvider extends ChangeNotifier {
 
-  PreferencesProvider(prefsInstance) {
-    prefs = prefsInstance;
-  }
-
-  // Preferences Instance
-  SharedPreferences prefs;
-
   // Favorites Videos
   List<StreamInfoItem> get favoriteVideos {
-    var map = jsonDecode(prefs.getString('newFavoriteVideos') ?? "{}");
+    var map = jsonDecode(globalPrefs.getString('newFavoriteVideos') ?? "{}");
     List<StreamInfoItem> videos = [];
     if (map.isNotEmpty) {
       if (map['favoriteVideos'].isNotEmpty) {
@@ -36,7 +30,7 @@ class PreferencesProvider extends ChangeNotifier {
       return e.toMap();
     }).toList();
     String json = jsonEncode({ 'favoriteVideos': map });
-    prefs.setString('newFavoriteVideos', json).then((_) {
+    globalPrefs.setString('newFavoriteVideos', json).then((_) {
       notifyListeners();
     });
   }
@@ -52,7 +46,7 @@ class PreferencesProvider extends ChangeNotifier {
 
   // Watch Later Videos
   List<StreamInfoItem> get watchLaterVideos {
-    var map = jsonDecode(prefs.getString('newWatchLaterList') ?? "{}");
+    var map = jsonDecode(globalPrefs.getString('newWatchLaterList') ?? "{}");
     List<StreamInfoItem> videos = [];
     if (map.isNotEmpty) {
       if (map['watchLaterList'].isNotEmpty) {
@@ -68,7 +62,7 @@ class PreferencesProvider extends ChangeNotifier {
       return e.toMap();
     }).toList();
     String json = jsonEncode({ 'watchLaterList': map });
-    prefs.setString('newWatchLaterList', json).then((_) {
+    globalPrefs.setString('newWatchLaterList', json).then((_) {
       notifyListeners();
     });
   }
@@ -84,7 +78,7 @@ class PreferencesProvider extends ChangeNotifier {
 
   // View History Videos
   List<StreamInfoItem> get viewHistory {
-    var map = jsonDecode(prefs.getString('newViewHistory') ?? "{}");
+    var map = jsonDecode(globalPrefs.getString('newViewHistory') ?? "{}");
     List<StreamInfoItem> videos = [];
     if (map.isNotEmpty) {
       if (map['viewHistory'].isNotEmpty) {
@@ -102,53 +96,53 @@ class PreferencesProvider extends ChangeNotifier {
       return e.toMap();
     }).toList();
     String json = jsonEncode({ 'viewHistory': map });
-    prefs.setString('newViewHistory', json).then((_) {
+    globalPrefs.setString('newViewHistory', json).then((_) {
       notifyListeners();
     });
   }
 
   // Join Telegram Dialog
   bool get showJoinTelegramDialog {
-    return prefs.getBool('joinTelegramDialog') ?? true;
+    return globalPrefs.getBool('joinTelegramDialog') ?? true;
   }
   set showJoinTelegramDialog(bool value) {
-    prefs.setBool('joinTelegramDialog', value);
+    globalPrefs.setBool('joinTelegramDialog', value);
   }
   // Remind Later
   bool remindTelegramLater = false;
 
   // Enable/Disable App's BlurUI
   bool get enableBlurUI {
-    return prefs.getBool('enable_BlurUI') ?? false;
+    return globalPrefs.getBool('enable_BlurUI') ?? false;
   }
   set enableBlurUI(bool value) {
-    prefs.setBool('enable_BlurUI', value);
+    globalPrefs.setBool('enable_BlurUI', value);
     notifyListeners();
   }
 
   bool get enablePlayerBlurBackground {
-    return prefs?.getBool('enablePlayerBlurBackground') ?? true;
+    return globalPrefs?.getBool('enablePlayerBlurBackground') ?? true;
   }
   set enablePlayerBlurBackground(bool value) {
-    prefs.setBool('enablePlayerBlurBackground', value);
+    globalPrefs.setBool('enablePlayerBlurBackground', value);
     notifyListeners();
   }
 
   // MusicPlayer Artwork Rounded Corners
   double get musicPlayerArtworkRoundCorners {
-    return prefs.getDouble('musicPlayerArtworkRoundCorners') ?? 20;
+    return globalPrefs.getDouble('musicPlayerArtworkRoundCorners') ?? 20;
   }
   set musicPlayerArtworkRoundCorners(double value) {
-    prefs.setDouble('musicPlayerArtworkRoundCorners', value);
+    globalPrefs.setDouble('musicPlayerArtworkRoundCorners', value);
     notifyListeners();
   }
 
   // Youtube Auto-Play
   bool get youtubeAutoPlay {
-    return prefs.getBool('youtubeAutoPlay') ?? true;
+    return globalPrefs.getBool('youtubeAutoPlay') ?? true;
   }
   set youtubeAutoPlay(bool value) {
-    prefs.setBool('youtubeAutoPlay', value);
+    globalPrefs.setBool('youtubeAutoPlay', value);
     notifyListeners();
   }
 
@@ -156,7 +150,7 @@ class PreferencesProvider extends ChangeNotifier {
   // Watch History
   // --------------
   List<StreamInfoItem> get watchHistory {
-    String json = prefs.getString('newWatchHistory');
+    String json = globalPrefs.getString('newWatchHistory');
     if (json == null) return [];
     var map = jsonDecode(json);
     List<StreamInfoItem> history = [];
@@ -170,7 +164,7 @@ class PreferencesProvider extends ChangeNotifier {
   set watchHistory(List<StreamInfoItem> history) {
     List<Map<dynamic, dynamic>> map =
       history.map((e) => e.toMap()).toList();
-    prefs.setString('newWatchHistory', jsonEncode(map));
+    globalPrefs.setString('newWatchHistory', jsonEncode(map));
     notifyListeners();
   }
   void watchHistoryInsert(dynamic video) {
@@ -190,10 +184,10 @@ class PreferencesProvider extends ChangeNotifier {
   }
   // Enable/Disable Watch History
   bool get enableWatchHistory {
-    return prefs.getBool('enableWatchHistory') ?? true;
+    return globalPrefs.getBool('enableWatchHistory') ?? true;
   }
   set enableWatchHistory(bool value) {
-    prefs.setBool('enableWatchHistory', value).then((_) {
+    globalPrefs.setBool('enableWatchHistory', value).then((_) {
       notifyListeners();
     });
   }
@@ -203,11 +197,11 @@ class PreferencesProvider extends ChangeNotifier {
   // ------------------------------------
   set streamPlaylists(List<StreamPlaylist> playlists) {
     String json = StreamPlaylist.listToJson(playlists);
-    prefs.setString('playlists', json);
+    globalPrefs.setString('playlists', json);
     notifyListeners();
   }
   List<StreamPlaylist> get streamPlaylists {
-    String json = prefs.getString('playlists') ?? "";
+    String json = globalPrefs.getString('playlists') ?? "";
     return StreamPlaylist.fromJsonList(json);
   }
   void streamPlaylistCreate(String playlistName, String author, List<StreamInfoItem> streams) {
@@ -260,20 +254,20 @@ class PreferencesProvider extends ChangeNotifier {
 
   // Youtube Player last set quality
   String get youtubePlayerQuality {
-    return prefs.getString('youtubePlayerQuality') ?? "720";
+    return globalPrefs.getString('youtubePlayerQuality') ?? "720";
   }
   set youtubePlayerQuality(String quality) {
-    prefs.setString('youtubePlayerQuality', quality);
+    globalPrefs.setString('youtubePlayerQuality', quality);
     notifyListeners();
   }
 
   // Channel Subscriptions
   List<ChannelSubscription> get channelSubscriptions {
-    String json = prefs.getString('subscriptions') ?? "";
+    String json = globalPrefs.getString('subscriptions') ?? "";
     return ChannelSubscription.fromJsonList(json);
   }
   set channelSubscriptions(List<ChannelSubscription> subscriptions) {
-    prefs.setString('subscriptions', ChannelSubscription.toJsonList(subscriptions));
+    globalPrefs.setString('subscriptions', ChannelSubscription.toJsonList(subscriptions));
     notifyListeners();
   }
   void removeChannelSubscription(String channelUrl) {
@@ -295,47 +289,47 @@ class PreferencesProvider extends ChangeNotifier {
 
   // Maximum simultaneous downloads
   int get maxSimultaneousDownloads {
-    return prefs.getInt('maxSimultaneousDownloads') ?? 2;
+    return globalPrefs.getInt('maxSimultaneousDownloads') ?? 2;
   }
   set maxSimultaneousDownloads(int value) {
-    prefs.setInt('maxSimultaneousDownloads', value);
+    globalPrefs.setInt('maxSimultaneousDownloads', value);
     notifyListeners();
   }
 
   // Enable/Disable Video Autoplay (Video page)
   bool get videoPageAutoPlay {
-    return prefs.getBool('videoPageAutoPlay') ?? true;
+    return globalPrefs.getBool('videoPageAutoPlay') ?? true;
   }
   set videoPageAutoPlay(bool value) {
-    prefs.setBool('videoPageAutoPlay', value);
+    globalPrefs.setBool('videoPageAutoPlay', value);
     notifyListeners();
   }
 
   // Enable/Disable Automatic PiP Mode
   bool get autoPipMode {
-    return prefs.getBool('autoPipMode') ?? true;
+    return globalPrefs.getBool('autoPipMode') ?? true;
   }
   set autoPipMode(bool value) {
-    prefs.setBool('autoPipMode', value);
+    globalPrefs.setBool('autoPipMode', value);
     notifyListeners();
   }
   
   // Enable/Disable Autocorrect in Home search bar
   bool get autocorrectSearchBar {
-    return prefs.getBool('autocorrectSearchBar') ?? true;
+    return globalPrefs.getBool('autocorrectSearchBar') ?? true;
   }
   set autocorrectSearchBar(bool value) {
-    prefs.setBool('autocorrectSearchBar', value);
+    globalPrefs.setBool('autocorrectSearchBar', value);
     notifyListeners();
   }
 
   // Retrieve/Set Song Playlists
   List<LocalPlaylist> get localPlaylists {
-    String json = prefs.getString('localPlaylists');
+    String json = globalPrefs.getString('localPlaylists');
     return LocalPlaylist.fromJsonList(json);
   }
   set localPlaylists(List<LocalPlaylist> playlists) {
-    prefs.setString('localPlaylists', LocalPlaylist.listToJson(playlists));
+    globalPrefs.setString('localPlaylists', LocalPlaylist.listToJson(playlists));
     notifyListeners();
   }
   // -----------------------

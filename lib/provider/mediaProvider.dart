@@ -202,6 +202,7 @@ class MediaProvider extends ChangeNotifier {
       audioFile: AudioService.queue[indexes[1]].id,
       audioId: AudioService.queue[indexes[1]].extras["albumId"],
     );
+    
     if (fwController.isAttached && fwController.isPanelOpen) {
       SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle(

@@ -11,6 +11,7 @@ import 'package:newpipeextractor_dart/models/playlist.dart';
 import 'package:newpipeextractor_dart/models/video.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:songtube/internal/avatarHandler.dart';
+import 'package:songtube/internal/globals.dart';
 import 'package:songtube/internal/models/playlist.dart';
 import 'package:songtube/internal/models/tagsControllers.dart';
 import 'package:songtube/players/components/youtubePlayer/videoPlayer.dart';
@@ -182,14 +183,13 @@ class VideoPageProvider extends ChangeNotifier {
   }
 
   Future<void> saveToHistory(StreamInfoItem video) async {
-    var prefs = await SharedPreferences.getInstance();
-    if (prefs.getBool('enableWatchHistory') ?? true) {
-      String json = prefs.getString('newWatchHistory');
+    if (globalPrefs.getBool('enableWatchHistory') ?? true) {
+      String json = globalPrefs.getString('newWatchHistory');
       if (json == null) {
         List<StreamInfoItem> videos = [video];
         List<Map<dynamic, dynamic>> map =
         videos.map((e) => e.toMap()).toList();
-        prefs.setString('newWatchHistory', jsonEncode(map));
+        globalPrefs.setString('newWatchHistory', jsonEncode(map));
       } else {
         List<StreamInfoItem> history = [];
         var map = jsonDecode(json);
@@ -205,7 +205,7 @@ class VideoPageProvider extends ChangeNotifier {
           history.insert(0, video);
         }
         map = history.map((e) => e.toMap()).toList();
-        prefs.setString('newWatchHistory', jsonEncode(map));
+        globalPrefs.setString('newWatchHistory', jsonEncode(map));
       }
     }
   }

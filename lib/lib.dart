@@ -10,6 +10,7 @@ import 'package:newpipeextractor_dart/models/video.dart';
 import 'package:newpipeextractor_dart/utils/url.dart';
 import 'package:package_info/package_info.dart';
 import 'package:songtube/internal/nativeMethods.dart';
+import 'package:songtube/internal/systemUi.dart';
 
 // Internal
 import 'package:songtube/internal/updateChecker.dart';

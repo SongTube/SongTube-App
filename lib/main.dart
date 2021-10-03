@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:songtube/internal/globals.dart';
 import 'package:songtube/internal/languages.dart';
 
 // Internal
@@ -37,15 +38,14 @@ import 'package:flutter/scheduler.dart' show timeDilation;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  globalPrefs = await SharedPreferences.getInstance();
   LegacyPreferences preferences = new LegacyPreferences();
-  SharedPreferences prefs = await SharedPreferences.getInstance();
   await preferences.initPreferences();
   final cachedSongs = await preferences.getCachedSongs();
   if (kDebugMode)
     timeDilation = 1.0;
   runApp(Main(
     preloadedFs: preferences,
-    prefs: prefs,
     cachedSongs: cachedSongs,
   ));
   /* if (dsn.isNotEmpty) {
@@ -79,11 +79,9 @@ class Main extends StatefulWidget {
   }
 
   final LegacyPreferences preloadedFs;
-  final SharedPreferences prefs;
   final List<MediaItem> cachedSongs;
   Main({
     @required this.preloadedFs,
-    @required this.prefs,
     @required this.cachedSongs
   });
 
@@ -130,7 +128,7 @@ class _MainState extends State<Main> {
           )
         ),
         ChangeNotifierProvider<PreferencesProvider>(
-          create: (context) => PreferencesProvider(widget.prefs),
+          create: (context) => PreferencesProvider(),
         ),
         ChangeNotifierProvider<VideoPageProvider>(
           create: (context) => VideoPageProvider(),
