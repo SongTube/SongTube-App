@@ -81,7 +81,7 @@ class _ChannelSubscribeComponentState extends State<ChannelSubscribeComponent> w
             ),
           ),
         ),
-        AnimatedSize(
+        /*AnimatedSize(
           vsync: this,
           duration: Duration(milliseconds: 500),
           curve: Curves.ease,
@@ -121,7 +121,7 @@ class _ChannelSubscribeComponentState extends State<ChannelSubscribeComponent> w
                 .enableChannelNotifications(widget.channel.url),
             ) : Container(width: 12),
           ),
-        ),
+        ),*/
       ],
     );
   }
