@@ -6,7 +6,7 @@ class LyricsProviders {
 
   static Future<String> lyricsOvh({String author, String title}) async {
     Client client = Client();
-    var response;
+    Response response;
     try {
       response = await client.get(Uri.parse(
         "https://api.lyrics.ovh/v1/"
@@ -17,7 +17,11 @@ class LyricsProviders {
       return "";
     }
     client.close();
-    return jsonDecode(response.body)["lyrics"]; 
+    if ((jsonDecode(response.body) as Map).containsKey('error')) {
+      return "";
+    } else {
+      return jsonDecode(response.body)["lyrics"]; 
+    }
   }
 
   static final happiDevKey = "e1de5fbTOztuNxXBGZ1m39MbY0SPfUUQQm2pbLSdEADsMMm1duk4xQBa";
