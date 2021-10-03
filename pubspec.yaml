@@ -40,7 +40,7 @@ dependencies:
             url: https://github.com/SongTube/video_player
             ref: master
 
-    just_audio: ^0.7.5
+    just_audio: ^0.9.12
     audio_service:
         git:
             url: https://github.com/SongTube/audio_service-1
