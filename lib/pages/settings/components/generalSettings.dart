@@ -123,7 +123,19 @@ class GeneralSettings extends StatelessWidget {
           ),
           value: prefs.autocorrectSearchBar,
           onChanged: (value) => prefs.autocorrectSearchBar = value,
-        )
+        ),
+        // Enable/Disable Watch History
+        SwitchListTile(
+          title: Text(
+            "Enable Watch History",
+            style: TextStyle(
+              color: Theme.of(context).textTheme.bodyText1.color,
+              fontWeight: FontWeight.w500
+            ),
+          ),
+          value: prefs.enableWatchHistory,
+          onChanged: (value) => prefs.enableWatchHistory = value,
+        ),
       ],
     );
   }

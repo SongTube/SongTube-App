@@ -152,7 +152,9 @@ class PreferencesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // --------------
   // Watch History
+  // --------------
   List<StreamInfoItem> get watchHistory {
     String json = prefs.getString('newWatchHistory');
     if (json == null) return [];
@@ -172,9 +174,20 @@ class PreferencesProvider extends ChangeNotifier {
     notifyListeners();
   }
   void watchHistoryInsert(dynamic video) {
-    List<StreamInfoItem> history = watchHistory;
-    history.add(video);
-    watchHistory = history;
+    if (enableWatchHistory) {
+      List<StreamInfoItem> history = watchHistory;
+      history.add(video);
+      watchHistory = history;
+    }
+  }
+  // Enable/Disable Watch History
+  bool get enableWatchHistory {
+    return prefs.getBool('enableWatchHistory') ?? true;
+  }
+  set enableWatchHistory(bool value) {
+    prefs.setBool('enableWatchHistory', value).then((_) {
+      notifyListeners();
+    });
   }
 
   // ------------------------------------

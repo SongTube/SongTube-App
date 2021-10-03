@@ -183,28 +183,30 @@ class VideoPageProvider extends ChangeNotifier {
 
   Future<void> saveToHistory(StreamInfoItem video) async {
     var prefs = await SharedPreferences.getInstance();
-    String json = prefs.getString('newWatchHistory');
-    if (json == null) {
-      List<StreamInfoItem> videos = [video];
-      List<Map<dynamic, dynamic>> map =
-      videos.map((e) => e.toMap()).toList();
-      prefs.setString('newWatchHistory', jsonEncode(map));
-    } else {
-      List<StreamInfoItem> history = [];
-      var map = jsonDecode(json);
-      if (map.isNotEmpty) {
-        map.forEach((element) {
-          history.add(StreamInfoItem.fromMap(element));
-        });
-      }
-      if (history.indexWhere((element) => element.url == video.url) != -1) {
-        history.removeAt(history.indexWhere((element) => video.url == element.url));
-        history.insert(0, video);
+    if (prefs.getBool('enableWatchHistory') ?? true) {
+      String json = prefs.getString('newWatchHistory');
+      if (json == null) {
+        List<StreamInfoItem> videos = [video];
+        List<Map<dynamic, dynamic>> map =
+        videos.map((e) => e.toMap()).toList();
+        prefs.setString('newWatchHistory', jsonEncode(map));
       } else {
-        history.insert(0, video);
+        List<StreamInfoItem> history = [];
+        var map = jsonDecode(json);
+        if (map.isNotEmpty) {
+          map.forEach((element) {
+            history.add(StreamInfoItem.fromMap(element));
+          });
+        }
+        if (history.indexWhere((element) => element.url == video.url) != -1) {
+          history.removeAt(history.indexWhere((element) => video.url == element.url));
+          history.insert(0, video);
+        } else {
+          history.insert(0, video);
+        }
+        map = history.map((e) => e.toMap()).toList();
+        prefs.setString('newWatchHistory', jsonEncode(map));
       }
-      map = history.map((e) => e.toMap()).toList();
-      prefs.setString('newWatchHistory', jsonEncode(map));
     }
   }
 }
