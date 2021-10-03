@@ -151,6 +151,7 @@ class AboutPage extends StatelessWidget {
             ),
             SizedBox(height: 16),
             Divider(),
+            // Artx Email
             ListTile(
               onTap: () {
                 launch('mailto:artx4dev@gmail.com');
@@ -178,14 +179,14 @@ class AboutPage extends StatelessWidget {
                 ),
               ),
             ),
+            // Airis Email
             ListTile(
               onTap: () {
-                launch('mailto:artx4dev@gmail.com');
+                launch('mailto:airisdevgroup@gmail.com');
               },
-              leading: Icon(
-                EvaIcons.emailOutline,
-                color: Colors.transparent,
-                size: 28,
+              leading: Image.asset(
+                'assets/images/airis.png',
+                width: MediaQuery.of(context).size.width*0.09,
               ),
               title: Text(
                 "Airis Email",
