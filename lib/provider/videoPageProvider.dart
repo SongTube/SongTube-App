@@ -78,7 +78,7 @@ class VideoPageProvider extends ChangeNotifier {
   }
 
 
-  void initializeStream(StreamInfoItem item) {
+  void initializeStream(StreamInfoItem item) async {
     _infoItem = item;
     currentVideo = null;
     currentChannel = null;
@@ -87,16 +87,16 @@ class VideoPageProvider extends ChangeNotifier {
     currentTags = null;
     isPlaylist = false;
     notifyListeners();
-    _infoItem.getVideo.then((value) { 
+    await _infoItem.getVideo.then((value) { 
       currentVideo = value;
       currentTags = TagsControllers();
       currentTags.updateTextControllers(value);
       saveToHistory(currentVideo.toStreamInfoItem());
       notifyListeners();
-      CommentsExtractor.getComments(currentVideo.url).then((comments) {
-        currentComments = comments;
-        notifyListeners();
-      });
+    });
+    CommentsExtractor.getComments(currentVideo.url).then((comments) {
+      currentComments = comments;
+      notifyListeners();
     });
     _infoItem.getChannel.then((value) async {
       currentChannel = value;
@@ -149,16 +149,17 @@ class VideoPageProvider extends ChangeNotifier {
     }
     _infoItem = currentRelatedVideos[0];
     notifyListeners();
-    _infoItem.getVideo.then((value) { 
+    await _infoItem.getVideo.then((value) { 
       currentVideo = value;
       currentTags = TagsControllers();
       currentTags.updateTextControllers(value);
       // TODO: Save Playlist to History
       notifyListeners();
-      CommentsExtractor.getComments(currentVideo.url).then((comments) {
-        currentComments = comments;
-        notifyListeners();
-      });
+      
+    });
+    CommentsExtractor.getComments(currentVideo.url).then((comments) {
+      currentComments = comments;
+      notifyListeners();
     });
     _infoItem.getChannel.then((value) {
       currentChannel = value;
