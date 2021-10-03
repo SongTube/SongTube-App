@@ -22,6 +22,7 @@
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask"
             android:supportsPictureInPicture="true"
             android:requestLegacyExternalStorage="true"
