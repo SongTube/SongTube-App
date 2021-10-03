@@ -3,10 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/provider/configurationProvider.dart';
 import 'package:songtube/provider/mediaProvider.dart';
+import 'package:songtube/provider/preferencesProvider.dart';
 
 void setSystemUiColor(BuildContext context) {
     ConfigurationProvider config = Provider.of<ConfigurationProvider>(context, listen: false);
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
+    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     Brightness _systemBrightness = Theme.of(context).brightness;
     Brightness _statusBarBrightness = _systemBrightness == Brightness.light
       ? Brightness.dark
@@ -25,7 +27,7 @@ void setSystemUiColor(BuildContext context) {
       double position = mediaProvider.fwController.panelPosition;
       int sdkInt = config.preferences.sdkInt;
       if (position > 0.95) {
-        bool mediaBlurBackground = config.useBlurBackground;
+        bool mediaBlurBackground = prefs.enablePlayerBlurBackground;
         SystemChrome.setSystemUIOverlayStyle(
           SystemUiOverlayStyle(
             statusBarIconBrightness: mediaBlurBackground ? mediaProvider.textColor == Colors.black

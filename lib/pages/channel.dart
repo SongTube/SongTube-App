@@ -10,6 +10,7 @@ import 'package:newpipeextractor_dart/models/infoItems/video.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/avatarHandler.dart';
 import 'package:songtube/internal/languages.dart';
+import 'package:songtube/internal/systemUi.dart';
 import 'package:songtube/provider/videoPageProvider.dart';
 import 'package:songtube/ui/animations/fadeIn.dart';
 import 'package:songtube/ui/components/shimmerContainer.dart';
@@ -47,6 +48,12 @@ class _YoutubeChannelPageState extends State<YoutubeChannelPage> {
     ChannelExtractor.channelInfo(widget.url).then((value) {
       setState(() => channel = value);
     });
+  }
+
+  @override
+  void dispose() {
+    setSystemUiColor(context);
+    super.dispose();
   }
 
   @override

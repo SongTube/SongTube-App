@@ -344,24 +344,22 @@ class _LibState extends State<Lib> {
       maxHeight: MediaQuery.of(context).size.height,
       onSlide: (double position) {
         int sdkInt = config.preferences.sdkInt;
+        final iconColor = Theme.of(context).brightness == Brightness.dark
+          ? Brightness.light : Brightness.dark;
         if (position > 0.95) {
           SystemChrome.setSystemUIOverlayStyle(
             SystemUiOverlayStyle(
-              statusBarIconBrightness: mediaProvider.textColor == Colors.black
-                ? Brightness.dark : Brightness.light,
-              systemNavigationBarIconBrightness: sdkInt >= 30 ? mediaProvider.textColor == Colors.black
-                ? Brightness.dark : Brightness.light : null,
+              statusBarIconBrightness: prefs.enablePlayerBlurBackground ? mediaProvider.textColor == Colors.black
+                ? Brightness.dark : Brightness.light : iconColor,
+              systemNavigationBarIconBrightness: prefs.enablePlayerBlurBackground ? sdkInt >= 30 ?
+                mediaProvider.textColor == Colors.black ? Brightness.dark : Brightness.light : null : iconColor,
             ),
           );
         } else if (position < 0.95) {
           SystemChrome.setSystemUIOverlayStyle(
             SystemUiOverlayStyle(
-              statusBarIconBrightness:
-                Theme.of(context).brightness == Brightness.dark
-                  ? Brightness.light : Brightness.dark,
-              systemNavigationBarIconBrightness:
-                Theme.of(context).brightness == Brightness.dark
-                  ? Brightness.light : Brightness.dark,
+              statusBarIconBrightness: iconColor,
+              systemNavigationBarIconBrightness: iconColor,
             ),
           );
         }
