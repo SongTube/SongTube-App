@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:audio_service/audio_service.dart';
+import 'package:audio_tagger/audio_tagger.dart';
+import 'package:audio_tagger/audio_tags.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -43,23 +45,17 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
   }
 
   void loadTagsControllers() async {
-    tagsControllers.titleController.text = widget.song.title;
-    tagsControllers.albumController.text = widget.song.album;
-    tagsControllers.artistController.text = widget.song.artist;
-    tagsControllers.genreController.text = widget.song.genre == null
-      ? "Any" : widget.song.genre;
-    tagsControllers.dateController.text = await FFmpegExtractor
-      .getAudioDate(widget.song.id);
-    tagsControllers.discController.text = await FFmpegExtractor
-      .getAudioDisc(widget.song.id);
-    tagsControllers.trackController.text = await FFmpegExtractor
-      .getAudioTrack(widget.song.id);
+    AudioTags tags = await AudioTagger.extractAllTags(widget.song.id);
+    tagsControllers.titleController.text = tags.title;
+    tagsControllers.albumController.text = tags.album;
+    tagsControllers.artistController.text = tags.artist;
+    tagsControllers.genreController.text = tags.genre == null
+      ? "Any" : tags.genre;
+    tagsControllers.dateController.text = tags.year;
+    tagsControllers.discController.text = tags.disc;
+    tagsControllers.trackController.text = tags.track;
     setState(() {});
-    tagsControllers.artworkController = (await FFmpegExtractor
-      .getAudioArtwork(
-        audioFile: widget.song.id,
-        audioId: ""
-    )).path;
+    tagsControllers.artworkController = widget.song.extras['artwork'];
     originalArtwork = this.tagsControllers.artworkController;
     setState(() {});
   }

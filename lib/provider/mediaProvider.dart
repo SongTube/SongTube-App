@@ -1,5 +1,7 @@
 // Dart
 import 'dart:io';
+import 'package:audio_tagger/audio_tagger.dart';
+import 'package:audio_tagger/audio_tags.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
@@ -7,7 +9,6 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:songtube/internal/database/databaseService.dart';
-import 'package:songtube/internal/ffmpeg/converter.dart';
 import 'package:songtube/internal/ffmpeg/extractor.dart';
 import 'package:songtube/internal/lyricsProviders.dart';
 
@@ -26,7 +27,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:songtube/internal/nativeMethods.dart';
 import 'package:songtube/internal/randomString.dart';
-import 'package:songtube/internal/tagsManager.dart';
 import 'package:songtube/ui/components/fancyScaffold.dart';
 import 'package:string_validator/string_validator.dart';
 
@@ -230,21 +230,34 @@ class MediaProvider extends ChangeNotifier {
     List<SongInfo> songInfoList = await audioQuery.getSongs();
     for (SongInfo song in songInfoList) {
       if (!(listMediaItems.any((element) => element.id == song.filePath))) {
-        File artworkFile = await FFmpegExtractor.getAudioThumbnail(
+        File artworkFile = await FFmpegExtractor.getAudioArtwork(
           audioFile: song.filePath,
           audioId: song.id
         );
-        String genre = await FFmpegExtractor.getAudioGenre(song.filePath);
+        AudioTags tags;
+        try {
+          tags = await AudioTagger.extractAllTags(song.filePath);
+        } catch (e) {
+          tags = AudioTags(
+            title: song.title,
+            album: song.album,
+            artist: song.artist,
+            genre: 'Unknown',
+            year: null,
+            disc: null,
+            track: null
+          );
+        }
         // Avoid this Method from stopping this function on
         // exception (Most probably because a corrupted audio)
         try {
           listMediaItems.add(
             MediaItem(
               id:       song.filePath,
-              album:    song.album,
-              title:    song.title,
-              artist:   song.artist,
-              genre:    genre ?? "unknown",
+              album:    tags.album.isNotEmpty ? tags.album : song.album,
+              title:    tags.title.isNotEmpty ? tags.title : song.title, 
+              artist:   tags.artist.isNotEmpty ? tags.artist : song.artist,
+              genre:    tags.genre,
               duration: Duration(milliseconds: int.parse(song.duration)),
               artUri:   Uri.parse("file://${artworkFile.path}"),
               extras:   {
@@ -338,18 +351,23 @@ class MediaProvider extends ChangeNotifier {
   }
 
   Future<void> replaceTags(MediaItem song, TagsControllers tags) async {
-    await TagsManager.writeAllTags(
+    await AudioTagger.writeAllTags(
       songPath: song.id,
-      title: tags.titleController.text,
-      album: tags.albumController.text,
-      artist: tags.artistController.text,
-      genre: tags.genreController.text,
-      year: tags.dateController.text,
-      disc: tags.discController.text,
-      track: tags.trackController.text
+      tags: AudioTags(
+        title: tags.titleController.text,
+        album: tags.albumController.text,
+        artist: tags.artistController.text,
+        genre: tags.genreController.text,
+        year: tags.dateController.text,
+        disc: tags.discController.text,
+        track: tags.trackController.text
+      )
     );
     // Only add Artwork if song is in AAC Format
-    File croppedImage;
+    File croppedImage = new File(
+      (await getExternalStorageDirectory()).path +
+      "/${RandomString.getRandomString(5)}"
+    );
     if (isURL(tags.artworkController)) {
       http.Response response;
       File artwork = new File(
@@ -361,12 +379,13 @@ class MediaProvider extends ChangeNotifier {
           .timeout(Duration(seconds: 120));
         await artwork.writeAsBytes(response.bodyBytes);
       } catch (_) {}
-      croppedImage = await NativeMethod.cropToSquare(artwork);
+      croppedImage.writeAsBytes(
+        await AudioTagger.cropToSquare(artwork));
     } else {
-      croppedImage = await NativeMethod
-        .cropToSquare(File(tags.artworkController));
+      croppedImage.writeAsBytes(await AudioTagger
+        .cropToSquare(File(tags.artworkController)));
     }
-    await TagsManager.writeArtwork(
+    await AudioTagger.writeArtwork(
       songPath: song.id,
       artworkPath: croppedImage.path
     );
@@ -376,7 +395,7 @@ class MediaProvider extends ChangeNotifier {
       audioId: song.extras["albumId"],
       forceExtraction: true
     );
-    File thumbnail = await FFmpegExtractor.getAudioThumbnail(
+    File thumbnail = await FFmpegExtractor.getAudioArtwork(
       audioFile: song.id,
       audioId: song.extras["albumId"],
       forceExtraction: true
@@ -408,6 +427,9 @@ class MediaProvider extends ChangeNotifier {
     }
     imageCache.clear();
     imageCache.clearLiveImages();
+    if (AudioService.currentMediaItem.id == song.id) {
+      AudioService.updateMediaItem(song);
+    }
     notifyListeners();
   }
 

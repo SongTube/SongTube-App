@@ -120,14 +120,14 @@ class _IntroPermissionsState extends State<IntroPermissions> {
                             style: TextStyle(
                               color: Theme.of(context).accentColor,
                               fontFamily: 'Product Sans',
-                              fontWeight: FontWeight.w600
+                              fontWeight: FontWeight.w700
                             )
                           ),
                           TextSpan(
-                            text: Languages.of(context).labelExternalAccessJustification,
+                            text: Languages.of(context).labelExternalAccessJustification.toLowerCase(),
                             style: TextStyle(
                               fontFamily: 'Product Sans',
-                              fontWeight: FontWeight.w600,
+                              fontWeight: FontWeight.w500,
                               color: Theme.of(context).textTheme.bodyText1.color
                                 .withOpacity(0.8)
                             )
@@ -177,7 +177,7 @@ class _IntroPermissionsState extends State<IntroPermissions> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Container(
-                            margin: EdgeInsets.only(left: 16, right: 8),
+                            margin: EdgeInsets.only(left: 18, right: 8),
                             child: Text(
                               "Allow Access",
                               style: TextStyle(
@@ -188,9 +188,9 @@ class _IntroPermissionsState extends State<IntroPermissions> {
                             ),
                           ),
                           Container(
-                            margin: EdgeInsets.only(right: 8),
+                            margin: EdgeInsets.only(right: 16),
                             child: Icon(
-                              EvaIcons.radioButtonOnOutline,
+                              EvaIcons.lockOutline,
                               color: Colors.white,
                             )
                           )

@@ -3,6 +3,8 @@ import 'dart:async';
 import 'dart:io';
 
 // Flutter
+import 'package:audio_tagger/audio_tagger.dart';
+import 'package:audio_tagger/audio_tags.dart';
 import 'package:file_operations/file_operations.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +23,6 @@ import 'package:songtube/internal/ffmpeg/converter.dart';
 import 'package:songtube/internal/models/streamSegmentTrack.dart';
 import 'package:songtube/internal/nativeMethods.dart';
 import 'package:songtube/internal/randomString.dart';
-import 'package:songtube/internal/tagsManager.dart';
 
 // Packages
 import 'package:http/http.dart' as http;
@@ -418,15 +419,17 @@ class DownloadSet {
   Future<void> writeAllMetadata(String filePath, DownloadTags tags) async {
     downloadStatusStream.add(DownloadStatus.WrittingTags);
     try {
-      await TagsManager.writeAllTags(
+      await AudioTagger.writeAllTags(
         songPath: filePath,
-        title: tags.title,
-        album: tags.album,
-        artist: tags.artist,
-        genre: tags.genre,
-        year: tags.date,
-        disc: tags.disc,
-        track: tags.track
+        tags: AudioTags(
+          title: tags.title,
+          album: tags.album,
+          artist: tags.artist,
+          genre: tags.genre,
+          year: tags.date,
+          disc: tags.disc,
+          track: tags.track
+        )
       );
       // Only add Artwork if song is in AAC Format
       if (downloadItem.ffmpegTask == FFmpegTask.ConvertToAAC) {
@@ -455,11 +458,13 @@ class DownloadSet {
               downloadItem.tags.coverurl = "https://img.youtube.com/vi/$id/mqdefault.jpg";
             } catch (_) {}
           }
-          croppedImage = await NativeMethod.cropToSquare(artwork);
+          croppedImage = await croppedImage.writeAsBytes(
+            await AudioTagger.cropToSquare(artwork));
         } else {
-          croppedImage = await NativeMethod.cropToSquare(File(tags.coverurl));
+          croppedImage = await croppedImage.writeAsBytes(
+            await AudioTagger.cropToSquare(File(tags.coverurl)));
         }
-        await TagsManager.writeArtwork(
+        await AudioTagger.writeArtwork(
           songPath: filePath,
           artworkPath: croppedImage.path
         );

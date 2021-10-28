@@ -17,6 +17,7 @@ class IntroReady extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.transparent,
         body: Stack(
           alignment: Alignment.center,
           children: [
@@ -80,7 +81,7 @@ class IntroReady extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 18,
                             fontFamily: 'Product Sans',
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w500,
                             color: Theme.of(context).textTheme.bodyText1.color
                           ),
                           children: [
@@ -88,7 +89,7 @@ class IntroReady extends StatelessWidget {
                               text: 
                                 Languages.of(context).labelIntroductionIsOver
                                 + "\n" +
-                                Languages.of(context).labelEnjoy + " "
+                                Languages.of(context).labelEnjoy.toLowerCase() + " "
                             ),
                             TextSpan(
                               text: "SongTube!",
@@ -115,7 +116,7 @@ class IntroReady extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.only(right: 16),
             child: FloatingActionButton.extended(
-              backgroundColor: Colors.red,
+              backgroundColor: Theme.of(context).accentColor,
               label: Text(
                 Languages.of(context).labelGoHome,
                 style: TextStyle(

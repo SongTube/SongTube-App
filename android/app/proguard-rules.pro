@@ -12,7 +12,7 @@
 -keep class com.artxdev.** { *; }
 -keep class androidx.lifecycle.** { *; }
 -keep class org.jaudiotagger.** { *; }
-
+-keep class com.example.audio_tagger.** { *; }
 -dontobfuscate
 
 ## Flutter wrapper

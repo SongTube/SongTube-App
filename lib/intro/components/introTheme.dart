@@ -117,7 +117,7 @@ class _IntroThemeState extends State<IntroTheme> {
                         style: TextStyle(
                           fontSize: 18,
                           fontFamily: 'Product Sans',
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w500,
                           color: Theme.of(context).textTheme.bodyText1.color
                         ),
                         children: [
@@ -162,13 +162,13 @@ class _IntroThemeState extends State<IntroTheme> {
                         },
                         child: AnimatedContainer(
                           padding: EdgeInsets.all(8),
-                          duration: Duration(milliseconds: 300),
+                          duration: Duration(milliseconds: 150),
                           height: 50,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
                             color: theme == ThemeSelected.System
                               ? Theme.of(context).accentColor
-                              : Theme.of(context).cardColor,
+                              : Theme.of(context).cardColor.withOpacity(0.4),
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.black12.withOpacity(0.08),
@@ -212,13 +212,13 @@ class _IntroThemeState extends State<IntroTheme> {
                         },
                         child: AnimatedContainer(
                           padding: EdgeInsets.all(8),
-                          duration: Duration(milliseconds: 300),
+                          duration: Duration(milliseconds: 150),
                           height: 50,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
                             color: theme == ThemeSelected.Light
                               ? Theme.of(context).accentColor
-                              : Theme.of(context).cardColor,
+                              : Theme.of(context).cardColor.withOpacity(0.4),
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.black12.withOpacity(0.08),
@@ -262,13 +262,13 @@ class _IntroThemeState extends State<IntroTheme> {
                         },
                         child: AnimatedContainer(
                           padding: EdgeInsets.all(8),
-                          duration: Duration(milliseconds: 300),
+                          duration: Duration(milliseconds: 150),
                           height: 50,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
                             color: theme == ThemeSelected.Dark
                               ? Theme.of(context).accentColor
-                              : Theme.of(context).cardColor,
+                              : Theme.of(context).cardColor.withOpacity(0.4),
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.black12.withOpacity(0.08),

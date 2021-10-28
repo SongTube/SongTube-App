@@ -51,7 +51,9 @@ class PlayerArtwork extends StatelessWidget {
                 opacity: mediaProvider.showLyrics
                   ? 0.2 : 1.0,
                 child: ImageFade(
-                  image: FileImage(image),
+                  image: image == null
+                    ? AssetImage('assets/images/artworkPlaceholder_big.png')
+                    : FileImage(image),
                   fadeDuration: Duration(milliseconds: 400),
                   height: double.infinity,
                   width: double.infinity,

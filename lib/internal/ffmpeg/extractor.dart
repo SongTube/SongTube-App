@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 // Packages
+import 'package:audio_tagger/audio_tagger.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_audio_query/flutter_audio_query.dart';
 import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
@@ -13,8 +14,8 @@ import 'package:path_provider/path_provider.dart';
 /// the provided [AudioFile]
 enum ArtworkExtractMethod {
   Automatic,
+  AudioTaggers,
   AudioQuery,
-  FFmpeg
 }
 
 /// Set of static functions design to Extract information from a given
@@ -51,17 +52,15 @@ class FFmpegExtractor {
       "-q:v", "1", "${artwork.path}"
     ];
     if (extractionMethod == ArtworkExtractMethod.Automatic) {
-      // On Automatic, FFmpeg Method has priority
+      // On Automatic, AudioTagger Method has priority
       // (Because Artwork quality will be better)
-      int result = await FlutterFFmpeg().executeWithArguments(_argsList);
-      // If it somehow failed, use AudioQuery native method, if id provided is
-      // null or AudioQuery returns nothing, then return default Artwork
-      // from Assets
-      if (result == 255 || result == 1) {
-        Uint8List bytes;
+      Uint8List bytes = await AudioTagger.extractArtwork(audioFile);
+      if (bytes != null && bytes.isNotEmpty) {
+        artwork.writeAsBytes(bytes);
+      } else {
         try {
           Size size = Size(800,800);
-          bytes =  await FlutterAudioQuery().getArtwork(
+          bytes = await FlutterAudioQuery().getArtwork(
             type: ResourceType.SONG,
             id: audioId, size: size
           );
@@ -78,20 +77,6 @@ class FFmpegExtractor {
                 assetBytes.lengthInBytes
           ));
         }
-      }
-    } else if (extractionMethod == ArtworkExtractMethod.FFmpeg) {
-      // On FFmpeg, Artwork will only be Extracted using FFmpeg and
-      // if it fails, it will return default Artwork from Assets
-      int result = await FlutterFFmpeg().executeWithArguments(_argsList);
-      if (result == 255 || result == 1) {
-        var assetBytes = await rootBundle
-          .load('assets/images/artworkPlaceholder_big.png');
-        await artwork.writeAsBytes(
-          assetBytes.buffer
-            .asUint8List(
-              assetBytes.offsetInBytes,
-              assetBytes.lengthInBytes
-        ));
       }
     } else if (extractionMethod == ArtworkExtractMethod.AudioQuery) {
       // On AudioQuery, Artwork will only be Extracted using AudioQuery package
@@ -116,51 +101,24 @@ class FFmpegExtractor {
               assetBytes.lengthInBytes
         ));
       }
-    }
-    return artwork;
-  }
-
-  static Future<File> getAudioThumbnail({
-    String audioFile,
-    String audioId,
-    ArtworkExtractMethod extractionMethod =
-      ArtworkExtractMethod.Automatic,
-    bool forceExtraction = false
-  }) async {
-    assert(audioFile != "" || audioFile != null);
-    String thumbnailDir = (await getApplicationDocumentsDirectory()).path + "/Thumbnails/";
-    if (!await Directory(thumbnailDir).exists())
-      await Directory(thumbnailDir).create();
-    File thumbnail = File("$thumbnailDir${audioFile.split("/").last.replaceAll("/", "_")}thumbnail.jpg");
-    if (await thumbnail.exists() && forceExtraction == false) return thumbnail;
-    if (await thumbnail.exists()) await thumbnail.delete();
-    // FFmpeg Arguments
-    var _argsList = [
-      "-y", "-i", "$audioFile", "-filter:v",
-      "scale=-1:250", "-an", "${thumbnail.path}"
-    ];
-    if (extractionMethod == ArtworkExtractMethod.Automatic) {
-      // On Automatic, FFmpeg Method has priority
-      // (Because Artwork quality will be better)
-      int result = await FlutterFFmpeg().executeWithArguments(_argsList);
-      // If it somehow failed, use AudioQuery native method, if id provided is
-      // null or AudioQuery returns nothing, then return default Artwork
-      // from Assets
-      if (result == 255 || result == 1) {
-        Uint8List bytes;
+    } else if (extractionMethod == ArtworkExtractMethod.AudioTaggers) {
+      Uint8List bytes = await AudioTagger.extractArtwork(audioFile);
+      if (bytes != null && bytes.isNotEmpty) {
+        artwork.writeAsBytes(bytes);
+      } else {
         try {
-          Size size = Size(250,250);
-          bytes =  await FlutterAudioQuery().getArtwork(
+          Size size = Size(800,800);
+          bytes = await FlutterAudioQuery().getArtwork(
             type: ResourceType.SONG,
             id: audioId, size: size
           );
         } catch (_) {}
         if (bytes != null && bytes.isNotEmpty) {
-          await thumbnail.writeAsBytes(bytes);
+          await artwork.writeAsBytes(bytes);
         } else {
           var assetBytes = await rootBundle
             .load('assets/images/artworkPlaceholder_big.png');
-          await thumbnail.writeAsBytes(
+          await artwork.writeAsBytes(
             assetBytes.buffer
               .asUint8List(
                 assetBytes.offsetInBytes,
@@ -168,45 +126,8 @@ class FFmpegExtractor {
           ));
         }
       }
-    } else if (extractionMethod == ArtworkExtractMethod.FFmpeg) {
-      // On FFmpeg, Artwork will only be Extracted using FFmpeg and
-      // if it fails, it will return default Artwork from Assets
-      int result = await FlutterFFmpeg().executeWithArguments(_argsList);
-      if (result == 255 || result == 1) {
-        var assetBytes = await rootBundle
-          .load('assets/images/artworkPlaceholder_big.png');
-        await thumbnail.writeAsBytes(
-          assetBytes.buffer
-            .asUint8List(
-              assetBytes.offsetInBytes,
-              assetBytes.lengthInBytes
-        ));
-      }
-    } else if (extractionMethod == ArtworkExtractMethod.AudioQuery) {
-      // On AudioQuery, Artwork will only be Extracted using AudioQuery package
-      // and if it fails, it will return default Artwork from Assets
-      Uint8List bytes;
-      try {
-        Size size = Size(250,250);
-        bytes =  await FlutterAudioQuery().getArtwork(
-          type: ResourceType.SONG,
-          id: audioId, size: size
-        );
-      } catch (_) {}
-      if (bytes != null && bytes.isNotEmpty) {
-        await thumbnail.writeAsBytes(bytes);
-      } else {
-        var assetBytes = await rootBundle
-          .load('assets/images/artworkPlaceholder_small.png');
-        await thumbnail.writeAsBytes(
-          assetBytes.buffer
-            .asUint8List(
-              assetBytes.offsetInBytes,
-              assetBytes.lengthInBytes
-        ));
-      }
     }
-    return thumbnail;
+    return artwork;
   }
 
   /// Gets video thumbnail of any Video Format on a [File]

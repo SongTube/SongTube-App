@@ -135,7 +135,7 @@ class SongsListView extends StatelessWidget {
                 )
               ],
               onItemTap: (String value) async {
-                if (value == "Edit Tags" || value == "Delete") {
+                if (value == "Delete") {
                   if (AudioService.running && AudioService.playbackState.playing) {
                     if (AudioService.currentMediaItem.id == song.id) {
                       AudioService.stop();
@@ -161,7 +161,7 @@ class SongsListView extends StatelessWidget {
                     mediaProvider.deleteSong(song);
                     break;
                   case "Edit Tags":
-                    FFmpegConverter().getMediaFormat(song.id). then((format) {
+                    FFmpegConverter().getMediaFormat(song.id).then((format) {
                       if (format == "m4a") {
                         Navigator.of(context).push(
                           BlurPageRoute(
