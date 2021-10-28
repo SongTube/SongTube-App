@@ -191,7 +191,7 @@ class SongsListView extends StatelessWidget {
               },
               child: Container(
                 color: Colors.transparent,
-                padding: EdgeInsets.all(4),
+                padding: EdgeInsets.all(8).copyWith(top: 16, bottom: 16),
                 child: Icon(Icons.more_vert, size: 18),
               )
             ),
