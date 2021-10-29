@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:songtube/ui/animations/FadeIn.dart';
 
 class BlurPageRoute<T> extends PageRoute<T> with MaterialRouteTransitionMixin<T> {
 
@@ -9,6 +10,7 @@ class BlurPageRoute<T> extends PageRoute<T> with MaterialRouteTransitionMixin<T>
   bool keepState;
   double blurStrength;
   Curve animationCurve;
+  Curve exitAnimationCurve;
   Offset slideOffset;
   bool useCardExit;
   Color backdropColor;
@@ -22,6 +24,7 @@ class BlurPageRoute<T> extends PageRoute<T> with MaterialRouteTransitionMixin<T>
     this.maintainState = true,
     bool fullscreenDialog = false,
     this.animationCurve = Curves.fastLinearToSlowEaseIn,
+    this.exitAnimationCurve = Curves.linearToEaseOut,
     this.opaque = false,
     this.slideOffset = const Offset(0.0, 10.0),
     this.useCardExit = true,
@@ -41,14 +44,22 @@ class BlurPageRoute<T> extends PageRoute<T> with MaterialRouteTransitionMixin<T>
   Widget buildTransitions(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation, Widget child) {
     // Create transition from bottom to top, like bottom sheet
-    if (animation.status == AnimationStatus.reverse && !useCardExit) {
+    if (animation.status == AnimationStatus.reverse) {
       return BackdropFilter(
         filter: ImageFilter.blur(
           sigmaX: blurStrength*animation.value,
           sigmaY: blurStrength*animation.value
         ),
-        child: FadeTransition(
-          opacity: animation,
+        child: SlideTransition(
+          position: CurvedAnimation(
+            parent: animation,
+            curve: exitAnimationCurve,
+          ).drive(
+            Tween<Offset>(
+              begin: slideOffset,
+              end: Offset(0.0, 0.0),
+            ),
+          ),
           child: child,
         ),
       );
@@ -68,7 +79,10 @@ class BlurPageRoute<T> extends PageRoute<T> with MaterialRouteTransitionMixin<T>
             sigmaX: blurStrength*animation.value,
             sigmaY: blurStrength*animation.value
           ),
-          child: child
+          child: FadeInTransition(
+            duration: const Duration(milliseconds: 300),
+            child: child
+          )
         ),
       );
     }
