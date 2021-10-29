@@ -86,6 +86,19 @@ class MediaProvider extends ChangeNotifier {
     List<SongFile> tmp = await dbHelper.getDownloadList();
     databaseSongs = convertToMediaItem(tmp);
     loadingDownloads = false;
+    updateListMediaItemFromDb();
+    notifyListeners();
+  }
+
+  // Check if database has songs that the regular list doesnt
+  void updateListMediaItemFromDb() {
+    databaseSongs.forEach((element) {
+      if (listMediaItems.indexWhere((song) => song.id == element.id) == -1) {
+        listMediaItems.add(element);
+      }
+    });
+    listMediaItems.sort((a, b) => a.title.toLowerCase().trim()
+      .compareTo(b.title.toLowerCase().trim()));
     notifyListeners();
   }
 

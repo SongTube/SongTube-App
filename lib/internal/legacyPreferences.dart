@@ -226,6 +226,8 @@ class LegacyPreferences {
         }
       }
     }
+    songs.sort((a, b) => a.title.toLowerCase().trim()
+      .compareTo(b.title.toLowerCase().trim()));
     return songs;
   }
   void saveCachedSongs(List<MediaItem> list) {
