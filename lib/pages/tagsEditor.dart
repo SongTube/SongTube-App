@@ -14,7 +14,7 @@ import 'package:songtube/provider/mediaProvider.dart';
 import 'package:songtube/provider/preferencesProvider.dart';
 import 'package:songtube/ui/animations/blurPageRoute.dart';
 import 'package:songtube/ui/internal/popupMenu.dart';
-import 'package:songtube/ui/components/tagsResultsPage.dart';
+import 'package:songtube/pages/musicBrainzResults.dart';
 import 'package:songtube/ui/components/textfieldTile.dart';
 import 'package:songtube/ui/dialogs/loadingDialog.dart';
 import 'package:string_validator/string_validator.dart';

@@ -23,7 +23,7 @@ import 'package:songtube/provider/preferencesProvider.dart';
 import 'package:songtube/provider/videoPageProvider.dart';
 import 'package:songtube/ui/animations/blurPageRoute.dart';
 import 'package:songtube/ui/animations/fadeIn.dart';
-import 'package:songtube/ui/components/tagsResultsPage.dart';
+import 'package:songtube/pages/musicBrainzResults.dart';
 import 'package:songtube/ui/components/textfieldTile.dart';
 import 'package:songtube/ui/dialogs/loadingDialog.dart';
 import 'package:songtube/ui/internal/popupMenu.dart';

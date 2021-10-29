@@ -9,7 +9,7 @@ import 'package:songtube/provider/mediaProvider.dart';
 // Internal
 import 'package:songtube/provider/preferencesProvider.dart';
 import 'package:songtube/provider/videoPageProvider.dart';
-import 'package:songtube/pages/aboutPage.dart';
+import 'package:songtube/pages/about.dart';
 import 'package:songtube/screens/libraryScreen/socialLinksRow.dart';
 import 'package:songtube/pages/watchHistory.dart';
 import 'package:songtube/screens/libraryScreen/watchHistoryRow.dart';
