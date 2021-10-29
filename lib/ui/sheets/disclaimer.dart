@@ -8,9 +8,9 @@ class DisclaimerSheet extends StatelessWidget {
     return StyledBottomSheet(
       title: "Disclaimer",
       content: Text(
-        "This Software is released \"as-is\", without any warranty, responsability or liability. " +
+        "This Software is released \"as-is\", without any warranty, responsibility or liability. " +
         "In no event shall the Author of this Software be liable for any special, consequential, " +
-        "indidental or indirect damages whatsoever (including, without limitation, damages for "   +
+        "incidental or indirect damages whatsoever (including, without limitation, damages for "   +
         "loss of business profits, business interruption, loss of business information, or any "   +
         "other pecuniary loss) arising out of the use of inability to use this product, even if "  +
         "Author of this Sotware is aware of the possibility of such damages and known defect.",
