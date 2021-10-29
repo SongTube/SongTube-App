@@ -91,11 +91,19 @@ class MusicBrainzAPI {
   }
 
   static String getAlbum(parsedJson) {
-    return parsedJson["releases"][0]["title"];
+    if (parsedJson.containsKey('releases')) {
+      return parsedJson["releases"][0]["title"];
+    } else {
+      return "Unknown";
+    }
   }
 
   static String getTrackNumber(parsedJson) {
-    return parsedJson["releases"][0]["media"][0]["track-offset"].toString() ?? "0";
+    if (parsedJson.containsKey('releases')) {
+      return parsedJson["releases"][0]["media"][0]["track-offset"].toString() ?? "0";
+    } else {
+      return 'Unknown';
+    }
   }
 
   static String getDiscNumber(parsedJson) {
@@ -103,7 +111,11 @@ class MusicBrainzAPI {
   }
 
   static String getDate(parsedJson) {
-    return parsedJson["releases"][0]["date"];
+    if (parsedJson.containsKey('releases')) {
+      return parsedJson["releases"][0]["date"];
+    } else {
+      return 'Unknown';
+    }
   }
 
   static String getGenre(parsedJson) {
@@ -174,6 +186,44 @@ class MusicBrainzAPI {
       });
       return thumbnails;
     }
+  }
+
+}
+
+class MusicBrainzRecord {
+
+  final String id;
+  final String title;
+  final String artist;
+  final String album;
+  final String date;
+  final String genre;
+  final String disc;
+  final String track;
+
+  MusicBrainzRecord({
+    this.id,
+    this.title,
+    this.artist,
+    this.album,
+    this.date,
+    this.genre,
+    this.disc,
+    this.track
+  });
+
+  static MusicBrainzRecord fromMap(Map<String, dynamic> map) {
+    return MusicBrainzRecord(
+      id: map.containsKey('releases')
+        ? map['releases'][0]['id'] : null,
+      title: MusicBrainzAPI.getTitle(map),
+      artist: MusicBrainzAPI.getArtist(map),
+      album: MusicBrainzAPI.getAlbum(map),
+      date: MusicBrainzAPI.getDate(map) ?? 'Unknown',
+      genre: MusicBrainzAPI.getGenre(map) ?? 'Unknown',
+      disc: MusicBrainzAPI.getDiscNumber(map) ?? 'Unknown',
+      track: MusicBrainzAPI.getTrackNumber(map) ?? 'Unknown',
+    );
   }
 
 }
