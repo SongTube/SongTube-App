@@ -49,18 +49,18 @@ class MusicBrainzAPI {
     return jsonDecode(utf8.decode(response.bodyBytes))["recordings"];
   }
 
-  static Future<TagsControllers> getSongTags(parsedJson, {String artworkLink}) async {
+  static Future<TagsControllers> getSongTags(MusicBrainzRecord record, {String artworkLink}) async {
     TagsControllers tagsControllers = TagsControllers();
-    tagsControllers.titleController.text = getTitle(parsedJson);
-    tagsControllers.artistController.text = getArtist(parsedJson);
-    tagsControllers.albumController.text = getAlbum(parsedJson);
-    tagsControllers.dateController.text = getDate(parsedJson);
-    tagsControllers.discController.text = getDiscNumber(parsedJson);
-    tagsControllers.trackController.text = getTrackNumber(parsedJson);
-    tagsControllers.genreController.text = getGenre(parsedJson);
+    tagsControllers.titleController.text = record.title;
+    tagsControllers.artistController.text = record.artist;
+    tagsControllers.albumController.text = record.album;
+    tagsControllers.dateController.text = record.date;
+    tagsControllers.discController.text = record.disc;
+    tagsControllers.trackController.text = record.track;
+    tagsControllers.genreController.text = record.genre;
     tagsControllers.artworkController = null;
     if (artworkLink == null) {
-      await getThumbnails(parsedJson["releases"][0]["id"]).then((map) {
+      await getThumbnails(record.id).then((map) {
         if (map != null) {
           if (map.containsKey("1200x1200"))
             tagsControllers.artworkController = map["1200x1200"];
@@ -74,11 +74,11 @@ class MusicBrainzAPI {
     return tagsControllers;
   }
 
-  static String getTitle(parsedJson) {
+  static String getTitle(Map<String, dynamic> parsedJson) {
     return parsedJson["title"];
   }
 
-  static String getArtist(parsedJson) {
+  static String getArtist(Map<String, dynamic> parsedJson) {
     String fullArtist = "";
     for (var map in parsedJson["artist-credit"]) {
       if (fullArtist == "") {
@@ -90,7 +90,7 @@ class MusicBrainzAPI {
     return fullArtist;
   }
 
-  static String getAlbum(parsedJson) {
+  static String getAlbum(Map<String, dynamic> parsedJson) {
     if (parsedJson.containsKey('releases')) {
       return parsedJson["releases"][0]["title"];
     } else {
@@ -98,7 +98,7 @@ class MusicBrainzAPI {
     }
   }
 
-  static String getTrackNumber(parsedJson) {
+  static String getTrackNumber(Map<String, dynamic>parsedJson) {
     if (parsedJson.containsKey('releases')) {
       return parsedJson["releases"][0]["media"][0]["track-offset"].toString() ?? "0";
     } else {
@@ -106,11 +106,11 @@ class MusicBrainzAPI {
     }
   }
 
-  static String getDiscNumber(parsedJson) {
+  static String getDiscNumber(Map<String, dynamic> parsedJson) {
     return "0";
   }
 
-  static String getDate(parsedJson) {
+  static String getDate(Map<String, dynamic>parsedJson) {
     if (parsedJson.containsKey('releases')) {
       return parsedJson["releases"][0]["date"];
     } else {
@@ -118,7 +118,7 @@ class MusicBrainzAPI {
     }
   }
 
-  static String getGenre(parsedJson) {
+  static String getGenre(Map<String, dynamic> parsedJson) {
     if (parsedJson.containsKey("genres")) {
       if (parsedJson["genres"].isNotEmpty) {
         return parsedJson["genres"][0]["name"];

@@ -87,24 +87,19 @@ class DatabaseService {
     await Future.forEach(result, (element) async {
       SongFile songFile = SongFile.fromMap(element);
       if (await File(songFile.path).exists()) {
-        String thumbnailsPath = (await getApplicationDocumentsDirectory()).path + "/Thumbnails/";
-        File coverPath = File("$thumbnailsPath/${songFile.title.replaceAll("/", "_")}.jpg");
-        if (!await coverPath.exists()) {
-          File coverImage =
-            await FFmpegExtractor.getAudioArtwork(
-              audioFile: songFile.path,
-              extractionMethod: ArtworkExtractMethod.AudioQuery
-            );
-          if (!await coverImage.exists()) {
-            if (isURL(songFile.coverUrl)) {
-              coverImage = await AudioTagger.generateCover(songFile.coverUrl);
-            } else {
-              coverImage = File(songFile.coverUrl);
-            }
+        File coverImage = await FFmpegExtractor.getAudioArtwork(
+          audioFile: songFile.path,
+          extractionMethod: ArtworkExtractMethod.Automatic,
+          forceExtraction: true
+        );
+        if (!await coverImage.exists()) {
+          if (isURL(songFile.coverUrl)) {
+            coverImage = await AudioTagger.generateCover(songFile.coverUrl);
+          } else {
+            coverImage = File(songFile.coverUrl);
           }
-          await coverImage.copy(coverPath.path);
         }
-        songFile.coverPath = coverPath.path;
+        songFile.coverPath = coverImage.path;
         list.add(songFile);
       }
     });

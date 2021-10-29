@@ -49,6 +49,9 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
   // Audio Settings
   AudioOnlyStream selectedAudio;
 
+  // Tags Controller
+  TagsControllers tags;
+
   // Audio Features
   bool showAudioFeatures = false;
   double volumeModifier = 0;
@@ -76,6 +79,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
 
   @override
   void initState() {
+    tags = widget.tags;
     selectedAudio = widget.video.audioWithBestAacQuality;
     if (widget.video.segments.isNotEmpty) {
       widget.video.segments.forEach((element) {
@@ -113,7 +117,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
     DownloadItem item = DownloadItem.fetchData(
       widget.video,
       list, 
-      Provider.of<VideoPageProvider>(context, listen: false).currentTags,
+      tags,
       Provider.of<ConfigurationProvider>(context, listen: false)
     );
     widget.onDownload(item);
@@ -121,8 +125,6 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
 
   @override
   Widget build(BuildContext context) {
-    VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
-    pageProvider.currentTags = widget.tags;
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
@@ -161,7 +163,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                 .pickFiles(type: FileType.image))
                 .paths[0]);
               if (image == null) return;
-              pageProvider.currentTags.artworkController = image.path;
+              tags.artworkController = image.path;
               setState(() {});
             },
             child: Container(
@@ -190,9 +192,9 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                             child: ImageFade(
                               fadeDuration: Duration(milliseconds: 300),
                               placeholder: Container(color: Theme.of(context).cardColor),
-                              image: isURL(pageProvider.currentTags.artworkController)
-                                ? NetworkImage(pageProvider.currentTags.artworkController)
-                                : FileImage(File(pageProvider.currentTags.artworkController)),
+                              image: isURL(tags.artworkController)
+                                ? NetworkImage(tags.artworkController)
+                                : FileImage(File(tags.artworkController)),
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -223,7 +225,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            pageProvider.currentTags.titleController.text,
+                            tags.titleController.text,
                             style: TextStyle(
                               fontSize: 16,
                               fontFamily: 'Product Sans',
@@ -234,7 +236,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                           ),
                           SizedBox(height: 4),
                           Text(
-                            pageProvider.currentTags.artistController.text,
+                            tags.artistController.text,
                             style: TextStyle(
                               fontSize: 14,
                               fontFamily: 'Product Sans',
@@ -311,7 +313,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                               ),
                               SizedBox(width: 8),
                               InkWell(
-                                onTap: () => setState(() => pageProvider.currentTags.updateTextControllers(widget.video)),
+                                onTap: () => setState(() => tags.updateTextControllers(widget.video)),
                                 borderRadius: BorderRadius.circular(50),
                                 child: Ink(
                                   color: Colors.transparent,
@@ -349,20 +351,20 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                           context: context,
                           builder: (_) => LoadingDialog()
                         );
-                        String lastArtwork = pageProvider.currentTags.artworkController;
+                        String lastArtwork = tags.artworkController;
                         var record = await MusicBrainzAPI
-                          .getFirstRecord(pageProvider.currentTags.titleController.text);
-                        pageProvider.currentTags = await MusicBrainzAPI.getSongTags(record);
-                        if (pageProvider.currentTags.artworkController == null)
-                          pageProvider.currentTags.artworkController = lastArtwork;
+                          .getFirstRecord(tags.titleController.text);
+                        tags = await MusicBrainzAPI.getSongTags(record);
+                        if (tags.artworkController == null)
+                          tags.artworkController = lastArtwork;
                         Navigator.pop(context);
                         setState(() {});
                       } else if (value == 'manualTag') {
-                        var record = await Navigator.push(context,
+                        MusicBrainzRecord record = await Navigator.push(context,
                           BlurPageRoute(builder: (context) => 
                             TagsResultsPage(
-                              title: pageProvider.currentTags.titleController.text,
-                              artist: pageProvider.currentTags.artistController.text
+                              title: tags.titleController.text,
+                              artist: tags.artistController.text
                             ),
                             blurStrength: Provider.of<PreferencesProvider>
                               (context, listen: false).enableBlurUI ? 20 : 0));
@@ -371,10 +373,10 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                           context: context,
                           builder: (_) => LoadingDialog()
                         );
-                        String lastArtwork = pageProvider.currentTags.artworkController;
-                        pageProvider.currentTags = await MusicBrainzAPI.getSongTags(record);
-                        if (pageProvider.currentTags.artworkController == null)
-                          pageProvider.currentTags.artworkController = lastArtwork;
+                        String lastArtwork = tags.artworkController;
+                        tags = await MusicBrainzAPI.getSongTags(record);
+                        if (tags.artworkController == null)
+                          tags.artworkController = lastArtwork;
                         Navigator.pop(context);
                         setState(() {});
                       } else {
@@ -541,7 +543,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                   children: [
                     Expanded(
                       child: TextFieldTile(
-                        textController: pageProvider.currentTags.titleController,
+                        textController: tags.titleController,
                         inputType: TextInputType.text,
                         labelText: Languages.of(context).labelEditorTitle,
                         icon: EvaIcons.textOutline,
@@ -556,7 +558,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                     // Album TextField
                     Expanded(
                       child: TextFieldTile(
-                        textController: pageProvider.currentTags.albumController,
+                        textController: tags.albumController,
                         inputType: TextInputType.text,
                         labelText: Languages.of(context).labelEditorAlbum,
                         icon: EvaIcons.bookOpenOutline,
@@ -566,7 +568,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                     // Artist TextField
                     Expanded(
                       child: TextFieldTile(
-                        textController: pageProvider.currentTags.artistController,
+                        textController: tags.artistController,
                         inputType: TextInputType.text,
                         labelText: Languages.of(context).labelEditorArtist,
                         icon: EvaIcons.personOutline,
@@ -581,7 +583,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                     // Gender TextField
                     Expanded(
                       child: TextFieldTile(
-                        textController: pageProvider.currentTags.genreController,
+                        textController: tags.genreController,
                         inputType: TextInputType.text,
                         labelText: Languages.of(context).labelEditorGenre,
                         icon: EvaIcons.bookOutline,
@@ -591,7 +593,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                     // Date TextField
                     Expanded(
                       child: TextFieldTile(
-                        textController: pageProvider.currentTags.dateController,
+                        textController: tags.dateController,
                         inputType: TextInputType.datetime,
                         labelText: Languages.of(context).labelEditorDate,
                         icon: EvaIcons.calendarOutline,
@@ -606,7 +608,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                     // Disk TextField
                     Expanded(
                       child: TextFieldTile(
-                        textController: pageProvider.currentTags.discController,
+                        textController: tags.discController,
                         inputType: TextInputType.number,
                         labelText: Languages.of(context).labelEditorDisc,
                         icon: EvaIcons.playCircleOutline
@@ -616,7 +618,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                     // Track TextField
                     Expanded(
                       child: TextFieldTile(
-                        textController: pageProvider.currentTags.trackController,
+                        textController: tags.trackController,
                         inputType: TextInputType.number,
                         labelText: Languages.of(context).labelEditorTrack,
                         icon: EvaIcons.musicOutline,

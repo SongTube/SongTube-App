@@ -433,7 +433,10 @@ class DownloadSet {
       );
       // Only add Artwork if song is in AAC Format
       if (downloadItem.ffmpegTask == FFmpegTask.ConvertToAAC) {
-        File croppedImage;
+        File croppedImage = new File(
+          (await getExternalStorageDirectory()).path +
+          "/${RandomString.getRandomString(5)}"
+        );
         if (isURL(tags.coverurl)) {
           http.Response response;
           File artwork = new File(
@@ -458,10 +461,10 @@ class DownloadSet {
               downloadItem.tags.coverurl = "https://img.youtube.com/vi/$id/mqdefault.jpg";
             } catch (_) {}
           }
-          croppedImage = await croppedImage.writeAsBytes(
+          await croppedImage.writeAsBytes(
             await AudioTagger.cropToSquare(artwork));
         } else {
-          croppedImage = await croppedImage.writeAsBytes(
+          await croppedImage.writeAsBytes(
             await AudioTagger.cropToSquare(File(tags.coverurl)));
         }
         await AudioTagger.writeArtwork(
