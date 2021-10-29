@@ -1,7 +1,9 @@
 import 'dart:ui';
 
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/musicBrainzApi.dart';
@@ -21,13 +23,27 @@ class TagsResultsPage extends StatefulWidget {
 }
 
 class _TagsResultsPageState extends State<TagsResultsPage> {
+
   TextEditingController searchController;
+
+  List<MusicBrainzRecord> searchResults = [];
+
   @override
   void initState() {
-    searchController = TextEditingController();
-    searchController.text = widget.title;
+    searchController = TextEditingController()..text = widget.title;
+    searchForRecords();
     super.initState();
   }
+
+  void searchForRecords() async {
+    final result = await MusicBrainzAPI.getRecordings(searchController.text);
+    searchResults.clear();
+    result.forEach((element) {
+      searchResults.add(MusicBrainzRecord.fromMap(element));
+    });
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,352 +61,312 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
         elevation: 0,
         bottom: PreferredSize(
           preferredSize: Size(double.infinity, 45),
-          child: Row(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.only(left: 16),
-                  child: TextFormField(
-                    controller: searchController,
-                    style: TextStyle(
-                      color: Theme.of(context).textTheme.bodyText1.color
+          child: Container(
+            margin: EdgeInsets.only(top: 4, left: 16, right: 16),
+            decoration: BoxDecoration(
+              color: Theme.of(context).cardColor,
+              borderRadius: BorderRadius.circular(100) 
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 16),
+                    child: TextFormField(
+                      controller: searchController,
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyText1.color,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      decoration: InputDecoration(
+                        enabledBorder: InputBorder.none
+                      ),
+                      onFieldSubmitted: (searchQuery) {
+                        setState(() => searchController.text = searchQuery);
+                        searchForRecords();
+                      },
                     ),
-                    decoration: InputDecoration(
-                      enabledBorder: InputBorder.none
-                    ),
-                    onFieldSubmitted: (searchQuery) {
-                      setState(() => searchController.text = searchQuery);
-                    },
                   ),
                 ),
-              ),
-              IconButton(
-                padding: EdgeInsets.only(right: 20, left: 12),
-                icon: Icon(EvaIcons.searchOutline),
-                onPressed: () {
-                  setState(() => searchController.text = searchController.text);
-                }
-              )
-            ],
+                IconButton(
+                  padding: EdgeInsets.only(right: 20, left: 12),
+                  icon: Icon(EvaIcons.searchOutline),
+                  onPressed: () {
+                    searchForRecords();
+                  }
+                )
+              ],
+            ),
           ),
         ),
       ),
-      body: ListView(
-        
-        children: [
-          SizedBox(height: 16),
-          FutureBuilder(
-            future: MusicBrainzAPI.getRecordings(searchController.text),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                var records = snapshot.data;
-                return GridView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  addAutomaticKeepAlives: true,
-                  cacheExtent: 9999999,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 16.0,
-                    mainAxisSpacing: 16.0,
-                  ),
-                  itemCount: records.length,
-                  itemBuilder: (context, index) {
-                    var record = records[index];
-                    return FutureBuilder(
-                      future: _getArtworkLink(record, index),
-                      builder: (context, image) {
-                        return GestureDetector(
-                          onTap: () async {
-                            var result = await Navigator.of(context).push(
-                              BlurPageRoute(
-                                backdropColor: Colors.black.withOpacity(0.4),
-                                blurStrength: Provider.of<PreferencesProvider>
-                                  (context, listen: false).enableBlurUI ? 20 : 0,
-                                builder: (BuildContext context) {
-                                  return Center(
-                                    child: Container(
-                                      margin: EdgeInsets.all(20),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          _artworkWidget(image, index, false),
-                                          Container(
-                                            padding: EdgeInsets.all(16),
-                                            width: double.infinity,
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.only(
-                                                bottomLeft: Radius.circular(10),
-                                                bottomRight: Radius.circular(10)
-                                              ),
-                                              color: Theme.of(context).scaffoldBackgroundColor
-                                            ),
-                                            child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                RichText(
-                                                  text: TextSpan(
-                                                    children: [
-                                                      TextSpan(
-                                                        text: Languages.of(context).labelEditorTitle + ": ",
-                                                        style: TextStyle(
-                                                          fontWeight: FontWeight.w600,
-                                                          fontFamily: 'Product Sans',
-                                                          fontSize: 16,
-                                                          color: Theme.of(context).textTheme
-                                                            .bodyText1.color
-                                                        )
-                                                      ),
-                                                      TextSpan(
-                                                        text: "${record['title']}",
-                                                        style: TextStyle(
-                                                          color: Theme.of(context).textTheme
-                                                            .bodyText1.color
-                                                        )
-                                                      ),
-                                                    ]
-                                                  ),
-                                                ),
-                                                RichText(
-                                                  text: TextSpan(
-                                                    children: [
-                                                      TextSpan(
-                                                        text: Languages.of(context).labelEditorArtist + ": ",
-                                                        style: TextStyle(
-                                                          fontWeight: FontWeight.w600,
-                                                          fontFamily: 'Product Sans',
-                                                          fontSize: 16,
-                                                          color: Theme.of(context).textTheme
-                                                            .bodyText1.color
-                                                        )
-                                                      ),
-                                                      TextSpan(
-                                                        text: "${MusicBrainzAPI.getArtist(record)}",
-                                                        style: TextStyle(
-                                                          color: Theme.of(context).textTheme
-                                                            .bodyText1.color
-                                                        )
-                                                      ),
-                                                    ]
-                                                  ),
-                                                ),
-                                                RichText(
-                                                  text: TextSpan(
-                                                    children: [
-                                                      TextSpan(
-                                                        text: Languages.of(context).labelEditorAlbum + ": ",
-                                                        style: TextStyle(
-                                                          fontWeight: FontWeight.w600,
-                                                          fontFamily: 'Product Sans',
-                                                          fontSize: 16,
-                                                          color: Theme.of(context).textTheme
-                                                            .bodyText1.color
-                                                        )
-                                                      ),
-                                                      TextSpan(
-                                                        text: "${record['releases'][0]['title']}",
-                                                        style: TextStyle(
-                                                          color: Theme.of(context).textTheme
-                                                            .bodyText1.color
-                                                        ),
-                                                      ),
-                                                    ]
-                                                  ),
-                                                ),
-                                                RichText(
-                                                  text: TextSpan(
-                                                    children: [
-                                                      TextSpan(
-                                                        text: Languages.of(context).labelEditorDate + ": ",
-                                                        style: TextStyle(
-                                                          fontWeight: FontWeight.w600,
-                                                          fontFamily: 'Product Sans',
-                                                          fontSize: 16,
-                                                          color: Theme.of(context).textTheme
-                                                            .bodyText1.color
-                                                        )
-                                                      ),
-                                                      TextSpan(
-                                                        text: "${MusicBrainzAPI.getDate(record)}",
-                                                        style: TextStyle(
-                                                          color: Theme.of(context).textTheme
-                                                            .bodyText1.color
-                                                        ),
-                                                      ),
-                                                    ]
-                                                  ),
-                                                ),
-                                                RichText(
-                                                  text: TextSpan(
-                                                    children: [
-                                                      TextSpan(
-                                                        text: Languages.of(context).labelEditorGenre + ": ",
-                                                        style: TextStyle(
-                                                          fontWeight: FontWeight.w600,
-                                                          fontFamily: 'Product Sans',
-                                                          fontSize: 16,
-                                                          color: Theme.of(context).textTheme
-                                                            .bodyText1.color
-                                                        )
-                                                      ),
-                                                      TextSpan(
-                                                        text: MusicBrainzAPI.getGenre(record) == "Any"
-                                                          ? Languages.of(context).labelNotSpecified
-                                                          : "${MusicBrainzAPI.getGenre(record)}",
-                                                        style: TextStyle(
-                                                          color: Theme.of(context).textTheme
-                                                            .bodyText1.color
-                                                        ),
-                                                      ),
-                                                    ]
-                                                  ),
-                                                ),
-                                                Material(
-                                                  color: Colors.transparent,
-                                                  child: GestureDetector(
-                                                    onTap: () {
-                                                      Navigator.pop(context, record);
-                                                    },
-                                                    child: Container(
-                                                      color: Colors.transparent,
-                                                      padding: EdgeInsets.all(8),
-                                                      child: Row(
-                                                        mainAxisSize: MainAxisSize.min,
-                                                        children: [
-                                                          Spacer(),
-                                                          Text(
-                                                            "Apply",
-                                                            style: TextStyle(
-                                                              fontWeight: FontWeight.w600,
-                                                              fontFamily: 'Product Sans',
-                                                              fontSize: 16,
-                                                              color: Theme.of(context).textTheme
-                                                                .bodyText1.color
-                                                            ),
-                                                          ),
-                                                          SizedBox(width: 8),
-                                                          Icon(EvaIcons.checkmark,
-                                                            color: Theme.of(context).accentColor),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                }
-                              ),
-                            );
-                            if (result == null) return;
-                            Navigator.pop(context, result);
-                          },
-                          child: Column(
-                            children: [
-                              Expanded(
-                                child: _artworkWidget(image, index, true)
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 16, right: 8, top: 8),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    RichText(
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.center,
-                                      text: TextSpan(
-                                        children: [
-                                          TextSpan(
-                                            text: Languages.of(context).labelEditorTitle + ": ",
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              color: Theme.of(context).textTheme
-                                                .bodyText1.color
-                                            )
-                                          ),
-                                          TextSpan(
-                                            text: "${record['title']}",
-                                            style: TextStyle(
-                                              color: Theme.of(context).textTheme
-                                                .bodyText1.color
-                                            )
-                                          ),
-                                        ]
-                                      ),
-                                    ),
-                                    RichText(
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.center,
-                                      text: TextSpan(
-                                        children: [
-                                          TextSpan(
-                                            text: Languages.of(context).labelEditorArtist + ": ",
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              color: Theme.of(context).textTheme
-                                                .bodyText1.color
-                                            )
-                                          ),
-                                          TextSpan(
-                                            text: "${MusicBrainzAPI.getArtist(record)}",
-                                            style: TextStyle(
-                                              color: Theme.of(context).textTheme
-                                                .bodyText1.color
-                                            )
-                                          ),
-                                        ]
-                                      ),
-                                    ),
-                                    RichText(
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.center,
-                                      text: TextSpan(
-                                        children: [
-                                          TextSpan(
-                                            text: Languages.of(context).labelEditorAlbum + ": ",
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              color: Theme.of(context).textTheme
-                                                .bodyText1.color
-                                            )
-                                          ),
-                                          TextSpan(
-                                            text: "${record['releases'][0]['title']}",
-                                            style: TextStyle(
-                                              color: Theme.of(context).textTheme
-                                                .bodyText1.color
-                                            ),
-                                          ),
-                                        ]
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-                    );
-                  },
-                );
-              } else {
-                return Center(child: CircularProgressIndicator());
-              }
-            }
-          )
-        ],
+      body: ListView.builder(
+        padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+        addAutomaticKeepAlives: true,
+        cacheExtent: 9999999,
+        itemCount: searchResults.length,
+        itemBuilder: (context, index) {
+          var record = searchResults[index];
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: _resultTile(record, index),
+          );
+        },
       ),
     );
+  }
+
+  Widget _resultTile(MusicBrainzRecord record, int index) {
+    return FutureBuilder(
+      future: _getArtworkLink(record, index),
+      builder: (context, image) {
+        return GestureDetector(
+          onTap: () async {
+            var result = await Navigator.of(context).push(
+              BlurPageRoute(
+                backdropColor: Colors.black.withOpacity(0.4),
+                blurStrength: Provider.of<PreferencesProvider>
+                  (context, listen: false).enableBlurUI ? 20 : 0,
+                builder: (BuildContext context) {
+                  return _dataPreview(record, image, index);
+                }
+              ),
+            );
+            if (result == null) return;
+            Navigator.pop(context, result);
+          },
+          child: SizedBox(
+            height: 100,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: _artworkWidget(image, index, true),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 16, right: 8, top: 8),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Title
+                        Text(
+                          record.title,
+                          maxLines: 1,
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w700
+                          )
+                        ),
+                        SizedBox(height: 4),
+                        // Album
+                        Text(
+                          record.album,
+                          maxLines: 1,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600
+                          )
+                        ),
+                        SizedBox(height: 4),
+                        // Artist
+                        Text(
+                          "By ${record.artist}",
+                          maxLines: 1,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600
+                          )
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      }
+    );
+  }
+
+  Widget _dataPreview(MusicBrainzRecord record, AsyncSnapshot<dynamic> image, int index) {
+    return Center(
+      child: Container(
+        margin: EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _artworkWidget(image, index, false),
+            Container(
+              padding: EdgeInsets.all(16),
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(10),
+                  bottomRight: Radius.circular(10)
+                ),
+                color: Theme.of(context).scaffoldBackgroundColor
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: Languages.of(context).labelEditorTitle + ": ",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Product Sans',
+                            fontSize: 16,
+                            color: Theme.of(context).textTheme
+                              .bodyText1.color
+                          )
+                        ),
+                        TextSpan(
+                          text: record.title,
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme
+                              .bodyText1.color
+                          )
+                        ),
+                      ]
+                    ),
+                  ),
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: Languages.of(context).labelEditorArtist + ": ",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Product Sans',
+                            fontSize: 16,
+                            color: Theme.of(context).textTheme
+                              .bodyText1.color
+                          )
+                        ),
+                        TextSpan(
+                          text: record.artist,
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme
+                              .bodyText1.color
+                          )
+                        ),
+                      ]
+                    ),
+                  ),
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: Languages.of(context).labelEditorAlbum + ": ",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Product Sans',
+                            fontSize: 16,
+                            color: Theme.of(context).textTheme
+                              .bodyText1.color
+                          )
+                        ),
+                        TextSpan(
+                          text: record.album,
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme
+                              .bodyText1.color
+                          ),
+                        ),
+                      ]
+                    ),
+                  ),
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: Languages.of(context).labelEditorDate + ": ",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Product Sans',
+                            fontSize: 16,
+                            color: Theme.of(context).textTheme
+                              .bodyText1.color
+                          )
+                        ),
+                        TextSpan(
+                          text: record.date,
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme
+                              .bodyText1.color
+                          ),
+                        ),
+                      ]
+                    ),
+                  ),
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: Languages.of(context).labelEditorGenre + ": ",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Product Sans',
+                            fontSize: 16,
+                            color: Theme.of(context).textTheme
+                              .bodyText1.color
+                          )
+                        ),
+                        TextSpan(
+                          text: record.genre,
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme
+                              .bodyText1.color
+                          ),
+                        ),
+                      ]
+                    ),
+                  ),
+                  Material(
+                    color: Colors.transparent,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context, record);
+                      },
+                      child: Container(
+                        color: Colors.transparent,
+                        padding: EdgeInsets.all(8),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Spacer(),
+                            Text(
+                              "Apply",
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Product Sans',
+                                fontSize: 16,
+                                color: Theme.of(context).textTheme
+                                  .bodyText1.color
+                              ),
+                            ),
+                            SizedBox(width: 8),
+                            Icon(EvaIcons.checkmark,
+                              color: Theme.of(context).accentColor),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+      );
   }
 
   Widget _artworkWidget(AsyncSnapshot image, int index, bool fullRound) {
@@ -436,10 +412,10 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
     );
   }
 
-  Future<String> _getArtworkLink(record, int index) async {
+  Future<String> _getArtworkLink(MusicBrainzRecord record, int index) async {
     await Future.delayed(Duration(seconds: index));
     Map<String, String> map = await MusicBrainzAPI
-      .getThumbnails(record['releases'][0]['id']);
+      .getThumbnails(record.id);
     String url;
     if (map.containsKey("1200x1200")) {
       url = map["1200x1200"];
