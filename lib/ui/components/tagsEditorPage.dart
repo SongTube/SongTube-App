@@ -35,7 +35,6 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
 
   TagsControllers tagsControllers;
   String originalArtwork;
-  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -47,7 +46,6 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: scaffoldKey,
       resizeToAvoidBottomInset: true,
       backgroundColor: Theme.of(context).cardColor,
       body: Column(
@@ -115,28 +113,25 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
   }
 
   Widget _artworkImage() {
-    return Hero(
-      tag: widget.song.title,
-      child: AspectRatio(
-        aspectRatio: 1,
-        child: Stack(
-          fit: StackFit.expand,
-          alignment: Alignment.center,
-          children: [
-            Image.file(
-              File(widget.song.extras["artwork"]),
-              fit: BoxFit.cover,
-            ),
-            if (tagsControllers.artworkController != null)
-            FadeInImage(
-              image: isURL(tagsControllers.artworkController)
-                ? NetworkImage(tagsControllers.artworkController)
-                : FileImage(File(tagsControllers.artworkController)),
-              placeholder: MemoryImage(kTransparentImage),
-              fit: BoxFit.cover,
-            ),
-          ],
-        ),
+    return AspectRatio(
+      aspectRatio: 1,
+      child: Stack(
+        fit: StackFit.expand,
+        alignment: Alignment.center,
+        children: [
+          Image.file(
+            File(widget.song.extras["artwork"]),
+            fit: BoxFit.cover,
+          ),
+          if (tagsControllers.artworkController != null)
+          FadeInImage(
+            image: isURL(tagsControllers.artworkController)
+              ? NetworkImage(tagsControllers.artworkController)
+              : FileImage(File(tagsControllers.artworkController)),
+            placeholder: MemoryImage(kTransparentImage),
+            fit: BoxFit.cover,
+          ),
+        ],
       ),
     );
   }
@@ -227,6 +222,7 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
       children: [
         // Search on MusicBrainz
         FloatingActionButton(
+          heroTag: 'fabSearch',
           backgroundColor: Theme.of(context).cardColor,
           foregroundColor: Colors.white,
           child: Icon(Icons.search,
@@ -238,6 +234,7 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
         SizedBox(width: 16),
         // Save Audio Information
         FloatingActionButton.extended(
+          heroTag: 'fabSave',
           backgroundColor: Theme.of(context).accentColor,
           foregroundColor: Colors.white,
           label: Row(

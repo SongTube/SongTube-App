@@ -90,30 +90,26 @@ class SongsListView extends StatelessWidget {
                     size: 20,
                   ),
                 ),
-                Hero(
-                  tag: song.title,
-                  child: AnimatedContainer(
-                    duration: Duration(milliseconds: 300),
-                    height: 50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          blurRadius: 8
-                        )
-                      ],
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: FadeInImage(
-                        fadeInDuration: Duration(milliseconds: 200),
-                        placeholder: MemoryImage(kTransparentImage),
-                        image: FileImage(File(song.extras["artwork"])),
-                        fit: BoxFit.cover,
+                Container(
+                  height: 50,
+                  width: 50,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 8
                       )
-                    ),
+                    ],
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: FadeInImage(
+                      fadeInDuration: Duration(milliseconds: 200),
+                      placeholder: MemoryImage(kTransparentImage),
+                      image: FileImage(File(song.extras["artwork"])),
+                      fit: BoxFit.cover,
+                    )
                   ),
                 ),
               ],
