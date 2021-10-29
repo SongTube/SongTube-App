@@ -30,19 +30,23 @@ class SongsListView extends StatelessWidget {
   final bool shrinkWrap;
   final bool tintNowPlaying;
   final bool addBottomPadding;
+  final ScrollController scrollController;
   SongsListView({
     @required this.songs,
     this.hasDownloadType = false,
     this.searchQuery = "",
     this.shrinkWrap = false,
     this.tintNowPlaying = true,
-    this.addBottomPadding = true
-  });
+    this.addBottomPadding = true,
+    this.scrollController,
+    Key key
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
-    
     return ListView.builder(
+      key: key,
+      controller: scrollController,
       shrinkWrap: shrinkWrap,
       physics: shrinkWrap ? NeverScrollableScrollPhysics() : AlwaysScrollableScrollPhysics(),
       itemCount: songs.length,

@@ -78,6 +78,9 @@ class MediaProvider extends ChangeNotifier {
   bool loadingDownloads = true;
   bool loadingVideos = true;
 
+  // Position in Pixels of the Music Tab
+  double musicScrollPosition = 0;
+
   // --------
   // Database
   // --------
