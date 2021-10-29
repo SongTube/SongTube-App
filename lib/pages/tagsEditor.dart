@@ -5,6 +5,7 @@ import 'package:audio_tagger/audio_tags.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/ffmpeg/extractor.dart';
 import 'package:songtube/internal/languages.dart';
@@ -45,6 +46,12 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.light,
+      ),
+    );
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: Theme.of(context).cardColor,
@@ -64,11 +71,11 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
                   title: Text(
                     Languages.of(context).labelTagsEditor.replaceAll("\n", " "),
                     style: TextStyle(
-                      color: Theme.of(context).textTheme.bodyText1.color
+                      color: Colors.white
                     ),
                   ),
                   iconTheme: IconThemeData(
-                    color: Theme.of(context).iconTheme.color
+                    color: Colors.white
                   ),
                   actions: [
                     GestureDetector(
@@ -195,7 +202,7 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
           labelText: Languages.of(context).labelEditorTrack,
           icon: EvaIcons.musicOutline,
         ),
-        Divider(),
+        Divider(color: Colors.transparent),
         ListTile(
           onTap: () {
             setState(() {

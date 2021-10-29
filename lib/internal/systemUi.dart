@@ -7,8 +7,8 @@ import 'package:songtube/provider/preferencesProvider.dart';
 
 void setSystemUiColor(BuildContext context) {
     ConfigurationProvider config = Provider.of<ConfigurationProvider>(context, listen: false);
-    MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
-    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
+    MediaProvider mediaProvider = Provider.of<MediaProvider>(context, listen: false);
+    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context, listen: false);
     Brightness _systemBrightness = Theme.of(context).brightness;
     Brightness _statusBarBrightness = _systemBrightness == Brightness.light
       ? Brightness.dark

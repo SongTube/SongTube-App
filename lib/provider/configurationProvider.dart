@@ -232,4 +232,8 @@ class ConfigurationProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void updateState() {
+    notifyListeners();
+  }
+
 }

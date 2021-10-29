@@ -10,8 +10,10 @@ import 'package:provider/provider.dart';
 import 'package:songtube/internal/ffmpeg/converter.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/models/videoFile.dart';
+import 'package:songtube/internal/systemUi.dart';
 import 'package:songtube/players/service/playerService.dart';
 import 'package:songtube/players/videoPlayer.dart';
+import 'package:songtube/provider/configurationProvider.dart';
 import 'package:songtube/provider/mediaProvider.dart';
 import 'package:songtube/provider/preferencesProvider.dart';
 import 'package:songtube/ui/animations/blurPageRoute.dart';
@@ -171,9 +173,9 @@ class SongsListView extends StatelessWidget {
                     mediaProvider.deleteSong(song);
                     break;
                   case "Edit Tags":
-                    FFmpegConverter().getMediaFormat(song.id).then((format) {
+                    FFmpegConverter().getMediaFormat(song.id).then((format) async {
                       if (format == "m4a") {
-                        Navigator.of(context).push(
+                        await Navigator.of(context).push(
                           BlurPageRoute(
                             builder: (_) {
                               return TagsEditorPage(
@@ -184,6 +186,9 @@ class SongsListView extends StatelessWidget {
                               (context, listen: false).enableBlurUI ? 20 : 0,
                           )
                         );
+                        Future.delayed(Duration(milliseconds: 400), () {
+                          setSystemUiColor(context);
+                        });
                       } else {
                         AppSnack.showSnackBar(
                           icon: EvaIcons.alertCircleOutline,
