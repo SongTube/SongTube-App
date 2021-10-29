@@ -198,7 +198,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       child: Consumer<ManagerProvider>(
                         builder: (context, manager, _) {
                           return SearchHistoryList(
-                            searchQuery: manager.searchController.text,
+                            searchQuery: manager.searchController.text
+                              .replaceAll('#', '')
+                              .replaceAll('&', ''),
                             onItemTap: (String item) {
                               manager.searchController.text = item;
                               manager.searchBarFocusNode.unfocus();
