@@ -5,6 +5,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_share/flutter_share.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/ffmpeg/converter.dart';
 import 'package:songtube/internal/languages.dart';
@@ -118,6 +119,10 @@ class SongsListView extends StatelessWidget {
               borderRadius: 10,
               items: [
                 FlexiblePopupItem(
+                  title: Languages.of(context).labelShare,
+                  value: "Share"
+                ),
+                FlexiblePopupItem(
                   title: Languages.of(context).labelAddToPlaylist,
                   value: "Add Playlist"
                 ),
@@ -139,6 +144,15 @@ class SongsListView extends StatelessWidget {
                   }
                 }
                 switch (value) {
+                  case "Share":
+                    FlutterShare.shareFile(
+                      title: song.title,
+                      text: '${song.title} - ${song.artist}\n\n'
+                            'Shared from SongTube\nsongtube.github.io',
+                      fileType: 'audio/*',
+                      filePath: song.id
+                    );
+                    break;
                   case "Add Playlist":
                     showModalBottomSheet(
                       context: context,

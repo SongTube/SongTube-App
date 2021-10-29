@@ -94,6 +94,7 @@ dependencies:
     floating_dots: ^0.2.2
 
     # Tools
+    flutter_share: ^2.0.0
     audio_tagger:
         git: https://github.com/SongTube/audio_tagger
 
