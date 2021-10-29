@@ -427,8 +427,10 @@ class MediaProvider extends ChangeNotifier {
     }
     imageCache.clear();
     imageCache.clearLiveImages();
-    if (AudioService.currentMediaItem.id == song.id) {
-      AudioService.updateMediaItem(song);
+    if (AudioService.currentMediaItem != null) {
+      if (AudioService.currentMediaItem.id == song.id) {
+        AudioService.updateMediaItem(song);
+      }
     }
     notifyListeners();
   }
