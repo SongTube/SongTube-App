@@ -188,7 +188,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
       borderRadius: MediaQuery.of(context).orientation == Orientation.landscape
         ? 0 : 10,
       key: pageProvider.playerKey,
-      videoTitle: pageProvider?.currentVideo?.name ?? "",
+      videoTitle: pageProvider?.currentVideo?.videoInfo?.name ?? "",
       streams: pageProvider.currentVideo.videoOnlyStreams.isNotEmpty
         ? pageProvider.currentVideo.videoOnlyStreams
         : pageProvider.currentVideo.videoStreams,
@@ -471,9 +471,9 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
               children: [
                 SizedBox(height: 4),
                 VideoEngagement(
-                  likeCount: pageProvider.currentVideo.likeCount,
-                  dislikeCount: pageProvider.currentVideo.dislikeCount,
-                  viewCount: pageProvider.currentVideo.viewCount,
+                  likeCount: pageProvider.currentVideo.videoInfo.likeCount,
+                  dislikeCount: pageProvider.currentVideo.videoInfo.dislikeCount,
+                  viewCount: pageProvider.currentVideo.videoInfo.viewCount,
                   onSaveToPlaylist: () {
                     showModalBottomSheet(
                       context: context,
@@ -506,7 +506,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                   },
                   onShare: () {
                     sharing = true;
-                    Share.share(pageProvider.currentVideo.url);
+                    Share.share(pageProvider.currentVideo.videoInfo.url);
                   },
                 ),
                 SizedBox(height: 4),

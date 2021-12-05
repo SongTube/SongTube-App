@@ -414,8 +414,10 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
 
   Future<String> _getArtworkLink(MusicBrainzRecord record, int index) async {
     await Future.delayed(Duration(seconds: index));
+    if (record.id == null) return null;
     Map<String, String> map = await MusicBrainzAPI
       .getThumbnails(record.id);
+    if (map == null) return null;
     String url;
     if (map.containsKey("1200x1200")) {
       url = map["1200x1200"];

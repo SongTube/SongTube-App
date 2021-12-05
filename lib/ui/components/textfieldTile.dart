@@ -33,10 +33,14 @@ class TextFieldTile extends StatelessWidget {
             ),
           ),
           labelText: labelText,
+          labelStyle: TextStyle(
+            fontWeight: FontWeight.w600,
+            color: Theme.of(context).accentColor,
+          )
         ),
         style: TextStyle(
           color: Theme.of(context).textTheme.bodyText1.color,
-          fontSize: 14,
+          fontSize: 16,
         ),
       ),
     );

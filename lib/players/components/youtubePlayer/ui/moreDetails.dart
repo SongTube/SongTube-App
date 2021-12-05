@@ -126,7 +126,7 @@ class _MoreDetailsSheetState extends State<MoreDetailsSheet> {
             physics: BouncingScrollPhysics(),
             children: [
               Html(
-                data: widget.video.description,
+                data: widget.video.videoInfo.description,
                 style: {
                   "html": Style(
                     padding: const EdgeInsets.all(12),

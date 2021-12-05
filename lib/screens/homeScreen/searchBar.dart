@@ -191,8 +191,8 @@ class _HomePageAppBarState extends State<HomePageAppBar> with TickerProviderStat
     if (data.isEmpty) {
       return null;
     }
-    _VideoId videoId = _VideoId(await YoutubeId.getIdFromStreamUrl(data));
-    _PlaylistId playlistId = _PlaylistId(await YoutubeId.getIdFromPlaylistUrl(data));
+    _VideoId videoId = _VideoId(await YoutubeId.getIdFromStreamUrl(data.replaceAll(' ', '')));
+    _PlaylistId playlistId = _PlaylistId(await YoutubeId.getIdFromPlaylistUrl(data.replaceAll(' ', '')));
     if (videoId.id != null) {
       return _VideoId(data);
     }

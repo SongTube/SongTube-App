@@ -60,14 +60,16 @@ class MusicBrainzAPI {
     tagsControllers.genreController.text = record.genre;
     tagsControllers.artworkController = null;
     if (artworkLink == null) {
-      await getThumbnails(record.id).then((map) {
-        if (map != null) {
-          if (map.containsKey("1200x1200"))
-            tagsControllers.artworkController = map["1200x1200"];
-          else
-            tagsControllers.artworkController = map["500x500"];
-        }
-      });
+      try {
+        await getThumbnails(record.id).then((map) {
+          if (map != null) {
+            if (map.containsKey("1200x1200"))
+              tagsControllers.artworkController = map["1200x1200"];
+            else
+              tagsControllers.artworkController = map["500x500"];
+          }
+        });
+      } catch (e) {}
     } else {
       tagsControllers.artworkController = artworkLink;
     }
@@ -91,7 +93,7 @@ class MusicBrainzAPI {
   }
 
   static String getAlbum(Map<String, dynamic> parsedJson) {
-    if (parsedJson.containsKey('releases')) {
+    if (parsedJson.containsKey('releases') && parsedJson['releases'].isNotEmpty) {
       return parsedJson["releases"][0]["title"];
     } else {
       return "Unknown";
@@ -99,7 +101,7 @@ class MusicBrainzAPI {
   }
 
   static String getTrackNumber(Map<String, dynamic>parsedJson) {
-    if (parsedJson.containsKey('releases')) {
+    if (parsedJson.containsKey('releases') && parsedJson['releases'].isNotEmpty) {
       return parsedJson["releases"][0]["media"][0]["track-offset"].toString() ?? "0";
     } else {
       return 'Unknown';
@@ -111,7 +113,7 @@ class MusicBrainzAPI {
   }
 
   static String getDate(Map<String, dynamic>parsedJson) {
-    if (parsedJson.containsKey('releases')) {
+    if (parsedJson.containsKey('releases') && parsedJson['releases'].isNotEmpty) {
       return parsedJson["releases"][0]["date"];
     } else {
       return 'Unknown';
@@ -160,6 +162,7 @@ class MusicBrainzAPI {
   }
 
   static Future<Map<String, String>> getThumbnails(mbid) async {
+    if (mbid == null) return null;
     http.Client client = new http.Client();
     Map<String, String> thumbnails = Map<String, String>();
     var response = await client.get(Uri.parse(
@@ -215,7 +218,7 @@ class MusicBrainzRecord {
   static MusicBrainzRecord fromMap(Map<String, dynamic> map) {
     return MusicBrainzRecord(
       id: map.containsKey('releases')
-        ? map['releases'][0]['id'] : null,
+        ? map['releases'].isNotEmpty ? map['releases'][0]['id'] : null : null,
       title: MusicBrainzAPI.getTitle(map),
       artist: MusicBrainzAPI.getArtist(map),
       album: MusicBrainzAPI.getAlbum(map),
