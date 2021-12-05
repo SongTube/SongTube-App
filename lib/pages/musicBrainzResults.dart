@@ -1,6 +1,9 @@
+import 'dart:io';
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -134,7 +137,7 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
                 blurStrength: Provider.of<PreferencesProvider>
                   (context, listen: false).enableBlurUI ? 20 : 0,
                 builder: (BuildContext context) {
-                  return _dataPreview(record, image, index);
+                  return _DataItem(record: record, image: image, index: index);
                 }
               ),
             );
@@ -198,183 +201,6 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
     );
   }
 
-  Widget _dataPreview(MusicBrainzRecord record, AsyncSnapshot<dynamic> image, int index) {
-    return Center(
-      child: Container(
-        margin: EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _artworkWidget(image, index, false),
-            Container(
-              padding: EdgeInsets.all(16),
-              width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(10),
-                  bottomRight: Radius.circular(10)
-                ),
-                color: Theme.of(context).scaffoldBackgroundColor
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: Languages.of(context).labelEditorTitle + ": ",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontFamily: 'Product Sans',
-                            fontSize: 16,
-                            color: Theme.of(context).textTheme
-                              .bodyText1.color
-                          )
-                        ),
-                        TextSpan(
-                          text: record.title,
-                          style: TextStyle(
-                            color: Theme.of(context).textTheme
-                              .bodyText1.color
-                          )
-                        ),
-                      ]
-                    ),
-                  ),
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: Languages.of(context).labelEditorArtist + ": ",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontFamily: 'Product Sans',
-                            fontSize: 16,
-                            color: Theme.of(context).textTheme
-                              .bodyText1.color
-                          )
-                        ),
-                        TextSpan(
-                          text: record.artist,
-                          style: TextStyle(
-                            color: Theme.of(context).textTheme
-                              .bodyText1.color
-                          )
-                        ),
-                      ]
-                    ),
-                  ),
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: Languages.of(context).labelEditorAlbum + ": ",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontFamily: 'Product Sans',
-                            fontSize: 16,
-                            color: Theme.of(context).textTheme
-                              .bodyText1.color
-                          )
-                        ),
-                        TextSpan(
-                          text: record.album,
-                          style: TextStyle(
-                            color: Theme.of(context).textTheme
-                              .bodyText1.color
-                          ),
-                        ),
-                      ]
-                    ),
-                  ),
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: Languages.of(context).labelEditorDate + ": ",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontFamily: 'Product Sans',
-                            fontSize: 16,
-                            color: Theme.of(context).textTheme
-                              .bodyText1.color
-                          )
-                        ),
-                        TextSpan(
-                          text: record.date,
-                          style: TextStyle(
-                            color: Theme.of(context).textTheme
-                              .bodyText1.color
-                          ),
-                        ),
-                      ]
-                    ),
-                  ),
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: Languages.of(context).labelEditorGenre + ": ",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontFamily: 'Product Sans',
-                            fontSize: 16,
-                            color: Theme.of(context).textTheme
-                              .bodyText1.color
-                          )
-                        ),
-                        TextSpan(
-                          text: record.genre,
-                          style: TextStyle(
-                            color: Theme.of(context).textTheme
-                              .bodyText1.color
-                          ),
-                        ),
-                      ]
-                    ),
-                  ),
-                  Material(
-                    color: Colors.transparent,
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context, record);
-                      },
-                      child: Container(
-                        color: Colors.transparent,
-                        padding: EdgeInsets.all(8),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Spacer(),
-                            Text(
-                              "Apply",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'Product Sans',
-                                fontSize: 16,
-                                color: Theme.of(context).textTheme
-                                  .bodyText1.color
-                              ),
-                            ),
-                            SizedBox(width: 8),
-                            Icon(EvaIcons.checkmark,
-                              color: Theme.of(context).accentColor),
-                          ],
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-      );
-  }
-
   Widget _artworkWidget(AsyncSnapshot image, int index, bool fullRound) {
     return AspectRatio(
       aspectRatio: 1,
@@ -433,4 +259,275 @@ class _TagsResultsPageState extends State<TagsResultsPage> {
     return url;
   }
 
+}
+
+class _DataItem extends StatefulWidget {
+  const _DataItem({this.record, this.image, this.index,
+    Key key}) : super(key: key);
+  final MusicBrainzRecord record;
+  final AsyncSnapshot<dynamic> image;
+  final int index;
+  @override
+  __DataItemState createState() => __DataItemState();
+}
+
+class __DataItemState extends State<_DataItem> {
+
+  // Current ArtWork
+  String artwork;
+  
+  Widget _artworkWidget(AsyncSnapshot image, int index, bool fullRound) {
+    return AspectRatio(
+      aspectRatio: 1,
+      child: AnimatedSwitcher(
+        duration: Duration(milliseconds: 250),
+        child: image.hasData
+          ? GestureDetector(
+              onTap: () async {
+                try {
+                  File image = File((await FilePicker.platform
+                    .pickFiles(type: FileType.image))
+                    .paths[0]);
+                  if (image == null) return;
+                  artwork = image.path;
+                  setState(() {});
+                } catch (e) {}
+              },
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10),
+                        bottomLeft: fullRound ? Radius.circular(10) : Radius.zero,
+                        bottomRight: fullRound ? Radius.circular(10) : Radius.zero,
+                      ),
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: artwork == null
+                          ? NetworkImage(image.data)
+                          : FileImage(File(artwork))
+                      )
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 16, bottom: 16),
+                    child: Align(
+                      alignment: Alignment.bottomRight,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(50),
+                        child: Container(
+                          height: 40,
+                          width: 40,
+                          decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.4)
+                          ),
+                          child: Icon(EvaIcons.brushOutline,
+                            color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : image.connectionState == ConnectionState.done && !image.hasData
+            ? Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/artworkPlaceholder_big.png')
+                  )
+                ),
+              )
+            : Center(
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation(
+                    Theme.of(context).accentColor
+                  ),
+                ),
+              )
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        margin: EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _artworkWidget(widget.image, widget.index, false),
+            Container(
+              padding: EdgeInsets.all(16),
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(10),
+                  bottomRight: Radius.circular(10)
+                ),
+                color: Theme.of(context).scaffoldBackgroundColor
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: Languages.of(context).labelEditorTitle + ": ",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Product Sans',
+                            fontSize: 16,
+                            color: Theme.of(context).textTheme
+                              .bodyText1.color
+                          )
+                        ),
+                        TextSpan(
+                          text: widget.record.title,
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme
+                              .bodyText1.color
+                          )
+                        ),
+                      ]
+                    ),
+                  ),
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: Languages.of(context).labelEditorArtist + ": ",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Product Sans',
+                            fontSize: 16,
+                            color: Theme.of(context).textTheme
+                              .bodyText1.color
+                          )
+                        ),
+                        TextSpan(
+                          text: widget.record.artist,
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme
+                              .bodyText1.color
+                          )
+                        ),
+                      ]
+                    ),
+                  ),
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: Languages.of(context).labelEditorAlbum + ": ",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Product Sans',
+                            fontSize: 16,
+                            color: Theme.of(context).textTheme
+                              .bodyText1.color
+                          )
+                        ),
+                        TextSpan(
+                          text: widget.record.album,
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme
+                              .bodyText1.color
+                          ),
+                        ),
+                      ]
+                    ),
+                  ),
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: Languages.of(context).labelEditorDate + ": ",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Product Sans',
+                            fontSize: 16,
+                            color: Theme.of(context).textTheme
+                              .bodyText1.color
+                          )
+                        ),
+                        TextSpan(
+                          text: widget.record.date,
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme
+                              .bodyText1.color
+                          ),
+                        ),
+                      ]
+                    ),
+                  ),
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: Languages.of(context).labelEditorGenre + ": ",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Product Sans',
+                            fontSize: 16,
+                            color: Theme.of(context).textTheme
+                              .bodyText1.color
+                          )
+                        ),
+                        TextSpan(
+                          text: widget.record.genre,
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme
+                              .bodyText1.color
+                          ),
+                        ),
+                      ]
+                    ),
+                  ),
+                  Material(
+                    color: Colors.transparent,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context, widget.record..artwork = artwork);
+                      },
+                      child: Container(
+                        color: Colors.transparent,
+                        padding: EdgeInsets.all(8),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Spacer(),
+                            Text(
+                              "Apply",
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Product Sans',
+                                fontSize: 16,
+                                color: Theme.of(context).textTheme
+                                  .bodyText1.color
+                              ),
+                            ),
+                            SizedBox(width: 8),
+                            Icon(EvaIcons.checkmark,
+                              color: Theme.of(context).accentColor),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+      );
+  }
 }

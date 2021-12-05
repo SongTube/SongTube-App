@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 import 'package:songtube/internal/models/tagsControllers.dart';
 
@@ -203,6 +204,7 @@ class MusicBrainzRecord {
   final String genre;
   final String disc;
   final String track;
+  String artwork;
 
   MusicBrainzRecord({
     this.id,
@@ -212,7 +214,8 @@ class MusicBrainzRecord {
     this.date,
     this.genre,
     this.disc,
-    this.track
+    this.track,
+    this.artwork,
   });
 
   static MusicBrainzRecord fromMap(Map<String, dynamic> map) {

@@ -153,11 +153,24 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
           const SizedBox(height: 8),
           GestureDetector(
             onTap: () async {
-              File image = File((await FilePicker.platform
-                .pickFiles(type: FileType.image))
-                .paths[0]);
-              if (image == null) return;
-              tags.artworkController = image.path;
+              MusicBrainzRecord record = await Navigator.push(context,
+                BlurPageRoute(builder: (context) => 
+                  TagsResultsPage(
+                    title: tags.titleController.text,
+                    artist: tags.artistController.text
+                  ),
+                  blurStrength: Provider.of<PreferencesProvider>
+                    (context, listen: false).enableBlurUI ? 20 : 0));
+              if (record == null) return;
+              showDialog(
+                context: context,
+                builder: (_) => LoadingDialog()
+              );
+              String lastArtwork = tags.artworkController;
+              tags = await MusicBrainzAPI.getSongTags(record, artworkLink: record.artwork);
+              if (tags.artworkController == null)
+                tags.artworkController = lastArtwork;
+              Navigator.pop(context);
               setState(() {});
             },
             child: Container(
@@ -1127,13 +1140,14 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
             String lastArtwork = segmentTracks[index].tags.artworkController;
             var record = await MusicBrainzAPI
               .getFirstRecord(segmentTracks[index].tags.titleController.text);
-            segmentTracks[index].tags = await MusicBrainzAPI.getSongTags(record);
+            var parsedRecord = MusicBrainzRecord.fromMap(record);
+            segmentTracks[index].tags = await MusicBrainzAPI.getSongTags(parsedRecord, artworkLink: parsedRecord.artwork);
             if (segmentTracks[index].tags.artworkController == null)
               segmentTracks[index].tags.artworkController = lastArtwork;
             Navigator.pop(context);
             setState(() {});
           } else if (value == 'manualTag') {
-            var record = await Navigator.push(context,
+            MusicBrainzRecord record = await Navigator.push(context,
               BlurPageRoute(builder: (context) => 
                 TagsResultsPage(
                   title: segmentTracks[index].tags.titleController.text,
@@ -1147,7 +1161,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
               builder: (_) => LoadingDialog()
             );
             String lastArtwork = segmentTracks[index].tags.artworkController;
-            segmentTracks[index].tags = await MusicBrainzAPI.getSongTags(record);
+            segmentTracks[index].tags = await MusicBrainzAPI.getSongTags(record, artworkLink: record.artwork);
             if (segmentTracks[index].tags.artworkController == null)
               segmentTracks[index].tags.artworkController = lastArtwork;
             Navigator.pop(context);

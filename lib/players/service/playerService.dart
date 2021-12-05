@@ -154,6 +154,17 @@ class SongTubePlayerService extends BackgroundAudioTask {
   }
 
   @override
+  Future<void> onUpdateMediaItem(MediaItem mediaItem) async {
+    final index = _queue.indexWhere((element) => element.id == mediaItem.id);
+    _queue[index] = mediaItem;
+    AudioServiceBackground.queue[index] = mediaItem;
+    if (AudioServiceBackground.mediaItem.id == mediaItem.id) {
+      await AudioServiceBackground.setMediaItem(_queue[index]);
+    }
+    return super.onUpdateMediaItem(mediaItem);
+  }
+
+  @override
   Future<void> onPlayMediaItem(MediaItem item) async {
     _index = queue.indexOf(item);
     AudioServiceBackground.setMediaItem(queue[_index]);

@@ -431,15 +431,16 @@ class MediaProvider extends ChangeNotifier {
           ? song.extras["downloadType"] : ""
       }
     );
+    
+    int songIndex = listMediaItems.indexWhere((element) => element.id == newSong.id);
+    listMediaItems[songIndex] = newSong;
+    if (AudioService?.currentMediaItem != null) {
+      await AudioService.updateMediaItem(listMediaItems[songIndex]);
+    }
     if (databaseSongs.contains(song)) {
       int index = databaseSongs.indexWhere((element) => element == song);
       databaseSongs.removeAt(index);
       databaseSongs.insert(index, newSong);
-    }
-    if (listMediaItems.contains(song)) {
-      int index = listMediaItems.indexWhere((element) => element == song);
-      listMediaItems.removeAt(index);
-      listMediaItems.insert(index, newSong);
     }
     imageCache.clear();
     imageCache.clearLiveImages();

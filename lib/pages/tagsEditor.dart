@@ -304,7 +304,7 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
   }
 
   void manualWriteTags() async {
-    var record = await Navigator.push(context,
+    MusicBrainzRecord record = await Navigator.push(context,
       BlurPageRoute(builder: (context) => 
         TagsResultsPage(
           title: tagsControllers.titleController.text,
@@ -317,7 +317,7 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
       builder: (_) => LoadingDialog()
     );
     String lastArtwork = tagsControllers.artworkController;
-    tagsControllers = await MusicBrainzAPI.getSongTags(record);
+    tagsControllers = await MusicBrainzAPI.getSongTags(record, artworkLink: record.artwork);
     if (tagsControllers.artworkController == null)
       tagsControllers.artworkController = lastArtwork;
     Navigator.pop(context);
