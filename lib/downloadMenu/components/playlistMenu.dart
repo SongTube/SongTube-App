@@ -101,31 +101,25 @@ class _PlaylistDownloadMenuState extends State<PlaylistDownloadMenu> {
         // Menu Title
         Container(
           margin: EdgeInsets.only(
-            top: 4,
+            top: 16,
             left: 8,
             right: 8,
-            bottom: 4
+            bottom: 16
           ),
           child: Row(
             children: [
               IconButton(
-                icon: Icon(EvaIcons.arrowBackOutline),
+                icon: Icon(Icons.arrow_back_ios_new_rounded),
                 onPressed: widget.onBack
               ),
               SizedBox(width: 4),
               Text(Languages.of(context).labelPlaylist, style: TextStyle(
-                fontSize: 20,
-                fontFamily: "YTSans"
+                fontSize: 24,
+                fontFamily: "Product Sans",
+                fontWeight: FontWeight.w600
               )),
             ],
           ),
-        ),
-        Divider(
-          height: 1,
-          thickness: 1,
-          color: Colors.grey[600].withOpacity(0.1),
-          indent: 12,
-          endIndent: 12
         ),
         Expanded(
           child: ListView.builder(
@@ -133,111 +127,141 @@ class _PlaylistDownloadMenuState extends State<PlaylistDownloadMenu> {
             itemBuilder: (context, index) {
               DownloadItem item = downloadItems[index];
               bool isEnabled = enabledVideos[index];
-              return InkWell(
-                onTap: () {
-                  setState(() =>
-                    enabledVideos[index] = !enabledVideos[index]);
-                },
-                child: ListTile(
-                  trailing: Container(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).scaffoldBackgroundColor,
-                      borderRadius: BorderRadius.circular(50)
-                    ),
-                    child: IconButton(
-                      icon: Icon(
-                        item.downloadType == DownloadType.VIDEO
-                          ? EvaIcons.videoOutline
-                          : EvaIcons.musicOutline,
-                        color: Theme.of(context).iconTheme.color
-                      ),
-                      onPressed: () {
-                        if (downloadItems[index].downloadType == DownloadType.VIDEO) {
-                          downloadItems[index].downloadPath = Provider.of<ConfigurationProvider>
-                            (context, listen: false).audioDownloadPath;
-                          downloadItems[index].downloadType = DownloadType.AUDIO;
-                          downloadItems[index].ffmpegTask = FFmpegTask.NONE;
-                        } else {
-                          downloadItems[index].downloadPath = Provider.of<ConfigurationProvider>
-                            (context, listen: false).videoDownloadPath;
-                          downloadItems[index].downloadType = DownloadType.VIDEO;
-                          downloadItems[index].ffmpegTask = FFmpegTask.AppendAudioOnVideo;
-                        }
-                      },
-                    ),
-                  ),
-                  leading: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Stack(
-                        children: [
-                          AspectRatio(
-                            aspectRatio: 16/9,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: ColorFiltered(
-                                colorFilter: isEnabled
-                                  ? ColorFilter.mode(
-                                      Colors.transparent,
-                                      BlendMode.multiply
-                                    )
-                                  : ColorFilter.mode(
-                                      Colors.grey,
-                                      BlendMode.saturation
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() =>
+                      enabledVideos[index] = !enabledVideos[index]);
+                  },
+                  child: Container(
+                    color: Colors.transparent,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const SizedBox(width: 16),
+                        SizedBox(
+                          height: 110,
+                          width: 110,
+                          child: Stack(
+                            fit: StackFit.expand,
+                            children: [
+                              AspectRatio(
+                                aspectRatio: 1,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: ColorFiltered(
+                                    colorFilter: isEnabled
+                                      ? ColorFilter.mode(
+                                          Colors.transparent,
+                                          BlendMode.multiply
+                                        )
+                                      : ColorFilter.mode(
+                                          Colors.grey,
+                                          BlendMode.saturation
+                                        ),
+                                    child: Transform.scale(
+                                      scale: 1.4,
+                                      child: FadeInImage(
+                                        fadeInDuration: Duration(milliseconds: 300),
+                                        placeholder: MemoryImage(kTransparentImage),
+                                        image: isURL(item.tags.coverurl)
+                                          ? NetworkImage(item.tags.coverurl)
+                                          : FileImage(File(item.tags.coverurl)),
+                                          fit: BoxFit.cover,
+                                      ),
                                     ),
-                                child: FadeInImage(
-                                  fadeInDuration: Duration(milliseconds: 300),
-                                  placeholder: MemoryImage(kTransparentImage),
-                                  image: isURL(item.tags.coverurl)
-                                    ? NetworkImage(item.tags.coverurl)
-                                    : FileImage(File(item.tags.coverurl)),
-                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                          Align(
-                            alignment: Alignment.bottomLeft,
-                            child: Container(
-                              padding: EdgeInsets.all(4),
-                              margin: EdgeInsets.all(4),
-                              decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(0.4),
-                                borderRadius: BorderRadius.circular(50)
+                              Align(
+                                alignment: Alignment.bottomLeft,
+                                child: Container(
+                                  padding: EdgeInsets.all(4),
+                                  margin: EdgeInsets.all(4),
+                                  decoration: BoxDecoration(
+                                    color: Colors.black.withOpacity(0.4),
+                                    borderRadius: BorderRadius.circular(50)
+                                  ),
+                                  child: Icon(
+                                    isEnabled
+                                      ? MdiIcons.downloadOutline
+                                      : MdiIcons.downloadOffOutline,
+                                    color: Colors.white,
+                                    size: 18,
+                                  ),
+                                ),
                               ),
-                              child: Icon(
-                                isEnabled
-                                  ? MdiIcons.downloadOutline
-                                  : MdiIcons.downloadOffOutline,
-                                color: Colors.white,
-                                size: 18,
-                              ),
-                            ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  title: Text(
-                    item.tags.title,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 14,
-                      color: Theme.of(context).textTheme
-                        .bodyText1.color
+                        ),
+                        SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 8),
+                              Text(
+                                item.tags.title,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 18,
+                                  color: Theme.of(context).textTheme
+                                    .bodyText1.color
+                                ),
+                                overflow: TextOverflow.clip,
+                                maxLines: 2,
+                              ),
+                              SizedBox(height: 4),
+                              Text(
+                                item.tags.artist,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Theme.of(context).textTheme
+                                    .bodyText1.color.withOpacity(0.8),
+                                  fontWeight: FontWeight.w600
+                                ),
+                                overflow: TextOverflow.clip,
+                                maxLines: 1,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).scaffoldBackgroundColor,
+                            borderRadius: BorderRadius.circular(50)
+                          ),
+                          child: IconButton(
+                            icon: Icon(
+                              item.downloadType == DownloadType.VIDEO
+                                ? EvaIcons.videoOutline
+                                : EvaIcons.musicOutline,
+                              color: Theme.of(context).iconTheme.color
+                            ),
+                            onPressed: () {
+                              if (downloadItems[index].downloadType == DownloadType.VIDEO) {
+                                downloadItems[index].downloadPath = Provider.of<ConfigurationProvider>
+                                  (context, listen: false).audioDownloadPath;
+                                downloadItems[index].downloadType = DownloadType.AUDIO;
+                                downloadItems[index].ffmpegTask = FFmpegTask.NONE;
+                              } else {
+                                downloadItems[index].downloadPath = Provider.of<ConfigurationProvider>
+                                  (context, listen: false).videoDownloadPath;
+                                downloadItems[index].downloadType = DownloadType.VIDEO;
+                                downloadItems[index].ffmpegTask = FFmpegTask.AppendAudioOnVideo;
+                              }
+                              setState(() {
+                                
+                              });
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                      ],
                     ),
-                    overflow: TextOverflow.clip,
-                    maxLines: 2,
-                  ),
-                  subtitle: Text(
-                    item.tags.artist,
-                    style: TextStyle(
-                      fontSize: 11,
-                      color: Theme.of(context).textTheme
-                        .bodyText1.color.withOpacity(0.8)
-                    ),
-                    overflow: TextOverflow.clip,
-                    maxLines: 1,
                   ),
                 ),
               );
@@ -304,7 +328,9 @@ class _PlaylistDownloadMenuState extends State<PlaylistDownloadMenu> {
                         DropdownMenuItem(
                           child: Text(_qualityList[index]+"p",
                             style: TextStyle(color: Theme.of(context)
-                              .textTheme.bodyText1.color
+                              .textTheme.bodyText1.color,
+                            fontFamily: 'Product Sans',
+                            fontWeight: FontWeight.w600
                           )),
                         value: _qualityList[index],
                       )),
@@ -329,8 +355,8 @@ class _PlaylistDownloadMenuState extends State<PlaylistDownloadMenu> {
                       child: Ink(
                         padding: EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                          borderRadius: BorderRadius.circular(15)
+                          color: Theme.of(context).cardColor,
+                          borderRadius: BorderRadius.circular(100)
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -341,6 +367,7 @@ class _PlaylistDownloadMenuState extends State<PlaylistDownloadMenu> {
                               style: TextStyle(
                                 fontFamily: 'Product Sans',
                                 fontWeight: FontWeight.w600,
+                                fontSize: 18,
                                 color: Theme.of(context).textTheme.bodyText1.color
                                   .withOpacity(0.8)
                               ),

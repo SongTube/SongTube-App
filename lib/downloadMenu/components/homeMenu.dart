@@ -25,17 +25,21 @@ class DownloadMenuHome extends StatelessWidget {
       children: [
         // Menu Title
         Container(
-          margin: EdgeInsets.all(8),
+          margin: EdgeInsets.all(8).copyWith(
+            bottom: 16,
+            top: 16
+          ),
           child: Row(
             children: [
               IconButton(
-                icon: Icon(EvaIcons.arrowBackOutline),
+                icon: Icon(Icons.arrow_back_ios_new_rounded),
                 onPressed: onBack
               ),
-              SizedBox(width: 16),
+              SizedBox(width: 4),
               Text(Languages.of(context).labelDownload, style: TextStyle(
-                fontSize: 20,
-                fontFamily: "YTSans"
+                fontSize: 24,
+                fontFamily: "Product Sans",
+                fontWeight: FontWeight.w600
               )),
             ],
           ),
@@ -44,135 +48,91 @@ class DownloadMenuHome extends StatelessWidget {
         Container(
           margin: EdgeInsets.only(
             left: 16,
+            top: 16,
             right: 16,
             bottom: 16
           ),
-          child: Flex(
-            direction: Axis.horizontal,
+          child: Column(
             children: [
               // Audio
-              Flexible(
-                fit: FlexFit.tight,
-                child: GestureDetector(
-                  onTap: onAudioTap,
-                  child: Container(
-                    margin: EdgeInsets.only(right: 8),
-                    height: 80,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: Theme.of(context).iconTheme.color.withOpacity(0.1),
-                        width: 1.5,
-                      ),
-                      color: Theme.of(context).cardColor,
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 12,
-                          color: Colors.black.withOpacity(0.04)
-                        )
-                      ]
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(EvaIcons.musicOutline, size: 35,
-                         color: Theme.of(context).accentColor),
-                        SizedBox(width: 16),
-                        Text(
-                          Languages.of(context).labelAudio,
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.9),
-                            fontFamily: "YTSans"
-                          )
-                        )
-                      ],
+              GestureDetector(
+                onTap: onAudioTap,
+                child: ListTile(
+                  leading: Icon(EvaIcons.musicOutline, size: 35,
+                    color: Theme.of(context).accentColor),
+                  title: Text(
+                    Languages.of(context).labelMusic,
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.9),
+                      fontFamily: "Product Sans",
+                      fontWeight: FontWeight.w600
+                    )
+                  ),
+                  subtitle: Text(
+                    'Select quality, convert and download audio only',
+                    style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.8),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600
                     ),
                   ),
                 ),
               ),
+              const SizedBox(height: 24),
               // Video
-              Flexible(
-                fit: FlexFit.tight,
-                child: GestureDetector(
-                  onTap: onVideoTap,
-                  child: Container(
-                    height: 80,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: Theme.of(context).iconTheme.color.withOpacity(0.1),
-                        width: 1.5,
-                      ),
-                      color: Theme.of(context).cardColor,
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 12,
-                          color: Colors.black.withOpacity(0.04)
-                        )
-                      ]
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(EvaIcons.videoOutline, size: 35,
-                          color: Theme.of(context).accentColor),
-                        SizedBox(width: 16),
-                        Text(
-                          Languages.of(context).labelVideo,
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.9),
-                            fontFamily: "YTSans"
-                          )
-                        )
-                      ],
+              GestureDetector(
+                onTap: onVideoTap,
+                child: ListTile(
+                  leading: Icon(EvaIcons.videoOutline, size: 35,
+                    color: Theme.of(context).accentColor),
+                  title: Text(
+                    Languages.of(context).labelVideo,
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.9),
+                      fontFamily: "Product Sans",
+                      fontWeight: FontWeight.w600
+                    )
+                  ),
+                  subtitle: Text(
+                    'Choose a Video quality from the list and download it',
+                    style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.8),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600
                     ),
                   ),
                 ),
               ),
+              const SizedBox(height: 24),
               //Playlist
               if (playlistVideos != null)
-              Flexible(
-                fit: FlexFit.tight,
-                child: GestureDetector(
-                  onTap: onPlaylistTap,
-                  child: Container(
-                    margin: EdgeInsets.only(left: 8),
-                    height: 80,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: Theme.of(context).iconTheme.color.withOpacity(0.1),
-                        width: 1.5,
-                      ),
-                      color: Theme.of(context).cardColor,
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 12,
-                          color: Colors.black.withOpacity(0.04)
-                        )
-                      ]
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(MdiIcons.playlistMusicOutline, size: 35,
-                          color: Theme.of(context).accentColor),
-                        SizedBox(width: 16),
-                        Text(
-                          Languages.of(context).labelPlaylist,
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.9),
-                            fontFamily: "YTSans"
-                          )
-                        )
-                      ],
+              GestureDetector(
+                onTap: onPlaylistTap,
+                child: ListTile(
+                  leading: Icon(MdiIcons.playlistMusicOutline, size: 35,
+                    color: Theme.of(context).accentColor),
+                  title: Text(
+                    Languages.of(context).labelPlaylist,
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.9),
+                      fontFamily: "Product Sans",
+                      fontWeight: FontWeight.w600
+                    )
+                  ),
+                  subtitle: Text(
+                    'Download everything as video or audio',
+                    style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.8),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600
                     ),
                   ),
                 ),
-              )
+              ),
+              const SizedBox(height: 16),
             ],
           ),
         )
