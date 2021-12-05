@@ -342,7 +342,9 @@ class DownloadSet {
       streamToDownload.size = await getContentSize(streamToDownload.url);
     }
     // StreamData
-    Stream<List<int>> streamData = ExtractorHttpClient.getStream(streamToDownload);
+    Stream<List<int>> streamData = ExtractorHttpClient.getStream(streamToDownload, headers: {
+      'Keep-Alive': 'timeout=1, max=1000'
+    });
     // Update Streams
     if (totalDownloaded == 0) {
       dataProgress.add(language.labelDownloadStarting);
@@ -432,7 +434,7 @@ class DownloadSet {
         )
       );
       // Only add Artwork if song is in AAC Format
-      if (downloadItem.ffmpegTask == FFmpegTask.ConvertToAAC) {
+      if (downloadItem.formatSuffix == 'm4a') {
         File croppedImage = new File(
           (await getExternalStorageDirectory()).path +
           "/${RandomString.getRandomString(5)}"
@@ -444,8 +446,7 @@ class DownloadSet {
             "/${RandomString.getRandomString(5)}"
           );
           try {
-            response = await http.get(Uri.parse(tags.coverurl))
-              .timeout(Duration(seconds: 120));
+            response = await http.get(Uri.parse(tags.coverurl));
             await artwork.writeAsBytes(response.bodyBytes);
             var decodedImage = await decodeImageFromList(artwork.readAsBytesSync());
             if (decodedImage.width == 120 && decodedImage.height == 90)
@@ -467,6 +468,7 @@ class DownloadSet {
           await croppedImage.writeAsBytes(
             await AudioTagger.cropToSquare(File(tags.coverurl)));
         }
+        currentAction.add('Writting Artwork...');
         await AudioTagger.writeArtwork(
           songPath: filePath,
           artworkPath: croppedImage.path
