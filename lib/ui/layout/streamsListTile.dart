@@ -127,7 +127,7 @@ class StreamsListTileView extends StatelessWidget {
                                     color: Theme.of(context).textTheme.bodyText1.color
                                       .withOpacity(0.8),
                                     fontFamily: "Product Sans",
-                                    fontSize: 10,
+                                    fontSize: 12,
                                     letterSpacing: 0.2
                                   ),
                                   overflow: TextOverflow.clip,

@@ -71,11 +71,17 @@ class _TagsEditorPageState extends State<TagsEditorPage> {
                   title: Text(
                     Languages.of(context).labelTagsEditor.replaceAll("\n", " "),
                     style: TextStyle(
+                      fontFamily: 'Product Sans',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 24,
                       color: Colors.white
                     ),
                   ),
-                  iconTheme: IconThemeData(
-                    color: Colors.white
+                  leading: IconButton(
+                    icon: Icon(Icons.arrow_back_ios_new_rounded, color: Theme.of(context).iconTheme.color),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                   ),
                   actions: [
                     GestureDetector(

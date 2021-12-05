@@ -123,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           }
                         },
                         labelStyle: TextStyle(
-                          fontSize: 13,
+                          fontSize: 14,
                           fontFamily: 'Product Sans',
                           fontWeight: FontWeight.w600,
                           letterSpacing: 0.3

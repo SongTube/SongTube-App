@@ -40,7 +40,7 @@ class DownloadTab extends StatelessWidget {
                 style: TextStyle(
                   fontFamily: 'Product Sans',
                   fontWeight: FontWeight.w700,
-                  fontSize: 20,
+                  fontSize: 24,
                   color: Theme.of(context).textTheme.bodyText1.color
                 ),
               ),
@@ -54,7 +54,7 @@ class DownloadTab extends StatelessWidget {
               color: Theme.of(context).cardColor,
               child: TabBar(
                 labelStyle: TextStyle(
-                  fontSize: 13,
+                  fontSize: 14,
                   fontFamily: 'Product Sans',
                   fontWeight: FontWeight.w600,
                   letterSpacing: 0.3

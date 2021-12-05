@@ -34,7 +34,7 @@ class VideoDetails extends StatelessWidget {
                       child: Text(
                         title,
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 20,
                           fontWeight: FontWeight.w600,
                           fontFamily: 'Product Sans',
                           color: Theme.of(context).textTheme.bodyText1.color,

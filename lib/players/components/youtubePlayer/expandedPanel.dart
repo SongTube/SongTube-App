@@ -292,7 +292,6 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
           // Mini-Player
           AnimatedSize(
             duration: Duration(milliseconds: 250),
-            vsync: this,
             child: Container(
               margin: EdgeInsets.only(left: 12, right: 12),
               child: MeasureSize(
@@ -459,7 +458,6 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
   Widget _videoEngagementWidget() {
     VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
     return AnimatedSize(
-      vsync: this,
       duration: Duration(milliseconds: 300),
       child: AnimatedSwitcher(
         duration: Duration(milliseconds: 300),
@@ -587,7 +585,11 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                   topPadding: topPadding + playerHeight + 8,
                   onDispose: () => bottomSheetController = null,
                 );
-              });
+              },
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20), topRight: Radius.circular(20)
+              ))
+              );
             },
             child: Column(
               mainAxisSize: MainAxisSize.min,

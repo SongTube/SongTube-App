@@ -78,9 +78,13 @@ class _YoutubeChannelPageState extends State<YoutubeChannelPage> {
                   color: Colors.white,
                   fontFamily: 'Product Sans',
                   fontWeight: FontWeight.w600,
+                  fontSize: 24,
                 )),
-              iconTheme: IconThemeData(
-                color: Colors.white
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back_ios_new_rounded, color: Theme.of(context).iconTheme.color),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
               ),
               elevation: 0,
               backgroundColor: Colors.transparent

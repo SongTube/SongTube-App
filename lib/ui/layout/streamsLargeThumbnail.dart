@@ -322,7 +322,7 @@ class StreamsLargeThumbnailView extends StatelessWidget {
                     color: Theme.of(context).textTheme.bodyText1.color,
                     fontWeight: FontWeight.w600,
                     fontFamily: 'Product Sans',
-                    fontSize: 14,
+                    fontSize: 16,
                   ),
                 ),
                 SizedBox(height: 4),
@@ -335,7 +335,8 @@ class StreamsLargeThumbnailView extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 12,
                     color: Theme.of(context).textTheme.bodyText1.color
-                      .withOpacity(0.8)
+                      .withOpacity(0.8),
+                    fontFamily: 'Product Sans'
                   ),
                 )
               ],

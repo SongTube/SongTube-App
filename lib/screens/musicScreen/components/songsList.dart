@@ -65,6 +65,8 @@ class SongsListView extends StatelessWidget {
               softWrap: false,
               style: TextStyle(
                 color: Theme.of(context).textTheme.bodyText1.color,
+                fontWeight: FontWeight.w600,
+                fontSize: 16
               ),
             ),
             subtitle: Text(

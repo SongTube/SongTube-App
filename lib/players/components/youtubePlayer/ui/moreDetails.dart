@@ -4,6 +4,7 @@ import 'package:md2_tab_indicator/md2_tab_indicator.dart';
 import 'package:newpipeextractor_dart/models/streamSegment.dart';
 import 'package:newpipeextractor_dart/newpipeextractor_dart.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:songtube/internal/languages.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:url_launcher/url_launcher.dart';
@@ -92,29 +93,36 @@ class _MoreDetailsSheetState extends State<MoreDetailsSheet> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Container(
-              padding: EdgeInsets.all(16),
-              child: Text(
-                "Description",
+        Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: Theme.of(context).cardColor,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(15),
+              topRight: Radius.circular(15)
+            ),
+          ),
+          padding: EdgeInsets.only(left: 8, top: 8, bottom: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              IconButton(
+                icon: Icon(Icons.arrow_back_ios_new_rounded,
+                  color: Theme.of(context).iconTheme.color),
+                onPressed: () => Navigator.pop(context)
+              ),
+              SizedBox(width: 4),
+              Text(
+                'Description',
                 style: TextStyle(
-                  fontFamily: 'Product Sans',
-                  fontWeight: FontWeight.w600,
                   fontSize: 20,
-                  color: Theme.of(context).textTheme.bodyText1.color
-                    .withOpacity(0.7)
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Product Sans'
                 ),
               ),
-            ),
-            Spacer(),
-            IconButton(
-              icon: Icon(Icons.clear_rounded,
-                color: Theme.of(context).iconTheme.color),
-              onPressed: () => Navigator.pop(context),
-            ),
-            SizedBox(width: 12)
-          ],
+            ],
+          ),
         ),
         Divider(
           height: 1,
@@ -131,7 +139,7 @@ class _MoreDetailsSheetState extends State<MoreDetailsSheet> {
                   "html": Style(
                     padding: const EdgeInsets.all(12),
                     color: Theme.of(context).textTheme.bodyText1.color,
-                    whiteSpace: WhiteSpace.PRE
+                    whiteSpace: WhiteSpace.PRE,
                   ),
                 },
                 customRender: {
@@ -177,29 +185,36 @@ class _MoreDetailsSheetState extends State<MoreDetailsSheet> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Container(
-              padding: EdgeInsets.all(16),
-              child: Text(
-                "Chapters",
+        Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: Theme.of(context).cardColor,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(15),
+              topRight: Radius.circular(15)
+            ),
+          ),
+          padding: EdgeInsets.only(left: 8, top: 8, bottom: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              IconButton(
+                icon: Icon(Icons.arrow_back_ios_new_rounded,
+                  color: Theme.of(context).iconTheme.color),
+                onPressed: () => Navigator.pop(context)
+              ),
+              SizedBox(width: 4),
+              Text(
+                'Chapters',
                 style: TextStyle(
-                  fontFamily: 'Product Sans',
-                  fontWeight: FontWeight.w600,
                   fontSize: 20,
-                  color: Theme.of(context).textTheme.bodyText1.color
-                    .withOpacity(0.7)
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Product Sans'
                 ),
               ),
-            ),
-            Spacer(),
-            IconButton(
-              icon: Icon(Icons.clear_rounded,
-                color: Theme.of(context).iconTheme.color),
-              onPressed: () => Navigator.pop(context),
-            ),
-            SizedBox(width: 12)
-          ],
+            ],
+          ),
         ),
         Divider(
           height: 1,
@@ -210,46 +225,72 @@ class _MoreDetailsSheetState extends State<MoreDetailsSheet> {
         ),
         Expanded(
           child: ListView.builder(
+            padding: const EdgeInsets.only(top: 24),
             physics: BouncingScrollPhysics(),
             itemCount: widget.segments.length,
             itemBuilder: (context, index) {
               StreamSegment segment = widget.segments[index];
               return Padding(
-                padding: EdgeInsets.only(bottom: 8.0),
-                child: ListTile(
-                  leading: AspectRatio(
-                    aspectRatio: 16/9,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: FadeInImage(
-                        placeholder: MemoryImage(kTransparentImage),
-                        image: NetworkImage(segment.previewUrl),
-                        fadeInDuration: Duration(milliseconds: 300),
-                      ),
+                padding: const EdgeInsets.only(bottom: 16),
+                child: GestureDetector(
+                  onTap: () => widget.onSegmentTap(segment.startTimeSeconds),
+                  child: Container(
+                    color: Colors.transparent,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(width: 16),
+                        SizedBox(
+                          height: 110,
+                          width: 110,
+                          child: AspectRatio(
+                            aspectRatio: 1,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: FadeInImage(
+                                placeholder: MemoryImage(kTransparentImage),
+                                image: NetworkImage(segment.previewUrl),
+                                fadeInDuration: Duration(milliseconds: 300),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 8),
+                              Text(
+                                segment.title,
+                                style: TextStyle(
+                                  color: Theme.of(context).textTheme.bodyText1.color
+                                    .withOpacity(0.8),
+                                  fontFamily: 'Product Sans',
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600
+                                ),
+                                maxLines: 2,
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                "${Duration(seconds: segment.startTimeSeconds).inMinutes.toString().padLeft(2, '0')}:"+
+                                "${Duration(seconds: segment.startTimeSeconds).inSeconds.remainder(60).toString().padLeft(2, '0')}",
+                                style: TextStyle(
+                                  color: Theme.of(context).accentColor,
+                                  fontFamily: 'Product Sans',
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                      ],
                     ),
                   ),
-                  title: Text(
-                    segment.title,
-                    style: TextStyle(
-                      color: Theme.of(context).textTheme.bodyText1.color
-                        .withOpacity(0.8),
-                      fontFamily: 'Product Sans',
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600
-                    ),
-                    maxLines: 1,
-                  ),
-                  subtitle: Text(
-                    "${Duration(seconds: segment.startTimeSeconds).inMinutes.toString().padLeft(2, '0')}:"+
-                    "${Duration(seconds: segment.startTimeSeconds).inSeconds.remainder(60).toString().padLeft(2, '0')}",
-                    style: TextStyle(
-                      color: Theme.of(context).accentColor,
-                      fontFamily: 'Product Sans',
-                      fontSize: 10,
-                      fontWeight: FontWeight.w600
-                    ),
-                  ),
-                  onTap: () => widget.onSegmentTap(segment.startTimeSeconds)
                 ),
               );
             },
