@@ -322,7 +322,7 @@ class StreamsLargeThumbnailView extends StatelessWidget {
                     color: Theme.of(context).textTheme.bodyText1.color,
                     fontWeight: FontWeight.w600,
                     fontFamily: 'Product Sans',
-                    fontSize: 16,
+                    fontSize: 14,
                   ),
                 ),
                 SizedBox(height: 4),
@@ -333,7 +333,7 @@ class StreamsLargeThumbnailView extends StatelessWidget {
                       " ${infoItem.uploadDate == null ? "" : " • " + infoItem.uploadDate}"
                     : ""),
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 11,
                     color: Theme.of(context).textTheme.bodyText1.color
                       .withOpacity(0.8),
                     fontFamily: 'Product Sans'

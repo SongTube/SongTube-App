@@ -36,7 +36,6 @@ class DownloadTile extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: Theme.of(context).cardColor,
-        border: Border.all(color: Colors.grey[600].withOpacity(0.1))
       ),
       // Tile main Body
       child: Column(
@@ -96,6 +95,9 @@ class DownloadTile extends StatelessWidget {
                           "${metadata.title}",
                           style: TextStyle(
                             color: Theme.of(context).textTheme.bodyText1.color,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Product Sans',
+                            fontSize: 14,
                           ),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
@@ -106,7 +108,8 @@ class DownloadTile extends StatelessWidget {
                         "${metadata.artist}",
                         style: TextStyle(
                           color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6),
-                          fontSize: 12
+                          fontFamily: 'Product Sans',
+                          fontSize: 11,
                         ),
                         overflow: TextOverflow.fade,
                         softWrap: false,
@@ -197,7 +200,9 @@ class DownloadTile extends StatelessWidget {
                       : Text(
                         snapshot.data,
                         style: TextStyle(
-                          fontSize: 12
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'Product Sans',
+                          fontSize: 12,
                         ),
                       );
                     }
@@ -211,14 +216,18 @@ class DownloadTile extends StatelessWidget {
                       ? Text(
                         Languages.of(context).labelDownloading,
                         style: TextStyle(
-                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'Product Sans',
+                          fontSize: 14,
                         ),
                         maxLines: 1,
                       )
                       : Text(
                         snapshot.data.toString(),
                         style: TextStyle(
-                          fontSize: 12
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'Product Sans',
+                          fontSize: 12,
                         ),
                         maxLines: 1,
                       );

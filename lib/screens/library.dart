@@ -92,6 +92,7 @@ class LibraryScreen extends StatelessWidget {
                     style: TextStyle(
                       fontFamily: 'Product Sans',
                       fontWeight: FontWeight.w600,
+                      fontSize: 18,
                       color: Theme.of(context).textTheme.bodyText1.color
                     ),
                   ),
@@ -112,6 +113,7 @@ class LibraryScreen extends StatelessWidget {
                     style: TextStyle(
                       fontFamily: 'Product Sans',
                       fontWeight: FontWeight.w600,
+                      fontSize: 18,
                       color: Theme.of(context).textTheme.bodyText1.color
                     ),
                   ),
@@ -133,6 +135,7 @@ class LibraryScreen extends StatelessWidget {
                     style: TextStyle(
                       fontFamily: 'Product Sans',
                       fontWeight: FontWeight.w600,
+                      fontSize: 18,
                       color: Theme.of(context).textTheme.bodyText1.color
                     ),
                   ),

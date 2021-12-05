@@ -109,7 +109,7 @@ class StreamsListTileView extends StatelessWidget {
                                   video.name,
                                   style: TextStyle(
                                     color: Theme.of(context).textTheme.bodyText1.color,
-                                    fontWeight: FontWeight.w600,
+                                    fontWeight: FontWeight.w500,
                                     fontFamily: 'Product Sans',
                                     fontSize: 14,
                                   ),

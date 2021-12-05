@@ -71,6 +71,11 @@ class WatchHistoryRow extends StatelessWidget {
                               maxLines: 2,
                               overflow: TextOverflow.clip,
                               textAlign: TextAlign.start,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Product Sans',
+                                fontSize: 14,
+                              ),
                             ),
                           )
                         ],

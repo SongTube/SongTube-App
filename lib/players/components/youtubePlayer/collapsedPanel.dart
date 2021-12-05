@@ -68,8 +68,9 @@ class VideoPageCollapsed extends StatelessWidget {
                           child: Text(
                             "$title",
                             style: TextStyle(
-                              fontFamily: 'YTSans',
-                              fontSize: 16
+                              fontWeight: FontWeight.w600,
+                              fontFamily: 'Product Sans',
+                              fontSize: 14,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.fade,
@@ -82,7 +83,7 @@ class VideoPageCollapsed extends StatelessWidget {
                         Text(
                           "$author",
                           style: TextStyle(
-                            fontFamily: 'YTSans',
+                            fontFamily: 'Product Sans',
                             fontSize: 11,
                             color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6)
                           ),

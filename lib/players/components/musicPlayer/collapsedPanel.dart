@@ -85,7 +85,7 @@ class CollapsedPanel extends StatelessWidget {
                           "${AudioService.currentMediaItem.artist}",
                           style: TextStyle(
                             fontFamily: 'Product Sans',
-                            fontSize: 12,
+                            fontSize: 11,
                             color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6)
                           ),
                           overflow: TextOverflow.fade,
