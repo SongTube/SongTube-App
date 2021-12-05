@@ -72,7 +72,7 @@ class CollapsedPanel extends StatelessWidget {
                             "${AudioService.currentMediaItem.title}",
                             style: TextStyle(
                               fontFamily: 'Product Sans',
-                              fontSize: 16,
+                              fontSize: 14,
                               fontWeight: FontWeight.w600
                             ),
                             maxLines: 1,
