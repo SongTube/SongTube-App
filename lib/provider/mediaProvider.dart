@@ -48,7 +48,9 @@ class MediaProvider extends ChangeNotifier {
     databaseSongs     = <MediaItem>[];
     getDatabase();
     AudioService.currentMediaItemStream.listen((event) {
-      mediaItem = event;
+      if (fwController.isAttached) {
+        mediaItem = event;
+      }
     });
   }
 

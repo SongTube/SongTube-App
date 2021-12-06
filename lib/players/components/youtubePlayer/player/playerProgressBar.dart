@@ -10,11 +10,15 @@ class PlayerProgressBar extends StatefulWidget {
   final Function onFullScreenTap;
   final List<StreamSegment> segments;
   final Function onSeekStart;
+  final bool audioOnly;
+  final Function() onAudioOnlySwitch;
   PlayerProgressBar({
     @required this.position,
     @required this.duration,
     @required this.onSeek,
     @required this.segments,
+    @required this.audioOnly,
+    @required this.onAudioOnlySwitch,
     this.onFullScreenTap,
     this.onSeekStart
   });
@@ -160,6 +164,20 @@ class _PlayerProgressBarState extends State<PlayerProgressBar> with TickerProvid
                 ),
               ),
               SizedBox(width: 16),
+              // Audio Only Switch
+              GestureDetector(
+                onTap: widget.onAudioOnlySwitch,
+                child: Container(
+                  color: Colors.transparent,
+                  child: Icon(
+                    widget.audioOnly
+                      ? Icons.music_note_outlined : Icons.music_off_outlined,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              SizedBox(width: 16),
+              // FullScreen Button
               GestureDetector(
                 onTap: widget.onFullScreenTap,
                 child: Container(
@@ -174,7 +192,6 @@ class _PlayerProgressBarState extends State<PlayerProgressBar> with TickerProvid
             ],
           ),
           AnimatedSize(
-            vsync: this,
             duration: Duration(milliseconds: 300),
             child: isDragging && currentLabel != null
               ? Container(

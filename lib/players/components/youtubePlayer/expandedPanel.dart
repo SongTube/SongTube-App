@@ -122,7 +122,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
       onSuspending: () {
         if (
           (pageProvider?.playerKey?.currentState?.isPlaying ?? false) &&
-          pageProvider.fwController.isPanelOpen
+          pageProvider.fwController.isPanelOpen && !pageProvider.playerKey.currentState.audioOnly
         ) {
           if (prefs.autoPipMode && !sharing) {
             setState(() => isInPictureInPictureMode = true);
@@ -177,6 +177,8 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
     VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
     PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     return StreamManifestPlayer(
+      duration: Duration(seconds: pageProvider.currentVideo.videoInfo.length),
+      videoThumbnail: pageProvider.currentVideo.videoInfo.thumbnailUrl,
       segments: pageProvider.currentVideo.segments,
       onAspectRatioInit: (value) => setState(() {
         aspectRatio = value;
@@ -199,8 +201,9 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
       isFullscreen: MediaQuery.of(context).orientation == Orientation.landscape
         ? true : false,
       onAutoPlay: () async {
-        if (mounted)
+        if (mounted) {
           executeAutoPlay();
+        }
       },
       onFullscreenTap: () {
         if (MediaQuery.of(context).orientation == Orientation.landscape) {
@@ -554,7 +557,7 @@ class _YoutubePlayerVideoPageState extends State<YoutubePlayerVideoPage> with Ti
                   video: pageProvider.currentVideo,
                   segments: pageProvider?.currentVideo?.segments ?? [],
                   onSegmentTap: (position) => pageProvider.playerKey.currentState
-                    .controller.seekTo(Duration(seconds: position)),
+                    .handleSeek(Duration(seconds: position)),
                   onDispose: () => bottomSheetController = null,
                 ),
               ),

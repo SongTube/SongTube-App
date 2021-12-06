@@ -1,3 +1,4 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -113,7 +114,11 @@ class VideoPageCollapsed extends StatelessWidget {
           ),
           InkWell(
             onTap: () {
+              if (pageProvider.playerKey.currentState.audioOnly && AudioService.running) {
+                AudioService.stop();
+              }
               pageProvider.closeVideoPanel();
+
             },
             child: Ink(
               color: Colors.transparent,

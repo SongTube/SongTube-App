@@ -1,16 +1,21 @@
 import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
+import 'package:audio_service/audio_service.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:newpipeextractor_dart/newpipeextractor_dart.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:flutter_screen/flutter_screen.dart';
+import 'package:songtube/internal/globals.dart';
 import 'package:songtube/players/components/youtubePlayer/player/playPauseButton.dart';
 import 'package:songtube/players/components/youtubePlayer/player/playerAppBar.dart';
 import 'package:songtube/players/components/youtubePlayer/player/playerProgressBar.dart';
+import 'package:songtube/players/service/playerService.dart';
+import 'package:songtube/players/service/screenStateStream.dart';
 import 'package:songtube/provider/preferencesProvider.dart';
+import 'package:transparent_image/transparent_image.dart';
 import 'package:video_player/video_player.dart';
 import 'package:volume/volume.dart';
 
@@ -28,6 +33,8 @@ class StreamManifestPlayer extends StatefulWidget {
   final Function(String) onQualityChanged;
   final List<StreamSegment> segments;
   final Function(double) onAspectRatioInit;
+  final String videoThumbnail;
+  final Duration duration;
   StreamManifestPlayer({
     Key key,
     @required this.videoTitle,
@@ -42,7 +49,9 @@ class StreamManifestPlayer extends StatefulWidget {
     @required this.quality,
     @required this.onQualityChanged,
     this.segments = const [],
-    this.onAspectRatioInit
+    this.onAspectRatioInit,
+    @required this.videoThumbnail,
+    @required this.duration,
   }) : super(key: key);
   @override
   StreamManifestPlayerState createState() => StreamManifestPlayerState();
@@ -67,7 +76,13 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
 
   // UI
   bool _showControls   = true;
-  bool get showControls => _showControls;
+  bool get showControls {
+    if (audioOnly) {
+      return true;
+    } else {
+      return _showControls;
+    }
+  }
   set showControls(bool value) {
     if (value == false) {
       _showControls = false;
@@ -78,7 +93,13 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
     }
   }
   bool _showBackdrop   = true;
-  bool get showBackdrop => _showBackdrop;
+  bool get showBackdrop {
+    if (audioOnly) {
+      return true;
+    } else {
+      return _showBackdrop;
+    }
+  }
   set showBackdrop(bool value) {
     if (value == false) {
       _showBackdrop = false;
@@ -108,6 +129,22 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
   VideoPlayerController _controller;
   VideoPlayerController get controller => _controller;
 
+  // Audio Only On/Off
+  bool _audioOnly = globalPrefs.getBool('videoPlayerAudioOnly') ?? false;
+  bool get audioOnly => _audioOnly;
+  set audioOnly(bool value) {
+    _audioOnly = value;
+    globalPrefs.setBool('videoPlayerAudioOnly', value);
+    if (value) {
+      setupAudioPlayer();
+    } else {
+      setupVideoPlayer();
+    }
+    setState(() {
+      
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -125,10 +162,14 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
     Future.delayed(Duration(seconds: 2), () {
       setState(() => hideControls = true);
     });
-    List<String> playerStreamsUrls = [];
-    widget.streams.forEach((element) {
-      playerStreamsUrls.add(element.url);
-    });
+    if (audioOnly) {
+      setupAudioPlayer();
+    } else {
+      setupVideoPlayer();
+    }
+  }
+
+  void setupVideoPlayer() async {
     int indexToPlay = widget.streams.indexWhere((element)
       => element.resolution.contains(widget.quality));
     if (indexToPlay == -1) {
@@ -143,6 +184,19 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
     )..initialize().then((value) {
       if (Provider.of<PreferencesProvider>(context, listen: false).videoPageAutoPlay) {
         _controller.play().then((_) {
+          Duration position;
+          if (AudioService.running) {
+            if (AudioService.currentMediaItem?.id == widget.audioStream.url) {
+              if (AudioService.playbackState.position != null) {
+                position = AudioService.playbackState.currentPosition;
+              }
+            }
+          }
+          if (position != null) {
+            _controller.seekTo(position).then((_) {
+              AudioService.stop();
+            });
+          }
           setState(() {isPlaying = true; buffering = false;});
           setState(() { showControls = false; showBackdrop = false; });
         });
@@ -178,6 +232,65 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
       });
     });
   }
+
+  void setupAudioPlayer() async {
+    if (!AudioService.running) {
+      await AudioService.start(
+        backgroundTaskEntrypoint: songtubePlayer,
+        androidNotificationChannelName: 'SongTube',
+        // Enable this if you want the Android service to exit the foreground state on pause.
+        //androidStopForegroundOnPause: true,
+        androidNotificationColor: 0xFF2196f3,
+        androidNotificationIcon: 'drawable/ic_stat_music_note',
+        androidEnableQueue: true,
+      );
+    }
+    final mediaItem = MediaItem(
+      id: widget.audioStream.url,
+      album: 'YouTube',
+      title: widget.videoTitle,
+      artUri: Uri.parse(widget.videoThumbnail),
+      duration: widget.duration,
+      artist: 'YouTube',
+    );
+    await AudioService.updateQueue([mediaItem]);
+    if (_controller != null) {
+      Duration position;
+      position = _controller.value.position;
+      await AudioService.playMediaItem(mediaItem);
+      await AudioService.seekTo(position);
+      _controller.pause();
+      _controller.removeListener(() { });
+      _controller.dispose();
+    } else {
+      await AudioService.playMediaItem(mediaItem);
+    }
+    setState(() {
+      buffering = false;
+      isPlaying = true;
+    });
+    runListener();
+  }
+
+  void runListener() async {
+    AudioService.playbackStateStream.listen((event) {
+      if (event.processingState == AudioProcessingState.completed) {
+        widget.onAutoPlay();
+      }
+    });
+  }
+
+  void handleSeek(Duration position) {
+    if (audioOnly) {
+      AudioService.seekTo(position);
+    } else {
+      controller.seekTo(position);
+    }
+  }
+
+  Duration get currentPosition => audioOnly
+    ? AudioService.playbackState.currentPosition
+    : _controller.value.position;
 
   @override
   void dispose() {
@@ -284,28 +397,55 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
       borderRadius: BorderRadius.circular(widget.borderRadius),
       child: Material(
         color: Colors.black,
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            // Video Beign Played
-            Container(
-              child: _controller.value.isInitialized
-                ? AspectRatio(
-                    aspectRatio: _controller?.value?.aspectRatio ?? 16/9,
-                    child: VideoPlayer(_controller)
-                  )
-                : Container(color: Colors.black),
-            ),
-            // Player Controls and Gestures
-            AnimatedSwitcher(
-              duration: Duration(milliseconds: 400),
-              child: showStreamQualityMenu 
-                ? _playbackQualityOverlay()
-                : _playbackControlsOverlay()
-            )
-          ],
-        ),
+        child: audioOnly
+          ? _audioPlayer()
+          : _videoPlayer()
       ),
+    );
+  }
+
+  Widget _videoPlayer() {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        // Video Beign Played
+        Container(
+          child: _controller.value.isInitialized
+            ? AspectRatio(
+                aspectRatio: _controller?.value?.aspectRatio ?? 16/9,
+                child: VideoPlayer(_controller)
+              )
+            : Container(color: Colors.black),
+        ),
+        // Player Controls and Gestures
+        AnimatedSwitcher(
+          duration: Duration(milliseconds: 400),
+          child: showStreamQualityMenu 
+            ? _playbackQualityOverlay()
+            : _playbackControlsOverlay()
+        )
+      ],
+    );
+  }
+
+  Widget _audioPlayer() {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        // Video Beign Played
+        FadeInImage(
+          placeholder: MemoryImage(kTransparentImage),
+          image: widget.videoThumbnail == null
+            ? AssetImage('assets/images/artworkPlaceholder_big.png')
+            : NetworkImage(widget.videoThumbnail)
+        ),
+        // Player Controls and Gestures
+        GestureDetector(
+          onTap: () => showControlsHandler(),
+          child: Container(
+            color: Colors.transparent,
+            child: _playbackControlsOverlay()))
+      ],
     );
   }
 
@@ -322,14 +462,14 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
               child: GestureDetector(
                 onTap: () => showControlsHandler(),
                 onDoubleTap: () {
-                  if (_controller.value.isInitialized) {
+                  if ((_controller?.value?.isInitialized ?? false) || audioOnly) {
                     Duration seekNewPosition;
-                    if (_controller.value.position < Duration(seconds: 10)) {
+                    if (currentPosition < Duration(seconds: 10)) {
                       seekNewPosition = Duration.zero;
                     } else {
-                      seekNewPosition = _controller.value.position - Duration(seconds: 10);
+                      seekNewPosition = currentPosition - Duration(seconds: 10);
                     }
-                    _controller.seekTo(seekNewPosition);
+                    handleSeek(seekNewPosition);
                     setState(() => showReverse = true);
                     Future.delayed(Duration(milliseconds: 250), ()
                       => setState(() => showReverse = false));
@@ -382,8 +522,8 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
               child: GestureDetector(
                 onTap: () => showControlsHandler(),
                 onDoubleTap: () {
-                  if (_controller.value.isInitialized) {
-                    _controller.seekTo(_controller.value.position + Duration(seconds: 10));
+                  if ((_controller?.value?.isInitialized ?? false) || audioOnly) {
+                    handleSeek(currentPosition + Duration(seconds: 10));
                     setState(() => showForward = true);
                     Future.delayed(Duration(milliseconds: 250), ()
                       => setState(() => showForward = false));
@@ -487,6 +627,7 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
                 Align(
                   alignment: Alignment.topLeft,
                   child: PlayerAppBar(
+                    audioOnly: audioOnly,
                     currentQuality: currentQuality,
                     videoTitle: widget.videoTitle,
                     streams: widget.streams,
@@ -500,39 +641,85 @@ class StreamManifestPlayerState extends State<StreamManifestPlayer> {
                 PlayPauseButton(
                   isPlaying: isPlaying,
                   onPlayPause: () async {
-                    if (controller.value.isPlaying) {
-                      await controller.pause();
-                      isPlaying = false;
+                    if (audioOnly) {
+                      if (AudioService.playbackState.playing) {
+                        AudioService.pause();
+                        isPlaying = false;
+                      } else {
+                        AudioService.play();
+                        isPlaying = true;
+                      }
                     } else {
-                      await controller.play();
-                      isPlaying = true;
+                      if (controller.value.isPlaying) {
+                        await controller.pause();
+                        isPlaying = false;
+                      } else {
+                        await controller.play();
+                        isPlaying = true;
+                      }
                     }
                     setState(() {});
                   },
                 ),
                 Align(
                   alignment: Alignment.bottomCenter,
-                  child: StreamBuilder<Object>(
-                    stream: Rx.combineLatest2<double, double, double>(
-                      _dragPositionSubject.stream,
-                      Stream.periodic(Duration(milliseconds: 1000)),
-                      (dragPosition, _) => dragPosition),
-                    builder: (context, snapshot) {
-                      return PlayerProgressBar(
-                        segments: widget.segments,
-                        position: controller.value.position,
-                        duration: controller == null
-                          ? Duration(seconds: 2)
-                          : controller.value.duration,
-                        onSeek: (double newPosition) {
-                          controller.seekTo(Duration(seconds: newPosition.round()));
-                          setState(() => isSeeking = false);
-                        },
-                        onFullScreenTap: widget.onFullscreenTap,
-                        onSeekStart: () {
-                          setState(() => isSeeking = true);
-                        },
-                      );
+                  child: Builder(
+                    builder: (context) {
+                      if (audioOnly) {
+                        return StreamBuilder<Object>(
+                          stream: Rx.combineLatest2<double, double, double>(
+                            _dragPositionSubject.stream,
+                            Stream.periodic(Duration(milliseconds: 1000)),
+                            (dragPosition, _) => dragPosition),
+                          builder: (context, snapshot) {
+                            return PlayerProgressBar(
+                              onAudioOnlySwitch: () {
+                                audioOnly = !audioOnly;
+                              },
+                              audioOnly: audioOnly,
+                              segments: widget.segments,
+                              position: AudioService.playbackState.currentPosition,
+                              duration: widget.duration,
+                              onSeek: (double newPosition) {
+                                handleSeek(Duration(seconds: newPosition.round()));
+                                setState(() => isSeeking = false);
+                              },
+                              onFullScreenTap: widget.onFullscreenTap,
+                              onSeekStart: () {
+                                setState(() => isSeeking = true);
+                              },
+                            );
+                          }
+                        );
+                      } else {
+                        return StreamBuilder<Object>(
+                          stream: Rx.combineLatest2<double, double, double>(
+                            _dragPositionSubject.stream,
+                            Stream.periodic(Duration(milliseconds: 1000)),
+                            (dragPosition, _) => dragPosition),
+                          builder: (context, snapshot) {
+                            return PlayerProgressBar(
+                              onAudioOnlySwitch: () {
+                                audioOnly = !audioOnly;
+                              },
+                              audioOnly: audioOnly,
+                              segments: widget.segments,
+                              position: controller.value.position,
+                              duration: controller == null
+                                ? Duration(seconds: 2)
+                                : controller.value.duration,
+                              onSeek: (double newPosition) {
+                                handleSeek(Duration(seconds: newPosition.round()));
+                                setState(() => isSeeking = false);
+                              },
+                              onFullScreenTap: widget.onFullscreenTap,
+                              onSeekStart: () {
+                                setState(() => isSeeking = true);
+                              },
+                            );
+                          }
+                        );
+                      }
                     }
                   ),
                 )
