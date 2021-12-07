@@ -1,3 +1,29 @@
+# SongTube 6.4.0:
+
+- Audio Only Switch:
+    * You can now switch between Video and Audio only on the Video Page
+    * When Audio Only is enabled, you can exit the app and control the music on the notifications bar
+
+- UI & UX:
+    * Small Download menu re-design for a cleaner look and feel
+    * Tags Editor page has been re-designed
+    * Tags Results from MusicBrainz have been re-designed
+    * Increased Lyrics size and transition animation on Music Player
+    * Improved UI & UX Consistency
+
+- General:
+    * Improved MusicBrainz Auto-Tagger data fetching
+    * You can now edit the Artwork in the Tags Results page before saving
+    * Current playing songs correctly update their tags if it were modified
+    * Fixed some issues with Audio Tagging and Downloads
+    * Fixed videos not loading on the video page
+    * You can now share you music from Music or Downloads
+    * Fixed Audio-Tagger failing on edge cases and filter out illegal search symbols
+
+- Languages:
+    * Added Italian Language (Thanks @alpha4041)
+    * Added Japanese Language (Thanks @HiSubway)
+
 # SongTube 6.3.0:
 
 - Playlists & Music Screen:
