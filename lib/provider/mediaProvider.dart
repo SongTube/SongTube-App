@@ -255,7 +255,8 @@ class MediaProvider extends ChangeNotifier {
         AudioTags tags;
         try {
           tags = await AudioTagger.extractAllTags(song.filePath);
-        } catch (e) {
+        } catch (e) {}
+        if (tags == null) {
           tags = AudioTags(
             title: song.title,
             album: song.album,
@@ -276,7 +277,7 @@ class MediaProvider extends ChangeNotifier {
               title:    tags.title.isNotEmpty ? tags.title : song.title, 
               artist:   tags.artist.isNotEmpty ? tags.artist : song.artist,
               genre:    tags.genre,
-              duration: Duration(milliseconds: int.parse(song.duration)),
+              duration: song.duration == null ? null : Duration(milliseconds: int.parse(song.duration)),
               artUri:   Uri.parse("file://${artworkFile.path}"),
               extras:   {
                 "albumId": song.id,
