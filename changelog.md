@@ -1,3 +1,7 @@
+# SongTube 6.4.1:
+
+- Hotfix for Crash issue
+
 # SongTube 6.4.0:
 
 - Audio Only Switch:
