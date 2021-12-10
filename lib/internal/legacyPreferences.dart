@@ -217,7 +217,7 @@ class LegacyPreferences {
             artist: song['artist'],
             genre: song['genre'],
             artUri: Uri.parse(song['artUri']),
-            duration: map['duration'] != null ? Duration(seconds: int.parse(song['duration'])) : null,
+            duration: song['duration'] != null ? Duration(seconds: int.parse(song['duration'])) : null,
             extras: {
               "downloadType": song['extras']['downloadType'],
               "artwork": song['extras']['artwork'],
