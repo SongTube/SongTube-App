@@ -4,7 +4,7 @@ class LanguageEn extends Languages {
 
   // Introduction Screens
   @override
-  String get labelAppWelcome => "Bi xêr hatî'";
+  String get labelAppWelcome => "Bi xêr hattî";
   @override
   String get labelStart => "Dest pê bike";
   @override
