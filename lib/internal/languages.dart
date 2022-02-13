@@ -17,6 +17,7 @@ import 'languages/languageBn.dart';
 import 'languages/languageUa.dart';
 import 'languages/languageIt.dart';
 import 'languages/languageJa.dart';
+import 'languages/languageFr.dart';
 
 /// Multi-Language Support for SongTube, for new Languages to be supported
 /// a new [File] in this project [internal/languages] folder needs to be
@@ -56,6 +57,8 @@ final supportedLanguages = <LanguageData>[
   LanguageData("🇮🇹", "Italian", "it"),
     // Japanese (JA)
   LanguageData("🇯🇵", "Japanese", "ja"),
+      // French (FR)
+  LanguageData("🇫🇷", "French", "fr"),
 ];
 Future<Languages> _loadLocale(Locale locale) async {
   switch (locale.languageCode) {
@@ -101,6 +104,9 @@ Future<Languages> _loadLocale(Locale locale) async {
     // Japanese (JA)
     case 'ja':
       return LanguageJa();
+    // French (FR)
+    case 'fr':
+      return LanguageFr();
     // Default Language (English)
     default:
       return LanguageEn();
