@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:songtube/internal/languages/languageAr.dart';
+import 'package:songtube/internal/languages/languageKMR.dart';
 import 'package:songtube/internal/languages/languageKu.dart';
 import 'package:songtube/internal/languages/languageRu.dart';
 import 'package:songtube/main.dart';
@@ -62,6 +63,8 @@ final supportedLanguages = <LanguageData>[
   LanguageData("🇫🇷", "French", "fr"),
   // Kurdish (KU)
   LanguageData("ku", "Kurdish", "ku"),
+  // Kurdish (KMR)
+  LanguageData("kmr", "Kurdish (KMR)", "kmr"),
 ];
 Future<Languages> _loadLocale(Locale locale) async {
   switch (locale.languageCode) {
@@ -113,6 +116,9 @@ Future<Languages> _loadLocale(Locale locale) async {
     // Kurdish (KU)
     case 'ku':
       return LanguageKu();
+    // Kurdish (KMR)
+    case 'kmr':
+      return LanguageKmr();
     // Default Language (English)
     default:
       return LanguageEn();
