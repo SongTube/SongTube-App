@@ -1,3 +1,14 @@
+# SongTube 6.4.2:
+
+- UI & UX:
+    * Small UI Improvements
+
+- General:
+    * Fixed videos not loading
+
+- Languages:
+    * Added Kurdish Language (Thanks to @CYAXXX and @baho_20)
+
 # SongTube 6.4.1:
 
 - Hotfix for Crash issue
