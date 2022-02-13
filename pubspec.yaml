@@ -55,18 +55,19 @@ dependencies:
 
     # Device Providers
     shared_preferences: ^2.0.6 
-    provider: ^5.0.0
+    provider: ^6.0.0
     device_info: ^2.0.2
     path_provider: ^2.0.2
     package_info: ^2.0.2
     ext_storage: ^1.0.3
-    permission_handler: ^8.0.1
+    permission_handler: ^8.3.0 
     file_picker: ^3.0.2
     path: ^1.7.0
 
     # Text
     intl: ^0.17.0
     string_validator: ^0.3.0
+    google_fonts: ^2.2.0
 
     # HTTP
     dio: ^4.0.0
@@ -132,6 +133,10 @@ dependencies:
     palette_generator: ^0.3.0
     flutter_markdown: ^0.6.2
     md2_tab_indicator: ^1.0.2
+
+dependency_overrides:
+  platform: ^3.1.0
+  flutter_math_fork: ^0.5.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

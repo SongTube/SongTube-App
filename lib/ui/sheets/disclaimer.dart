@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:songtube/ui/components/styledBottomSheet.dart';
 import 'package:songtube/ui/dialogs/licenseDialog.dart';
 
@@ -14,7 +15,7 @@ class DisclaimerSheet extends StatelessWidget {
         "loss of business profits, business interruption, loss of business information, or any "   +
         "other pecuniary loss) arising out of the use of inability to use this product, even if "  +
         "Author of this Sotware is aware of the possibility of such damages and known defect.",
-        style: TextStyle(
+        style: GoogleFonts.poppins(
           color: Theme.of(context).textTheme.bodyText1.color,
           fontSize: 16,
         ),
@@ -27,9 +28,10 @@ class DisclaimerSheet extends StatelessWidget {
               builder: (context) => LicenseDialog()
             );
           },
-          child: Text("License", style: TextStyle(
+          child: Text("License", style: GoogleFonts.poppins(
             color: Theme.of(context).accentColor,
-            fontWeight: FontWeight.w600
+            fontWeight: FontWeight.w600,
+            fontSize: 18
           )),
         ),
       ],

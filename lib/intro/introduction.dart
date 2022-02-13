@@ -3,6 +3,7 @@ import 'package:floating_dots/floating_dots.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_html/shims/dart_ui_real.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:songtube/internal/languages.dart';
 
 // Internal
@@ -112,8 +113,7 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
                         ),
                         child: Text(
                           Languages.of(context).labelSkip,
-                          style: TextStyle(
-                            fontFamily: 'Product Sans',
+                          style: GoogleFonts.poppins(
                             fontWeight: FontWeight.w600,
                             fontSize: 14,
                             color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.7),
@@ -163,8 +163,7 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
                         ),
                         child: Text(
                           Languages.of(context).labelNext,
-                          style: TextStyle(
-                            fontFamily: 'Product Sans',
+                          style: GoogleFonts.poppins(
                             fontWeight: FontWeight.w600,
                             fontSize: 14,
                             color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.7),
@@ -189,25 +188,9 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
       );
     }
     return Scaffold(
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          ImageFiltered(
-            imageFilter: ImageFilter.blur(sigmaX: 40, sigmaY: 40),
-            child: FloatingDotGroup(
-              number: 10,
-              direction: Direction.random,
-              size: DotSize.large,
-              colors: [Theme.of(context).accentColor],
-              speed: DotSpeed.fast,
-              trajectory: Trajectory.random,
-            ),
-          ),
-          Container(
-            color: backgroundColor,
-            child: _body())
-        ],
-      )
+      body: Container(
+        color: backgroundColor,
+        child: _body())
     );
   }
 }

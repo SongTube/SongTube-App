@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/internal/nativeMethods.dart';
 import 'package:songtube/ui/components/styledBottomSheet.dart';
@@ -10,17 +11,19 @@ class DownloadFixSheet extends StatelessWidget {
       title: Languages.of(context).labelAndroid11Detected,
       content: Text(
         Languages.of(context).labelAndroid11DetectedJustification,
-        style: TextStyle(
+        style: GoogleFonts.poppins(
           color: Theme.of(context).textTheme.bodyText1.color,
-          fontSize: 16
+          fontSize: 16,
         ),
       ),
       actions: [
         TextButton(
           child: Text(
             "Allow",
-            style: TextStyle(
-              color: Theme.of(context).accentColor
+            style: GoogleFonts.poppins(
+              color: Theme.of(context).accentColor,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
             ),
           ),
           onPressed: () {
@@ -31,8 +34,10 @@ class DownloadFixSheet extends StatelessWidget {
         TextButton(
           child: Text(
             "Not Now",
-            style: TextStyle(
-              color: Theme.of(context).accentColor
+            style: GoogleFonts.poppins(
+              color: Theme.of(context).accentColor,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
             ),
           ),
           onPressed: () => Navigator.pop(context)

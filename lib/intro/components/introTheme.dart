@@ -1,5 +1,6 @@
 // Flutter
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:songtube/internal/languages.dart';
 
 // Internal
@@ -74,9 +75,8 @@ class _IntroThemeState extends State<IntroTheme> {
                     RichText(
                       textAlign: TextAlign.center,
                       text: TextSpan(
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontFamily: 'Product Sans',
+                        style: GoogleFonts.poppins(
+                          fontSize: 28,
                           fontWeight: FontWeight.w600,
                           color: Theme.of(context).textTheme.bodyText1.color
                         ),
@@ -114,10 +114,9 @@ class _IntroThemeState extends State<IntroTheme> {
                     child: RichText(
                       textAlign: TextAlign.center,
                       text: TextSpan(
-                        style: TextStyle(
+                        style: GoogleFonts.poppins(
                           fontSize: 18,
-                          fontFamily: 'Product Sans',
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w600,
                           color: Theme.of(context).textTheme.bodyText1.color
                         ),
                         children: [
@@ -128,7 +127,7 @@ class _IntroThemeState extends State<IntroTheme> {
                             text: Languages.of(context).labelTheme + "!",
                             style: TextStyle(
                               color: Theme.of(context).accentColor,
-                              fontWeight: FontWeight.w600
+                              fontWeight: FontWeight.w700
                             )
                           )
                         ]
@@ -181,13 +180,12 @@ class _IntroThemeState extends State<IntroTheme> {
                           child: Center(
                             child: Text(
                               Languages.of(context).labelSystem,
-                              style: TextStyle(
+                              style: GoogleFonts.poppins(
                                 fontSize: 14,
                                 color: theme == ThemeSelected.System
                                   ? Colors.white
                                   : Theme.of(context).textTheme.bodyText1.color,
                                 fontWeight: FontWeight.w700,
-                                fontFamily: 'Product Sans'
                               )
                             ),
                           ),
@@ -231,13 +229,12 @@ class _IntroThemeState extends State<IntroTheme> {
                           child: Center(
                             child: Text(
                               "Light",
-                              style: TextStyle(
+                              style: GoogleFonts.poppins(
                                 fontSize: 14,
                                 color: theme == ThemeSelected.Light
                                   ? Colors.white
                                   : Theme.of(context).textTheme.bodyText1.color,
                                 fontWeight: FontWeight.w700,
-                                fontFamily: 'Product Sans'
                               )
                             ),
                           ),
@@ -281,13 +278,12 @@ class _IntroThemeState extends State<IntroTheme> {
                           child: Center(
                             child: Text(
                               "Dark",
-                              style: TextStyle(
+                              style: GoogleFonts.poppins(
                                 fontSize: 14,
                                 color: theme == ThemeSelected.Dark
                                   ? Colors.white
                                   : Theme.of(context).textTheme.bodyText1.color,
                                 fontWeight: FontWeight.w700,
-                                fontFamily: 'Product Sans'
                               )
                             ),
                           ),

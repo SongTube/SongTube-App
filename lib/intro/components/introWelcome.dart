@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Packages
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:songtube/internal/languages.dart';
@@ -71,19 +72,17 @@ class IntroWelcome extends StatelessWidget {
                         children: [
                           TextSpan(
                             text: Languages.of(context).labelAppWelcome.toLowerCase() + "\n",
-                            style: TextStyle(
-                              fontFamily: 'Product Sans',
-                              fontWeight: FontWeight.w600
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 22
                             )
                           ),
                           TextSpan(
                             text: "SongTube",
-                            style: TextStyle(
+                            style: GoogleFonts.poppins(
                               color: Theme.of(context).accentColor,
-                              fontWeight: FontWeight.w800,
-                              letterSpacing: 1.0,
-                              fontSize: 32,
-                              fontFamily: 'Product Sans'
+                              fontWeight: FontWeight.w700,
+                              fontSize: 42,
                             )
                           )
                         ]
@@ -180,13 +179,12 @@ class IntroWelcome extends StatelessWidget {
               backgroundColor: Theme.of(context).accentColor,
               label: Text(
                 Languages.of(context).labelStart,
-                style: TextStyle(
+                style: GoogleFonts.poppins(
                   color: Colors.white,
-                  fontFamily: 'YTSans',
-                  fontSize: 16
+                  fontSize: 22,
+                  fontWeight: FontWeight.w600
                 ),
               ),
-              icon: Icon(EvaIcons.arrowForward, color: Colors.white),
               onPressed: onNext,
             ),
           ),
@@ -205,9 +203,8 @@ class IntroWelcome extends StatelessWidget {
           padding: EdgeInsets.only(right: 8.0),
           child: Text(
             Localizations.localeOf(context).languageCode.toUpperCase(),
-            style: TextStyle(
-              fontSize: 14,
-              fontFamily: 'Product Sans',
+            style: GoogleFonts.poppins(
+              fontSize: 18,
               fontWeight: FontWeight.w800,
               color: Theme.of(context).textTheme.bodyText1.color
             ),

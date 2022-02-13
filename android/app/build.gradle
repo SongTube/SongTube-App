@@ -32,7 +32,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
 
     lintOptions {
         disable 'InvalidPackage'
@@ -81,6 +81,9 @@ android {
             signingConfig signingConfigs.release
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //ndk {
+            //    abiFilters 'armeabi-v7a', 'arm64-v8a'
+            //}
         }
         debug{
             applicationIdSuffix ".dev"
