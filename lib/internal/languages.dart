@@ -7,6 +7,7 @@ import 'package:songtube/internal/languages/languageRu.dart';
 import 'package:songtube/main.dart';
 
 // Language Files
+import 'languages/languageCa.dart';
 import 'languages/languageEn.dart';
 import 'languages/languageEs.dart';
 import 'languages/languagePt-BR.dart';
@@ -65,6 +66,8 @@ final supportedLanguages = <LanguageData>[
   LanguageData("ku", "Kurdish", "ku"),
   // Kurdish (KMR)
   LanguageData("kmr", "Kurdish (KMR)", "kmr"),
+  // Catalan (CA)
+  LanguageData("ca", "Català", "ca");
 ];
 Future<Languages> _loadLocale(Locale locale) async {
   switch (locale.languageCode) {
@@ -119,6 +122,8 @@ Future<Languages> _loadLocale(Locale locale) async {
     // Kurdish (KMR)
     case 'kmr':
       return LanguageKmr();
+    case 'ca':
+      return LanguageCa();
     // Default Language (English)
     default:
       return LanguageEn();
