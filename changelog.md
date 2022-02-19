@@ -1,3 +1,8 @@
+# SongTube 6.4.3:
+
+- General
+    * Fixed videos not loading
+
 # SongTube 6.4.2:
 
 - UI & UX:
