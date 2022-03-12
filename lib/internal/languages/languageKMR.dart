@@ -58,7 +58,7 @@ class LanguageEn extends Languages {
   @override
   String get labelFavorites => "Bijarte";
   @override
-  String get labelWatchLater => "Paşe temaşekirin";
+  String get labelWatchLater => "Paşê temaşekirin";
 
   // Video Options Menu
   @override
