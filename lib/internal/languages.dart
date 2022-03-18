@@ -61,10 +61,10 @@ final supportedLanguages = <LanguageData>[
   LanguageData("🇯🇵", "Japanese", "ja"),
   // French (FR)
   LanguageData("🇫🇷", "French", "fr"),
-  // Kurdish (KU)
-  LanguageData("ku", "Kurdish", "ku"),
+  // Sorani (CKB)
+  LanguageData("ckb", "Sorani", "ku"),
   // Kurdish (KMR)
-  LanguageData("kmr", "Kurdish (KMR)", "kmr"),
+  LanguageData("kmr", "Kurmanji", "ku"),
 ];
 Future<Languages> _loadLocale(Locale locale) async {
   switch (locale.languageCode) {
@@ -113,10 +113,10 @@ Future<Languages> _loadLocale(Locale locale) async {
     // French (FR)
     case 'fr':
       return LanguageFr();
-    // Kurdish (KU)
-    case 'ku':
-      return LanguageKu();
-    // Kurdish (KMR)
+    // Sorani (CKB)
+    case 'ckb':
+      return LanguageCkb();
+    // Kurmanji (KMR)
     case 'kmr':
       return LanguageKmr();
     // Default Language (English)
