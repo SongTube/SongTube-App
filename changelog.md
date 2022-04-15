@@ -1,3 +1,9 @@
+# SongTube 6.4.5:
+
+- General
+    * Fixed videos not loading
+    * Fixed clipboard (crashing the app on special cases)
+
 # SongTube 6.4.3:
 
 - General
