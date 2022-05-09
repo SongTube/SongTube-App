@@ -4,17 +4,17 @@ class LanguageTr extends Languages {
 
   // Introduction Screens
   @override
-  String get labelAppWelcome => "'ye hoşgeldiniz";
+  String get labelAppWelcome => "Hoşgeldiniz";
   @override
   String get labelStart => "Başlat";
   @override
   String get labelSkip => "Atla";
   @override
-  String get labelNext => "Sıradaki";
+  String get labelNext => "Sonraki";
   @override
   String get labelExternalAccessJustification =>
-    "Kaydetmek için depolama izni gerekli" +
-    "Videolar ve müzikler";
+    "Videolar ve müzikler indirebilmek için " +
+    "depolama izni gerekli";
   @override
   String get labelAppCustomization => "Özelleştirmeler";
   @override
@@ -22,9 +22,9 @@ class LanguageTr extends Languages {
   @override
   String get labelConfigReady => "Yapılandırma hazır";
   @override
-  String get labelIntroductionIsOver => "Giriş bitti";
+  String get labelIntroductionIsOver => "Herşey tamam";
   @override
-  String get labelEnjoy => "Eğlen";
+  String get labelEnjoy => "Tadını çıkarın";
   @override 
   String get labelGoHome => "Ana sayfaya git";
 
@@ -44,9 +44,9 @@ class LanguageTr extends Languages {
   @override
   String get labelQuickSearch => "Hızlı arama...";
   @override
-  String get labelTagsEditor => "Etiketleri\nDüzenle";
+  String get labelTagsEditor => "Etiketleri\ndüzenle";
   @override
-  String get labelEditArtwork => "Görseli\nDüzenle";
+  String get labelEditArtwork => "Görseli\ndüzenle";
   @override
   String get labelDownloadAll => "Hepsini indir";
   @override 
@@ -62,11 +62,11 @@ class LanguageTr extends Languages {
 
   // Video Options Menu
   @override
-  String get labelCopyLink => "Bağlantıyı Kopyala";
+  String get labelCopyLink => "Bağlantıyı kopyala";
   @override
   String get labelAddToFavorites => "Favorilere ekle";
   @override
-  String get labelAddToWatchLater => "Sonra izleme listesine ekle";
+  String get labelAddToWatchLater => "Sonra izle";
   @override
   String get labelAddToPlaylist => "Oynatma listesine ekle";
 
@@ -138,10 +138,10 @@ class LanguageTr extends Languages {
   @override
   String get labelVideos => "Videolar";
   @override
-  String get labelNoMediaYet => "Henüz medya yok";
+  String get labelNoMediaYet => "Henüz burası boş";
   @override
-  String get labelNoMediaYetJustification => "Tüm medya dosyalarınız" +
-    "burada gösterilecek";
+  String get labelNoMediaYetJustification => "Tüm medya dosyalarınız " +
+    "burada gösterilir";
   @override
   String get labelSearchMedia => "Medya ara...";
   @override
@@ -156,7 +156,7 @@ class LanguageTr extends Languages {
 
   // Navigate Screen
   @override
-  String get labelSearchYoutube => "Youtube'da Ara...";
+  String get labelSearchYoutube => "Youtube'da ara...";
 
   // More Screen
   @override
@@ -205,7 +205,7 @@ class LanguageTr extends Languages {
   @override
   String get labelDeleteCache => "Önbelleği temizle";
   @override
-  String get labelDeleteCacheJustification => "SongTube'nin önbelleğini temizle";
+  String get labelDeleteCacheJustification => "SongTube önbelleğini temizle";
   @override
   String get labelAndroid11Fix => "Android 11 düzeltmesi";
   @override
@@ -353,7 +353,7 @@ class LanguageTr extends Languages {
   @override
   String get labelNo => "Hayır";
   @override
-  String get labelLibrary => "kütüphane";
+  String get labelLibrary => "Kütüphane";
   @override
   String get labelCreate => "Oluştur";
   @override
