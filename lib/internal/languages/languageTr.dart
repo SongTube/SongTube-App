@@ -13,24 +13,24 @@ class LanguageTr extends Languages {
   String get labelNext => "Sıradaki";
   @override
   String get labelExternalAccessJustification =>
-    "Kaydetmek için depolamaya izne ihtiyacı var " +
+    "Kaydetmek için depolama izni gerekli" +
     "Videolar ve müzikler";
   @override
   String get labelAppCustomization => "Özelleştirmeler";
   @override
-  String get labelSelectPreferred => "Tercih ettiğinizi seçin";
+  String get labelSelectPreferred => "Tercihinizi seçin";
   @override
   String get labelConfigReady => "Yapılandırma hazır";
   @override
   String get labelIntroductionIsOver => "Giriş bitti";
   @override
-  String get labelEnjoy => "Zevk alın";
+  String get labelEnjoy => "Eğlen";
   @override 
-  String get labelGoHome => "Ana Sayfaya Git";
+  String get labelGoHome => "Ana sayfaya git";
 
   // Bottom Navigation Bar
   @override
-  String get labelHome => "Ana Sayfa";
+  String get labelHome => "Ana sayfa";
   @override
   String get labelDownloads => "İndirilenler";
   @override
@@ -38,99 +38,99 @@ class LanguageTr extends Languages {
   @override
   String get labelYouTube => "YouTube";
   @override
-  String get labelMore => "Daha Fazla";
+  String get labelMore => "Daha fazla";
 
   // Home Screen
   @override
-  String get labelQuickSearch => "Hızlı Arama...";
+  String get labelQuickSearch => "Hızlı arama...";
   @override
-  String get labelTagsEditor => "Tagları\nDüzenle";
+  String get labelTagsEditor => "Etiketleri\nDüzenle";
   @override
-  String get labelEditArtwork => "Resmi\nDüzenle";
+  String get labelEditArtwork => "Görseli\nDüzenle";
   @override
-  String get labelDownloadAll => "Hepsini İndir";
+  String get labelDownloadAll => "Hepsini indir";
   @override 
-  String get labelLoadingVideos => "Videolar Yükleniyor...";
+  String get labelLoadingVideos => "Videolar yükleniyor...";
   @override
-  String get labelHomePage => "Home Page";
+  String get labelHomePage => "Ana sayfa";
   @override
-  String get labelTrending => "Trending";
+  String get labelTrending => "Trendler";
   @override
-  String get labelFavorites => "Favorites";
+  String get labelFavorites => "Favoriler";
   @override
-  String get labelWatchLater => "Watch Later";
+  String get labelWatchLater => "Sonra izle";
 
   // Video Options Menu
   @override
-  String get labelCopyLink => "Copy Link";
+  String get labelCopyLink => "Bağlantıyı Kopyala";
   @override
-  String get labelAddToFavorites => "Add to Favorites";
+  String get labelAddToFavorites => "Favorilere ekle";
   @override
-  String get labelAddToWatchLater => "Add to Watch Later";
+  String get labelAddToWatchLater => "Sonra izleme listesine ekle";
   @override
-  String get labelAddToPlaylist => "Add to Playlist";
+  String get labelAddToPlaylist => "Oynatma listesine ekle";
 
   // Downloads Screen
   @override
-  String get labelQueued => "Sıraya Alındı";
+  String get labelQueued => "Sıraya alındı";
   @override
   String get labelDownloading => "İndiriliyor";
   @override
-  String get labelConverting => "Çevriliyor";
+  String get labelConverting => "Dönüştürülüyor";
   @override
-  String get labelCancelled => "İptal Edildi";
+  String get labelCancelled => "İptal edildi";
   @override
   String get labelCompleted => "Tamamlandı";
 
   // Download Status/Error Messages
   @override
-  String get labelDownloadQueued => "İndirme Sıraya Alındı";
+  String get labelDownloadQueued => "İndirme sıraya alındı";
   @override
   String get labelDownloadAcesssDenied => "İzin reddedildi";
   @override
-  String get labelClearingExistingMetadata => "Zaten varolan Metadata siliniyor...";
+  String get labelClearingExistingMetadata => "Zaten varolan meta veri siliniyor...";
   @override
-  String get labelWrittingTagsAndArtwork => "Taglar & Resim uygulanıyor...";
+  String get labelWrittingTagsAndArtwork => "Etiketler & görsel uygulanıyor...";
   @override
-  String get labelSavingFile => "Dosya Kaydediliyor...";
+  String get labelSavingFile => "Dosya kaydediliyor...";
   @override
   String get labelAndroid11FixNeeded => "Hata, Android 11 düzeltmesi gerekli, Ayarları kontrol edin";
   @override
-  String get labelErrorSavingDownload => "Dosya kaydedilemedi, uygulama için izinleri kontrol edin";
+  String get labelErrorSavingDownload => "Dosya kaydedilemedi, uygulama izinlerini kontrol edin";
   @override
-  String get labelDownloadingVideo => "Video İndiriliyor...";
+  String get labelDownloadingVideo => "Video indiriliyor...";
   @override
-  String get labelDownloadingAudio => "Ses İndiriliyor...";
+  String get labelDownloadingAudio => "Ses indiriliyor...";
   @override
-  String get labelGettingAudioStream => "Ses Yayını İndiriliyor...";
+  String get labelGettingAudioStream => "Ses yayını indiriliyor...";
   @override
-  String get labelAudioNoDataRecieved => "Ses Yayın bulunamadı";
+  String get labelAudioNoDataRecieved => "Ses yayını alınamadı";
   @override
-  String get labelDownloadStarting => "İndirme Başlatılıyor...";
+  String get labelDownloadStarting => "İndirme başlatılıyor...";
   @override
-  String get labelDownloadCancelled => "İndirme İptal Edildi";
+  String get labelDownloadCancelled => "İndirme iptal edildi";
   @override
-  String get labelAnIssueOcurredConvertingAudio => "Çevirme başarısız oldu";
+  String get labelAnIssueOcurredConvertingAudio => "Dönüştürme başarısız oldu";
   @override
   String get labelPatchingAudio => "Ses yamalanıyor...";
 
   // Download Menu
   @override
-  String get labelEnableAudioConversion => "Ses Çevirmesini Aç";
+  String get labelEnableAudioConversion => "Ses dönüşümünü etkinleştir";
   @override
-  String get labelGainControls => "Yükseklik Ayarları";
+  String get labelGainControls => "Kazanç kontrolleri";
   @override
   String get labelVolume => "Ses";
   @override
-  String get labelBassGain => "Bass Yüksekliği";
+  String get labelBassGain => "Bass yüksekliği";
   @override
-  String get labelTrebleGain => "Tiz Yüksekliği";
+  String get labelTrebleGain => "Tiz yüksekliği";
   @override
-  String get labelSelectVideo => "Video Seç";
+  String get labelSelectVideo => "Video seç";
   @override
-  String get labelSelectAudio => "Ses Seç";
+  String get labelSelectAudio => "Ses seç";
   @override
-  String get labelGlobalParameters => "Global parametreler";
+  String get labelGlobalParameters => "Genel parametreler";
 
   // Media Screen
   @override
@@ -138,21 +138,21 @@ class LanguageTr extends Languages {
   @override
   String get labelVideos => "Videolar";
   @override
-  String get labelNoMediaYet => "Şu Anlık Medya Yok";
+  String get labelNoMediaYet => "Henüz medya yok";
   @override
   String get labelNoMediaYetJustification => "Tüm medya dosyalarınız" +
-    "burada gösterilecektir";
+    "burada gösterilecek";
   @override
-  String get labelSearchMedia => "Medya Ara...";
+  String get labelSearchMedia => "Medya ara...";
   @override
-  String get labelDeleteSong => "Şarkıyı Sil";
+  String get labelDeleteSong => "Şarkıyı sil";
   @override
-  String get labelNoPermissionJustification => "Medyaya Şu İzni Vererek Bakınız" + "\n" +
-    "Hafızaya Erişim İzni";
+  String get labelNoPermissionJustification => "Depolama izni vererek" + "\n" +
+    "medyalarınızı görüntüleyin";
   @override
-  String get labelGettingYourMedia => "Medya Yükleniyor...";
+  String get labelGettingYourMedia => "Medya yükleniyor...";
   @override
-  String get labelEditTags => "Edit Tags";
+  String get labelEditTags => "Etiketleri düzenle";
 
   // Navigate Screen
   @override
@@ -166,71 +166,71 @@ class LanguageTr extends Languages {
   @override
   String get labelLicenses => "Lisanslar";
   @override
-  String get labelChooseColor => "Renk Seç";
+  String get labelChooseColor => "Renk seç";
   @override
   String get labelTheme => "Tema";
   @override
-  String get labelUseSystemTheme => "Sistem Temasını Kullan";
+  String get labelUseSystemTheme => "Sistem temasını kullan";
   @override
   String get labelUseSystemThemeJustification =>
-    "Otomatik temayı Aç/Kapat";
+    "Otomatik temayı aç/kapat";
   @override
-  String get labelEnableDarkTheme => "Karanlık Temayı Aç";
+  String get labelEnableDarkTheme => "Koyu temayı aç";
   @override
   String get labelEnableDarkThemeJustification =>
-    "Karanlık Temayı Varsayılan Olarak Kullan";
+    "Varsayılan olarak koyu temayı kullan";
   @override
-  String get labelEnableBlackTheme => "Siyah Temayı Aç";
+  String get labelEnableBlackTheme => "Siyah temayı aç";
   @override
   String get labelEnableBlackThemeJustification =>
-    "Saf Siyah Temayı Aç";
+    "Saf siyah temayı etkinleştir";
   @override
-  String get labelAccentColor => "Varsayılan Renk";
+  String get labelAccentColor => "Varsayılan renk";
   @override
-  String get labelAccentColorJustification => "Varsayılan Rengi Özelleştir";
+  String get labelAccentColorJustification => "Varsayılan rengi özelleştir";
   @override
-  String get labelAudioFolder => "Ses Klasörü";
+  String get labelAudioFolder => "Ses klasörü";
   @override
-  String get labelAudioFolderJustification => "Şunun için klasör seç " +
-    "Ses İndirmeleri";
+  String get labelAudioFolderJustification => "İndirilen ses dosyaları için " +
+    "klasör seç";
   @override
-  String get labelVideoFolder => "Video Klasörü";
+  String get labelVideoFolder => "Video klasörü";
   @override
-  String get labelVideoFolderJustification => "Şunun için klasör seç " +
-    "Video İndirmeleri";
+  String get labelVideoFolderJustification => "İndirilen video dosyaları için " +
+    "klasör seç";
   @override
-  String get labelAlbumFolder => "Album Klasörü";
+  String get labelAlbumFolder => "Albüm Klasörü";
   @override
-  String get labelAlbumFolderJustification => "Her Albüm için bir klasör oluştur";
+  String get labelAlbumFolderJustification => "Her albüm için bir klasör oluştur";
   @override
-  String get labelDeleteCache => "Önbelleği Sil";
+  String get labelDeleteCache => "Önbelleği temizle";
   @override
-  String get labelDeleteCacheJustification => "SongTube'nin önbelleğini sil";
+  String get labelDeleteCacheJustification => "SongTube'nin önbelleğini temizle";
   @override
-  String get labelAndroid11Fix => "Android 11 Düzeltmesi";
+  String get labelAndroid11Fix => "Android 11 düzeltmesi";
   @override
-  String get labelAndroid11FixJustification => "Şu Android versiyonları için indirme sıkıntılarını düzeltir " +
-    "Android 10 & 11";
+  String get labelAndroid11FixJustification => "Android 10 & 11 versiyonları için indirme " +
+    "sorunlarını düzeltir";
   @override
   String get labelBackup => "Yedekle";
   @override
   String get labelBackupJustification => "Medya kütüphanesini yedekle";
   @override
-  String get labelRestore => "Geri Yükle";
+  String get labelRestore => "Geri yükle";
   @override
   String get labelRestoreJustification => "Medya kütüphanesini geri yükle";
   @override
-  String get labelBackupLibraryEmpty => "Kütüphaneniz Boş";
+  String get labelBackupLibraryEmpty => "Kütüphaneniz boş";
   @override
-  String get labelBackupCompleted => "Yedeklemr Tamamlandı";
+  String get labelBackupCompleted => "Yedekleme tamamlandı";
   @override
-  String get labelRestoreNotFound => "Geri Yükleme Dosyası Bulunamadı";
+  String get labelRestoreNotFound => "Geri yükleme dosyası bulunamadı";
   @override
-  String get labelRestoreCompleted => "Geri Yükleme Tamamlandı";
+  String get labelRestoreCompleted => "Geri yükleme tamamlandı";
   @override
-  String get labelCacheIsEmpty => "Önbellek Boş";
+  String get labelCacheIsEmpty => "Önbellek boş";
   @override
-  String get labelYouAreAboutToClear => "Dikkat:Siliyorsunuz/Temizliyorsunuz";
+  String get labelYouAreAboutToClear => "Dikkat! Temizlemek üzeresin";
 
   // Tags Editor TextFields
   @override
@@ -250,62 +250,62 @@ class LanguageTr extends Languages {
 
   // Android 10 or 11 Detected Dialog
   @override
-  String get labelAndroid11Detected => "Android 10 ya da 11 Algılandı";
+  String get labelAndroid11Detected => "Android 10 ya da 11 algılandı";
   @override
-  String get labelAndroid11DetectedJustification => "Şunun çalıştıgından emin olmak için " +
-    "bu uygulamadan indirilenler, Android 10 ve 11'de çalışması için " +
-    "Hafızaya izin gerekebilir, bu kalıcı değildir ve gerekmez " +
-    "ilerdeki güncellemeler için. Bu düzeltmeyi Ayarlardan da uygulayabilirsiniz.";
+  String get labelAndroid11DetectedJustification => "Bu uygulamada indirme işleminin doğru çalışması için " +
+    "Android 10 ve 11'de Dosya Erişim iznine gereksinim duyar, " +
+    "bu geçici bir çözüm ve gelecek güncellemelerde gerekli olmayacak. " +
+    "Bu düzeltmeyi Ayarlar'dan da uygulayabilirsiniz.";
 
   // Music Player
   @override
-  String get labelPlayerSettings => "Player Settings";
+  String get labelPlayerSettings => "Oynatıcı ayarları";
   @override
-  String get labelExpandArtwork => "Expand Artwork";
+  String get labelExpandArtwork => "Görseli genişlet";
   @override
-  String get labelArtworkRoundedCorners => "Artwork Rounded Corners";
+  String get labelArtworkRoundedCorners => "Kenerları yuvarlanmış görsel";
   @override
-  String get labelPlayingFrom => "Playing From";
+  String get labelPlayingFrom => "Şuradan oynat";
   @override
-  String get labelBlurBackground => "Blur Background";
+  String get labelBlurBackground => "Arka plan bulanıklaştırma";
 
   // Video Page
   @override
-  String get labelTags => "Tags";
+  String get labelTags => "Etiketler";
   @override
-  String get labelRelated => "Related";
+  String get labelRelated => "Alaka";
   @override
-  String get labelAutoPlay => "AutoPlay";
+  String get labelAutoPlay => "Otomatik oynatma";
 
   // Tags Pages
   @override
   String get labelAudioFormatNotCompatible =>
-    "Audio format not Compatible";
+    "Ses formatı uyumlu değil";
   @override
-  String get labelNotSpecified => "Not Specified";
+  String get labelNotSpecified => "Belirtilmemiş";
   @override
   String get labelPerformAutomaticTagging => 
-    "Perform Automatic Tagging";
+    "Otomatik etiketle";
   @override
   String get labelSelectTagsfromMusicBrainz => 
-    "Select Tags from MusicBrainz";
+    "MusicBrainz'den etiketleri al";
   @override
   String get labelSelectArtworkFromDevice =>
-    "Select Artwork from Device";
+    "Cihazdan görsel seç";
   
   // Telegram Join Channel Dialog
   @override
-  String get labelJoinTelegramChannel => "Join Telegram Channel!";
+  String get labelJoinTelegramChannel => "Telegram kanalına katıl!";
   @override
   String get labelJoinTelegramJustification =>
-    "Do you like SongTube? Please join the Telegram Channel! You will find " +
-    "Updates, Information, Development, Group Link and other Social links." +
+    "SongTube'u sevdiniz mi? Telegram Kanalımıza katılabilirsiniz! " +
+    "Güncellemeler, bilgi, geliştirme, grup bağlantısı veya diğer sosyal medya bağlantılarını bulabilirsiniz." +
     "\n\n" +
-    "In case you have an issue or a great recommentation in your mind, " +
-    "please join the Group from the Channel and write it down! But take in mind " +
-    "you can only speak in English, thanks!";
+    "Aklınıza takılan bir sorun veya harika bir öneriniz varsa lütfen kanaldaki grub bağlantısını " +
+    "kullanarak grubumuza katılın ve yazın! Ancak yalnızca İngilizce konuşmanız gerektiğini unutmayın, " +
+    "Şimdiden herşey için teşekkürler!";
   @override
-  String get labelRemindLater => "Remind Later";
+  String get labelRemindLater => "Daha sonra hatırlat";
 
   // Common Words (One word labels)
   @override
@@ -313,7 +313,7 @@ class LanguageTr extends Languages {
   @override
   String get labelSystem => "Sistem";
   @override
-  String get labelChannel => "Kanal/Grup";
+  String get labelChannel => "Kanal";
   @override
   String get labelShare => "Paylaş";
   @override
@@ -325,15 +325,15 @@ class LanguageTr extends Languages {
   @override
   String get labelBest => "En İyi";
   @override
-  String get labelPlaylist => "Oynatma Listesk";
+  String get labelPlaylist => "Oynatma listesi";
   @override
   String get labelVersion => "Sürüm";
   @override
   String get labelLanguage => "Dil";
   @override
-  String get labelGrant => "İzin Ver";
+  String get labelGrant => "İzin ver";
   @override
-  String get labelAllow => "Kabul Et";
+  String get labelAllow => "Kabul et";
   @override
   String get labelAccess => "İzin Ver";
   @override
@@ -345,17 +345,17 @@ class LanguageTr extends Languages {
   @override
   String get labelCancel => "İptal";
   @override
-  String get labelGeneral => "General";
+  String get labelGeneral => "Genel";
   @override
-  String get labelRemove => "Remove";
+  String get labelRemove => "Kaldır";
   @override
-  String get labelJoin => "Join";
+  String get labelJoin => "Katıl";
   @override
-  String get labelNo => "No";
+  String get labelNo => "Hayır";
   @override
   String get labelLibrary => "kütüphane";
   @override
-  String get labelCreate => "Oluşturmak";
+  String get labelCreate => "Oluştur";
   @override
   String get labelPlaylists => "Çalma listeleri";
   @override
