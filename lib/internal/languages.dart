@@ -63,7 +63,7 @@ final supportedLanguages = <LanguageData>[
   LanguageData("🇫🇷", "French", "fr"),
   // Sorani (CKB)
   LanguageData("ckb", "Sorani", "ku"),
-  // Kurdish (KU)
+  // Kurmanji (KU)
   LanguageData("ku", "Kurmanji", "ku"),
 ];
 Future<Languages> _loadLocale(Locale locale) async {
