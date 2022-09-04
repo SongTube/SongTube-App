@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Packages
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:songtube/internal/languages.dart';
 
 // UI
@@ -17,6 +18,7 @@ class IntroReady extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.transparent,
         body: Stack(
           alignment: Alignment.center,
           children: [
@@ -44,9 +46,8 @@ class IntroReady extends StatelessWidget {
                       RichText(
                         textAlign: TextAlign.center,
                         text: TextSpan(
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontFamily: 'Product Sans',
+                          style: GoogleFonts.poppins(
+                            fontSize: 28,
                             fontWeight: FontWeight.w600,
                             color: Theme.of(context).textTheme.bodyText1.color
                           ),
@@ -77,9 +78,8 @@ class IntroReady extends StatelessWidget {
                       child: RichText(
                         textAlign: TextAlign.center,
                         text: TextSpan(
-                          style: TextStyle(
+                          style: GoogleFonts.poppins(
                             fontSize: 18,
-                            fontFamily: 'Product Sans',
                             fontWeight: FontWeight.w600,
                             color: Theme.of(context).textTheme.bodyText1.color
                           ),
@@ -88,13 +88,13 @@ class IntroReady extends StatelessWidget {
                               text: 
                                 Languages.of(context).labelIntroductionIsOver
                                 + "\n" +
-                                Languages.of(context).labelEnjoy + " "
+                                Languages.of(context).labelEnjoy.toLowerCase() + " "
                             ),
                             TextSpan(
                               text: "SongTube!",
                               style: TextStyle(
                                 color: Theme.of(context).accentColor,
-                                fontWeight: FontWeight.w600
+                                fontWeight: FontWeight.w700
                               )
                             )
                           ]
@@ -115,16 +115,15 @@ class IntroReady extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.only(right: 16),
             child: FloatingActionButton.extended(
-              backgroundColor: Colors.red,
+              backgroundColor: Theme.of(context).accentColor,
               label: Text(
                 Languages.of(context).labelGoHome,
-                style: TextStyle(
+                style: GoogleFonts.poppins(
                   color: Colors.white,
-                  fontFamily: 'YTSans',
-                  fontSize: 16
+                  fontSize: 22,
+                  fontWeight: FontWeight.w600
                 ),
               ),
-              icon: Icon(EvaIcons.homeOutline, color: Colors.white),
               onPressed: onEnd,
             ),
           ),

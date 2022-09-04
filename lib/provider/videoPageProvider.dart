@@ -65,7 +65,7 @@ class VideoPageProvider extends ChangeNotifier {
         currentTags.updateTextControllers(value);
         saveToHistory(currentVideo.toStreamInfoItem());
         notifyListeners();
-        CommentsExtractor.getComments(currentVideo.url).then((comments) {
+        CommentsExtractor.getComments(currentVideo.videoInfo.url).then((comments) {
           currentComments = comments;
           notifyListeners();
         });
@@ -94,7 +94,7 @@ class VideoPageProvider extends ChangeNotifier {
       saveToHistory(currentVideo.toStreamInfoItem());
       notifyListeners();
     });
-    CommentsExtractor.getComments(currentVideo.url).then((comments) {
+    CommentsExtractor.getComments(currentVideo.videoInfo.url).then((comments) {
       currentComments = comments;
       notifyListeners();
     });
@@ -157,7 +157,7 @@ class VideoPageProvider extends ChangeNotifier {
       notifyListeners();
       
     });
-    CommentsExtractor.getComments(currentVideo.url).then((comments) {
+    CommentsExtractor.getComments(currentVideo.videoInfo.url).then((comments) {
       currentComments = comments;
       notifyListeners();
     });

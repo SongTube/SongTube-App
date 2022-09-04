@@ -10,11 +10,13 @@ class PlayerAppBar extends StatelessWidget {
   final Function onChangeQuality;
   final Function onEnterPipMode;
   final String currentQuality;
+  final bool audioOnly;
   PlayerAppBar({
     @required this.streams,
     @required this.videoTitle,
     @required this.onChangeQuality,
     @required this.currentQuality,
+    @required this.audioOnly,
     this.onEnterPipMode
   });
   @override
@@ -47,7 +49,9 @@ class PlayerAppBar extends StatelessWidget {
               softWrap: false,
             ),
           ),
+          if (!audioOnly)
           SizedBox(width: 16),
+          if (!audioOnly)
           FutureBuilder(
             future: DeviceInfoPlugin().androidInfo, 
             builder: (context, AsyncSnapshot<AndroidDeviceInfo> info) {
@@ -89,7 +93,9 @@ class PlayerAppBar extends StatelessWidget {
               }
             }
           ),
+          if (!audioOnly)
           SizedBox(width: 8),
+          if (!audioOnly)
           GestureDetector(
             onTap: () => onChangeQuality(),
             child: Container(

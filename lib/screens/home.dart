@@ -123,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           }
                         },
                         labelStyle: TextStyle(
-                          fontSize: 13,
+                          fontSize: 14,
                           fontFamily: 'Product Sans',
                           fontWeight: FontWeight.w600,
                           letterSpacing: 0.3
@@ -198,7 +198,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       child: Consumer<ManagerProvider>(
                         builder: (context, manager, _) {
                           return SearchHistoryList(
-                            searchQuery: manager.searchController.text,
+                            searchQuery: manager.searchController.text
+                              .replaceAll('#', '')
+                              .replaceAll('&', ''),
                             onItemTap: (String item) {
                               manager.searchController.text = item;
                               manager.searchBarFocusNode.unfocus();

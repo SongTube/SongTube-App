@@ -71,8 +71,9 @@ class CollapsedPanel extends StatelessWidget {
                           child: Text(
                             "${AudioService.currentMediaItem.title}",
                             style: TextStyle(
-                              fontFamily: 'YTSans',
-                              fontSize: 16
+                              fontFamily: 'Product Sans',
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.fade,
@@ -83,7 +84,7 @@ class CollapsedPanel extends StatelessWidget {
                         Text(
                           "${AudioService.currentMediaItem.artist}",
                           style: TextStyle(
-                            fontFamily: 'YTSans',
+                            fontFamily: 'Product Sans',
                             fontSize: 11,
                             color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6)
                           ),

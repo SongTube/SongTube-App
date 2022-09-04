@@ -217,7 +217,7 @@ class LegacyPreferences {
             artist: song['artist'],
             genre: song['genre'],
             artUri: Uri.parse(song['artUri']),
-            duration: Duration(seconds: int.parse(song['duration'])),
+            duration: song['duration'] != null ? Duration(seconds: int.parse(song['duration'])) : null,
             extras: {
               "downloadType": song['extras']['downloadType'],
               "artwork": song['extras']['artwork'],
@@ -226,6 +226,8 @@ class LegacyPreferences {
         }
       }
     }
+    songs.sort((a, b) => a.title.toLowerCase().trim()
+      .compareTo(b.title.toLowerCase().trim()));
     return songs;
   }
   void saveCachedSongs(List<MediaItem> list) {
@@ -245,7 +247,7 @@ class LegacyPreferences {
           'title': song.title,
           'artist': song.artist,
           'genre': song.genre,
-          'duration': song.duration.inSeconds.toString(),
+          'duration': song.duration != null ? song.duration.inSeconds.toString() : null,
           'artUri': song.artUri.toString(),
           'extras': {
             'downloadType': song.extras['downloadType'],

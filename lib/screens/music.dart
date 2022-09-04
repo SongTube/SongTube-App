@@ -93,7 +93,7 @@ class _MediaScreenState extends State<MediaScreen> {
                 style: TextStyle(
                   fontFamily: 'Product Sans',
                   fontWeight: FontWeight.w700,
-                  fontSize: 20,
+                  fontSize: 24,
                   color: Theme.of(context).textTheme.bodyText1.color
                 ),
               ),
@@ -134,7 +134,7 @@ class _MediaScreenState extends State<MediaScreen> {
               child: TabBar(
                 isScrollable: true,
                 labelStyle: TextStyle(
-                  fontSize: 13,
+                  fontSize: 14,
                   fontFamily: 'Product Sans',
                   fontWeight: FontWeight.w600,
                   letterSpacing: 0.3

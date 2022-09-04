@@ -28,16 +28,16 @@ class TagsControllers {
   String artworkController;
 
   void updateTextControllers(YoutubeVideo stream) {
-    titleController.text  = stream.name;
+    titleController.text  = stream.videoInfo.name;
     albumController.text  = "YouTube";
-    artistController.text = stream.uploaderName
+    artistController.text = stream.videoInfo.uploaderName
                               .replaceAll("- Topic", "")
                               .trim();
     genreController.text  = "Any";
-    dateController.text   = stream.uploadDate;
+    dateController.text   = stream.videoInfo.uploadDate;
     discController.text   = "1";
     trackController.text  = "1";
-    artworkController     = stream.thumbnailUrl;
+    artworkController     = stream.videoInfo.thumbnailUrl;
   }
 
   void updateTextControllersFromPlaylist(YoutubePlaylist playlist) {

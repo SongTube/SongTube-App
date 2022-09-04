@@ -1,6 +1,9 @@
 // Flutter
+import 'package:floating_dots/floating_dots.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_html/shims/dart_ui_real.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:songtube/internal/languages.dart';
 
 // Internal
@@ -54,6 +57,10 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
       if (value != _selectedIndex)
         setState(() => _selectedIndex = value);
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       Brightness _systemBrightness = Theme.of(context).brightness;
       Brightness _statusBarBrightness = _systemBrightness == Brightness.light
@@ -72,14 +79,11 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
         ),
       );
     });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    
-
-    return Scaffold(
-      body: Column(
+    // Background color with some transparency
+    final backgroundColor = Theme.of(context).scaffoldBackgroundColor.withOpacity(0.7);
+    // Introduction body
+    Widget _body() {
+      return Column(
         children: [
           // Main Body
           Expanded(
@@ -99,25 +103,27 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
                   alignment: Alignment.centerLeft,
                   child: Padding(
                     padding: EdgeInsets.only(left: 8),
-                    child: TextButton(
-                      style: TextButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0),
+                    child: AnimatedSwitcher(
+                      duration: Duration(milliseconds: 300),
+                      child: _selectedIndex == 3 ? SizedBox() : TextButton(
+                        style: TextButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
                         ),
-                      ),
-                      child: Text(
-                        Languages.of(context).labelSkip,
-                        style: TextStyle(
-                          fontFamily: 'Product Sans',
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14,
-                          color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.7),
+                        child: Text(
+                          Languages.of(context).labelSkip,
+                          style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                            color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.7),
+                          ),
                         ),
+                        onPressed: () {
+                          Provider.of<ConfigurationProvider>(context, listen: false).preferences.saveShowIntroductionPages(false);
+                          Navigator.pushReplacementNamed(context, 'homeScreen');
+                        },
                       ),
-                      onPressed: () {
-                        Provider.of<ConfigurationProvider>(context, listen: false).preferences.saveShowIntroductionPages(false);
-                        Navigator.pushReplacementNamed(context, 'homeScreen');
-                      },
                     ),
                   ),
                 ),
@@ -157,8 +163,7 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
                         ),
                         child: Text(
                           Languages.of(context).labelNext,
-                          style: TextStyle(
-                            fontFamily: 'Product Sans',
+                          style: GoogleFonts.poppins(
                             fontWeight: FontWeight.w600,
                             fontSize: 14,
                             color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.7),
@@ -178,10 +183,14 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
           ),
           Container(
             height: MediaQuery.of(context).padding.bottom,
-            color: Theme.of(context).scaffoldBackgroundColor
           )
         ],
-      ),
+      );
+    }
+    return Scaffold(
+      body: Container(
+        color: backgroundColor,
+        child: _body())
     );
   }
 }

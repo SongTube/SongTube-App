@@ -333,9 +333,10 @@ class StreamsLargeThumbnailView extends StatelessWidget {
                       " ${infoItem.uploadDate == null ? "" : " • " + infoItem.uploadDate}"
                     : ""),
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 11,
                     color: Theme.of(context).textTheme.bodyText1.color
-                      .withOpacity(0.8)
+                      .withOpacity(0.8),
+                    fontFamily: 'Product Sans'
                   ),
                 )
               ],

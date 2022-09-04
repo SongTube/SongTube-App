@@ -1,5 +1,6 @@
 // Flutter
 import 'package:audio_service/audio_service.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:songtube/internal/languages.dart';
 import 'package:songtube/pages/localVideos.dart';
@@ -9,7 +10,7 @@ import 'package:songtube/provider/mediaProvider.dart';
 // Internal
 import 'package:songtube/provider/preferencesProvider.dart';
 import 'package:songtube/provider/videoPageProvider.dart';
-import 'package:songtube/pages/aboutPage.dart';
+import 'package:songtube/pages/about.dart';
 import 'package:songtube/screens/libraryScreen/socialLinksRow.dart';
 import 'package:songtube/pages/watchHistory.dart';
 import 'package:songtube/screens/libraryScreen/watchHistoryRow.dart';
@@ -24,6 +25,7 @@ import 'package:provider/provider.dart';
 class LibraryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    PreferencesProvider prefs = Provider.of<PreferencesProvider>(context);
     VideoPageProvider pageProvider = Provider.of<VideoPageProvider>(context);
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
     return Scaffold(
@@ -45,7 +47,7 @@ class LibraryScreen extends StatelessWidget {
               style: TextStyle(
                 fontFamily: 'Product Sans',
                 fontWeight: FontWeight.w700,
-                fontSize: 20,
+                fontSize: 24,
                 color: Theme.of(context).textTheme.bodyText1.color
               ),
             ),
@@ -77,7 +79,9 @@ class LibraryScreen extends StatelessWidget {
             child: ListView(
               children: [
                 // Watch History Row (First 10 videos only)
+                if (prefs.watchHistory.isNotEmpty)
                 WatchHistoryRow(),
+                if (prefs.watchHistory.isNotEmpty)
                 SizedBox(height: 8),
                 Divider(indent: 12, endIndent: 12),
                 // Playlists
@@ -87,6 +91,8 @@ class LibraryScreen extends StatelessWidget {
                     Languages.of(context).labelPlaylists,
                     style: TextStyle(
                       fontFamily: 'Product Sans',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 18,
                       color: Theme.of(context).textTheme.bodyText1.color
                     ),
                   ),
@@ -106,6 +112,8 @@ class LibraryScreen extends StatelessWidget {
                     "Watch History",
                     style: TextStyle(
                       fontFamily: 'Product Sans',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 18,
                       color: Theme.of(context).textTheme.bodyText1.color
                     ),
                   ),
@@ -126,6 +134,8 @@ class LibraryScreen extends StatelessWidget {
                     "Local Videos",
                     style: TextStyle(
                       fontFamily: 'Product Sans',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 18,
                       color: Theme.of(context).textTheme.bodyText1.color
                     ),
                   ),

@@ -39,20 +39,22 @@ class _VideoDownloadMenuState extends State<VideoDownloadMenu> {
         // Menu Title
         Container(
           margin: EdgeInsets.only(
-            top: 8,
+            top: 16,
             left: 8,
-            right: 8
+            right: 8,
+            bottom: 8
           ),
           child: Row(
             children: [
               IconButton(
-                icon: Icon(EvaIcons.arrowBackOutline),
+                icon: Icon(Icons.arrow_back_ios_new_rounded),
                 onPressed: widget.onBack
               ),
               SizedBox(width: 4),
               Text(Languages.of(context).labelSelectVideo, style: TextStyle(
-                fontSize: 20,
-                fontFamily: "YTSans"
+                fontSize: 24,
+                fontFamily: "Product Sans",
+                fontWeight: FontWeight.w600
               )),
             ],
           ),
@@ -75,15 +77,7 @@ class _VideoDownloadMenuState extends State<VideoDownloadMenu> {
                       left: 16, right: 16
                     ),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Theme.of(context).scaffoldBackgroundColor,
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 16,
-                          color: Colors.black.withOpacity(0.06),
-                          offset: Offset(0,12)
-                        )
-                      ]
+                      color: Theme.of(context).cardColor,
                     ),
                     child: Row(
                       children: [
@@ -94,7 +88,8 @@ class _VideoDownloadMenuState extends State<VideoDownloadMenu> {
                           groupByValue,
                           style: TextStyle(
                             fontSize: 20,
-                            fontFamily: 'YTSans',
+                            fontFamily: 'Product Sans',
+                            fontWeight: FontWeight.w600
                           ),
                         ),
                       ],
@@ -151,7 +146,8 @@ class _VideoDownloadMenuState extends State<VideoDownloadMenu> {
                                   softWrap: false,
                                   style: TextStyle(
                                     fontWeight: FontWeight.w700,
-                                    fontSize: 16
+                                    fontSize: 20,
+                                    fontFamily: 'Product Sans'
                                   ),
                                 ),
                                 FutureBuilder(
@@ -165,7 +161,8 @@ class _VideoDownloadMenuState extends State<VideoDownloadMenu> {
                                       textAlign: TextAlign.left,
                                       softWrap: false,
                                       style: TextStyle(
-                                        fontSize: 12
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600
                                       ),
                                     );
                                   }

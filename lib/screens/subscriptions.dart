@@ -54,7 +54,7 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
                 style: TextStyle(
                   fontFamily: 'Product Sans',
                   fontWeight: FontWeight.w700,
-                  fontSize: 20,
+                  fontSize: 24,
                   color: Theme.of(context).textTheme.bodyText1.color
                 ),
               ),

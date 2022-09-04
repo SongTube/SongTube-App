@@ -31,7 +31,8 @@ class VideoEngagement extends StatelessWidget {
             likeCount != -1
               ? NumberFormat.compact().format(likeCount) : 'Likes',
             style: TextStyle(
-              fontSize: 10
+              fontSize: 10,
+              fontFamily: 'Product Sans',
             ),
             ),
         ),
@@ -42,7 +43,8 @@ class VideoEngagement extends StatelessWidget {
             dislikeCount != -1
               ? NumberFormat.compact().format(dislikeCount) : 'Dislikes',
             style: TextStyle(
-              fontSize: 10
+              fontSize: 10,
+              fontFamily: 'Product Sans',
             ),
             ),
         ),
@@ -63,7 +65,8 @@ class VideoEngagement extends StatelessWidget {
           text: Text(
             Languages.of(context).labelPlaylist,
             style: TextStyle(
-              fontSize: 10
+              fontSize: 10,
+              fontFamily: 'Product Sans',
             ),
           ),
           onPressed: onSaveToPlaylist
@@ -74,7 +77,8 @@ class VideoEngagement extends StatelessWidget {
           text: Text(
             Languages.of(context).labelDownload,
             style: TextStyle(
-              fontSize: 10
+              fontSize: 10,
+              fontFamily: 'Product Sans',
             ),
           ),
           onPressed: onDownload

@@ -46,15 +46,16 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
               : currentPlaylist.name,
             style: TextStyle(
               fontFamily: 'Product Sans',
-              fontWeight: FontWeight.w700,
-              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              fontSize: 24,
               color: Theme.of(context).textTheme.bodyText1.color
             ),
           ),
           leading: IconButton(
-            icon: Icon(Icons.arrow_back_rounded,
-              color: Theme.of(context).iconTheme.color),
-            onPressed: () => Navigator.pop(context),
+            icon: Icon(Icons.arrow_back_ios_new_rounded, color: Theme.of(context).iconTheme.color),
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
         ),
         body: Column(

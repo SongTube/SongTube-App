@@ -101,11 +101,13 @@ class PlayerBody extends StatelessWidget {
                   )
                 ],
               ),
-              expandArtwork
-                ? Expanded(
-                    child: PlayerArtwork(image: artworkFile, textColor: textColor)
-                  )
-                : PlayerArtwork(image: artworkFile, textColor: textColor),
+              Expanded(
+                child: PlayerArtwork(
+                  image: artworkFile,
+                  textColor: textColor,
+                  expandArtwork: expandArtwork,
+                )
+              ),
               PlayerControls(
                 vibrantColor: vibrantColor,
                 mediaItem: mediaItem,

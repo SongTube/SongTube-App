@@ -33,7 +33,9 @@ class EmptyIndicator extends StatelessWidget {
             Languages.of(context).labelEmpty,
             style: TextStyle(
               color: Colors.white,
-              fontFamily: 'YTSans'
+              fontWeight: FontWeight.w600,
+              fontFamily: 'Product Sans',
+              fontSize: 14,
             ),
           ),
         ),

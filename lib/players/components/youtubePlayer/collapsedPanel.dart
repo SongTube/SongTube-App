@@ -1,3 +1,4 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -68,8 +69,9 @@ class VideoPageCollapsed extends StatelessWidget {
                           child: Text(
                             "$title",
                             style: TextStyle(
-                              fontFamily: 'YTSans',
-                              fontSize: 16
+                              fontWeight: FontWeight.w600,
+                              fontFamily: 'Product Sans',
+                              fontSize: 14,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.fade,
@@ -82,7 +84,7 @@ class VideoPageCollapsed extends StatelessWidget {
                         Text(
                           "$author",
                           style: TextStyle(
-                            fontFamily: 'YTSans',
+                            fontFamily: 'Product Sans',
                             fontSize: 11,
                             color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.6)
                           ),
@@ -112,7 +114,11 @@ class VideoPageCollapsed extends StatelessWidget {
           ),
           InkWell(
             onTap: () {
+              if (pageProvider.playerKey.currentState.audioOnly && AudioService.running) {
+                AudioService.stop();
+              }
               pageProvider.closeVideoPanel();
+
             },
             child: Ink(
               color: Colors.transparent,

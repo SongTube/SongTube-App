@@ -1,11 +1,15 @@
 // Dart
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 
 // Packages
 import 'package:audio_service/audio_service.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:audio_session/audio_session.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:songtube/internal/globals.dart';
 
 MediaControl playControl = MediaControl(
   androidIcon: 'drawable/ic_play_arrow',
@@ -127,7 +131,7 @@ class SongTubePlayerService extends BackgroundAudioTask {
     _player = new AudioPlayer(audioPipeline: AudioPipeline(
       androidAudioEffects: [ equalizer, loudnessEnhancer ]));
     _eventSubscription = _player.playbackEventStream.listen((event) {
-      _broadcastState();
+      _broadcastState(null);
     });
     // Special processing for state transitions.
     _player.processingStateStream.listen((state) {
@@ -154,6 +158,17 @@ class SongTubePlayerService extends BackgroundAudioTask {
   }
 
   @override
+  Future<void> onUpdateMediaItem(MediaItem mediaItem) async {
+    final index = _queue.indexWhere((element) => element.id == mediaItem.id);
+    _queue[index] = mediaItem;
+    AudioServiceBackground.queue[index] = mediaItem;
+    if (AudioServiceBackground.mediaItem.id == mediaItem.id) {
+      await AudioServiceBackground.setMediaItem(_queue[index]);
+    }
+    return super.onUpdateMediaItem(mediaItem);
+  }
+
+  @override
   Future<void> onPlayMediaItem(MediaItem item) async {
     _index = queue.indexOf(item);
     AudioServiceBackground.setMediaItem(queue[_index]);
@@ -162,12 +177,12 @@ class SongTubePlayerService extends BackgroundAudioTask {
   }
 
   Future<void> _handlePlaybackCompleted() async {
-    if (enableRepeat) {
+    if (enableRepeat && _queue.length > 1) {
       await _player.setUrl(mediaItem.id);
       onPlay();
       return;
     }
-    if (enableRandom) {
+    if (enableRandom && _queue.length > 1) {
       _index = Random().nextInt(_queue.length);
       await AudioServiceBackground.setMediaItem(_queue[_index]);
       await _player.setUrl(mediaItem.id);
@@ -177,7 +192,8 @@ class SongTubePlayerService extends BackgroundAudioTask {
     if (hasNext) {
       onSkipToNext();
     } else {
-      _player.stop();
+      await _player.stop();
+      _broadcastState(AudioProcessingState.completed);
     }
   }
 
@@ -208,7 +224,7 @@ class SongTubePlayerService extends BackgroundAudioTask {
     // It is important to wait for this state to be broadcast before we shut
     // down the task. If we don't, the background task will be destroyed before
     // the message gets sent to the UI.
-    await _broadcastState();
+    await _broadcastState(null);
     // Shut down this task
     await super.onStop();
   }
@@ -320,7 +336,7 @@ class SongTubePlayerService extends BackgroundAudioTask {
   }
 
   /// Broadcasts the current state to all clients.
-  Future<void> _broadcastState() async {
+  Future<void> _broadcastState(AudioProcessingState state) async {
     await AudioServiceBackground.setState(
       controls: getControls(),
       systemActions: [
@@ -328,7 +344,7 @@ class SongTubePlayerService extends BackgroundAudioTask {
         MediaAction.seekForward,
         MediaAction.seekBackward,
       ],
-      processingState: _getProcessingState(),
+      processingState: state != null ? state : _getProcessingState(),
       playing: _player.playing,
       position: _player.position,
       bufferedPosition: _player.bufferedPosition,

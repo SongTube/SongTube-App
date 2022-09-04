@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Packages
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:songtube/internal/languages.dart';
@@ -69,9 +70,8 @@ class _IntroPermissionsState extends State<IntroPermissions> {
                     RichText(
                       textAlign: TextAlign.center,
                       text: TextSpan(
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontFamily: 'Product Sans',
+                        style: GoogleFonts.poppins(
+                          fontSize: 28,
                           fontWeight: FontWeight.w600,
                           color: Theme.of(context).textTheme.bodyText1.color
                         ),
@@ -81,7 +81,7 @@ class _IntroPermissionsState extends State<IntroPermissions> {
                           ),
                           TextSpan(
                             text: Languages.of(context).labelAccess,
-                            style: TextStyle(
+                            style: GoogleFonts.poppins(
                               color: Theme.of(context).accentColor,
                               fontWeight: FontWeight.w600
                             )
@@ -111,22 +111,19 @@ class _IntroPermissionsState extends State<IntroPermissions> {
                       text: TextSpan(
                         style: TextStyle(
                           fontSize: 18,
-                          fontFamily: 'YTSans',
                           color: Theme.of(context).textTheme.bodyText1.color
                         ),
                         children: [
                           TextSpan(
                             text: "SongTube ",
-                            style: TextStyle(
+                            style: GoogleFonts.poppins(
                               color: Theme.of(context).accentColor,
-                              fontFamily: 'Product Sans',
-                              fontWeight: FontWeight.w600
+                              fontWeight: FontWeight.w700
                             )
                           ),
                           TextSpan(
-                            text: Languages.of(context).labelExternalAccessJustification,
-                            style: TextStyle(
-                              fontFamily: 'Product Sans',
+                            text: Languages.of(context).labelExternalAccessJustification.toLowerCase(),
+                            style: GoogleFonts.poppins(
                               fontWeight: FontWeight.w600,
                               color: Theme.of(context).textTheme.bodyText1.color
                                 .withOpacity(0.8)
@@ -177,21 +174,22 @@ class _IntroPermissionsState extends State<IntroPermissions> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Container(
-                            margin: EdgeInsets.only(left: 16, right: 8),
+                            margin: EdgeInsets.only(left: 18, right: 8),
                             child: Text(
                               "Allow Access",
-                              style: TextStyle(
-                                fontSize: 16,
+                              style: GoogleFonts.poppins(
+                                fontSize: 18,
                                 color: Colors.white,
                                 fontWeight: FontWeight.w600
                               )
                             ),
                           ),
                           Container(
-                            margin: EdgeInsets.only(right: 8),
+                            margin: EdgeInsets.only(right: 16),
                             child: Icon(
-                              EvaIcons.radioButtonOnOutline,
+                              EvaIcons.lockOutline,
                               color: Colors.white,
+                              size: 26,
                             )
                           )
                         ],

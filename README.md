@@ -1,6 +1,6 @@
-![](https://i.imgur.com/My9Zslh.png)
+![](https://i.imgur.com/Y80SpfK.jpg)
 
-SongTube is a new beautiful and fast application made in flutter, it supports YouTube audio and video downloading at any quality, In-App YouTube Browser, audio conversion and an Audio tags editor.
+SongTube is a new beautiful and fast application made in flutter, it supports YouTube audio and video downloading at any quality, In-App YouTube Browser, audio conversion, Playlists and an Audio tags editor.
 
 ---
 
@@ -16,11 +16,13 @@ SongTube is a new beautiful and fast application made in flutter, it supports Yo
 + Set custom path for Audio/Video download
 + Music Player built-in
 + Video Player built-in
++ Music Equalizer
++ Music Playlists
++ Youtube Videos Playlists
 + In-App Youtube Browser
 + Light/Dark/Black Themes
 + Accent Color Picker
 + UI Customizations
-+ Backup Options
 
 ---
 
@@ -81,13 +83,13 @@ Where for your new Language you have to add a new LanguageData(flag, name, langu
 - Igbo (Thanks to [@enweazudaniel](https://github.com/enweazudaniel))
 - Indonesian (Thanks to [@breakdowns](https://github.com/breakdowns))
 - Turkish (Thanks to Barış Kırmızı)
-
----
-
-## Screenshots
-
-![](https://i.imgur.com/JZQA9RY.png) ![](https://i.imgur.com/92zyGD1.png)
-![](https://imgur.com/bEuSeIe.jpg) ![](https://imgur.com/bTZftKU.jpg)
-![](https://imgur.com/6IoCL5V.jpg)
+- Russian (Thanks yxur_bruh)
+- Arabic (Thanks JOOD_TECH)
+- Somali (Thanks [@nadiration](https://github.com/nadiration))
+- German (Thanks [@Paduu29](https://github.com/Paduu29))
+- Bengali (Thanks [@pieas-asif](https://github.com/pieas-asif))
+- Ukrainian (Thanks [@redman-dev29](https://github.com/redman-dev29))
+- Japanese (Thanks to [@HiSubway](https://github.com/HiSubway))
+- Italian (Thanks to [@alpha4041](https://github.com/alpha4041))
 
 ---

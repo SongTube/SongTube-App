@@ -161,7 +161,7 @@ class _DownloadMenuState extends State<DownloadMenu> with TickerProviderStateMix
     if (widget.scaffoldState != null) {
       String message;
       if (items.length == 1) {
-        message = "${video.name}";
+        message = "${video.videoInfo.name}";
       } else {
         message = "${items[0].tags.title}, ${items[1].tags.title}, ${items[2].tags.title}...";
       }

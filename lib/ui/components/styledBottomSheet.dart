@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:songtube/internal/languages.dart';
 
 class StyledBottomSheetList extends StatefulWidget {
@@ -65,8 +66,7 @@ class _StyledBottomSheetListState extends State<StyledBottomSheetList> with Tick
                       ),
                       child: Text(
                         "${_selectedIndex+1}/${widget.children.length}",
-                        style: TextStyle(
-                          fontFamily: 'Product Sans',
+                        style: GoogleFonts.poppins(
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
                           color: Theme.of(context).accentColor,
@@ -115,8 +115,7 @@ class _StyledBottomSheetListState extends State<StyledBottomSheetList> with Tick
                           _selectedIndex+1 == widget.children.length
                             ? Languages.of(context).labelExit
                             : Languages.of(context).labelNext,
-                          style: TextStyle(
-                            fontFamily: 'Product Sans',
+                          style: GoogleFonts.poppins(
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
                             color: Theme.of(context).accentColor,
@@ -182,21 +181,17 @@ class StyledBottomSheet extends StatelessWidget {
         child: Column(
           children: [
             if (title != null)
-            Theme(
-              data: ThemeData(
-                fontFamily: 'Product Sans',
-              ),
-              child: AppBar(
-                centerTitle: false,
-                backgroundColor: Theme.of(context).cardColor,
-                elevation: 0,
-                automaticallyImplyLeading: false,
-                title: Text(title, style: TextStyle(
-                  color: Theme.of(context).textTheme.bodyText1.color,
-                  fontWeight: FontWeight.w600
-                )),
-                leading: leading,
-              ),
+            AppBar(
+              centerTitle: false,
+              backgroundColor: Theme.of(context).cardColor,
+              elevation: 0,
+              automaticallyImplyLeading: false,
+              title: Text(title, style: GoogleFonts.poppins(
+                color: Theme.of(context).textTheme.bodyText1.color,
+                fontWeight: FontWeight.w600,
+                fontSize: 24
+              )),
+              leading: leading,
             ),
             if (title != null)
             Divider(
@@ -213,14 +208,9 @@ class StyledBottomSheet extends StatelessWidget {
             if (actions != null)
             Padding(
               padding: actionsPadding,
-              child: Theme(
-                data: ThemeData(
-                  fontFamily: 'Product Sans',
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: actions
-                )
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: actions
               ),
             ),
             if (addBottomPadding)

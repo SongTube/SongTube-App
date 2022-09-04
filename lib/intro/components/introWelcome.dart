@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Packages
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:songtube/internal/languages.dart';
@@ -20,6 +21,7 @@ class IntroWelcome extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.transparent,
         body: Stack(
           alignment: Alignment.center,
           children: [
@@ -36,8 +38,8 @@ class IntroWelcome extends StatelessWidget {
                       repeat: true,
                       endRadius: 120,
                       showTwoGlows: false,
-                      glowColor: Theme.of(context).accentColor,
-                      repeatPauseDuration: Duration(milliseconds: 50),
+                      glowColor: Theme.of(context).accentColor.withOpacity(0.1),
+                      repeatPauseDuration: Duration(milliseconds: 400),
                       child: Container(
                         height: 160,
                         width: 160,
@@ -62,25 +64,25 @@ class IntroWelcome extends StatelessWidget {
                       textAlign: TextAlign.center,
                       text: TextSpan(
                         style: TextStyle(
-                          fontSize: 26,
+                          fontSize: 20,
                           fontFamily: 'YTSans',
                           fontWeight: FontWeight.w400,
                           color: Theme.of(context).textTheme.bodyText1.color
                         ),
                         children: [
                           TextSpan(
-                            text: Languages.of(context).labelAppWelcome + "\n",
-                            style: TextStyle(
-                              fontFamily: 'Product Sans',
-                              fontWeight: FontWeight.w600
+                            text: Languages.of(context).labelAppWelcome.toLowerCase() + "\n",
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 22
                             )
                           ),
                           TextSpan(
                             text: "SongTube",
-                            style: TextStyle(
+                            style: GoogleFonts.poppins(
                               color: Theme.of(context).accentColor,
                               fontWeight: FontWeight.w700,
-                              fontFamily: 'Product Sans'
+                              fontSize: 42,
                             )
                           )
                         ]
@@ -92,7 +94,7 @@ class IntroWelcome extends StatelessWidget {
             ),
             ShowUpTransition(
               forward: true,
-              slideSide: SlideFromSlide.LEFT,
+              slideSide: SlideFromSlide.TOP,
               duration: Duration(milliseconds: 600),
               child: GestureDetector(
                 onTap: () {
@@ -106,10 +108,20 @@ class IntroWelcome extends StatelessWidget {
                     children: [
                       Container(
                         margin: EdgeInsets.only(right: 8),
-                        child: Icon(
-                          MdiIcons.youtube,
-                          size: 40,
-                          color: Colors.red
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Container(
+                              alignment: Alignment.center,
+                              height: 15, width: 15,
+                              color: Colors.white,
+                            ),
+                            Icon(
+                              MdiIcons.youtube,
+                              size: 40,
+                              color: Colors.red
+                            ),
+                          ],
                         ),
                       ),
                       RichText(
@@ -147,7 +159,7 @@ class IntroWelcome extends StatelessWidget {
             ),
             ShowUpTransition(
               forward: true,
-              slideSide: SlideFromSlide.LEFT,
+              slideSide: SlideFromSlide.TOP,
               duration: Duration(milliseconds: 600),
               child: Align(
                 alignment: Alignment.topRight,
@@ -164,16 +176,15 @@ class IntroWelcome extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.only(right: 16),
             child: FloatingActionButton.extended(
-              backgroundColor: Colors.red,
+              backgroundColor: Theme.of(context).accentColor,
               label: Text(
                 Languages.of(context).labelStart,
-                style: TextStyle(
+                style: GoogleFonts.poppins(
                   color: Colors.white,
-                  fontFamily: 'YTSans',
-                  fontSize: 16
+                  fontSize: 22,
+                  fontWeight: FontWeight.w600
                 ),
               ),
-              icon: Icon(EvaIcons.arrowForward, color: Colors.white),
               onPressed: onNext,
             ),
           ),
@@ -186,21 +197,20 @@ class IntroWelcome extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.all(16),
       child: DropdownButton<LanguageData>(
+        alignment: Alignment.centerRight,
         iconSize: 26,
         hint: Padding(
           padding: EdgeInsets.only(right: 8.0),
           child: Text(
-            Languages.of(context).labelLanguage,
-            style: TextStyle(
-              fontSize: 14,
-              fontFamily: 'Product Sans',
-              fontWeight: FontWeight.w600,
+            Localizations.localeOf(context).languageCode.toUpperCase(),
+            style: GoogleFonts.poppins(
+              fontSize: 18,
+              fontWeight: FontWeight.w800,
               color: Theme.of(context).textTheme.bodyText1.color
             ),
           ),
         ),
-        icon: Icon(EvaIcons.globe2Outline,
-          color: Theme.of(context).accentColor),
+        icon: SizedBox(),
         onChanged: (LanguageData language) {
           changeLanguage(context, language.languageCode);
         },

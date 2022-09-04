@@ -49,7 +49,6 @@ class _HomePageAppBarState extends State<HomePageAppBar> with TickerProviderStat
           AnimatedSize(
             duration: Duration(milliseconds: 300),
             curve: Curves.fastLinearToSlowEaseIn,
-            vsync: this,
             child: manager.showSearchBar ? Container(
               color: Colors.transparent,
               child: GestureDetector(
@@ -65,7 +64,7 @@ class _HomePageAppBarState extends State<HomePageAppBar> with TickerProviderStat
                 child: Padding(
                   padding: const EdgeInsets.only(left: 18, top: 12, bottom: 12),
                   child: Icon(
-                    EvaIcons.arrowBack,
+                    Icons.arrow_back_ios_new_rounded,
                     color: Theme.of(context).iconTheme.color,
                   ),
                 ),
@@ -79,7 +78,7 @@ class _HomePageAppBarState extends State<HomePageAppBar> with TickerProviderStat
               decoration: BoxDecoration(
                 color: Theme.of(context).iconTheme.color
                   .withOpacity(0.03),
-                borderRadius: BorderRadius.circular(15)
+                borderRadius: BorderRadius.circular(100)
               ),
               child: Row(
                 children: [
@@ -191,8 +190,8 @@ class _HomePageAppBarState extends State<HomePageAppBar> with TickerProviderStat
     if (data.isEmpty) {
       return null;
     }
-    _VideoId videoId = _VideoId(await YoutubeId.getIdFromStreamUrl(data));
-    _PlaylistId playlistId = _PlaylistId(await YoutubeId.getIdFromPlaylistUrl(data));
+    _VideoId videoId = _VideoId(await YoutubeId.getIdFromStreamUrl(data.replaceAll(' ', '')));
+    _PlaylistId playlistId = _PlaylistId(await YoutubeId.getIdFromPlaylistUrl(data.replaceAll(' ', '')));
     if (videoId.id != null) {
       return _VideoId(data);
     }

@@ -130,7 +130,7 @@ class DownloadItem {
       }
     }
     return DownloadItem(
-      url: video.url,
+      url: video.videoInfo.url,
       downloadType: configList[0] == "Audio"
         ? DownloadType.AUDIO : DownloadType.VIDEO,
       videoStream: videoStream,
@@ -148,7 +148,7 @@ class DownloadItem {
         normalizeAudio: configList[5]
       ),
       downloadQuality: downloadQuality,
-      duration: video.length
+      duration: video.videoInfo.length
     );
   }
 

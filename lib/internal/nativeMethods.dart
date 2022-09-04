@@ -37,17 +37,7 @@ class NativeMethod {
       intentPlatform.invokeMethod('openVideo', {"videoPath": videoPath});
     }
   }
-
-  // Crop image to Square
-  static Future<File> cropToSquare(File image) async {
-    if (await image.exists()) {
-      String croppedImagePath =
-        await imageProcessing.invokeMethod('cropToSquare', {"imagePath": image.path});
-      return File(croppedImagePath);
-    }
-    return null;
-  }
-
+  
   // (TEMP FIX) Request All Files Access to The App
   // to fix Downloads on Android 11
   static void requestAllFilesPermission() {

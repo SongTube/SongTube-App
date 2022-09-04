@@ -37,12 +37,14 @@ class _ShowUpTransitionState extends State<ShowUpTransition>
   Animation<Offset> _animOffset;
 
   List<Offset> slideSides = [
-    Offset(-0.35,0.0), // LEFT
-    Offset(0.35,0.0),  // RIGHT
-    Offset(0.0,0.35), // BOTTOM
-    Offset(0.0,-0.35),  // TOP
+    Offset(-0.20,0.0), // LEFT
+    Offset(0.20,0.0),  // RIGHT
+    Offset(0.0,0.20), // BOTTOM
+    Offset(0.0,-0.20),  // TOP
   ];
   Offset selectedSlide;
+
+
 
   @override
   void initState() {

@@ -38,7 +38,6 @@ class _VideoCommentsState extends State<VideoComments> {
         children: [
           // CommentsBar
           Container(
-            height: 50,
             width: double.infinity,
             decoration: BoxDecoration(
               color: Theme.of(context).cardColor,
@@ -47,21 +46,21 @@ class _VideoCommentsState extends State<VideoComments> {
                 topRight: Radius.circular(15)
               ),
             ),
-            padding: EdgeInsets.only(left: 16),
+            padding: EdgeInsets.only(left: 8, top: 8, bottom: 8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 IconButton(
-                  icon: Icon(EvaIcons.arrowBackOutline,
+                  icon: Icon(Icons.arrow_back_ios_new_rounded,
                     color: Theme.of(context).iconTheme.color),
                   onPressed: () => Navigator.pop(context)
                 ),
-                SizedBox(width: 8),
+                SizedBox(width: 4),
                 Text(
                   "Comments",
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 20,
                     fontWeight: FontWeight.w600,
                     fontFamily: 'Product Sans'
                   ),
@@ -110,7 +109,7 @@ class _VideoCommentsState extends State<VideoComments> {
                               style: TextStyle(
                                 color: Theme.of(context)
                                   .textTheme.bodyText1.color,
-                                fontSize: 14,
+                                fontSize: 16,
                                 fontWeight: FontWeight.w600,
                                 fontFamily: 'Product Sans'
                               ),
@@ -133,7 +132,7 @@ class _VideoCommentsState extends State<VideoComments> {
                               style: TextStyle(
                                 color: Theme.of(context)
                                   .textTheme.bodyText1.color,
-                                fontSize: 12,
+                                fontSize: 13,
                               ),
                             ),
                             SizedBox(height: 16),
