@@ -7,11 +7,13 @@ import 'package:songtube/internal/languages/languageRu.dart';
 import 'package:songtube/main.dart';
 
 // Language Files
+import 'languages/languageCa.dart';
 import 'languages/languageEn.dart';
 import 'languages/languageEs.dart';
 import 'languages/languagePt-BR.dart';
 import 'languages/languageIgbo-NG.dart';
 import 'languages/languageId.dart';
+import 'languages/languageVi.dart';
 import 'languages/languageTr.dart';
 import 'languages/languageSo.dart';
 import 'languages/languageDe.dart';
@@ -41,6 +43,8 @@ final supportedLanguages = <LanguageData>[
   LanguageData("ng", "Igbo", "ig"),
   // Indonesia (ID)
   LanguageData("🇮🇩", "Indonesia", "id"),
+  // Vietnamese (VI)
+  LanguageData("🇻🇳", "Vietnamese", "vi"),
   // Turkish (TR)
   LanguageData("tr", "Turkey", "tr"),
   // Russian (RU)
@@ -65,6 +69,8 @@ final supportedLanguages = <LanguageData>[
   LanguageData("ckb", "Kurdish(CKB)", "ku"),
   // Kurmanji (KU)
   LanguageData("ku", "Kurdish(KU)", "ku"),
+  // Catalan (CA)
+  LanguageData("ca", "Català", "ca");
 ];
 Future<Languages> _loadLocale(Locale locale) async {
   switch (locale.languageCode) {
@@ -83,6 +89,9 @@ Future<Languages> _loadLocale(Locale locale) async {
     // Indonesia (ID)
     case 'id':
       return LanguageId();
+    // Indonesia (ID)
+    case 'vi':
+      return LanguageVi();
     // Turkish (TR)
     case 'tr':
       return LanguageTr();
@@ -119,6 +128,8 @@ Future<Languages> _loadLocale(Locale locale) async {
     // Kurdish (KU) (KU)
     case 'ku':
       return LanguageKu();
+    case 'ca':
+      return LanguageCa();
     // Default Language (English)
     default:
       return LanguageEn();
