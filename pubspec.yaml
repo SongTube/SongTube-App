@@ -47,7 +47,9 @@ dependencies:
 
     # NewPipe Extractor
     newpipeextractor_dart:
-        path: ../NewPipeExtractor_Dart
+        git:
+            url: https://github.com/SongTube/newpipeextractor_dart
+            ref: master
 
     # Device Providers
     shared_preferences: ^2.0.6 
