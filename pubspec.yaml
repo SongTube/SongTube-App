@@ -12,12 +12,10 @@ publish_to: none
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 6.4.5+1200
+version: 6.5.0+1400
 
 environment:
     sdk: ">=2.2.2 <3.0.0"
-    shared_preferences: ">=0.5.7+3 <2.0.0"
-    share: ">=0.6.4+3 <2.0.0"
 
 dependencies:
     flutter:
@@ -49,9 +47,7 @@ dependencies:
 
     # NewPipe Extractor
     newpipeextractor_dart:
-        git:
-            url: https://github.com/SongTube/newpipeextractor_dart
-            ref: master
+        path: ../NewPipeExtractor_Dart
 
     # Device Providers
     shared_preferences: ^2.0.6 
@@ -87,7 +83,7 @@ dependencies:
     flutter_glow: ^0.2.0
     autolist:
         git:
-            url: git://github.com/SongTube/autolist.git
+            url: https://github.com/SongTube/autolist
             ref: master
     image_fade: ^0.2.1
     animations: ^2.0.0
@@ -137,6 +133,7 @@ dependencies:
 dependency_overrides:
   platform: ^3.1.0
   flutter_math_fork: ^0.5.0
+  html: ^0.15.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
