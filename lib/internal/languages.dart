@@ -13,6 +13,7 @@ import 'languages/languageEs.dart';
 import 'languages/languagePt-BR.dart';
 import 'languages/languageIgbo-NG.dart';
 import 'languages/languageId.dart';
+import 'languages/languageVi.dart';
 import 'languages/languageTr.dart';
 import 'languages/languageSo.dart';
 import 'languages/languageDe.dart';
@@ -42,6 +43,8 @@ final supportedLanguages = <LanguageData>[
   LanguageData("ng", "Igbo", "ig"),
   // Indonesia (ID)
   LanguageData("🇮🇩", "Indonesia", "id"),
+  // Vietnamese (VI)
+  LanguageData("🇻🇳", "Vietnamese", "vi"),
   // Turkish (TR)
   LanguageData("tr", "Turkey", "tr"),
   // Russian (RU)
@@ -86,6 +89,9 @@ Future<Languages> _loadLocale(Locale locale) async {
     // Indonesia (ID)
     case 'id':
       return LanguageId();
+    // Indonesia (ID)
+    case 'vi':
+      return LanguageVi();
     // Turkish (TR)
     case 'tr':
       return LanguageTr();
