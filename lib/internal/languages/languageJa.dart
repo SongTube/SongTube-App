@@ -71,7 +71,7 @@ class LanguageJa extends Languages {
 
   // Downloads Screen
   @override
-  String get labelQueued => "開始を待っています";
+  String get labelQueued => "追加済み";
   @override
   String get labelDownloading => "ダウンロード中";
   @override
@@ -79,7 +79,7 @@ class LanguageJa extends Languages {
   @override
   String get labelCancelled => "中止済み";
   @override
-  String get labelCompleted => "完了";
+  String get labelCompleted => "完了済み";
 
   // Download Status/Error Messages
   @override
