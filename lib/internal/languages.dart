@@ -22,6 +22,7 @@ import 'languages/languageUa.dart';
 import 'languages/languageIt.dart';
 import 'languages/languageJa.dart';
 import 'languages/languageFr.dart';
+import 'languages/languageZh-CN.dart';
 import 'languages/languageCs.dart';
 
 /// Multi-Language Support for SongTube, for new Languages to be supported
@@ -66,6 +67,8 @@ final supportedLanguages = <LanguageData>[
   LanguageData("🇯🇵", "Japanese", "ja"),
   // French (FR)
   LanguageData("🇫🇷", "French", "fr"),
+  // Chinese (CN)
+  LanguageData("cn", "Simplified Chinese", "zh"),
   // Czech (CS)
   LanguageData("🇨🇿", "Čeština", "cs"),
   // Sorani (CKB)
@@ -131,6 +134,9 @@ Future<Languages> _loadLocale(Locale locale) async {
     // Kurdish (KU) (KU)
     case 'ku':
       return LanguageKu();
+    // Chinses (CN)
+    case 'cn':
+      return LanguageZhCN();
     // Czech (CS)
     case 'cs':
       return LanguageCs();
