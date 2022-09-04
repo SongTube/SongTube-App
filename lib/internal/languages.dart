@@ -47,7 +47,7 @@ final supportedLanguages = <LanguageData>[
   // Vietnamese (VI)
   LanguageData("🇻🇳", "Vietnamese", "vi"),
   // Turkish (TR)
-  LanguageData("tr", "Turkey", "tr"),
+  LanguageData("🇹🇷", "Turkey", "tr"),
   // Russian (RU)
   LanguageData("ru", "Russian", "ru"),
   // Somali (SO, ET, DJI, KEN)
