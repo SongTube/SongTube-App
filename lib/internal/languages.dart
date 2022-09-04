@@ -7,11 +7,13 @@ import 'package:songtube/internal/languages/languageRu.dart';
 import 'package:songtube/main.dart';
 
 // Language Files
+import 'languages/languageCa.dart';
 import 'languages/languageEn.dart';
 import 'languages/languageEs.dart';
 import 'languages/languagePt-BR.dart';
 import 'languages/languageIgbo-NG.dart';
 import 'languages/languageId.dart';
+import 'languages/languageVi.dart';
 import 'languages/languageTr.dart';
 import 'languages/languageSo.dart';
 import 'languages/languageDe.dart';
@@ -21,6 +23,7 @@ import 'languages/languageIt.dart';
 import 'languages/languageJa.dart';
 import 'languages/languageFr.dart';
 import 'languages/languageZh-CN.dart';
+import 'languages/languageCs.dart';
 
 /// Multi-Language Support for SongTube, for new Languages to be supported
 /// a new [File] in this project [internal/languages] folder needs to be
@@ -42,8 +45,10 @@ final supportedLanguages = <LanguageData>[
   LanguageData("ng", "Igbo", "ig"),
   // Indonesia (ID)
   LanguageData("🇮🇩", "Indonesia", "id"),
+  // Vietnamese (VI)
+  LanguageData("🇻🇳", "Vietnamese", "vi"),
   // Turkish (TR)
-  LanguageData("tr", "Turkey", "tr"),
+  LanguageData("🇹🇷", "Turkey", "tr"),
   // Russian (RU)
   LanguageData("ru", "Russian", "ru"),
   // Somali (SO, ET, DJI, KEN)
@@ -62,12 +67,16 @@ final supportedLanguages = <LanguageData>[
   LanguageData("🇯🇵", "Japanese", "ja"),
   // French (FR)
   LanguageData("🇫🇷", "French", "fr"),
-  // Kurdish (KU)
-  LanguageData("ku", "Kurdish", "ku"),
-  // Kurdish (KMR)
-  LanguageData("kmr", "Kurdish (KMR)", "kmr"),
   // Chinese (CN)
   LanguageData("cn", "Simplified Chinese", "zh"),
+  // Czech (CS)
+  LanguageData("🇨🇿", "Čeština", "cs"),
+  // Sorani (CKB)
+  LanguageData("ckb", "Kurdish(CKB)", "ku"),
+  // Kurmanji (KU)
+  LanguageData("ku", "Kurdish(KU)", "ku"),
+  // Catalan (CA)
+  LanguageData("ca", "Català", "ca");
 ];
 Future<Languages> _loadLocale(Locale locale) async {
   switch (locale.languageCode) {
@@ -86,6 +95,9 @@ Future<Languages> _loadLocale(Locale locale) async {
     // Indonesia (ID)
     case 'id':
       return LanguageId();
+    // Indonesia (ID)
+    case 'vi':
+      return LanguageVi();
     // Turkish (TR)
     case 'tr':
       return LanguageTr();
@@ -116,15 +128,20 @@ Future<Languages> _loadLocale(Locale locale) async {
     // French (FR)
     case 'fr':
       return LanguageFr();
-    // Kurdish (KU)
+    // Kurdish (CKB) (CKB)
+    case 'ckb':
+      return LanguageCkb();
+    // Kurdish (KU) (KU)
     case 'ku':
       return LanguageKu();
-    // Kurdish (KMR)
-    case 'kmr':
-      return LanguageKmr();
     // Chinses (CN)
     case 'cn':
       return LanguageZhCN();
+    // Czech (CS)
+    case 'cs':
+      return LanguageCs();
+    case 'ca':
+      return LanguageCa();
     // Default Language (English)
     default:
       return LanguageEn();

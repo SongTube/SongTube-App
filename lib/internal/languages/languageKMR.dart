@@ -26,11 +26,11 @@ class LanguageKmr extends Languages {
   @override
   String get labelEnjoy => "Bajo";
   @override
-  String get labelGoHome => "Biçe rûpela sereke";
+  String get labelGoHome => "Biçe Serrûpelê";
 
   // Bottom Navigation Bar
   @override
-  String get labelHome => "Rûpela sereke";
+  String get labelHome => "Serrûpel";
   @override
   String get labelDownloads => "Daxistin";
   @override
@@ -52,7 +52,7 @@ class LanguageKmr extends Languages {
   @override
   String get labelLoadingVideos => "Vîdyo têne barkirin...";
   @override
-  String get labelHomePage => "Rûpela sereke";
+  String get labelHomePage => "Serrûpel";
   @override
   String get labelTrending => "Rojev";
   @override
@@ -90,7 +90,7 @@ class LanguageKmr extends Languages {
   @override
   String get labelClearingExistingMetadata => "Daneyên meta têne pakkirin...";
   @override
-  String get labelWrittingTagsAndArtwork => "Nivisandina zanyariyan...";
+  String get labelWrittingTagsAndArtwork => "Zanyarî têne nivîsandin...";
   @override
   String get labelSavingFile => "Pel tê tomarkirin...";
   @override
@@ -150,7 +150,7 @@ class LanguageKmr extends Languages {
   String get labelNoPermissionJustification => "Medyayê xwe nîşan bide bi riya" + "\n" +
     "mafdayîna gihiştîna bîrgehê ";
   @override
-  String get labelGettingYourMedia => "Medyayên te têne bidest xistin...";
+  String get labelGettingYourMedia => "Medyayên te têne anîn...";
   @override
   String get labelEditTags => "Zanyariyan serrast bike";
 
@@ -185,9 +185,9 @@ class LanguageKmr extends Languages {
   String get labelEnableBlackThemeJustification =>
     "Serrastkarê rûkara reş çalak bike";
   @override
-  String get labelAccentColor => "Rengê çarçoveyê";
+  String get labelAccentColor => "Rengê devokê";
   @override
-  String get labelAccentColorJustification => "Rengê çarçoveyê kesane bike";
+  String get labelAccentColorJustification => "Rengê devokê kesane bike";
   @override
   String get labelAudioFolder => "Peldanka dengê";
   @override
@@ -259,7 +259,7 @@ class LanguageKmr extends Languages {
 
   // Music Player
   @override
-  String get labelPlayerSettings => "Sazkariyên lêder";
+  String get labelPlayerSettings => "Sazkariyên lêderê";
   @override
   String get labelExpandArtwork => "Wêneya albuma pehn bike";
   @override
@@ -275,7 +275,7 @@ class LanguageKmr extends Languages {
   @override
   String get labelRelated => "Nêzîk";
   @override
-  String get labelAutoPlay => "lêdan bi xweber";
+  String get labelAutoPlay => "lêdana bi xweber";
 
   // Tags Pages
   @override
