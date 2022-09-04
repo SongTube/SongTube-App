@@ -65,10 +65,10 @@ final supportedLanguages = <LanguageData>[
   LanguageData("🇯🇵", "Japanese", "ja"),
   // French (FR)
   LanguageData("🇫🇷", "French", "fr"),
-  // Kurdish (KU)
-  LanguageData("ku", "Kurdish", "ku"),
-  // Kurdish (KMR)
-  LanguageData("kmr", "Kurdish (KMR)", "kmr"),
+  // Sorani (CKB)
+  LanguageData("ckb", "Kurdish(CKB)", "ku"),
+  // Kurmanji (KU)
+  LanguageData("ku", "Kurdish(KU)", "ku"),
   // Catalan (CA)
   LanguageData("ca", "Català", "ca");
 ];
@@ -122,12 +122,12 @@ Future<Languages> _loadLocale(Locale locale) async {
     // French (FR)
     case 'fr':
       return LanguageFr();
-    // Kurdish (KU)
+    // Kurdish (CKB) (CKB)
+    case 'ckb':
+      return LanguageCkb();
+    // Kurdish (KU) (KU)
     case 'ku':
       return LanguageKu();
-    // Kurdish (KMR)
-    case 'kmr':
-      return LanguageKmr();
     case 'ca':
       return LanguageCa();
     // Default Language (English)
