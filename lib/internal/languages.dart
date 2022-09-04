@@ -76,7 +76,7 @@ final supportedLanguages = <LanguageData>[
   // Kurmanji (KU)
   LanguageData("ku", "Kurdish(KU)", "ku"),
   // Catalan (CA)
-  LanguageData("ca", "Català", "ca");
+  LanguageData("ca", "Català", "ca"),
 ];
 Future<Languages> _loadLocale(Locale locale) async {
   switch (locale.languageCode) {
@@ -129,8 +129,8 @@ Future<Languages> _loadLocale(Locale locale) async {
     case 'fr':
       return LanguageFr();
     // Kurdish (CKB) (CKB)
-    case 'ckb':
-      return LanguageCkb();
+    //case 'ckb':
+    //  return LanguageCkb();
     // Kurdish (KU) (KU)
     case 'ku':
       return LanguageKu();
