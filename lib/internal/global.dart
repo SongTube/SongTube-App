@@ -7,6 +7,7 @@ import 'package:flutter_pip/platform_channel/channel.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:songtube/internal/artwork_manager.dart';
+import 'package:songtube/internal/models/update/update_manger.dart';
 
 import '../services/audio_service.dart';
 
@@ -26,7 +27,9 @@ Future<void> initGlobals() async {
         androidNotificationChannelId: 'com.artxdev.songtube',
         androidNotificationChannelName: 'SongTube',
       ));
-  isPictureInPictureSupported = await FlutterPip.isPictureInPictureSupported() ?? false;
+  isPictureInPictureSupported =
+      await FlutterPip.isPictureInPictureSupported() ?? false;
+  AppUpdateManger.inAppUpdater();
 }
 
 // App Custom Accent Color
