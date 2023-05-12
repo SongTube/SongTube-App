@@ -26,39 +26,6 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-<<<<<<< HEAD
-=======
-    compileSdkVersion 32
-
-    lintOptions {
-        disable 'InvalidPackage'
-    }
-
-    defaultConfig {
-        configurations.all {
-            resolutionStrategy { force 'androidx.core:core-ktx:1.6.0' }
-        }
-        applicationId "com.artxdev.songtube"
-        minSdkVersion 22
-        targetSdkVersion 28
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        resValue "string", "app_name", "SongTube"
-        vectorDrawables.useSupportLibrary = true
-        // Only required when setting minSdkVersion to 20 or lower
-        multiDexEnabled true
-    }
-
-    signingConfigs {
-        release {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
-        }
-    }
->>>>>>> f213efa7a9166728726117e7489c0ea50b1bee5d
     
     compileSdkVersion 33
     ndkVersion flutter.ndkVersion
