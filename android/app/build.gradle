@@ -25,65 +25,38 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
-def keystoreProperties = new Properties()
-def keystorePropertiesFile = rootProject.file('key.properties')
-if (keystorePropertiesFile.exists()) {
-    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-}
-
 android {
-    compileSdkVersion 31
-
-    lintOptions {
-        disable 'InvalidPackage'
-    }
-
-    defaultConfig {
-        configurations.all {
-            resolutionStrategy { force 'androidx.core:core-ktx:1.6.0' }
-        }
-        applicationId "com.artxdev.songtube"
-        minSdkVersion 22
-        targetSdkVersion 28
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        resValue "string", "app_name", "SongTube"
-        vectorDrawables.useSupportLibrary = true
-        // Only required when setting minSdkVersion to 20 or lower
-        multiDexEnabled true
-    }
-
-    signingConfigs {
-        release {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
-        }
-    }
     
+    compileSdkVersion 33
+    ndkVersion flutter.ndkVersion
+
     compileOptions {
         // Flag to enable support for the new language APIs
         coreLibraryDesugaringEnabled true
-
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
-        encoding 'utf-8'
     }
 
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8
+    defaultConfig {
+        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        applicationId "com.artxdev.songtube.beta"
+        minSdkVersion 22
+        resValue "string", "app_name", "SongTube Beta"
+        targetSdkVersion 32
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
+        // Enabling multidex support.
+        multiDexEnabled true
     }
 
     buildTypes {
         release {
-            signingConfig signingConfigs.release
+            // TODO: Add your own signing config for the release build.
+            // Signing with the debug keys for now, so `flutter run --release` works.
+            signingConfig signingConfigs.debug
+            applicationIdSuffix ".profile"
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            //ndk {
-            //    abiFilters 'armeabi-v7a', 'arm64-v8a'
-            //}
         }
         debug{
             applicationIdSuffix ".dev"
@@ -103,10 +76,7 @@ repositories {
 }
 
 dependencies {
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.9'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
-    implementation "androidx.core:core-ktx:+"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'androidx.window:window:1.0.0'
+    implementation 'androidx.window:window-java:1.0.0'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
 }

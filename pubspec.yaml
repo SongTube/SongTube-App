@@ -1,6 +1,9 @@
 name: songtube
 description: A new Flutter project.
-publish_to: none
+
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -12,173 +15,191 @@ publish_to: none
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 6.4.5+1200
+version: 1.0.1+10
 
 environment:
-    sdk: ">=2.2.2 <3.0.0"
-    shared_preferences: ">=0.5.7+3 <2.0.0"
-    share: ">=0.6.4+3 <2.0.0"
+  sdk: ">=2.17.6 <3.0.0"
 
+# Dependencies specify other packages that your package needs in order to work.
+# To automatically upgrade your package dependencies to the latest versions
+# consider running `flutter pub upgrade --major-versions`. Alternatively,
+# dependencies can be manually updated by changing the version numbers below to
+# the latest version available on pub.dev. To see which dependencies have newer
+# versions available, run `flutter pub outdated`.
 dependencies:
-    flutter:
-        sdk: flutter
-    flutter_localizations:
-        sdk: flutter
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
 
-    # Error reporting
-    # sentry_flutter: ^4.0.6
+  # Tools
+  url_launcher: ^6.1.5
+  http: ^0.13.5
+  intl: ^0.17.0
+  validators: ^3.0.0
+  share_plus: ^4.1.0
+  device_info_plus: ^4.1.2
+  volume_controller: ^2.0.4
+  screen_brightness: ^0.2.1
+  flutter_keyboard_visibility: ^5.3.0
+  cached_network_image: ^3.2.2
+  file_picker: ^5.2.0
+  flutter_share: ^2.0.0
+  wakelock: ^0.6.2
+  pick_or_save: ^2.2.4
+  receive_intent: ^0.2.3
+  flutter_widget_from_html_core: ^0.10.0
 
-    # Media Playback Packages
-    # flutter_audio_query null salfety by https://github.com/Mayb3Nots/flutter_audio_query
-    flutter_audio_query: 
-        git: 
-            url: https://github.com/harshmandan/flutter_audio_query
-            ref: master
+  # Dart advanced Streams
+  rxdart: any
 
-    video_player:
-        git:
-            url: https://github.com/SongTube/video_player
-            ref: master
+  # Google Fonts
+  google_fonts: ^2.2.0
 
-    just_audio: ^0.9.12
-    audio_service:
-        git:
-            url: https://github.com/SongTube/audio_service-1
-            ref: master
+  # Custom VideoPlayer with support for Muxed Streams
+  video_player:
+    git:
+      url: https://github.com/SongTube/video_player
+      ref: master
 
+  # Audio Tagger, Music Data Extractor
+  audio_tagger:
+    git:
+      url: https://github.com/SongTube/audio_tagger
+      ref: main
 
-    # NewPipe Extractor
-    newpipeextractor_dart:
-        git:
-            url: https://github.com/SongTube/newpipeextractor_dart
-            ref: master
+  # CrossFade Images
+  image_fade:
+    git:
+      url: https://github.com/SongTube/image_fade.git
+      ref: master
 
-    # Device Providers
-    shared_preferences: ^2.0.6 
-    provider: ^6.0.0
-    device_info: ^2.0.2
-    path_provider: ^2.0.2
-    package_info: ^2.0.2
-    ext_storage: ^1.0.3
-    permission_handler: ^8.3.0 
-    file_picker: ^3.0.2
-    path: ^1.7.0
+  # Audio Query, Extract Music from device
+  flutter_audio_query: 
+    git: 
+      url: https://github.com/harshmandan/flutter_audio_query
+      ref: master
 
-    # Text
-    intl: ^0.17.0
-    string_validator: ^0.3.0
-    google_fonts: ^2.2.0
+  # Shared Preferences, Save user settings and cache things
+  shared_preferences: ^2.0.11
 
-    # HTTP
-    dio: ^4.0.0
-    http: ^0.13.3
-    flutter_inappwebview: ^5.3.2
-    flutter_html:
-        git:
-            url: https://github.com/SongTube/flutter_html
+  # Particles Animation, for decoration
+  particles_flutter: ^0.1.1
 
-    # Icons
-    material_design_icons_flutter: ^4.0.5955
-    eva_icons_flutter: ^3.0.0
+  # Permisisons Managing
+  permission_handler: ^10.2.0
 
-    # Animations
-    shimmer: ^2.0.0
-    avatar_glow: ^2.0.1
-    flutter_glow: ^0.2.0
-    autolist:
-        git:
-            url: git://github.com/SongTube/autolist.git
-            ref: master
-    image_fade: ^0.2.1
-    animations: ^2.0.0
-    loading_indicator: ^2.1.1
-    floating_dots: ^0.2.2
+  # App Paths Provider
+  path_provider: ^2.0.8
+  android_path_provider: ^0.3.0
 
-    # Tools
-    flutter_share: ^2.0.0
-    audio_tagger:
-        git: https://github.com/SongTube/audio_tagger
+  # Provider Package
+  provider: any
 
-    share: ^2.0.4
-    flutter_ffmpeg:
-        git:
-            url: https://github.com/SongTube/flutter-ffmpeg
-            ref: master
-    url_launcher: ^6.0.6
-    transparent_image: ^2.0.0
-    grouped_list: ^4.0.0
-    volume: ^1.0.1
-    flutter_screen: ^0.0.2
-    flutter_pip:
-        git:
-            url: https://github.com/Artx-II/flutter_pip
-            ref: main
-    file_operations:
-        git:
-            url: https://github.com/SongTube/file_operations
-            ref: main
-    apk_installer:
-        git:
-            url: https://github.com/SongTube/apk_installer
-            ref: main
+  # Audio Service, for playing music on background
+  audio_service: ^0.18.3
 
-    # Database
-    sqflite: ^2.0.0+3
+  # Just Audio, to actually play and handle Music
+  just_audio: ^0.9.18
 
-    # Misc
-    flutter_xlider: ^3.4.0
-    flutter_material_color_picker: ^1.0.5
-    flutter_keyboard_visibility: ^5.0.2
-    flutter_staggered_grid_view: ^0.4.0
-    palette_generator: ^0.3.0
-    flutter_markdown: ^0.6.2
-    md2_tab_indicator: ^1.0.2
+  # Some Fancy Icons
+  eva_icons_flutter: ^3.0.2
+  font_awesome_flutter: ^10.1.0
+  line_icons: ^2.0.0
+  ionicons: ^0.2.1
+  iconsax: ^0.0.8
+  material_design_icons_flutter: ^5.0.6996
 
-dependency_overrides:
-  platform: ^3.1.0
-  flutter_math_fork: ^0.5.0
+  # Transparent Image as ByteArray
+  transparent_image: ^2.0.0
+
+  # Extract primary colors from Images
+  palette_generator: ^0.3.3
+
+  # Animation Packages
+  flutter_bounce: ^1.1.0
+  animations: ^2.0.3
+
+  # ID Generator
+  uuid: ^3.0.6
+
+  # Picture in Picture
+  flutter_pip:
+    git:
+      url: https://github.com/SongTube/flutter_pip
+      ref: main
+
+  # Aditional UI Stuff I'm too lazy to do myself
+  roundcheckbox: ^2.0.4+1
+  auto_animated: ^3.0.1
+  grouped_list: ^5.1.2
+  timeago: ^3.3.0
+  dynamic_color: ^1.6.3
+  #animated_theme_switcher: ^2.0.7
+
+  # NewPipe Extractor
+  newpipeextractor_dart:
+    git:
+      url: https://github.com/SongTube/NewPipeExtractor_Dart
+      ref: master
+
+  # FFmpeg
+  flutter_ffmpeg:
+    git:
+      url: https://github.com/SongTube/flutter-ffmpeg
+      ref: master
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  # The "flutter_lints" package below contains a set of recommended lints to
+  # encourage good coding practices. The lint set provided by the package is
+  # activated in the `analysis_options.yaml` file located at the root of your
+  # package. See that file for information about deactivating specific lint
+  # rules and activating additional ones.
+  flutter_lints: ^2.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
-# The following section is specific to Flutter.
+# The following section is specific to Flutter packages.
 flutter:
-    # The following line ensures that the Material Icons font is
-    # included with your application, so that you can use the icons in
-    # the material Icons class.
-    uses-material-design: true
 
-    # To add assets to your application, add an assets section, like this:
-    assets:
-        - assets/images/
-        - assets/LICENSE
-    #  - images/a_dot_ham.jpeg
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
 
-    # An image asset can refer to one or more resolution-specific "variants", see
-    # https://flutter.dev/assets-and-images/#resolution-aware.
+  # To add assets to your application, add an assets section, like this:
+  assets:
+      - assets/images/
+      - assets/LICENSE
 
-    # For details regarding adding assets from package dependencies, see
-    # https://flutter.dev/assets-and-images/#from-packages
+  # An image asset can refer to one or more resolution-specific "variants", see
+  # https://flutter.dev/assets-and-images/#resolution-aware.
 
-    # To add custom fonts to your application, add a fonts section here,
-    # in this "flutter" section. Each entry in this list should have a
-    # "family" key with the font family name, and a "fonts" key with a
-    # list giving the asset and other descriptors for the font. For
-    fonts:
-        - family: YTSans
-          fonts:
-              - asset: assets/fonts/youtube-sans-medium.ttf
-                weight: 500
-              - asset: assets/fonts/youtube-sans-light.ttf
-                weight: 300
-              - asset: assets/fonts/youtube-sans-bold.ttf
-                weight: 700
-        - family: Product Sans
-          fonts:
-              - asset: assets/fonts/productSans/bold.ttf
-                weight: 700
-              - asset: assets/fonts/productSans/regular.ttf
-                weight: 400
-    #
-    # For details regarding fonts from package dependencies,
-    # see https://flutter.dev/custom-fonts/#from-packages
+  # For details regarding adding assets from package dependencies, see
+  # https://flutter.dev/assets-and-images/#from-packages
+
+  # To add custom fonts to your application, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font. For
+  fonts:
+      - family: YTSans
+        fonts:
+            - asset: assets/fonts/youtube-sans-medium.ttf
+              weight: 500
+            - asset: assets/fonts/youtube-sans-light.ttf
+              weight: 300
+            - asset: assets/fonts/youtube-sans-bold.ttf
+              weight: 700
+      - family: Product Sans
+        fonts:
+            - asset: assets/fonts/productSans/bold.ttf
+              weight: 700
+            - asset: assets/fonts/productSans/regular.ttf
+              weight: 400
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/custom-fonts/#from-packages

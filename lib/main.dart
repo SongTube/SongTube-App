@@ -1,98 +1,93 @@
-// Flutter
-import 'dart:async';
-
+import 'package:animations/animations.dart';
+import 'package:audio_service/audio_service.dart';
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:songtube/internal/globals.dart';
-import 'package:songtube/internal/languages.dart';
-
-// Internal
-import 'package:songtube/intro/introduction.dart';
-import 'package:songtube/provider/downloadsProvider.dart';
-import 'package:songtube/provider/managerProvider.dart';
-import 'package:songtube/provider/configurationProvider.dart';
-import 'package:songtube/lib.dart';
-import 'package:songtube/internal/legacyPreferences.dart';
-import 'package:songtube/provider/mediaProvider.dart';
-
-// Packages
-import 'package:audio_service/audio_service.dart';
 import 'package:provider/provider.dart';
-import 'package:songtube/provider/preferencesProvider.dart';
-import 'package:songtube/provider/videoPageProvider.dart';
-import 'package:songtube/ui/internal/scrollBehavior.dart';
-import 'package:newpipeextractor_dart/utils/reCaptcha.dart';
-import 'package:newpipeextractor_dart/utils/navigationService.dart';
-// import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:receive_intent/receive_intent.dart' as intent;
+import 'package:songtube/internal/models/backup_model.dart';
+import 'package:songtube/internal/music_brainz.dart';
+import 'package:songtube/providers/app_settings.dart';
+import 'package:songtube/internal/global.dart';
+import 'package:songtube/internal/models/song_item.dart';
+import 'package:songtube/languages/languages.dart';
+import 'package:songtube/providers/content_provider.dart';
+import 'package:songtube/providers/download_provider.dart';
+import 'package:songtube/providers/media_provider.dart';
+import 'package:songtube/providers/playlist_provider.dart';
+import 'package:songtube/providers/ui_provider.dart';
+import 'package:songtube/screens/home/home.dart';
+import 'package:songtube/screens/intro/intro.dart';
+import 'package:songtube/ui/components/fancy_scaffold.dart';
+import 'package:songtube/ui/components/nested_will_pop_scope.dart';
+import 'package:songtube/ui/players/music_player.dart';
+import 'package:songtube/ui/players/video_player.dart';
+import 'package:songtube/ui/themes/adaptive.dart';
+import 'package:songtube/ui/themes/dark.dart';
+import 'package:songtube/ui/themes/light.dart';
 
-// UI
-import 'package:songtube/ui/internal/themeValues.dart';
+final internalNavigatorKey = GlobalKey<NavigatorState>();
+final navigatorKey = GlobalKey<NavigatorState>();
+final snackbarKey = GlobalKey<ScaffoldState>();
 
-// Debug
-import 'package:flutter/scheduler.dart' show timeDilation;
-
-// const dsn = '';
-// final sentry = SentryClient(SentryOptions(dsn: dsn));
-
-Future<void> main() async {
+void main() async {
+  // Initialize WidgetsBinding
   WidgetsFlutterBinding.ensureInitialized();
-  globalPrefs = await SharedPreferences.getInstance();
-  LegacyPreferences preferences = new LegacyPreferences();
-  await preferences.initPreferences();
-  final cachedSongs = await preferences.getCachedSongs();
-  if (kDebugMode)
-    timeDilation = 1.0;
-  runApp(Main(
-    preloadedFs: preferences,
-    cachedSongs: cachedSongs,
-  ));
-  /* if (dsn.isNotEmpty) {
-    runZonedGuarded(() => runApp(Main(preloadedFs: preferences)),
-      (error, stackTrace) async {
-        await sentry.captureException(
-          error, stackTrace: stackTrace,
-        );
-      },
-    );
-    FlutterError.onError = (details, {bool forceReport = false}) {
-      if (
-        !(details.exception is AssertionError)
-      ) {
-        sentry.captureException(
-          details.exception,
-          stackTrace: details.stack,
-        );
-      }
-    };
-  } else {
-    
-  } */
-}
 
-class Main extends StatefulWidget {
+  // Initialize Global Variables
+  await initGlobals();
 
-  static void setLocale(BuildContext context, Locale newLocale) {
-    var state = context.findAncestorStateOfType<_MainState>();
-    state.setLocale(newLocale);
+  // Initialize App Settings
+  await AppSettings.initSettings();
+
+  // Check for an init intent
+  intent.Intent? initIntent;
+  try {
+    initIntent = await intent.ReceiveIntent.getInitialIntent();
+  } catch (e) {
+    if (kDebugMode) {
+      print(e.toString());
+    }
   }
 
-  final LegacyPreferences preloadedFs;
-  final List<MediaItem> cachedSongs;
-  Main({
-    @required this.preloadedFs,
-    @required this.cachedSongs
-  });
+  // Set System UI Mode
+  if ((deviceInfo.version.sdkInt ?? 28) >= 29 && false) {
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.edgeToEdge
+    );
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        systemNavigationBarColor: Colors.transparent,
+        statusBarColor: Colors.transparent 
+      )
+    );
+  }
 
-  @override
-  _MainState createState() => _MainState();
+  // Run App
+  runApp(SongTube(initIntent: initIntent));
 }
 
-class _MainState extends State<Main> {
+class SongTube extends StatefulWidget {
+  const SongTube({this.initIntent, Key? key}) : super(key: key);
+  final intent.Intent? initIntent;
+  static void setLocale(BuildContext context, Locale newLocale) {
+    var state = context.findAncestorStateOfType<_SongTubeState>();
+    state!.setLocale(newLocale);
+  }
+
+  @override
+  State<SongTube> createState() => _SongTubeState();
+}
+
+class _SongTubeState extends State<SongTube> {
+
+  // Intent
+  intent.Intent? get initIntent => widget.initIntent;
 
   // Language
-  Locale _locale;
+  Locale? _locale;
   void setLocale(Locale locale) {
     setState(() {
       _locale = locale;
@@ -100,101 +95,177 @@ class _MainState extends State<Main> {
   }
 
   @override
-  void didChangeDependencies() async {
-    getLocale().then((locale) {
-      setState(() {
-        _locale = locale;
-      });
-    });
-    super.didChangeDependencies();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<ConfigurationProvider>(
-          create: (context) => ConfigurationProvider(preferences: widget.preloadedFs)
-        ),
-        ChangeNotifierProvider<ManagerProvider>(
-          create: (context) => ManagerProvider()
-        ),
-        ChangeNotifierProvider<DownloadsProvider>(
-          create: (context) => DownloadsProvider()
+        ChangeNotifierProvider<UiProvider>(
+          create: (context) => UiProvider()
         ),
         ChangeNotifierProvider<MediaProvider>(
-          create: (context) => MediaProvider(
-            cachedSongs: widget.cachedSongs
-          )
+          create: (context) => MediaProvider()
         ),
-        ChangeNotifierProvider<PreferencesProvider>(
-          create: (context) => PreferencesProvider(),
+        ChangeNotifierProvider<PlaylistProvider>(
+          create: (context) => PlaylistProvider()
         ),
-        ChangeNotifierProvider<VideoPageProvider>(
-          create: (context) => VideoPageProvider(),
+        ChangeNotifierProvider<ContentProvider>(
+          create: (context) => ContentProvider()
+        ),
+        ChangeNotifierProvider<DownloadProvider>(
+          create: (context) => DownloadProvider()
+        ),
+        ChangeNotifierProvider<AppSettings>(
+          create: (context) => AppSettings()
         ),
       ],
-      child: Builder( builder: (context) {
-        ConfigurationProvider config = Provider.of<ConfigurationProvider>(context);
-        ThemeData customTheme;
-        ThemeData darkTheme;
-
-        darkTheme = config.blackThemeEnabled 
-                    ? AppTheme.black(config.accentColor)
-                    : AppTheme.dark(config.accentColor);
-
-        customTheme = config.darkThemeEnabled
-                      ? darkTheme
-                      : AppTheme.white(config.accentColor);
-
-        List<Locale> supportedLocales = [];
-        supportedLanguages.forEach((element) =>
-          supportedLocales.add(Locale(element.languageCode, '')));
-
-        return MaterialApp(
-          locale: _locale,
-          supportedLocales: supportedLocales,
-          localizationsDelegates: [
-            FallbackLocalizationDelegate(),
-            AppLocalizationsDelegate(),
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          localeResolutionCallback: (locale, supportedLocales) {
-            for (var supportedLocale in supportedLocales) {
-              if (supportedLocale?.languageCode == locale?.languageCode &&
-                  supportedLocale?.countryCode == locale?.countryCode) {
-                return supportedLocale;
+      child: Builder(
+        builder: (context) {
+          return DynamicColorBuilder(
+            builder: (lightScheme, darkScheme) {
+              List<Locale> supportedLocales = [];
+              for (var element in supportedLanguages) {
+                supportedLocales.add(Locale(element.languageCode, ''));
               }
+
+              // Load Providers
+              UiProvider uiProvider = Provider.of(context);
+              ContentProvider contentProvider = Provider.of(context);
+              AppSettings appSettings = Provider.of(context);
+
+              return MaterialApp(
+    
+                // Providing a restorationScopeId allows the Navigator built by the
+                // MaterialApp to restore the navigation stack when a user leaves and
+                // returns to the app after it has been killed while running in the
+                // background.
+                restorationScopeId: 'app',
+    
+                // Locale Related Stuff
+                locale: _locale,
+                supportedLocales: supportedLocales,
+                localizationsDelegates: [
+                  FallbackLocalizationDelegate(),
+                  const AppLocalizationsDelegate(),
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                ],
+                localeResolutionCallback: (locale, supportedLocales) {
+                  for (var supportedLocale in supportedLocales) {
+                    if (supportedLocale.languageCode == locale?.languageCode &&
+                        supportedLocale.countryCode == locale?.countryCode) {
+                      return supportedLocale;
+                    }
+                  }
+                  return supportedLocales.first;
+                },
+              
+                // Define a light and dark color theme. Then, read the user's
+                // preferred ThemeMode (light, dark, or system default) from the
+                // SettingsController to display the correct theme.
+                theme: appSettings.enableMaterialYou ? adaptiveTheme(lightScheme, Brightness.light) : lightTheme(),
+                darkTheme: appSettings.enableMaterialYou ? adaptiveTheme(darkScheme, Brightness.dark) : darkTheme(),
+                themeMode: appSettings.enableMaterialYou ? ThemeMode.system : uiProvider.themeMode,
+                home: StreamBuilder<MediaItem?>(
+                  stream: audioHandler.mediaItem,
+                  builder: (context, media) {
+                    return Scaffold(
+                      key: snackbarKey,
+                      body: FancyScaffold(
+                        resizeToAvoidBottomInset: false,
+                        key: internalNavigatorKey,
+                        body: NestedWillPopScope(
+                          onWillPop: () async {
+                            if (navigatorKey.currentState?.canPop() ?? false) {
+                              navigatorKey.currentState?.maybePop();
+                              return false;
+                            }
+                            return true;
+                          },
+                          child: Navigator(
+                            key: navigatorKey,
+                            onGenerateRoute: (settings) {
+                              Widget widget;
+                              // Manage your route names here
+                              switch (settings.name) {
+                                case 'intro':
+                                  widget = const IntroScreen();
+                                  break;
+                                case 'home':
+                                  widget = HomeScreen(
+                                    initIntent: initIntent
+                                  );
+                                  break;
+                                default:
+                                  throw Exception('Invalid route: ${settings.name}');
+                              }
+                              // You can also return a PageRouteBuilder and
+                              // define custom transitions between pages
+                              return PageRouteBuilder(
+                                settings: settings,
+                                barrierColor: Colors.transparent,
+                                transitionDuration: const Duration(milliseconds: 500),
+                                reverseTransitionDuration: const Duration(milliseconds: 500),
+                                transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                  return SharedAxisTransition(
+                                    fillColor: Colors.transparent,
+                                    animation: animation,
+                                    secondaryAnimation: secondaryAnimation,
+                                    transitionType: SharedAxisTransitionType.scaled,
+                                    child: child,
+                                  );
+                                },
+                                pageBuilder: (context, animation, secondaryAnimation) {
+                                  return widget;
+                                }
+                              );
+                            },
+                            initialRoute: initialRoute,
+                          ),
+                        ),
+                        floatingWidgetConfig: FloatingWidgetConfig(
+                          backdropColor: Colors.black,
+                          backdropEnabled: true,
+                          onSlide: media.hasData && media.data != null && uiProvider.currentPlayer == CurrentPlayer.music
+                            ? (position) => onSlide(position, media.data!)
+                            : null,
+                        ),
+                        floatingWidgetController: uiProvider.fwController,
+                        musicFloatingWidget: media.hasData && media.data != null ? const MusicPlayer() : null,
+                        videoFloatingWidget: contentProvider.playingContent != null ? const VideoPlayer() : null,
+                      ),
+                    );
+                  }
+                )
+              );
             }
-            return supportedLocales?.first;
-          },
-          builder: (context, child) {
-            return ScrollConfiguration(
-              behavior: CustomScrollBehavior(),
-              child: child,
-            );
-          },
-          navigatorKey: NavigationService.instance.navigationKey,
-          title: "SongTube",
-          theme: config.systemThemeEnabled
-                 ? AppTheme.white(config.accentColor)
-                 : customTheme,
-          darkTheme: config.systemThemeEnabled
-                     ? darkTheme
-                     : customTheme,
-          initialRoute: config.preferences.showIntroductionPages()
-            ? 'introScreen'
-            : 'homeScreen',
-          routes: {
-            'homeScreen':  (context) => AudioServiceWidget(child: Material(child: Lib())),
-            'introScreen': (context) => IntroScreen(),
-            'reCaptcha': (context) => ReCaptchaPage(),
-          },
-        );
-      }),
+          );
+        }
+      ),
     );
   }
-}
 
+  // Change appbar colors on music player slide
+  void onSlide(double position, MediaItem mediaItem) {
+    AppSettings appSettings = Provider.of(internalNavigatorKey.currentContext!, listen: false);
+    final iconColor = Theme.of(internalNavigatorKey.currentContext!).brightness;
+    final Color? textColor = SongItem.fromMediaItem(mediaItem).palette?.text;
+    if (position > 0.95) {
+      if (textColor != null) {
+        SystemChrome.setSystemUIOverlayStyle(
+          SystemUiOverlayStyle(
+            statusBarIconBrightness: appSettings.enableMusicPlayerBlur ? textColor == Colors.black
+              ? Brightness.dark : Brightness.light : iconColor,
+          ),
+        );
+      }
+    } else if (position < 0.95) {
+      SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(
+          statusBarIconBrightness: iconColor,
+          systemNavigationBarIconBrightness: iconColor,
+        ),
+      );
+    }
+  }
+
+}

@@ -1,39 +1,40 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:songtube/ui/components/styledBottomSheet.dart';
-import 'package:songtube/ui/dialogs/licenseDialog.dart';
+import 'package:songtube/ui/sheets/common_sheet.dart';
+import 'package:songtube/ui/text_styles.dart';
 
 class DisclaimerSheet extends StatelessWidget {
+  const DisclaimerSheet({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return StyledBottomSheet(
-      title: "Disclaimer",
-      content: Text(
+    return CommonSheet(
+      title: 'Disclaimer',
+      body: Text(
+        // ignore: prefer_interpolation_to_compose_strings
         "This Software is released \"as-is\", without any warranty, responsibility or liability. " +
         "In no event shall the Author of this Software be liable for any special, consequential, " +
         "incidental or indirect damages whatsoever (including, without limitation, damages for "   +
         "loss of business profits, business interruption, loss of business information, or any "   +
         "other pecuniary loss) arising out of the use of inability to use this product, even if "  +
         "Author of this Sotware is aware of the possibility of such damages and known defect.",
-        style: GoogleFonts.poppins(
-          color: Theme.of(context).textTheme.bodyText1.color,
-          fontSize: 16,
-        ),
+        style: subtitleTextStyle(context),
       ),
       actions: [
-        TextButton(
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (context) => LicenseDialog()
-            );
-          },
-          child: Text("License", style: GoogleFonts.poppins(
-            color: Theme.of(context).accentColor,
-            fontWeight: FontWeight.w600,
-            fontSize: 18
-          )),
-        ),
+        Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).primaryColor,
+            borderRadius: BorderRadius.circular(100)
+          ),
+          child: TextButton(
+            onPressed: () async {
+              Navigator.pop(context);
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(left: 12, right: 12),
+              child: Text('OK', style: smallTextStyle(context).copyWith(color: Colors.white)),
+            )
+          ),
+        )
       ],
     );
   }
