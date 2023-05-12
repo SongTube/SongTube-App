@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:android_path_provider/android_path_provider.dart';
 import 'package:apk_installer/apk_installer.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:package_info_plus/package_info_plus.dart';
@@ -19,12 +20,14 @@ class AppUpdateManger {
   static double appVersion = 0;
   static late PackageInfo packageInfo;
 
-  /// Checks for app update
+  /// Checks for app update. Doesn't run in debug builds
   static void inAppUpdater() async {
     packageInfo = await PackageInfo.fromPlatform();
     appVersion = double.parse(packageInfo.version.replaceRange(3, 5, ""));
     final latestRelease = await _getLatestRelease();
-    if (latestRelease != null && appVersion < latestRelease.versionDouble) {
+    if (!kDebugMode &&
+        latestRelease != null &&
+        appVersion < latestRelease.versionDouble) {
       showDialog(
           barrierDismissible: false,
           context: internalNavigatorKey.currentContext!,
@@ -58,6 +61,7 @@ class AppUpdateManger {
       await downloadProgress.close();
       client.close();
       _installApk(saveName.absolute.path);
+      Navigator.of(internalNavigatorKey.currentContext!).pop();
     }, onError: (e) async {
       await ioSink.close();
       client.close();
@@ -71,9 +75,8 @@ class AppUpdateManger {
     var headers = {
       "Accept": "application/vnd.github.v3+json",
     };
-    const songTubeNew =
-        "https://api.github.com/repos/SongTube/SongTube-New/releases";
-    var repoUrl = Uri.parse(songTubeNew);
+    const songTube = "https://api.github.com/repos/SongTube/SongTube/releases";
+    var repoUrl = Uri.parse(songTube);
     try {
       var response = await client.get(repoUrl, headers: headers);
       if (response.body.isNotEmpty && response.body.trim() != "[]") {
