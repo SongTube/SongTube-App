@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:songtube/main.dart';
 
 // Language Files
+<<<<<<< HEAD:lib/languages/languages.dart
 // import 'translations/languageCa.dart';
 import 'translations/languageEn.dart';
 import 'translations/languageEs.dart';
@@ -24,6 +25,25 @@ import 'translations/languageEs.dart';
 // import 'translations/languageFr.dart';
 // import 'translations/languageZh-CN.dart';
 // import 'translations/languageCs.dart';
+=======
+import 'languages/languageCa.dart';
+import 'languages/languageEn.dart';
+import 'languages/languageEs.dart';
+import 'languages/languagePt-BR.dart';
+import 'languages/languageIgbo-NG.dart';
+import 'languages/languageId.dart';
+import 'languages/languageVi.dart';
+import 'languages/languageTr.dart';
+import 'languages/languageSo.dart';
+import 'languages/languageDe.dart';
+import 'languages/languageBn.dart';
+import 'languages/languageUa.dart';
+import 'languages/languageIt.dart';
+import 'languages/languageJa.dart';
+import 'languages/languageFr.dart';
+import 'languages/languageZh-CN.dart';
+import 'languages/languageCs.dart';
+>>>>>>> f213efa7a9166728726117e7489c0ea50b1bee5d:lib/internal/languages.dart
 
 /// Multi-Language Support for SongTube, for new Languages to be supported
 /// a new [File] in this project [languages/translations] folder needs to be
@@ -86,6 +106,7 @@ Future<Languages> _loadLocale(Locale locale) async {
     // Spanish (VE)
     case 'es':
       return LanguageEs();
+<<<<<<< HEAD:lib/languages/languages.dart
     // // Portuguese (BR)
     // case 'pt':
     //   return LanguagePtBr();
@@ -142,6 +163,64 @@ Future<Languages> _loadLocale(Locale locale) async {
     //   return LanguageCs();
     // case 'ca':
     //   return LanguageCa();
+=======
+    // Portuguese (BR)
+    case 'pt':
+      return LanguagePtBr();
+    // Igbo (NG)
+    case 'ig':
+      return LanguageIgbo();
+    // Indonesia (ID)
+    case 'id':
+      return LanguageId();
+    // Indonesia (ID)
+    case 'vi':
+      return LanguageVi();
+    // Turkish (TR)
+    case 'tr':
+      return LanguageTr();
+    // Russian (RU)
+    case 'ru':
+      return LanguageRu();
+    // Somali (SO, ET, DJI, KEN)
+    case 'so':
+      return LanguageSo();
+    // Arabic (AR)
+    case 'ar':
+      return LanguageAr();
+    // German (DE)
+    case 'de':
+      return LanguageDe();
+    // Bengali (BD)
+    case 'bn':
+      return LanguageBn();
+    // Ukrainian
+    case 'ua':
+      return LanguageUa();
+    // Italian (IT)
+    case 'it':
+      return LanguageIt();
+    // Japanese (JA)
+    case 'ja':
+      return LanguageJa();
+    // French (FR)
+    case 'fr':
+      return LanguageFr();
+    // Kurdish (CKB) (CKB)
+    //case 'ckb':
+    //  return LanguageCkb();
+    // Kurdish (KU) (KU)
+    case 'ku':
+      return LanguageKu();
+    // Chinses (CN)
+    case 'cn':
+      return LanguageZhCN();
+    // Czech (CS)
+    case 'cs':
+      return LanguageCs();
+    case 'ca':
+      return LanguageCa();
+>>>>>>> f213efa7a9166728726117e7489c0ea50b1bee5d:lib/internal/languages.dart
     // Default Language (English)
     default:
       return LanguageEn();
