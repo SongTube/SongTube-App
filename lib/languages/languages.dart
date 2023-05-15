@@ -1,29 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:songtube/languages/translations/languageAr.dart';
-// import 'package:songtube/languages/translations/languageKMR.dart';
-// import 'package:songtube/languages/translations/languageKu.dart';
-// import 'package:songtube/languages/translations/languageRu.dart';
+import 'package:songtube/languages/translations/languageAr.dart';
+import 'package:songtube/languages/translations/languageCa.dart';
+import 'package:songtube/languages/translations/languageKMR.dart';
+import 'package:songtube/languages/translations/languageKu.dart';
+import 'package:songtube/languages/translations/languageRu.dart';
 import 'package:songtube/main.dart';
 
 // Language Files
 // import 'translations/languageCa.dart';
 import 'translations/languageEn.dart';
 import 'translations/languageEs.dart';
-// import 'translations/languagePt-BR.dart';
-// import 'translations/languageIgbo-NG.dart';
-// import 'translations/languageId.dart';
-// import 'translations/languageVi.dart';
-// import 'translations/languageTr.dart';
-// import 'translations/languageSo.dart';
-// import 'translations/languageDe.dart';
-// import 'translations/languageBn.dart';
-// import 'translations/languageUa.dart';
-// import 'translations/languageIt.dart';
-// import 'translations/languageJa.dart';
-// import 'translations/languageFr.dart';
-// import 'translations/languageZh-CN.dart';
-// import 'translations/languageCs.dart';
+import 'translations/languagePt-BR.dart';
+import 'translations/languageIgbo-NG.dart';
+import 'translations/languageId.dart';
+import 'translations/languageVi.dart';
+import 'translations/languageTr.dart';
+import 'translations/languageSo.dart';
+import 'translations/languageDe.dart';
+import 'translations/languageBn.dart';
+import 'translations/languageUa.dart';
+import 'translations/languageIt.dart';
+import 'translations/languageJa.dart';
+import 'translations/languageFr.dart';
+import 'translations/languageZh-CN.dart';
+import 'translations/languageCs.dart';
 
 /// Multi-Language Support for SongTube, for new Languages to be supported
 /// a new [File] in this project [languages/translations] folder needs to be
@@ -86,62 +87,62 @@ Future<Languages> _loadLocale(Locale locale) async {
     // Spanish (VE)
     case 'es':
       return LanguageEs();
-    // // Portuguese (BR)
-    // case 'pt':
-    //   return LanguagePtBr();
-    // // Igbo (NG)
-    // case 'ig':
-    //   return LanguageIgbo();
-    // // Indonesia (ID)
-    // case 'id':
-    //   return LanguageId();
-    // // Indonesia (ID)
-    // case 'vi':
-    //   return LanguageVi();
-    // // Turkish (TR)
-    // case 'tr':
-    //   return LanguageTr();
-    // // Russian (RU)
-    // case 'ru':
-    //   return LanguageRu();
-    // // Somali (SO, ET, DJI, KEN)
-    // case 'so':
-    //   return LanguageSo();
-    // // Arabic (AR)
-    // case 'ar':
-    //   return LanguageAr();
-    // // German (DE)
-    // case 'de':
-    //   return LanguageDe();
-    // // Bengali (BD)
-    // case 'bn':
-    //   return LanguageBn();
-    // // Ukrainian
-    // case 'ua':
-    //   return LanguageUa();
-    // // Italian (IT)
-    // case 'it':
-    //   return LanguageIt();
-    // // Japanese (JA)
-    // case 'ja':
-    //   return LanguageJa();
-    // // French (FR)
-    // case 'fr':
-    //   return LanguageFr();
-    // // Kurdish (CKB) (CKB)
-    // //case 'ckb':
-    // //  return LanguageCkb();
-    // // Kurdish (KU) (KU)
-    // case 'ku':
-    //   return LanguageKu();
-    // // Chinses (CN)
-    // case 'cn':
-    //   return LanguageZhCN();
-    // // Czech (CS)
-    // case 'cs':
-    //   return LanguageCs();
-    // case 'ca':
-    //   return LanguageCa();
+    // Portuguese (BR)
+    case 'pt':
+      return LanguagePtBr();
+    // Igbo (NG)
+    case 'ig':
+      return LanguageIgbo();
+    // Indonesia (ID)
+    case 'id':
+      return LanguageId();
+    // Indonesia (ID)
+    case 'vi':
+      return LanguageVi();
+    // Turkish (TR)
+    case 'tr':
+      return LanguageTr();
+    // Russian (RU)
+    case 'ru':
+      return LanguageRu();
+    // Somali (SO, ET, DJI, KEN)
+    case 'so':
+      return LanguageSo();
+    // Arabic (AR)
+    case 'ar':
+      return LanguageAr();
+    // German (DE)
+    case 'de':
+      return LanguageDe();
+    // Bengali (BD)
+    case 'bn':
+      return LanguageBn();
+    // Ukrainian
+    case 'ua':
+      return LanguageUa();
+    // Italian (IT)
+    case 'it':
+      return LanguageIt();
+    // Japanese (JA)
+    case 'ja':
+      return LanguageJa();
+    // French (FR)
+    case 'fr':
+      return LanguageFr();
+    // Kurdish (CKB) (CKB)
+    //case 'ckb':
+    //  return LanguageCkb();
+    // Kurdish (KU) (KU)
+    case 'ku':
+      return LanguageKu();
+    // Chinses (CN)
+    case 'cn':
+      return LanguageZhCN();
+    // Czech (CS)
+    case 'cs':
+      return LanguageCs();
+    case 'ca':
+      return LanguageCa();
     // Default Language (English)
     default:
       return LanguageEn();
