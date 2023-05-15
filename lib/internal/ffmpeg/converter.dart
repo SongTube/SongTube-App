@@ -112,9 +112,10 @@ class FFmpegConverter {
   static Future<File> convertAudio({
     required String audioFile,
     required FFmpegTask task,
+    bool checkFormat = true
   }) async {
     assert(audioFile != "");
-    if (!await audioConversionRequired(task, audioFile)) {
+    if (!await audioConversionRequired(task, audioFile) && checkFormat) {
       return File(audioFile);
     }
     List<String> argsList = [];

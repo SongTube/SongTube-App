@@ -12,6 +12,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/artwork_manager.dart';
+import 'package:songtube/internal/ffmpeg/converter.dart';
 import 'package:songtube/internal/global.dart';
 import 'package:songtube/internal/media_utils.dart';
 import 'package:songtube/internal/models/audio_tags.dart';
@@ -23,7 +24,9 @@ import 'package:songtube/providers/media_provider.dart';
 import 'package:songtube/services/music_brainz_service.dart';
 import 'package:songtube/ui/animations/blue_page_route.dart';
 import 'package:songtube/ui/components/custom_snackbar.dart';
+import 'package:songtube/ui/components/slideable_panel.dart';
 import 'package:songtube/ui/components/text_icon_button.dart';
+import 'package:songtube/ui/sheet_phill.dart';
 import 'package:songtube/ui/sheets/common_sheet.dart';
 import 'package:songtube/ui/text_styles.dart';
 import 'package:songtube/ui/tiles/text_field_tile.dart';
@@ -43,6 +46,12 @@ class ID3Editor extends StatefulWidget {
 
 class _ID3EditorState extends State<ID3Editor> {
 
+  // Do not show again conversion checkbox
+  bool get hideConversionPopup => sharedPreferences.getBool('hideConversionPopup') ?? false;
+  set hideConversionPopup(bool value) {
+    sharedPreferences.setBool('hideConversionPopup', value);
+  }
+
   // Default image getter
   Future<File> getAlbumImage() async {
     await ArtworkManager.writeArtwork(widget.song.id);
@@ -52,18 +61,103 @@ class _ID3EditorState extends State<ID3Editor> {
   AudioTags tags = AudioTags();
   AudioTags originalTags = AudioTags();
 
+  // MusicBrainz Search
+  late SlidablePanelController panelController;
+  late TextEditingController searchController = TextEditingController()..text = widget.song.title;
+  List<MusicBrainzRecord> searchResults = [];
+  void searchForRecords() async {
+    final result = await MusicBrainzAPI.getRecordings(searchController.text);
+    searchResults.clear();
+    for (var element in result) {
+      searchResults.add(MusicBrainzRecord.fromMap(element));
+    }
+    setState(() {});
+  }
+  Future<String?> _getArtworkLink(MusicBrainzRecord record, int index) async {
+    await Future.delayed(Duration(seconds: index));
+    Map<String, String>? map = await MusicBrainzAPI
+      .getThumbnails(record.id);
+    if (map == null) return null;
+    String url;
+    if (map.containsKey("1200x1200")) {
+      url = map["1200x1200"]!;
+    } else {
+      url = map["500x500"]!;
+    }
+    return url;
+  }
+
   // Writting Tags Status
   bool processingTags = false;
 
   @override
   void initState() {
-    loadTagsControllers();
-    checkPermissions();
+    checkPermissions().then((_) {
+      isSongCompatible().then((_) {
+        loadTagsControllers();
+      });
+    });
+    // Search MusicBrainz
+    searchForRecords();
     super.initState();
   }
 
+  // Requires Conversion
+  bool requiresConversion = true;
+
+  // Check for the song to be compatible
+  Future<void> isSongCompatible() async {
+    final result = await FFmpegConverter.getMediaFormat(widget.song.id);
+    if (result != 'm4a') {
+      // Promt the user if he agrees that his songs needs to be converted to apply tags
+      final result = await showModalBottomSheet(context: internalNavigatorKey.currentContext!, backgroundColor: Colors.transparent, isScrollControlled: true, builder: (context) {
+        return CommonSheet(
+          title: 'Conversion required',
+          body: Text('This song format is incompatible with the ID3 Tags editor. The app will automatically convert this song to AAC (m4a) to sort out this issue.', style: subtitleTextStyle(context, opacity: 0.8)),
+          actions: [
+            // Cancel Button
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context, false);
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(left: 12, right: 12),
+                child: Text('Cancel', style: smallTextStyle(context)),
+              )
+            ),
+            // Delete button
+            Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+                borderRadius: BorderRadius.circular(100)
+              ),
+              child: TextButton(
+                onPressed: () async {
+                  Navigator.pop(context, true);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 12, right: 12),
+                  child: Text('Continue', style: smallTextStyle(context).copyWith(color: Colors.white)),
+                )
+              ),
+            ),
+          ],
+        );
+      });
+      if (result ?? false) {
+        setState(() {
+          requiresConversion = true;
+        });
+      } else {
+        
+        // ignore: use_build_context_synchronously
+        Navigator.pop(context);
+      }
+    }
+  }
+
   // Check for all file access permissions
-  void checkPermissions() async {
+  Future<void> checkPermissions() async {
     final deviceInfo = await DeviceInfoPlugin().androidInfo;
     if ((deviceInfo.version.sdkInt ?? 29) >= 30) {
       final status = await Permission.manageExternalStorage.status;
@@ -120,6 +214,42 @@ class _ID3EditorState extends State<ID3Editor> {
         statusBarBrightness: Brightness.light,
       ),
     );
+    final double minFloatingPanelSize = MediaQuery.of(context).size.height*0.3;
+    return Material(
+      color: Theme.of(context).cardColor,
+      child: Stack(
+        children: [
+          // Tags Editor Body
+          Column(
+            children: [
+              Expanded(
+                child: _body()
+              ),
+              SizedBox(height: minFloatingPanelSize),
+            ],
+          ),
+          // MusicBrainz Results
+          SlidablePanel(
+            onControllerCreate: (controller) {
+              panelController = controller;
+            },
+            enableBackdrop: false,
+            collapsedColor: Theme.of(context).scaffoldBackgroundColor,
+            borderRadius: BorderRadius.circular(20),
+            backdropColor: Theme.of(context).scaffoldBackgroundColor,
+            backdropOpacity: 1,
+            color: Theme.of(context).scaffoldBackgroundColor,
+            maxHeight: MediaQuery.of(context).size.height-kToolbarHeight,
+            minHeight: minFloatingPanelSize,
+            child: _musicBrainz()
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Tags Editor Body
+  Widget _body() {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: Theme.of(context).cardColor,
@@ -152,10 +282,16 @@ class _ID3EditorState extends State<ID3Editor> {
                           Text('Tags Editor', style: textStyle(context).copyWith(color: Colors.white)),
                           const Spacer(),
                           IconButton(
-                            onPressed: () {
-                              manualWriteTags();
+                            onPressed: () async {
+                              final image = await FilePicker.platform.pickFiles(
+                                type: FileType.image,
+                              );
+                              if (image != null && image.files.isNotEmpty) {
+                                tags.artwork = image.files.first.path!;
+                                setState(() {});
+                              }
                             },
-                            icon: const Icon(Iconsax.search_normal, color: Colors.white),
+                            icon: const Icon(Iconsax.image, color: Colors.white),
                           ), 
                         ],
                       ),
@@ -173,12 +309,169 @@ class _ID3EditorState extends State<ID3Editor> {
               child: _textfields(),
             ),
           ),
-          AnimatedContainer(
-            duration: const Duration(milliseconds: 400),
-            curve: Curves.ease,
-            margin: const EdgeInsets.only(bottom: 34),
-            child: _floatingButtons())
         ],
+      ),
+      floatingActionButton: AnimatedContainer(
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.ease,
+        margin: const EdgeInsets.only(bottom: 12),
+        child: _floatingButtons()),
+    );
+  }
+
+  // Music Brainz Results
+  Widget _musicBrainz() {
+    return Column(
+      children: [
+        const SizedBox(height: 12),
+        const BottomSheetPhill(),
+        const SizedBox(height: 12),
+        // Search Bar
+        Row(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 24),
+                child: TextFormField(
+                  controller: searchController,
+                  style: subtitleTextStyle(context),
+                  decoration: const InputDecoration(
+                    enabledBorder: InputBorder.none
+                  ),
+                  onFieldSubmitted: (searchQuery) {
+                    setState(() => searchController.text = searchQuery);
+                    searchForRecords();
+                  },
+                ),
+              ),
+            ),
+            IconButton(
+              padding: const EdgeInsets.only(right: 24, left: 12),
+              icon: const Icon(EvaIcons.searchOutline, size: 22),
+              onPressed: () {
+                FocusManager.instance.primaryFocus?.unfocus();
+                searchForRecords();
+              }
+            )
+          ],
+        ),
+        const SizedBox(height: 12),
+        Divider(height: 1, color: Theme.of(context).dividerColor,),
+        Expanded(
+          child: ListView.builder(
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+            addAutomaticKeepAlives: true,
+            physics: const BouncingScrollPhysics(),
+            cacheExtent: 9999999,
+            itemCount: searchResults.length,
+            itemBuilder: (context, index) {
+              var record = searchResults[index];
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: _resultTile(record, index),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _resultTile(MusicBrainzRecord record, int index) {
+    return FutureBuilder(
+      future: _getArtworkLink(record, index),
+      builder: (context, image) {
+        return GestureDetector(
+          onTap: () async {
+            tags = AudioTags.withMusicBrainzRecord(record)..artwork = image.data;
+            panelController.close();
+            setState(() {});
+          },
+          child: SizedBox(
+            height: 80,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: _musicBrainzArtwork(image, index, true),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 16, right: 8),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Title
+                        Text(
+                          record.title,
+                          maxLines: 1,
+                          style: subtitleTextStyle(context, bold: true)
+                        ),
+                        // Album
+                        Text(
+                          record.album,
+                          maxLines: 1,
+                          style: smallTextStyle(context, opacity: 0.8)
+                        ),
+                        // Artist
+                        Text(
+                          "By ${record.artist}",
+                          maxLines: 1,
+                          style: smallTextStyle(context, opacity: 0.8)
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      }
+    );
+  }
+
+  Widget _musicBrainzArtwork(AsyncSnapshot image, int index, bool fullRound) {
+    return AspectRatio(
+      aspectRatio: 1,
+      child: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 250),
+        child: image.hasData
+          ? Hero(
+              tag: "artwork$index",
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topLeft: const Radius.circular(10),
+                    topRight: const Radius.circular(10),
+                    bottomLeft: fullRound ? const Radius.circular(10) : Radius.zero,
+                    bottomRight: fullRound ? const Radius.circular(10) : Radius.zero,
+                  ),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(image.data)
+                  )
+                ),
+              ),
+            )
+          : image.connectionState == ConnectionState.done && !image.hasData
+            ? Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  image: const DecorationImage(
+                    image: AssetImage('assets/images/artworkPlaceholder_big.png')
+                  )
+                ),
+              )
+            : Center(
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation(
+                    Theme.of(context).primaryColor
+                  ),
+                ),
+              )
       ),
     );
   }
@@ -191,12 +484,12 @@ class _ID3EditorState extends State<ID3Editor> {
         alignment: Alignment.center,
         children: [
           if (tags.artwork != null)
-          FadeInImage(
-            fadeInDuration: const Duration(milliseconds: 300),
+          ImageFade(
+            fadeDuration: const Duration(milliseconds: 300),
             image: isURL(tags.artwork)
               ? NetworkImage(tags.artwork)
               : FileImage(File(tags.artwork)) as ImageProvider,
-            placeholder: MemoryImage(kTransparentImage),
+            placeholder: Image.memory(kTransparentImage),
             fit: BoxFit.cover,
           ),
           Container(
@@ -282,26 +575,16 @@ class _ID3EditorState extends State<ID3Editor> {
 
   Widget _floatingButtons() {
     return Container(
-      padding: const EdgeInsets.only(left: 12, right: 12),
+      padding: const EdgeInsets.only(left: 12),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           // Search on MusicBrainz
-          FloatingActionButton.extended(
+          FloatingActionButton(
             heroTag: 'fabSearch',
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             foregroundColor: Colors.white,
-            label: Row(
-              children: [
-                Icon(Iconsax.undo,
-                  color: Theme.of(context).primaryColor),
-                const SizedBox(width: 12),
-                Text(
-                  'Restore Tags',
-                  style: subtitleTextStyle(context, bold: true),
-                )
-              ],
-            ),
+            child: const Icon(Iconsax.undo),
             onPressed: () {
               setState(() {
                 tags = originalTags;
@@ -329,15 +612,33 @@ class _ID3EditorState extends State<ID3Editor> {
               setState(() {
                 processingTags = true;
               });
-              final status = await MediaUtils.writeMetadata(widget.song.id, tags);
-              if (status != null) {
-                CustomSnackbar.showSnackBar(
-                  icon: Iconsax.warning_2,
-                  title: 'Audio format not compatible',
-                  duration: const Duration(seconds: 2),
-                  context: context,
-                );
+              // Convert song if needed
+              if (requiresConversion) {
+                File song = File(widget.song.id);
+                showModalBottomSheet(context: internalNavigatorKey.currentContext!, isDismissible: false, backgroundColor: Colors.transparent, isScrollControlled: true, builder: (context) {
+                  return CommonSheet(
+                    title: 'Converting Song...',
+                    body: Text('Re-encoding this song into AAC (m4a) format', style: subtitleTextStyle(context, opacity: 0.8)),
+                  );
+                });
+                final result = await FFmpegConverter.convertAudio(audioFile: song.path, task: FFmpegTask.convertToAAC, checkFormat: false);
+                if (await result.exists()) {
+                  final cleanedFiled = await FFmpegConverter.clearFileMetadata(result.path);
+                  await cleanedFiled.copy(song.path);
+                  await cleanedFiled.delete();
+                }
+                // ignore: use_build_context_synchronously
+                Navigator.pop(context);
               }
+              showModalBottomSheet(context: internalNavigatorKey.currentContext!, isDismissible: false, backgroundColor: Colors.transparent, isScrollControlled: true, builder: (context) {
+                return CommonSheet(
+                  title: 'Writting Tags...',
+                  body: Text('Applying new tags to this song', style: subtitleTextStyle(context, opacity: 0.8)),
+                );
+              });
+              await MediaUtils.writeMetadata(widget.song.id, tags);
+              // ignore: use_build_context_synchronously
+              Navigator.pop(context);
               // ignore: use_build_context_synchronously
               Navigator.pop(context);
             },
@@ -360,20 +661,6 @@ class _ID3EditorState extends State<ID3Editor> {
     setState(() {});
     tags.artwork = artwork.path;
     originalTags = tags;
-    setState(() {});
-  }
-
-  void manualWriteTags() async {
-    MusicBrainzRecord? record = await Navigator.push(context,
-      BlurPageRoute(builder: (context) => 
-        MusicBrainzSearch(
-          title: tags.titleController.text,
-          artist: tags.artistController.text),
-        ));
-    if (record == null) return;
-    String lastArtwork = tags.artwork;
-    tags = await MusicBrainzAPI.getSongTags(record);
-    tags.artwork ??= lastArtwork;
     setState(() {});
   }
 

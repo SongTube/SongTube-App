@@ -8,6 +8,7 @@ class SlidablePanel extends StatefulWidget {
   const SlidablePanel({
     this.initialState = SlidablePanelStatus.closed,
     required this.maxHeight,
+    this.minHeight,
     this.enableBackdrop = false,
     required this.child,
     this.backdropColor = Colors.black,
@@ -21,6 +22,7 @@ class SlidablePanel extends StatefulWidget {
     super.key});
   final SlidablePanelStatus initialState;
   final double maxHeight;
+  final double? minHeight;
   final bool enableBackdrop;
   final Widget child;
   final Color backdropColor;
@@ -51,7 +53,7 @@ class SlidablePanelState extends State<SlidablePanel> with TickerProviderStateMi
   final _floatingWidgetScrollController = ScrollController();
 
   // Minimum Panel Size
-  double minHeight = kToolbarHeight*1.5;
+  late double minHeight = widget.minHeight ?? kToolbarHeight*1.5;
 
   @override
   void initState() {

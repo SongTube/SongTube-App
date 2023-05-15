@@ -45,23 +45,28 @@ class MediaUtils {
       if (userTags.artwork != null) {
         File image = File("${(await getExternalStorageDirectory())!.path}/${MediaUtils.getRandomString(5)}");
         if (userTags.artwork is File || (userTags.artwork is String && !isURL(userTags.artwork))) {
-          image.writeAsBytes((await tagger.AudioTagger.cropToSquare(userTags.artwork is File ? userTags.artwork : File(userTags.artwork)))!.toList());
+          final bytes = await tagger.AudioTagger.cropToSquare(userTags.artwork is File ? userTags.artwork : File(userTags.artwork));
+          if (bytes != null) {
+            image.writeAsBytes(bytes.toList());
+          }
         } else if (userTags.artwork is Uint8List) {
           image.writeAsBytes(userTags.artwork);
         } else if (userTags.artwork is String && isURL(userTags.artwork)) {
           final response = await get(Uri.parse(userTags.artwork));
           image.writeAsBytes(response.bodyBytes);
         }
-        await ArtworkManager.writeArtwork(tmp.path, artwork: image, forceRefresh: true, embedToSong: true);
-        await ArtworkManager.writeThumbnail(tmp.path, artwork: image, forceRefresh: true);
-        // Delete the original file and copy the new (modified) one
-        await File(path).delete();
-        await tmp.copy(path);
-        // Delete temporal file
-        await tmp.delete();
-        // Clear images cache
-        imageCache.clear();
-        imageCache.clearLiveImages();
+        if (await image.exists()) {
+          await ArtworkManager.writeArtwork(tmp.path, artwork: image, forceRefresh: true, embedToSong: true);
+          await ArtworkManager.writeThumbnail(tmp.path, artwork: image, forceRefresh: true);
+          // Delete the original file and copy the new (modified) one
+          await File(path).delete();
+          await tmp.copy(path);
+          // Delete temporal file
+          await tmp.delete();
+          // Clear images cache
+          imageCache.clear();
+          imageCache.clearLiveImages();
+        }
       }
     return null;
   }
