@@ -143,6 +143,17 @@ dependencies:
       url: https://github.com/SongTube/NewPipeExtractor_Dart
       ref: master
 
+  # Apk installer
+  apk_installer:
+    git:
+      url: https://github.com/SongTube/apk_installer.git
+      ref: main
+
+  # For InApp update
+  package_info_plus: ^3.1.2
+  flutter_markdown: ^0.6.14
+  avatar_glow: ^2.0.2
+
   # FFmpeg
   flutter_ffmpeg:
     git:
