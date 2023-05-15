@@ -95,7 +95,7 @@ class _AppUpdateDialogState extends State<AppUpdateDialog> {
               showDialog(
                 context: context,
                 builder: (context) {
-                  // AppUpdateManger.download(widget.details);
+                  AppUpdateManger.download(widget.details);
                   return const _AppUpdate();
                 },
               );
