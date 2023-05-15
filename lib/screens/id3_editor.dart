@@ -103,7 +103,7 @@ class _ID3EditorState extends State<ID3Editor> {
   }
 
   // Requires Conversion
-  bool requiresConversion = true;
+  bool requiresConversion = false;
 
   // Check for the song to be compatible
   Future<void> isSongCompatible() async {
