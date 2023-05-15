@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_tagger/audio_tagger.dart' as tagger;
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -63,48 +64,51 @@ class _ID3EditorState extends State<ID3Editor> {
 
   // Check for all file access permissions
   void checkPermissions() async {
-    final status = await Permission.manageExternalStorage.status;
-    if (status.isDenied || status.isPermanentlyDenied) {
-      // Show Bottom Sheet
-      showModalBottomSheet(context: internalNavigatorKey.currentContext!, backgroundColor: Colors.transparent, isScrollControlled: true, builder: (context) {
-        return CommonSheet(
-          title: 'Permissions required',
-          body: Text('All file access permission is required for SongTube to edit any song on your device', style: subtitleTextStyle(context, opacity: 0.8)),
-          actions: [
-            // Cancel Button
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-                Navigator.pop(context);
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(left: 12, right: 12),
-                child: Text('Cancel', style: smallTextStyle(context)),
-              )
-            ),
-            // Delete button
-            Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-                borderRadius: BorderRadius.circular(100)
-              ),
-              child: TextButton(
-                onPressed: () async {
+    final deviceInfo = await DeviceInfoPlugin().androidInfo;
+    if ((deviceInfo.version.sdkInt ?? 29) >= 30) {
+      final status = await Permission.manageExternalStorage.status;
+      if (status.isDenied || status.isPermanentlyDenied) {
+        // Show Bottom Sheet
+        showModalBottomSheet(context: internalNavigatorKey.currentContext!, backgroundColor: Colors.transparent, isScrollControlled: true, builder: (context) {
+          return CommonSheet(
+            title: 'Permissions required',
+            body: Text('All file access permission is required for SongTube to edit any song on your device', style: subtitleTextStyle(context, opacity: 0.8)),
+            actions: [
+              // Cancel Button
+              TextButton(
+                onPressed: () {
                   Navigator.pop(context);
-                  final result = await Permission.manageExternalStorage.request();
-                  if (result.isDenied || result.isPermanentlyDenied) {
-                    Navigator.pop(context);
-                  }
+                  Navigator.pop(context);
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(left: 12, right: 12),
-                  child: Text('Grant', style: smallTextStyle(context).copyWith(color: Colors.white)),
+                  child: Text('Cancel', style: smallTextStyle(context)),
                 )
               ),
-            ),
-          ],
-        );
-      });
+              // Delete button
+              Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                  borderRadius: BorderRadius.circular(100)
+                ),
+                child: TextButton(
+                  onPressed: () async {
+                    Navigator.pop(context);
+                    final result = await Permission.manageExternalStorage.request();
+                    if (result.isDenied || result.isPermanentlyDenied) {
+                      Navigator.pop(context);
+                    }
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 12, right: 12),
+                    child: Text('Grant', style: smallTextStyle(context).copyWith(color: Colors.white)),
+                  )
+                ),
+              ),
+            ],
+          );
+        });
+      }
     }
   }
 
