@@ -89,7 +89,9 @@ class MediaProvider extends ChangeNotifier {
   // User Songs
   List<SongItem> _songs = [];
   List<SongItem> get songs {
-    return _songs.unique((element) => element.id)..sort(((a, b) => a.title.compareTo(b.title)));
+    final list = _songs.unique((element) => element.id)..sort(((a, b) => a.title.compareTo(b.title)));
+    list.removeWhere((element) => element.id.contains('Android/media') || element.id.contains('Android/data'));
+    return list;
   }
   set songs(List<SongItem> items) {
     _songs = items;

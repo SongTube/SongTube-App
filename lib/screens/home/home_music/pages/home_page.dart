@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
     super.build(context);
     MediaProvider mediaProvider = Provider.of(context);
     UiProvider uiProvider = Provider.of(context);
-    final mostPlayed = mediaProvider.songs.take(20).toList()..sort(((a, b) => b.playCount.compareTo(a.playCount)));
+    final mostPlayed = (List.from(mediaProvider.songs)..sort(((a, b) => b.playCount.compareTo(a.playCount)))).take(20).toList();
     final sortedSongs = List<SongItem>.from(mediaProvider.songs)
       ..sort((a, b) => b.lastModified.compareTo(a.lastModified));
     return Builder(
