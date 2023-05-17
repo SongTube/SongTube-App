@@ -251,7 +251,7 @@ class _ID3EditorState extends State<ID3Editor> {
   // Tags Editor Body
   Widget _body() {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomInset: false,
       backgroundColor: Theme.of(context).cardColor,
       body: Column(
         children: [
@@ -338,6 +338,9 @@ class _ID3EditorState extends State<ID3Editor> {
                   decoration: const InputDecoration(
                     enabledBorder: InputBorder.none
                   ),
+                  onTap: () {
+                    panelController.open();
+                  },
                   onFieldSubmitted: (searchQuery) {
                     setState(() => searchController.text = searchQuery);
                     searchForRecords();
