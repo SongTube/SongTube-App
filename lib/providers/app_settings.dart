@@ -43,6 +43,9 @@ const enableMaterialYouColorsKey = 'enableMaterialYouColors';
 // Lock Navigation Bar from hiding
 const lockNavigationBarKey = 'lockNavigationBar';
 
+// Enable Music Player Background Parallax
+const musicPlayerBackgroundParallaxKey = 'musicPlayerBackgroundParallaxKey';
+
 class AppSettings extends ChangeNotifier {
 
   // Initialize App Settings
@@ -185,6 +188,12 @@ class AppSettings extends ChangeNotifier {
   static bool get lockNavigationBar => sharedPreferences.getBool('lockNavigationBar') ?? false;
   static set lockNavigationBar(bool value) {
     sharedPreferences.setBool(lockNavigationBarKey, value);
+  }
+
+  // Music Player Background Image Parallax
+  static bool get enableMusicPlayerBackgroundParallax => sharedPreferences.getBool(musicPlayerBackgroundParallaxKey) ?? true;
+  static set enableMusicPlayerBackgroundParallax(bool value) {
+    sharedPreferences.setBool(musicPlayerBackgroundParallaxKey, value);
   }
 
 }

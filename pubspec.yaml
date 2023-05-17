@@ -49,6 +49,7 @@ dependencies:
   pick_or_save: ^2.2.4
   receive_intent: ^0.2.3
   flutter_widget_from_html_core: ^0.10.0
+  parallax_sensors_bg: ^1.0.0
 
   # Dart advanced Streams
   rxdart: any

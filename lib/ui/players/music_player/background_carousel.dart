@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 
 // Packages
 import 'package:image_fade/image_fade.dart';
+import 'package:parallax_sensors_bg/parallax_sensors_bg.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/providers/app_settings.dart';
 import 'package:songtube/internal/global.dart';
@@ -71,22 +72,47 @@ class _BackgroundCarouselState extends State<BackgroundCarousel> with TickerProv
           borderRadius: BorderRadius.circular(30),
           child: Stack(
             children: [
-              Transform.scale(
-                scale: appSettings.musicPlayerArtworkZoom,
-                child: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 300),
-                  child: widget.enableBlur ? ImageFade(
-                    image: widget.backgroundImage != null
-                      ? FileImage(widget.backgroundImage!)
-                      : MemoryImage(kTransparentImage) as ImageProvider,
-                    height: double.infinity,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  ) : Container(
-                    color: Theme.of(context).scaffoldBackgroundColor,
+              AppSettings.enableMusicPlayerBackgroundParallax && widget.enableBlur
+                ? Parallax(
+                    sensor: ParallaxSensor.accelerometer,
+                    layers: [
+                      Layer(
+                        sensitivity: 6,
+                        child: Transform.scale(
+                          scale: 1.5,
+                          child: AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 300),
+                            child: widget.enableBlur ? ImageFade(
+                              image: widget.backgroundImage != null
+                                ? FileImage(widget.backgroundImage!)
+                                : MemoryImage(kTransparentImage) as ImageProvider,
+                              height: double.infinity,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                            ) : Container(
+                              color: Theme.of(context).scaffoldBackgroundColor,
+                            )
+                          ),
+                        ),
+                      ),
+                    ],
                   )
-                ),
-              ),
+                : Transform.scale(
+                    scale: AppSettings.enableMusicPlayerBackgroundParallax ? 1.5 : appSettings.musicPlayerArtworkZoom,
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 300),
+                      child: widget.enableBlur ? ImageFade(
+                        image: widget.backgroundImage != null
+                          ? FileImage(widget.backgroundImage!)
+                          : MemoryImage(kTransparentImage) as ImageProvider,
+                        height: double.infinity,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      ) : Container(
+                        color: Theme.of(context).scaffoldBackgroundColor,
+                      )
+                    ),
+                  ),
               AnimatedBuilder(
                 animation: animationController,
                 builder: (context, child) {

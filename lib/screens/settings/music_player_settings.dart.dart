@@ -2,6 +2,9 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:ionicons/ionicons.dart';
+import 'package:line_icons/line_icon.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
@@ -77,6 +80,18 @@ class _MusicPlayerSettingsState extends State<MusicPlayerSettings> {
           valueTrailingString: '%',
           onChange: (value) {
             appSettings.musicPlayerArtworkZoom = value/100;
+          }
+        ),
+        const SizedBox(height: 12),
+        // Music Player Background Parallax effect
+        SettingTileCheckbox(
+          title: 'Background Parallax',
+          subtitle: 'Enable/Disable background image parallax effect',
+          leadingIcon: Icons.animation,
+          value: AppSettings.enableMusicPlayerBackgroundParallax,
+          onChange: (value) {
+            AppSettings.enableMusicPlayerBackgroundParallax = value;
+            setState(() {});
           }
         ),
         const SizedBox(height: 12),
