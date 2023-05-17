@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:newpipeextractor_dart/models/infoItems/video.dart';
+import 'package:songtube/internal/media_utils.dart';
 import 'package:songtube/internal/models/music_brainz_record.dart';
+import 'package:songtube/ui/ui_utils.dart';
 
 class AudioTags {
 
@@ -23,7 +25,7 @@ class AudioTags {
   factory AudioTags.withStreamInfoItem(StreamInfoItem stream) {
     return AudioTags()
       ..urlController.text    = stream.url ?? ''
-      ..titleController.text  = stream.name ?? 'Unknown'
+      ..titleController.text  = MediaUtils.removeToxicSymbols(stream.name ?? 'Unknown')
       ..albumController.text  = 'Youtube'
       ..artistController.text = stream.uploaderName?.replaceAll("- Topic", "").trim() ?? 'Unknown'
       ..genreController.text  = 'Any'
@@ -37,7 +39,7 @@ class AudioTags {
   factory AudioTags.withMusicBrainzRecord(MusicBrainzRecord record) {
     return AudioTags()
       ..urlController.text    = ''
-      ..titleController.text  = record.title
+      ..titleController.text  = MediaUtils.removeToxicSymbols(record.title)
       ..albumController.text  = record.album
       ..artistController.text = record.artist
       ..genreController.text  = record.genre
