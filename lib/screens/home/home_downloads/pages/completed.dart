@@ -43,33 +43,27 @@ class _DownloadsCompletedPageState extends State<DownloadsCompletedPage> {
     DownloadProvider downloadProvider = Provider.of<DownloadProvider>(context);
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
     UiProvider uiProvider = Provider.of(context);
-    return StreamBuilder<MediaItem?>(
-      stream: audioHandler.mediaItem,
-      builder: (context, snapshot) {
-        final playerOpened = snapshot.data != null;
-        return ListView.builder(
-          padding: const EdgeInsets.only(top: 8).copyWith(bottom: playerOpened ? (kToolbarHeight*1.6)+24 : 24),
-          physics: const BouncingScrollPhysics(),
-          itemCount: downloadProvider.downloadedSongs.length,
-          itemBuilder: (context, index) {
-            final song = downloadProvider.downloadedSongs[index];
-            return SongTile(
-              song: song,
-              isDownload: true,
-              onPlay: () async {
-                if (song.isVideo) {
-                  // Open the built-in video player
-                  
-                } else {
-                  mediaProvider.currentPlaylistName = 'Downloads';
-                  final queue = List<MediaItem>.generate(downloadProvider.downloadedSongs.length, (index) {
-                    return downloadProvider.downloadedSongs[index].mediaItem;
-                  });
-                  uiProvider.currentPlayer = CurrentPlayer.music;
-                  mediaProvider.playSong(queue, index);
-                }
-              }
-            );
+    return ListView.builder(
+      padding: const EdgeInsets.only(top: 8).copyWith(bottom: (kToolbarHeight*1.5)+16),
+      physics: const BouncingScrollPhysics(),
+      itemCount: downloadProvider.downloadedSongs.length,
+      itemBuilder: (context, index) {
+        final song = downloadProvider.downloadedSongs[index];
+        return SongTile(
+          song: song,
+          isDownload: true,
+          onPlay: () async {
+            if (song.isVideo) {
+              // Open the built-in video player
+              
+            } else {
+              mediaProvider.currentPlaylistName = 'Downloads';
+              final queue = List<MediaItem>.generate(downloadProvider.downloadedSongs.length, (index) {
+                return downloadProvider.downloadedSongs[index].mediaItem;
+              });
+              uiProvider.currentPlayer = CurrentPlayer.music;
+              mediaProvider.playSong(queue, index);
+            }
           }
         );
       }

@@ -151,7 +151,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                   );
                 }), childCount: mostPlayed.length)
               ),
-              const SliverToBoxAdapter(child: SizedBox(height: 16+kToolbarHeight*1.5)),
+              const SliverToBoxAdapter(child: SizedBox(height: 16+(kToolbarHeight*1.5))),
             ],
           );
         } else {

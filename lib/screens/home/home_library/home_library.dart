@@ -159,6 +159,7 @@ class _HomeLibraryState extends State<HomeLibrary> {
               ),
             ),
             _socialIcons(),
+            const SizedBox(height: (kToolbarHeight*1.5)+16)
           ],
         ),
       ),

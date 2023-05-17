@@ -152,7 +152,8 @@ class MusicSearchPage extends StatelessWidget {
                     }
                   );
                 },
-              )
+              ),
+              const SizedBox(height: 16+(kToolbarHeight*1.5)),
             ],
           ),
         ),
