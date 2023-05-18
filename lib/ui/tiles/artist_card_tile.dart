@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:image_fade/image_fade.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:songtube/internal/album_utils.dart';
 import 'package:songtube/internal/artwork_manager.dart';
 import 'package:songtube/internal/global.dart';
@@ -126,7 +127,7 @@ class _ArtistCardTileState extends State<ArtistCardTile> {
                             ),
                           ),
                           const SizedBox(width: 16),
-                          Icon(Ionicons.albums_outline, color: widget.artist.mediaItems.first.palette!.text, size: 16)
+                          Icon(LineIcons.user, color: widget.artist.mediaItems.first.palette!.text, size: 16)
                         ],
                       ),
                     ),

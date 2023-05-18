@@ -68,7 +68,7 @@ class _SongTileState extends State<SongTile> {
                 maxLines: 1,
               ),
               subtitle: Text(
-                widget.song.artist!,
+                widget.song.artist ?? 'Unknown',
                 style: tinyTextStyle(context, opacity: 0.6).copyWith(fontWeight: FontWeight.w500),
                 maxLines: 1,
               ),
@@ -101,8 +101,8 @@ class _SongTileState extends State<SongTile> {
               borderRadius: BorderRadius.circular(20),
               child: FadeInImage(
                 fadeInDuration: const Duration(milliseconds: 200),
-                image: widget.song.isVideo
-                  ? NetworkImage(widget.song.artworkUrl!.toString()) as ImageProvider
+                image: widget.song.isVideo && widget.song.artworkUrl != null
+                  ? NetworkImage(widget.song.artworkUrl.toString()) as ImageProvider
                   : FileImage(widget.song.thumbnailPath!),
                 placeholder: MemoryImage(kTransparentImage),
                 fit: BoxFit.cover,
