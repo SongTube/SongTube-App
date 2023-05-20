@@ -12,6 +12,7 @@ class DownloadInfo {
 
   DownloadInfo({
     required this.url,
+    required this.name,
     required this.duration,
     required this.downloadType,
     required this.audioStream,
@@ -23,6 +24,7 @@ class DownloadInfo {
   });
 
   final String url;
+  final String name;
   final int duration;
   final DownloadType downloadType;
   final AudioOnlyStream audioStream;
@@ -38,6 +40,7 @@ class DownloadInfo {
     final data = await VideoExtractor.getStream(url);
     return DownloadInfo(
       url: url,
+      name: data.videoInfo.name ?? 'Unknown',
       duration: data.videoInfo.length ?? 0,
       downloadType: downloadType,
       audioStream: data.audioWithHighestQuality!,

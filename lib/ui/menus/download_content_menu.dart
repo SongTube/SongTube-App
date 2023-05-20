@@ -142,6 +142,7 @@ class _DownloadContentMenuState extends State<DownloadContentMenu> {
                 // Build download
                 final downloadInfo = DownloadInfo(
                   url: widget.content.videoDetails!.videoInfo.url!,
+                  name: widget.content.videoDetails!.videoInfo.name ?? 'Unknown',
                   duration: widget.content.videoDetails!.videoInfo.length!,
                   downloadType: DownloadType.audio,
                   audioStream: format == 'AAC'

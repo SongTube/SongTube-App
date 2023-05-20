@@ -34,6 +34,7 @@ class _VideoDownloadMenuState extends State<VideoDownloadMenu> {
   void onDownload(VideoOnlyStream stream) {
     final downloadInfo = DownloadInfo(
       url: widget.video.videoInfo.url!,
+      name: widget.video.videoInfo.name ?? 'Unknown',
       duration: widget.video.videoInfo.length!,
       downloadType: DownloadType.video,
       audioStream: widget.video.getAudioStreamWithBestMatchForVideoStream(stream) ?? widget.video.audioWithHighestQuality!,

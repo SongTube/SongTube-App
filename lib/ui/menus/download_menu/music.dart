@@ -93,6 +93,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
   void onDownload() {
     final downloadInfo = DownloadInfo(
       url: widget.video.videoInfo.url!,
+      name: widget.video.videoInfo.name ?? 'Unknown',
       duration: widget.video.videoInfo.length!,
       downloadType: DownloadType.audio,
       audioStream: selectedAudio,

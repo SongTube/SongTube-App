@@ -68,6 +68,7 @@ class LinkServer {
       // Build download
       final downloadInfo = DownloadInfo(
         url: videoDetails.videoInfo.url!,
+        name: videoDetails.videoInfo.name ?? 'Unknown',
         duration: videoDetails.videoInfo.length!,
         downloadType: DownloadType.audio,
         audioStream: format == 'AAC'

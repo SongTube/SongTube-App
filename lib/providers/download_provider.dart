@@ -88,7 +88,7 @@ class DownloadProvider extends ChangeNotifier {
         // Create Music Playlist if enabled
         if (queue[index].downloadInfo.createMusicPlaylistFromSegments) {
           Provider.of<PlaylistProvider>(navigatorKey.currentState!.context, listen: false)
-            .createGlobalPlaylist(queue[index].downloadInfo.tags.titleController.text, songs: items);
+            .createGlobalPlaylist(queue[index].downloadInfo.name, songs: items);
         }
         queue.removeAt(index);
         notifyListeners();
