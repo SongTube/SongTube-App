@@ -1,5 +1,10 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:songtube/providers/app_settings.dart';
 import 'package:songtube/internal/global.dart';
 import 'package:songtube/ui/tiles/setting_tile.dart';
@@ -58,7 +63,33 @@ class _DownloadSettingsState extends State<DownloadSettings> {
               setState(() {});
             }
           },
-        )
+        ),
+        // Download Audio Path
+        SettingTile(
+          title: 'Music Directory',
+          subtitle: 'Current: ${AppSettings.musicDirectory.path}',
+          leadingIcon: Iconsax.folder,
+          onTap: () async {
+            final result = await FilePicker.platform.getDirectoryPath();
+            if (result != null && result != '/') {
+              AppSettings.musicDirectory = Directory(result);
+              setState(() {});
+            }
+          }
+        ),
+        // Download Video Path
+        SettingTile(
+          title: 'Video Directory',
+          subtitle: 'Current: ${AppSettings.videoDirectory.path}',
+          leadingIcon: Iconsax.folder,
+          onTap: () async {
+            final result = await FilePicker.platform.getDirectoryPath();
+            if (result != null && result != '/') {
+              AppSettings.videoDirectory = Directory(result);
+              setState(() {});
+            }
+          }
+        ),
       ],
     );
   }

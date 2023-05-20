@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:songtube/providers/app_settings.dart';
 import 'package:songtube/ui/components/circular_check_box.dart';
 import 'package:songtube/ui/text_styles.dart';
 
