@@ -13,7 +13,7 @@ class MediaSet<T extends Object>  {
   });
 
   // Id
-  final String? id;
+  String? id;
 
   // Set Name
   String name;

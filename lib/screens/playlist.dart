@@ -60,6 +60,9 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
 
   @override
   void initState() {
+    if (mediaSet.id == 'userFavorites') {
+      mediaSet.id = null;
+    }
     if (mediaSet.isArtist) {
       MusicBrainzAPI.getArtistImage(mediaSet.name.trim()).then((value) {
         setState(() {
