@@ -58,7 +58,8 @@ class _GeneralSettingsState extends State<GeneralSettings> {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      padding: const EdgeInsets.only(left: 12, right: 12, top: 12),
+      physics: const BouncingScrollPhysics(),
+      padding: const EdgeInsets.only(left: 12, right: 12, top: 12, bottom: (kToolbarHeight * 1.6)+12),
       children: [
         // Use System Theme
         SettingTileCheckbox(
