@@ -53,10 +53,12 @@ class BackupRestoreSheet extends StatelessWidget {
             subtitle: 'Backup all of your local data into a single file that can be used to restore later',
             icon: Iconsax.save_2,
             onTap: () async {
-              await BackupModel.generateBackup(context);
+              final result = await BackupModel.generateBackup(context);
               // ignore: use_build_context_synchronously
               Navigator.pop(context);
-              showSnackbar(customSnackBar: const CustomSnackBar(icon: Iconsax.save_2, title: 'Backup created'));
+              if (result != null) {
+                showSnackbar(customSnackBar: const CustomSnackBar(icon: Iconsax.save_2, title: 'Backup created'));
+              }
             }
           ),
           // Restore
@@ -65,10 +67,12 @@ class BackupRestoreSheet extends StatelessWidget {
             subtitle: 'Restore all your data from a backup file',
             icon: Iconsax.refresh_left_square,
             onTap: () async {
-              await BackupModel.restoreBackup(context);
+              final result = await BackupModel.restoreBackup(context);
               // ignore: use_build_context_synchronously
               Navigator.pop(context);
-              showSnackbar(customSnackBar: const CustomSnackBar(icon: Iconsax.refresh_left_square, title: 'Backup restored'));
+              if (result) {
+                showSnackbar(customSnackBar: const CustomSnackBar(icon: Iconsax.refresh_left_square, title: 'Backup restored'));
+              }
             }
           ),
         ],
