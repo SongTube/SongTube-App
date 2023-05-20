@@ -39,7 +39,7 @@ class PlaylistTile extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
               child: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 300),
-                child: PlaylistArtwork(mediaSet: playlist.toMediaSet(), useThumbnail: true)
+                child: PlaylistArtwork(artwork: playlist.artworkPath, useThumbnail: true)
               ),
             ),
           ),

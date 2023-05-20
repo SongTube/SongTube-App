@@ -15,7 +15,7 @@ import 'package:validators/validators.dart';
 
 class PlaylistArtwork extends StatefulWidget {
   const PlaylistArtwork({
-    required this.mediaSet,
+    required this.artwork,
     this.useThumbnail = false,
     this.enableHeroAnimation = true,
     this.fit = BoxFit.cover,
@@ -25,7 +25,7 @@ class PlaylistArtwork extends StatefulWidget {
     this.shadowIntensity = 1,
     this.shadowSpread = 12,
     Key? key}) : super(key: key);
-  final MediaSet mediaSet;
+  final dynamic artwork;
   final bool useThumbnail;
   final bool enableHeroAnimation;
   final BoxFit fit;
@@ -40,20 +40,8 @@ class PlaylistArtwork extends StatefulWidget {
 
 class _PlaylistArtworkState extends State<PlaylistArtwork> {
 
-  // Extract Artwork can only run once
-  bool extractArtworkProcess = true;
-
-  void extractArtwork() async {
-    extractArtworkProcess = false;
-    await ArtworkManager.writeArtwork(widget.mediaSet.songs.first.id);
-    imageCache.clear();
-    imageCache.clearLiveImages();
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
-
     Widget body() {
       return ImageFiltered(
         imageFilter: ImageFilter.blur(sigmaX: widget.enableBlur ? 15 : 0, sigmaY: widget.enableBlur ? 15 : 0),
@@ -85,54 +73,34 @@ class _PlaylistArtworkState extends State<PlaylistArtwork> {
       );
     }
 
-    if (widget.enableHeroAnimation) {
-      return Hero(
-        tag: widget.mediaSet.id ?? UniqueKey(),
-        child: body()
-      );
-    } else {
-      return body();
-    }
+    return body();
   }
 
   Widget _image() {
-    final artwork = widget.mediaSet.artwork ?? artworkFile(widget.mediaSet.songs.first.id);
     const fit = BoxFit.cover;
-    if (widget.mediaSet.isArtist) {
-      return FutureBuilder<String?>(
-        future: MusicBrainzAPI.getArtistImage(widget.mediaSet.name.trim()),
-        builder: (context, snapshot) {
-          return ImageFade(
-            placeholder: Image.asset('assets/images/artworkPlaceholder_big.png', fit: fit, width: double.infinity, height: double.infinity),
-            image: snapshot.hasData && snapshot.data != null
-              ? NetworkImage(snapshot.data!)
-              : MemoryImage(kTransparentImage) as ImageProvider,
-            fit: BoxFit.cover,
-            errorBuilder: (context, child, exception) {
-              return Image.asset('assets/images/artworkPlaceholder_big.png', fit: fit, width: double.infinity, height: double.infinity);
-            },
-          );
-        }
-      );
-    }
+    return ImageFade(
+      fadeDuration: const Duration(milliseconds: 300),
+      fadeCurve: Curves.ease,
+      image: image(),
+      fit: fit, width: double.infinity, height: double.infinity,
+      errorBuilder:(context, error, stackTrace) {
+        return Image.asset('assets/images/artworkPlaceholder_big.png', fit: BoxFit.cover);
+      },
+    );
+  }
+
+  ImageProvider image() {
+    final artwork = widget.artwork;
     if (artwork is File) {
-      return Image.file(
-        artwork, fit: fit, width: double.infinity, height: double.infinity,
-        errorBuilder:(context, error, stackTrace) {
-          return Image.asset('assets/images/artworkPlaceholder_big.png', fit: BoxFit.cover);
-        },
-      );
+      return FileImage(artwork);
     } else if (artwork is Uint8List) {
-      return Image.memory(artwork, fit: fit, width: double.infinity, height: double.infinity);
+      return MemoryImage(artwork);
     } else if (isURL(artwork)) {
-      return Image.network(artwork, fit: fit, width: double.infinity, height: double.infinity);
+      return NetworkImage(artwork);
     } else if (artwork is String) {
-      return Image.file(File(artwork), fit: fit, width: double.infinity, height: double.infinity);
+      return FileImage(File(artwork));
     } else {
-      if (extractArtworkProcess) {
-        extractArtwork();
-      }
-      return Image.asset('assets/images/artworkPlaceholder_big.png', key: ValueKey('${widget.mediaSet.name}asset'), fit: fit, width: double.infinity, height: double.infinity);
+      return const AssetImage('assets/images/artworkPlaceholder_big.png');
     }
   }
 

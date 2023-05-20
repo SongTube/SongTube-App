@@ -65,6 +65,26 @@ class PlaylistProvider extends ChangeNotifier {
     globalPlaylists = global;
   }
 
+  // Update Global Playlist Artwork
+  void updateGlobalPlaylist(String id, {List<SongItem>? songs, String? artworkPath, String? newName}) {
+    final global = List<MediaPlaylist>.from(globalPlaylists);
+    final playlist = global.firstWhere((element) => element.id == id);
+    if (songs != null) {
+      playlist.songs = songs;
+    }
+    if (artworkPath != null) {
+      playlist.artworkPath = artworkPath;
+    }
+    if (newName != null && newName.trim().isNotEmpty) {
+      playlist.name = newName;
+    }
+    // Save Playlist
+    final index = global.indexWhere((element) => element.id == id);
+    global.removeAt(index);
+    global.insert(index, playlist);
+    globalPlaylists = global;
+  }
+
   // Add/Remove song to a global playlist
   void addToGlobalPlaylist(String id, {required SongItem song}){
     final global = List<MediaPlaylist>.from(globalPlaylists);

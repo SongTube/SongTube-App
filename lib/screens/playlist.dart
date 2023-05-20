@@ -1,10 +1,18 @@
+import 'dart:io';
+
 import 'package:audio_service/audio_service.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/internal/artwork_manager.dart';
 import 'package:songtube/internal/global.dart';
+import 'package:songtube/internal/media_utils.dart';
 import 'package:songtube/internal/models/media_set.dart';
+import 'package:songtube/internal/music_brainz.dart';
+import 'package:songtube/main.dart';
 import 'package:songtube/providers/media_provider.dart';
 import 'package:songtube/providers/playlist_provider.dart';
 import 'package:songtube/providers/ui_provider.dart';
@@ -14,11 +22,54 @@ import 'package:songtube/ui/playlist_artwork.dart';
 import 'package:songtube/ui/text_styles.dart';
 import 'package:songtube/ui/tiles/song_tile.dart';
 
-class PlaylistScreen extends StatelessWidget {
+class PlaylistScreen extends StatefulWidget {
   const PlaylistScreen({
     required this.mediaSet,
     Key? key}) : super(key: key);
   final MediaSet mediaSet;
+  @override
+  State<PlaylistScreen> createState() => _PlaylistScreenState();
+}
+
+class _PlaylistScreenState extends State<PlaylistScreen> {
+
+  // MediaSet
+  late final MediaSet mediaSet = widget.mediaSet;
+
+  // Playlist name editing
+  late TextEditingController nameController = TextEditingController(text: mediaSet.name);
+  FocusNode focusNode = FocusNode();
+  bool editingPlaylistName = false;
+
+  // Save artwork for this playlist
+  Future<void> setArtwork() async {
+    final artwork = File('${(await getApplicationDocumentsDirectory()).path}/${MediaUtils.getRandomString(10)}');
+    final image = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+    );
+    if (image != null && image.files.isNotEmpty) {
+      final file = File(image.files.first.path!);
+      final bytes = await file.readAsBytes();
+      await artwork.writeAsBytes(bytes);
+      mediaSet.artwork = artwork.path;
+      PlaylistProvider playlistProvider = Provider.of(context, listen: false);
+      playlistProvider.updateGlobalPlaylist(mediaSet.id!, artworkPath: artwork.path);
+      setState(() {});
+    }
+  }
+
+  @override
+  void initState() {
+    if (mediaSet.isArtist) {
+      MusicBrainzAPI.getArtistImage(mediaSet.name.trim()).then((value) {
+        setState(() {
+          mediaSet.artwork = value;
+        });
+      });
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     MediaProvider mediaProvider = Provider.of(context);
@@ -33,7 +84,7 @@ class PlaylistScreen extends StatelessWidget {
             child: Stack(
               fit: StackFit.expand,
               children: [
-                PlaylistArtwork(mediaSet: mediaSet, color: Theme.of(context).cardColor, opacity: 0.7, shadowIntensity: 0.2, shadowSpread: 24, enableHeroAnimation: false),
+                PlaylistArtwork(artwork: mediaSet.artwork, color: Theme.of(context).cardColor, opacity: 0.7, shadowIntensity: 0.2, shadowSpread: 24, enableHeroAnimation: false),
                 Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,9 +104,9 @@ class PlaylistScreen extends StatelessWidget {
                           if (mediaSet.id != null)
                           IconButton(
                             onPressed: () {
-                              Navigator.pop(context);
+                              setArtwork();
                             },
-                            icon: Icon(Iconsax.edit, color: Theme.of(context).iconTheme.color)
+                            icon: Icon(Iconsax.image, color: Theme.of(context).iconTheme.color)
                           ), 
                         ],
                       ),
@@ -69,13 +120,66 @@ class PlaylistScreen extends StatelessWidget {
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text(mediaSet.name, style: bigTextStyle(context)),
+                              Flexible(
+                                child: IntrinsicWidth(
+                                  child: editingPlaylistName
+                                    ? TextField(
+                                        maxLines: 1,
+                                        style: bigTextStyle(context),
+                                        controller: nameController,
+                                        focusNode: focusNode,
+                                        decoration: const InputDecoration.collapsed(hintText: ''),
+                                        onSubmitted: (text) {
+                                          setState(() {
+                                            editingPlaylistName = false;
+                                          });
+                                          if (nameController.text != mediaSet.name) {
+                                            // Update Playlist name
+                                            playlistProvider.updateGlobalPlaylist(mediaSet.id!, newName: nameController.text);
+                                            setState(() {
+                                              mediaSet.name = nameController.text;
+                                            });
+                                          }
+                                        },
+                                      )
+                                    : Text(
+                                        mediaSet.name,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: bigTextStyle(context),
+                                      )
+                                )
+                              ),
                               const SizedBox(width: 2),
-                              mediaSet.favorite ?? false
-                                ? const FadeInTransition(
-                                    duration: Duration(milliseconds: 500),
-                                    child: Icon(Icons.star_rounded, color: Colors.orangeAccent, size: 18))
-                                : const SizedBox()
+                              // mediaSet.favorite ?? false
+                              //   ? const FadeInTransition(
+                              //       duration: Duration(milliseconds: 500),
+                              //       child: Icon(Icons.star_rounded, color: Colors.orangeAccent, size: 18))
+                              //   : const SizedBox()
+                              if (mediaSet.id != null)
+                              IconButton(
+                                onPressed: () {
+                                  if (editingPlaylistName) {
+                                    setState(() {
+                                      editingPlaylistName = false;
+                                    });
+                                    if (nameController.text != mediaSet.name) {
+                                      // Update Playlist name
+                                      playlistProvider.updateGlobalPlaylist(mediaSet.id!, newName: nameController.text);
+                                      setState(() {
+                                        mediaSet.name = nameController.text;
+                                      });
+                                    }
+                                  } else {
+                                    setState(() {
+                                      editingPlaylistName = true;
+                                    });
+                                    nameController.selection = TextSelection(baseOffset: 0, extentOffset: mediaSet.name.length);
+                                    focusNode.requestFocus();
+                                  }
+                                },
+                                icon: Icon(editingPlaylistName ? Icons.check_rounded : Icons.edit_rounded, size: 20)
+                              )
                             ],
                           ),
                           Text(mediaSet.songs.isEmpty ? 'Empty' : '${mediaSet.songs.length} songs', style: smallTextStyle(context))
@@ -139,36 +243,44 @@ class PlaylistScreen extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (mediaSet.id != null)
+                // if (mediaSet.id != null)
+                // InkWell(
+                //   onTap: () {
+                //     setState(() {
+                //       mediaSet.favorite = !(mediaSet.favorite ?? false);
+                //     });
+                //     playlistProvider.favoriteGlobalPlaylist(mediaSet.id!);
+                //   },
+                //   child: Container(
+                //     decoration: BoxDecoration( 
+                //       color: Theme.of(context).cardColor,
+                //       borderRadius: BorderRadius.circular(100),
+                //       boxShadow: [
+                //         BoxShadow(
+                //           blurRadius: 12,
+                //           offset: const Offset(0,0),
+                //           color: Theme.of(context).shadowColor.withOpacity(0.1)
+                //         )
+                //       ]
+                //     ),
+                //     margin: const EdgeInsets.only(right: 12),
+                //     padding: const EdgeInsets.all(12),
+                //     child: AnimatedSwitcher(
+                //       duration: const Duration(milliseconds: 500),
+                //       child: Icon(
+                //         (mediaSet.favorite ?? false) ? Icons.star_rounded : Icons.star_outline_rounded,
+                //         key: ValueKey('${mediaSet.favorite}+${mediaSet.id}'),
+                //         color: (mediaSet.favorite ?? false) ? Colors.orangeAccent : Theme.of(context).iconTheme.color)),
+                //   ),
+                // ),
                 InkWell(
                   onTap: () {
-                    playlistProvider.favoriteGlobalPlaylist(mediaSet.id!);
-                  },
-                  child: Container(
-                    decoration: BoxDecoration( 
-                      color: Theme.of(context).cardColor,
-                      borderRadius: BorderRadius.circular(100),
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 12,
-                          offset: const Offset(0,0),
-                          color: Theme.of(context).shadowColor.withOpacity(0.1)
-                        )
-                      ]
-                    ),
-                    margin: const EdgeInsets.only(right: 12),
-                    padding: const EdgeInsets.all(12),
-                    child: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 500),
-                      child: Icon(
-                        (mediaSet.favorite ?? false) ? Icons.star_rounded : Icons.star_outline_rounded,
-                        key: ValueKey('${mediaSet.favorite}+${mediaSet.id}'),
-                        color: (mediaSet.favorite ?? false) ? Colors.orangeAccent : Theme.of(context).iconTheme.color)),
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-            
+                    mediaProvider.currentPlaylistName = mediaSet.name;
+                    final queue = List<MediaItem>.generate(mediaSet.songs.length, (index) {
+                      return mediaSet.songs[index].mediaItem;
+                    });
+                    queue.shuffle();
+                    mediaProvider.playSong(queue, 0);
                   },
                   child: Container(
                     decoration: BoxDecoration( 

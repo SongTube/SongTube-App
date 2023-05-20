@@ -16,16 +16,16 @@ class MediaSet<T extends Object>  {
   final String? id;
 
   // Set Name
-  final String name;
+  String name;
 
   // Author
   final String? author;
 
   // Favorite
-  final bool? favorite;
+  bool? favorite;
 
   // Artwork (Uint8List, File, Path)
-  final dynamic artwork;
+  dynamic artwork;
 
   // Set Songs
   final List<SongItem> songs;

@@ -8,13 +8,18 @@ import 'package:songtube/ui/text_styles.dart';
 import 'package:songtube/ui/tiles/playlist_grid_tile.dart';
 import 'package:songtube/ui/ui_utils.dart';
 
-class PlaylistsPage extends StatelessWidget {
+class PlaylistsPage extends StatefulWidget {
   const PlaylistsPage({ Key? key }) : super(key: key);
 
   @override
+  State<PlaylistsPage> createState() => _PlaylistsPageState();
+}
+
+class _PlaylistsPageState extends State<PlaylistsPage> {
+  @override
   Widget build(BuildContext context) {
     PlaylistProvider playlistProvider = Provider.of(context);
-    final globalPlaylists = playlistProvider.globalPlaylists;
+    final globalPlaylists = List.from(playlistProvider.globalPlaylists);
     // Inject liked songs as Playlist
     if (playlistProvider.favorites.songs.isNotEmpty) {
       globalPlaylists.insert(0, playlistProvider.favorites);
@@ -32,8 +37,8 @@ class PlaylistsPage extends StatelessWidget {
             padding: const EdgeInsets.only(top: 2, bottom: 2),
             child: PlaylistGridTile(
               playlist: globalPlaylists[index],
-              onTap: () {
-                UiUtils.pushRouteAsync(context, PlaylistScreen(mediaSet: globalPlaylists[index].toMediaSet()));
+              onTap: () async {
+                await UiUtils.pushRouteAsync(context, PlaylistScreen(mediaSet: globalPlaylists[index].toMediaSet()));
               },
             ),
           );
@@ -56,5 +61,4 @@ class PlaylistsPage extends StatelessWidget {
       ],
     ));
   }
-
 }
