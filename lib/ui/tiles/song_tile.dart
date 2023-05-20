@@ -106,6 +106,9 @@ class _SongTileState extends State<SongTile> {
                   : FileImage(widget.song.thumbnailPath!),
                 placeholder: MemoryImage(kTransparentImage),
                 fit: BoxFit.cover,
+                imageErrorBuilder: (context, error, stackTrace) {
+                  return Image.asset('assets/images/artworkPlaceholder_big.png', fit: BoxFit.cover);
+                },
               ),
             ),
           ),
