@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/internal/models/media_playlist.dart';
 import 'package:songtube/providers/playlist_provider.dart';
 import 'package:songtube/screens/playlist.dart';
 import 'package:songtube/ui/text_styles.dart';
@@ -19,7 +20,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
   @override
   Widget build(BuildContext context) {
     PlaylistProvider playlistProvider = Provider.of(context);
-    final globalPlaylists = List.from(playlistProvider.globalPlaylists);
+    final globalPlaylists = List<MediaPlaylist>.from(playlistProvider.globalPlaylists);
     // Inject liked songs as Playlist
     if (playlistProvider.favorites.songs.isNotEmpty) {
       globalPlaylists.insert(0, playlistProvider.favorites);
@@ -38,7 +39,9 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
             child: PlaylistGridTile(
               playlist: globalPlaylists[index],
               onTap: () async {
-                await UiUtils.pushRouteAsync(context, PlaylistScreen(mediaSet: globalPlaylists[index].toMediaSet()));
+                final mediaSet = globalPlaylists[index].toMediaSet();
+                mediaSet.artwork ??= mediaSet.songs.first.artworkPath;
+                await UiUtils.pushRouteAsync(context, PlaylistScreen(mediaSet: mediaSet));
               },
             ),
           );
