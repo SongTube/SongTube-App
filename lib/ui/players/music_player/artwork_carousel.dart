@@ -45,9 +45,9 @@ class _ArtworkCarouselState extends State<ArtworkCarousel> {
               borderRadius: BorderRadius.circular(Tween<double>(begin: 20, end: 25).animate(widget.animationController).value),
               boxShadow: [
                 BoxShadow(
-                  blurRadius: 12,
+                  blurRadius: AppSettings.musicPlayerArtworkShadowRadius.toDouble(),
                   offset: const Offset(0,0),
-                  color: Theme.of(context).shadowColor.withOpacity(0.2)
+                  color: Theme.of(context).shadowColor.withOpacity(AppSettings.musicPlayerArtworkShadowLevel)
                 )
               ],
             ),

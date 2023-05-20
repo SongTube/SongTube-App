@@ -46,6 +46,12 @@ const lockNavigationBarKey = 'lockNavigationBar';
 // Enable Music Player Background Parallax
 const musicPlayerBackgroundParallaxKey = 'musicPlayerBackgroundParallaxKey';
 
+// Music Player Artwork Shadow Level
+const musicPlayerArtworkShadowLevelKey = 'musicPlayerArtworkShadowLevelKey';
+
+// Music Player Artwork Shadow Radius
+const musicPlayerArtworkShadowRadiusKey = 'musicPlayerArtworkShadowRadiusKey';
+
 class AppSettings extends ChangeNotifier {
 
   // Initialize App Settings
@@ -194,6 +200,18 @@ class AppSettings extends ChangeNotifier {
   static bool get enableMusicPlayerBackgroundParallax => sharedPreferences.getBool(musicPlayerBackgroundParallaxKey) ?? true;
   static set enableMusicPlayerBackgroundParallax(bool value) {
     sharedPreferences.setBool(musicPlayerBackgroundParallaxKey, value);
+  }
+
+  // Music Player Artwork Shadow Level
+  static double get musicPlayerArtworkShadowLevel => sharedPreferences.getDouble(musicPlayerArtworkShadowLevelKey) ?? 0.2;
+  static set musicPlayerArtworkShadowLevel(double value) {
+    sharedPreferences.setDouble(musicPlayerArtworkShadowLevelKey, value);
+  }
+
+  // Music Player Artwork Shadow Level
+  static int get musicPlayerArtworkShadowRadius => sharedPreferences.getInt(musicPlayerArtworkShadowRadiusKey) ?? 12;
+  static set musicPlayerArtworkShadowRadius(int value) {
+    sharedPreferences.setInt(musicPlayerArtworkShadowRadiusKey, value);
   }
 
 }

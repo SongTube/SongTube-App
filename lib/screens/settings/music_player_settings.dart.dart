@@ -55,7 +55,7 @@ class _MusicPlayerSettingsState extends State<MusicPlayerSettings> {
           }
         ),
         const SizedBox(height: 12),
-        // Music Player blur background intensity
+        // Music Player Backdrop color intensity
         SettingTileSlider(
           title: 'Backdrop opacity',
           subtitle: 'Change the colored backdrop opacity',
@@ -66,6 +66,36 @@ class _MusicPlayerSettingsState extends State<MusicPlayerSettings> {
           valueTrailingString: '%',
           onChange: (value) {
             appSettings.musicPlayerBackdropOpacity = value/100;
+          }
+        ),
+        const SizedBox(height: 12),
+        // Music Player Artwork Shadow Level
+        SettingTileSlider(
+          title: 'Artwork Shadow Opacity',
+          subtitle: 'Change the artwork shadow intensity of the music player',
+          leadingIcon: Icons.texture,
+          value: (AppSettings.musicPlayerArtworkShadowLevel*100).roundToDouble(),
+          min: 0,
+          max: 100,
+          valueTrailingString: '%',
+          onChange: (value) {
+            AppSettings.musicPlayerArtworkShadowLevel = value/100;
+            setState(() {});
+          }
+        ),
+        const SizedBox(height: 12),
+        // Music Player Artwork Shadow Radius
+        SettingTileSlider(
+          title: 'Artwork Shadow Radius',
+          subtitle: 'Change the artwork shadow radius of the music player',
+          leadingIcon: Icons.blur_circular,
+          value: AppSettings.musicPlayerArtworkShadowRadius.roundToDouble(),
+          min: 0,
+          max: 40,
+          valueTrailingString: '',
+          onChange: (value) {
+            AppSettings.musicPlayerArtworkShadowRadius = value.round();
+            setState(() {});
           }
         ),
         const SizedBox(height: 12),
