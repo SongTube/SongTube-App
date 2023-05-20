@@ -136,6 +136,9 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                                           if (nameController.text != mediaSet.name) {
                                             // Update Playlist name
                                             playlistProvider.updateGlobalPlaylist(mediaSet.id!, newName: nameController.text);
+                                            if (mediaProvider.currentPlaylistName == mediaSet.name) {
+                                              mediaProvider.currentPlaylistName = nameController.text;
+                                            }
                                             setState(() {
                                               mediaSet.name = nameController.text;
                                             });
@@ -166,6 +169,9 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                                     if (nameController.text != mediaSet.name) {
                                       // Update Playlist name
                                       playlistProvider.updateGlobalPlaylist(mediaSet.id!, newName: nameController.text);
+                                      if (mediaProvider.currentPlaylistName == mediaSet.name) {
+                                        mediaProvider.currentPlaylistName = nameController.text;
+                                      }
                                       setState(() {
                                         mediaSet.name = nameController.text;
                                       });

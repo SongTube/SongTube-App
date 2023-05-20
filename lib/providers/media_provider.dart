@@ -84,7 +84,12 @@ class MediaProvider extends ChangeNotifier {
   }
 
   // Current Playlist Name
-  String? currentPlaylistName;
+  String? _currentPlaylistName;
+  String? get currentPlaylistName => _currentPlaylistName;
+  set currentPlaylistName(String? name) {
+    _currentPlaylistName = name;
+    notifyListeners();
+  }
 
   // User Songs
   List<SongItem> _songs = [];
