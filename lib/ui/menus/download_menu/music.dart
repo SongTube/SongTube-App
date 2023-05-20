@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 // Packages
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:image_fade/image_fade.dart';
 import 'package:newpipeextractor_dart/newpipeextractor_dart.dart';
 import 'package:provider/provider.dart';
@@ -67,6 +68,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
   // audio will be split the choosen segments
   bool segmentedDownload = false;
   bool showSegmentedDownload = false;
+  bool createMusicPlaylistWithSegments = false;
 
   // Flag indicating if the auto tagger is running or not, to make
   // sure we don't run it again and then cause chaos and destruction
@@ -96,6 +98,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
       audioStream: selectedAudio,
       segmentTracks: segmentedDownload ? segmentTracks : null,
       tags: mainTags,
+      createMusicPlaylistFromSegments: createMusicPlaylistWithSegments,
       conversionTask: enableConversion ? AppSettings.defaultFfmpegTask : null
     )..filters = filters;
     final downloadProvider = Provider.of<DownloadProvider>(context, listen: false);
@@ -832,6 +835,45 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
               padding: const EdgeInsets.only(left: 4),
               child: Column(
                 children: [
+                  // Create music playlist with downloaded segments
+                  InkWell(
+                    child: Ink(
+                      padding: const EdgeInsets.only(top: 8, bottom: 16),
+                      child: Row(
+                        children: [
+                          const SizedBox(width: 8),
+                          Icon(
+                            createMusicPlaylistWithSegments
+                              ? Icons.check_box
+                              : Icons.check_box_outline_blank,
+                            color: createMusicPlaylistWithSegments
+                              ? Theme.of(context).primaryColor
+                              : Theme.of(context).iconTheme.color
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Create Music Playlist", style: subtitleTextStyle(context, bold: true)),
+                                Text(
+                                  "Create music playlist from all downloaded and saved audio segments",
+                                  style: smallTextStyle(context, opacity: 0.7))
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 24),
+                        ],
+                      ),
+                    ),
+                    onTap: () async {
+                      setState(() {
+                        createMusicPlaylistWithSegments = !createMusicPlaylistWithSegments;
+                      });
+                    }
+                  ),
+                  // Apply Tags Automatically
                   InkWell(
                     child: Ink(
                       padding: const EdgeInsets.only(top: 8, bottom: 16),

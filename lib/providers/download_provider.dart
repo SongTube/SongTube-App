@@ -15,6 +15,7 @@ import 'package:songtube/internal/models/download/download_item.dart';
 import 'package:songtube/internal/models/song_item.dart';
 import 'package:songtube/main.dart';
 import 'package:songtube/providers/media_provider.dart';
+import 'package:songtube/providers/playlist_provider.dart';
 
 class DownloadProvider extends ChangeNotifier {
 
@@ -84,31 +85,15 @@ class DownloadProvider extends ChangeNotifier {
           handleNewDownload(song: songItem);
         }
         final index = queue.indexWhere((element) => element.id == id);
+        // Create Music Playlist if enabled
+        if (queue[index].downloadInfo.createMusicPlaylistFromSegments) {
+          Provider.of<PlaylistProvider>(navigatorKey.currentState!.context, listen: false)
+            .createGlobalPlaylist(queue[index].downloadInfo.tags.titleController.text, songs: items);
+        }
         queue.removeAt(index);
         notifyListeners();
         checkQueue();
       });
-    checkQueue();
-  }
-
-  // Handle Playlist Download
-  Future<void> handleDownloadItems({required List<DownloadInfo> infos}) async {
-    final directory = await getApplicationDocumentsDirectory();
-    for (final info in infos) {
-      queue.add(await DownloadItem.buildData(info: info, preloadedDirectory: directory)
-        ..onDownloadCancelled = (id) {
-          moveToCancelled(id);
-        }
-        ..onDownloadCompleted = (id, items) {
-          for (final songItem in items) {
-            handleNewDownload(song: songItem);
-          }
-          final index = queue.indexWhere((element) => element.id == id);
-          queue.removeAt(index);
-          notifyListeners();
-          checkQueue();
-        });
-    }
     checkQueue();
   }
 

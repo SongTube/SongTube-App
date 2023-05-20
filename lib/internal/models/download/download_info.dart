@@ -18,7 +18,8 @@ class DownloadInfo {
     required this.tags,
     this.segmentTracks,
     this.videoStream,
-    this.conversionTask
+    this.conversionTask,
+    this.createMusicPlaylistFromSegments = false,
   });
 
   final String url;
@@ -27,6 +28,7 @@ class DownloadInfo {
   final AudioOnlyStream audioStream;
   final VideoOnlyStream? videoStream;
   final List<StreamSegmentTrack>? segmentTracks;
+  final bool createMusicPlaylistFromSegments;
   final FFmpegTask? conversionTask;
   AudioTags tags;
   AudioFilters filters = AudioFilters();
