@@ -84,6 +84,7 @@ class _SongTileState extends State<SongTile> {
     return AspectRatio(
       aspectRatio: 1,
       child: Stack(
+        fit: StackFit.expand,
         alignment: Alignment.center,
         children: [
           Container(
