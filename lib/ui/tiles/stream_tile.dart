@@ -245,7 +245,7 @@ class StreamTileExpanded extends StatelessWidget {
                   style: smallTextStyle(context).copyWith(fontWeight: FontWeight.w500),
                 ),
                 Text(
-                  "${stream.viewCount != -1 ? "${NumberFormat.compact().format(stream.viewCount)} views" : ""}"
+                  "${stream.uploaderName}  •  ${stream.viewCount != -1 ? "${NumberFormat.compact().format(stream.viewCount)} views" : ""}"
                       " ${stream.uploadDate == null ? "" : " ${stream.uploadDate!}"}",
                   style: tinyTextStyle(context, opacity: 0.8).copyWith(fontWeight: FontWeight.w500),
                 )
