@@ -9,6 +9,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:image_fade/image_fade.dart';
 import 'package:newpipeextractor_dart/newpipeextractor_dart.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/internal/media_utils.dart';
 import 'package:songtube/providers/app_settings.dart';
 import 'package:songtube/internal/enums/download_type.dart';
 import 'package:songtube/internal/ffmpeg/converter.dart';
@@ -81,7 +82,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
         final title = segment.title;
         final previewUrl = segment.previewUrl;
         AudioTags audioTags = AudioTags.withStreamInfoItem(widget.video.toStreamInfoItem())
-          ..titleController.text = title ?? widget.video.videoInfo.name ?? 'Unknown'
+          ..titleController.text = MediaUtils.removeToxicSymbols(title ?? widget.video.videoInfo.name ?? 'Unknown')
           ..artwork = previewUrl;
         segmentTracks.add(StreamSegmentTrack(audioTags: audioTags, segment: segment, enabled: true));
       }
