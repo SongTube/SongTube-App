@@ -63,13 +63,11 @@ class UiUtils {
     // Create our dirs and define our avatar file path
     Directory avatarDir = Directory("${(await getApplicationDocumentsDirectory()).path}/avatarDir/");
     if (!(await avatarDir.exists())) avatarDir.create(recursive: true);
-    File avatarImage = File("${avatarDir.path}/$channelName");
-
+    String? id = (await IdHelper.getIdFromChannelUrl(channelUrl))?.split("/").last;
+    File avatarImage = File("${avatarDir.path}/$id");
     // Return avatar image file path if it exist
     if (await avatarImage.exists() && !updateAvatar) return avatarImage.path;
-
     // Extract the avatar image from the channel url provided using our Isolate
-    String? id = (await IdHelper.getIdFromChannelUrl(channelUrl))?.split("/").last;
     if (id == null) return null;
     ReceivePort receivePort = ReceivePort();
     await Isolate.spawn(_getChannelLogoUrlIsolate, receivePort.sendPort);
