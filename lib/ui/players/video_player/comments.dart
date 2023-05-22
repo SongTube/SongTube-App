@@ -12,6 +12,7 @@ import 'package:newpipeextractor_dart/extractors/comments.dart';
 import 'package:newpipeextractor_dart/models/comment.dart';
 import 'package:newpipeextractor_dart/models/videoInfo.dart';
 import 'package:songtube/internal/models/timestamp.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/ui/animations/show_up.dart';
 import 'package:songtube/ui/components/custom_inkwell.dart';
 import 'package:songtube/ui/components/linkify_text.dart';
@@ -62,11 +63,11 @@ class _VideoPlayerCommentsCollapsedState extends State<VideoPlayerCommentsCollap
                           Row(
                             children: [
                               Text(
-                                "Comments",
+                                Languages.of(context)!.labelComments,
                                 style: smallTextStyle(context).copyWith(fontWeight: FontWeight.bold)
                               ),
                               Text(
-                                "  •  See more",
+                                "  •  ${Languages.of(context)!.labelSeeMore}",
                                 style: tinyTextStyle(context).copyWith(fontWeight: FontWeight.normal, color: Theme.of(context).primaryColor)
                               ),
                             ],
@@ -186,7 +187,7 @@ class VideoPlayerCommentsExpanded extends StatelessWidget {
                 icon: const Icon(Iconsax.arrow_left)
               ),
               const SizedBox(width: 4),
-              Text('Comments', style: subtitleTextStyle(context, bold: true).copyWith(fontSize: 16)),
+              Text(Languages.of(context)!.labelComments, style: subtitleTextStyle(context, bold: true).copyWith(fontSize: 16)),
               const Spacer(),
             ],
           ),
@@ -259,7 +260,7 @@ class VideoPlayerCommentsExpanded extends StatelessWidget {
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text('Pinned', style: tinyTextStyle(context, bold: true).copyWith(color: Theme.of(context).primaryColor)),
+                        Text(Languages.of(context)!.labelPinned, style: tinyTextStyle(context, bold: true).copyWith(color: Theme.of(context).primaryColor)),
                       ],
                     )
                   ],
@@ -299,7 +300,7 @@ class VideoPlayerCommentsExpanded extends StatelessWidget {
                           const SizedBox(width: 12),
                           const Icon(Ionicons.heart, color: Colors.red, size: 18),
                           const SizedBox(width: 6),
-                          Text('Liked by author', style: tinyTextStyle(context, opacity: 0.8)),
+                          Text(Languages.of(context)!.labelLikedByAuthor, style: tinyTextStyle(context, opacity: 0.8)),
                         ],
                       )
                     ],

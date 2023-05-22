@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:songtube/internal/models/backup_model.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/ui/sheet_phill.dart';
 import 'package:songtube/ui/sheets/snack_bar.dart';
 import 'package:songtube/ui/text_styles.dart';
@@ -49,29 +50,29 @@ class BackupRestoreSheet extends StatelessWidget {
           const SizedBox(height: 8),
           // Backup
           _optionTile(context,
-            title: 'Backup',
-            subtitle: 'Backup all of your local data into a single file that can be used to restore later',
+            title: Languages.of(context)!.labelBackup,
+            subtitle: Languages.of(context)!.labelBackupDescription,
             icon: Iconsax.save_2,
             onTap: () async {
               final result = await BackupModel.generateBackup(context);
               // ignore: use_build_context_synchronously
               Navigator.pop(context);
               if (result != null) {
-                showSnackbar(customSnackBar: const CustomSnackBar(icon: Iconsax.save_2, title: 'Backup created'));
+                showSnackbar(customSnackBar: CustomSnackBar(icon: Iconsax.save_2, title: Languages.of(context)!.labelBackupCreated));
               }
             }
           ),
           // Restore
           _optionTile(context,
-            title: 'Restore',
-            subtitle: 'Restore all your data from a backup file',
+            title: Languages.of(context)!.labelRestore,
+            subtitle: Languages.of(context)!.labelRestoreDescription,
             icon: Iconsax.refresh_left_square,
             onTap: () async {
               final result = await BackupModel.restoreBackup(context);
               // ignore: use_build_context_synchronously
               Navigator.pop(context);
               if (result) {
-                showSnackbar(customSnackBar: const CustomSnackBar(icon: Iconsax.refresh_left_square, title: 'Backup restored'));
+                showSnackbar(customSnackBar: CustomSnackBar(icon: Iconsax.refresh_left_square, title: Languages.of(context)!.labelBackupRestored));
               }
             }
           ),

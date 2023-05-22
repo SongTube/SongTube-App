@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/ui/tiles/setting_tile.dart';
 
 import '../../providers/app_settings.dart';
@@ -21,8 +22,8 @@ class _PagesSettingsState extends State<PagesSettings> {
       children: [
         // Default landing page
         SettingTileDropdown(
-          title: 'Home Screen',
-          subtitle: 'Change the default landing screen when you open the app',
+          title: Languages.of(context)!.labelHomeScreen,
+          subtitle: Languages.of(context)!.labelHomeScreenDescription,
           leadingIcon: LineIcons.home,
           currentValue: landingPageName(AppSettings.defaultLandingPage),
           onChange: (name) {
@@ -42,8 +43,8 @@ class _PagesSettingsState extends State<PagesSettings> {
         const SizedBox(height: 12),
         // Default landing page for Music Screen
         SettingTileDropdown(
-          title: 'Default Music Page',
-          subtitle: 'Change the default page for the Music Page',
+          title: Languages.of(context)!.labelDefaultMusicPage,
+          subtitle: Languages.of(context)!.labelDefaultMusicPageDescription,
           leadingIcon: LineIcons.music,
           currentValue: landingMusicPageName(AppSettings.defaultLandingMusicPage),
           onChange: (name) {

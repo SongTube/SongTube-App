@@ -4,6 +4,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:newpipeextractor_dart/models/videoInfo.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/ui/animations/show_up.dart';
 import 'package:songtube/ui/components/linkify_text.dart';
 import 'package:songtube/ui/text_styles.dart';
@@ -37,7 +38,7 @@ class VideoPlayerDescription extends StatelessWidget {
                 icon: const Icon(Iconsax.arrow_left)
               ),
               const SizedBox(width: 4),
-              Text('Description', style: subtitleTextStyle(context, bold: true).copyWith(fontSize: 16)),
+              Text(Languages.of(context)!.labelDescription, style: subtitleTextStyle(context, bold: true).copyWith(fontSize: 16)),
               const Spacer(),
             ],
           ),
@@ -60,7 +61,7 @@ class VideoPlayerDescription extends StatelessWidget {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text((info.viewCount == -1 ? "" : "${NumberFormat.decimalPattern().format(info.viewCount)} views  •  ${info.uploadDate}"), style: smallTextStyle(context, opacity: 0.8)),
+                        Text((info.viewCount == -1 ? "" : "${NumberFormat.decimalPattern().format(info.viewCount)} ${Languages.of(context)!.labelViews}  •  ${info.uploadDate}"), style: smallTextStyle(context, opacity: 0.8)),
                       ],
                     ),
                   ),

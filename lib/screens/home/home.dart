@@ -14,6 +14,7 @@ import 'package:newpipeextractor_dart/newpipeextractor_dart.dart';
 import 'package:newpipeextractor_dart/utils/url.dart';
 import 'package:provider/provider.dart';
 import 'package:receive_intent/receive_intent.dart' as intent;
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/main.dart';
 import 'package:songtube/providers/app_settings.dart';
 import 'package:songtube/internal/global.dart';
@@ -224,26 +225,26 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               bottomNavigationBarIndex = tappedIndex;
             });
           },
-          destinations: const [
+          destinations: [
             NavigationDestination(
-              icon: Icon(Ionicons.home_outline),
-              selectedIcon: Icon(Ionicons.home, color: Colors.white),
-              label: 'Home',
+              icon: const Icon(Ionicons.home_outline),
+              selectedIcon: const Icon(Ionicons.home, color: Colors.white),
+              label: Languages.of(context)!.labelHome,
             ),
             NavigationDestination(
-              icon: Icon(Ionicons.musical_note_outline),
-              selectedIcon: Icon(Ionicons.musical_note, color: Colors.white),
-              label: 'Music',
+              icon: const Icon(Ionicons.musical_note_outline),
+              selectedIcon: const Icon(Ionicons.musical_note, color: Colors.white),
+              label: Languages.of(context)!.labelMusic,
             ),
             NavigationDestination(
-              icon: Icon(Ionicons.cloud_download_outline),
-              selectedIcon: Icon(Ionicons.cloud_download, color: Colors.white),
-              label: 'Downloads',
+              icon: const Icon(Ionicons.cloud_download_outline),
+              selectedIcon: const Icon(Ionicons.cloud_download, color: Colors.white),
+              label: Languages.of(context)!.labelDownloads,
             ),
             NavigationDestination(
-              icon: Icon(Ionicons.library_outline),
-              selectedIcon: Icon(Ionicons.library, color: Colors.white),
-              label: 'Library',
+              icon: const Icon(Ionicons.library_outline),
+              selectedIcon: const Icon(Ionicons.library, color: Colors.white),
+              label: Languages.of(context)!.labelLibrary,
             ),
           ],
         ),

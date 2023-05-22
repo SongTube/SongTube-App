@@ -4,6 +4,7 @@ import 'package:image_fade/image_fade.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:newpipeextractor_dart/newpipeextractor_dart.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/main.dart';
 import 'package:songtube/providers/content_provider.dart';
 import 'package:songtube/providers/ui_provider.dart';
@@ -112,7 +113,7 @@ class PlaylistTileCollapsed extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.only(left: 8),
                   child: Text(
-                    playlist.streamCount.isNegative ? ' ' : "${playlist.streamCount} videos",
+                    playlist.streamCount.isNegative ? ' ' : "${playlist.streamCount} ${Languages.of(context)!.labelVideos}",
                     style: tinyTextStyle(context, opacity: 0.6).copyWith(fontWeight: FontWeight.w500),
                     overflow: TextOverflow.clip,
                     maxLines: 1,
@@ -251,7 +252,7 @@ class PlaylistTileExpanded extends StatelessWidget {
                   style: smallTextStyle(context).copyWith(fontWeight: FontWeight.normal),
                 ),
                 Text(
-                  "Contains ${playlist.streamCount} videos",
+                  "${Languages.of(context)!.labelContains} ${playlist.streamCount} ${Languages.of(context)!.labelVideos}",
                   style: tinyTextStyle(context, opacity: 0.8).copyWith(fontWeight: FontWeight.w500),
                 )
               ],

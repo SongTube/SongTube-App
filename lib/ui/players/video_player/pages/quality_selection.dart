@@ -4,6 +4,7 @@ import 'package:line_icons/line_icon.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:songtube/internal/models/content_wrapper.dart';
 import 'package:songtube/internal/models/playback_quality.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/ui/sheet_phill.dart';
 import 'package:songtube/ui/text_styles.dart';
 
@@ -47,7 +48,7 @@ class _PlaybackQualitySheetState extends State<PlaybackQualitySheet> {
                 const SizedBox(height: 6),
                 Row(
                   children: [
-                    Text('Current Quality:   ${widget.currentQuality.resolution}p', style: textStyle(context)),
+                    Text('${Languages.of(context)!.labelCurrentQuality}:   ${widget.currentQuality.resolution}p', style: textStyle(context)),
                     if (widget.currentQuality.framerate > 30)
                     Text(' ${widget.currentQuality.framerate.round()}FPS', style: smallTextStyle(context, bold: true).copyWith(color: Theme.of(context).primaryColor))
                   ],
@@ -57,7 +58,7 @@ class _PlaybackQualitySheetState extends State<PlaybackQualitySheet> {
                   children: [
                     Icon(Ionicons.flash_outline, color: Theme.of(context).primaryColor),
                     const SizedBox(width: 6),
-                    Expanded(child: Text('Fast Streaming Options:', style: subtitleTextStyle(context).copyWith(fontSize: 16))),
+                    Expanded(child: Text('${Languages.of(context)!.labelFastStreamingOptions}:', style: subtitleTextStyle(context).copyWith(fontSize: 16))),
                   ],
                 ),
                 videoOptions(),
@@ -66,7 +67,7 @@ class _PlaybackQualitySheetState extends State<PlaybackQualitySheet> {
                   children: [
                     Icon(Ionicons.videocam_outline, color: Theme.of(context).primaryColor),
                     const SizedBox(width: 6),
-                    Expanded(child: Text('Streaming Options:', style: subtitleTextStyle(context).copyWith(fontSize: 16))),
+                    Expanded(child: Text('${Languages.of(context)!.labelStreamingOptions}:', style: subtitleTextStyle(context).copyWith(fontSize: 16))),
                   ],
                 ),
                 videoOnlyOptions()

@@ -1,5 +1,6 @@
 import 'package:songtube/internal/models/media_playlist.dart';
 import 'package:songtube/internal/models/song_item.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/playlist_provider.dart';
 import 'package:songtube/ui/playlist_artwork.dart';
 import 'package:songtube/ui/text_styles.dart';
@@ -51,7 +52,7 @@ class PlaylistTile extends StatelessWidget {
         maxLines: 1,
       ),
       subtitle: Text(
-        playlist.songs.isEmpty ? 'Empty' : '${playlist.songs.length} songs',
+        playlist.songs.isEmpty ? Languages.of(context)!.labelEmpty : '${playlist.songs.length} ${Languages.of(context)!.labelSongs}',
         style: tinyTextStyle(context, opacity: 0.6).copyWith(letterSpacing: 0.4, fontWeight: FontWeight.w500),
         maxLines: 1,
       ),

@@ -1,6 +1,7 @@
 import 'package:flutter_share/flutter_share.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/models/song_item.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/main.dart';
 import 'package:songtube/providers/download_provider.dart';
 import 'package:songtube/providers/media_provider.dart';
@@ -42,8 +43,8 @@ class SongOptionsSheet extends StatelessWidget {
             disablePlayingVisualizer: true),
           Divider(indent: 12, endIndent: 12, color: Theme.of(context).dividerColor),
           _optionTile(context,
-            title: 'Add to Playlist',
-            subtitle: 'Add to existing or new playlist',
+            title: Languages.of(context)!.labelAddToPlaylist,
+            subtitle: Languages.of(context)!.labelAddToPlaylistDescription,
             icon: LineIcons.list,
             onTap: () {
               Navigator.pop(context);
@@ -53,8 +54,8 @@ class SongOptionsSheet extends StatelessWidget {
             }
           ),
           _optionTile(context,
-            title: 'Share Song',
-            subtitle: 'Share with friends or other platforms',
+            title: Languages.of(context)!.labelShareSong,
+            subtitle: Languages.of(context)!.labelShareSongDescription,
             icon: LineIcons.share,
             onTap: () {
               FlutterShare.shareFile(
@@ -67,8 +68,8 @@ class SongOptionsSheet extends StatelessWidget {
             }
           ),
           _optionTile(context,
-            title: 'Edit Tags',
-            subtitle: 'Open ID3 tags and artwork editor',
+            title: Languages.of(context)!.labelEditTags,
+            subtitle: Languages.of(context)!.labelEditTagsDescription,
             icon: LineIcons.tags,
             onTap: () {
               Navigator.pop(context);

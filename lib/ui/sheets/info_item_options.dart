@@ -3,6 +3,7 @@ import 'package:flutter_share/flutter_share.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:newpipeextractor_dart/newpipeextractor_dart.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/main.dart';
 import 'package:songtube/providers/content_provider.dart';
 import 'package:songtube/services/content_service.dart';
@@ -47,12 +48,12 @@ class InfoItemOptions extends StatelessWidget {
             builder: (context) {
               final hasPlaylist = contentProvider.streamPlaylists.any((element) => element.name == infoItem.name);
               return _optionTile(context,
-                title: hasPlaylist ? 'Remove from Playlists' : 'Add to Playlists',
-                subtitle: hasPlaylist ? 'This action cannot be undone' : 'Editable once saved',
+                title: hasPlaylist ? Languages.of(context)!.labelRemoveFromPlaylists : Languages.of(context)!.labelAddToPlaylists,
+                subtitle: hasPlaylist ? Languages.of(context)!.labelThisActionCannotBeUndone : Languages.of(context)!.labelEditableOnceSaved,
                 icon: LineIcons.heart,
                 onTap: () async {
                   Navigator.pop(context);
-                  showSnackbar(customSnackBar: CustomSnackBar(icon: hasPlaylist ? LineIcons.heartBroken : LineIcons.heart, title: hasPlaylist ? 'Playlist removed' : 'Playlist saved'));
+                  showSnackbar(customSnackBar: CustomSnackBar(icon: hasPlaylist ? LineIcons.heartBroken : LineIcons.heart, title: hasPlaylist ? Languages.of(context)!.labelPlaylistRemoved : Languages.of(context)!.labelPlaylistSaved));
                   if (hasPlaylist) {
                     contentProvider.streamPlaylistRemove(infoItem.name);
                   } else {
@@ -66,8 +67,8 @@ class InfoItemOptions extends StatelessWidget {
           ),
           if (infoItem is StreamInfoItem)
           _optionTile(context,
-            title: 'Add to video Playlist',
-            subtitle: 'Add to existing or new video playlist',
+            title: Languages.of(context)!.labelAddVideoToPlaylist,
+            subtitle: Languages.of(context)!.labelAddVideoToPlaylistDescription,
             icon: LineIcons.list,
             onTap: () {
               Navigator.pop(context);
@@ -81,12 +82,12 @@ class InfoItemOptions extends StatelessWidget {
             builder: (context) {
               final hasVideo = contentProvider.favoriteVideos.any((element) => element.id == infoItem.id);
               return _optionTile(context,
-                title: hasVideo ? 'Remove from favorites' : 'Save to favorites',
-                subtitle: hasVideo ? 'Remove this video from your favorites' : 'Add video to your list of favorites',
+                title: hasVideo ? Languages.of(context)!.labelRemoveFromFavorites : Languages.of(context)!.labelSaveToFavorites,
+                subtitle: hasVideo ? Languages.of(context)!.labelRemoveFromFavoritesDescription : Languages.of(context)!.labelSaveToFavoritesDescription,
                 icon: LineIcons.star,
                 onTap: () {
                   Navigator.pop(context);
-                  showSnackbar(customSnackBar: CustomSnackBar(icon: hasVideo ? LineIcons.trash : LineIcons.star, title: hasVideo ? 'Video removed from favorites' : 'Video added to favorites'));
+                  showSnackbar(customSnackBar: CustomSnackBar(icon: hasVideo ? LineIcons.trash : LineIcons.star, title: hasVideo ? Languages.of(context)!.labelVideoRemovedFromFavorites : Languages.of(context)!.labelVideoAddedToFavorites));
                   if (hasVideo) {
                     contentProvider.removeVideoFromFavorites(infoItem.id);
                   } else {
@@ -97,8 +98,8 @@ class InfoItemOptions extends StatelessWidget {
             }
           ),
           _optionTile(context,
-            title: infoItem is StreamInfoItem ? 'Share video' : 'Share playlist',
-            subtitle: 'Share with friends or other platforms',
+            title: infoItem is StreamInfoItem ? Languages.of(context)!.labelShareVideo : Languages.of(context)!.labelSharePlaylist,
+            subtitle: Languages.of(context)!.labelShareDescription,
             icon: LineIcons.share,
             onTap: () {
               FlutterShare.share(
@@ -109,7 +110,7 @@ class InfoItemOptions extends StatelessWidget {
             }
           ),
           if (onDelete != null)
-          _optionTile(context, title: 'Delete', subtitle: 'Removes this video from this list', icon: LineIcons.trash, onTap: () {
+          _optionTile(context, title: Languages.of(context)!.labelDelete, subtitle: Languages.of(context)!.labelRemoveThisVideoFromThisList, icon: LineIcons.trash, onTap: () {
             Navigator.pop(context);
             onDelete!();
           })

@@ -3,6 +3,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/app_settings.dart';
 import 'package:songtube/internal/enums/download_type.dart';
 import 'package:songtube/internal/global.dart';
@@ -58,11 +59,11 @@ class _DownloadContentMenuState extends State<DownloadContentMenu> {
                   ),
                 ),
                 const SizedBox(width: 4),
-                Text('Download', style: textStyle(context)),
+                Text(Languages.of(context)!.labelDownload, style: textStyle(context)),
               ],
             ),
             const SizedBox(height: 8),
-            _optionTile(context, title: 'Music', subtitle: 'Select quality, convert and download audio only', icon: Ionicons.musical_notes_outline, onTap: () {
+            _optionTile(context, title: Languages.of(context)!.labelMusic, subtitle: Languages.of(context)!.labelMusicDownloadDescription, icon: Ionicons.musical_notes_outline, onTap: () {
               // Open Music Download Menu
               Navigator.pop(context);
               showModalBottomSheet(context: context,
@@ -81,7 +82,7 @@ class _DownloadContentMenuState extends State<DownloadContentMenu> {
                 );
               });
             }),
-            _optionTile(context, title: 'Video', subtitle: 'Choose a video quality from the list and download it', icon: Ionicons.videocam_outline, onTap: () {
+            _optionTile(context, title: Languages.of(context)!.labelVideo, subtitle: Languages.of(context)!.labelVideoDownloadDescription, icon: Ionicons.videocam_outline, onTap: () {
               // Open Video Download Menu
               Navigator.pop(context);
               showModalBottomSheet(context: context,
@@ -100,7 +101,7 @@ class _DownloadContentMenuState extends State<DownloadContentMenu> {
                 );
               });
             }),
-            _optionTile(context, title: 'Instant', subtitle: 'Instantly start downloading as music', icon: Ionicons.flash_outline,
+            _optionTile(context, title: Languages.of(context)!.labelInstant, subtitle: Languages.of(context)!.labelInstantDescription, icon: Ionicons.flash_outline,
               trailing: SizedBox(
                 height: 30,
                 child: DropdownButton<String>(

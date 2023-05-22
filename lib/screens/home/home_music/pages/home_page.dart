@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/models/media_item_models.dart';
 import 'package:songtube/internal/models/song_item.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/media_provider.dart';
 import 'package:songtube/providers/ui_provider.dart';
 import 'package:songtube/screens/playlist.dart';
@@ -76,7 +77,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                     padding: const EdgeInsets.only(bottom: 12, top: 12),
                     child: Row(
                       children: [
-                        Text('Albums', style: smallTextStyle(context).copyWith(fontWeight: FontWeight.w800, letterSpacing: 0.4)),
+                        Text(Languages.of(context)!.labelEditorAlbum, style: smallTextStyle(context).copyWith(fontWeight: FontWeight.w800, letterSpacing: 0.4)),
                         Padding(
                           padding: const EdgeInsets.all(4.0),
                           child: CustomInkWell(
@@ -84,7 +85,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                               // Switch to Albums tab
                               widget.onSwitchIndex(3);
                             },
-                            child: Text('  •  See more', style: tinyTextStyle(context).copyWith(fontWeight: FontWeight.normal, color: Theme.of(context).primaryColor))
+                            child: Text('  •  ${Languages.of(context)!.labelSeeMore}', style: tinyTextStyle(context).copyWith(fontWeight: FontWeight.normal, color: Theme.of(context).primaryColor))
                           ),
                         ),
                       ],
@@ -128,8 +129,8 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                     padding: const EdgeInsets.only(bottom: 12, top: 12),
                     child: Row(
                       children: [
-                        Text('Most Played', style: smallTextStyle(context).copyWith(fontWeight: FontWeight.w800, letterSpacing: 0.4)),
-                        Text('  •  See more', style: tinyTextStyle(context).copyWith(fontWeight: FontWeight.normal, color: Theme.of(context).primaryColor))
+                        Text(Languages.of(context)!.labelMostPlayed, style: smallTextStyle(context).copyWith(fontWeight: FontWeight.w800, letterSpacing: 0.4)),
+                        Text('  •  ${Languages.of(context)!.labelSeeMore}', style: tinyTextStyle(context).copyWith(fontWeight: FontWeight.normal, color: Theme.of(context).primaryColor))
                       ],
                     ),
                   ),

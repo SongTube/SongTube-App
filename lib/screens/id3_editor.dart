@@ -18,6 +18,7 @@ import 'package:songtube/internal/media_utils.dart';
 import 'package:songtube/internal/models/audio_tags.dart';
 import 'package:songtube/internal/models/music_brainz_record.dart';
 import 'package:songtube/internal/models/song_item.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/main.dart';
 import 'package:songtube/pages/music_brainz_search.dart';
 import 'package:songtube/providers/media_provider.dart';
@@ -112,8 +113,8 @@ class _ID3EditorState extends State<ID3Editor> {
       // Promt the user if he agrees that his songs needs to be converted to apply tags
       final result = await showModalBottomSheet(context: internalNavigatorKey.currentContext!, backgroundColor: Colors.transparent, isScrollControlled: true, builder: (context) {
         return CommonSheet(
-          title: 'Conversion required',
-          body: Text('This song format is incompatible with the ID3 Tags editor. The app will automatically convert this song to AAC (m4a) to sort out this issue.', style: subtitleTextStyle(context, opacity: 0.8)),
+          title: Languages.of(context)!.labelConversionRequired,
+          body: Text(Languages.of(context)!.labelConversionRequiredDescription, style: subtitleTextStyle(context, opacity: 0.8)),
           actions: [
             // Cancel Button
             TextButton(
@@ -122,7 +123,7 @@ class _ID3EditorState extends State<ID3Editor> {
               },
               child: Padding(
                 padding: const EdgeInsets.only(left: 12, right: 12),
-                child: Text('Cancel', style: smallTextStyle(context)),
+                child: Text(Languages.of(context)!.labelCancel, style: smallTextStyle(context)),
               )
             ),
             // Delete button
@@ -137,7 +138,7 @@ class _ID3EditorState extends State<ID3Editor> {
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(left: 12, right: 12),
-                  child: Text('Continue', style: smallTextStyle(context).copyWith(color: Colors.white)),
+                  child: Text(Languages.of(context)!.labelContinue, style: smallTextStyle(context).copyWith(color: Colors.white)),
                 )
               ),
             ),
@@ -165,8 +166,8 @@ class _ID3EditorState extends State<ID3Editor> {
         // Show Bottom Sheet
         showModalBottomSheet(context: internalNavigatorKey.currentContext!, backgroundColor: Colors.transparent, isScrollControlled: true, builder: (context) {
           return CommonSheet(
-            title: 'Permissions required',
-            body: Text('All file access permission is required for SongTube to edit any song on your device', style: subtitleTextStyle(context, opacity: 0.8)),
+            title: Languages.of(context)!.labelPermissionRequired,
+            body: Text(Languages.of(context)!.labelPermissionRequiredDescription, style: subtitleTextStyle(context, opacity: 0.8)),
             actions: [
               // Cancel Button
               TextButton(
@@ -176,7 +177,7 @@ class _ID3EditorState extends State<ID3Editor> {
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(left: 12, right: 12),
-                  child: Text('Cancel', style: smallTextStyle(context)),
+                  child: Text(Languages.of(context)!.labelCancel, style: smallTextStyle(context)),
                 )
               ),
               // Delete button
@@ -195,7 +196,7 @@ class _ID3EditorState extends State<ID3Editor> {
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(left: 12, right: 12),
-                    child: Text('Grant', style: smallTextStyle(context).copyWith(color: Colors.white)),
+                    child: Text(Languages.of(context)!.labelGrant, style: smallTextStyle(context).copyWith(color: Colors.white)),
                   )
                 ),
               ),
@@ -279,7 +280,7 @@ class _ID3EditorState extends State<ID3Editor> {
                             },
                             icon: const Icon(Iconsax.arrow_left, color: Colors.white)
                           ), 
-                          Text('Tags Editor', style: textStyle(context).copyWith(color: Colors.white)),
+                          Text(Languages.of(context)!.labelTagsEditor, style: textStyle(context).copyWith(color: Colors.white)),
                           const Spacer(),
                           IconButton(
                             onPressed: () async {
@@ -514,7 +515,7 @@ class _ID3EditorState extends State<ID3Editor> {
           fillColor: fillColor,
           textController: tags.titleController,
           inputType: TextInputType.text,
-          labelText: 'Title',
+          labelText: Languages.of(context)!.labelEditorTitle,
           icon: Iconsax.text,
         ),
         const SizedBox(height: 16),
@@ -523,7 +524,7 @@ class _ID3EditorState extends State<ID3Editor> {
           fillColor: fillColor,
           textController: tags.albumController,
           inputType: TextInputType.text,
-          labelText: 'Album',
+          labelText: Languages.of(context)!.labelEditorAlbum,
           icon: Iconsax.book,
         ),
         const SizedBox(height: 16),
@@ -532,7 +533,7 @@ class _ID3EditorState extends State<ID3Editor> {
           fillColor: fillColor,
           textController: tags.artistController,
           inputType: TextInputType.text,
-          labelText: 'Artist',
+          labelText: Languages.of(context)!.labelEditorArtist,
           icon: Iconsax.user,
         ),
         const SizedBox(height: 16),
@@ -541,7 +542,7 @@ class _ID3EditorState extends State<ID3Editor> {
           fillColor: fillColor,
           textController: tags.genreController,
           inputType: TextInputType.text,
-          labelText: 'Genre',
+          labelText: Languages.of(context)!.labelEditorGenre,
           icon: Iconsax.musicnote,
         ),
         const SizedBox(height: 16),
@@ -550,7 +551,7 @@ class _ID3EditorState extends State<ID3Editor> {
           fillColor: fillColor,
           textController: tags.dateController,
           inputType: TextInputType.datetime,
-          labelText: 'Date',
+          labelText: Languages.of(context)!.labelEditorDate,
           icon: Iconsax.calendar,
         ),
         const SizedBox(height: 16),
@@ -559,7 +560,7 @@ class _ID3EditorState extends State<ID3Editor> {
           fillColor: fillColor,
           textController: tags.discController,
           inputType: TextInputType.number,
-          labelText: 'Disc',
+          labelText: Languages.of(context)!.labelEditorDisc,
           icon: Iconsax.happyemoji4
         ),
         const SizedBox(height: 16),
@@ -568,7 +569,7 @@ class _ID3EditorState extends State<ID3Editor> {
           fillColor: fillColor,
           textController: tags.trackController,
           inputType: TextInputType.number,
-          labelText: 'Track',
+          labelText: Languages.of(context)!.labelEditorTrack,
           icon: Iconsax.sound4,
         ),
         const Divider(color: Colors.transparent),
@@ -606,7 +607,7 @@ class _ID3EditorState extends State<ID3Editor> {
                   color: Colors.white),
                 const SizedBox(width: 12),
                 Text(
-                  processingTags ? 'Applying...' : 'Apply',
+                  processingTags ? '${Languages.of(context)!.labelApplying}...' : Languages.of(context)!.labelApply,
                   style: subtitleTextStyle(context, bold: true)
                 )
               ],
@@ -620,8 +621,8 @@ class _ID3EditorState extends State<ID3Editor> {
                 File song = File(widget.song.id);
                 showModalBottomSheet(context: internalNavigatorKey.currentContext!, isDismissible: false, backgroundColor: Colors.transparent, isScrollControlled: true, builder: (context) {
                   return CommonSheet(
-                    title: 'Converting Song...',
-                    body: Text('Re-encoding this song into AAC (m4a) format', style: subtitleTextStyle(context, opacity: 0.8)),
+                    title: Languages.of(context)!.labelConverting,
+                    body: Text(Languages.of(context)!.labelConvertingDescription, style: subtitleTextStyle(context, opacity: 0.8)),
                   );
                 });
                 final result = await FFmpegConverter.convertAudio(audioFile: song.path, task: FFmpegTask.convertToAAC, checkFormat: false);
@@ -635,8 +636,8 @@ class _ID3EditorState extends State<ID3Editor> {
               }
               showModalBottomSheet(context: internalNavigatorKey.currentContext!, isDismissible: false, backgroundColor: Colors.transparent, isScrollControlled: true, builder: (context) {
                 return CommonSheet(
-                  title: 'Writting Tags...',
-                  body: Text('Applying new tags to this song', style: subtitleTextStyle(context, opacity: 0.8)),
+                  title: Languages.of(context)!.labelWrittingTagsAndArtwork,
+                  body: Text(Languages.of(context)!.labelWrittingTagsAndArtworkDescription, style: subtitleTextStyle(context, opacity: 0.8)),
                 );
               });
               await MediaUtils.writeMetadata(widget.song.id, tags);

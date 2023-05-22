@@ -9,6 +9,7 @@ import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:songtube/internal/artwork_manager.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/app_settings.dart';
 import 'package:songtube/ui/components/circular_check_box.dart';
 import 'package:songtube/ui/sheets/snack_bar.dart';
@@ -33,8 +34,8 @@ class _MusicPlayerSettingsState extends State<MusicPlayerSettings> {
       children: [
         // Music Player blur background
         SettingTileCheckbox(
-          title: 'Blur Background',
-          subtitle: 'Add blurred artwork background',
+          title: Languages.of(context)!.labelBlurBackground,
+          subtitle: Languages.of(context)!.labelBlurBackgroundDescription,
           value: appSettings.enableMusicPlayerBlur,
           onChange: (value) {
             appSettings.enableMusicPlayerBlur = value;
@@ -44,8 +45,8 @@ class _MusicPlayerSettingsState extends State<MusicPlayerSettings> {
         const SizedBox(height: 12),
         // Music Player blur background intensity
         SettingTileSlider(
-          title: 'Blur intensity',
-          subtitle: 'Change the blur intensity of the artwork background',
+          title: Languages.of(context)!.labelBlurIntensity,
+          subtitle: Languages.of(context)!.labelBlurIntensityDescription,
           leadingIcon: Icons.blur_linear,
           value: appSettings.musicPlayerBlurStrenght,
           min: 0.00001,
@@ -58,8 +59,8 @@ class _MusicPlayerSettingsState extends State<MusicPlayerSettings> {
         const SizedBox(height: 12),
         // Music Player Backdrop color intensity
         SettingTileSlider(
-          title: 'Backdrop opacity',
-          subtitle: 'Change the colored backdrop opacity',
+          title: Languages.of(context)!.labelBackdropOpacity,
+          subtitle: Languages.of(context)!.labelBackdropOpacityDescription,
           leadingIcon: Icons.opacity_rounded,
           value: appSettings.musicPlayerBackdropOpacity*100,
           min: 0,
@@ -72,8 +73,8 @@ class _MusicPlayerSettingsState extends State<MusicPlayerSettings> {
         const SizedBox(height: 12),
         // Music Player Artwork Shadow Level
         SettingTileSlider(
-          title: 'Artwork Shadow Opacity',
-          subtitle: 'Change the artwork shadow intensity of the music player',
+          title: Languages.of(context)!.labelArtworkShadowOpacity,
+          subtitle: Languages.of(context)!.labelArtworkShadowOpacityDescription,
           leadingIcon: Icons.texture,
           value: (AppSettings.musicPlayerArtworkShadowLevel*100).roundToDouble(),
           min: 0,
@@ -87,8 +88,8 @@ class _MusicPlayerSettingsState extends State<MusicPlayerSettings> {
         const SizedBox(height: 12),
         // Music Player Artwork Shadow Radius
         SettingTileSlider(
-          title: 'Artwork Shadow Radius',
-          subtitle: 'Change the artwork shadow radius of the music player',
+          title: Languages.of(context)!.labelArtworkShadowRadius,
+          subtitle: Languages.of(context)!.labelArtworkShadowRadiusDescription,
           leadingIcon: Icons.blur_circular,
           value: AppSettings.musicPlayerArtworkShadowRadius.roundToDouble(),
           min: 0,
@@ -102,8 +103,8 @@ class _MusicPlayerSettingsState extends State<MusicPlayerSettings> {
         const SizedBox(height: 12),
         // Music Player Artwork Zoom
         SettingTileSlider(
-          title: 'Artwork Scaling',
-          subtitle: 'Scale out the music player artwork & background images',
+          title: Languages.of(context)!.labelArtworkScaling,
+          subtitle: Languages.of(context)!.labelArtworkScalingDescription,
           leadingIcon: Icons.zoom_out_map,
           value: appSettings.musicPlayerArtworkZoom*100,
           min: 100,
@@ -116,8 +117,8 @@ class _MusicPlayerSettingsState extends State<MusicPlayerSettings> {
         const SizedBox(height: 12),
         // Music Player Background Parallax effect
         SettingTileCheckbox(
-          title: 'Background Parallax',
-          subtitle: 'Enable/Disable background image parallax effect',
+          title: Languages.of(context)!.labelBackgroundParallax,
+          subtitle: Languages.of(context)!.labelBackgroundParallaxDescription,
           leadingIcon: Icons.animation,
           value: AppSettings.enableMusicPlayerBackgroundParallax,
           onChange: (value) {
@@ -128,8 +129,8 @@ class _MusicPlayerSettingsState extends State<MusicPlayerSettings> {
         const SizedBox(height: 12),
         // Restore thumbnails and artworks
         SettingTile(
-          title: 'Restore thumbnails',
-          subtitle: 'Force thumbnails and artwork generation process',
+          title: Languages.of(context)!.labelRestoreThumbnails,
+          subtitle: Languages.of(context)!.labelRestoreThumbnailsDescription,
           leadingIcon: LineIcons.imageFile,
           onTap: () async {
             showSnackbar(
@@ -138,7 +139,7 @@ class _MusicPlayerSettingsState extends State<MusicPlayerSettings> {
                   width: 24, height: 24,
                   child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(Theme.of(context).primaryColor)),
                 ),
-              title: 'Restoring artworks...'));
+              title: Languages.of(context)!.labelRestoringArtworks));
             final completer = Completer();
             final files = <File>[];
             songArtworkPath.list().listen((event) {
@@ -151,9 +152,9 @@ class _MusicPlayerSettingsState extends State<MusicPlayerSettings> {
             imageCache.clearLiveImages();
             imageCache.clear();
             showSnackbar(
-              customSnackBar: const CustomSnackBar(
+              customSnackBar: CustomSnackBar(
                 icon: Icons.check,
-                title: 'Restoring artworks is done!'));
+                title: Languages.of(context)!.labelRestoringArtworksDone));
           }
         )
       ],

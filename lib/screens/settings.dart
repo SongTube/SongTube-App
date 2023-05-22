@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/screens/settings/download_settings.dart';
 import 'package:songtube/screens/settings/general_settings.dart';
 import 'package:songtube/screens/settings/music_player_settings.dart.dart';
@@ -40,15 +41,15 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> with TickerPr
         physics: const BouncingScrollPhysics(),
         indicatorSize: TabBarIndicatorSize.label,
         indicator: RoundedTabIndicator(color: Theme.of(context).primaryColor, height: 3, radius: 100, bottomMargin: 0),
-        tabs: const [
+        tabs: [
           // General Settings
-          Tab(child: Text('General')),
+          Tab(child: Text(Languages.of(context)!.labelGeneral)),
           // Customization Settings
-          Tab(child: Text('Pages')),
+          Tab(child: Text(Languages.of(context)!.labelPages)),
           // Download Settings
-          Tab(child: Text('Downloads')),
+          Tab(child: Text(Languages.of(context)!.labelDownloads)),
           // Music Player Settings
-          Tab(child: Text('Music Player')),
+          Tab(child: Text(Languages.of(context)!.labelMusicPlayer)),
         ],
       ),
     );

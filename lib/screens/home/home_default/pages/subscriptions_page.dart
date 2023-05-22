@@ -3,6 +3,7 @@ import 'package:ionicons/ionicons.dart';
 import 'package:newpipeextractor_dart/models/infoItems/channel.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/global.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/main.dart';
 import 'package:songtube/providers/content_provider.dart';
 import 'package:songtube/ui/info_item_renderer.dart';
@@ -129,10 +130,10 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
             icon: Icon(Ionicons.add, size: 52, color: Theme.of(context).primaryColor)),
         ),
         const SizedBox(height: 8),
-        Text('No Subscriptions?', style: textStyle(context)),
+        Text(Languages.of(context)!.labelNoSubscriptions, style: textStyle(context)),
         Padding(
           padding: const EdgeInsets.only(left: 32, right: 32),
-          child: Text('Tap the button above to show suggested Channels!', style: subtitleTextStyle(context, opacity: 0.6), textAlign: TextAlign.center,),
+          child: Text(Languages.of(context)!.labelNoSubscriptionsDescription, style: subtitleTextStyle(context, opacity: 0.6), textAlign: TextAlign.center,),
         ),
       ],
     ));

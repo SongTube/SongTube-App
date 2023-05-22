@@ -6,6 +6,7 @@ import 'package:line_icons/line_icons.dart';
 import 'package:newpipeextractor_dart/newpipeextractor_dart.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/models/content_wrapper.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/content_provider.dart';
 import 'package:songtube/ui/components/slideable_panel.dart';
 import 'package:songtube/ui/players/video_player/suggestions.dart';
@@ -107,7 +108,7 @@ class _VideoPlayerPlaylistContentState extends State<VideoPlayerPlaylistContent>
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(widget.content.playlistDetails == null ? 'Loading playlist...' : hasNextVideo ? 'Next: ${nextVideo.name}' : 'Playlist reached the end', maxLines: 1, style: smallTextStyle(context, bold: true).copyWith(color: textColor), overflow: TextOverflow.ellipsis),
+                                Text(widget.content.playlistDetails == null ? Languages.of(context)!.labelLoadingPlaylist : hasNextVideo ? '${Languages.of(context)!.labelNext}: ${nextVideo.name}' : Languages.of(context)!.labelPlaylistReachedTheEnd, maxLines: 1, style: smallTextStyle(context, bold: true).copyWith(color: textColor), overflow: TextOverflow.ellipsis),
                                 Text('${(widget.content.infoItem as PlaylistInfoItem).name}', maxLines: 1, style: tinyTextStyle(context, opacity: 0.7).copyWith(color: subTextColor), overflow: TextOverflow.ellipsis),
                               ],
                             );

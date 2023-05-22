@@ -4,6 +4,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/models/media_item_models.dart';
 import 'package:songtube/internal/models/song_item.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/media_provider.dart';
 import 'package:songtube/providers/ui_provider.dart';
 import 'package:songtube/screens/playlist.dart';
@@ -48,7 +49,7 @@ class MusicSearchPage extends StatelessWidget {
                   padding: const EdgeInsets.only(bottom: 12, top: 4),
                   child: Row(
                     children: [
-                      Text('Artist results', style: smallTextStyle(context).copyWith(fontWeight: FontWeight.w800, letterSpacing: 0.4)),
+                      Text(Languages.of(context)!.labelArtistResults, style: smallTextStyle(context).copyWith(fontWeight: FontWeight.w800, letterSpacing: 0.4)),
                     ],
                   ),
                 ),
@@ -88,7 +89,7 @@ class MusicSearchPage extends StatelessWidget {
                   padding: const EdgeInsets.only(bottom: 12, top: 4),
                   child: Row(
                     children: [
-                      Text('Album results', style: smallTextStyle(context).copyWith(fontWeight: FontWeight.w800, letterSpacing: 0.4)),
+                      Text(Languages.of(context)!.labelAlbumResults, style: smallTextStyle(context).copyWith(fontWeight: FontWeight.w800, letterSpacing: 0.4)),
                     ],
                   ),
                 ),
@@ -127,7 +128,7 @@ class MusicSearchPage extends StatelessWidget {
                   padding: const EdgeInsets.only(bottom: 4, top: 4),
                   child: Row(
                     children: [
-                      Text('Song results', style: smallTextStyle(context).copyWith(fontWeight: FontWeight.w800, letterSpacing: 0.4)),
+                      Text(Languages.of(context)!.labelSongResults, style: smallTextStyle(context).copyWith(fontWeight: FontWeight.w800, letterSpacing: 0.4)),
                     ],
                   ),
                 ),
@@ -167,7 +168,7 @@ class MusicSearchPage extends StatelessWidget {
       children: [
         const Icon(Iconsax.music_square_search, size: 64),
         const SizedBox(height: 8),
-        Text('No search results', style: textStyle(context)),
+        Text(Languages.of(context)!.labelNoSearchResults, style: textStyle(context)),
       ],
     ));
   }

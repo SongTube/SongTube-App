@@ -17,6 +17,7 @@ import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:songtube/internal/models/channel_subscription.dart';
 import 'package:songtube/internal/models/content_wrapper.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/main.dart';
 import 'package:songtube/providers/content_provider.dart';
 import 'package:songtube/providers/download_provider.dart';
@@ -209,7 +210,7 @@ class _VideoPlayerContentState extends State<VideoPlayerContent> with TickerProv
   Widget _playerTitle() {
     StreamInfoItem? infoItem = widget.content.infoItem is StreamInfoItem ? widget.content.infoItem : null;
     VideoInfo? videoInfo = widget.content.videoDetails?.videoInfo;
-    final views = (infoItem?.viewCount != null || videoInfo != null) ? "${NumberFormat.compact().format(infoItem?.viewCount ?? videoInfo?.viewCount)} views" : '-1';
+    final views = (infoItem?.viewCount != null || videoInfo != null) ? "${NumberFormat.compact().format(infoItem?.viewCount ?? videoInfo?.viewCount)} ${Languages.of(context)!.labelViews}" : '-1';
     final date = infoItem?.date ?? widget.content.videoDetails?.videoInfo.uploadDate ?? "";
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -330,9 +331,9 @@ class _VideoPlayerContentState extends State<VideoPlayerContent> with TickerProv
               final hasVideo = contentProvider.favoriteVideos.any((element) => element.id == videoInfo?.id);
               return TextIconSlimButton(
                 icon: Icon(LineIcons.thumbsUp, color: hasVideo ? Theme.of(context).primaryColor : Theme.of(context).iconTheme.color, size: 18),
-                text: hasVideo ? 'Liked' : 'Like',
+                text: hasVideo ? Languages.of(context)!.labelLiked : Languages.of(context)!.labelLike,
                 onTap: () {
-                  showSnackbar(customSnackBar: CustomSnackBar(icon: hasVideo ? LineIcons.trash : LineIcons.star, title: hasVideo ? 'Video removed from favorites' : 'Video added to favorites'));
+                  showSnackbar(customSnackBar: CustomSnackBar(icon: hasVideo ? LineIcons.trash : LineIcons.star, title: hasVideo ? Languages.of(context)!.labelVideoRemovedFromFavorites : Languages.of(context)!.labelVideoAddedToFavorites));
                   if (hasVideo) {
                     contentProvider.removeVideoFromFavorites(videoInfo!.id!);
                   } else {
@@ -346,7 +347,7 @@ class _VideoPlayerContentState extends State<VideoPlayerContent> with TickerProv
           // Share Button
           TextIconSlimButton(
             icon: const Icon(LineIcons.share, size: 18),
-            text: 'Share',
+            text: Languages.of(context)!.labelShare,
             onTap: () {
               Share.share(videoInfo!.url!);
             },
@@ -355,7 +356,7 @@ class _VideoPlayerContentState extends State<VideoPlayerContent> with TickerProv
           // Add to Playlist Button
           TextIconSlimButton(
             icon: const Icon(Ionicons.add_outline, size: 18),
-            text: 'Playlist',
+            text: Languages.of(context)!.labelPlaylist,
             onTap: () {
               showModalBottomSheet(context: internalNavigatorKey.currentContext!, backgroundColor: Colors.transparent, isScrollControlled: true, builder: (context) {
                 return AddToStreamPlaylist(stream: widget.content.videoDetails!.toStreamInfoItem());
@@ -371,7 +372,7 @@ class _VideoPlayerContentState extends State<VideoPlayerContent> with TickerProv
                   padding: const EdgeInsets.only(left: 8),
                   child: TextIconSlimButton(
                     icon: const Icon(LineIcons.video, size: 18),
-                    text: 'Popup Mode',
+                    text: Languages.of(context)!.labelPopupMode,
                     onTap: () {
                       final size = Provider.of<ContentProvider>(context, listen: false).playingContent?.videoPlayerController.videoPlayerController?.value.size;
                       FlutterPip.enterPictureInPictureMode(pipRatio: size != null ? PipRatio(width: size.width.round(), height: size.height.round()) : null);
@@ -397,7 +398,7 @@ class _VideoPlayerContentState extends State<VideoPlayerContent> with TickerProv
                   final currentProgress = progress != null ? (progress*100).round().toString() : '';
                   return TextIconSlimButton(
                     icon: Icon(LineIcons.alternateCloudDownload, color: Theme.of(context).iconTheme.color, size: 18),
-                    text: downloading ? 'Downloading... ${currentProgress.isNotEmpty ? '$currentProgress%' : ''}' : downloaded ? 'Downloaded' : 'Download',
+                    text: downloading ? '${Languages.of(context)!.labelDownloading}... ${currentProgress.isNotEmpty ? '$currentProgress%' : ''}' : downloaded ? Languages.of(context)!.labelDownloaded : Languages.of(context)!.labelDownload,
                     onTap: () {
                       showModalBottomSheet(
                         context: internalNavigatorKey.currentContext!,
@@ -412,18 +413,6 @@ class _VideoPlayerContentState extends State<VideoPlayerContent> with TickerProv
             }
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _animatedBox({required Widget child}) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
-      height: hidePlayerBody ? 0 : null,
-      child: AnimatedOpacity(
-        duration: const Duration(milliseconds: 150),
-        opacity: hidePlayerBody ? 0 : 1,
-        child: child,
       ),
     );
   }

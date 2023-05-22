@@ -10,6 +10,7 @@ import 'package:newpipeextractor_dart/models/channel.dart';
 import 'package:newpipeextractor_dart/newpipeextractor_dart.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/cache_utils.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/content_provider.dart';
 import 'package:songtube/ui/animations/show_up.dart';
 import 'package:songtube/ui/sheet_phill.dart';
@@ -69,7 +70,7 @@ class _ChannelSuggestionsState extends State<ChannelSuggestions> {
                     child: Icon(Ionicons.arrow_back_outline, color: Theme.of(context).primaryColor),
                   )
                 ),
-                Expanded(child: Text('Channel Suggestions', style: textStyle(context))),
+                Expanded(child: Text(Languages.of(context)!.labelChannelSuggestions, style: textStyle(context))),
               ],
             ),
           ),
@@ -113,7 +114,7 @@ class _ChannelSuggestionsState extends State<ChannelSuggestions> {
           ),
           const SizedBox(height: 8),
           Text(
-            "Fetching channels...",
+            Languages.of(context)!.labelFetchingChannels,
             style: smallTextStyle(context)
           )
         ],

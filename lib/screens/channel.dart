@@ -4,6 +4,7 @@ import 'package:image_fade/image_fade.dart';
 import 'package:intl/intl.dart';
 import 'package:newpipeextractor_dart/extractors/channels.dart';
 import 'package:newpipeextractor_dart/newpipeextractor_dart.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/ui/components/channel_image.dart';
 import 'package:songtube/ui/components/infinite_scrolling_adapter.dart';
 import 'package:songtube/ui/components/subscribe_text.dart';
@@ -80,13 +81,13 @@ class _ChannelPageState extends State<ChannelPage> with TickerProviderStateMixin
         physics: const BouncingScrollPhysics(),
         indicatorSize: TabBarIndicatorSize.label,
         indicator: RoundedTabIndicator(color: Theme.of(context).primaryColor, height: 3, radius: 100, bottomMargin: 0),
-        tabs: const [
+        tabs: [
           // Recent videos
-          Tab(child: Text('Videos')),
+          Tab(child: Text(Languages.of(context)!.labelVideos)),
           // Playlists 
-          Tab(child: Text('Playlists')),
+          Tab(child: Text(Languages.of(context)!.labelPlaylists)),
           // Channel Information
-          Tab(child: Text('About')),
+          Tab(child: Text(Languages.of(context)!.labelAbout)),
         ],
       ),
     );
@@ -169,7 +170,7 @@ class _ChannelPageState extends State<ChannelPage> with TickerProviderStateMixin
                                     const SizedBox(width: 2),
                                   ],
                                 ),
-                                Text('${channel != null ? '${ NumberFormat().format(channel!.subscriberCount)} Subs • ' : ''}${widget.infoItem.streamCount} videos', style: smallTextStyle(context, opacity: 0.8)),
+                                Text('${channel != null ? '${ NumberFormat().format(channel!.subscriberCount)} Subs • ' : ''}${widget.infoItem.streamCount} ${Languages.of(context)!.labelVideos}', style: smallTextStyle(context, opacity: 0.8)),
                                 const SizedBox(height: 2),
                                 ChannelSubscribeText(channelName: widget.infoItem.name??'', channel: widget.infoItem)
                               ],

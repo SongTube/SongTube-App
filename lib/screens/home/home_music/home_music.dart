@@ -5,6 +5,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/global.dart';
 import 'package:songtube/internal/models/song_item.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/app_settings.dart';
 import 'package:songtube/providers/media_provider.dart';
 import 'package:songtube/screens/home/home_music/pages/albums_page.dart';
@@ -108,7 +109,7 @@ class _HomeMusicState extends State<HomeMusic> with TickerProviderStateMixin {
                 style: smallTextStyle(context).copyWith(fontWeight: FontWeight.w500),
                 decoration: InputDecoration.collapsed(
                   hintStyle: smallTextStyle(context, opacity: 0.4).copyWith(fontWeight: FontWeight.w500),
-                  hintText: 'Search anything...'),
+                  hintText: Languages.of(context)!.labelSearchAnything),
                 onChanged: (_) {
                   setState(() {});
                 },
@@ -148,17 +149,17 @@ class _HomeMusicState extends State<HomeMusic> with TickerProviderStateMixin {
         physics: const BouncingScrollPhysics(),
         indicatorSize: TabBarIndicatorSize.label,
         indicator: RoundedTabIndicator(color: Theme.of(context).primaryColor, height: 3, radius: 100, bottomMargin: 0),
-        tabs: const [
+        tabs: [
           // Home
-          Tab(child: Text('Recents')),
+          Tab(child: Text(Languages.of(context)!.labelRecents)),
           // Music
-          Tab(child: Text('Music')),
+          Tab(child: Text(Languages.of(context)!.labelMusic)),
           // Playlists
-          Tab(child: Text('Playlist')),
+          Tab(child: Text(Languages.of(context)!.labelPlaylists)),
           // Albums
-          Tab(child: Text('Album')),
+          Tab(child: Text(Languages.of(context)!.labelEditorAlbum)),
           // Artists
-          Tab(child: Text('Artist')),
+          Tab(child: Text(Languages.of(context)!.labelEditorArtist)),
         ],
       ),
     );
@@ -174,8 +175,8 @@ class _HomeMusicState extends State<HomeMusic> with TickerProviderStateMixin {
             children: [
               CircularProgressIndicator.adaptive(valueColor: AlwaysStoppedAnimation(Theme.of(context).primaryColor)),
               const SizedBox(height: 8),
-              Text('Fetching songs', style: textStyle(context)),
-              Text('Please wait a moment...', style: subtitleTextStyle(context, opacity: 0.6))
+              Text(Languages.of(context)!.labelFetchingSongs, style: textStyle(context)),
+              Text(Languages.of(context)!.labelPleaseWaitAMoment, style: subtitleTextStyle(context, opacity: 0.6))
             ],
           ))
         : Stack(

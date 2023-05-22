@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:newpipeextractor_dart/models/infoItems/video.dart';
 import 'package:newpipeextractor_dart/newpipeextractor_dart.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/main.dart';
 import 'package:songtube/providers/content_provider.dart';
 import 'package:songtube/providers/ui_provider.dart';
@@ -109,7 +110,7 @@ class StreamTileCollapsed extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.only(left: 8),
                   child: Text(
-                    "${showChannelName ? '${stream.uploaderName}  •  ' : ''}${NumberFormat.compact().format(stream.viewCount) != '-1' ? '${NumberFormat.compact().format(stream.viewCount)} views' : ''}",
+                    "${showChannelName ? '${stream.uploaderName}  •  ' : ''}${NumberFormat.compact().format(stream.viewCount) != '-1' ? '${NumberFormat.compact().format(stream.viewCount)} ${Languages.of(context)!.labelViews}' : ''}",
                     style: tinyTextStyle(context, opacity: 0.8).copyWith(fontWeight: FontWeight.w500),
                     overflow: TextOverflow.clip,
                     maxLines: 1,
@@ -245,7 +246,7 @@ class StreamTileExpanded extends StatelessWidget {
                   style: smallTextStyle(context).copyWith(fontWeight: FontWeight.w500),
                 ),
                 Text(
-                  "${stream.uploaderName}  •  ${stream.viewCount != -1 ? "${NumberFormat.compact().format(stream.viewCount)} views" : ""}"
+                  "${stream.uploaderName}  •  ${stream.viewCount != -1 ? "${NumberFormat.compact().format(stream.viewCount)} ${Languages.of(context)!.labelViews}" : ""}"
                       " ${stream.uploadDate == null ? "" : " ${stream.uploadDate!}"}",
                   style: tinyTextStyle(context, opacity: 0.8).copyWith(fontWeight: FontWeight.w500),
                 )

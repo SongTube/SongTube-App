@@ -59,8 +59,8 @@ class _IntroPageState extends State<IntroPage> {
                           text: TextSpan(
                             style: smallTextStyle(context).copyWith(color: Colors.white.withOpacity(0.8)),
                             children: [
-                              const TextSpan(
-                                text: "Powered by\n",
+                              TextSpan(
+                                text: "${Languages.of(context)!.labelPoweredBy}\n",
                               ),
                               TextSpan(
                                 text: "NewPipe Extractor",
@@ -128,7 +128,7 @@ class _IntroPageState extends State<IntroPage> {
                     color: Colors.black,
                     borderRadius: BorderRadius.circular(100),
                   ),
-                  child: Text('Get Started', style: GoogleFonts.poppins(
+                  child: Text(Languages.of(context)!.labelGetStarted, style: GoogleFonts.poppins(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
                     color: Colors.white

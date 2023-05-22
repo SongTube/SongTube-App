@@ -3,6 +3,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:newpipeextractor_dart/newpipeextractor_dart.dart';
 import 'package:songtube/internal/cache_utils.dart';
 import 'package:songtube/internal/global.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/main.dart';
 import 'package:songtube/providers/content_provider.dart';
 import 'package:songtube/ui/info_item_renderer.dart';
@@ -50,7 +51,7 @@ class _WatchHistoryPageState extends State<WatchHistoryPage> {
                 const SizedBox(width: 4),
                 Expanded(
                   child: Text(
-                    "Watch History",
+                    Languages.of(context)!.labelWatchHistory,
                     style: textStyle(context)
                   ),
                 ),
@@ -58,8 +59,8 @@ class _WatchHistoryPageState extends State<WatchHistoryPage> {
                   onPressed: () {
                     showModalBottomSheet(context: internalNavigatorKey.currentContext!, backgroundColor: Colors.transparent, isScrollControlled: true, builder: (context) {
                       return CommonSheet(
-                        title: 'Clear Watch History',
-                        body: Text('You\'re about to delete all your watch history videos, this action cannot be undone, proceed?', style: subtitleTextStyle(context, opacity: 0.8)),
+                        title: Languages.of(context)!.labelClearWatchHistory,
+                        body: Text(Languages.of(context)!.labelClearWatchHistoryDescription, style: subtitleTextStyle(context, opacity: 0.8)),
                         actions: [
                           // Cancel Button
                           TextButton(
@@ -68,7 +69,7 @@ class _WatchHistoryPageState extends State<WatchHistoryPage> {
                             },
                             child: Padding(
                               padding: const EdgeInsets.only(left: 12, right: 12),
-                              child: Text('Cancel', style: smallTextStyle(context)),
+                              child: Text(Languages.of(context)!.labelCancel, style: smallTextStyle(context)),
                             )
                           ),
                           // Delete button
@@ -87,7 +88,7 @@ class _WatchHistoryPageState extends State<WatchHistoryPage> {
                               },
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 12, right: 12),
-                                child: Text('Delete', style: smallTextStyle(context).copyWith(color: Colors.white)),
+                                child: Text(Languages.of(context)!.labelDelete, style: smallTextStyle(context).copyWith(color: Colors.white)),
                               )
                             ),
                           ),

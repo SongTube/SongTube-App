@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:newpipeextractor_dart/models/infoItems/video.dart';
 import 'package:provider/provider.dart';
 import 'package:roundcheckbox/roundcheckbox.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/main.dart';
 import 'package:songtube/providers/content_provider.dart';
 import 'package:songtube/providers/playlist_provider.dart';
@@ -40,7 +41,7 @@ class AddToStreamPlaylist extends StatelessWidget {
           const SizedBox(height: 8),
           Padding(
             padding: const EdgeInsets.only(left: 16),
-            child: Text('Add to Video Playlist', style: textStyle(context)),
+            child: Text(Languages.of(context)!.labelAddVideoToPlaylist, style: textStyle(context)),
           ),
           const SizedBox(height: 8),
           Padding(
@@ -125,7 +126,7 @@ class AddToStreamPlaylist extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
               ),
               height: kToolbarHeight,
-              child: Center(child: Text('Create Playlist', style: subtitleTextStyle(context).copyWith(color: Theme.of(context).primaryColor))),
+              child: Center(child: Text(Languages.of(context)!.labelCreatePlaylist, style: subtitleTextStyle(context).copyWith(color: Theme.of(context).primaryColor))),
             ),
           )
         ],

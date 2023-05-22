@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/media_provider.dart';
 import 'package:songtube/ui/animations/show_up.dart';
 
@@ -51,7 +52,7 @@ class _FinishIntroPageState extends State<FinishIntroPage> {
             const SizedBox(height: 90),
             ShowUpTransition(
               child: Text(
-                'We are done',
+                Languages.of(context)!.labelWeAreDone,
                 style: GoogleFonts.poppins(
                   fontWeight: FontWeight.w600,
                   fontSize: 20,
@@ -61,7 +62,7 @@ class _FinishIntroPageState extends State<FinishIntroPage> {
             ),
             ShowUpTransition(
               child: Text(
-                'Enjoy the\nApp!',
+                Languages.of(context)!.labelEnjoyTheApp,
                 style: GoogleFonts.poppins(
                   fontWeight: FontWeight.w800,
                   fontSize: 56,
@@ -75,7 +76,7 @@ class _FinishIntroPageState extends State<FinishIntroPage> {
             ShowUpTransition(
               delay: const Duration(milliseconds: 200),
               child: Text(
-                'SongTube is back with a cleaner look and set of features, have fun with your music!',
+                Languages.of(context)!.labelSongtubeIsBackDescription,
                 style: GoogleFonts.poppins(
                   fontWeight: FontWeight.w600,
                   fontSize: 20,
@@ -106,7 +107,7 @@ class _FinishIntroPageState extends State<FinishIntroPage> {
                     borderRadius: BorderRadius.circular(100),
                   ),
                   child: !isLoading
-                    ? Text('Let\'s Go', style: GoogleFonts.poppins(
+                    ? Text(Languages.of(context)!.labelLetsGo, style: GoogleFonts.poppins(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
                         color: Colors.white
@@ -118,7 +119,7 @@ class _FinishIntroPageState extends State<FinishIntroPage> {
                             width: 20, height: 20,
                             child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(Theme.of(context).primaryColor))),
                           const SizedBox(width: 16),
-                          Text('Please wait...', style: GoogleFonts.poppins(
+                          Text(Languages.of(context)!.labelPleaseWait, style: GoogleFonts.poppins(
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
                             color: Colors.white

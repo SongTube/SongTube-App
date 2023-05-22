@@ -12,6 +12,7 @@ import 'package:songtube/internal/enums/download_type.dart';
 import 'package:songtube/internal/models/audio_tags.dart';
 import 'package:songtube/internal/models/download/download_info.dart';
 import 'package:songtube/internal/models/stream_segment_track.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/download_provider.dart';
 import 'package:songtube/ui/sheet_phill.dart';
 import 'package:songtube/ui/text_styles.dart';
@@ -80,7 +81,7 @@ class _VideoDownloadMenuState extends State<VideoDownloadMenu> {
                     ),
                   ),
                   const SizedBox(width: 4),
-                  Text('Video', style: textStyle(context)),
+                  Text(Languages.of(context)!.labelVideo, style: textStyle(context)),
                 ],
               ),
             ),
@@ -228,7 +229,7 @@ class _VideoDownloadMenuState extends State<VideoDownloadMenu> {
                                       return Text(
                                         snapshot.hasData && audioStreamData.hasData && (snapshot.data != null && audioStreamData.data != null)
                                           ? "${((snapshot.data!/1024)/1024 + (audioStreamData.data!/1024)/1024).toStringAsFixed(2)} MB"
-                                          : "Loading...",
+                                          : Languages.of(context)!.labelLoading,
                                         overflow: TextOverflow.fade,
                                         textAlign: TextAlign.left,
                                         softWrap: false,
@@ -282,7 +283,7 @@ class _VideoDownloadMenuState extends State<VideoDownloadMenu> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      'Download',
+                      Languages.of(context)!.labelDownload,
                       style: textStyle(context).copyWith(color: Colors.white)
                     ),
                     const SizedBox(width: 4),

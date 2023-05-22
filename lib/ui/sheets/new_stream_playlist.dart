@@ -1,5 +1,6 @@
 import 'package:newpipeextractor_dart/newpipeextractor_dart.dart';
 import 'package:songtube/internal/models/song_item.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/main.dart';
 import 'package:songtube/providers/content_provider.dart';
 import 'package:songtube/ui/sheet_phill.dart';
@@ -62,7 +63,7 @@ class _NewStreamPlaylistState extends State<NewStreamPlaylist> {
                     child: Icon(Ionicons.arrow_back_outline, color: Theme.of(context).primaryColor),
                   )
                 ),
-                Expanded(child: Text('Create Video Playlist', style: textStyle(context))),
+                Expanded(child: Text(Languages.of(context)!.labelCreateVideoPlaylist, style: textStyle(context))),
               ],
             ),
           ),
@@ -87,7 +88,7 @@ class _NewStreamPlaylistState extends State<NewStreamPlaylist> {
                         child: TextField(
                           autofocus: true,
                           controller: controller,
-                          decoration: InputDecoration.collapsed(hintText: 'Playlist name...', hintStyle: smallTextStyle(context, opacity: 0.6)),
+                          decoration: InputDecoration.collapsed(hintText: Languages.of(context)!.labelPlaylistName, hintStyle: smallTextStyle(context, opacity: 0.6)),
                           style: smallTextStyle(context),
                         ),
                       ),
@@ -105,7 +106,7 @@ class _NewStreamPlaylistState extends State<NewStreamPlaylist> {
                     });
                   }
                 },
-                child: Text('Save', style: smallTextStyle(context).copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor))
+                child: Text(Languages.of(context)!.labelSave, style: smallTextStyle(context).copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor))
               )
             ],
           )

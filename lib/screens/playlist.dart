@@ -12,6 +12,7 @@ import 'package:songtube/internal/global.dart';
 import 'package:songtube/internal/media_utils.dart';
 import 'package:songtube/internal/models/media_set.dart';
 import 'package:songtube/internal/music_brainz.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/main.dart';
 import 'package:songtube/providers/media_provider.dart';
 import 'package:songtube/providers/playlist_provider.dart';
@@ -191,7 +192,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                               )
                             ],
                           ),
-                          Text(mediaSet.songs.isEmpty ? 'Empty' : '${mediaSet.songs.length} songs', style: smallTextStyle(context))
+                          Text(mediaSet.songs.isEmpty ? Languages.of(context)!.labelEmpty : '${mediaSet.songs.length} ${Languages.of(context)!.labelSongs}', style: smallTextStyle(context))
                         ],
                       ),
                     ),
@@ -339,7 +340,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                               children: [
                                 const Icon(Ionicons.play, color: Colors.white),
                                 const SizedBox(width: 8),
-                                Text('Play all', style: textStyle(context).copyWith(color: Colors.white))
+                                Text(Languages.of(context)!.labelPlayAll, style: textStyle(context).copyWith(color: Colors.white))
                               ],
                             )
                           : Row(
@@ -353,7 +354,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                                   }
                                 ),
                                 const SizedBox(width: 8),
-                                Text('Playing...', style: textStyle(context).copyWith(color: Colors.white))
+                                Text(Languages.of(context)!.labelPlaying, style: textStyle(context).copyWith(color: Colors.white))
                               ],
                             )
                       ),

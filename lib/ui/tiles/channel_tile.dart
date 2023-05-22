@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:newpipeextractor_dart/models/infoItems/channel.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/screens/channel.dart';
 import 'package:songtube/ui/components/channel_image.dart';
 import 'package:songtube/ui/components/shimmer_container.dart';
@@ -80,7 +81,7 @@ class _ChannelTileState extends State<ChannelTile> {
                   maxLines: 2,
                 ),
                 Text(
-                  widget.channel.subscriberCount != -1 ? "${NumberFormat().format(widget.channel.subscriberCount)} Subs • " : '' '${widget.channel.streamCount} videos',
+                  widget.channel.subscriberCount != -1 ? "${NumberFormat().format(widget.channel.subscriberCount)} Subs • " : '' '${widget.channel.streamCount} ${Languages.of(context)!.labelVideos}',
                   style: smallTextStyle(context, opacity: 0.8)
                 ),
               ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/ui/animations/show_up.dart';
 
 class PermissionIntroPage extends StatefulWidget {
@@ -86,7 +87,7 @@ class _PermissionIntroPageState extends State<PermissionIntroPage> {
                 ? false : true,
               delay: const Duration(milliseconds: 300),
               child: Text(
-                'Allow us to have',
+                Languages.of(context)!.labelAllowUsToHave,
                 style: GoogleFonts.poppins(
                   fontWeight: FontWeight.w600,
                   fontSize: 20,
@@ -100,7 +101,7 @@ class _PermissionIntroPageState extends State<PermissionIntroPage> {
             ShowUpTransition(
               delay: const Duration(milliseconds: 400),
               child: Text(
-                'Storage\nRead',
+                Languages.of(context)!.labelStorageRead,
                 style: GoogleFonts.poppins(
                   fontWeight: FontWeight.w800,
                   fontSize: 56,
@@ -117,7 +118,7 @@ class _PermissionIntroPageState extends State<PermissionIntroPage> {
             ShowUpTransition(
               delay: const Duration(milliseconds: 500),
               child: Text(
-                'This will scan your music, extract high quality artworks and allow you to personalize your music',
+                Languages.of(context)!.labelStorageReadDescription,
                 style: GoogleFonts.poppins(
                   fontWeight: FontWeight.w600,
                   fontSize: 20,
@@ -160,8 +161,8 @@ class _PermissionIntroPageState extends State<PermissionIntroPage> {
                           key: UniqueKey(),
                           child: Text(
                             hasPermission
-                              ? 'Continue'
-                              : 'Allow Storage Read',
+                              ? Languages.of(context)!.labelContinue
+                              : Languages.of(context)!.labelAllowStorageRead,
                             style: GoogleFonts.poppins(
                             fontSize: 16,
                             fontWeight: FontWeight.w700,

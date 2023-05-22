@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/app_settings.dart';
 import 'package:songtube/internal/artwork_manager.dart';
 import 'package:songtube/internal/global.dart';
@@ -189,8 +190,8 @@ class _MusicPlayerState extends State<MusicPlayer> with TickerProviderStateMixin
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text('Show Playlist', style: tinyTextStyle(context, bold: true).copyWith(letterSpacing: 1, color: textColor)),
-                    Icon(Icons.expand_less, color: Theme.of(context).iconTheme.color, size: 18)
+                    Text(Languages.of(context)!.labelShowPlaylist, style: tinyTextStyle(context, bold: true).copyWith(letterSpacing: 1, color: textColor)),
+                    Icon(Icons.expand_less, color: textColor, size: 18)
                   ],
                 ),
               ),

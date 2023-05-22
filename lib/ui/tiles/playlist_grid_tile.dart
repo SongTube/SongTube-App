@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:songtube/internal/models/media_playlist.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/ui/playlist_artwork.dart';
 import 'package:songtube/ui/text_styles.dart';
 
@@ -62,7 +63,7 @@ class PlaylistGridTile extends StatelessWidget {
                                     color: playlist.songs.first.palette?.text.withOpacity(0.9) ?? Colors.white)
                                 ),
                                 Text(
-                                  playlist.songs.isEmpty ? 'Empty' : '${playlist.songs.length} songs',
+                                  playlist.songs.isEmpty ? Languages.of(context)!.labelEmpty : '${playlist.songs.length} ${Languages.of(context)!.labelSongs}',
                                   maxLines: 1,
                                   overflow: TextOverflow.fade,
                                   softWrap: false,

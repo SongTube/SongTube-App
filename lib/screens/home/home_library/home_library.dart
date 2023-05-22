@@ -7,6 +7,7 @@ import 'package:line_icons/line_icons.dart';
 import 'package:songtube/internal/cache_utils.dart';
 import 'package:songtube/internal/http_server.dart';
 import 'package:songtube/internal/models/backup_model.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/main.dart';
 import 'package:songtube/screens/settings.dart';
 import 'package:songtube/screens/watch_history.dart';
@@ -34,7 +35,7 @@ class _HomeLibraryState extends State<HomeLibrary> {
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle(statusBarIconBrightness: Theme.of(context).brightness),
-        title: Text('Library', style: bigTextStyle(context).copyWith(fontSize: 24)),
+        title: Text(Languages.of(context)!.labelLibrary, style: bigTextStyle(context).copyWith(fontSize: 24)),
         shadowColor: Colors.transparent,
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -81,8 +82,8 @@ class _HomeLibraryState extends State<HomeLibrary> {
                 leading: SizedBox(
                   height: double.infinity,
                   child: Icon(LineIcons.history, color: Theme.of(context).primaryColor)),
-                title: Text('Watch History', style: subtitleTextStyle(context, bold: true)),
-                subtitle: Text('Look at which videos you have seen', style: smallTextStyle(context, opacity: 0.8)),
+                title: Text(Languages.of(context)!.labelWatchHistory, style: subtitleTextStyle(context, bold: true)),
+                subtitle: Text(Languages.of(context)!.labelWatchHistoryDescription, style: smallTextStyle(context, opacity: 0.8)),
                 onTap: () async {
                   await UiUtils.pushRouteAsync(context, const WatchHistoryPage());
                   setState(() {});
@@ -95,8 +96,8 @@ class _HomeLibraryState extends State<HomeLibrary> {
                 leading: SizedBox(
                   height: double.infinity,
                   child: Icon(Iconsax.save_2, color: Theme.of(context).primaryColor)),
-                title: Text('Backup & Restore', style: subtitleTextStyle(context, bold: true)),
-                subtitle: Text('Save or resture all of your local data', style: smallTextStyle(context, opacity: 0.8)),
+                title: Text(Languages.of(context)!.labelBackupAndRestore, style: subtitleTextStyle(context, bold: true)),
+                subtitle: Text(Languages.of(context)!.labelBackupAndRestoreDescription, style: smallTextStyle(context, opacity: 0.8)),
                 onTap: () async {
                   await showModalBottomSheet(context: internalNavigatorKey.currentContext!, backgroundColor: Colors.transparent, isScrollControlled: true, builder: (context) {
                     return const BackupRestoreSheet();
@@ -118,8 +119,8 @@ class _HomeLibraryState extends State<HomeLibrary> {
                   borderRadius: BorderRadius.circular(20)
                 ),
                 child: CheckboxListTile(
-                  title: Text('SongTube Link', style: subtitleTextStyle(context, bold: true)),
-                  subtitle: Text('Allow SongTube browser extension to detect this device, long press to learn more', style: smallTextStyle(context, opacity: 0.8)),
+                  title: Text(Languages.of(context)!.labelSongtubeLink, style: subtitleTextStyle(context, bold: true)),
+                  subtitle: Text(Languages.of(context)!.labelSongtubeLinkDescription, style: smallTextStyle(context, opacity: 0.8)),
                   value: linkServer != null,
                   activeColor: Theme.of(context).primaryColor,
                   onChanged: (value) async {
@@ -148,12 +149,12 @@ class _HomeLibraryState extends State<HomeLibrary> {
                   ),
                 ),
                 title: Text(
-                  'Donate',
+                  Languages.of(context)!.labelDonate,
                   textAlign: TextAlign.start,
                   style: subtitleTextStyle(context, bold: true)
                 ),
                 subtitle: Text(
-                  "Support Development!",
+                  Languages.of(context)!.labelSupportDevelopment,
                   style: smallTextStyle(context, opacity: 0.8)
                 ),
               ),
@@ -170,7 +171,7 @@ class _HomeLibraryState extends State<HomeLibrary> {
     return ListTile(
       title: Padding(
         padding: const EdgeInsets.only(left: 12),
-        child: Text('Social Links', style: subtitleTextStyle(context, bold: true)),
+        child: Text(Languages.of(context)!.labelSocialLinks, style: subtitleTextStyle(context, bold: true)),
       ),
       contentPadding: EdgeInsets.zero,
       subtitle: Container(

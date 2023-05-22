@@ -136,7 +136,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                     ),
                   ),
                   const SizedBox(width: 4),
-                  Text('Music', style: textStyle(context)),
+                  Text(Languages.of(context)!.labelMusic, style: textStyle(context)),
                 ],
               ),
             ),
@@ -334,7 +334,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      'Download',
+                      Languages.of(context)!.labelDownload,
                       style: textStyle(context).copyWith(color: Colors.white)
                     ),
                     const SizedBox(width: 4),
@@ -389,7 +389,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                     color: Theme.of(context).primaryColor),
                   const SizedBox(width: 8),
                   Text(
-                    'Tags Editor',
+                    Languages.of(context)!.labelTagsEditor,
                     style: subtitleTextStyle(context, bold: true)
                   ),
                   const Spacer(),
@@ -419,7 +419,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                       child: TextFieldTile(
                         textController: mainTags.titleController,
                         inputType: TextInputType.text,
-                        labelText: 'Title',
+                        labelText: Languages.of(context)!.labelEditorTitle,
                         icon: EvaIcons.textOutline,
                       ),
                     ),
@@ -434,7 +434,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                       child: TextFieldTile(
                         textController: mainTags.albumController,
                         inputType: TextInputType.text,
-                        labelText: 'Album',
+                        labelText: Languages.of(context)!.labelEditorAlbum,
                         icon: EvaIcons.bookOpenOutline,
                       ),
                     ),
@@ -444,7 +444,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                       child: TextFieldTile(
                         textController: mainTags.artistController,
                         inputType: TextInputType.text,
-                        labelText: 'Artist',
+                        labelText: Languages.of(context)!.labelEditorArtist,
                         icon: EvaIcons.personOutline,
                       ),
                     ),
@@ -459,7 +459,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                       child: TextFieldTile(
                         textController: mainTags.genreController,
                         inputType: TextInputType.text,
-                        labelText: 'Genre',
+                        labelText: Languages.of(context)!.labelEditorGenre,
                         icon: EvaIcons.bookOutline,
                       ),
                     ),
@@ -469,7 +469,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                       child: TextFieldTile(
                         textController: mainTags.dateController,
                         inputType: TextInputType.datetime,
-                        labelText: 'Date',
+                        labelText: Languages.of(context)!.labelEditorDate,
                         icon: EvaIcons.calendarOutline,
                       ),
                     ),
@@ -484,7 +484,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                       child: TextFieldTile(
                         textController: mainTags.discController,
                         inputType: TextInputType.number,
-                        labelText: 'Disc',
+                        labelText: Languages.of(context)!.labelEditorDisc,
                         icon: EvaIcons.playCircleOutline
                       ),
                     ),
@@ -494,7 +494,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                       child: TextFieldTile(
                         textController: mainTags.trackController,
                         inputType: TextInputType.number,
-                        labelText: 'Track',
+                        labelText: Languages.of(context)!.labelEditorTrack,
                         icon: EvaIcons.musicOutline,
                       ),
                     ),
@@ -525,7 +525,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                     color: Theme.of(context).primaryColor),
                   const SizedBox(width: 8),
                   Text(
-                    "Audio Features",
+                    Languages.of(context)!.labelAudioFeatures,
                     style: subtitleTextStyle(context, bold: true)
                   ),
                   const Spacer(),
@@ -552,7 +552,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                   const SizedBox(height: 12),
                   // Volume Gain
                   Text(
-                    'Volume Boost',
+                    Languages.of(context)!.labelVolumeBoost,
                     style: TextStyle(
                       color: Theme.of(context).iconTheme.color,
                       fontFamily: 'Product Sans',
@@ -572,7 +572,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                   //
                   // Bass Gain
                   Text(
-                    'Bass Gain',
+                    Languages.of(context)!.labelBassGain,
                     style: TextStyle(
                       color: Theme.of(context).iconTheme.color,
                       fontFamily: 'Product Sans',
@@ -592,7 +592,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                   //
                   // Treble Gain
                   Text(
-                    'Treble Gain',
+                    Languages.of(context)!.labelTrebleGain,
                     style: TextStyle(
                       color: Theme.of(context).iconTheme.color,
                       fontFamily: 'Product Sans',
@@ -624,7 +624,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                               : Theme.of(context).iconTheme.color
                           ),
                           const SizedBox(width: 8),
-                          Text("Normalize Audio", style: TextStyle(
+                          Text(Languages.of(context)!.labelNormalizeAudio, style: TextStyle(
                             fontSize: 16,
                             color: Theme.of(context).iconTheme.color,
                             fontFamily: "Product Sans",
@@ -654,7 +654,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                           ),
                           const SizedBox(width: 8),
                           Text(
-                            'Enable Audio Conversion',
+                            Languages.of(context)!.labelEnableAudioConversion,
                             style: TextStyle(
                               fontSize: 16,
                               color: Theme.of(context).iconTheme.color,
@@ -769,7 +769,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    "Segmented Download",
+                    Languages.of(context)!.labelSegmentedDownload,
                     style: subtitleTextStyle(context, bold: true)
                   ),
                   const Spacer(),
@@ -809,11 +809,10 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Enable segmented download", style: subtitleTextStyle(context, bold: true)),
+                          Text(Languages.of(context)!.labelEnableSegmentedDownload, style: subtitleTextStyle(context, bold: true)),
                           const SizedBox(height: 8),
                           Text(
-                            "This will download the whole audio file and then split it into the various "
-                            "enabled segments (or audio tracks) from the list below",
+                            Languages.of(context)!.labelEnableSegmentedDownloadDescription,
                             style: smallTextStyle(context, opacity: 0.7)
                           ),
                         ],
@@ -858,9 +857,9 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text("Create Music Playlist", style: subtitleTextStyle(context, bold: true)),
+                                Text(Languages.of(context)!.labelCreateMusicPlaylist, style: subtitleTextStyle(context, bold: true)),
                                 Text(
-                                  "Create music playlist from all downloaded and saved audio segments",
+                                  Languages.of(context)!.labelCreateMusicPlaylistDescription ,
                                   style: smallTextStyle(context, opacity: 0.7))
                               ],
                             ),
@@ -892,9 +891,9 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text("Apply Tags", style: subtitleTextStyle(context, bold: true)),
+                                Text(Languages.of(context)!.labelApplyTags, style: subtitleTextStyle(context, bold: true)),
                                 Text(
-                                  "Extract tags from MusicBrainz for all segments",
+                                  Languages.of(context)!.labelApplyTagsDescription,
                                   style: smallTextStyle(context, opacity: 0.7))
                               ],
                             ),

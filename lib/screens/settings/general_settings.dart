@@ -5,6 +5,7 @@ import 'package:line_icons/line_icon.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:roundcheckbox/roundcheckbox.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/app_settings.dart';
 import 'package:songtube/providers/ui_provider.dart';
 import 'package:songtube/ui/components/circular_check_box.dart';
@@ -64,8 +65,8 @@ class _GeneralSettingsState extends State<GeneralSettings> {
         // Use System Theme
         SettingTileCheckbox(
           leadingIcon: LineIcons.brush,
-          title: 'Use system theme',
-          subtitle: 'Let system override current theme',
+          title: Languages.of(context)!.labelUseSystemTheme,
+          subtitle: Languages.of(context)!.labelUseSystemThemeJustification,
           onChange: (_) => updateThemeMode(system: true),
           value: uiProvider.themeMode == ThemeMode.system,
         ),
@@ -73,8 +74,8 @@ class _GeneralSettingsState extends State<GeneralSettings> {
         // Dark mode
         SettingTileCheckbox(
           leadingIcon: LineIcons.moon,
-          title: 'Dark mode',
-          subtitle: 'Enable/disable dark mode',
+          title: Languages.of(context)!.labelEnableDarkTheme,
+          subtitle: Languages.of(context)!.labelEnableDarkThemeJustification,
           onChange: (_) => updateThemeMode(),
           value: uiProvider.themeMode == ThemeMode.dark,
           enabled: uiProvider.themeMode != ThemeMode.system,
@@ -83,8 +84,8 @@ class _GeneralSettingsState extends State<GeneralSettings> {
         // Enable/Disable Watch History
         SettingTileCheckbox(
           leadingIcon: Iconsax.video_play,
-          title: 'Pause Watch History',
-          subtitle: 'While paused, videos are not saved into the watch history list',
+          title: Languages.of(context)!.labelPauseWatchHistory,
+          subtitle: Languages.of(context)!.labelPauseWatchHistoryDescription,
           onChange: (_) {
             AppSettings.enableWatchHistory = !AppSettings.enableWatchHistory;
             setState(() {});
@@ -94,8 +95,8 @@ class _GeneralSettingsState extends State<GeneralSettings> {
         // Lock Navigation Bar so it doesnt hide
         const SizedBox(height: 12),
         SettingTileCheckbox(
-          title: 'Lock Navigation Bar',
-          subtitle: 'Locks the navigation bar from hiding and showing automatically on scroll',
+          title: Languages.of(context)!.labelLockNavigationBar,
+          subtitle: Languages.of(context)!.labelLockNavigationBarDescription,
           leadingIcon: LineIcons.lock,
           value: AppSettings.lockNavigationBar,
           onChange: (value) {
@@ -107,8 +108,8 @@ class _GeneralSettingsState extends State<GeneralSettings> {
         const SizedBox(height: 12),
         SettingTileCheckbox(
           leadingIcon: Icons.picture_in_picture_alt_outlined,
-          title: 'Picture in Picture',
-          subtitle: 'Automatically enters PiP mode upon tapping home button while watching a video',
+          title: Languages.of(context)!.labelPictureInPicture,
+          subtitle: Languages.of(context)!.labelPictureInPictureDescription,
           onChange: (value) => setState(() => AppSettings.enableAutoPictureInPictureMode = value),
           value: AppSettings.enableAutoPictureInPictureMode,
         ),
@@ -116,8 +117,8 @@ class _GeneralSettingsState extends State<GeneralSettings> {
         const SizedBox(height: 12),
         SettingTileCheckbox(
           leadingIcon: LineIcons.playCircle,
-          title: 'Background Playback (Alpha)',
-          subtitle: 'Toggle background playback feature. Due to plugin limitations, only current video can be played in the background',
+          title: Languages.of(context)!.labelBackgroundPlaybackAlpha,
+          subtitle: Languages.of(context)!.labelBackgroundPlaybackAlphaDescription,
           onChange: (value) => setState(() => AppSettings.enableBackgroundPlayback = value),
           value: AppSettings.enableBackgroundPlayback,
         ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/content_provider.dart';
 import 'package:songtube/providers/ui_provider.dart';
 import 'package:songtube/ui/text_styles.dart';
@@ -48,10 +49,10 @@ class VideoPlaylistPage extends StatelessWidget {
       children: [
         const Icon(Ionicons.list, size: 64),
         const SizedBox(height: 8),
-        Text('No Playlists', style: textStyle(context)),
+        Text(Languages.of(context)!.labelNoPlaylists, style: textStyle(context)),
         Padding(
           padding: const EdgeInsets.only(left: 32, right: 32),
-          child: Text('Search for videos or playlists and save them. They will appear here', style: subtitleTextStyle(context, opacity: 0.6), textAlign: TextAlign.center,),
+          child: Text(Languages.of(context)!.labelNoPlaylistsDescription, style: subtitleTextStyle(context, opacity: 0.6), textAlign: TextAlign.center,),
         ),
       ],
     ));

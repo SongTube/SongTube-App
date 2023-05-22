@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:newpipeextractor_dart/newpipeextractor_dart.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/models/channel_subscription.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/content_provider.dart';
 import 'package:songtube/ui/text_styles.dart';
 
@@ -54,7 +55,7 @@ class _ChannelSubscribeTextState extends State<ChannelSubscribeText> with Ticker
           child: Ink(
             color: Colors.transparent,
             child: Text(
-              isSubscribed ? 'UNSUBSCRIBE' : 'SUBSCRIBE',
+              isSubscribed ? Languages.of(context)!.labelUnsubscribe : Languages.of(context)!.labelSubscribe,
               style: smallTextStyle(context).copyWith(fontWeight: FontWeight.w900, letterSpacing: 1, color: isSubscribed
                 ? Theme.of(context).iconTheme.color!
                     .withOpacity(0.6)

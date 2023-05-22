@@ -3,6 +3,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/models/media_playlist.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/playlist_provider.dart';
 import 'package:songtube/screens/playlist.dart';
 import 'package:songtube/ui/text_styles.dart';
@@ -56,10 +57,10 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
       children: [
         const Icon(Iconsax.music_playlist, size: 64),
         const SizedBox(height: 8),
-        Text('No playlists yet', style: textStyle(context)),
+        Text(Languages.of(context)!.labelNoPlaylistsYet, style: textStyle(context)),
         Padding(
           padding: const EdgeInsets.only(left: 32, right: 32),
-          child: Text('You can create a playlist from your recents, music, albums or artists', style: subtitleTextStyle(context, opacity: 0.6), textAlign: TextAlign.center,),
+          child: Text(Languages.of(context)!.labelNoPlaylistsYetDescription, style: subtitleTextStyle(context, opacity: 0.6), textAlign: TextAlign.center,),
         ),
       ],
     ));

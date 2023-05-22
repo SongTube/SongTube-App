@@ -4,6 +4,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:songtube/internal/global.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/ui/sheet_phill.dart';
 import 'package:songtube/ui/text_styles.dart';
 
@@ -79,7 +80,7 @@ class _MusicEqualizerSheetState extends State<MusicEqualizerSheet> {
                     child: Icon(Ionicons.arrow_back_outline),
                   )
                 ),
-                Expanded(child: Text('Equalizer', style: textStyle(context))),
+                Expanded(child: Text(Languages.of(context)!.labelEqualizer, style: textStyle(context))),
               ],
             ),
           ),
@@ -99,7 +100,7 @@ class _MusicEqualizerSheetState extends State<MusicEqualizerSheet> {
         CheckboxListTile(
           activeColor: Theme.of(context).iconTheme.color,
           checkColor: widget.songColor,
-          title: Text('Loudness Equalization Gain',
+          title: Text(Languages.of(context)!.labelLoudnessEqualizationGain,
             style: subtitleTextStyle(context)),
           value: loudnessEqualization.enabled,
           onChanged: (value) {
@@ -129,7 +130,7 @@ class _MusicEqualizerSheetState extends State<MusicEqualizerSheet> {
         CheckboxListTile(
           activeColor: Theme.of(context).iconTheme.color,
           checkColor: widget.songColor,
-          title: Text('Sliders',
+          title: Text(Languages.of(context)!.labelSliders,
             style: subtitleTextStyle(context)),
           value: equalizer.enabled,
           onChanged: (value) {

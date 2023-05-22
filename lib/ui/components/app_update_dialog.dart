@@ -1,6 +1,7 @@
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/ui/text_styles.dart';
 
 import '../../internal/models/update/update_detail.dart';
@@ -52,7 +53,7 @@ class _AppUpdateDialogState extends State<AppUpdateDialog> {
                   Row(
                     children: [
                       Text(
-                        "App Update  ->  ",
+                        "${Languages.of(context)!.labelAppUpdate}  ->  ",
                         style: subtitleTextStyle(context)
                       ),
                       Text(
@@ -69,7 +70,7 @@ class _AppUpdateDialogState extends State<AppUpdateDialog> {
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              "What's new?",
+              Languages.of(context)!.labelWhatsNew,
               style: subtitleTextStyle(context, bold: true).copyWith(color: Theme.of(context).primaryColor)
             ),
           )
@@ -84,7 +85,7 @@ class _AppUpdateDialogState extends State<AppUpdateDialog> {
         TextButton(
             onPressed: () => Navigator.pop(context),
             child: Text(
-              "Later",
+              Languages.of(context)!.labelLater,
               style: subtitleTextStyle(context)
             )),
         Padding(
@@ -108,7 +109,7 @@ class _AppUpdateDialogState extends State<AppUpdateDialog> {
                   borderRadius: BorderRadius.circular(100),
                 )),
             child: Text(
-              "Update",
+              Languages.of(context)!.labelUpdate,
               style: subtitleTextStyle(context).copyWith(color: Colors.white)
             ),
           ),
@@ -128,7 +129,7 @@ class _AppUpdate extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
       ),
       title: Text(
-        "Downloading",
+        Languages.of(context)!.labelDownloading,
         style: textStyle(context)
       ),
       content: StreamBuilder<double?>(

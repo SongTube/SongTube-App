@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/global.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/download_provider.dart';
 import 'package:songtube/providers/media_provider.dart';
 import 'package:songtube/providers/ui_provider.dart';
@@ -28,10 +29,10 @@ class _DownloadsCompletedPageState extends State<DownloadsCompletedPage> {
             children: [
               const Icon(Ionicons.cloud_download_outline, size: 64),
               const SizedBox(height: 8),
-              Text('No downloads yet', style: textStyle(context)),
+              Text(Languages.of(context)!.labelNoDownloadsYet, style: textStyle(context)),
               Padding(
                 padding: const EdgeInsets.only(left: 32, right: 32),
-                child: Text('Go home, search for something to download or wait for the queue!', style: subtitleTextStyle(context, opacity: 0.6), textAlign: TextAlign.center,),
+                child: Text(Languages.of(context)!.labelNoDownloadsYetDescription, style: subtitleTextStyle(context, opacity: 0.6), textAlign: TextAlign.center,),
               ),
             ],
           ))

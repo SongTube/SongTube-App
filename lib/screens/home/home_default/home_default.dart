@@ -4,6 +4,7 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:newpipeextractor_dart/utils/url.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/main.dart';
 import 'package:songtube/providers/content_provider.dart';
 import 'package:songtube/providers/ui_provider.dart';
@@ -152,7 +153,7 @@ class _HomeDefaultState extends State<HomeDefault> with TickerProviderStateMixin
                                 style: smallTextStyle(context).copyWith(fontWeight: FontWeight.w500),
                                 decoration: InputDecoration.collapsed(
                                   hintStyle: smallTextStyle(context, opacity: 0.4).copyWith(fontWeight: FontWeight.w500),
-                                  hintText: 'Search YouTube...'),
+                                  hintText: Languages.of(context)!.labelSearchYoutube),
                                 onSubmitted: (query) {
                                   FocusScope.of(context).unfocus();
                                   setState(() {});
@@ -232,15 +233,15 @@ class _HomeDefaultState extends State<HomeDefault> with TickerProviderStateMixin
         indicator: RoundedTabIndicator(color: Theme.of(context).primaryColor, height: 3, radius: 100, bottomMargin: 0),
         tabs: [
           if (contentProvider.searchContent != null || contentProvider.searchingContent)
-          const Tab(child: Text('Search')),
+          Tab(child: Text(Languages.of(context)!.labelSearch)),
           // Trending
-          const Tab(child: Text('Recents')),
+          Tab(child: Text(Languages.of(context)!.labelTrending)),
           // Subscriptions
-          const Tab(child: Text('Subscriptions')),
+          Tab(child: Text(Languages.of(context)!.labelSubscriptions)),
           // Favorites
-          const Tab(child: Text('Playlists')),
+          Tab(child: Text(Languages.of(context)!.labelPlaylists)),
           // Watch Later
-          const Tab(child: Text('Favorites')),
+          Tab(child: Text(Languages.of(context)!.labelFavorites)),
         ],
       ),
     );

@@ -12,6 +12,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:screen_brightness/screen_brightness.dart';
 import 'package:songtube/internal/models/content_wrapper.dart';
 import 'package:songtube/internal/models/playback_quality.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/main.dart';
 import 'package:songtube/providers/app_settings.dart';
 import 'package:songtube/providers/content_provider.dart';
@@ -694,7 +695,7 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Playing next in... $autoplayCurrent', style: subtitleTextStyle(context, bold: true).copyWith(color: Colors.white)),
+                        Text('${Languages.of(context)!.labelPlayingNextIn} $autoplayCurrent', style: subtitleTextStyle(context, bold: true).copyWith(color: Colors.white)),
                         Text('${nextStream.name}', style: smallTextStyle(context).copyWith(color: Colors.white), maxLines: 1),
                         Text('by ${nextStream.uploaderName}', style: smallTextStyle(context).copyWith(color: Colors.white), maxLines: 1),
                       ],
@@ -720,7 +721,7 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                         color: Colors.white.withOpacity(0.4),
                         borderRadius: BorderRadius.circular(100)
                       ),
-                      child: Text('Cancel', style: subtitleTextStyle(context, bold: true).copyWith(color: Colors.white)),
+                      child: Text(Languages.of(context)!.labelCancel, style: subtitleTextStyle(context, bold: true).copyWith(color: Colors.white)),
                     ),
                   ),
                   const SizedBox(width: 24),
@@ -735,7 +736,7 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                         color: Colors.white.withOpacity(0.4),
                         borderRadius: BorderRadius.circular(100)
                       ),
-                      child: Text('Play Now', style: subtitleTextStyle(context, bold: true).copyWith(color: Colors.white)),
+                      child: Text(Languages.of(context)!.labelPlayNow, style: subtitleTextStyle(context, bold: true).copyWith(color: Colors.white)),
                     ),
                   ),
                 ],

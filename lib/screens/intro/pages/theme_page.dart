@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/ui_provider.dart';
 import 'package:songtube/ui/animations/show_up.dart';
 
@@ -34,7 +35,7 @@ class _ThemeIntroPageState extends State<ThemeIntroPage> {
           const SizedBox(height: 90),
           ShowUpTransition(
             child: Text(
-              'Select your preferred',
+              Languages.of(context)!.labelSelectYourPreferred,
               style: GoogleFonts.poppins(
                 fontWeight: FontWeight.w600,
                 fontSize: 20,
@@ -44,7 +45,7 @@ class _ThemeIntroPageState extends State<ThemeIntroPage> {
           ),
           ShowUpTransition(
             child: Text(
-              'Theme',
+              Languages.of(context)!.labelTheme,
               style: GoogleFonts.poppins(
                 fontWeight: FontWeight.w800,
                 fontSize: 56,
@@ -107,7 +108,7 @@ class _ThemeIntroPageState extends State<ThemeIntroPage> {
                   color: Colors.black,
                   borderRadius: BorderRadius.circular(100),
                 ),
-                child: Text('Continue', style: GoogleFonts.poppins(
+                child: Text(Languages.of(context)!.labelContinue, style: GoogleFonts.poppins(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
                   color: Colors.white
@@ -157,10 +158,10 @@ class _ThemeIntroPageState extends State<ThemeIntroPage> {
             duration: const Duration(milliseconds: 200),
             child: Text(
               mode == ThemeMode.system
-                ? 'System'
+                ? Languages.of(context)!.labelSystem
                 : mode == ThemeMode.light
-                  ? 'Light'
-                  : 'Dark',
+                  ? Languages.of(context)!.labelLight
+                  : Languages.of(context)!.labelDark,
               style: GoogleFonts.poppins(
               fontSize: 18,
               fontWeight: FontWeight.w700,

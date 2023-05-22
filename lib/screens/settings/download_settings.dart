@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/app_settings.dart';
 import 'package:songtube/internal/global.dart';
 import 'package:songtube/ui/tiles/setting_tile.dart';
@@ -26,13 +27,13 @@ class _DownloadSettingsState extends State<DownloadSettings> {
       children: [
         // Simultaneous download count
         SettingTileSlider(
-          title: 'Simultaneous Downloads',
-          subtitle: 'Define how many downloads can happen at the same time',
+          title: Languages.of(context)!.labelSimultaneousDownloads,
+          subtitle: Languages.of(context)!.labelSimultaneousDownloadsDescription,
           leadingIcon: Ionicons.cloud_download_outline,
           value: AppSettings.maxSimultaneousDownloads.roundToDouble(),
           min: 1,
           max: 6,
-          valueTrailingString: ' items',
+          valueTrailingString: ' ${Languages.of(context)!.labelItems}',
           onChange: (double value) async {
             AppSettings.maxSimultaneousDownloads = value.round();
             setState(() {});
@@ -41,8 +42,8 @@ class _DownloadSettingsState extends State<DownloadSettings> {
         const SizedBox(height: 12),
         // Instant Download Format
         SettingTileDropdown(
-          title: 'Instant Download Format',
-          subtitle: 'Change the audio format for instant downloads',
+          title: Languages.of(context)!.labelInstantDownloadFormat,
+          subtitle: Languages.of(context)!.labelInstantDownloadFormatDescription,
           leadingIcon: Ionicons.flash_outline,
           currentValue: sharedPreferences.getString('instant_download_format') ?? 'AAC',
           items: const [
@@ -67,8 +68,8 @@ class _DownloadSettingsState extends State<DownloadSettings> {
         ),
         // Download Audio Path
         SettingTile(
-          title: 'Music Directory',
-          subtitle: 'Current: ${AppSettings.musicDirectory.path}',
+          title: Languages.of(context)!.labelAudioFolder,
+          subtitle: '${Languages.of(context)!.labelCurrent}: ${AppSettings.musicDirectory.path}',
           leadingIcon: Iconsax.folder,
           onTap: () async {
             final result = await FilePicker.platform.getDirectoryPath();
@@ -80,8 +81,8 @@ class _DownloadSettingsState extends State<DownloadSettings> {
         ),
         // Download Video Path
         SettingTile(
-          title: 'Video Directory',
-          subtitle: 'Current: ${AppSettings.videoDirectory.path}',
+          title: Languages.of(context)!.labelVideoFolder,
+          subtitle: '${Languages.of(context)!.labelCurrent}: ${AppSettings.videoDirectory.path}',
           leadingIcon: Iconsax.folder,
           onTap: () async {
             final result = await FilePicker.platform.getDirectoryPath();

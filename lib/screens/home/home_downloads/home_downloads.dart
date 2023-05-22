@@ -4,6 +4,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/download_provider.dart';
 import 'package:songtube/screens/home/home_downloads/pages/canceled.dart';
 import 'package:songtube/screens/home/home_downloads/pages/completed.dart';
@@ -66,7 +67,7 @@ class _HomeDownloadsState extends State<HomeDownloads> with TickerProviderStateM
                   style: subtitleTextStyle(context).copyWith(fontWeight: FontWeight.w500),
                   decoration: InputDecoration.collapsed(
                     hintStyle: smallTextStyle(context, opacity: 0.4).copyWith(fontWeight: FontWeight.w500),
-                    hintText: 'Search downloads...'),
+                    hintText: Languages.of(context)!.labelSearchDownloads),
                 ),
               ),
               const SizedBox(width: 16),
@@ -91,13 +92,13 @@ class _HomeDownloadsState extends State<HomeDownloads> with TickerProviderStateM
         physics: const BouncingScrollPhysics(),
         indicatorSize: TabBarIndicatorSize.label,
         indicator: RoundedTabIndicator(color: Theme.of(context).primaryColor, height: 3, radius: 100, bottomMargin: 0),
-        tabs: const [
+        tabs: [
           // Queue
-          Tab(child: Text('Queue')),
+          Tab(child: Text(Languages.of(context)!.labelQueue)),
           // Completed
-          Tab(child: Text('Completed')),
+          Tab(child: Text(Languages.of(context)!.labelCompleted)),
           // Canceled
-          Tab(child: Text('Canceled')),
+          Tab(child: Text(Languages.of(context)!.labelCancelled)),
         ],
       ),
     );

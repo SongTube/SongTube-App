@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:newpipeextractor_dart/models/filters.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/content_provider.dart';
 import 'package:songtube/ui/sheet_phill.dart';
 import 'package:songtube/ui/text_styles.dart';
@@ -44,7 +45,7 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
                     child: Icon(Ionicons.arrow_back_outline),
                   )
                 ),
-                Expanded(child: Text('Search Filters', style: textStyle(context))),
+                Expanded(child: Text(Languages.of(context)!.labelSearchFilters, style: textStyle(context))),
               ],
             ),
           ),
