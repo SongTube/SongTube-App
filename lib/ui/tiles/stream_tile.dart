@@ -248,6 +248,8 @@ class StreamTileExpanded extends StatelessWidget {
                 Text(
                   "${stream.uploaderName}  •  ${stream.viewCount != -1 ? "${NumberFormat.compact().format(stream.viewCount)} ${Languages.of(context)!.labelViews}" : ""}"
                       " ${stream.uploadDate == null ? "" : " ${stream.uploadDate!}"}",
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: tinyTextStyle(context, opacity: 0.8).copyWith(fontWeight: FontWeight.w500),
                 )
               ],
