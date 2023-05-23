@@ -41,6 +41,15 @@ class _IntroScreenState extends State<IntroScreen> {
   }
 
   @override
+  void initState() {
+    // Clear data from previous SongTube so we avoid getting into weird bugs
+    if (appFirstRun) {
+      sharedPreferences.clear();
+    }
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final mediaProvider = Provider.of<MediaProvider>(context);
     SystemChrome.setSystemUIOverlayStyle(
