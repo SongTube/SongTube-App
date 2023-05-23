@@ -90,7 +90,7 @@ class _SongCardTileState extends State<SongCardTile> {
                     width: double.infinity,
                     height: kToolbarHeight,
                     decoration: BoxDecoration(
-                      color: widget.song.palette!.dominant!.withOpacity(0.9),
+                      color: widget.song.palette?.dominant?.withOpacity(0.9),
                       borderRadius: BorderRadius.circular(30)
                     ),
                     child: ClipRRect(
@@ -113,14 +113,14 @@ class _SongCardTileState extends State<SongCardTile> {
                                     softWrap: false,
                                     style: tinyTextStyle(context).copyWith(
                                       fontWeight: FontWeight.bold,
-                                      color: widget.song.palette!.text)
+                                      color: widget.song.palette?.text)
                                   ),
                                   Text(
                                     widget.song.album ?? 'Unknown',
                                     maxLines: 1,
                                     overflow: TextOverflow.fade,
                                     softWrap: false,
-                                    style: tinyTextStyle(context).copyWith(color: (widget.song.palette!.text).withOpacity(0.8))
+                                    style: tinyTextStyle(context).copyWith(color: (widget.song.palette?.text)?.withOpacity(0.8))
                                   ),
                                 ],
                               ),
@@ -131,8 +131,8 @@ class _SongCardTileState extends State<SongCardTile> {
                               child: isPlaying 
                                 ? SizedBox(
                                     height: 20, width: 20,
-                                    child: MiniMusicVisualizer(color: widget.song.palette!.text, width: 2, height: 12))
-                                : Icon(Ionicons.play, color: widget.song.palette!.text, size: 16))
+                                    child: MiniMusicVisualizer(color: widget.song.palette?.text, width: 2, height: 12))
+                                : Icon(Ionicons.play, color: widget.song.palette?.text, size: 16))
                           ],
                         ),
                       ),

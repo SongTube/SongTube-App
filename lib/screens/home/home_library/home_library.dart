@@ -9,6 +9,7 @@ import 'package:songtube/internal/http_server.dart';
 import 'package:songtube/internal/models/backup_model.dart';
 import 'package:songtube/languages/languages.dart';
 import 'package:songtube/main.dart';
+import 'package:songtube/screens/about.dart';
 import 'package:songtube/screens/settings.dart';
 import 'package:songtube/screens/watch_history.dart';
 import 'package:songtube/ui/info_item_renderer.dart';
@@ -159,6 +160,7 @@ class _HomeLibraryState extends State<HomeLibrary> {
                 ),
               ),
             ),
+            _about(),
             _socialIcons(),
             const SizedBox(height: (kToolbarHeight*1.5)+16)
           ],
@@ -197,6 +199,34 @@ class _HomeLibraryState extends State<HomeLibrary> {
               child: Image.asset('assets/images/instagram.png')
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _about() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 12),
+      child: ListTile(
+        onTap: () {
+          UiUtils.pushRouteAsync(context, AboutPage());
+        },
+        leading: const SizedBox(
+          height: double.infinity,
+          child: Icon(
+            EvaIcons.questionMarkCircle,
+            color: Colors.orangeAccent,
+            size: 24,
+          ),
+        ),
+        title: Text(
+          Languages.of(context)!.labelAbout,
+          textAlign: TextAlign.start,
+          style: subtitleTextStyle(context, bold: true)
+        ),
+        subtitle: Text(
+          "Licenses, Contact Info and more",
+          style: smallTextStyle(context, opacity: 0.8)
         ),
       ),
     );
