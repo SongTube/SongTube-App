@@ -209,7 +209,7 @@ class _HomeLibraryState extends State<HomeLibrary> {
       padding: const EdgeInsets.only(left: 12),
       child: ListTile(
         onTap: () {
-          UiUtils.pushRouteAsync(context, AboutPage());
+          UiUtils.pushRouteAsync(internalNavigatorKey.currentContext!, AboutPage());
         },
         leading: const SizedBox(
           height: double.infinity,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/internal/global.dart';
 import 'package:songtube/ui/text_styles.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -36,9 +37,9 @@ class AboutPage extends StatelessWidget {
                     color: Colors.green),
                   onPressed: () {
                     showLicensePage(
-                      applicationName: 'SongTube',
+                      applicationName: packageInfo.appName,
                       applicationIcon: Image.asset('assets/images/ic_launcher.png', height: 50, width: 50),
-                      applicationVersion: '7',//config.appVersion,
+                      applicationVersion: packageInfo.version,
                       context: context
                     );
                   },
@@ -48,147 +49,112 @@ class AboutPage extends StatelessWidget {
           ),
           Expanded(
             child: ListView(
+              padding: const EdgeInsets.only(bottom: 32),
+              physics: const BouncingScrollPhysics(),
               children: [
-                SizedBox(height: 12),
+                const SizedBox(height: 12),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Spacer(),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.grey.withOpacity(0.6),
-                        borderRadius: BorderRadius.circular(100)
-                      ),
-                      padding: EdgeInsets.all(8),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(100)
-                        ),
-                        padding: EdgeInsets.all(12),
-                        child: Image.asset(
-                          'assets/images/logo.png',
-                          width: MediaQuery.of(context).size.width*0.15,
-                        ),
-                      ),
+                    Image.asset(
+                      'assets/images/logo.png',
+                      width: MediaQuery.of(context).size.width*0.24,
                     ),
-                    SizedBox(width: 32),
+                    const SizedBox(width: 32),
                     Text(
                       "SongTube",
-                      style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyText1!.color,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'Product Sans'
-                      ),
+                      style: bigTextStyle(context)
                     ),
-                    Spacer(),
                   ],
                 ),
-                SizedBox(height: 16),
-                RichText(
-                  text: TextSpan(
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Theme.of(context).textTheme.bodyText1!.color
-                    ),
-                    children: [
-                      TextSpan(
-                        text: "It's an Open Source app for media downloading "
-                          "or streaming purposes\n\nMeant to be a beautiful, "
-                          "fast and functional alternative to other Youtube "
-                          "Clients, "
-                      ),
-                      TextSpan(
-                        text: "it'll be forever free with no ads.",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w700
+                const SizedBox(height: 32),
+                Padding(
+                  padding: const EdgeInsets.only(left: 32, right: 32),
+                  child: RichText(
+                    text: TextSpan(
+                      style: subtitleTextStyle(context),
+                      children: const [
+                        TextSpan(
+                          text: "It's an Open Source app for media downloading "
+                            "or streaming purposes\n\nMeant to be a beautiful, "
+                            "fast and functional alternative to other Youtube "
+                            "Clients, "
+                        ),
+                        TextSpan(
+                          text: "it'll be forever free with no ads.",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700
+                          )
                         )
-                      )
-                    ]
+                      ]
+                    ),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 32),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Spacer(),
                     Text(
                       "Airis Team",
-                      style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyText1!.color,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'Product Sans'
-                      ),
+                      style: bigTextStyle(context)
                     ),
-                    SizedBox(width: 32),
+                    const SizedBox(width: 32),
                     Container(
                       decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 0, 10, 28),
-                        borderRadius: BorderRadius.circular(100)
+                        color: const Color.fromARGB(255, 0, 10, 28),
+                        borderRadius: BorderRadius.circular(100),
+                        border: Border.all(color: Theme.of(context).dividerColor.withOpacity(0.1), width: 2)
                       ),
-                      padding: EdgeInsets.all(8),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 0, 10, 28),
-                          borderRadius: BorderRadius.circular(100)
-                        ),
-                        padding: EdgeInsets.all(12),
-                        child: Image.asset(
-                          'assets/images/airis.png',
-                          width: MediaQuery.of(context).size.width*0.15,
-                        ),
+                      child: Image.asset(
+                        'assets/images/airis.png',
+                        width: MediaQuery.of(context).size.width*0.24,
                       ),
                     ),
-                    Spacer(),
                   ],
                 ),
-                SizedBox(height: 16),
-                Text(
-                  "We are a Development Team dedicated to professional software "
-                  "solutions.\n\nContact us to know more about the best Web "
-                  "and Mobile services we can offer you.",
-                  style: TextStyle(
-                    fontSize: 14
+                const SizedBox(height: 32),
+                Padding(
+                  padding: const EdgeInsets.only(left: 32, right: 32),
+                  child: Text(
+                    "We are a Development Team dedicated to professional software "
+                    "solutions.\n\nContact us to know more about the best Web "
+                    "and Mobile services we can offer you.",
+                    style: subtitleTextStyle(context)
                   ),
                 ),
-                SizedBox(height: 16),
-                Divider(),
+                const SizedBox(height: 16),
+                const Divider(),
                 // Artx Email
                 ListTile(
+                  contentPadding: const EdgeInsets.only(left: 32, right: 32),
                   onTap: () {
-                    launch('mailto:artx4dev@gmail.com');
+                    launchUrl(Uri.parse('mailto:artx4dev@gmail.com'));
                   },
-                  leading: Icon(
-                    EvaIcons.emailOutline,
-                    color: Colors.red,
-                    size: 28,
+                  leading: Image.asset(
+                    'assets/images/logo.png',
+                    width: MediaQuery.of(context).size.width*0.09,
                   ),
                   title: Text(
-                    "Email",
+                    "SongTube Developer",
                     textAlign: TextAlign.start,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      fontFamily: 'Product Sans',
-                      color: Theme.of(context).textTheme.bodyText1!.color
-                    )
+                    style: subtitleTextStyle(context, bold: true)
                   ),
                   subtitle: Text(
                     "artx4dev@gmail.com",
-                    style: TextStyle(
-                      fontFamily: 'Product Sans',
-                      color: Theme.of(context).textTheme.bodyText1!.color
-                    ),
+                    style: smallTextStyle(context, opacity: 0.8)
+                  ),
+                  trailing: IconButton(
+                    onPressed: () {},
+                    icon: Icon(Icons.arrow_forward_ios_rounded, color: Theme.of(context).iconTheme.color, size: 18),
                   ),
                 ),
                 // Airis Email
                 ListTile(
+                  contentPadding: const EdgeInsets.only(left: 32, right: 32),
                   onTap: () {
-                    launch('mailto:airisdevgroup@gmail.com');
+                    launchUrl(Uri.parse('mailto:airisdevgroup@gmail.com'));
                   },
                   leading: Image.asset(
                     'assets/images/airis.png',
@@ -197,22 +163,18 @@ class AboutPage extends StatelessWidget {
                   title: Text(
                     "Airis Email",
                     textAlign: TextAlign.start,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      fontFamily: 'Product Sans',
-                      color: Theme.of(context).textTheme.bodyText1!.color
-                    )
+                    style: subtitleTextStyle(context, bold: true)
                   ),
                   subtitle: Text(
                     "airisdevgroup@gmail.com",
-                    style: TextStyle(
-                      fontFamily: 'Product Sans',
-                      color: Theme.of(context).textTheme.bodyText1!.color
-                    ),
+                    style: smallTextStyle(context, opacity: 0.8)
+                  ),
+                  trailing: IconButton(
+                    onPressed: () {},
+                    icon: Icon(Icons.arrow_forward_ios_rounded, color: Theme.of(context).iconTheme.color, size: 18),
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
               ],
             ),
           ),

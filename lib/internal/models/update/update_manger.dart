@@ -18,7 +18,6 @@ class AppUpdateManger {
       BehaviorSubject.seeded(.0);
 
   static double appVersion = 0;
-  static late PackageInfo packageInfo;
 
   /// Checks for app update. Doesn't run in debug builds
   static void inAppUpdater() async {

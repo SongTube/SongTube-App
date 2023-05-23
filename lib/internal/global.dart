@@ -4,6 +4,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pip/platform_channel/channel.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:songtube/internal/artwork_manager.dart';
@@ -29,6 +30,7 @@ Future<void> initGlobals() async {
       ));
   isPictureInPictureSupported =
       await FlutterPip.isPictureInPictureSupported() ?? false;
+  packageInfo = await PackageInfo.fromPlatform();
   AppUpdateManger.inAppUpdater();
 }
 
@@ -53,6 +55,9 @@ late AudioHandler audioHandler;
 
 // Support for PictureInPicture
 late bool isPictureInPictureSupported;
+
+// App Info
+late PackageInfo packageInfo;
 
 // First run
 bool get appFirstRun => sharedPreferences.getBool('appFirstRun') ?? true;
