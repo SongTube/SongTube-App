@@ -181,19 +181,19 @@ class _HomeLibraryState extends State<HomeLibrary> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             GestureDetector(
-              onTap: () => launchUrl(Uri.parse("https://t.me/songtubechannel")),
+              onTap: () => launchUrl(Uri.parse("https://t.me/songtubechannel"), mode: LaunchMode.externalApplication),
               child: Image.asset('assets/images/telegram.png')
             ),
             GestureDetector(
-              onTap: () => launchUrl(Uri.parse("https://github.com/SongTube")),
+              onTap: () => launchUrl(Uri.parse("https://github.com/SongTube"), mode: LaunchMode.externalApplication),
               child: Image.asset('assets/images/github.png')
             ),
             GestureDetector(
-              onTap: () => launchUrl(Uri.parse("https://facebook.com/songtubeapp/")),
+              onTap: () => launchUrl(Uri.parse("https://facebook.com/songtubeapp/"), mode: LaunchMode.externalApplication),
               child: Image.asset('assets/images/facebook.png')
             ),
             GestureDetector(
-              onTap: () => launchUrl(Uri.parse("https://instagram.com/songtubeapp")),
+              onTap: () => launchUrl(Uri.parse("https://instagram.com/songtubeapp"), mode: LaunchMode.externalApplication),
               child: Image.asset('assets/images/instagram.png')
             ),
           ],
