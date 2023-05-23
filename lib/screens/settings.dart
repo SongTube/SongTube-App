@@ -107,7 +107,7 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> with TickerPr
           padding: const EdgeInsets.only(right: 8.0),
           child: Text(
             Localizations.localeOf(context).languageCode.toUpperCase(),
-            style: subtitleTextStyle(context).copyWith(color: Colors.white, fontWeight: FontWeight.w900)
+            style: subtitleTextStyle(context).copyWith(fontWeight: FontWeight.w900)
           ),
         ),
         icon: const SizedBox(),
