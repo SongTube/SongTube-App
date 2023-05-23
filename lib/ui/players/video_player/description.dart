@@ -76,7 +76,7 @@ class VideoPlayerDescription extends StatelessWidget {
                         final seconds = url.split('&t=').last;
                         onSeek(Duration(seconds: int.parse(seconds)));
                       } else {
-                        launchUrlString(url);
+                        launchUrlString(url, mode: LaunchMode.externalApplication);
                       }
                       return true;
                     },

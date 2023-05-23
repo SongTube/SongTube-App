@@ -38,7 +38,7 @@ class _IntroPageState extends State<IntroPage> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    launchUrl(Uri.parse('https://github.com/TeamNewPipe/NewPipeExtractor'));
+                    launchUrl(Uri.parse('https://github.com/TeamNewPipe/NewPipeExtractor'), mode: LaunchMode.externalApplication);
                   },
                   child: Container(
                     alignment: Alignment.topLeft,

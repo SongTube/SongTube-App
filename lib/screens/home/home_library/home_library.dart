@@ -138,7 +138,7 @@ class _HomeLibraryState extends State<HomeLibrary> {
               padding: const EdgeInsets.only(left: 12),
               child: ListTile(
                 onTap: () {
-                  launchUrl(Uri.parse("https://paypal.me/artixo"));
+                  launchUrl(Uri.parse("https://paypal.me/artixo"), mode: LaunchMode.externalApplication);
                 },
                 leading: const SizedBox(
                   height: double.infinity,
