@@ -25,6 +25,12 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file('key.properties')
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
 android {
     
     compileSdkVersion 33
@@ -39,9 +45,9 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.artxdev.songtube.beta"
+        applicationId "com.artxdev.songtube"
         minSdkVersion 22
-        resValue "string", "app_name", "SongTube Beta"
+        resValue "string", "app_name", "SongTube"
         targetSdkVersion 32
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -49,14 +55,23 @@ android {
         multiDexEnabled true
     }
 
+    signingConfigs {
+        release {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+        }
+    }
+
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
-            applicationIdSuffix ".profile"
+            signingConfig signingConfigs.release
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //ndk {
+            //    abiFilters 'armeabi-v7a', 'arm64-v8a'
+            //}
         }
         debug{
             applicationIdSuffix ".dev"
