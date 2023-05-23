@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/ui/sheets/common_sheet.dart';
 import 'package:songtube/ui/text_styles.dart';
-import 'package:url_launcher/url_launcher_string.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class JoinTelegramSheet extends StatelessWidget {
   const JoinTelegramSheet({super.key});
@@ -21,6 +22,12 @@ class JoinTelegramSheet extends StatelessWidget {
         style: subtitleTextStyle(context),
       ),
       actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(
+            Languages.of(context)!.labelLater,
+            style: smallTextStyle(context)
+          )),
         Container(
           decoration: BoxDecoration(
             color: Theme.of(context).primaryColor,
@@ -28,7 +35,7 @@ class JoinTelegramSheet extends StatelessWidget {
           ),
           child: TextButton(
             onPressed: () async {
-              launchUrlString("https://t.me/songtubechannel");
+              launchUrl(Uri.parse("https://t.me/songtubechannel"), mode: LaunchMode.externalApplication);
               Navigator.pop(context);
             },
             child: Padding(
