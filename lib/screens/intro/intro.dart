@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/global.dart';
+import 'package:songtube/providers/app_settings.dart';
 import 'package:songtube/providers/media_provider.dart';
 import 'package:songtube/screens/intro/pages/finish_page.dart';
 import 'package:songtube/screens/intro/pages/intro_page.dart';
@@ -82,6 +83,7 @@ class _IntroScreenState extends State<IntroScreen> {
       // Finish
       FinishIntroPage(
         onIntroFinish: () {
+          AppSettings.initSettings();
           initialRoute = 'home';
           Navigator.of(context).pushReplacementNamed('home', arguments: {'fetchSongs': false});
         },
