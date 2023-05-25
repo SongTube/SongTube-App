@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/global.dart';
+import 'package:songtube/internal/models/song_item.dart';
 import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/download_provider.dart';
 import 'package:songtube/providers/media_provider.dart';
@@ -13,8 +14,10 @@ import 'package:songtube/ui/tiles/song_tile.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DownloadsCompletedPage extends StatefulWidget {
-  const DownloadsCompletedPage({super.key});
-
+  const DownloadsCompletedPage({
+    required this.searchQuery,
+    super.key});
+  final String searchQuery;
   @override
   State<DownloadsCompletedPage> createState() => _DownloadsCompletedPageState();
 }
@@ -46,12 +49,16 @@ class _DownloadsCompletedPageState extends State<DownloadsCompletedPage> {
     DownloadProvider downloadProvider = Provider.of<DownloadProvider>(context);
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
     UiProvider uiProvider = Provider.of(context);
+    List<SongItem> downloads = downloadProvider.downloadedSongs;
+    if (widget.searchQuery.isNotEmpty) {
+      downloads = downloadProvider.downloadedSongs.where((element) => element.title.toLowerCase().contains(widget.searchQuery.trim().toLowerCase())).toList();
+    }
     return ListView.builder(
       padding: const EdgeInsets.only(top: 8).copyWith(bottom: (kToolbarHeight*1.5)+16),
       physics: const BouncingScrollPhysics(),
-      itemCount: downloadProvider.downloadedSongs.length,
+      itemCount: downloads.length,
       itemBuilder: (context, index) {
-        final song = downloadProvider.downloadedSongs[index];
+        final song = downloads[index];
         return SongTile(
           song: song,
           isDownload: true,
@@ -61,8 +68,8 @@ class _DownloadsCompletedPageState extends State<DownloadsCompletedPage> {
               ExternalVideoPlayerLauncher.launchOtherPlayer(song.id, MIME.applicationMpeg, null);
             } else {
               mediaProvider.currentPlaylistName = 'Downloads';
-              final queue = List<MediaItem>.generate(downloadProvider.downloadedSongs.length, (index) {
-                return downloadProvider.downloadedSongs[index].mediaItem;
+              final queue = List<MediaItem>.generate(downloads.length, (index) {
+                return downloads[index].mediaItem;
               });
               uiProvider.currentPlayer = CurrentPlayer.music;
               mediaProvider.playSong(queue, index);

@@ -1,5 +1,6 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:line_icons/line_icons.dart';
@@ -9,6 +10,7 @@ import 'package:songtube/providers/download_provider.dart';
 import 'package:songtube/screens/home/home_downloads/pages/canceled.dart';
 import 'package:songtube/screens/home/home_downloads/pages/completed.dart';
 import 'package:songtube/screens/home/home_downloads/pages/queue.dart';
+import 'package:songtube/ui/components/custom_inkwell.dart';
 import 'package:songtube/ui/rounded_tab_indicator.dart';
 import 'package:songtube/ui/text_styles.dart';
 
@@ -24,6 +26,23 @@ class _HomeDownloadsState extends State<HomeDownloads> with TickerProviderStateM
   // TabBar Controller
   late TabController tabController = TabController(length: 3, vsync: this,
     initialIndex: Provider.of<DownloadProvider>(context, listen: false).queue.isEmpty ? 1 : 0);
+
+  // Keyboard Visibility
+  KeyboardVisibilityController keyboardController = KeyboardVisibilityController();
+
+  // Downloads Search Controllers
+  TextEditingController searchController = TextEditingController();
+  FocusNode node = FocusNode();
+
+  @override
+  void initState() {
+    keyboardController.onChange.listen((event) {
+      if (!event && node.hasFocus) {
+        node.unfocus();
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +64,7 @@ class _HomeDownloadsState extends State<HomeDownloads> with TickerProviderStateM
   Widget _appBar() {
     return InkWell(
       onTap: () {
-        // UiUtils.pushRouteAsync(context, const SearchScreen());
+        node.requestFocus();
       },
       child: Container(
         margin: const EdgeInsets.only(left: 20, right: 20),
@@ -63,11 +82,26 @@ class _HomeDownloadsState extends State<HomeDownloads> with TickerProviderStateM
               const SizedBox(width: 16),
               Expanded(
                 child: TextField(
+                  controller: searchController,
+                  focusNode: node,
                   style: subtitleTextStyle(context).copyWith(fontWeight: FontWeight.w500),
                   decoration: InputDecoration.collapsed(
                     hintStyle: smallTextStyle(context, opacity: 0.4).copyWith(fontWeight: FontWeight.w500),
                     hintText: Languages.of(context)!.labelSearchDownloads),
+                  onChanged: (_) {
+                    setState(() {});
+                  },
                 ),
+              ),
+              const SizedBox(width: 16),
+              if (searchController.text.isNotEmpty)
+              CustomInkWell(
+                onTap: () {
+                  searchController.clear();
+                  node.unfocus();
+                  setState(() {});
+                },
+                child: Icon(Icons.clear, color: Theme.of(context).iconTheme.color, size: 18),
               ),
               const SizedBox(width: 16),
             ],
@@ -109,13 +143,13 @@ class _HomeDownloadsState extends State<HomeDownloads> with TickerProviderStateM
       child: TabBarView(
         physics: const BouncingScrollPhysics(),
         controller: tabController,
-        children: const [
+        children: [
           // Queue
-          DownloadsQueuePage(),
+          const DownloadsQueuePage(),
           // Completed
-          DownloadsCompletedPage(),
+          DownloadsCompletedPage(searchQuery: searchController.text),
           // Canceled
-          DownloadsCanceledPage()
+          const DownloadsCanceledPage()
         ]
       ),
     );
