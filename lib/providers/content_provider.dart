@@ -170,10 +170,11 @@ class ContentProvider extends ChangeNotifier {
     } else {
       if (nextPlaylistVideo != null) {
         // Load next video
-        playingContent?.selectedPlaylistIndex = playingContent?.playlistDetails?.streams?.indexWhere((element) => element.id == nextPlaylistVideo?.id);
+        final video = nextPlaylistVideo;
+        playingContent?.selectedPlaylistIndex = playingContent?.playlistDetails?.streams?.indexWhere((element) => element.id == video?.id);
         notifyListeners();
-        playingContent!.videoDetails = await ContentService.fetchVideoFromInfoItem(nextPlaylistVideo!);
-        saveToHistory(nextPlaylistVideo!);
+        playingContent!.videoDetails = await ContentService.fetchVideoFromInfoItem(video!);
+        saveToHistory(video);
         notifyListeners();
       }
     }

@@ -63,7 +63,6 @@ class _HomeDownloadsState extends State<HomeDownloads> with TickerProviderStateM
               const SizedBox(width: 16),
               Expanded(
                 child: TextField(
-                  enabled: false,
                   style: subtitleTextStyle(context).copyWith(fontWeight: FontWeight.w500),
                   decoration: InputDecoration.collapsed(
                     hintStyle: smallTextStyle(context, opacity: 0.4).copyWith(fontWeight: FontWeight.w500),
