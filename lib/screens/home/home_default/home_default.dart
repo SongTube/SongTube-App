@@ -61,6 +61,7 @@ class _HomeDefaultState extends State<HomeDefault> with TickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
     ContentProvider contentProvider = Provider.of(context);
+    UiProvider uiProvider = Provider.of(context);
     if (tabController.length == 5 && (contentProvider.searchContent == null)) {
       tabController = TabController(length: 4, vsync: this);
     }
@@ -85,7 +86,7 @@ class _HomeDefaultState extends State<HomeDefault> with TickerProviderStateMixin
                 // Search Body, which goes on top to show search history and suggestions
                 // when the search bar is focused
                 ShowUpTransition(
-                  forward: contentProvider.searchFocusNode.hasFocus,
+                  forward: uiProvider.homeSearchNode.hasFocus,
                   child: SearchSuggestions(
                     searchQuery: searchController.text,
                     onSearch: (suggestion) {
@@ -107,6 +108,7 @@ class _HomeDefaultState extends State<HomeDefault> with TickerProviderStateMixin
 
   Widget _searchBar() {
     ContentProvider contentProvider = Provider.of(context);
+    UiProvider uiProvider = Provider.of(context);
     return Row(
       children: [
         Expanded(
@@ -120,7 +122,7 @@ class _HomeDefaultState extends State<HomeDefault> with TickerProviderStateMixin
             child: CustomInkWell(
               borderRadius: BorderRadius.circular(100),
               onTap: () {
-                contentProvider.searchFocusNode.requestFocus();
+                uiProvider.homeSearchNode.requestFocus();
               },
               child: Row(
                 children: [
@@ -148,7 +150,7 @@ class _HomeDefaultState extends State<HomeDefault> with TickerProviderStateMixin
                             Expanded(
                               child: TextField(
                                 enabled: true,
-                                focusNode: contentProvider.searchFocusNode,
+                                focusNode: uiProvider.homeSearchNode,
                                 controller: searchController,
                                 style: smallTextStyle(context).copyWith(fontWeight: FontWeight.w500),
                                 decoration: InputDecoration.collapsed(
@@ -165,7 +167,7 @@ class _HomeDefaultState extends State<HomeDefault> with TickerProviderStateMixin
                             CustomInkWell(
                               onTap: () {
                                 searchController.clear();
-                                contentProvider.searchFocusNode.requestFocus();
+                                uiProvider.homeSearchNode.requestFocus();
                                 setState(() {});
                               },
                               child: Icon(Icons.clear, color: Theme.of(context).iconTheme.color, size: 18),

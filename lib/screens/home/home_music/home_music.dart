@@ -1,6 +1,7 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/global.dart';
@@ -8,6 +9,7 @@ import 'package:songtube/internal/models/song_item.dart';
 import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/app_settings.dart';
 import 'package:songtube/providers/media_provider.dart';
+import 'package:songtube/providers/ui_provider.dart';
 import 'package:songtube/screens/home/home_music/pages/albums_page.dart';
 import 'package:songtube/screens/home/home_music/pages/artists_page.dart';
 import 'package:songtube/screens/home/home_music/pages/home_page.dart';
@@ -33,13 +35,21 @@ class _HomeMusicState extends State<HomeMusic> with TickerProviderStateMixin {
 
   MediaItem? latestEvent;
 
+  UiProvider get uiProvider => Provider.of(context);
+
   // Search Query
-  TextEditingController searchController = TextEditingController();
-  FocusNode searchFocusNode = FocusNode();
-  bool get searching => searchController.text.trim().isNotEmpty;
+  bool get searching => uiProvider.musicSearchController.text.trim().isNotEmpty;
+
+  // Keyboard Visibility
+  KeyboardVisibilityController keyboardController = KeyboardVisibilityController();
 
   @override
   void initState() {
+    keyboardController.onChange.listen((event) {
+      if (!event) {
+        FocusManager.instance.primaryFocus?.unfocus();
+      }
+    });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       audioHandler.mediaItem.listen((event) {
         if (event != null && latestEvent != event) {
@@ -104,8 +114,8 @@ class _HomeMusicState extends State<HomeMusic> with TickerProviderStateMixin {
             Expanded(
               child: TextField(
                 enabled: true,
-                focusNode: searchFocusNode,
-                controller: searchController,
+                focusNode: uiProvider.musicSearchNode,
+                controller: uiProvider.musicSearchController,
                 style: smallTextStyle(context).copyWith(fontWeight: FontWeight.w500),
                 decoration: InputDecoration.collapsed(
                   hintStyle: smallTextStyle(context, opacity: 0.4).copyWith(fontWeight: FontWeight.w500),
@@ -115,11 +125,11 @@ class _HomeMusicState extends State<HomeMusic> with TickerProviderStateMixin {
                 },
               ),
             ),
-            if (searchController.text.trim().isNotEmpty)
+            if (uiProvider.musicSearchController.text.trim().isNotEmpty)
             CustomInkWell(
               onTap: () {
-                searchController.clear();
-                searchFocusNode.unfocus();
+                uiProvider.musicSearchController.clear();
+                uiProvider.musicSearchNode.unfocus();
                 setState(() {});
               },
               child: Icon(Icons.clear, color: Theme.of(context).iconTheme.color, size: 18),
@@ -213,7 +223,7 @@ class _HomeMusicState extends State<HomeMusic> with TickerProviderStateMixin {
   }
 
   Widget _searchBox() {
-    return MusicSearchPage(searchController: searchController);
+    return MusicSearchPage(searchController: uiProvider.musicSearchController);
   }
 
 }

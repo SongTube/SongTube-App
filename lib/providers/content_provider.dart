@@ -48,9 +48,6 @@ class ContentProvider extends ChangeNotifier {
   // Search Filters
   List<String> searchFilters = [];
 
-  // SearchBar Focus node
-  FocusNode searchFocusNode = FocusNode();
-
   // Search Videos
   YoutubeSearch? searchContent;
   bool searchingContent = false;

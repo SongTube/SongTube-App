@@ -186,14 +186,28 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           if (uiProvider.onAltRoute) {
             return Future.value(true);
           } else {
-            if (contentProvider.searchFocusNode.hasFocus) {
-              contentProvider.searchFocusNode.unfocus();
-              contentProvider.setState();
-              return Future.value(false);
+            if (bottomNavigationBarIndex == 0) {
+              if (uiProvider.homeSearchNode.hasFocus) {
+                uiProvider.homeSearchNode.unfocus();
+                contentProvider.setState();
+                return Future.value(false);
+              }
+              if (contentProvider.searchContent != null) {
+                contentProvider.clearSearchContent();
+                return Future.value(false);
+              }
             }
-            if (contentProvider.searchContent != null) {
-              contentProvider.clearSearchContent();
-              return Future.value(false);
+            if (bottomNavigationBarIndex == 1) {
+              if (uiProvider.musicSearchNode.hasFocus) {
+                uiProvider.musicSearchNode.unfocus();
+                contentProvider.setState();
+                return Future.value(false);
+              }
+              if (uiProvider.musicSearchController.text.isNotEmpty) {
+                uiProvider.musicSearchController.clear();
+                uiProvider.setState();
+                return Future.value(false);
+              }
             }
             return Future.value(true);
           }

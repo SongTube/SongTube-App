@@ -62,4 +62,15 @@ class UiProvider extends ChangeNotifier {
   // Indicate if we are on another route different than home
   bool onAltRoute = false;
 
+  // Search Controllers
+  TextEditingController homeSearchController = TextEditingController();
+  FocusNode homeSearchNode = FocusNode();
+  TextEditingController musicSearchController = TextEditingController();
+  FocusNode musicSearchNode = FocusNode();
+
+  // Update State
+  void setState() {
+    notifyListeners();
+  }
+
 }
