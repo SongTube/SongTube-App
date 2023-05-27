@@ -117,7 +117,7 @@ class _HomeDefaultState extends State<HomeDefault> with TickerProviderStateMixin
             height: kToolbarHeight,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(100),
-              color: Theme.of(context).cardColor
+              color: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.05),
             ),
             child: CustomInkWell(
               borderRadius: BorderRadius.circular(100),
