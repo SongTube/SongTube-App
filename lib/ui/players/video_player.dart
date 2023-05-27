@@ -5,6 +5,7 @@ import 'package:flutter_pip/models/pip_ratio.dart';
 import 'package:flutter_pip/platform_channel/channel.dart';
 import 'package:provider/provider.dart';
 import 'package:screen_brightness/screen_brightness.dart';
+import 'package:songtube/internal/global.dart';
 import 'package:songtube/internal/models/content_wrapper.dart';
 import 'package:songtube/providers/app_settings.dart';
 import 'package:songtube/providers/content_provider.dart';
@@ -83,8 +84,10 @@ class _VideoPlayerState extends State<VideoPlayer> with TickerProviderStateMixin
       ScreenBrightness().resetScreenBrightness();
       return PipWidget(
         onSuspending: () {
-          if (AppSettings.enableAutoPictureInPictureMode && !AppSettings.enableBackgroundPlayback && Provider.of<UiProvider>(context, listen: false).fwController.isPanelOpen) {
-            enterPipMode();
+          if (!blockPipMode) {
+            if (AppSettings.enableAutoPictureInPictureMode && !AppSettings.enableBackgroundPlayback && Provider.of<UiProvider>(context, listen: false).fwController.isPanelOpen) {
+              enterPipMode();
+            }
           }
         },
         pictureInPictureChild: player,

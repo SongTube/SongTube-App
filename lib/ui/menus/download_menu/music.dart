@@ -1,6 +1,7 @@
 // Flutter
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 // Packages
@@ -9,6 +10,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:image_fade/image_fade.dart';
 import 'package:newpipeextractor_dart/newpipeextractor_dart.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/internal/global.dart';
 import 'package:songtube/internal/media_utils.dart';
 import 'package:songtube/providers/app_settings.dart';
 import 'package:songtube/internal/enums/download_type.dart';
@@ -25,6 +27,7 @@ import 'package:songtube/services/music_brainz_service.dart';
 import 'package:songtube/ui/animations/blue_page_route.dart';
 import 'package:songtube/ui/animations/fade_in.dart';
 import 'package:songtube/ui/components/flexible_popup_menu.dart';
+import 'package:songtube/ui/components/text_icon_button.dart';
 import 'package:songtube/ui/sheet_phill.dart';
 import 'package:songtube/ui/text_styles.dart';
 import 'package:songtube/ui/tiles/text_field_tile.dart';
@@ -145,13 +148,17 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
               padding: const EdgeInsets.only(left: 12, right: 12),
               child: GestureDetector(
                 onTap: () async {
-                  final MusicBrainzRecord? record = await UiUtils.pushRouteAsync(context, MusicBrainzSearch(title: mainTags.titleController.text, artist: mainTags.artistController.text));
-                  if (record == null) return;
-                  setState(() {
-                    mainTags = AudioTags.withMusicBrainzRecord(record)..artwork = record.artwork;
-                  });
+                  blockPipMode = true;
+                  final image = await FilePicker.platform.pickFiles(
+                    type: FileType.image,
+                  );
+                  blockPipMode = false;
+                  if (image != null && image.files.isNotEmpty) {
+                    mainTags.artwork = image.files.first.path!;
+                    setState(() {});
+                  }
                 },
-                child: Container(
+                child: SizedBox(
                   height: 130,
                   child: Row(
                     children: [
@@ -193,7 +200,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                                   decoration: BoxDecoration(
                                     color: Colors.black.withOpacity(0.4)
                                   ),
-                                  child: const Icon(EvaIcons.brushOutline,
+                                  child: const Icon(Iconsax.image,
                                     color: Colors.white),
                                 ),
                               ),
@@ -391,6 +398,30 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                   Text(
                     Languages.of(context)!.labelTagsEditor,
                     style: subtitleTextStyle(context, bold: true)
+                  ),
+                  const SizedBox(width: 8),
+                  GestureDetector(
+                    child: Container(
+                      padding: const EdgeInsets.only(top: 4, bottom: 4, left: 12, right: 12),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: BorderRadius.circular(100)
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.search, size: 18, color: Colors.white),
+                          const SizedBox(width: 4),
+                          Text(Languages.of(context)!.labelSearch, style: smallTextStyle(context, bold: true).copyWith(color: Colors.white)),
+                        ],
+                      )),
+                    onTap: () async {
+                      final MusicBrainzRecord? record = await UiUtils.pushRouteAsync(context, MusicBrainzSearch(title: mainTags.titleController.text, artist: mainTags.artistController.text));
+                      if (record == null) return;
+                      setState(() {
+                        mainTags = AudioTags.withMusicBrainzRecord(record)..artwork = record.artwork;
+                      });
+                    },
                   ),
                   const Spacer(),
                   Icon(showTags ? Icons.expand_less : Icons.expand_more,

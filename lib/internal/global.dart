@@ -61,3 +61,6 @@ late PackageInfo packageInfo;
 
 // First run
 bool get appFirstRun => sharedPreferences.getBool('appFirstRun') ?? true;
+
+// Block for Picture in Picture mode
+bool blockPipMode = false;
