@@ -78,7 +78,7 @@ class PlaylistTileCollapsed extends StatelessWidget {
                           topRight: Radius.circular(15)
                         )
                       ),
-                      child: Icon(Ionicons.list, color: Theme.of(context).iconTheme.color, size: 14)
+                      child: const Icon(Ionicons.list, color: Colors.white, size: 14)
                     ),
                   )
                 ],
