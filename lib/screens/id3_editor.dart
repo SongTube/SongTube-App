@@ -583,11 +583,11 @@ class _ID3EditorState extends State<ID3Editor> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          // Search on MusicBrainz
+          // Restore song to default values
           FloatingActionButton(
             heroTag: 'fabSearch',
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            foregroundColor: Colors.white,
+            foregroundColor: Theme.of(context).iconTheme.color,
             child: const Icon(Iconsax.undo),
             onPressed: () {
               setState(() {
@@ -608,7 +608,7 @@ class _ID3EditorState extends State<ID3Editor> {
                 const SizedBox(width: 12),
                 Text(
                   processingTags ? '${Languages.of(context)!.labelApplying}...' : Languages.of(context)!.labelApply,
-                  style: subtitleTextStyle(context, bold: true)
+                  style: subtitleTextStyle(context, bold: true).copyWith(color: Colors.white)
                 )
               ],
             ),
