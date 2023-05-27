@@ -83,7 +83,7 @@ class _VideoPlayerState extends State<VideoPlayer> with TickerProviderStateMixin
       ScreenBrightness().resetScreenBrightness();
       return PipWidget(
         onSuspending: () {
-          if (AppSettings.enableAutoPictureInPictureMode && !AppSettings.enableBackgroundPlayback) {
+          if (AppSettings.enableAutoPictureInPictureMode && !AppSettings.enableBackgroundPlayback && Provider.of<UiProvider>(context, listen: false).fwController.isPanelOpen) {
             enterPipMode();
           }
         },
