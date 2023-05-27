@@ -130,26 +130,28 @@ class _ThemeIntroPageState extends State<ThemeIntroPage> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          AnimatedContainer(
-            margin: const EdgeInsets.symmetric(horizontal: 8).copyWith(top: 24),
-            duration: const Duration(milliseconds: 200),
-            padding: const EdgeInsets.all(4),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30),
-              boxShadow: [
-                BoxShadow(
-                  blurRadius: 16,
-                  spreadRadius: 0.2,
-                  color: Theme.of(context).shadowColor
-                )
-              ]
-            ),
-            child: Image.asset(
-              mode == ThemeMode.system
-                ? 'assets/images/systemPreview.png'
-                : mode == ThemeMode.light
-                  ? 'assets/images/lightPreview.png'
-                  : 'assets/images/darkPreview.png'
+          Expanded(
+            child: AnimatedContainer(
+              margin: const EdgeInsets.symmetric(horizontal: 8).copyWith(top: 24),
+              duration: const Duration(milliseconds: 200),
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                boxShadow: [
+                  BoxShadow(
+                    blurRadius: 16,
+                    spreadRadius: 0.2,
+                    color: Theme.of(context).shadowColor
+                  )
+                ]
+              ),
+              child: Image.asset(
+                mode == ThemeMode.system
+                  ? 'assets/images/systemPreview.png'
+                  : mode == ThemeMode.light
+                    ? 'assets/images/lightPreview.png'
+                    : 'assets/images/darkPreview.png'
+              ),
             ),
           ),
           const SizedBox(height: 16),
@@ -167,6 +169,7 @@ class _ThemeIntroPageState extends State<ThemeIntroPage> {
               fontWeight: FontWeight.w700,
             )),
           ),
+          const SizedBox(height: 16),
         ],
       ),
     );

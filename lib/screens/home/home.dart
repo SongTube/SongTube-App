@@ -172,7 +172,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       SystemUiOverlayStyle(
         statusBarIconBrightness: Theme.of(context).brightness,
         statusBarColor: Colors.transparent,
-        systemNavigationBarColor: Theme.of(context).cardColor
+        systemNavigationBarColor: Theme.of(context).cardColor,
+        systemNavigationBarIconBrightness: Theme.of(context).brightness,
       )
     );
     final ContentProvider contentProvider = Provider.of(context);

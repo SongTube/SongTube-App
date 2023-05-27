@@ -255,6 +255,8 @@ class _SongTubeState extends State<SongTube> {
           SystemUiOverlayStyle(
             statusBarIconBrightness: appSettings.enableMusicPlayerBlur ? textColor == Colors.black
               ? Brightness.dark : Brightness.light : iconColor,
+            systemNavigationBarIconBrightness: appSettings.enableMusicPlayerBlur ? textColor == Colors.black
+              ? Brightness.dark : Brightness.light : iconColor,
           ),
         );
       }

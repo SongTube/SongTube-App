@@ -58,6 +58,9 @@ class _IntroScreenState extends State<IntroScreen> {
         systemNavigationBarColor: pageIndex == 0
           ? accentColor
           : Colors.transparent,
+        systemNavigationBarIconBrightness: pageIndex == 0
+          ? Brightness.light
+          : Theme.of(context).brightness,
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: pageIndex == 0
           ? Brightness.light
