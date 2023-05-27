@@ -44,7 +44,7 @@ class LanguageEn extends Languages {
   @override
   String get labelQuickSearch => "Quick Search...";
   @override
-  String get labelTagsEditor => "Tags\nEditor";
+  String get labelTagsEditor => "Tags Editor";
   @override
   String get labelEditArtwork => "Edit\nArtwork";
   @override

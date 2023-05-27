@@ -44,7 +44,7 @@ class LanguageEs extends Languages {
   @override
   String get labelQuickSearch => "Busqueda Rápida...";
   @override
-  String get labelTagsEditor => "Editor de\nTags";
+  String get labelTagsEditor => "Editor de Tags";
   @override
   String get labelEditArtwork => "Editor de\nCaratula";
   @override
