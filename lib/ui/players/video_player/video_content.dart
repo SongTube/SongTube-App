@@ -61,31 +61,6 @@ class _VideoPlayerContentState extends State<VideoPlayerContent> with TickerProv
   // Indicate if this videos has comments available
   bool commentsAvailable = true;
 
-  // Show comments
-  bool _showComments = false;
-  bool get showComments => _showComments;
-  set showComments(bool value) {
-    if (value) {
-      _showDescription = false;
-    }
-    _showComments = value;
-    setState(() {});
-  }
-
-  // Show description
-  bool _showDescription = false;
-  bool get showDescription => _showDescription;
-  set showDescription(bool value) {
-    if (value) {
-      _showComments = false;
-    }
-    _showDescription = value;
-    setState(() {});
-  }
-
-  // Determine if we need to hide the player's UI for the comments or description
-  bool get hidePlayerBody => showComments;
-
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -156,17 +131,22 @@ class _VideoPlayerContentState extends State<VideoPlayerContent> with TickerProv
   }
 
   Widget _body() {
-    if (showComments && widget.content.videoDetails != null) {
+    ContentProvider contentProvider = Provider.of(context);
+    if (contentProvider.showComments && widget.content.videoDetails != null) {
       return VideoPlayerCommentsExpanded(
         comments: comments..sort((a, b) => b.likeCount!.compareTo(a.likeCount!)),
-        onBack: () => showComments = false,
+        onBack: () => contentProvider.showComments = false,
         onSeek: (position) {
           widget.content.videoPlayerController.videoPlayerController?.seekTo(position);
         });
-    } else if (showDescription && widget.content.videoDetails != null) {
+    } else if (contentProvider.showDescription && widget.content.videoDetails != null) {
       return VideoPlayerDescription(
         info: widget.content.videoDetails!.videoInfo,
-        onBack: () => showDescription = false,
+        segments: widget.content.videoDetails?.segments ?? [],
+        onBack: () => contentProvider.showDescription = false,
+        onSegmentTap: (position) {
+          widget.content.videoPlayerController.videoPlayerController?.seekTo(Duration(seconds: position));
+        },
         onSeek: (position) {
           widget.content.videoPlayerController.videoPlayerController?.seekTo(position);
         });
@@ -176,6 +156,7 @@ class _VideoPlayerContentState extends State<VideoPlayerContent> with TickerProv
   }
 
   Widget _playerBody() {
+    ContentProvider contentProvider = Provider.of(context);
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),
       slivers: [
@@ -188,7 +169,7 @@ class _VideoPlayerContentState extends State<VideoPlayerContent> with TickerProv
         SliverToBoxAdapter(
           child: GestureDetector(
             onTap: () {
-              showComments = true;
+              contentProvider.showComments = true;
             },
             child: Padding(
               padding: const EdgeInsets.only(left: 12, right: 12),
@@ -208,6 +189,7 @@ class _VideoPlayerContentState extends State<VideoPlayerContent> with TickerProv
   }
 
   Widget _playerTitle() {
+    ContentProvider contentProvider = Provider.of(context);
     StreamInfoItem? infoItem = widget.content.infoItem is StreamInfoItem ? widget.content.infoItem : null;
     VideoInfo? videoInfo = widget.content.videoDetails?.videoInfo;
     final views = (infoItem?.viewCount != null || videoInfo != null) ? "${NumberFormat.compact().format(infoItem?.viewCount ?? videoInfo?.viewCount)} ${Languages.of(context)!.labelViews}" : '-1';
@@ -235,7 +217,7 @@ class _VideoPlayerContentState extends State<VideoPlayerContent> with TickerProv
                   ),
                   IconButton(
                     onPressed: () {
-                      showDescription = true;
+                      contentProvider.showDescription = true;
                     },
                     icon: Icon(Icons.expand_more, color: Theme.of(context).primaryColor)
                   ),

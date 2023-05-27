@@ -103,6 +103,28 @@ class ContentProvider extends ChangeNotifier {
     }
   }
 
+  // Show comments
+  bool _showComments = false;
+  bool get showComments => _showComments;
+  set showComments(bool value) {
+    if (value) {
+      _showDescription = false;
+    }
+    _showComments = value;
+    notifyListeners();
+  }
+
+  // Show description
+  bool _showDescription = false;
+  bool get showDescription => _showDescription;
+  set showDescription(bool value) {
+    if (value) {
+      _showComments = false;
+    }
+    _showDescription = value;
+    notifyListeners();
+  }
+
   // Load the video player with provided InfoItem
   Future<void> loadVideoPlayer(dynamic infoItem, {String? previousUrl}) async {
     if (infoItem == null) {

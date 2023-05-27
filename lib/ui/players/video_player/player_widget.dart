@@ -31,10 +31,12 @@ class VideoPlayerWidget extends StatefulWidget {
     required this.content,
     required this.onAspectRatioUpdate,
     required this.onFullscreen,
+    required this.onOpenChapters,
     super.key});
   final ContentWrapper content;
   final Function(double) onAspectRatioUpdate;
   final Function() onFullscreen;
+  final Function() onOpenChapters;
   @override
   State<VideoPlayerWidget> createState() => VideoPlayerWidgetState();
 }
@@ -616,6 +618,9 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                             },
                             audioOnly: false,
                             segments: widget.content.videoDetails?.segments,
+                            onShowSegments: () {
+                              widget.onOpenChapters();
+                            },
                             position: controller?.value.position ?? const Duration(seconds: 0),
                             duration: controller?.value.duration ?? const Duration(seconds: 1),
                             onSeek: (double newPosition) {
@@ -627,9 +632,6 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                             },
                             onSeekStart: () {
                               setState(() => isSeeking = true);
-                            },
-                            onShowSegments: () {
-
                             },
                           );
                         }

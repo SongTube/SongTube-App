@@ -62,7 +62,7 @@ class _VideoPlayerProgressBarState extends State<VideoPlayerProgressBar> with Ti
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(top: 0, left: 16),
+      padding: EdgeInsets.only(top: 0, left: 16, bottom: MediaQuery.of(context).orientation == Orientation.landscape ? 32 : 0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -86,12 +86,14 @@ class _VideoPlayerProgressBarState extends State<VideoPlayerProgressBar> with Ti
                     }
                   ),
                   if (widget.segments != null && widget.segments!.isNotEmpty)
-                  Expanded(
+                  Flexible(
                     child: Builder(
                       builder: (context) {
                         final currentSegmentText = isDragging && currentLabel != null ? currentLabel : currentSegment(widget.position.inSeconds.roundToDouble())!.title ?? '';
                         return GestureDetector(
-                          onTap: widget.onShowSegments,
+                          onTap: () {
+                            widget.onShowSegments();
+                          },
                           child: Container(
                             color: Colors.transparent,
                             child: AnimatedSwitcher(
@@ -101,7 +103,7 @@ class _VideoPlayerProgressBarState extends State<VideoPlayerProgressBar> with Ti
                                 key: ValueKey(currentSegmentText),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: tinyTextStyle(context),
+                                style: tinyTextStyle(context).copyWith(color: Colors.white),
                               ),
                             ),
                           ),

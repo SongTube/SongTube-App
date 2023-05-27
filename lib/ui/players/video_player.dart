@@ -50,7 +50,7 @@ class _VideoPlayerState extends State<VideoPlayer> with TickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
-
+    ContentProvider contentProvider = Provider.of(context);
     // Player Widget
     final player = VideoPlayerWidget(
       key: playerKey,
@@ -64,6 +64,9 @@ class _VideoPlayerState extends State<VideoPlayer> with TickerProviderStateMixin
         setState(() {
           fullscreenEnabled = !fullscreenEnabled;
         });
+      },
+      onOpenChapters: () {
+        contentProvider.showDescription = true;
       },
     );
 
