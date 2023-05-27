@@ -51,6 +51,7 @@ class _SongTileState extends State<SongTile> {
               borderRadius: BorderRadius.circular(20)
             ),
             child: ListTile(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               onTap: widget.onPlay,
               onLongPress: () {
                 if (widget.onPlay != null && !widget.song.isVideo) {
