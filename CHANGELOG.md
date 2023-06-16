@@ -1,7 +1,7 @@
 # SongTube 7.0.1:
 
 - General
-    * Mayor update includes whole app re-write
+    * Major update includes whole app re-write
     * Improvements on all features
     * Other new features, refer to the README.md for an updated app description
 
