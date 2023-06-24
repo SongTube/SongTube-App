@@ -6,14 +6,14 @@ class LanguageJa extends Languages {
   @override
   String get labelAppWelcome => "ようこそ";
   @override
-  String get labelStart => "始める";
+  String get labelStart => "はじめる";
   @override
   String get labelSkip => "スキップ";
   @override
   String get labelNext => "次へ";
   @override
-  String get labelExternalAccessJustification =>"動画と音楽を保存するために" +
-    "は外部ストレージにアクセスする必要があります";
+  String get labelExternalAccessJustification =>"動画と音楽を保存するには" +
+    "外部の保存領域が必要です";
   @override
   String get labelAppCustomization => "カスタマイズ";
   @override
@@ -41,7 +41,7 @@ class LanguageJa extends Languages {
 
   // Home Screen
   @override
-  String get labelQuickSearch => "検索...";
+  String get labelQuickSearch => "かんたん検索...";
   @override
   String get labelTagsEditor => "タグを\n編集";
   @override
@@ -53,7 +53,7 @@ class LanguageJa extends Languages {
   @override
   String get labelHomePage => "ホームページ";
   @override
-  String get labelTrending => "トレンド";
+  String get labelTrending => "急上昇";
   @override
   String get labelFavorites => "お気に入り";
   @override
@@ -356,7 +356,7 @@ class LanguageJa extends Languages {
   @override
   String get labelCreate => "作成";
   @override
-  String get labelPlaylists => "プレイリスト";
+  String get labelPlaylists => "再生リスト";
   @override
   String get labelQuality => "画質";
   @override
@@ -364,77 +364,77 @@ class LanguageJa extends Languages {
 
   // Other Translations
   @override
-  String get labelNoFavoriteVideos => 'No Favorite Videos';
+  String get labelNoFavoriteVideos => 'お気に入りの動画なし';
   @override
-  String get labelNoFavoriteVideosDescription => 'Search for videos and save them as favorites. They will appear here';
+  String get labelNoFavoriteVideosDescription => '動画を検索してお気に入りに保存するとここに表示されます';
   @override
-  String get labelNoSubscriptions => 'No Subscriptions';
+  String get labelNoSubscriptions => '登録チャンネルなし';
   @override
-  String get labelNoSubscriptionsDescription => 'Tap the button above to show suggested Channels!';
+  String get labelNoSubscriptionsDescription => '上部のボタンを押すとおすすめのチャンネルを表示します！';
   @override
-  String get labelNoPlaylists => 'No Playlists';
+  String get labelNoPlaylists => '再生リストなし';
   @override
-  String get labelNoPlaylistsDescription => 'Search for videos or playlists and save them. They will appear here';
+  String get labelNoPlaylistsDescription => '動画や再生リストを検索して保存するとここに表示されます';
   @override
-  String get labelSearch => 'Search';
+  String get labelSearch => '検索';
   @override
-  String get labelSubscriptions => 'Subscriptions';
+  String get labelSubscriptions => 'チャンネル購読';
   @override
-  String get labelNoDownloadsCanceled => 'No Downloads Canceled';
+  String get labelNoDownloadsCanceled => 'キャンセルしたダウンロードなし';
   @override
-  String get labelNoDownloadsCanceledDescription => 'Good news! But if you cancel or something goes wrong with the download, you can check from here';
+  String get labelNoDownloadsCanceledDescription => 'いいことです！でもキャンセルしたりダウンロードに失敗すればここに表示されます';
   @override
-  String get labelNoDownloadsYet => 'No Downloads Yet';
+  String get labelNoDownloadsYet => 'まだダウンロードなし';
   @override
-  String get labelNoDownloadsYetDescription => 'Go home, search for something to download or wait for the queue!';
+  String get labelNoDownloadsYetDescription => 'ホームから何かを検索しダウンロードするか or wait for the queue!';
   @override
-  String get labelYourQueueIsEmpty => 'Your queue is empty';
+  String get labelYourQueueIsEmpty => 'キューに登録なし';
   @override
-  String get labelYourQueueIsEmptyDescription => 'Go home and search for something to download!';
+  String get labelYourQueueIsEmptyDescription => 'ホームから何かを検索しダウンロードしましょう！';
   @override
-  String get labelQueue => 'Queue';
+  String get labelQueue => 'キュー';
   @override
-  String get labelSearchDownloads => 'Search Downloads';
+  String get labelSearchDownloads => 'ダウンロードを検索';
   @override
-  String get labelWatchHistory => 'Watch History';
+  String get labelWatchHistory => '再生履歴';
   @override
-  String get labelWatchHistoryDescription => 'Look at which videos you have seen';
+  String get labelWatchHistoryDescription => '見た動画です';
   @override
-  String get labelBackupAndRestore => 'Backup & Restore';
+  String get labelBackupAndRestore => 'バックアップ & 復元';
   @override
-  String get labelBackupAndRestoreDescription => 'Save or resture all of your local data';
+  String get labelBackupAndRestoreDescription => '端末内データのすべてを保存または復元';
   @override
-  String get labelSongtubeLink => 'SongTube Link';
+  String get labelSongtubeLink => 'SongTube リンク';
   @override
-  String get labelSongtubeLinkDescription => 'Allow SongTube browser extension to detect this device, long press to learn more';
+  String get labelSongtubeLinkDescription => 'SongTube ブラウザ拡張機能がこの端末を検出できるようにします。長押しで詳細';
   @override
-  String get labelSupportDevelopment => 'Support Development';
+  String get labelSupportDevelopment => '開発支援';
   @override
-  String get labelSocialLinks => 'Social Links';
+  String get labelSocialLinks => 'ソーシャルリンク';
   @override
-  String get labelSeeMore => 'See more';
+  String get labelSeeMore => 'もっと見る';
   @override
-  String get labelMostPlayed => 'Most played';
+  String get labelMostPlayed => '再生回数が多い';
   @override
-  String get labelNoPlaylistsYet => 'No Playlists Yet';
+  String get labelNoPlaylistsYet => 'まだ再生リストなし';
   @override
-  String get labelNoPlaylistsYetDescription => 'You can create a playlist from your recents, music, albums or artists';
+  String get labelNoPlaylistsYetDescription => '履歴、曲、アルバム、アーティストから再生リストを作成できます';
   @override
-  String get labelNoSearchResults => 'No search results';
+  String get labelNoSearchResults => '検索結果はありませんでした';
   @override
-  String get labelSongResults => 'Song results';
+  String get labelSongResults => '曲';
   @override
-  String get labelAlbumResults => 'Album results';
+  String get labelAlbumResults => 'アルバム';
   @override
-  String get labelArtistResults => 'Artist results';
+  String get labelArtistResults => 'アーティスト';
   @override
   String get labelSearchAnything => 'Search anything';
   @override
   String get labelRecents => 'Recents';
   @override
-  String get labelFetchingSongs => 'Fetching Songs';
+  String get labelFetchingSongs => '曲を取得';
   @override
-  String get labelPleaseWaitAMoment => 'Please wait a moment';
+  String get labelPleaseWaitAMoment => '少しお待ちください';
   @override
   String get labelWeAreDone => 'We are done';
   @override
@@ -444,7 +444,7 @@ class LanguageJa extends Languages {
   @override
   String get labelLetsGo => 'Let\'s go';
   @override
-  String get labelPleaseWait => 'Please wait';
+  String get labelPleaseWait => 'お待ちください';
   @override
   String get labelPoweredBy => 'Powered by';
   @override
@@ -456,15 +456,15 @@ class LanguageJa extends Languages {
   @override
   String get labelStorageReadDescription => 'This will scan your music, extract high quality artworks and allow you to personalize your music';
   @override
-  String get labelContinue => 'Continue';
+  String get labelContinue => '続行';
   @override
   String get labelAllowStorageRead => 'Allow Storage Read';
   @override
   String get labelSelectYourPreferred => 'Select your preferred';
   @override
-  String get labelLight => 'Light';
+  String get labelLight => 'ライト';
   @override
-  String get labelDark => 'Dark';
+  String get labelDark => 'ダーク';
   @override
   String get labelSimultaneousDownloads => 'Simultaneous Downloads';
   @override
@@ -472,49 +472,49 @@ class LanguageJa extends Languages {
   @override
   String get labelItems => 'Items';
   @override
-  String get labelInstantDownloadFormat => 'Instant Download';
+  String get labelInstantDownloadFormat => 'すぐダウンロード';
   @override
-  String get labelInstantDownloadFormatDescription => 'Change the audio format for instant downloads';
+  String get labelInstantDownloadFormatDescription => 'すぐダウンロード用の音声形式を変更';
   @override
   String get labelCurrent => 'Current';
   @override
-  String get labelPauseWatchHistory => 'Pause Watch History';
+  String get labelPauseWatchHistory => '再生履歴を停止';
   @override
-  String get labelPauseWatchHistoryDescription => 'While paused, videos are not saved into the watch history list';
+  String get labelPauseWatchHistoryDescription => '停止中は動画は再生履歴にの一覧に保存されません';
   @override
-  String get labelLockNavigationBar => 'Lock Navigation Bar';
+  String get labelLockNavigationBar => 'ナビバーを固定';
   @override
   String get labelLockNavigationBarDescription => 'Locks the navigation bar from hiding and showing automatically on scroll';
   @override
-  String get labelPictureInPicture => 'Picture in Picture';
+  String get labelPictureInPicture => 'ピクチャーインピクチャー';
   @override
-  String get labelPictureInPictureDescription => 'Automatically enters PiP mode upon tapping home button while watching a video';
+  String get labelPictureInPictureDescription => '動画視聴中にホームボタンを押すと自動的にPiPモードにします';
   @override
-  String get labelBackgroundPlaybackAlpha => 'Background Playback (Alpha)';
+  String get labelBackgroundPlaybackAlpha => 'バックグラウンド再生 (アルファ)';
   @override
-  String get labelBackgroundPlaybackAlphaDescription => 'Toggle background playback feature. Due to plugin limitations, only current video can be played in the background';
+  String get labelBackgroundPlaybackAlphaDescription => 'バックグラウンド再生を切り替え。プラグインの制限により、バックグラウンド再生するのは現在の動画のみです';
   @override
-  String get labelBlurBackgroundDescription => 'Add blurred artwork background';
+  String get labelBlurBackgroundDescription => 'アートワークの背景にぼかしを追加';
   @override
-  String get labelBlurIntensity => 'Blur Intensity';
+  String get labelBlurIntensity => 'ぼかしの強さ';
   @override
-  String get labelBlurIntensityDescription => 'Change the blur intensity of the artwork background';
+  String get labelBlurIntensityDescription => 'アートワークの背景のぼかしの強さを変更;
   @override
-  String get labelBackdropOpacity => 'Backdrop Opacity';
+  String get labelBackdropOpacity => '背景の不透明度';
   @override
-  String get labelBackdropOpacityDescription => 'Change the colored backdrop opacity';
+  String get labelBackdropOpacityDescription => '背景の不透明度';
   @override
-  String get labelArtworkShadowOpacity => 'Artwork Shadow Opacity';
+  String get labelArtworkShadowOpacity => 'アートワークの影の不透明度';
   @override
-  String get labelArtworkShadowOpacityDescription => 'Change the artwork shadow intensity of the music player';
+  String get labelArtworkShadowOpacityDescription => '音楽プレイヤーのアートワークの影の強さを変更';
   @override
-  String get labelArtworkShadowRadius => 'Artwork Shadow Radius';
+  String get labelArtworkShadowRadius => 'アートワークの影の丸み';
   @override
-  String get labelArtworkShadowRadiusDescription => 'Change the artwork shadow radius of the music player';
+  String get labelArtworkShadowRadiusDescription => '音楽プレイヤーのアートワークの影の丸みを変更r';
   @override
-  String get labelArtworkScaling => 'Artwork Scaling';
+  String get labelArtworkScaling => 'アートワークの拡大率';
   @override
-  String get labelArtworkScalingDescription => 'Scale out the music player artwork & background images';
+  String get labelArtworkScalingDescription => '音楽プレイヤーのアートワークと背景画像の拡大率';
   @override
   String get labelBackgroundParallax => 'Background Parallax';
   @override
@@ -528,9 +528,9 @@ class LanguageJa extends Languages {
   @override
   String get labelRestoringArtworksDone => 'Restoring artworks done';
   @override
-  String get labelHomeScreen => 'Home Screen';
+  String get labelHomeScreen => 'ホーム画面';
   @override
-  String get labelHomeScreenDescription => 'Change the default landing screen when you open the app';
+  String get labelHomeScreenDescription => 'アプリ開始時の最初の表示画面を変更';
   @override
   String get labelDefaultMusicPage => 'Default Music Page';
   @override
@@ -538,53 +538,53 @@ class LanguageJa extends Languages {
   @override
   String get labelAbout => 'About';
   @override
-  String get labelConversionRequired => 'Conversion Required';
+  String get labelConversionRequired => '要変換';
   @override
-  String get labelConversionRequiredDescription =>  'This song format is incompatible with the ID3 Tags editor. The app will automatically convert this song to AAC (m4a) to sort out this issue.';
+  String get labelConversionRequiredDescription =>  'この曲の形式は ID3 タグエディターの対応しません。本アプリはこの曲を AAC (m4a) に自動変換しこの問題を解決します。';
   @override
-  String get labelPermissionRequired => 'Permission Required';
+  String get labelPermissionRequired => '許可が必要';
   @override
-  String get labelPermissionRequiredDescription => 'All file access permission is required for SongTube to edit any song on your device';
+  String get labelPermissionRequiredDescription => 'この端末上でSongTubeが曲を編集するにはすべてのファイルにアクセスする許可が必要です';
   @override
-  String get labelApplying => 'Applying';
+  String get labelApplying => '適用中';
   @override
-  String get labelConvertingDescription => 'Re-encoding this song into AAC (m4a) format';
+  String get labelConvertingDescription => 'この曲を AAC (m4a) 形式に再エンコード中';
   @override
-  String get labelWrittingTagsAndArtworkDescription => 'Applying new tags to this song';
+  String get labelWrittingTagsAndArtworkDescription => 'この曲に新たなタグを適用中';
   @override
-  String get labelApply => 'Apply';
+  String get labelApply => '適用';
   @override
-  String get labelSongs => 'Songs';
+  String get labelSongs => '曲';
   @override
-  String get labelPlayAll => 'Play All';
+  String get labelPlayAll => 'すべて再生';
   @override
   String get labelPlaying => 'Playing';
   @override
-  String get labelPages => 'Pages';
+  String get labelPages => 'ページ';
   @override
-  String get labelMusicPlayer => 'Music Player';
+  String get labelMusicPlayer => '音楽プレイヤー';
   @override
-  String get labelClearWatchHistory => 'Clear Watch History';
+  String get labelClearWatchHistory => '再生履歴を消去';
   @override
-  String get labelClearWatchHistoryDescription =>  'You\'re about to delete all your watch history videos, this action cannot be undone, proceed?';
+  String get labelClearWatchHistoryDescription =>  '動画の再生履歴をすべて削除しようとしています。元に戻せません。続けますか？';
   @override
-  String get labelDelete => 'Delete';
+  String get labelDelete => '削除';
   @override
-  String get labelAppUpdate => 'App Update';
+  String get labelAppUpdate => 'アプリの更新';
   @override
-  String get labelWhatsNew => 'What\'s New';
+  String get labelWhatsNew => '更新内容';
   @override
-  String get labelLater => 'Later';
+  String get labelLater => '後で';
   @override
-  String get labelUpdate => 'Update';
+  String get labelUpdate => '更新';
   @override
-  String get labelUnsubscribe => 'Unsubscribe';
+  String get labelUnsubscribe => '登録解除';
   @override
-  String get labelAudioFeatures => 'Audio Features';
+  String get labelAudioFeatures => '音声の機能';
   @override
-  String get labelVolumeBoost => 'Volume Boost';
+  String get labelVolumeBoost => '音量ブースト';
   @override
-  String get labelNormalizeAudio => 'Normalize Audio';
+  String get labelNormalizeAudio => '音声の正規化';
   @override
   String get labelSegmentedDownload => 'Segmented Download';
   @override
@@ -592,7 +592,7 @@ class LanguageJa extends Languages {
   @override
   String get labelEnableSegmentedDownloadDescription => 'This will download the whole audio file and then split it into the various enabled segments (or audio tracks) from the list below';
   @override
-  String get labelCreateMusicPlaylist => 'Create Music Playlist';
+  String get labelCreateMusicPlaylist => '音楽再生リストの作成';
   @override
   String get labelCreateMusicPlaylistDescription => 'Create music playlist from all downloaded and saved audio segments';
   @override
@@ -616,105 +616,105 @@ class LanguageJa extends Languages {
   @override
   String get labelStreamingOptions => 'Streaming Options';
   @override
-  String get labelComments => 'Comments';
+  String get labelComments => 'コメント';
   @override
-  String get labelPinned => 'Pinned';
+  String get labelPinned => 'ピン留め';
   @override
   String get labelLikedByAuthor => 'Liked by Author';
   @override
-  String get labelDescription => 'Description';
+  String get labelDescription => '説明';
   @override
   String get labelViews => 'Views';
   @override
   String get labelPlayingNextIn => 'Playing next in';
   @override
-  String get labelPlayNow => 'Play Now';
+  String get labelPlayNow => '今すぐ再生';
   @override
-  String get labelLoadingPlaylist => 'Loading Playlist';
+  String get labelLoadingPlaylist => '再生リスト読み込み中';
   @override
-  String get labelPlaylistReachedTheEnd => 'Playlist reached the end';
+  String get labelPlaylistReachedTheEnd => '再生リストの最後まで再生しました';
   @override
   String get labelLiked => 'Liked';
   @override
   String get labelLike => 'Like';
   @override
-  String get labelVideoRemovedFromFavorites => 'Video removed from favorites';
+  String get labelVideoRemovedFromFavorites => 'お気に入りから動画を削除しました';
   @override
-  String get labelVideoAddedToFavorites => 'Video added to favorites';
+  String get labelVideoAddedToFavorites => 'お気に入りに動画を追加しました';
   @override
   String get labelPopupMode => 'Popup Mode';
   @override
   String get labelDownloaded => 'Downloaded';
   @override
-  String get labelShowPlaylist => 'Show Playlist';
+  String get labelShowPlaylist => '再生リスト表示';
   @override
-  String get labelCreatePlaylist => 'Create Playlist';
+  String get labelCreatePlaylist => '再生リスト作成';
   @override
-  String get labelAddVideoToPlaylist => 'Add video to playlist';
+  String get labelAddVideoToPlaylist => '動画を再生リストに追加';
   @override
-  String get labelBackupDescription => 'Backup all of your local data into a single file that can be used to restore later';
+  String get labelBackupDescription => 'すべての端末内のデータを1つのファイルにバックアップし後から復元できます';
   @override
-  String get labelBackupCreated => 'Backup Created';
+  String get labelBackupCreated => 'バックアップを作成しました';
   @override
-  String get labelBackupRestored => 'Backup Restored';
+  String get labelBackupRestored => 'バックアップを復元しました';
   @override
-  String get labelRestoreDescription => 'Restore all your data from a backup file';
+  String get labelRestoreDescription => 'バックアップファイルからすべてのデータを復元';
   @override
-  String get labelChannelSuggestions => 'Channel Suggestions';
+  String get labelChannelSuggestions => 'おすすめのチャンネル';
   @override
-  String get labelFetchingChannels => 'Fetching Channels';
+  String get labelFetchingChannels => 'チャンネル取得中';
   @override
   String get labelShareVideo => 'Shared Video';
   @override
-  String get labelShareDescription => 'Share with friends or other platforms';
+  String get labelShareDescription => '友達やほかのプラットフォームに共有';
   @override
-  String get labelRemoveFromPlaylists => 'Remove from playlist';
+  String get labelRemoveFromPlaylists => '再生リストから削除';
   @override
-  String get labelThisActionCannotBeUndone => 'This action cannot be undone';
+  String get labelThisActionCannotBeUndone => 'この操作は元に戻せません';
   @override
-  String get labelAddVideoToPlaylistDescription => 'Add to existing or new video playlist';
+  String get labelAddVideoToPlaylistDescription => '既存または新しい動画の再生リストに追加';
   @override
-  String get labelAddToPlaylists => 'Add to playlists';
+  String get labelAddToPlaylists => '再生リストに追加';
   @override
   String get labelEditableOnceSaved => 'Editable once saved';
   @override
-  String get labelPlaylistRemoved => 'Playlist Removed';
+  String get labelPlaylistRemoved => '再生リストを削除しました';
   @override
-  String get labelPlaylistSaved => 'Playlist Saved';
+  String get labelPlaylistSaved => '再生リストを保存しました';
   @override
-  String get labelRemoveFromFavorites => 'Remove from favorites';
+  String get labelRemoveFromFavorites => 'お気に入りから除去';
   @override
-  String get labelRemoveFromFavoritesDescription => 'Remove this video from your favorites';
+  String get labelRemoveFromFavoritesDescription => 'この動画をお気に入りから除去';
   @override
-  String get labelSaveToFavorites => 'Save to favorites';
+  String get labelSaveToFavorites => 'お気に入りに保存';
   @override
-  String get labelSaveToFavoritesDescription => 'Add video to your list of favorites';
+  String get labelSaveToFavoritesDescription => 'お気に入り一覧に追加';
   @override
-  String get labelSharePlaylist => 'Share Playlist';
+  String get labelSharePlaylist => '再生リストを共有';
   @override
-  String get labelRemoveThisVideoFromThisList => 'Remove this video from this list';
+  String get labelRemoveThisVideoFromThisList => 'この一覧からこの動画を除去';
   @override
-  String get labelEqualizer => 'Equalizer';
+  String get labelEqualizer => 'イコライザー';
   @override
   String get labelLoudnessEqualizationGain => 'Loudness Equalization Gain';
   @override
-  String get labelSliders => 'Sliders';
+  String get labelSliders => 'スライダー';
   @override
-  String get labelSave => 'Save';
+  String get labelSave => '保存';
   @override
-  String get labelPlaylistName => 'PlaylistName';
+  String get labelPlaylistName => '再生リスト名';
   @override
-  String get labelCreateVideoPlaylist => 'Create Video Playlist';
+  String get labelCreateVideoPlaylist => '動画の再生リストの作成';
   @override
-  String get labelSearchFilters => 'Search Filters';
+  String get labelSearchFilters => '検索絞り込み';
   @override
-  String get labelAddToPlaylistDescription => 'Add to existing or new playlist';
+  String get labelAddToPlaylistDescription => '既存または新しい再生リストに追加';
   @override
-  String get labelShareSong => 'Share Song';
+  String get labelShareSong => '曲を共有';
   @override
-  String get labelShareSongDescription => 'Share with friends or other platforms';
+  String get labelShareSongDescription => '友達やほかのプラットフォームに共有';
   @override
-  String get labelEditTagsDescription => 'Open ID3 tags and artwork editor';
+  String get labelEditTagsDescription => 'ID3 タグとアートワークのエディターを開く';
   @override
   String get labelContains => 'Contains';
 }
