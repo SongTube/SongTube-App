@@ -24,6 +24,7 @@ import 'package:songtube/ui/players/video_player/player_ui/player_progress_bar.d
 import 'package:songtube/ui/text_styles.dart';
 import 'package:video_player/video_player.dart';
 import 'package:volume_controller/volume_controller.dart';
+import 'package:wakelock/wakelock.dart';
 
 class VideoPlayerWidget extends StatefulWidget {
   const VideoPlayerWidget({
@@ -220,6 +221,7 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
 
   @override
   void initState() {
+    Wakelock.enable();
     super.initState();
   }
 
@@ -322,6 +324,7 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   @override
   void dispose() {
     controller?.dispose();
+    Wakelock.disable();
     super.dispose();
   }
 

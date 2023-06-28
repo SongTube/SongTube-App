@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/internal/models/colors_palette.dart';
 import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/app_settings.dart';
 import 'package:songtube/internal/artwork_manager.dart';
@@ -15,6 +16,7 @@ import 'package:songtube/providers/media_provider.dart';
 import 'package:songtube/providers/playlist_provider.dart';
 import 'package:songtube/providers/ui_provider.dart';
 import 'package:songtube/screens/playlist.dart';
+import 'package:songtube/ui/components/palette_loader.dart';
 import 'package:songtube/ui/players/music_player/background_carousel.dart';
 import 'package:songtube/ui/players/music_player/player_body.dart';
 import 'package:songtube/ui/sheets/music_equalizer.dart';
@@ -49,13 +51,13 @@ class _MusicPlayerState extends State<MusicPlayer> with TickerProviderStateMixin
   }
 
   // Player Colors
-  Color get textColor {
+  Color textColor(ColorsPalette? palette) {
     final defaultColor = Theme.of(context).textTheme.bodyText1!.color!;
     if (AppSettings().enableMusicPlayerBlur) {
-      if ((song.palette?.dominant ?? Colors.black).computeLuminance() < 0.2) {
-        return song.palette?.text ?? defaultColor;
+      if ((palette?.dominant ?? Colors.black).computeLuminance() < 0.2) {
+        return palette?.text ?? defaultColor;
       } else {
-        return song.palette?.text ?? defaultColor;
+        return palette?.text ?? defaultColor;
       }
     } else {
       return defaultColor;
@@ -100,164 +102,174 @@ class _MusicPlayerState extends State<MusicPlayer> with TickerProviderStateMixin
     return Material(
       color: Colors.transparent,
       borderRadius: BorderRadius.circular(30),
-      child: AnimatedBuilder(
-        animation: uiProvider.fwController.animationController,
-        builder: (context, child) {
-          return Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(uiProvider.fwController.animationController.value < 1 ? 30 : 0),
-              color: Theme.of(context).cardColor,
-              boxShadow: uiProvider.fwController.lockNotificationListener
-              ? [BoxShadow(
-                  blurRadius: 12,
-                  offset: const Offset(0,0),
-                  color: Theme.of(context).shadowColor.withOpacity(0.2)
-                )]
-              : null,
-            ),
-            child: Stack(
-              children: [
-                // Blurred Background
-                FutureBuilder<File>(
-                  future: getAlbumImage(),
-                  builder: (context, snapshot) {
-                    return BackgroundCarousel(
-                      enabled: appSettings.enableMusicPlayerBlur,
-                      backgroundImage: useArtwork ? snapshot.data : thumbnailFile(song.id),
-                      backdropColor: appSettings.enableMusicPlayerBlur
-                        ? song.palette!.dominant ?? Theme.of(context).scaffoldBackgroundColor
-                        : Theme.of(context).scaffoldBackgroundColor,
-                      backdropOpacity: appSettings.musicPlayerBackdropOpacity,
-                      blurIntensity: appSettings.musicPlayerBlurStrenght,
-                      transparency: Tween<double>(begin: 0, end: 1).animate(uiProvider.fwController.animationController).value,
-                    );
-                  }
+      child: PaletteLoader(
+        song: song,
+        builder: (context, palette) {
+          return AnimatedBuilder(
+            animation: uiProvider.fwController.animationController,
+            builder: (context, child) {
+              return Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(uiProvider.fwController.animationController.value < 1 ? 30 : 0),
+                  color: Theme.of(context).cardColor,
+                  boxShadow: uiProvider.fwController.lockNotificationListener
+                  ? [BoxShadow(
+                      blurRadius: 12,
+                      offset: const Offset(0,0),
+                      color: Theme.of(context).shadowColor.withOpacity(0.2)
+                    )]
+                  : null,
                 ),
-                // Player UI
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    color: Colors.transparent,
+                child: Stack(
+                  children: [
+                    // Blurred Background
+                    FutureBuilder<File>(
+                      future: getAlbumImage(),
+                      builder: (context, snapshot) {
+                        return BackgroundCarousel(
+                          enabled: appSettings.enableMusicPlayerBlur,
+                          backgroundImage: useArtwork ? snapshot.data : thumbnailFile(song.id),
+                          backdropColor: appSettings.enableMusicPlayerBlur
+                            ? palette!.dominant ?? Theme.of(context).scaffoldBackgroundColor
+                            : Theme.of(context).scaffoldBackgroundColor,
+                          backdropOpacity: appSettings.musicPlayerBackdropOpacity,
+                          blurIntensity: appSettings.musicPlayerBlurStrenght,
+                          transparency: Tween<double>(begin: 0, end: 1).animate(uiProvider.fwController.animationController).value,
+                        );
+                      }
+                    ),
+                    // Player UI
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        color: Colors.transparent,
+                      ),
+                      padding: EdgeInsets.only(top: Tween<double>(begin: 0, end: MediaQuery.of(context).padding.top).animate(uiProvider.fwController.animationController).value),
+                      child: child
+                    ),
+                  ],
+                ),
+              );
+            },
+            child: Column(
+              children: [
+                // Now Playing
+                _nowPlaying(),
+                // Player Body
+                const ExpandedPlayerBody(),
+                // Show Playlist Text, filtered by the exception list
+                if (!playlistExceptionFilter.any((element) => element == mediaProvider.currentPlaylistName))
+                AnimatedBuilder(
+                  animation: uiProvider.fwController.animationController,
+                  builder: (context, child) {
+                    return SizedBox(
+                      height: Tween<double>(begin: 0, end: kToolbarHeight*0.7).animate(uiProvider.fwController.animationController).value,
+                      child: Opacity(
+                        opacity: (uiProvider.fwController.animationController.value - (1 - uiProvider.fwController.animationController.value)) > 0
+                          ? (uiProvider.fwController.animationController.value - (1 - uiProvider.fwController.animationController.value)) : 0,
+                        child: child
+                      ),
+                    );
+                  },
+                  child: GestureDetector(
+                    onTap: () {
+                      // Build mediaSet from the current playing playlist to push playlist page
+                      final name = mediaProvider.currentPlaylistName;
+                      final albums = MediaItemAlbum.fetchAlbums(mediaProvider.songs);
+                      var playlistScreen;
+                      if (name == 'Favorites') {
+                        playlistScreen = PlaylistScreen(mediaSet: playlistProvider.favorites.toMediaSet());
+                      } else if (name == 'Most Played') {
+                        
+                      } else if (name == 'Downloads') {
+
+                      } else if (playlistProvider.globalPlaylists.any((element) => element.name == name)) {
+                        playlistScreen = PlaylistScreen(mediaSet: playlistProvider.globalPlaylists.firstWhere((element) => element.name == name).toMediaSet());
+                      } else if (albums.any((element) => element.albumTitle == name)) {
+                        playlistScreen = PlaylistScreen(mediaSet: albums.firstWhere((element) => element.albumTitle == name).toMediaSet());
+                      }
+                      UiUtils.pushRouteAsync(navigatorKey.currentState!.context, playlistScreen, providerContext: context);
+                      uiProvider.fwController.close();
+                    },
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(Languages.of(context)!.labelShowPlaylist, style: tinyTextStyle(context, bold: true).copyWith(letterSpacing: 1, color: textColor(palette))),
+                        Icon(Icons.expand_less, color: textColor(palette), size: 18)
+                      ],
+                    ),
                   ),
-                  padding: EdgeInsets.only(top: Tween<double>(begin: 0, end: MediaQuery.of(context).padding.top).animate(uiProvider.fwController.animationController).value),
-                  child: child
                 ),
               ],
             ),
           );
-        },
-        child: Column(
-          children: [
-            // Now Playing
-            _nowPlaying(),
-            // Player Body
-            const ExpandedPlayerBody(),
-            // Show Playlist Text, filtered by the exception list
-            if (!playlistExceptionFilter.any((element) => element == mediaProvider.currentPlaylistName))
-            AnimatedBuilder(
-              animation: uiProvider.fwController.animationController,
-              builder: (context, child) {
-                return SizedBox(
-                  height: Tween<double>(begin: 0, end: kToolbarHeight*0.7).animate(uiProvider.fwController.animationController).value,
-                  child: Opacity(
-                    opacity: (uiProvider.fwController.animationController.value - (1 - uiProvider.fwController.animationController.value)) > 0
-                      ? (uiProvider.fwController.animationController.value - (1 - uiProvider.fwController.animationController.value)) : 0,
-                    child: child
-                  ),
-                );
-              },
-              child: GestureDetector(
-                onTap: () {
-                  // Build mediaSet from the current playing playlist to push playlist page
-                  final name = mediaProvider.currentPlaylistName;
-                  final albums = MediaItemAlbum.fetchAlbums(mediaProvider.songs);
-                  var playlistScreen;
-                  if (name == 'Favorites') {
-                    playlistScreen = PlaylistScreen(mediaSet: playlistProvider.favorites.toMediaSet());
-                  } else if (name == 'Most Played') {
-                    
-                  } else if (name == 'Downloads') {
-
-                  } else if (playlistProvider.globalPlaylists.any((element) => element.name == name)) {
-                    playlistScreen = PlaylistScreen(mediaSet: playlistProvider.globalPlaylists.firstWhere((element) => element.name == name).toMediaSet());
-                  } else if (albums.any((element) => element.albumTitle == name)) {
-                    playlistScreen = PlaylistScreen(mediaSet: albums.firstWhere((element) => element.albumTitle == name).toMediaSet());
-                  }
-                  UiUtils.pushRouteAsync(navigatorKey.currentState!.context, playlistScreen, providerContext: context);
-                  uiProvider.fwController.close();
-                },
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(Languages.of(context)!.labelShowPlaylist, style: tinyTextStyle(context, bold: true).copyWith(letterSpacing: 1, color: textColor)),
-                    Icon(Icons.expand_less, color: textColor, size: 18)
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
+        }
       ),
     );
   }
 
   Widget _nowPlaying() {
-    return AnimatedBuilder(
-      animation: uiProvider.fwController.animationController,
-      builder: (context, child) {
-        return SizedBox(
-          height: Tween<double>(begin: 0, end: kToolbarHeight).animate(uiProvider.fwController.animationController).value,
-          child: Opacity(
-            opacity: (uiProvider.fwController.animationController.value - (1 - uiProvider.fwController.animationController.value)) > 0
-              ? (uiProvider.fwController.animationController.value - (1 - uiProvider.fwController.animationController.value)) : 0,
-            child: Transform.translate(
-              offset: Offset(0, Tween<double>(begin: -64, end: 0).animate(uiProvider.fwController.animationController).value),
-              child: child
-            ),
-          ),
-        );
-      },
-      child: Row(
-        children: [
-          const SizedBox(width: 16),
-          // Hide Player Button
-          IconButton(
-            onPressed: () {
-              uiProvider.fwController.close();
-            },
-            icon: Icon(Icons.expand_more_rounded, color: textColor)
-          ),
-          // Now Playing Text
-          Expanded(
-            child: Center(
-              child: Container(
-                padding: const EdgeInsets.only(top: 8, bottom: 8, left: 32, right: 32),
-                child: Text(
-                  mediaProvider.currentPlaylistName ?? 'Unknown Playlist',
-                  maxLines: 1,
-                  textAlign: TextAlign.center,
-                  style: subtitleTextStyle(context, bold: true).copyWith(letterSpacing: 1, color: textColor)
+    return PaletteLoader(
+      song: song,
+      builder: (context, palette) {
+        return AnimatedBuilder(
+          animation: uiProvider.fwController.animationController,
+          builder: (context, child) {
+            return SizedBox(
+              height: Tween<double>(begin: 0, end: kToolbarHeight).animate(uiProvider.fwController.animationController).value,
+              child: Opacity(
+                opacity: (uiProvider.fwController.animationController.value - (1 - uiProvider.fwController.animationController.value)) > 0
+                  ? (uiProvider.fwController.animationController.value - (1 - uiProvider.fwController.animationController.value)) : 0,
+                child: Transform.translate(
+                  offset: Offset(0, Tween<double>(begin: -64, end: 0).animate(uiProvider.fwController.animationController).value),
+                  child: child
                 ),
               ),
-            ),
+            );
+          },
+          child: Row(
+            children: [
+              const SizedBox(width: 16),
+              // Hide Player Button
+              IconButton(
+                onPressed: () {
+                  uiProvider.fwController.close();
+                },
+                icon: Icon(Icons.expand_more_rounded, color: textColor(palette))
+              ),
+              // Now Playing Text
+              Expanded(
+                child: Center(
+                  child: Container(
+                    padding: const EdgeInsets.only(top: 8, bottom: 8, left: 32, right: 32),
+                    child: Text(
+                      mediaProvider.currentPlaylistName ?? 'Unknown Playlist',
+                      maxLines: 1,
+                      textAlign: TextAlign.center,
+                      style: subtitleTextStyle(context, bold: true).copyWith(letterSpacing: 1, color: textColor(palette))
+                    ),
+                  ),
+                ),
+              ),
+              // Show Equalizer
+              IconButton(
+                onPressed: () async {
+                  final equalizerMap = await audioHandler.customAction('retrieveEqualizer');
+                  final loudnessMap = await audioHandler.customAction('retrieveLoudnessGain');
+                  showModalBottomSheet(
+                    context: internalNavigatorKey.currentContext!,
+                    isScrollControlled: true,
+                    backgroundColor: Colors.transparent,
+                    builder: (context) => MusicEqualizerSheet(equalizerMap: equalizerMap, loudnessMap: loudnessMap,
+                      songColor: palette?.vibrant ?? palette?.dominant ?? Theme.of(context).textTheme.bodyText1!.color!));
+                },
+                icon: Icon(Icons.graphic_eq_outlined, color: textColor(palette))
+              ),
+              const SizedBox(width: 16)
+            ],
           ),
-          // Show Equalizer
-          IconButton(
-            onPressed: () async {
-              final equalizerMap = await audioHandler.customAction('retrieveEqualizer');
-              final loudnessMap = await audioHandler.customAction('retrieveLoudnessGain');
-              showModalBottomSheet(
-                context: internalNavigatorKey.currentContext!,
-                isScrollControlled: true,
-                backgroundColor: Colors.transparent,
-                builder: (context) => MusicEqualizerSheet(equalizerMap: equalizerMap, loudnessMap: loudnessMap,
-                  songColor: song.palette?.vibrant ?? song.palette?.dominant ?? Theme.of(context).textTheme.bodyText1!.color!));
-            },
-            icon: Icon(Icons.graphic_eq_outlined, color: textColor)
-          ),
-          const SizedBox(width: 16)
-        ],
-      ),
+        );
+      }
     );
   }
 

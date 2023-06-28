@@ -48,11 +48,11 @@ class MediaProvider extends ChangeNotifier {
         id: id,
         modelId: metadata.title,
         title: metadata.title,
-        palette: ColorsPalette(
-          dominant: palette.dominantColor?.color,
-          vibrant: palette.vibrantColor?.color,
-        ),
         lastModified: stats.changed);
+      newSong.palette = ColorsPalette(
+        dominant: palette.dominantColor?.color,
+        vibrant: palette.vibrantColor?.color,
+      );
       _songs.removeAt(index);
       _songs.insert(index, newSong);
       // Save to cache

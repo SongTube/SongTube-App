@@ -85,24 +85,29 @@ class MediaUtils {
       }
     });
     // Build Thumbnails
-    Stopwatch thumbnailsStopwatch = Stopwatch()..start();
+    Stopwatch thumbnailStopwatch = Stopwatch();
+    int thumbnailsDuration = 0;
     for (final song in userSongs) {
-      await ArtworkManager.writeThumbnail(song.filePath!);
+      try {
+        thumbnailStopwatch.reset();
+        thumbnailStopwatch.start();
+        await ArtworkManager.writeThumbnail(song.filePath!);
+        if (kDebugMode) {
+          thumbnailStopwatch.stop();
+          thumbnailsDuration += thumbnailStopwatch.elapsed.inMilliseconds;
+          print('Thumbnail took: ${thumbnailStopwatch.elapsed.inMilliseconds}ms');
+        }
+      } catch (_) {}
     }
-    thumbnailsStopwatch.stop();
     if (kDebugMode) {
-      print('Thumbnails spent a total of ${thumbnailsStopwatch.elapsed.inSeconds}s');
+      print('Thumbnails spent a total of ${thumbnailsDuration/1000}s');
     }
     final List<SongItem> songs = [];
     for (final element in userSongs) {
-      try {
-        final song = await MediaUtils.convertToSongItem(element);
+      final song = MediaUtils.convertToSongItem(element);
+      if (song != null) {
         songs.add(song);
         onUpdateTrigger(song);
-      } catch (e) {
-        if (kDebugMode) {
-          print(e);
-        }
       }
     }
     CacheUtils.cacheSongs = fetchCachedSongsAsSongItems()..addAll(songs);
@@ -156,18 +161,25 @@ class MediaUtils {
   }
 
   // Convert any List<SongFile> to a List<MediaItem>
-  static Future<SongItem> convertToSongItem(SongInfo element) async {
+  static SongItem? convertToSongItem(SongInfo element) {
     int hours = 0;
     int minutes = 0;
     int? micros;
-    List<String> parts = element.duration!.split(':');
-    if (parts.length > 2) {
-      hours = int.parse(parts[parts.length - 3]);
+    List<String> parts = element.duration?.split(':') ?? [];
+    try {
+      if (parts.length > 2) {
+        hours = int.parse(parts[parts.length - 3]);
+      }
+      if (parts.length > 1) {
+        minutes = int.parse(parts[parts.length - 2]);
+      }
+      micros = (double.parse(parts[parts.length - 1]) * 1000000).round();
+    } catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+      return null;
     }
-    if (parts.length > 1) {
-      minutes = int.parse(parts[parts.length - 2]);
-    }
-    micros = (double.parse(parts[parts.length - 1]) * 1000000).round();
     Duration duration = Duration(
       milliseconds: Duration(
         hours: hours, 
@@ -175,13 +187,13 @@ class MediaUtils {
         microseconds: micros
       ).inMilliseconds
     );
-    FileStat stats = await FileStat.stat(element.filePath!);
-    PaletteGenerator palette;
+    FileStat? stats;
     try {
-      palette = await PaletteGenerator.fromImageProvider(FileImage(thumbnailFile(element.filePath!)));
+      stats = FileStat.statSync(element.filePath!);
     } catch (e) {
-      await ArtworkManager.writeDefaultThumbnail(element.filePath!);
-      palette = await PaletteGenerator.fromImageProvider(FileImage(thumbnailFile(element.filePath!)));
+      if (kDebugMode) {
+        print(e.toString());
+      }
     }
     return SongItem(
       id: element.filePath!,
@@ -192,11 +204,7 @@ class MediaUtils {
       artworkPath: artworkFile(element.filePath!),
       thumbnailPath: thumbnailFile(element.filePath!),
       duration: duration,
-      lastModified: stats.changed,
-      palette: ColorsPalette(
-        dominant: palette.dominantColor?.color,
-        vibrant: palette.vibrantColor?.color,
-      )
+      lastModified: stats?.changed ?? DateTime.now(),
     );
   }
 
@@ -215,7 +223,7 @@ class MediaUtils {
         palette = await PaletteGenerator.fromImageProvider(FileImage(thumbnailFile(path)));
       }
     }
-    return SongItem(
+    final song = SongItem(
       id: path,
       modelId: info.tags.titleController.text,
       title: info.tags.titleController.text,
@@ -228,11 +236,37 @@ class MediaUtils {
       duration: duration,
       lastModified: stats.changed,
       videoId: info.url,
-      palette: palette != null ? ColorsPalette(
-        dominant: palette.dominantColor?.color,
-        vibrant: palette.vibrantColor?.color,
-      ) : null
     );
+    song.palette = palette != null ? ColorsPalette(
+      dominant: palette.dominantColor?.color,
+      vibrant: palette.vibrantColor?.color,
+    ) : null;
+    return song;
+  }
+
+  // Generate Colors Palette from any given song id (if it doesnt exist)
+  static Future<ColorsPalette?> generateColorsPalette(SongItem song) async {
+    final palette = sharedPreferences.getString(paletteId(song.id));
+    if (palette != null) {
+      return ColorsPalette.fromJson(palette);
+    } else {
+      try {
+        Stopwatch paletteStopwatch = Stopwatch()..start();
+        final result = await PaletteGenerator.fromImageProvider(FileImage(thumbnailFile(song.id)));
+        paletteStopwatch.stop();
+        if (kDebugMode) {
+          print('Palette: ${paletteId(song.id)} took ${paletteStopwatch.elapsed.inMilliseconds}ms');
+        }
+        final colors = ColorsPalette(dominant: result.dominantColor?.color, vibrant: result.vibrantColor?.color);
+        song.palette = colors;
+        return colors;
+      } catch (_) {
+        if (kDebugMode) {
+          print('Palette: ${paletteId(song.id)} failed');
+        }
+        return null;
+      }
+    }
   }
 
   static List<SongItem> fetchCachedSongsAsSongItems() {

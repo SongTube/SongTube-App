@@ -16,6 +16,7 @@ import 'package:songtube/providers/media_provider.dart';
 import 'package:songtube/providers/playlist_provider.dart';
 import 'package:songtube/providers/ui_provider.dart';
 import 'package:songtube/ui/animations/mini_music_visualizer.dart';
+import 'package:songtube/ui/components/palette_loader.dart';
 import 'package:songtube/ui/playlist_artwork.dart';
 import 'package:songtube/ui/text_styles.dart';
 import 'package:songtube/ui/tiles/song_tile.dart';
@@ -306,57 +307,62 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                     child: Icon(Ionicons.shuffle_outline, color: Theme.of(context).iconTheme.color),
                   ),
                 ),
-                InkWell(
-                  onTap: () {
-                    mediaProvider.currentPlaylistName = mediaSet.name;
-                    final queue = List<MediaItem>.generate(mediaSet.songs.length, (index) {
-                      return mediaSet.songs[index].mediaItem;
-                    });
-                    mediaProvider.playSong(queue, 0);
-                  },
-                  child: Container(
-                    decoration: BoxDecoration( 
-                      color: mediaSet.songs.first.palette!.vibrant,
-                      borderRadius: BorderRadius.circular(100),
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 12,
-                          offset: const Offset(0,0),
-                          color: Theme.of(context).shadowColor.withOpacity(0.1)
-                        )
-                      ]
-                    ),
-                    padding: const EdgeInsets.all(12).copyWith(left: 18, right: 24),
-                    child: AnimatedSize(
-                      duration: const Duration(milliseconds: 300),
-                      child: AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 400),
-                        child: mediaProvider.currentPlaylistName != mediaSet.name
-                          ? Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Icon(Ionicons.play, color: Colors.white),
-                                const SizedBox(width: 8),
-                                Text(Languages.of(context)!.labelPlayAll, style: textStyle(context).copyWith(color: Colors.white))
-                              ],
+                PaletteLoader(
+                  song: mediaSet.songs.first,
+                  builder: (context, palette) {
+                    return InkWell(
+                      onTap: () {
+                        mediaProvider.currentPlaylistName = mediaSet.name;
+                        final queue = List<MediaItem>.generate(mediaSet.songs.length, (index) {
+                          return mediaSet.songs[index].mediaItem;
+                        });
+                        mediaProvider.playSong(queue, 0);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration( 
+                          color: palette!.vibrant,
+                          borderRadius: BorderRadius.circular(100),
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 12,
+                              offset: const Offset(0,0),
+                              color: Theme.of(context).shadowColor.withOpacity(0.1)
                             )
-                          : Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                StreamBuilder<PlaybackState>(
-                                  stream: audioHandler.playbackState,
-                                  builder: (context, state) {
-                                    final isPaused = !(state.data?.playing ?? true);
-                                    return MiniMusicVisualizer(color: Colors.white, width: 4, height: 12, pause: isPaused);
-                                  }
-                                ),
-                                const SizedBox(width: 8),
-                                Text(Languages.of(context)!.labelPlaying, style: textStyle(context).copyWith(color: Colors.white))
-                              ],
-                            )
+                          ]
+                        ),
+                        padding: const EdgeInsets.all(12).copyWith(left: 18, right: 24),
+                        child: AnimatedSize(
+                          duration: const Duration(milliseconds: 300),
+                          child: AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 400),
+                            child: mediaProvider.currentPlaylistName != mediaSet.name
+                              ? Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Icon(Ionicons.play, color: Colors.white),
+                                    const SizedBox(width: 8),
+                                    Text(Languages.of(context)!.labelPlayAll, style: textStyle(context).copyWith(color: Colors.white))
+                                  ],
+                                )
+                              : Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    StreamBuilder<PlaybackState>(
+                                      stream: audioHandler.playbackState,
+                                      builder: (context, state) {
+                                        final isPaused = !(state.data?.playing ?? true);
+                                        return MiniMusicVisualizer(color: Colors.white, width: 4, height: 12, pause: isPaused);
+                                      }
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Text(Languages.of(context)!.labelPlaying, style: textStyle(context).copyWith(color: Colors.white))
+                                  ],
+                                )
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
+                    );
+                  }
                 ),
               ],
             ),

@@ -57,11 +57,11 @@ class DownloadProvider extends ChangeNotifier {
         videoId: oldSong.id,
         modelId: metadata.title,
         title: metadata.title,
-        palette: ColorsPalette(
-          dominant: palette.dominantColor?.color,
-          vibrant: palette.vibrantColor?.color,
-        ),
         lastModified: stats.changed);
+      newSong.palette = ColorsPalette(
+        dominant: palette.dominantColor?.color,
+        vibrant: palette.vibrantColor?.color,
+      );
       downloadedSongs.removeAt(index);
       downloadedSongs.insert(index, newSong);
       // Save to cache

@@ -85,7 +85,7 @@ class _ArtistCardTileState extends State<ArtistCardTile> {
                   width: double.infinity,
                   height: kToolbarHeight,
                   decoration: BoxDecoration(
-                    color: widget.artist.mediaItems.first.palette!.dominant!.withOpacity(0.9),
+                    color: Theme.of(context).cardColor.withOpacity(0.9),
                     borderRadius: BorderRadius.circular(20)
                   ),
                   child: ClipRRect(
@@ -107,21 +107,20 @@ class _ArtistCardTileState extends State<ArtistCardTile> {
                                   overflow: TextOverflow.fade,
                                   softWrap: false,
                                   style: tinyTextStyle(context).copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    color: widget.artist.mediaItems.first.palette!.text)
+                                    fontWeight: FontWeight.bold)
                                 ),
                                 Text(
                                   '${widget.artist.mediaItems.length} ${Languages.of(context)!.labelSongs}',
                                   maxLines: 1,
                                   overflow: TextOverflow.fade,
                                   softWrap: false,
-                                  style: tinyTextStyle(context).copyWith(color: (widget.artist.mediaItems.first.palette!.text).withOpacity(0.8))
+                                  style: tinyTextStyle(context)
                                 ),
                               ],
                             ),
                           ),
                           const SizedBox(width: 16),
-                          Icon(LineIcons.user, color: widget.artist.mediaItems.first.palette!.text, size: 16)
+                          const Icon(LineIcons.user, size: 16)
                         ],
                       ),
                     ),

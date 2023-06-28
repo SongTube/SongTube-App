@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:image_fade/image_fade.dart';
 import 'package:ionicons/ionicons.dart';
@@ -193,14 +192,12 @@ class PlaylistTileExpanded extends StatelessWidget {
       fit: StackFit.expand,
       alignment: Alignment.bottomCenter,
       children: [
-        CachedNetworkImage(
-          fadeInDuration: const Duration(milliseconds: 300),
-          placeholder: (context, _) {
-            return Container(color: Theme.of(context).cardColor.withOpacity(0.6));
-          },
-          imageUrl: playlist.thumbnailUrl ?? '',
+        ImageFade(
+          fadeDuration: const Duration(milliseconds: 300),
+          placeholder: Container(color: Theme.of(context).cardColor.withOpacity(0.6)),
+          image: NetworkImage(playlist.thumbnailUrl ?? ''),
           fit: BoxFit.cover,
-          errorWidget: (context, error, stackTrace) =>
+          errorBuilder: (context, error, stackTrace) =>
             Container(color: Theme.of(context).cardColor),
         ),
         Align(

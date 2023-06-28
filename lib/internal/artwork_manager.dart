@@ -15,6 +15,9 @@ File artworkFile(String id) => File('${songArtworkPath.path}/${MediaUtils.remove
 // Thumbnail Getter
 File thumbnailFile(String id) => File('${songThumbnailPath.path}/${MediaUtils.removeToxicSymbols((id.split('/').last).replaceAll(' ', '').trim())}-lq');
 
+// Palette Id Getter
+String paletteId(String id) => '${MediaUtils.removeToxicSymbols((id.split('/').last).replaceAll(' ', '').trim())}-palette';
+
 class ArtworkManager {
 
   /// Setup the artwork for a given song file, this function also has the ability to embed the artwork to the song directly

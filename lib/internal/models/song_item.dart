@@ -55,14 +55,27 @@ class SongItem {
   /// Last Modified
   final DateTime lastModified;
 
-  /// Colors Palette
-  final ColorsPalette? palette;
-
   /// Video Id
   final String? videoId;
 
   /// Thumbnail Uri for MediaPlayer
   Uri? get thumbnailUri => thumbnailPath != null ? Uri.parse(thumbnailPath!.path) : null;
+
+  /// Colors Palette getter/setter for MediaPlayer
+  ColorsPalette? get palette {
+    final data = sharedPreferences.getString(paletteId(id));
+    if (data != null) {
+      return ColorsPalette.fromJson(data);
+    } else {
+      return null;
+    }
+  }
+  set palette(ColorsPalette? colors) {
+    if (colors != null) {
+      final json = colors.toJson();
+      sharedPreferences.setString(paletteId(id), json);
+    }
+  }
 
   // Is Video Check
   bool get isVideo {
@@ -117,7 +130,6 @@ class SongItem {
       displaySubtitle: item.displaySubtitle,
       displayDescription: item.displayDescription,
       lastModified: stats.changed,
-      palette: item.extras != null ? ColorsPalette.fromMap(item.extras!['palette']) : null
     );
   }
 
@@ -137,7 +149,6 @@ class SongItem {
     this.displaySubtitle,
     this.displayDescription,
     required this.lastModified,
-    this.palette,
     this.videoId,
   });
 
@@ -176,7 +187,6 @@ class SongItem {
       displaySubtitle: displaySubtitle ?? this.displaySubtitle,
       displayDescription: displayDescription ?? this.displayDescription,
       lastModified: lastModified ?? this.lastModified,
-      palette: palette ?? this.palette,
       videoId: videoId ?? this.videoId,
     );
   }
@@ -219,7 +229,6 @@ class SongItem {
       displaySubtitle: map['displaySubtitle'],
       displayDescription: map['displayDescription'],
       lastModified: DateTime.parse(map['lastModified']),
-      palette: map['palette'] != null ? ColorsPalette.fromMap(map['palette']) : null,
       videoId: map['videoId'] != null ? map['videoId'] as String : null,
     );
   }

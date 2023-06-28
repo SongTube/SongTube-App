@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:image_fade/image_fade.dart';
 import 'package:intl/intl.dart';
@@ -188,15 +187,13 @@ class StreamTileExpanded extends StatelessWidget {
       fit: StackFit.expand,
       alignment: Alignment.bottomCenter,
       children: [
-        CachedNetworkImage(
-          fadeInDuration: const Duration(milliseconds: 300),
-          placeholder: (context, _) {
-            return Container(
-                color: Theme.of(context).cardColor.withOpacity(0.6));
-          },
-          imageUrl: stream.thumbnails?.maxresdefault ?? '',
+        ImageFade(
+          fadeDuration: const Duration(milliseconds: 300),
+          placeholder: Container(
+                color: Theme.of(context).cardColor.withOpacity(0.6)),
+          image: NetworkImage(stream.thumbnails?.maxresdefault ?? ''),
           fit: BoxFit.cover,
-          errorWidget: (context, error, stackTrace) =>
+          errorBuilder: (context, error, stackTrace) =>
               Image.network(stream.thumbnails!.hqdefault, fit: BoxFit.cover),
         ),
         Align(
