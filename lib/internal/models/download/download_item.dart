@@ -231,7 +231,9 @@ class DownloadItem {
           break;
         } else {
           contentLengthTries +=1;
-          print('content size null after ${3*(contentLengthTries+1)} seconds, retrying...');
+          if (kDebugMode) {
+            print('content size null after ${3*(contentLengthTries+1)} seconds, retrying...');
+          }
         }
       }
     }

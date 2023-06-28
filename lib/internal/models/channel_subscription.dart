@@ -54,14 +54,14 @@ class ChannelSubscription {
   }
 
   static String toJsonList(List<ChannelSubscription> channels) {
-    if (channels == null || channels.isEmpty) return "";
+    if (channels.isEmpty) return "";
     return jsonEncode(List.generate(channels.length, (index) {
       return channels[index].toMap();
     }).toList());
   }
 
   static List<ChannelSubscription> fromJsonList(String json) {
-    if (json == null || json == "") return <ChannelSubscription>[];
+    if (json == "") return <ChannelSubscription>[];
     var channelsMap = jsonDecode(json);
     return channelsMap.isNotEmpty
       ? List.generate(channelsMap.length, (index) {

@@ -29,7 +29,7 @@ class _ChannelSuggestionsState extends State<ChannelSuggestions> {
   @override
   void initState() {
     generateChannelRecommendations(
-      Provider.of<ContentProvider>(context, listen: false).trendingVideos!
+      Provider.of<ContentProvider>(context, listen: false).trendingVideos
     );
     super.initState();
   }
@@ -118,11 +118,11 @@ class _ChannelSuggestionsState extends State<ChannelSuggestions> {
   }
 
   // Generate a list of YoutubeChannels extracting channels from multiple sources
-  Future<void> generateChannelRecommendations(List<StreamInfoItem> trendingPage) async {
+  Future<void> generateChannelRecommendations(List<StreamInfoItem>? trendingPage) async {
     setState(() {
       fetchingChannels = true;
     });
-    List<StreamInfoItem> trendingVideos = trendingPage;
+    List<StreamInfoItem>? trendingVideos = trendingPage;
 
     //If trending page videos are null, extract manually the trending page
     if (trendingVideos == null) {
