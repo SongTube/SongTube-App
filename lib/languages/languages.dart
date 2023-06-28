@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:songtube/internal/global.dart';
 import 'package:songtube/languages/translations/languageAr.dart';
 import 'package:songtube/languages/translations/languageCa.dart';
-import 'package:songtube/languages/translations/languageKMR.dart';
+import 'package:songtube/languages/translations/languageKu.dart';
 import 'package:songtube/languages/translations/languageRu.dart';
 import 'package:songtube/main.dart';
 
