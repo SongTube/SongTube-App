@@ -1,6 +1,6 @@
 import 'package:songtube/languages/languages.dart';
 
-class LanguageKmr extends Languages {
+class LanguageKu extends Languages {
 
   // Introduction Screens
   @override
@@ -13,18 +13,18 @@ class LanguageKmr extends Languages {
   String get labelNext => "Pêş";
   @override
   String get labelExternalAccessJustification =>
-    "Pêdivî bi gihiştîna bîrgeha te ya Dervyî heye da ku hemû" +
-     "Vîdyo û Muzîka tomar bike";
+    "Pêdivî bi gihiştîna bîrdanka te ya Dervyî heye da ku hemû" +
+     "Vîdyo û Muzîk tomar bibe";
   @override
   String get labelAppCustomization => "Kesane bike";
   @override
-  String get labelSelectPreferred => "Bijarteyan diyar bike";
+  String get labelSelectPreferred => "Bijarteyan nîşan bike";
   @override
   String get labelConfigReady => "Pevsazkirin amede ye";
   @override
   String get labelIntroductionIsOver => "Danasîn qediya";
   @override
-  String get labelEnjoy => "Bajo";
+  String get labelEnjoy => "Dest pê bike";
   @override
   String get labelGoHome => "Biçe Serrûpelê";
 
@@ -42,7 +42,7 @@ class LanguageKmr extends Languages {
 
   // Home Screen
   @override
-  String get labelQuickSearch => "lêgerîna lezdar...";
+  String get labelQuickSearch => "Lêgerîna bilez...";
   @override
   String get labelTagsEditor => "Serrastkarê\nzanyariyan";
   @override
@@ -68,7 +68,7 @@ class LanguageKmr extends Languages {
   @override
   String get labelAddToWatchLater => "Tevlî paşê temaşekirin bike";
   @override
-  String get labelAddToPlaylist => "Tevlî rêzokê lêdanê bike";
+  String get labelAddToPlaylist => "Tevlî rêzeya lêdanê bike";
 
   // Downloads Screen
   @override
@@ -138,7 +138,7 @@ class LanguageKmr extends Languages {
   @override
   String get labelVideos => "Vîdyo";
   @override
-  String get labelNoMediaYet => "Tu medya tune ne";
+  String get labelNoMediaYet => "Medya tune ne";
   @override
   String get labelNoMediaYetJustification => "Hemû medyayên te " +
     "wê li vir werin nîşandan";
@@ -148,7 +148,7 @@ class LanguageKmr extends Languages {
   String get labelDeleteSong => "Stranê jê bibe";
   @override
   String get labelNoPermissionJustification => "Medyayê xwe nîşan bide bi riya" + "\n" +
-    "mafdayîna gihiştîna bîrgehê ";
+    "mafdayîna gihiştîna bîrdankê ";
   @override
   String get labelGettingYourMedia => "Medyayên te têne anîn...";
   @override
@@ -199,9 +199,9 @@ class LanguageKmr extends Languages {
   String get labelVideoFolderJustification => "Peldankekê hilbijêre " +
     "ji bo daxistinên Vîdyoyê";
   @override
-  String get labelAlbumFolder => "Pelanka albumê";
+  String get labelAlbumFolder => "Pelanka elbumê";
   @override
-  String get labelAlbumFolderJustification => "Ji bo her albumekê peldankekê çê bike";
+  String get labelAlbumFolderJustification => "Ji bo her elbumekê peldankekê çê bike";
   @override
   String get labelDeleteCache => "Pêşbîrê jê bibe";
   @override
@@ -214,13 +214,13 @@ class LanguageKmr extends Languages {
   @override
   String get labelBackup => "Hilanîn";
   @override
-  String get labelBackupJustification => "Pirtukxaneya medyayên xwe hilîne";
+  String get labelBackupJustification => "Pirtûkxaneya medyayên xwe hilîne";
   @override
   String get labelRestore => "Vegerîne";
   @override
-  String get labelRestoreJustification => "Pirtukxaneya medyayên xwe vegerîne";
+  String get labelRestoreJustification => "Pirtûkxaneya medyayên xwe vegerîne";
   @override
-  String get labelBackupLibraryEmpty => "Pirtukxaneya te vala ye";
+  String get labelBackupLibraryEmpty => "Pirtûkxaneya te vala ye";
   @override
   String get labelBackupCompleted => "Hilanîn qediya";
   @override
@@ -240,17 +240,17 @@ class LanguageKmr extends Languages {
   @override
   String get labelEditorGenre => "Cure";
   @override
-  String get labelEditorDisc => "Disk";
+  String get labelEditorDisc => "Dîsk";
   @override
   String get labelEditorTrack => "Herik";
   @override
   String get labelEditorDate => "Dîrok";
   @override
-  String get labelEditorAlbum => "Album";
+  String get labelEditorAlbum => "Elbum";
 
   // Android 10 or 11 Detected Dialog
   @override
-  String get labelAndroid11Detected => "Android 10 an jî 11 hate vedîtin";
+  String get labelAndroid11Detected => "Android 10 an jî 11 hate dîtin";
   @override
   String get labelAndroid11DetectedJustification => "Da ku ev bername " +
     "baş bixebite, li ser Android 10 û 11, Mafê gihiştîna pelan " +
@@ -261,7 +261,7 @@ class LanguageKmr extends Languages {
   @override
   String get labelPlayerSettings => "Sazkariyên lêderê";
   @override
-  String get labelExpandArtwork => "Wêneya albuma pehn bike";
+  String get labelExpandArtwork => "Wêneya elbuma pehn bike";
   @override
   String get labelArtworkRoundedCorners => "Quncikên gilover ji bo wêneya albumê";
   @override
@@ -275,7 +275,7 @@ class LanguageKmr extends Languages {
   @override
   String get labelRelated => "Nêzîk";
   @override
-  String get labelAutoPlay => "lêdana bi xweber";
+  String get labelAutoPlay => "lêdana bixweber";
 
   // Tags Pages
   @override
@@ -285,20 +285,20 @@ class LanguageKmr extends Languages {
   String get labelNotSpecified => "Nediyarkirî";
   @override
   String get labelPerformAutomaticTagging =>
-    "Zanyariyan bi xweber çê bike";
+    "Zanyariyan bixweber çê bike";
   @override
   String get labelSelectTagsfromMusicBrainz =>
     "Zanyariyan ji MusicBrainz bistîne";
   @override
   String get labelSelectArtworkFromDevice =>
-    "Wêneya albumê ji amûrê hilbijêre";
+    "Wêneya elbumê ji amûrê hilbijêre";
 
   // Telegram Join Channel Dialog
   @override
   String get labelJoinTelegramChannel => "Beşdarî kenala me ya Telegram bibe!";
   @override
   String get labelJoinTelegramJustification =>
-    "Tu ji SongTube hez dikî? Jkx beşdarî kenala me ya Telegram bibe! Tu yê " +
+    "Tu ji SongTube hez dikî? Jkx beşdarî kanala me ya Telegram bibe! Tu yê " +
     "Rojanekirin, Zanyarî, Pêşdebirin, girêdanên komê û girêdanê torên civakî yên din bibînî." +
     "\n\n" +
     "Ku tu rastî pirsgirêkêkê hatî an jî pêşniyareke te heye, " +
@@ -313,7 +313,7 @@ class LanguageKmr extends Languages {
   @override
   String get labelSystem => "Pergal";
   @override
-  String get labelChannel => "Kenal";
+  String get labelChannel => "Kanal";
   @override
   String get labelShare => "Parve bike";
   @override
@@ -325,7 +325,7 @@ class LanguageKmr extends Languages {
   @override
   String get labelBest => "Baştir";
   @override
-  String get labelPlaylist => "Rêzoka lêdanê";
+  String get labelPlaylist => "Rêzeya lêdanê";
   @override
   String get labelVersion => "Goherto";
   @override
@@ -353,11 +353,11 @@ class LanguageKmr extends Languages {
   @override
   String get labelNo => "Na";
   @override
-  String get labelLibrary => "Pirtukxane";
+  String get labelLibrary => "Pirtûkxane";
   @override
   String get labelCreate => "Çê bike";
   @override
-  String get labelPlaylists => "Rêzokên lêdanê";
+  String get labelPlaylists => "Rêzeyên lêdanê";
   @override
   String get labelQuality => "Kalîte";
   @override
@@ -365,133 +365,133 @@ class LanguageKmr extends Languages {
 
   // Other Translations
   @override
-  String get labelNoFavoriteVideos => 'No Favorite Videos';
+  String get labelNoFavoriteVideos => 'Vîdyoyên bijarte tine ne';
   @override
-  String get labelNoFavoriteVideosDescription => 'Search for videos and save them as favorites. They will appear here';
+  String get labelNoFavoriteVideosDescription => 'Ji bo vîdyoyan bigere û wekî bijarte tomar bike. Ew ê li vir werin nîşandan';
   @override
-  String get labelNoSubscriptions => 'No Subscriptions';
+  String get labelNoSubscriptions => 'Beşdarî tine ne';
   @override
-  String get labelNoSubscriptionsDescription => 'Tap the button above to show suggested Channels!';
+  String get labelNoSubscriptionsDescription => 'Bişkoka jor bitikîne bo ku kanalên pêşniyarkirî werin nîşandan!';
   @override
-  String get labelNoPlaylists => 'No Playlists';
+  String get labelNoPlaylists => 'Rêzeyên lêdanê tine ne';
   @override
-  String get labelNoPlaylistsDescription => 'Search for videos or playlists and save them. They will appear here';
+  String get labelNoPlaylistsDescription => 'Ji bo vîdyoyan û rêzeyên lêdanê bigere û wekî bijarte tomar bike. Ew ê li vir xuya bibine';
   @override
-  String get labelSearch => 'Search';
+  String get labelSearch => 'Bigere';
   @override
-  String get labelSubscriptions => 'Subscriptions';
+  String get labelSubscriptions => 'Beşdarî';
   @override
-  String get labelNoDownloadsCanceled => 'No Downloads Canceled';
+  String get labelNoDownloadsCanceled => 'Daxistinên têkbirî tine ne';
   @override
-  String get labelNoDownloadsCanceledDescription => 'Good news! But if you cancel or something goes wrong with the download, you can check from here';
+  String get labelNoDownloadsCanceledDescription => 'Nûçeyên xweş! Lê ku tu daxistinê têk bibî an tiştek çewt pêk be, tu dikarî li vir kontrol bikî';
   @override
-  String get labelNoDownloadsYet => 'No Downloads Yet';
+  String get labelNoDownloadsYet => 'Daxistinên tine ne';
   @override
-  String get labelNoDownloadsYetDescription => 'Go home, search for something to download or wait for the queue!';
+  String get labelNoDownloadsYetDescription => 'Biçe serrûpelê û ji bo daxistinê li tiştekî bigere yan jî li benda rêzê be!';
   @override
-  String get labelYourQueueIsEmpty => 'Your queue is empty';
+  String get labelYourQueueIsEmpty => 'Rêz vala ye';
   @override
-  String get labelYourQueueIsEmptyDescription => 'Go home and search for something to download!';
+  String get labelYourQueueIsEmptyDescription => 'Biçe serrûpelê û ji bo daxistinê li tiştekî bigere!';
   @override
-  String get labelQueue => 'Queue';
+  String get labelQueue => 'Rêz';
   @override
-  String get labelSearchDownloads => 'Search Downloads';
+  String get labelSearchDownloads => 'Daxistinên lêgerînê';
   @override
-  String get labelWatchHistory => 'Watch History';
+  String get labelWatchHistory => 'Dîroka temaşekirinê';
   @override
-  String get labelWatchHistoryDescription => 'Look at which videos you have seen';
+  String get labelWatchHistoryDescription => 'Te li kîjan vîdyo temaşe kiriye bibîne';
   @override
-  String get labelBackupAndRestore => 'Backup & Restore';
+  String get labelBackupAndRestore => 'Hîlanîn & Vegerandin';
   @override
-  String get labelBackupAndRestoreDescription => 'Save or resture all of your local data';
+  String get labelBackupAndRestoreDescription => 'Hemû daneyên xwe yên herêmî tomar bike an jî dîsa saz bike';
   @override
-  String get labelSongtubeLink => 'SongTube Link';
+  String get labelSongtubeLink => 'Girêdana SongTube';
   @override
-  String get labelSongtubeLinkDescription => 'Allow SongTube browser extension to detect this device, long press to learn more';
+  String get labelSongtubeLinkDescription => 'Mafê bide pêvekên geroka SongTube da ku vê amûrê bibîne, dirêj bitikîne bo bêtir fêr bibî';
   @override
-  String get labelSupportDevelopment => 'Support Development';
+  String get labelSupportDevelopment => 'Piştgiriya pêşxistinê';
   @override
-  String get labelSocialLinks => 'Social Links';
+  String get labelSocialLinks => 'Girêdanên medya civakî';
   @override
-  String get labelSeeMore => 'See more';
+  String get labelSeeMore => 'Bêtir bibîne';
   @override
-  String get labelMostPlayed => 'Most played';
+  String get labelMostPlayed => 'Herî pir lêdayî';
   @override
-  String get labelNoPlaylistsYet => 'No Playlists Yet';
+  String get labelNoPlaylistsYet => 'Rêzeyên lêdanê tine ne';
   @override
-  String get labelNoPlaylistsYetDescription => 'You can create a playlist from your recents, music, albums or artists';
+  String get labelNoPlaylistsYetDescription => 'Tu dikarî rêzeyên lêdanê çê bikî ji stran, elbum an jî hunermendan';
   @override
-  String get labelNoSearchResults => 'No search results';
+  String get labelNoSearchResults => 'Encamên lêgerînê tine ne';
   @override
-  String get labelSongResults => 'Song results';
+  String get labelSongResults => 'Encamên stranê';
   @override
-  String get labelAlbumResults => 'Album results';
+  String get labelAlbumResults => 'Encamên elbumê';
   @override
-  String get labelArtistResults => 'Artist results';
+  String get labelArtistResults => 'Encamên hunermend';
   @override
-  String get labelSearchAnything => 'Search anything';
+  String get labelSearchAnything => 'Bigere';
   @override
-  String get labelRecents => 'Recents';
+  String get labelRecents => 'Dawî';
   @override
-  String get labelFetchingSongs => 'Fetching Songs';
+  String get labelFetchingSongs => 'Stranan bîne';
   @override
-  String get labelPleaseWaitAMoment => 'Please wait a moment';
+  String get labelPleaseWaitAMoment => 'Bendê bimîne';
   @override
-  String get labelWeAreDone => 'We are done';
+  String get labelWeAreDone => 'Qediya';
   @override
-  String get labelEnjoyTheApp => 'Enjoy the\nApp';
+  String get labelEnjoyTheApp => 'Xweşiyê bibîne ji\nSepanê';
   @override
-  String get labelSongtubeIsBackDescription => 'SongTube is back with a cleaner look and set of features, have fun with your music!';
+  String get labelSongtubeIsBackDescription => 'SongTube bi dîmeneke paktir vegeriya ye û komek taybetmendî, bi muzîka xwe xweşiyê bibîne!';
   @override
-  String get labelLetsGo => 'Let\'s go';
+  String get labelLetsGo => 'Dest pê\'s bike';
   @override
-  String get labelPleaseWait => 'Please wait';
+  String get labelPleaseWait => 'Bendê bimîne';
   @override
-  String get labelPoweredBy => 'Powered by';
+  String get labelPoweredBy => 'Tê hêzkirin ji aliyê';
   @override
-  String get labelGetStarted => 'Get Started';
+  String get labelGetStarted => 'Dest pê bike';
   @override
-  String get labelAllowUsToHave => 'Allow us to have';
+  String get labelAllowUsToHave => 'Mafê bide gihiştînê';
   @override
-  String get labelStorageRead => 'Storage\nRead';
+  String get labelStorageRead => 'Xwendina\nbîrdankê';
   @override
-  String get labelStorageReadDescription => 'This will scan your music, extract high quality artworks and allow you to personalize your music';
+  String get labelStorageReadDescription => 'Ev ê stranên te vekolê, Berhemên hunerî yên bi kalîteya bilind derxê û bihêle ku tu muzîka xwe kesane bikî';
   @override
-  String get labelContinue => 'Continue';
+  String get labelContinue => 'Bidomîne';
   @override
-  String get labelAllowStorageRead => 'Allow Storage Read';
+  String get labelAllowStorageRead => 'Mafê bide xwendina bîrdankê';
   @override
-  String get labelSelectYourPreferred => 'Select your preferred';
+  String get labelSelectYourPreferred => 'Hilbijarteyên xwe nîşan bike';
   @override
-  String get labelLight => 'Light';
+  String get labelLight => 'Ronî';
   @override
-  String get labelDark => 'Dark';
+  String get labelDark => 'Tarî';
   @override
-  String get labelSimultaneousDownloads => 'Simultaneous Downloads';
+  String get labelSimultaneousDownloads => 'Daxistinên hevdem';
   @override
-  String get labelSimultaneousDownloadsDescription => 'Define how many downloads can happen at the same time';
+  String get labelSimultaneousDownloadsDescription => 'Nîşan bike ka di heman demê de bila çend daxistin werê pêkanîn.';
   @override
-  String get labelItems => 'Items';
+  String get labelItems => 'Hêman';
   @override
-  String get labelInstantDownloadFormat => 'Instant Download';
+  String get labelInstantDownloadFormat => 'Daxistina bilez';
   @override
-  String get labelInstantDownloadFormatDescription => 'Change the audio format for instant downloads';
+  String get labelInstantDownloadFormatDescription => 'Ji bo daxistinên bilêz formata dengê biguherîne';
   @override
-  String get labelCurrent => 'Current';
+  String get labelCurrent => 'Heyî';
   @override
-  String get labelPauseWatchHistory => 'Pause Watch History';
+  String get labelPauseWatchHistory => 'Dîroka temaşekirinê rawestîne';
   @override
-  String get labelPauseWatchHistoryDescription => 'While paused, videos are not saved into the watch history list';
+  String get labelPauseWatchHistoryDescription => 'Dema rawestî be, vîdyo nayên tomarkirin di rêzeya dîroka temaşekirinê de';
   @override
-  String get labelLockNavigationBar => 'Lock Navigation Bar';
+  String get labelLockNavigationBar => 'Darîka geranê kilît bike';
   @override
-  String get labelLockNavigationBarDescription => 'Locks the navigation bar from hiding and showing automatically on scroll';
+  String get labelLockNavigationBarDescription => 'Darîka geranê kilît bike ji veşartin û nîşandana bixweber li ser  şemitandinê';
   @override
-  String get labelPictureInPicture => 'Picture in Picture';
+  String get labelPictureInPicture => 'Wêne di wêne de';
   @override
-  String get labelPictureInPictureDescription => 'Automatically enters PiP mode upon tapping home button while watching a video';
+  String get labelPictureInPictureDescription => 'Bixweber dikeve moda PiP dema li ser bişkoka serrûpelê tê tikandinê ku vîdyo tê temaşekirin';
   @override
-  String get labelBackgroundPlaybackAlpha => 'Background Playback (Alpha)';
+  String get labelBackgroundPlaybackAlpha => 'Lêdana paşrûyê (Alpha)';
   @override
   String get labelBackgroundPlaybackAlphaDescription => 'Toggle background playback feature. Due to plugin limitations, only current video can be played in the background';
   @override
@@ -517,7 +517,7 @@ class LanguageKmr extends Languages {
   @override
   String get labelArtworkScalingDescription => 'Scale out the music player artwork & background images';
   @override
-  String get labelBackgroundParallax => 'Background Parallax';
+  String get labelBackgroundParallax => 'Awayî paşrûyê';
   @override
   String get labelBackgroundParallaxDescription =>  'Enable/Disable background image parallax effect';
   @override
@@ -537,185 +537,185 @@ class LanguageKmr extends Languages {
   @override
   String get labelDefaultMusicPageDescription => 'Change the default page for the Music Page';
   @override
-  String get labelAbout => 'About';
+  String get labelAbout => 'Derbar';
   @override
-  String get labelConversionRequired => 'Conversion Required';
+  String get labelConversionRequired => 'Guhertin pêdivî ye';
   @override
-  String get labelConversionRequiredDescription =>  'This song format is incompatible with the ID3 Tags editor. The app will automatically convert this song to AAC (m4a) to sort out this issue.';
+  String get labelConversionRequiredDescription =>  'Ev formata stranê bi serrastkera ID3 ra ne lihevhatî ye. Sepan, ji bo çareserkirina vê pirsgirêkê vê stranê bi awayekî xweber diguherîne bo AAC (m4a).';
   @override
-  String get labelPermissionRequired => 'Permission Required';
+  String get labelPermissionRequired => 'Mafdayîn pêdivî ye';
   @override
-  String get labelPermissionRequiredDescription => 'All file access permission is required for SongTube to edit any song on your device';
+  String get labelPermissionRequiredDescription => 'Ji bo SongTube di amûra te de stranekê serrast bikî hemû mafdayînên gihîştina pelan pêdivî ye.';
   @override
-  String get labelApplying => 'Applying';
+  String get labelApplying => 'Tê sepandin';
   @override
-  String get labelConvertingDescription => 'Re-encoding this song into AAC (m4a) format';
+  String get labelConvertingDescription => 'Zanyariyên vê stranê bo formata AAC (m4a) tê sazkirin';
   @override
-  String get labelWrittingTagsAndArtworkDescription => 'Applying new tags to this song';
+  String get labelWrittingTagsAndArtworkDescription => 'Zanyariyên nû bo vê stranê têne sepandin';
   @override
-  String get labelApply => 'Apply';
+  String get labelApply => 'Bisepîne';
   @override
-  String get labelSongs => 'Songs';
+  String get labelSongs => 'Stran';
   @override
-  String get labelPlayAll => 'Play All';
+  String get labelPlayAll => 'Hemû lêde';
   @override
-  String get labelPlaying => 'Playing';
+  String get labelPlaying => 'Tê lêdan';
   @override
-  String get labelPages => 'Pages';
+  String get labelPages => 'Rûpel';
   @override
-  String get labelMusicPlayer => 'Music Player';
+  String get labelMusicPlayer => 'Lêdera muzîkê';
   @override
-  String get labelClearWatchHistory => 'Clear Watch History';
+  String get labelClearWatchHistory => 'Dîroka temaşekirinê pak bike';
   @override
   String get labelClearWatchHistoryDescription =>  'You\'re about to delete all your watch history videos, this action cannot be undone, proceed?';
   @override
-  String get labelDelete => 'Delete';
+  String get labelDelete => 'Jê bibe';
   @override
-  String get labelAppUpdate => 'App Update';
+  String get labelAppUpdate => 'Rojanekirina sepanê';
   @override
-  String get labelWhatsNew => 'What\'s New';
+  String get labelWhatsNew => 'Çi\'s nû ye';
   @override
-  String get labelLater => 'Later';
+  String get labelLater => 'Paşê';
   @override
-  String get labelUpdate => 'Update';
+  String get labelUpdate => 'Rojane bike';
   @override
-  String get labelUnsubscribe => 'Unsubscribe';
+  String get labelUnsubscribe => 'Beşdariyê rake';
   @override
-  String get labelAudioFeatures => 'Audio Features';
+  String get labelAudioFeatures => 'Taybetmendiyên dengê';
   @override
-  String get labelVolumeBoost => 'Volume Boost';
+  String get labelVolumeBoost => 'bilindkirina Dengê';
   @override
-  String get labelNormalizeAudio => 'Normalize Audio';
+  String get labelNormalizeAudio => 'Dengê normal bike';
   @override
-  String get labelSegmentedDownload => 'Segmented Download';
+  String get labelSegmentedDownload => 'Daxistina beşî';
   @override
-  String get labelEnableSegmentedDownload => 'Enable Segmented Download';
+  String get labelEnableSegmentedDownload => 'Daxistina beşî çalak bike';
   @override
-  String get labelEnableSegmentedDownloadDescription => 'This will download the whole audio file and then split it into the various enabled segments (or audio tracks) from the list below';
+  String get labelEnableSegmentedDownloadDescription => 'Ev ê tevahiya pelên dengî daxîne û piştre wê dabeşî beşên cuda yên çalak (an jî herîkên dengî) bike ji rêzeya jêrîn';
   @override
-  String get labelCreateMusicPlaylist => 'Create Music Playlist';
+  String get labelCreateMusicPlaylist => 'rêzeya lêdanê çê bike';
   @override
-  String get labelCreateMusicPlaylistDescription => 'Create music playlist from all downloaded and saved audio segments';
+  String get labelCreateMusicPlaylistDescription => 'Ji hemû beşên dengê yên hatine daxistin û tomarkirin rêzeya lêdanê ya muzîkê çê bike';
   @override
-  String get labelApplyTags => 'Apply Tags';
+  String get labelApplyTags => 'Zanyariyên disepîne';
   @override
-  String get labelApplyTagsDescription => 'Extract tags from MusicBrainz for all segments';
+  String get labelApplyTagsDescription => 'Ji bo hemû beşan ji MusicBrainz zanyariyan derxîne';
   @override
-  String get labelLoading => 'Loading';
+  String get labelLoading => 'Tê barkirin';
   @override
-  String get labelMusicDownloadDescription => 'Select quality, convert and download audio only';
+  String get labelMusicDownloadDescription => 'Kalîteya hilbijêre, û tenê dengê daxîne';
   @override
-  String get labelVideoDownloadDescription =>  'Choose a video quality from the list and download it';
+  String get labelVideoDownloadDescription =>  'Ji rêzeyê kalîteya vîdeoyê hilbijêre û daxîne';
   @override
-  String get labelInstantDescription => 'Instantly start downloading as music';
+  String get labelInstantDescription => 'Bilez wekî muzîk dest bi daxistinê bike';
   @override
-  String get labelInstant => 'Instant';
+  String get labelInstant => 'Bilez';
   @override
-  String get labelCurrentQuality => 'Current Quality';
+  String get labelCurrentQuality => 'Kalîteya heyî';
   @override
-  String get labelFastStreamingOptions => 'Fast Streaming Options';
+  String get labelFastStreamingOptions => 'Vebijêrkên weşanê bilez';
   @override
-  String get labelStreamingOptions => 'Streaming Options';
+  String get labelStreamingOptions => 'Vebijêrkên weşanê';
   @override
-  String get labelComments => 'Comments';
+  String get labelComments => 'Şîrove';
   @override
-  String get labelPinned => 'Pinned';
+  String get labelPinned => 'Darxistî';
   @override
-  String get labelLikedByAuthor => 'Liked by Author';
+  String get labelLikedByAuthor => 'Hatiye hezkirin ji aliyê nivîskar ve';
   @override
-  String get labelDescription => 'Description';
+  String get labelDescription => 'Danasîn';
   @override
-  String get labelViews => 'Views';
+  String get labelViews => 'Dîtin';
   @override
-  String get labelPlayingNextIn => 'Playing next in';
+  String get labelPlayingNextIn => 'A pêş tê lêdan di';
   @override
-  String get labelPlayNow => 'Play Now';
+  String get labelPlayNow => 'Niha lêde';
   @override
-  String get labelLoadingPlaylist => 'Loading Playlist';
+  String get labelLoadingPlaylist => 'Rêzeyên lêdanê têne barkirin';
   @override
-  String get labelPlaylistReachedTheEnd => 'Playlist reached the end';
+  String get labelPlaylistReachedTheEnd => 'Rêzeya lêdanê gihişte dawiyê';
   @override
-  String get labelLiked => 'Liked';
+  String get labelLiked => 'Hate hezkirin';
   @override
-  String get labelLike => 'Like';
+  String get labelLike => 'Hezkirin';
   @override
-  String get labelVideoRemovedFromFavorites => 'Video removed from favorites';
+  String get labelVideoRemovedFromFavorites => 'Vîdyo hate rakirin jo bijarteyan';
   @override
-  String get labelVideoAddedToFavorites => 'Video added to favorites';
+  String get labelVideoAddedToFavorites => 'Vîdyo hate tevlîkirin bo bijarteyan';
   @override
-  String get labelPopupMode => 'Popup Mode';
+  String get labelPopupMode => 'Moda hilpekok';
   @override
-  String get labelDownloaded => 'Downloaded';
+  String get labelDownloaded => 'Daxistî';
   @override
-  String get labelShowPlaylist => 'Show Playlist';
+  String get labelShowPlaylist => 'Rêzeya lêdanê nîşan bide';
   @override
-  String get labelCreatePlaylist => 'Create Playlist';
+  String get labelCreatePlaylist => 'Rêzeya lêdanê çê bike';
   @override
-  String get labelAddVideoToPlaylist => 'Add video to playlist';
+  String get labelAddVideoToPlaylist => 'Vîdyo tevlî rêzeya lêdanê bike';
   @override
-  String get labelBackupDescription => 'Backup all of your local data into a single file that can be used to restore later';
+  String get labelBackupDescription => 'Hemû daneyên xwe yên herêmî li pelekk ku paşê ji bo vegerandinê werê bikaranîn, hilîne.';
   @override
-  String get labelBackupCreated => 'Backup Created';
+  String get labelBackupCreated => 'Hilanîn hate çêkirin';
   @override
-  String get labelBackupRestored => 'Backup Restored';
+  String get labelBackupRestored => 'Hilanîn hate vegirandin';
   @override
-  String get labelRestoreDescription => 'Restore all your data from a backup file';
+  String get labelRestoreDescription => 'Hemû daneyên xwe vegerîne ji pelekê hilanînê';
   @override
-  String get labelChannelSuggestions => 'Channel Suggestions';
+  String get labelChannelSuggestions => 'Pêşniyariyên kanalê';
   @override
-  String get labelFetchingChannels => 'Fetching Channels';
+  String get labelFetchingChannels => 'Anîna kanaan';
   @override
-  String get labelShareVideo => 'Shared Video';
+  String get labelShareVideo => 'Vîdyoyê parve bike';
   @override
-  String get labelShareDescription => 'Share with friends or other platforms';
+  String get labelShareDescription => 'Bi hevalên xwe re parve bike yan jî platformên din';
   @override
-  String get labelRemoveFromPlaylists => 'Remove from playlist';
+  String get labelRemoveFromPlaylists => 'Ji rêzeya lêdanê xwe rake';
   @override
-  String get labelThisActionCannotBeUndone => 'This action cannot be undone';
+  String get labelThisActionCannotBeUndone => 'Veger ji bo vê çalakiyê tune';
   @override
   String get labelAddVideoToPlaylistDescription => 'Add to existing or new video playlist';
   @override
-  String get labelAddToPlaylists => 'Add to playlists';
+  String get labelAddToPlaylists => 'Tevlî rêzeyên lêdanê bike';
   @override
   String get labelEditableOnceSaved => 'Editable once saved';
   @override
-  String get labelPlaylistRemoved => 'Playlist Removed';
+  String get labelPlaylistRemoved => 'Rêzeya lêdanê hate rakirin';
   @override
-  String get labelPlaylistSaved => 'Playlist Saved';
+  String get labelPlaylistSaved => 'Rêzeya lêdanê hate tomarkirin';
   @override
-  String get labelRemoveFromFavorites => 'Remove from favorites';
+  String get labelRemoveFromFavorites => 'Ji bijarteyan rake';
   @override
   String get labelRemoveFromFavoritesDescription => 'Remove this video from your favorites';
   @override
-  String get labelSaveToFavorites => 'Save to favorites';
+  String get labelSaveToFavorites => 'Tevlî bijarteyan bike';
   @override
-  String get labelSaveToFavoritesDescription => 'Add video to your list of favorites';
+  String get labelSaveToFavoritesDescription => 'Vîdyo tevlî rêzeyên xwe yên bijarte bike';
   @override
-  String get labelSharePlaylist => 'Share Playlist';
+  String get labelSharePlaylist => 'Rêzeya lêdanê parve bike';
   @override
-  String get labelRemoveThisVideoFromThisList => 'Remove this video from this list';
+  String get labelRemoveThisVideoFromThisList => 'Vîdeoyê ji vê rêzeyê rake';
   @override
-  String get labelEqualizer => 'Equalizer';
+  String get labelEqualizer => 'Yeksanker';
   @override
-  String get labelLoudnessEqualizationGain => 'Loudness Equalization Gain';
+  String get labelLoudnessEqualizationGain => 'Bilindbûna yeksanker bi dest dixe';
   @override
-  String get labelSliders => 'Sliders';
+  String get labelSliders => 'Şemitandin';
   @override
-  String get labelSave => 'Save';
+  String get labelSave => 'Tomar bike';
   @override
-  String get labelPlaylistName => 'PlaylistName';
+  String get labelPlaylistName => 'Navê rêzeya lêdanê';
   @override
-  String get labelCreateVideoPlaylist => 'Create Video Playlist';
+  String get labelCreateVideoPlaylist => 'rêzeya lêdanê ya vîdyo çê bike';
   @override
-  String get labelSearchFilters => 'Search Filters';
+  String get labelSearchFilters => 'Parzûnan bigere';
   @override
-  String get labelAddToPlaylistDescription => 'Add to existing or new playlist';
+  String get labelAddToPlaylistDescription => 'Tevlî rêzeya lêdanê ya heyî bike yan jî yeka nû';
   @override
-  String get labelShareSong => 'Share Song';
+  String get labelShareSong => 'Stranê parve bike';
   @override
-  String get labelShareSongDescription => 'Share with friends or other platforms';
+  String get labelShareSongDescription => 'Bi hevalên xwe re parve bike yan jî platformên din re';
   @override
-  String get labelEditTagsDescription => 'Open ID3 tags and artwork editor';
+  String get labelEditTagsDescription => 'Serrastkarê zanyariyên stranê û ID3 veke';
   @override
-  String get labelContains => 'Contains';
+  String get labelContains => 'Tê de';
 }
