@@ -2,21 +2,17 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:image_fade/image_fade.dart';
 import 'package:intl/intl.dart';
-import 'package:newpipeextractor_dart/models/infoItems/video.dart';
 import 'package:newpipeextractor_dart/newpipeextractor_dart.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/languages/languages.dart';
-import 'package:songtube/main.dart';
 import 'package:songtube/providers/content_provider.dart';
 import 'package:songtube/providers/ui_provider.dart';
 import 'package:songtube/screens/channel.dart';
 import 'package:songtube/ui/components/channel_image.dart';
 import 'package:songtube/ui/components/custom_inkwell.dart';
 import 'package:songtube/ui/components/shimmer_container.dart';
-import 'package:songtube/ui/sheets/info_item_options.dart';
 import 'package:songtube/ui/text_styles.dart';
 import 'package:songtube/ui/ui_utils.dart';
-import 'package:transparent_image/transparent_image.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class StreamTileCollapsed extends StatelessWidget {

@@ -12,7 +12,6 @@ import 'package:songtube/internal/global.dart';
 import 'package:songtube/internal/media_utils.dart';
 import 'package:songtube/internal/models/colors_palette.dart';
 import 'package:songtube/internal/models/song_item.dart';
-import 'package:songtube/ui/components/fancy_scaffold.dart';
 
 class MediaProvider extends ChangeNotifier {
 

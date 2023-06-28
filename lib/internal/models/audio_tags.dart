@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:newpipeextractor_dart/models/infoItems/video.dart';
 import 'package:songtube/internal/media_utils.dart';
 import 'package:songtube/internal/models/music_brainz_record.dart';
-import 'package:songtube/ui/ui_utils.dart';
 
 class AudioTags {
 

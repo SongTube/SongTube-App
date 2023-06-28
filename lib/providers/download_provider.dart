@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:audio_tagger/audio_tagger.dart';
 import 'package:flutter/material.dart';
 import 'package:palette_generator/palette_generator.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/providers/app_settings.dart';
 import 'package:songtube/internal/artwork_manager.dart';

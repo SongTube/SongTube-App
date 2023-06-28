@@ -66,12 +66,12 @@ class MediaItemArtist {
   }
 
   static List<MediaItemArtist> fetchArtists(List<SongItem> songs) {
-    List<MediaItemArtist> _artists = [];
+    List<MediaItemArtist> artists = [];
     for (final song in songs) {
       // Check if Artist exist and create it
-      if (_artists.indexWhere((artist) => artist.artistName == (song.artist ?? "Unknown")) == -1) {
+      if (artists.indexWhere((artist) => artist.artistName == (song.artist ?? "Unknown")) == -1) {
         // Create Artist and add the song
-        _artists.add(
+        artists.add(
           MediaItemArtist(
             artistName: song.artist ?? "Unknown",
             mediaItems: []
@@ -79,10 +79,10 @@ class MediaItemArtist {
         );
       }
       // Add song to Artist
-      int indexToArtist = _artists.indexWhere((artist) => artist.artistName == (song.artist ?? "Unknown"));
-      _artists[indexToArtist].mediaItems.add(song);
+      int indexToArtist = artists.indexWhere((artist) => artist.artistName == (song.artist ?? "Unknown"));
+      artists[indexToArtist].mediaItems.add(song);
     }
-    return _artists;
+    return artists;
   }
 
 }
@@ -106,12 +106,12 @@ class MediaItemGenre {
   });
 
   static List<MediaItemGenre> fetchGenres(List<SongItem> songs) {
-    List<MediaItemGenre> _genres = [];
+    List<MediaItemGenre> genres = [];
     for (final song in songs) {
       // Check if Genre exist and create it
-      if (_genres.indexWhere((genre) => genre.genreName == (song.genre ?? "Unknown")) == -1) {
+      if (genres.indexWhere((genre) => genre.genreName == (song.genre ?? "Unknown")) == -1) {
         // Create Genre and add the song
-        _genres.add(
+        genres.add(
           MediaItemGenre(
             genreName: song.genre ?? "Unknown",
             mediaItems: []
@@ -119,12 +119,12 @@ class MediaItemGenre {
         );
       }
       // Add song to Genre
-      int indexToGenre = _genres.indexWhere((genre) {
+      int indexToGenre = genres.indexWhere((genre) {
         return genre.genreName == (song.genre ?? "Unknown");
       });
-      _genres[indexToGenre].mediaItems.add(song);
+      genres[indexToGenre].mediaItems.add(song);
     }
-    return _genres;
+    return genres;
   }
 
 }

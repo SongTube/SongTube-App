@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:newpipeextractor_dart/models/infoItems/playlist.dart';
 import 'package:newpipeextractor_dart/models/infoItems/video.dart';
-import 'package:newpipeextractor_dart/models/video.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/models/content_wrapper.dart';
 import 'package:songtube/providers/content_provider.dart';

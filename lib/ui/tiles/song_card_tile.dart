@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:songtube/internal/artwork_manager.dart';
 import 'package:songtube/internal/global.dart';
-import 'package:songtube/internal/media_utils.dart';
 import 'package:songtube/internal/models/song_item.dart';
 import 'package:songtube/ui/animations/mini_music_visualizer.dart';
 import 'package:songtube/ui/text_styles.dart';

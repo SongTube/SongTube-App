@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_audio_query/flutter_audio_query.dart';
 import 'package:newpipeextractor_dart/extractors/channels.dart';
 import 'package:newpipeextractor_dart/extractors/search.dart';
 import 'package:newpipeextractor_dart/newpipeextractor_dart.dart';

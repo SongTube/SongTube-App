@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:newpipeextractor_dart/extractors/videos.dart';
 import 'package:newpipeextractor_dart/models/streams/audioOnlyStream.dart';
 import 'package:newpipeextractor_dart/models/streams/videoOnlyStream.dart';

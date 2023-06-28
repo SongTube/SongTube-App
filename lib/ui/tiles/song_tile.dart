@@ -1,12 +1,10 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:songtube/internal/global.dart';
-import 'package:songtube/internal/models/media_playlist.dart';
 import 'package:songtube/internal/models/song_item.dart';
 import 'package:songtube/main.dart';
 import 'package:songtube/providers/playlist_provider.dart';
 import 'package:songtube/ui/animations/mini_music_visualizer.dart';
-import 'package:songtube/ui/playlist_artwork.dart';
 import 'package:songtube/ui/sheets/song_options.dart';
 import 'package:songtube/ui/text_styles.dart';
 import 'package:flutter/material.dart';

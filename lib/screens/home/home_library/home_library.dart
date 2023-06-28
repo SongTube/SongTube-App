@@ -2,11 +2,9 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:image_fade/image_fade.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:songtube/internal/cache_utils.dart';
 import 'package:songtube/internal/http_server.dart';
-import 'package:songtube/internal/models/backup_model.dart';
 import 'package:songtube/languages/languages.dart';
 import 'package:songtube/main.dart';
 import 'package:songtube/screens/about.dart';
@@ -16,7 +14,6 @@ import 'package:songtube/ui/info_item_renderer.dart';
 import 'package:songtube/ui/sheets/backup_restore.dart';
 import 'package:songtube/ui/text_styles.dart';
 import 'package:songtube/ui/ui_utils.dart';
-import 'package:transparent_image/transparent_image.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomeLibrary extends StatefulWidget {

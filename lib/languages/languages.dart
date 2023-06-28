@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:songtube/internal/global.dart';
 import 'package:songtube/languages/translations/languageAr.dart';
 import 'package:songtube/languages/translations/languageCa.dart';
 import 'package:songtube/languages/translations/languageKMR.dart';
@@ -568,25 +568,23 @@ abstract class Languages {
 
 const String prefSelectedLanguageCode = "SelectedLanguageCode";
 
-Future<Locale> setLocale(String languageCode) async {
-  SharedPreferences _prefs = await SharedPreferences.getInstance();
-  await _prefs.setString(prefSelectedLanguageCode, languageCode);
+Locale setLocale(String languageCode) {
+  sharedPreferences.setString(prefSelectedLanguageCode, languageCode);
   return _locale(languageCode);
 }
 
-Future<Locale> getLocale() async {
-  SharedPreferences _prefs = await SharedPreferences.getInstance();
-  String languageCode = _prefs.getString(prefSelectedLanguageCode) ?? "en";
+Locale getLocale() {
+  String languageCode = sharedPreferences.getString(prefSelectedLanguageCode) ?? "en";
   return _locale(languageCode);
 }
 
 Locale _locale(String languageCode) {
-  return languageCode != null && languageCode.isNotEmpty
+  return languageCode.isNotEmpty
       ? Locale(languageCode, '')
-      : Locale('en', '');
+      : const Locale('en', '');
 }
 
 void changeLanguage(BuildContext context, String selectedLanguageCode) async {
-  var _locale = await setLocale(selectedLanguageCode);
-  SongTube.setLocale(context, _locale);
+  var locale = setLocale(selectedLanguageCode);
+  SongTube.setLocale(context, locale);
 }

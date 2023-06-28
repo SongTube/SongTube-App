@@ -11,7 +11,6 @@ import 'package:roundcheckbox/roundcheckbox.dart';
 import 'package:songtube/internal/enums/download_type.dart';
 import 'package:songtube/internal/models/audio_tags.dart';
 import 'package:songtube/internal/models/download/download_info.dart';
-import 'package:songtube/internal/models/stream_segment_track.dart';
 import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/download_provider.dart';
 import 'package:songtube/ui/sheet_phill.dart';

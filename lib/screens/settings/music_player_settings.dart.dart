@@ -2,18 +2,12 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
-import 'package:ionicons/ionicons.dart';
-import 'package:line_icons/line_icon.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:songtube/internal/artwork_manager.dart';
 import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/app_settings.dart';
-import 'package:songtube/ui/components/circular_check_box.dart';
 import 'package:songtube/ui/sheets/snack_bar.dart';
-import 'package:songtube/ui/text_styles.dart';
 import 'package:songtube/ui/tiles/setting_tile.dart';
 
 class MusicPlayerSettings extends StatefulWidget {

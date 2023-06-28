@@ -7,8 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:receive_intent/receive_intent.dart' as intent;
-import 'package:songtube/internal/models/backup_model.dart';
-import 'package:songtube/internal/music_brainz.dart';
 import 'package:songtube/providers/app_settings.dart';
 import 'package:songtube/internal/global.dart';
 import 'package:songtube/internal/models/song_item.dart';
@@ -53,17 +51,17 @@ void main() async {
   }
 
   // Set System UI Mode
-  if ((deviceInfo.version.sdkInt ?? 28) >= 29 && false) {
-    SystemChrome.setEnabledSystemUIMode(
-      SystemUiMode.edgeToEdge
-    );
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        systemNavigationBarColor: Colors.transparent,
-        statusBarColor: Colors.transparent 
-      )
-    );
-  }
+  // if ((deviceInfo.version.sdkInt ?? 28) >= 29 && false) {
+  //   SystemChrome.setEnabledSystemUIMode(
+  //     SystemUiMode.edgeToEdge
+  //   );
+  //   SystemChrome.setSystemUIOverlayStyle(
+  //     const SystemUiOverlayStyle(
+  //       systemNavigationBarColor: Colors.transparent,
+  //       statusBarColor: Colors.transparent 
+  //     )
+  //   );
+  // }
 
   // Run App
   runApp(SongTube(initIntent: initIntent));

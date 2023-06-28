@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:line_icons/line_icon.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:newpipeextractor_dart/newpipeextractor_dart.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/models/content_wrapper.dart';
 import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/content_provider.dart';
 import 'package:songtube/ui/components/slideable_panel.dart';
-import 'package:songtube/ui/players/video_player/suggestions.dart';
 import 'package:songtube/ui/players/video_player/video_content.dart';
 import 'package:songtube/ui/sheet_phill.dart';
 import 'package:songtube/ui/text_styles.dart';

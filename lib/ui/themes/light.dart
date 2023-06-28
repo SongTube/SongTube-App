@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:songtube/internal/global.dart';
-import 'package:songtube/ui/text_styles.dart';
 
 ThemeData lightTheme() {
   return ThemeData.light().copyWith(

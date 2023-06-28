@@ -1,8 +1,4 @@
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:songtube/internal/global.dart';
-import 'package:songtube/internal/models/playback_quality.dart';
 import 'package:songtube/ui/text_styles.dart';
 
 class VideoPlayerAppBar extends StatelessWidget {

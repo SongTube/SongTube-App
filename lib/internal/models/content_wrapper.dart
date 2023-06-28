@@ -3,7 +3,6 @@ import 'package:songtube/internal/models/playback_quality.dart';
 import 'package:songtube/services/content_service.dart';
 import 'package:songtube/ui/players/video_player/player_widget.dart';
 import 'package:songtube/ui/players/video_player/suggestions.dart';
-import 'package:video_player/video_player.dart';
 
 class ContentWrapper {
 

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:line_icons/line_icon.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:songtube/internal/models/content_wrapper.dart';
 import 'package:songtube/internal/models/playback_quality.dart';
 import 'package:songtube/languages/languages.dart';

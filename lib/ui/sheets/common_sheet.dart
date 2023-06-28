@@ -1,12 +1,7 @@
-import 'package:songtube/internal/models/song_item.dart';
-import 'package:songtube/main.dart';
-import 'package:songtube/providers/playlist_provider.dart';
 import 'package:songtube/ui/sheet_phill.dart';
-import 'package:songtube/ui/sheets/add_to_playlist.dart';
 import 'package:songtube/ui/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:provider/provider.dart';
 
 class CommonSheet extends StatefulWidget {
   const CommonSheet({

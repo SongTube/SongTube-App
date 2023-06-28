@@ -1,18 +1,11 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:image_fade/image_fade.dart';
-import 'package:ionicons/ionicons.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:songtube/internal/album_utils.dart';
-import 'package:songtube/internal/artwork_manager.dart';
-import 'package:songtube/internal/global.dart';
-import 'package:songtube/internal/media_utils.dart';
 import 'package:songtube/internal/models/media_item_models.dart';
 import 'package:songtube/internal/music_brainz.dart';
 import 'package:songtube/languages/languages.dart';
-import 'package:songtube/ui/components/shimmer_container.dart';
 import 'package:songtube/ui/text_styles.dart';
 import 'package:transparent_image/transparent_image.dart';
 

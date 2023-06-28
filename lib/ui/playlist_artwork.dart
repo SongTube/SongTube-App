@@ -4,13 +4,6 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_fade/image_fade.dart';
-import 'package:songtube/internal/artwork_manager.dart';
-import 'package:songtube/internal/global.dart';
-import 'package:songtube/internal/media_utils.dart';
-import 'package:songtube/internal/models/media_playlist.dart';
-import 'package:songtube/internal/models/media_set.dart';
-import 'package:songtube/internal/music_brainz.dart';
-import 'package:transparent_image/transparent_image.dart';
 import 'package:validators/validators.dart';
 
 class PlaylistArtwork extends StatefulWidget {

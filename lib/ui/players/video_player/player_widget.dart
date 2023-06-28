@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_audio_query/flutter_audio_query.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_fade/image_fade.dart';
 import 'package:newpipeextractor_dart/newpipeextractor_dart.dart';

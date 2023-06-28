@@ -1,8 +1,6 @@
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:provider/provider.dart';
 import 'package:songtube/internal/global.dart';
 import 'package:songtube/ui/text_styles.dart';
 import 'package:url_launcher/url_launcher.dart';

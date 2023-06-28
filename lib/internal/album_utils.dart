@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:songtube/internal/artwork_manager.dart';
-import 'package:songtube/internal/media_utils.dart';
 import 'package:songtube/internal/models/song_item.dart';
 
 class AlbumUtils {

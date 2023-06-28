@@ -1,6 +1,5 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +15,6 @@ import 'package:songtube/screens/home/home_music/pages/home_page.dart';
 import 'package:songtube/screens/home/home_music/pages/music_page.dart';
 import 'package:songtube/screens/home/home_music/pages/playlists_page.dart';
 import 'package:songtube/screens/home/home_music/pages/search_page.dart';
-import 'package:songtube/ui/animations/blue_page_route.dart';
 import 'package:songtube/ui/components/custom_inkwell.dart';
 import 'package:songtube/ui/rounded_tab_indicator.dart';
 import 'package:songtube/ui/text_styles.dart';

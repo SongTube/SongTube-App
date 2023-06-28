@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -6,11 +5,9 @@ import 'package:newpipeextractor_dart/models/infoItems/channel.dart';
 import 'package:songtube/languages/languages.dart';
 import 'package:songtube/screens/channel.dart';
 import 'package:songtube/ui/components/channel_image.dart';
-import 'package:songtube/ui/components/shimmer_container.dart';
 import 'package:songtube/ui/components/subscribe_text.dart';
 import 'package:songtube/ui/text_styles.dart';
 import 'package:songtube/ui/ui_utils.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 enum ChannelTileSize { small, big }
 

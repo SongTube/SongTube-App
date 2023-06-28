@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 
 // Packages
-import 'package:audio_service/audio_service.dart';
 import 'package:songtube/ui/text_styles.dart';
 
 class CustomSnackbar {

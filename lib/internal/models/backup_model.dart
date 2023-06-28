@@ -2,7 +2,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:newpipeextractor_dart/newpipeextractor_dart.dart';
@@ -15,7 +14,6 @@ import 'package:songtube/internal/models/media_playlist.dart';
 import 'package:songtube/internal/models/song_item.dart';
 import 'package:songtube/providers/content_provider.dart';
 import 'package:songtube/providers/download_provider.dart';
-import 'package:songtube/providers/media_provider.dart';
 import 'package:songtube/providers/playlist_provider.dart';
 
 class BackupModel {

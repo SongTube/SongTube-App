@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:songtube/languages/languages.dart';
 import 'package:songtube/ui/tiles/setting_tile.dart';

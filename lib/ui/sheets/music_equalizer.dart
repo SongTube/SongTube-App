@@ -1,6 +1,4 @@
-import 'dart:math';
 
-import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:songtube/internal/global.dart';

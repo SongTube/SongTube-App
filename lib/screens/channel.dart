@@ -8,7 +8,6 @@ import 'package:songtube/languages/languages.dart';
 import 'package:songtube/ui/components/channel_image.dart';
 import 'package:songtube/ui/components/infinite_scrolling_adapter.dart';
 import 'package:songtube/ui/components/subscribe_text.dart';
-import 'package:songtube/ui/info_item_renderer.dart';
 import 'package:songtube/ui/rounded_tab_indicator.dart';
 import 'package:songtube/ui/text_styles.dart';
 import 'package:songtube/ui/tiles/stream_tile.dart';

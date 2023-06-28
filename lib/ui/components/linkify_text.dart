@@ -2,7 +2,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:songtube/internal/models/timestamp.dart';
 import 'package:songtube/ui/text_styles.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 import 'package:validators/validators.dart';
 
 class LinkifyText extends StatelessWidget {

@@ -3,7 +3,6 @@ import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/content_provider.dart';
-import 'package:songtube/providers/ui_provider.dart';
 import 'package:songtube/ui/text_styles.dart';
 import 'package:songtube/ui/tiles/stream_tile.dart';
 

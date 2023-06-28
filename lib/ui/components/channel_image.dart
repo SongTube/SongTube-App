@@ -1,8 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:newpipeextractor_dart/extractors/channels.dart';
-import 'package:newpipeextractor_dart/models/channel.dart';
 import 'package:songtube/services/content_service.dart';
 import 'package:songtube/ui/components/shimmer_container.dart';
 import 'package:songtube/ui/ui_utils.dart';

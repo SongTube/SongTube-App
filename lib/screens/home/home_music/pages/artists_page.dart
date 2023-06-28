@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/models/media_item_models.dart';
-import 'package:songtube/internal/music_brainz.dart';
 import 'package:songtube/providers/media_provider.dart';
 import 'package:songtube/screens/playlist.dart';
 import 'package:songtube/ui/tiles/artist_card_tile.dart';

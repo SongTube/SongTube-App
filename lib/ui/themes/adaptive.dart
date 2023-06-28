@@ -1,4 +1,3 @@
-import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 
 ThemeData adaptiveTheme(ColorScheme? data, Brightness brightness) {
