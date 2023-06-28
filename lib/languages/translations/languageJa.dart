@@ -498,7 +498,7 @@ class LanguageJa extends Languages {
   @override
   String get labelBlurIntensity => 'ぼかしの強さ';
   @override
-  String get labelBlurIntensityDescription => 'アートワークの背景のぼかしの強さを変更;
+  String get labelBlurIntensityDescription => 'アートワークの背景のぼかしの強さを変更';
   @override
   String get labelBackdropOpacity => '背景の不透明度';
   @override
