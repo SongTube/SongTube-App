@@ -35,7 +35,7 @@ dependencies:
   # Tools
   url_launcher: ^6.1.5
   http: ^0.13.5
-  intl: ^0.17.0
+  intl: ^0.18.0
   validators: ^3.0.0
   share_plus: ^4.1.0
   device_info_plus: ^4.1.2
