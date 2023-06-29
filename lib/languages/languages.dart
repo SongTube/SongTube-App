@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:songtube/internal/global.dart';
 import 'package:songtube/languages/translations/languageAr.dart';
 import 'package:songtube/languages/translations/languageCa.dart';
+import 'package:songtube/languages/translations/languageCkb.dart';
 import 'package:songtube/languages/translations/languageKu.dart';
 import 'package:songtube/languages/translations/languageRu.dart';
 import 'package:songtube/main.dart';
@@ -129,8 +130,8 @@ Future<Languages> _loadLocale(Locale locale) async {
     case 'fr':
       return LanguageFr();
     // Kurdish (CKB) (CKB)
-    //case 'ckb':
-    //  return LanguageCkb();
+    case 'ckb':
+      return LanguageCkb();
     // Kurdish (KU) (KU)
     case 'ku':
       return LanguageKu();
