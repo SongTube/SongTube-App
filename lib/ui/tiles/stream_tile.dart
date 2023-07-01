@@ -142,9 +142,10 @@ class StreamTileCollapsed extends StatelessWidget {
 }
 
 class StreamTileExpanded extends StatelessWidget {
-  const StreamTileExpanded({required this.stream,this.onDelete, super.key});
+  const StreamTileExpanded({required this.stream,this.onDelete, super.key, this.isEditable = true});
   final StreamInfoItem stream;
   final Function()? onDelete;
+  final bool isEditable;
   @override
   Widget build(BuildContext context) {
     ContentProvider contentProvider = Provider.of(context);
@@ -155,9 +156,9 @@ class StreamTileExpanded extends StatelessWidget {
         contentProvider.loadVideoPlayer(stream);
         uiProvider.fwController.open();
       },
-      onLongPress: () {
+      onLongPress: isEditable ? () {
         UiUtils.showInfoItemOptions(stream, onDelete: onDelete);
-      },
+      } : null,
       child: Column(
         children: [
           Container(
@@ -250,9 +251,9 @@ class StreamTileExpanded extends StatelessWidget {
           ),
         ),
         IconButton(
-            onPressed: () {
+            onPressed: isEditable ? () {
               UiUtils.showInfoItemOptions(stream, onDelete: onDelete);
-            },
+            } : null,
             icon: Icon(Icons.more_vert,
                 size: 20, color: Theme.of(context).iconTheme.color!.withOpacity(0.8)))
       ],

@@ -23,9 +23,9 @@ class InfoItemRenderer extends StatelessWidget {
       return ChannelTile(channel: infoItem, size: ChannelTileSize.big);
     } else if (infoItem is StreamInfoItem) {
       if (expandItem) {
-        return StreamTileExpanded(stream: infoItem, onDelete: onDelete);
+        return StreamTileExpanded(stream: infoItem, onDelete: onDelete, isEditable: editable);
       } else {
-        return StreamTileCollapsed(stream: infoItem, onDelete: onDelete);
+        return StreamTileCollapsed(stream: infoItem, onDelete: onDelete, isEditable: editable);
       }
     } else if (infoItem is PlaylistInfoItem) {
       if (expandItem) {
