@@ -85,7 +85,9 @@ class VideoPlaybackQuality {
     return 
       other.resolution == resolution &&
       other.format == format &&
-      other.framerate == framerate;
+      other.framerate == framerate &&
+      other.videoUrl == videoUrl &&
+      other.audioUrl == audioUrl;
   }
 
   @override

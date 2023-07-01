@@ -607,7 +607,7 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                             onPresetTap: () {
                               showModalBottomSheet(
                                 context: internalNavigatorKey.currentContext!,
-                                isScrollControlled: MediaQuery.of(context).orientation == Orientation.portrait ? false : true,
+                                isScrollControlled: true,
                                 backgroundColor: Colors.transparent,
                                 builder: (context) => PlaybackQualitySheet(content: widget.content, currentQuality: currentQuality!, onChangeQuality: (quality) async {
                                   final position = controller?.value.position;
