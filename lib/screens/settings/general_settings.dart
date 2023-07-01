@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/app_settings.dart';
 import 'package:songtube/providers/ui_provider.dart';
+import 'package:songtube/ui/text_styles.dart';
 import 'package:songtube/ui/tiles/setting_tile.dart';
 
 
@@ -54,6 +56,7 @@ class _GeneralSettingsState extends State<GeneralSettings> {
 
   @override
   Widget build(BuildContext context) {
+    AppSettings settingsProvider = Provider.of(context);
     return ListView(
       physics: const BouncingScrollPhysics(),
       padding: const EdgeInsets.only(left: 12, right: 12, top: 12, bottom: (kToolbarHeight * 1.6)+12),
@@ -75,6 +78,23 @@ class _GeneralSettingsState extends State<GeneralSettings> {
           onChange: (_) => updateThemeMode(),
           value: uiProvider.themeMode == ThemeMode.dark,
           enabled: uiProvider.themeMode != ThemeMode.system,
+        ),
+        const SizedBox(height: 12),
+        // App's font family
+        SettingTileCheckbox(
+          title: 'Font Family',
+          subtitle: 'Use default System font family',
+          leadingIcon: LineIcons.font,
+          value: AppSettings.useSystemFontFamiliy,
+          onChange: (value) {
+            AppSettings.useSystemFontFamiliy = value;
+            if (value) {
+              defaultFontStyle = DefaultTextStyle.of(context).style;
+            } else {
+              defaultFontStyle = GoogleFonts.poppins();
+            }
+            settingsProvider.setState();
+          },
         ),
         const SizedBox(height: 12),
         // Enable/Disable Watch History

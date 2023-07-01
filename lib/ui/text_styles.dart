@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:songtube/providers/app_settings.dart';
 
-final defaultFontStyle = GoogleFonts.poppins();
+TextStyle defaultFontStyle = AppSettings.useSystemFontFamiliy
+  ? const TextStyle()
+  : GoogleFonts.poppins();
 
 TextStyle bigTextStyle(BuildContext context, {double opacity = 1, bool bold = true}) {
   return defaultFontStyle.copyWith(

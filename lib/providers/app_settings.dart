@@ -4,6 +4,7 @@ import 'package:android_path_provider/android_path_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:songtube/internal/ffmpeg/converter.dart';
 import 'package:songtube/internal/global.dart';
+import 'package:songtube/ui/text_styles.dart';
 
 // FFmpeg Related Keys
 const defaultFfmpegTaskKey = 'defaultFfmpegTask';
@@ -51,6 +52,9 @@ const musicPlayerArtworkShadowLevelKey = 'musicPlayerArtworkShadowLevelKey';
 
 // Music Player Artwork Shadow Radius
 const musicPlayerArtworkShadowRadiusKey = 'musicPlayerArtworkShadowRadiusKey';
+
+// Use System font family
+const useSystemFontFamilyKey = 'useSystemFontFamilyKey';
 
 class AppSettings extends ChangeNotifier {
 
@@ -212,6 +216,17 @@ class AppSettings extends ChangeNotifier {
   static int get musicPlayerArtworkShadowRadius => sharedPreferences.getInt(musicPlayerArtworkShadowRadiusKey) ?? 12;
   static set musicPlayerArtworkShadowRadius(int value) {
     sharedPreferences.setInt(musicPlayerArtworkShadowRadiusKey, value);
+  }
+
+  // Use system default font family
+  static bool get useSystemFontFamiliy => sharedPreferences.getBool(useSystemFontFamilyKey) ?? false;
+  static set useSystemFontFamiliy(bool value) {
+    sharedPreferences.setBool(useSystemFontFamilyKey, value);
+  }
+
+  // Update State
+  void setState() {
+    notifyListeners();
   }
 
 }
