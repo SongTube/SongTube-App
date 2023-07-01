@@ -721,4 +721,6 @@ class LanguageEs extends Languages {
   String get labelEditTagsDescription => 'Abre el editor de etiquetas y caratula';
   @override
   String get labelContains => 'Contiene';
+  @override
+  String get labelPlaybackSpeed => 'Velocidad de reproduccion';
 }

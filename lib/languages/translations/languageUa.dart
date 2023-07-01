@@ -718,4 +718,6 @@ class LanguageUa extends Languages {
   String get labelEditTagsDescription => 'Open ID3 tags and artwork editor';
   @override
   String get labelContains => 'Contains';
+  @override
+  String get labelPlaybackSpeed => 'Playback speed';
 }

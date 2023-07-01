@@ -717,4 +717,6 @@ class LanguageJa extends Languages {
   String get labelEditTagsDescription => 'ID3 タグとアートワークのエディターを開く';
   @override
   String get labelContains => 'Contains';
+  @override
+  String get labelPlaybackSpeed => 'Playback speed';
 }

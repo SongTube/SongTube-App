@@ -561,6 +561,7 @@ abstract class Languages {
   String get labelShareSongDescription;
   String get labelEditTagsDescription;
   String get labelContains;
+  String get labelPlaybackSpeed;
 }
 
 // ----------------------------------------

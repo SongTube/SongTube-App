@@ -718,4 +718,6 @@ class LanguageKu extends Languages {
   String get labelEditTagsDescription => 'Serrastkarê zanyariyên stranê û ID3 veke';
   @override
   String get labelContains => 'Tê de';
+  @override
+  String get labelPlaybackSpeed => 'Playback speed';
 }
