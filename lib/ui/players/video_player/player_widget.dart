@@ -609,13 +609,20 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                                 context: internalNavigatorKey.currentContext!,
                                 isScrollControlled: true,
                                 backgroundColor: Colors.transparent,
-                                builder: (context) => PlaybackQualitySheet(content: widget.content, currentQuality: currentQuality!, onChangeQuality: (quality) async {
-                                  final position = controller?.value.position;
-                                  controller?.removeListener(() { });
-                                  await controller?.dispose();
-                                  AppSettings.lastVideoQuality = quality.resolution;
-                                  setState(() { controller = null; currentQuality = quality; });
-                                  loadVideo(position: position);
+                                builder: (context) => PlaybackQualitySheet(
+                                  content: widget.content,
+                                  currentPlaybackSpeed: controller?.value.playbackSpeed ?? 1.00,
+                                  onPlaybackSpeedChange: (speed) {
+                                    controller?.setPlaybackSpeed(speed);
+                                  },
+                                  currentQuality: currentQuality!,
+                                  onChangeQuality: (quality) async {
+                                    final position = controller?.value.position;
+                                    controller?.removeListener(() { });
+                                    await controller?.dispose();
+                                    AppSettings.lastVideoQuality = quality.resolution;
+                                    setState(() { controller = null; currentQuality = quality; });
+                                    loadVideo(position: position);
                               }));
                             },
                             audioOnly: false,

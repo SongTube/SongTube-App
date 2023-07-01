@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ionicons/ionicons.dart';
 import 'package:songtube/internal/models/content_wrapper.dart';
 import 'package:songtube/internal/models/playback_quality.dart';
 import 'package:songtube/languages/languages.dart';
@@ -11,8 +10,12 @@ class PlaybackQualitySheet extends StatefulWidget {
     required this.content,
     required this.currentQuality,
     required this.onChangeQuality,
+    required this.currentPlaybackSpeed,
+    required this.onPlaybackSpeedChange,
     super.key});
   final ContentWrapper content;
+  final double currentPlaybackSpeed;
+  final Function(double) onPlaybackSpeedChange;
   final VideoPlaybackQuality currentQuality;
   final Function(VideoPlaybackQuality) onChangeQuality;
   @override
@@ -24,6 +27,24 @@ class _PlaybackQualitySheetState extends State<PlaybackQualitySheet> {
   List<VideoPlaybackQuality> get videoList => widget.content.videoOptions!.reversed.toList();
 
   List<VideoPlaybackQuality> get videoOnlyList => widget.content.videoOnlyOptions!;
+
+  // Playback speed values
+  final List<double> values = [0.25, 0.5, 0.75, 1.0, 1.25, 1.50, 1.75, 2.0];
+  late int playbackSpeedIndex = values.indexWhere((element) => element == widget.currentPlaybackSpeed);
+
+  SliderThemeData sliderTheme() {
+    return SliderThemeData(
+      thumbColor: Theme.of(context).primaryColor,
+      activeTrackColor: Theme.of(context).primaryColor,
+      trackHeight: 6,
+      thumbShape: const RoundSliderThumbShape(
+        disabledThumbRadius: 7,
+        enabledThumbRadius: 7
+      ),
+      inactiveTickMarkColor: Theme.of(context).primaryColor,
+      inactiveTrackColor: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.6),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +67,42 @@ class _PlaybackQualitySheetState extends State<PlaybackQualitySheet> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 12),
+              // Video playback speed
+              Text(Languages.of(context)!.labelPlaybackSpeed, style: textStyle(context)),
+              const SizedBox(height: 6),
+              Row(
+                children: [
+                  Text('${Languages.of(context)!.labelCurrent}: ', style: subtitleTextStyle(context, opacity: 0.7)),
+                  Text('x${values[playbackSpeedIndex].toStringAsFixed(2)}', style: subtitleTextStyle(context).copyWith(color: Theme.of(context).primaryColor)),
+                ],
+              ),
+              Row(
+                children: [
+                  Text('0.25', style: smallTextStyle(context, opacity: 0.7)),
+                  Expanded(
+                    child: SliderTheme(
+                      data: sliderTheme(),
+                      child: Slider(
+                        value: playbackSpeedIndex.toDouble(),
+                        min: 0,
+                        max: values.length - 1,
+                        divisions: values.length - 1,
+                        onChanged: (index) {
+                          setState(() {
+                            playbackSpeedIndex = index.toInt();
+                          });
+                        },
+                        onChangeEnd: (index) {
+                          widget.onPlaybackSpeedChange(values[index.toInt()]);
+                        },
+                      )
+                    ),
+                  ),
+                  Text('2.00', style: smallTextStyle(context, opacity: 0.7)),
+                  const SizedBox(width: 16),
+                ],
+              ),
+              // Video current quality
               Text(Languages.of(context)!.labelCurrentQuality, style: textStyle(context)),
               const SizedBox(height: 6),
               Text('${Languages.of(context)!.labelFastStreamingOptions}:', style: subtitleTextStyle(context, opacity: 0.7)),
