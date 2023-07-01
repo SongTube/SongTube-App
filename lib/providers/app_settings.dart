@@ -4,7 +4,6 @@ import 'package:android_path_provider/android_path_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:songtube/internal/ffmpeg/converter.dart';
 import 'package:songtube/internal/global.dart';
-import 'package:songtube/ui/text_styles.dart';
 
 // FFmpeg Related Keys
 const defaultFfmpegTaskKey = 'defaultFfmpegTask';
