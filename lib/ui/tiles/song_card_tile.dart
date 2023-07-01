@@ -3,11 +3,12 @@ import 'dart:io';
 import 'package:songtube/internal/artwork_manager.dart';
 import 'package:songtube/internal/global.dart';
 import 'package:songtube/internal/models/song_item.dart';
+import 'package:songtube/main.dart';
 import 'package:songtube/ui/animations/mini_music_visualizer.dart';
 import 'package:songtube/ui/components/palette_loader.dart';
+import 'package:songtube/ui/sheets/song_options.dart';
 import 'package:songtube/ui/text_styles.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:image_fade/image_fade.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -44,9 +45,17 @@ class _SongCardTileState extends State<SongCardTile> {
       builder: (context, palette) {
         return Padding(
           padding: const EdgeInsets.only(right: 8),
-          child: Bounce(
-            duration: const Duration(milliseconds: 80),
-            onPressed: widget.onPlay,
+          child: GestureDetector(
+            onLongPress: () {
+              if (!widget.song.isVideo) {
+                showModalBottomSheet(
+                  context: internalNavigatorKey.currentContext!,
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
+                  builder: (context) => SongOptionsSheet(song: widget.song, isDownload: false));
+              }
+            },
+            onTap: widget.onPlay,
             child: AspectRatio(
               aspectRatio: 1,
               child: Stack(
