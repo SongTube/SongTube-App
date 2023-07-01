@@ -76,7 +76,6 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
   Widget build(BuildContext context) {
     MediaProvider mediaProvider = Provider.of(context);
     PlaylistProvider playlistProvider = Provider.of(context);
-    UiProvider uiProvider = Provider.of(context);
     return Scaffold(
       backgroundColor: Theme.of(context).cardColor,
       body: Column(
@@ -204,35 +203,18 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
               stream: audioHandler.mediaItem,
               builder: (context, snapshot) {
                 final playerOpened = snapshot.data != null;
-                return CustomScrollView(
+                return ListView(
+                  padding: const EdgeInsets.all(0),
                   physics: const BouncingScrollPhysics(),
-                  slivers: [
-                    const SliverToBoxAdapter(
-                      child: SizedBox(height: 12),
-                    ),
-                    SliverList(
-                      delegate: SliverChildBuilderDelegate((context, index) {
-                        final song = mediaSet.songs[index];
-                        return SongTile(
-                          song: song,
-                          onPlay: () async {
-                            mediaProvider.currentPlaylistName = mediaSet.name;
-                            final queue = List<MediaItem>.generate(mediaSet.songs.length, (index) {
-                              return mediaSet.songs[index].mediaItem;
-                            });
-                            uiProvider.currentPlayer = CurrentPlayer.music;
-                            mediaProvider.playSong(queue, index);
-                          }
-                        );
-                      }, childCount: mediaSet.songs.length),
-                    ),
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 16)
-                          .copyWith(bottom: playerOpened
-                            ? (kToolbarHeight * 1.6)+(kToolbarHeight)+34
-                            : (kToolbarHeight * 1.6)),
-                      ),
+                  children: [
+                    const SizedBox(height: 12),
+                    mediaSet.id == null
+                      ? _commonList() : _reorderableList(),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16)
+                        .copyWith(bottom: playerOpened
+                          ? (kToolbarHeight * 1.6)+(kToolbarHeight)+34
+                          : (kToolbarHeight * 1.6)),
                     )
                   ],
                 );
@@ -371,4 +353,77 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
       ),
     );
   }
+
+  Widget _commonList() {
+    MediaProvider mediaProvider = Provider.of(context);
+    UiProvider uiProvider = Provider.of(context);
+    return ListView.builder(
+      padding: EdgeInsets.zero,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemBuilder: (context, index) {
+        final song = mediaSet.songs[index];
+        return SongTile(
+          song: song,
+          onPlay: () async {
+            mediaProvider.currentPlaylistName = mediaSet.name;
+            final queue = List<MediaItem>.generate(mediaSet.songs.length, (index) {
+              return mediaSet.songs[index].mediaItem;
+            });
+            uiProvider.currentPlayer = CurrentPlayer.music;
+            mediaProvider.playSong(queue, index);
+          }
+        );
+      },
+      itemCount: mediaSet.songs.length,
+    );
+  }
+
+  Widget _reorderableList() {
+    MediaProvider mediaProvider = Provider.of(context);
+    PlaylistProvider playlistProvider = Provider.of(context);
+    UiProvider uiProvider = Provider.of(context);
+    return ReorderableListView.builder(
+      shrinkWrap: true,
+      padding: EdgeInsets.zero,
+      physics: const NeverScrollableScrollPhysics(),
+      itemBuilder: (context, index) {
+        final song = mediaSet.songs[index];
+        return Row(
+          key: ValueKey('${mediaSet.id}$index'),
+          children: [
+            // Reorder Tab
+            if (mediaSet.id != null)
+            Padding(
+              padding: const EdgeInsets.all(8.0).copyWith(left: 16, right: 0),
+              child: Icon(Icons.reorder_rounded, size: 18, color: Theme.of(context).iconTheme.color!.withOpacity(0.4)),
+            ),
+            // Song
+            Expanded(
+              child: SongTile(
+                song: song,
+                onPlay: () async {
+                  mediaProvider.currentPlaylistName = mediaSet.name;
+                  final queue = List<MediaItem>.generate(mediaSet.songs.length, (index) {
+                    return mediaSet.songs[index].mediaItem;
+                  });
+                  uiProvider.currentPlayer = CurrentPlayer.music;
+                  mediaProvider.playSong(queue, index);
+                }
+              ),
+            ),
+          ],
+        );
+      },
+      itemCount: mediaSet.songs.length,
+      onReorder: (oldIndex, newIndex) {
+        final song = mediaSet.songs[oldIndex];
+        mediaSet.songs.removeAt(oldIndex);
+        mediaSet.songs.insert(newIndex, song);
+        setState(() {});
+        playlistProvider.updateGlobalPlaylist(mediaSet.id!, songs: mediaSet.songs);
+      }
+    );
+  }
+
 }

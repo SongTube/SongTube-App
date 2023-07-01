@@ -20,12 +20,14 @@ class SongTile extends StatefulWidget {
     this.disablePlayingBackground = false,
     this.disablePlayingVisualizer = false,
     this.isDownload = false,
+    this.disableLongPress = false,
     Key? key }) : super(key: key);
   final SongItem song;
   final Function()? onPlay;
   final bool disablePlayingBackground;
   final bool disablePlayingVisualizer;
   final bool isDownload;
+  final bool disableLongPress;
   @override
   State<SongTile> createState() => _SongTileState();
 }
@@ -51,7 +53,7 @@ class _SongTileState extends State<SongTile> {
             child: ListTile(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               onTap: widget.onPlay,
-              onLongPress: () {
+              onLongPress: widget.disableLongPress ? null : () {
                 if (widget.onPlay != null && !widget.song.isVideo) {
                   showModalBottomSheet(
                     context: internalNavigatorKey.currentContext!,

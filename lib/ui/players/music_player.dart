@@ -130,7 +130,7 @@ class _MusicPlayerState extends State<MusicPlayer> with TickerProviderStateMixin
                           enabled: appSettings.enableMusicPlayerBlur,
                           backgroundImage: useArtwork ? snapshot.data : thumbnailFile(song.id),
                           backdropColor: appSettings.enableMusicPlayerBlur
-                            ? palette!.dominant ?? Theme.of(context).scaffoldBackgroundColor
+                            ? palette?.dominant ?? Theme.of(context).scaffoldBackgroundColor
                             : Theme.of(context).scaffoldBackgroundColor,
                           backdropOpacity: appSettings.musicPlayerBackdropOpacity,
                           blurIntensity: appSettings.musicPlayerBlurStrenght,
