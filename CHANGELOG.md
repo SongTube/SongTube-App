@@ -1,3 +1,19 @@
+# SongTube 7.1.0:
+
+- General:
+    * Greatly optimized songs library loading time
+    * Re-desiged video quality selection dialog
+    * Added video playback speed support
+    * New option in settings to use system default font
+    * Song cards now shows options menu on long press
+    * Added support for re-ordering music playlists
+    * Added information on long press SongTube Link button
+    * New option in settings to change view mode on video player suggestions
+    * When sharing a video link to songtube, a preview is now shown while it loads
+    * Fixed share button on collapsed/expanded video or playlists tiles
+    * Fine tuned some animations
+    * Other bug & stability fixes
+
 # SongTube 7.0.1:
 
 - General
