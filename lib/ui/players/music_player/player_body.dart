@@ -360,20 +360,21 @@ class _ExpandedPlayerBodyState extends State<ExpandedPlayerBody> {
               children: [
                 // Song Details
                 Padding(
-                  padding: const EdgeInsets.only(left: 32, right: 32),
+                  padding: const EdgeInsets.only(left: 32, right: 16),
                   child: AnimatedSwitcher(
                     duration: const Duration(milliseconds: 400),
                     child: StreamBuilder<MediaItem?>(
                       stream: audioHandler.mediaItem,
                       builder: (context, snapshot) {
                         return MarqueeWidget(
+                          textColor: textColor(palette),
                           currentSong: snapshot.data,
                           animationDuration: const Duration(seconds: 10),
                           backDuration: const Duration(seconds: 5),
                           pauseDuration: const Duration(seconds: 2),
                           direction: Axis.horizontal,
                           child: Text(
-                            snapshot.data?.title ?? '',
+                            '${snapshot.data?.title ?? ''}    ',
                             key: ValueKey(snapshot.data?.title),
                             style: bigTextStyle(context).copyWith(fontWeight: FontWeight.w900).copyWith(color: textColor(palette)),
                             maxLines: 1,

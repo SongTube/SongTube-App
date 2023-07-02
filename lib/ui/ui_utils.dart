@@ -24,7 +24,7 @@ class UiUtils {
     uiProvider.onAltRoute = true;
     // Set FancyScaffold position variables so that the MediaPlayer
     // removes the bottom padding with animation
-    uiProvider.fwController.navbarAnimationController.animateTo(0);
+    uiProvider.fwController.navbarAnimationController.animateTo(0, curve: Curves.ease);
     uiProvider.fwController.navbarScrolledDown = true;
     // Execute our page push asynchronous for performance
     final page = await Future.microtask(() => widget);
@@ -34,7 +34,7 @@ class UiUtils {
     // Once the pushed route has been removed, restore FancyScaffold position variables
     // so that we restore the MediaPlayer bottom padding with animation
     uiProvider.fwController.navbarScrolledDown = navbarScrollStatus;
-    uiProvider.fwController.navbarAnimationController.animateTo(navbarAnimationValue);
+    uiProvider.fwController.navbarAnimationController.animateTo(navbarAnimationValue, curve: Curves.ease);
     uiProvider.fwController.lockNotificationListener = false;
     uiProvider.onAltRoute = false;
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(

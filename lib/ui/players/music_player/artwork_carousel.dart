@@ -60,6 +60,7 @@ class _ArtworkCarouselState extends State<ArtworkCarousel> {
           future: getAlbumImage(),
           builder: (context, snapshot) {
             return ImageFade(
+              fadeCurve: Curves.ease,
               placeholder: const SizedBox(),
               image: snapshot.hasData
                 ? FileImage(snapshot.data!)
