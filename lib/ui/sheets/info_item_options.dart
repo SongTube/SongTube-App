@@ -104,8 +104,7 @@ class InfoItemOptions extends StatelessWidget {
             onTap: () {
               FlutterShare.share(
                 title: infoItem.name!,
-                text: '${infoItem.name!}\n\n'
-                      'Shared from SongTube\nsongtube.github.io',
+                text: '${infoItem.url}'
               );
             }
           ),
