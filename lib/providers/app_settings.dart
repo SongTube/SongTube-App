@@ -55,6 +55,9 @@ const musicPlayerArtworkShadowRadiusKey = 'musicPlayerArtworkShadowRadiusKey';
 // Use System font family
 const useSystemFontFamilyKey = 'useSystemFontFamilyKey';
 
+// Video suggestions view mode
+const videoSuggestionsViewModeKey = 'videoSuggestionsViewMode';
+
 class AppSettings extends ChangeNotifier {
 
   // Initialize App Settings
@@ -226,6 +229,12 @@ class AppSettings extends ChangeNotifier {
   // Update State
   void setState() {
     notifyListeners();
+  }
+
+  // Video Suggestions video mode
+  static String get videoSuggestionsViewMode => sharedPreferences.getString(videoSuggestionsViewModeKey) ?? 'collapsed';
+  static set videoSuggestionsViewMode(String mode) {
+    sharedPreferences.setString(videoSuggestionsViewModeKey, mode);
   }
 
 }

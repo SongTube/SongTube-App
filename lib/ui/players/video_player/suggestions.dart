@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/providers/app_settings.dart';
 import 'package:songtube/providers/content_provider.dart';
 import 'package:songtube/ui/info_item_renderer.dart';
 
@@ -24,11 +25,12 @@ class VideoPlayerSuggestionsState extends State<VideoPlayerSuggestions> {
   }
 
   Widget _suggestionsList() {
+    final bool expand = AppSettings.videoSuggestionsViewMode == 'collapsed' ? false : true;
     return SliverList(
       delegate: SliverChildBuilderDelegate((context, index) {
         return Padding(
-          padding: const EdgeInsets.only(bottom: 12, left: 12, right: 12),
-          child: InfoItemRenderer(infoItem: widget.suggestions[index], expandItem: false),
+          padding: EdgeInsets.only(bottom: expand ? 24 : 12, left: expand ? 0 : 12, right: expand ? 0 : 12),
+          child: InfoItemRenderer(infoItem: widget.suggestions[index], expandItem: expand),
         );
       }, childCount: widget.suggestions.length),
     );

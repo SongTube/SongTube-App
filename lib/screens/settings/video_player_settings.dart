@@ -18,7 +18,23 @@ class _VideoPlayerSettingsState extends State<VideoPlayerSettings> {
       physics: const BouncingScrollPhysics(),
       padding: const EdgeInsets.only(left: 12, right: 12, top: 12, bottom: (kToolbarHeight * 1.6)+12),
       children: [
+        // Change view mode on video player suggestions
+        SettingTileDropdown(
+          title: 'Suggestions View',
+          subtitle: 'Change view mode of video suggestions in the video player',
+          leadingIcon: LineIcons.photoVideo,
+          currentValue: AppSettings.videoSuggestionsViewMode,
+          onChange: (value) {
+            AppSettings.videoSuggestionsViewMode = value ?? 'collapsed';
+            setState(() {});
+          },
+          items: const [
+            DropdownMenuItem(value: 'collapsed', child: Text('collapsed')),
+            DropdownMenuItem(value: 'expanded', child: Text('expanded')),
+          ]
+        ),
         // Automatic Picture-in-Picture mode
+        const SizedBox(height: 12),
         SettingTileCheckbox(
           leadingIcon: Icons.picture_in_picture_alt_outlined,
           title: Languages.of(context)!.labelPictureInPicture,
