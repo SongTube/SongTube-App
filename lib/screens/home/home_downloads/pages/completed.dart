@@ -60,6 +60,7 @@ class _DownloadsCompletedPageState extends State<DownloadsCompletedPage> {
         return SongTile(
           song: song,
           isDownload: true,
+          
           onPlay: () async {
             if (song.isVideo) {
               // Open video player
