@@ -124,6 +124,30 @@ class AboutPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 const Divider(),
+                // Developers Information
+                ListTile(
+                  contentPadding: const EdgeInsets.only(left: 32, right: 32),
+                  onTap: () {
+                    launchUrl(Uri.parse('https://linktr.ee/artxdev'));
+                  },
+                  leading: Image.asset(
+                    'assets/images/logo.png',
+                    width: MediaQuery.of(context).size.width*0.09,
+                  ),
+                  title: Text(
+                    "Developer Info",
+                    textAlign: TextAlign.start,
+                    style: subtitleTextStyle(context, bold: true)
+                  ),
+                  subtitle: Text(
+                    "https://linktr.ee/artxdev",
+                    style: smallTextStyle(context, opacity: 0.8)
+                  ),
+                  trailing: IconButton(
+                    onPressed: () {},
+                    icon: Icon(Icons.arrow_forward_ios_rounded, color: Theme.of(context).iconTheme.color, size: 18),
+                  ),
+                ),
                 // Artx Email
                 ListTile(
                   contentPadding: const EdgeInsets.only(left: 32, right: 32),
@@ -135,7 +159,7 @@ class AboutPage extends StatelessWidget {
                     width: MediaQuery.of(context).size.width*0.09,
                   ),
                   title: Text(
-                    "SongTube Developer",
+                    "Support Email",
                     textAlign: TextAlign.start,
                     style: subtitleTextStyle(context, bold: true)
                   ),
