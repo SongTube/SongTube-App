@@ -302,7 +302,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                       },
                       child: Container(
                         decoration: BoxDecoration( 
-                          color: palette!.vibrant,
+                          color: palette?.vibrant,
                           borderRadius: BorderRadius.circular(100),
                           boxShadow: [
                             BoxShadow(
