@@ -14,8 +14,7 @@ import 'package:songtube/internal/models/content_wrapper.dart';
 import 'package:songtube/main.dart';
 import 'package:songtube/providers/ui_provider.dart';
 import 'package:songtube/services/content_service.dart';
-import 'package:songtube/ui/sheets/common_sheet.dart';
-import 'package:songtube/ui/text_styles.dart';
+import 'package:songtube/ui/sheets/video_preview_sheet.dart';
 
 class ContentProvider extends ChangeNotifier {
 
@@ -144,13 +143,7 @@ class ContentProvider extends ChangeNotifier {
         isScrollControlled: true,
         backgroundColor: Colors.transparent,
         isDismissible: false,
-        builder: (context) => CommonSheet(
-          title: 'Loading Link...',
-          body: Text(infoItem, style: subtitleTextStyle(context)),
-          actions: [
-            SizedBox(width: 18, height: 18, child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(Theme.of(internalNavigatorKey.currentContext!).primaryColor)))
-          ],
-        ));
+        builder: (context) => VideoPreviewSheet(url: infoItem));
       final item = await ContentService.fetchInfoItemFromUrl(infoItem);
       Navigator.pop(internalNavigatorKey.currentContext!);
       if (item is YoutubeVideo) {
