@@ -106,8 +106,7 @@ class _HomeLibraryState extends State<HomeLibrary> {
             ),
             GestureDetector(
               onLongPress: () {
-                // Show more information about SongTube Link
-      
+                launchUrl(Uri.parse("https://github.com/SongTube/songtube_link_extension"), mode: LaunchMode.externalApplication);
               },
               child: Container(
                 margin: const EdgeInsets.all(12),
