@@ -496,12 +496,12 @@ class LanguageAr extends Languages {
   String get labelPictureInPicture => 'Picture in Picture';
   @override
   String get labelPictureInPictureDescription =>
-      'Automatically enters PiP mode upon tapping home button while watching a video';
+      'يدخل تلقائيًا في وضع PiP عند النقر على زر الصفحة الرئيسية أثناء مشاهدة مقطع فيديو';
   @override
-  String get labelBackgroundPlaybackAlpha => 'Background Playback (Alpha)';
+  String get labelBackgroundPlaybackAlpha => 'تشغيل الخلفية (ألفا)';
   @override
   String get labelBackgroundPlaybackAlphaDescription =>
-      'Toggle background playback feature. Due to plugin limitations, only current video can be played in the background';
+      'تبديل ميزة تشغيل الخلفية. نظرًا لقيود البرنامج المساعد ، يمكن تشغيل الفيديو الحالي فقط في الخلفية';
   @override
   String get labelBlurBackgroundDescription => 'Add blurred artwork background';
   @override
@@ -688,45 +688,45 @@ class LanguageAr extends Languages {
   String get labelBackupRestored => 'Backup Restored';
   @override
   String get labelRestoreDescription =>
-      'Restore all your data from a backup file';
+      'استعادة جميع البيانات الخاصة بك من ملف النسخ الاحتياطي';
   @override
-  String get labelChannelSuggestions => 'Channel Suggestions';
+  String get labelChannelSuggestions => 'اقتراحات القنوات';
   @override
-  String get labelFetchingChannels => 'Fetching Channels';
+  String get labelFetchingChannels => 'جلب القنوات';
   @override
-  String get labelShareVideo => 'Shared Video';
+  String get labelShareVideo => 'فيديو مشترك';
   @override
-  String get labelShareDescription => 'Share with friends or other platforms';
+  String get labelShareDescription => 'شارك مع الأصدقاء أو منصات أخرى';
   @override
-  String get labelRemoveFromPlaylists => 'Remove from playlist';
+  String get labelRemoveFromPlaylists => 'إزالة من قائمة التشغيل';
   @override
-  String get labelThisActionCannotBeUndone => 'This action cannot be undone';
+  String get labelThisActionCannotBeUndone => 'لا يمكن التراجع عن هذا الإجراء';
   @override
   String get labelAddVideoToPlaylistDescription =>
-      'Add to existing or new video playlist';
+      'أضف إلى قائمة تشغيل الفيديو الحالية أو الجديدة';
   @override
-  String get labelAddToPlaylists => 'Add to playlists';
+  String get labelAddToPlaylists => 'أضف إلى قوائم التشغيل';
   @override
-  String get labelEditableOnceSaved => 'Editable once saved';
+  String get labelEditableOnceSaved => 'قابل للتحرير حفظ مرة واحدة';
   @override
-  String get labelPlaylistRemoved => 'Playlist Removed';
+  String get labelPlaylistRemoved => 'قائمة التشغيل إزالتها';
   @override
-  String get labelPlaylistSaved => 'Playlist Saved';
+  String get labelPlaylistSaved => 'تم حفظ قائمة التشغيل';
   @override
-  String get labelRemoveFromFavorites => 'Remove from favorites';
+  String get labelRemoveFromFavorites => 'إزالة من المفضلة';
   @override
   String get labelRemoveFromFavoritesDescription =>
-      'Remove this video from your favorites';
+      'إزالة هذا الفيديو من المفضلة لديك';
   @override
-  String get labelSaveToFavorites => 'Save to favorites';
+  String get labelSaveToFavorites => 'حفظ في المفضلة';
   @override
   String get labelSaveToFavoritesDescription =>
-      'Add video to your list of favorites';
+      'إضافة الفيديو إلى قائمة المفضلة الخاصة بك';
   @override
-  String get labelSharePlaylist => 'Share Playlist';
+  String get labelSharePlaylist => 'مشاركة قائمة التشغيل';
   @override
   String get labelRemoveThisVideoFromThisList =>
-      'Remove this video from this list';
+      'إزالة هذا الفيديو من هذه القائمة';
   @override
   String get labelEqualizer => 'Equalizer';
   @override
@@ -734,24 +734,24 @@ class LanguageAr extends Languages {
   @override
   String get labelSliders => 'Sliders';
   @override
-  String get labelSave => 'Save';
+  String get labelSave => 'حفظ';
   @override
-  String get labelPlaylistName => 'PlaylistName';
+  String get labelPlaylistName => 'اسم قائمة التشغيل';
   @override
-  String get labelCreateVideoPlaylist => 'Create Video Playlist';
+  String get labelCreateVideoPlaylist => 'إنشاء قائمة تشغيل الفيديو';
   @override
-  String get labelSearchFilters => 'Search Filters';
+  String get labelSearchFilters => 'مرشحات البحث';
   @override
-  String get labelAddToPlaylistDescription => 'Add to existing or new playlist';
+  String get labelAddToPlaylistDescription =>
+      'أضف إلى قائمة التشغيل الحالية أو الجديدة';
   @override
-  String get labelShareSong => 'Share Song';
+  String get labelShareSong => 'مشاركة الأغنية';
   @override
-  String get labelShareSongDescription =>
-      'Share with friends or other platforms';
+  String get labelShareSongDescription => 'شارك مع الأصدقاء أو منصات أخرى';
   @override
   String get labelEditTagsDescription => 'Open ID3 tags and artwork editor';
   @override
-  String get labelContains => 'Contains';
+  String get labelContains => 'يتضمن';
   @override
-  String get labelPlaybackSpeed => 'Playback speed';
+  String get labelPlaybackSpeed => 'سرعة التشغيل';
 }
