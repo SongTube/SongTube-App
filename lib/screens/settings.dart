@@ -16,8 +16,8 @@ class ConfigurationScreen extends StatefulWidget {
   State<ConfigurationScreen> createState() => _ConfigurationScreenState();
 }
 
-class _ConfigurationScreenState extends State<ConfigurationScreen> with TickerProviderStateMixin {
-
+class _ConfigurationScreenState extends State<ConfigurationScreen>
+    with TickerProviderStateMixin {
   // TabBar Controller
   late TabController tabController = TabController(length: 5, vsync: this);
 
@@ -28,7 +28,7 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> with TickerPr
     VideoPlayerSettings(),
     MusicPlayerSettings()
   ];
-  
+
   Widget _tabs() {
     return SizedBox(
       height: kToolbarHeight,
@@ -37,12 +37,19 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> with TickerPr
         controller: tabController,
         isScrollable: true,
         labelColor: Theme.of(context).textTheme.bodyText1!.color,
-        unselectedLabelColor: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.8),
-        labelStyle: smallTextStyle(context).copyWith(fontWeight: FontWeight.w800, letterSpacing: 0.4),
-        unselectedLabelStyle: smallTextStyle(context).copyWith(fontWeight: FontWeight.normal, letterSpacing: 0.4),
+        unselectedLabelColor:
+            Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.8),
+        labelStyle: smallTextStyle(context)
+            .copyWith(fontWeight: FontWeight.w800, letterSpacing: 0.4),
+        unselectedLabelStyle: smallTextStyle(context)
+            .copyWith(fontWeight: FontWeight.normal, letterSpacing: 0.4),
         physics: const BouncingScrollPhysics(),
         indicatorSize: TabBarIndicatorSize.label,
-        indicator: RoundedTabIndicator(color: Theme.of(context).primaryColor, height: 3, radius: 100, bottomMargin: 0),
+        indicator: RoundedTabIndicator(
+            color: Theme.of(context).primaryColor,
+            height: 3,
+            radius: 100,
+            bottomMargin: 0),
         tabs: [
           // General Settings
           Tab(child: Text(Languages.of(context)!.labelGeneral)),
@@ -71,17 +78,15 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> with TickerPr
               children: [
                 const SizedBox(width: 4),
                 IconButton(
-                  icon: Icon(Iconsax.arrow_left, color: Theme.of(context).iconTheme.color),
+                  icon: Icon(Iconsax.arrow_left,
+                      color: Theme.of(context).iconTheme.color),
                   onPressed: () {
                     Navigator.pop(context);
                   },
                 ),
                 const SizedBox(width: 4),
                 Expanded(
-                  child: Text(
-                    "Settings",
-                    style: textStyle(context)
-                  ),
+                  child: Text("Settings", style: textStyle(context)),
                 ),
                 _createLanguageDropDown(context)
               ],
@@ -91,10 +96,9 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> with TickerPr
           Divider(height: 1, color: Theme.of(context).dividerColor),
           Expanded(
             child: TabBarView(
-              physics: const BouncingScrollPhysics(),
-              controller: tabController,
-              children: pages
-            ),
+                physics: const BouncingScrollPhysics(),
+                controller: tabController,
+                children: pages),
           ),
         ],
       ),
@@ -110,35 +114,30 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> with TickerPr
         hint: Padding(
           padding: const EdgeInsets.only(right: 8.0),
           child: Text(
-            Localizations.localeOf(context).languageCode.toUpperCase(),
-            style: subtitleTextStyle(context).copyWith(fontWeight: FontWeight.w900)
-          ),
+              Localizations.localeOf(context).languageCode.toUpperCase(),
+              style: subtitleTextStyle(context)
+                  .copyWith(fontWeight: FontWeight.w900)),
         ),
         icon: const SizedBox(),
         onChanged: (LanguageData? language) {
           if (language == null) return;
           changeLanguage(context, language.languageCode);
         },
-        underline: DropdownButtonHideUnderline(child: Container()),
+        underline: DropdownButtonHideUnderline(child: const SizedBox.shrink()),
         items: supportedLanguages
-          .map<DropdownMenuItem<LanguageData>>(
-            (e) =>
-            DropdownMenuItem<LanguageData>(
-              value: e,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  Text(
-                    e.name,
-                    style: subtitleTextStyle(context)
-                  )
-                ],
+            .map<DropdownMenuItem<LanguageData>>(
+              (e) => DropdownMenuItem<LanguageData>(
+                value: e,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    Text(e.name, style: subtitleTextStyle(context))
+                  ],
+                ),
               ),
-            ),
-          )
-          .toList(),
+            )
+            .toList(),
       ),
     );
   }
-
 }

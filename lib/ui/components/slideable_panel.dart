@@ -4,21 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 
 class SlidablePanel extends StatefulWidget {
-  const SlidablePanel({
-    this.initialState = SlidablePanelStatus.closed,
-    required this.maxHeight,
-    this.minHeight,
-    this.enableBackdrop = false,
-    required this.child,
-    this.backdropColor = Colors.black,
-    this.backdropOpacity = 0.3,
-    this.borderRadius = BorderRadius.zero,
-    this.color,
-    this.padding = 8,
-    this.animatePadding = false,
-    this.collapsedColor,
-    required this.onControllerCreate,
-    super.key});
+  const SlidablePanel(
+      {this.initialState = SlidablePanelStatus.closed,
+      required this.maxHeight,
+      this.minHeight,
+      this.enableBackdrop = false,
+      required this.child,
+      this.backdropColor = Colors.black,
+      this.backdropOpacity = 0.3,
+      this.borderRadius = BorderRadius.zero,
+      this.color,
+      this.padding = 8,
+      this.animatePadding = false,
+      this.collapsedColor,
+      required this.onControllerCreate,
+      super.key});
   final SlidablePanelStatus initialState;
   final double maxHeight;
   final double? minHeight;
@@ -36,23 +36,22 @@ class SlidablePanel extends StatefulWidget {
   State<SlidablePanel> createState() => SlidablePanelState();
 }
 
-class SlidablePanelState extends State<SlidablePanel> with TickerProviderStateMixin {
-
+class SlidablePanelState extends State<SlidablePanel>
+    with TickerProviderStateMixin {
   // Panel Controller
   SlidablePanelController controller = SlidablePanelController();
 
   // Floating Widget values
   late final animationController = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 600),
-    value: widget.initialState == SlidablePanelStatus.closed ? 0.0 : 1.0
-  );
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+      value: widget.initialState == SlidablePanelStatus.closed ? 0.0 : 1.0);
 
   // Scroll Controller
   final _floatingWidgetScrollController = ScrollController();
 
   // Minimum Panel Size
-  late double minHeight = widget.minHeight ?? kToolbarHeight*1.5;
+  late double minHeight = widget.minHeight ?? kToolbarHeight * 1.5;
 
   @override
   void initState() {
@@ -67,11 +66,9 @@ class SlidablePanelState extends State<SlidablePanel> with TickerProviderStateMi
       alignment: Alignment.bottomCenter,
       children: [
         _backdropWidget(),
-        Builder(
-          builder: (context) {
-            return _actualSlidingPanel();
-          }
-        )
+        Builder(builder: (context) {
+          return _actualSlidingPanel();
+        })
       ],
     );
   }
@@ -83,21 +80,23 @@ class SlidablePanelState extends State<SlidablePanel> with TickerProviderStateMi
         builder: (context, child) {
           return Container(
             decoration: BoxDecoration(
-              color: widget.collapsedColor != null
-                ? ColorTween(begin: widget.collapsedColor, end: widget.color ?? Theme.of(context).cardColor).animate(animationController).value
-                : widget.color ?? Theme.of(context).cardColor,
-              borderRadius: widget.borderRadius
-            ),
+                color: widget.collapsedColor != null
+                    ? ColorTween(
+                            begin: widget.collapsedColor,
+                            end: widget.color ?? Theme.of(context).cardColor)
+                        .animate(animationController)
+                        .value
+                    : widget.color ?? Theme.of(context).cardColor,
+                borderRadius: widget.borderRadius),
             margin: widget.animatePadding
-              ? EdgeInsets.all((1 - animationController.value) * widget.padding)
-              : EdgeInsets.all(widget.padding),
+                ? EdgeInsets.all(
+                    (1 - animationController.value) * widget.padding)
+                : EdgeInsets.all(widget.padding),
             child: SizedBox(
-              width: double.infinity,
-              height: (widget.maxHeight *
-                animationController.value) +
-                (minHeight * (1 - animationController.value)),
-              child: child
-            ),
+                width: double.infinity,
+                height: (widget.maxHeight * animationController.value) +
+                    (minHeight * (1 - animationController.value)),
+                child: child),
           );
         },
         child: widget.child,
@@ -106,77 +105,77 @@ class SlidablePanelState extends State<SlidablePanel> with TickerProviderStateMi
   }
 
   Widget _backdropWidget() {
-    return !widget.enableBackdrop ? Container() : AnimatedBuilder(
-      animation: animationController,
-      builder: (context, _) {
-        return Container(
-          height: widget.maxHeight,
-          width: MediaQuery.of(context).size.width,
-          //set color to null so that touch events pass through
-          //to the body when the panel is closed, otherwise,
-          //if a color exists, then touch events won't go through
-          color: animationController.value == 0.0 ? null
-            : widget.backdropColor.withOpacity(
-                widget.backdropOpacity *
-                animationController.value),
-        );
-      }
-    );
+    return !widget.enableBackdrop
+        ? const SizedBox.shrink()
+        : AnimatedBuilder(
+            animation: animationController,
+            builder: (context, _) {
+              return Container(
+                height: widget.maxHeight,
+                width: MediaQuery.of(context).size.width,
+                //set color to null so that touch events pass through
+                //to the body when the panel is closed, otherwise,
+                //if a color exists, then touch events won't go through
+                color: animationController.value == 0.0
+                    ? null
+                    : widget.backdropColor.withOpacity(
+                        widget.backdropOpacity * animationController.value),
+              );
+            });
   }
 
   // returns a gesture detector if panel is used
   // and a listener if panelBuilder is used.
   // this is because the listener is designed only for use with linking the scrolling of
   // panels and using it for panels that don't want to linked scrolling yields odd results
-  Widget _gestureHandler({required Widget child}){
+  Widget _gestureHandler({required Widget child}) {
     return GestureDetector(
-      onVerticalDragUpdate: (DragUpdateDetails dets) => _onGestureSlide(dets.delta.dy),
+      onVerticalDragUpdate: (DragUpdateDetails dets) =>
+          _onGestureSlide(dets.delta.dy),
       onVerticalDragEnd: (DragEndDetails dets) => _onGestureEnd(dets.velocity),
       child: child,
     );
   }
 
   // handles the sliding gesture
-  void _onGestureSlide(double dy){
-
+  void _onGestureSlide(double dy) {
     // only slide the panel if scrolling is not enabled
-    animationController.value -= dy /
-      ((widget.maxHeight) - minHeight);
+    animationController.value -= dy / ((widget.maxHeight) - minHeight);
 
     // if the panel is open and the user hasn't scrolled, we need to determine
     // whether to enable scrolling if the user swipes up, or disable closing and
     // begin to close the panel if the user swipes down
-    if (
-      _isPanelOpen && _floatingWidgetScrollController.hasClients &&
-      _floatingWidgetScrollController.offset <= 0
-    ) {
+    if (_isPanelOpen &&
+        _floatingWidgetScrollController.hasClients &&
+        _floatingWidgetScrollController.offset <= 0) {
       setState(() {});
     }
   }
 
   // handles when user stops sliding
-  void _onGestureEnd(Velocity v){
+  void _onGestureEnd(Velocity v) {
     double minFlingVelocity = 365.0;
 
     //let the current animation finish before starting a new one
-    if(animationController.isAnimating) return;
+    if (animationController.isAnimating) return;
 
     // if scrolling is allowed and the panel is open, we don't want to close
     // the panel if they swipe up on the scrollable
-    if(_isPanelOpen) return;
+    if (_isPanelOpen) return;
 
     //check if the velocity is sufficient to constitute fling to end
-    double visualVelocity = -v.pixelsPerSecond.dy /
-      ((widget.maxHeight) - minHeight);
+    double visualVelocity =
+        -v.pixelsPerSecond.dy / ((widget.maxHeight) - minHeight);
 
     // get minimum distances to figure out where the panel is at
     double d2Close = animationController.value;
     double d2Open = 1 - animationController.value;
-    double d2Snap = (3 -animationController.value).abs(); // large value if null results in not every being the min
+    double d2Snap = (3 - animationController.value)
+        .abs(); // large value if null results in not every being the min
     double minDistance = min(d2Close, min(d2Snap, d2Open));
 
     // check if velocity is sufficient for a fling
-    if(v.pixelsPerSecond.dy.abs() >= minFlingVelocity){
+    if (v.pixelsPerSecond.dy.abs() >= minFlingVelocity) {
       animationController.fling(velocity: visualVelocity);
       return;
     }
@@ -191,17 +190,16 @@ class SlidablePanelState extends State<SlidablePanel> with TickerProviderStateMi
     }
   }
 
-  void _flingPanelToPosition(double targetPos, double velocity){
+  void _flingPanelToPosition(double targetPos, double velocity) {
     final Simulation simulation = SpringSimulation(
-      SpringDescription.withDampingRatio(
-        mass: 1.0,
-        stiffness: 500.0,
-        ratio: 1.0,
-      ),
-      animationController.value,
-      targetPos,
-      velocity
-    );
+        SpringDescription.withDampingRatio(
+          mass: 1.0,
+          stiffness: 500.0,
+          ratio: 1.0,
+        ),
+        animationController.value,
+        targetPos,
+        velocity);
 
     animationController.animateWith(simulation);
   }
@@ -211,25 +209,28 @@ class SlidablePanelState extends State<SlidablePanel> with TickerProviderStateMi
   //---------------------------------
 
   //close the panel
-  Future<void> _close(){
+  Future<void> _close() {
     return animationController.fling(velocity: -1.0);
   }
 
   //open the panel
-  Future<void> _open(){
+  Future<void> _open() {
     return animationController.fling(velocity: 1.0);
   }
 
   //animate the panel position to value - must
   //be between 0.0 and 1.0
-  Future<void> _animatePanelToPosition(double value, {Duration duration = const Duration(milliseconds: 200), Curve curve = Curves.linear}){
+  Future<void> _animatePanelToPosition(double value,
+      {Duration duration = const Duration(milliseconds: 200),
+      Curve curve = Curves.linear}) {
     assert(0.0 <= value && value <= 1.0);
-    return animationController.animateTo(value, duration: duration, curve: curve);
+    return animationController.animateTo(value,
+        duration: duration, curve: curve);
   }
 
   //set the panel position to value - must
   //be between 0.0 and 1.0
-  set _panelPosition(double value){
+  set _panelPosition(double value) {
     assert(0.0 <= value && value <= 1.0);
     animationController.value = value;
   }
@@ -250,13 +251,12 @@ class SlidablePanelState extends State<SlidablePanel> with TickerProviderStateMi
   //returns whether or not the
   //panel is closed
   bool get _isPanelClosed => animationController.value == 0.0;
-
 }
 
-class SlidablePanelController{
+class SlidablePanelController {
   SlidablePanelState? _state;
 
-  void _addState(SlidablePanelState panelState){
+  void _addState(SlidablePanelState panelState) {
     _state = panelState;
   }
 
@@ -272,14 +272,14 @@ class SlidablePanelController{
   AnimationController get animationController => _state!.animationController;
 
   /// Closes the sliding panel to its collapsed state (i.e. to the  minHeight)
-  Future<void> close(){
+  Future<void> close() {
     assert(isAttached, "PanelController must be attached to a SlidingUpPanel");
     return _state!._close();
   }
 
   /// Opens the sliding panel fully
   /// (i.e. to the maxHeight)
-  Future<void> open(){
+  Future<void> open() {
     assert(isAttached, "PanelController must be attached to a SlidingUpPanel");
     return _state!._open();
   }
@@ -289,16 +289,19 @@ class SlidablePanelController{
   /// where 0.0 is fully collapsed and 1.0 is completely open.
   /// (optional) duration specifies the time for the animation to complete
   /// (optional) curve specifies the easing behavior of the animation.
-  Future<void> animatePanelToPosition(double value, {Duration duration = const Duration(milliseconds: 200), Curve curve = Curves.linear}){
+  Future<void> animatePanelToPosition(double value,
+      {Duration duration = const Duration(milliseconds: 200),
+      Curve curve = Curves.linear}) {
     assert(isAttached, "PanelController must be attached to a SlidingUpPanel");
     assert(0.0 <= value && value <= 1.0);
-    return _state!._animatePanelToPosition(value, duration: duration, curve: curve);
+    return _state!
+        ._animatePanelToPosition(value, duration: duration, curve: curve);
   }
 
   /// Sets the panel position (without animation).
   /// The value must between 0.0 and 1.0
   /// where 0.0 is fully collapsed and 1.0 is completely open.
-  set panelPosition(double value){
+  set panelPosition(double value) {
     assert(isAttached, "PanelController must be attached to a SlidingUpPanel");
     assert(0.0 <= value && value <= 1.0);
     _state!._panelPosition = value;
@@ -310,32 +313,31 @@ class SlidablePanelController{
   /// as a decimal between 0.0 and 1.0
   /// where 0.0 is fully collapsed and
   /// 1.0 is full open.
-  double get panelPosition{
+  double get panelPosition {
     assert(isAttached, "PanelController must be attached to a SlidingUpPanel");
     return _state!._panelPosition;
   }
 
   /// Returns whether or not the panel is
   /// currently animating.
-  bool get isPanelAnimating{
+  bool get isPanelAnimating {
     assert(isAttached, "PanelController must be attached to a SlidingUpPanel");
     return _state!._isPanelAnimating;
   }
 
   /// Returns whether or not the
   /// panel is open.
-  bool get isPanelOpen{
+  bool get isPanelOpen {
     assert(isAttached, "PanelController must be attached to a SlidingUpPanel");
     return _state!._isPanelOpen;
   }
 
   /// Returns whether or not the
   /// panel is closed.
-  bool get isPanelClosed{
+  bool get isPanelClosed {
     assert(isAttached, "PanelController must be attached to a SlidingUpPanel");
     return _state!._isPanelClosed;
   }
-
 }
 
 enum SlidablePanelStatus { open, closed }
