@@ -1,7 +1,6 @@
 import 'package:songtube/languages/languages.dart';
 
 class LanguageAr extends Languages {
-
   // Introduction Screens
   @override
   String get labelAppWelcome => "أهلاً بك في ";
@@ -13,8 +12,8 @@ class LanguageAr extends Languages {
   String get labelNext => "التالي";
   @override
   String get labelExternalAccessJustification =>
-    "أحتاج الوصول إلى ذاكرة التخزين الداخلية الخاصة بجهازك لحفظ كل" +
-    "مقاطع الفيديو والموسيقى الخاصة بك";
+      "أحتاج الوصول إلى ذاكرة التخزين الداخلية الخاصة بجهازك لحفظ كل"
+      "مقاطع الفيديو والموسيقى الخاصة بك";
   @override
   String get labelAppCustomization => "تخصيص";
   @override
@@ -25,7 +24,7 @@ class LanguageAr extends Languages {
   String get labelIntroductionIsOver => "تم الإعداد ";
   @override
   String get labelEnjoy => "استمتع";
-  @override 
+  @override
   String get labelGoHome => "الذهاب للقائمة الرئيسية";
 
   // Bottom Navigation Bar
@@ -44,12 +43,12 @@ class LanguageAr extends Languages {
   @override
   String get labelQuickSearch => "بحث سريع...";
   @override
-  String get labelTagsEditor => "إشارة\محرر";
+  String get labelTagsEditor => "إشارةمحرر";
   @override
-  String get labelEditArtwork => "تعديل\الأعمال الفنية";
+  String get labelEditArtwork => "تعديلالأعمال الفنية";
   @override
   String get labelDownloadAll => "تحميل الكل";
-  @override 
+  @override
   String get labelLoadingVideos => "يتم تحميل الفيديوهات";
   @override
   String get labelHomePage => "الصفحة الرئيسية";
@@ -94,8 +93,8 @@ class LanguageAr extends Languages {
   @override
   String get labelSavingFile => "حفظ الملف...";
   @override
-  String get labelAndroid11FixNeeded => 
-"خطأ ،  أندرويد 11 يجب إصلاحه ، تحقق من الإعدادات";
+  String get labelAndroid11FixNeeded =>
+      "خطأ ،  أندرويد 11 يجب إصلاحه ، تحقق من الإعدادات";
   @override
   String get labelErrorSavingDownload => "تعذر حفظ التنزيل ، تحقق من الأذونات";
   @override
@@ -141,15 +140,14 @@ class LanguageAr extends Languages {
   @override
   String get labelNoMediaYet => "لا توجد وسائط حتى الآن";
   @override
-  String get labelNoMediaYetJustification => "كل الوسائط " +
-    "ستظهر هنا";
+  String get labelNoMediaYetJustification => "كل الوسائط " "ستظهر هنا";
   @override
   String get labelSearchMedia => "بحث في الوسائط ...";
   @override
   String get labelDeleteSong => "حذف الأغنية";
   @override
-  String get labelNoPermissionJustification => "عرض الوسائط الخاصة بك عن طريق" + "\n" +
-    "منح إذن التخزين";
+  String get labelNoPermissionJustification =>
+      "عرض الوسائط الخاصة بك عن طريق\nمنح إذن التخزين";
   @override
   String get labelGettingYourMedia => "عرض الوسائط الخاصة بك هنا ...";
   @override
@@ -174,17 +172,17 @@ class LanguageAr extends Languages {
   String get labelUseSystemTheme => "استخدم سمة النظام";
   @override
   String get labelUseSystemThemeJustification =>
-    "تفعيل / تعطيل المظهر التلقائي";
+      "تفعيل / تعطيل المظهر التلقائي";
   @override
   String get labelEnableDarkTheme => "تفعيل المظهر الداكن";
   @override
   String get labelEnableDarkThemeJustification =>
-    "تفعيل المظهر الداكن إفتراضياً";
+      "تفعيل المظهر الداكن إفتراضياً";
   @override
   String get labelEnableBlackTheme => "تفعيل المظهر الداكن";
   @override
   String get labelEnableBlackThemeJustification =>
-    "تفعيل تصحيح مظهر الاسود الداكن";
+      "تفعيل تصحيح مظهر الاسود الداكن";
   @override
   String get labelAccentColor => "لون التمييز";
   @override
@@ -192,13 +190,12 @@ class LanguageAr extends Languages {
   @override
   String get labelAudioFolder => "مجلد الصوت";
   @override
-  String get labelAudioFolderJustification => "اختر مجلداً لـ " +
-    "تنزيلات الصوت";
+  String get labelAudioFolderJustification => "اختر مجلداً لـ " "تنزيلات الصوت";
   @override
   String get labelVideoFolder => "مجلد الفيديو";
   @override
-  String get labelVideoFolderJustification => "اختر مجلدًا لـ " +
-    "تنزيلات الفيديو";
+  String get labelVideoFolderJustification =>
+      "اختر مجلدًا لـ " "تنزيلات الفيديو";
   @override
   String get labelAlbumFolder => "مجلد الألبوم";
   @override
@@ -206,16 +203,18 @@ class LanguageAr extends Languages {
   @override
   String get labelDeleteCache => "حذف ذاكرة التخزين المؤقت";
   @override
-  String get labelDeleteCacheJustification => "امسح ذاكرة التخزين المؤقت بالضبط";
+  String get labelDeleteCacheJustification =>
+      "امسح ذاكرة التخزين المؤقت بالضبط";
   @override
   String get labelAndroid11Fix => "إصلاح أندرويد 11";
   @override
-  String get labelAndroid11FixJustification => "يعمل على إصلاح مشكلات التنزيل " +
-    "Android 10 & 11";
+  String get labelAndroid11FixJustification =>
+      "يعمل على إصلاح مشكلات التنزيل " "Android 10 & 11";
   @override
   String get labelBackup => "نسخ احتياطي";
   @override
-  String get labelBackupJustification => "قم بعمل نسخة احتياطية من مكتبة الوسائط الخاصة بك";
+  String get labelBackupJustification =>
+      "قم بعمل نسخة احتياطية من مكتبة الوسائط الخاصة بك";
   @override
   String get labelRestore => "استعادة";
   @override
@@ -225,7 +224,8 @@ class LanguageAr extends Languages {
   @override
   String get labelBackupCompleted => "اكتمل النسخ الاحتياطي";
   @override
-  String get labelRestoreNotFound => "لم يتم العثور على نسخة احتياطية للاستعادة";
+  String get labelRestoreNotFound =>
+      "لم يتم العثور على نسخة احتياطية للاستعادة";
   @override
   String get labelRestoreCompleted => "اكتملت الاستعادة";
   @override
@@ -251,13 +251,10 @@ class LanguageAr extends Languages {
 
   // Android 10 or 11 Detected Dialog
   @override
-  String get labelAndroid11Detected =>
- " تم اكتشاف أن جهازك أندرويد 10 أو 11";
+  String get labelAndroid11Detected => " تم اكتشاف أن جهازك أندرويد 10 أو 11";
   @override
-  String get labelAndroid11DetectedJustification => "للتأكد من صحة ملف " +
-    "أداء هذا التطبيق التنزيلات ، على أندرويد 10 و 11 ، والوصول إلى الجميع " +
-    "قد تكون هناك حاجة إلى إذن الملفات ، سيكون هذا مؤقتًا وغير مطلوب " +
-    "في التحديثات المستقبلية ، يمكنك أيضًا تطبيق هذا الإصلاح في الإعدادات.";
+  String get labelAndroid11DetectedJustification =>
+      "للتأكد من صحة ملف أداء هذا التطبيق التنزيلات ، على أندرويد 10 و 11 ، والوصول إلى الجميع قد تكون هناك حاجة إلى إذن الملفات ، سيكون هذا مؤقتًا وغير مطلوب في التحديثات المستقبلية ، يمكنك أيضًا تطبيق هذا الإصلاح في الإعدادات.";
 
   // Music Player
   @override
@@ -281,31 +278,22 @@ class LanguageAr extends Languages {
 
   // Tags Pages
   @override
-  String get labelAudioFormatNotCompatible =>
-    "تنسيق الصوت غير متوافق";
+  String get labelAudioFormatNotCompatible => "تنسيق الصوت غير متوافق";
   @override
   String get labelNotSpecified => "غير محدد";
   @override
-  String get labelPerformAutomaticTagging => 
-    "قم بإجراء وضع العلامات التلقائي";
+  String get labelPerformAutomaticTagging => "قم بإجراء وضع العلامات التلقائي";
   @override
-  String get labelSelectTagsfromMusicBrainz => 
-    "حدد العلامات من Music Brainz";
+  String get labelSelectTagsfromMusicBrainz => "حدد العلامات من Music Brainz";
   @override
-  String get labelSelectArtworkFromDevice =>
-    "اختر صورة للألبوم من الجهاز";
+  String get labelSelectArtworkFromDevice => "اختر صورة للألبوم من الجهاز";
 
   // Telegram Join Channel Dialog
   @override
   String get labelJoinTelegramChannel => "انضم إلى قناتنا على تليگرام!";
   @override
   String get labelJoinTelegramJustification =>
-    "هل تحب SongTube؟  يرجى الانضمام إلى قناة قناتنا سوف تجد " +
-    "تحديثات, معلومات, مطورين, روابط مجموعتنا عبر مواقع التواصل الإجتماعي ." +
-    "\n\n" +
-    "في حال كان لديك مشكلة أو توصية رائعة تدور في ذهنك, " +
-    "يرجى الانضمام إلى المجموعة من القناة وتدوينها!  لكن ضع في اعتبارك " +
-    "يمكنك التحدث باللغة الإنجليزية فقط ، وشكراً!";
+      "هل تحب SongTube؟  يرجى الانضمام إلى قناة قناتنا سوف تجد تحديثات, معلومات, مطورين, روابط مجموعتنا عبر مواقع التواصل الإجتماعي .\n\nفي حال كان لديك مشكلة أو توصية رائعة تدور في ذهنك, يرجى الانضمام إلى المجموعة من القناة وتدوينها!  لكن ضع في اعتبارك يمكنك التحدث باللغة الإنجليزية فقط ، وشكراً!";
   @override
   String get labelRemindLater => "تذكير في وقت لاحق";
 
@@ -367,165 +355,190 @@ class LanguageAr extends Languages {
 
   // Other Translations
   @override
-  String get labelNoFavoriteVideos => 'No Favorite Videos';
+  String get labelNoFavoriteVideos => 'لا توجد مقاطع فيديو مفضلة';
   @override
-  String get labelNoFavoriteVideosDescription => 'Search for videos and save them as favorites. They will appear here';
+  String get labelNoFavoriteVideosDescription =>
+      'ابحث عن مقاطع الفيديو واحفظها كمفضلة. ستظهر هنا';
   @override
-  String get labelNoSubscriptions => 'No Subscriptions';
+  String get labelNoSubscriptions => 'لا يوجد إشتراكات';
   @override
-  String get labelNoSubscriptionsDescription => 'Tap the button above to show suggested Channels!';
+  String get labelNoSubscriptionsDescription =>
+      'اضغط على الزر أعلاه لإظهار القنوات المقترحة!';
   @override
-  String get labelNoPlaylists => 'No Playlists';
+  String get labelNoPlaylists => 'لا توجد قوائم تشغيل متاحة';
   @override
-  String get labelNoPlaylistsDescription => 'Search for videos or playlists and save them. They will appear here';
+  String get labelNoPlaylistsDescription =>
+      'ابحث عن مقاطع الفيديو أو قوائم التشغيل واحفظها. ستظهر هنا';
   @override
-  String get labelSearch => 'Search';
+  String get labelSearch => 'بحث';
   @override
-  String get labelSubscriptions => 'Subscriptions';
+  String get labelSubscriptions => 'الإشتراكات';
   @override
-  String get labelNoDownloadsCanceled => 'No Downloads Canceled';
+  String get labelNoDownloadsCanceled => 'لا توجد تنزيلات تم إلغاؤها';
   @override
-  String get labelNoDownloadsCanceledDescription => 'Good news! But if you cancel or something goes wrong with the download, you can check from here';
+  String get labelNoDownloadsCanceledDescription =>
+      'أخبار جيدة! إذا قمت بالإلغاء أو حدث خطأ ما في التنزيل ، فيمكنك التحقق من هنا';
   @override
-  String get labelNoDownloadsYet => 'No Downloads Yet';
+  String get labelNoDownloadsYet => 'لا توجد تنزيلات حتى الآن';
   @override
-  String get labelNoDownloadsYetDescription => 'Go home, search for something to download or wait for the queue!';
+  String get labelNoDownloadsYetDescription =>
+      'اذهب إلى الرئيسية ، ابحث عن شيء لتنزيله ، أو انتظر قائمة الانتظار!';
   @override
-  String get labelYourQueueIsEmpty => 'Your queue is empty';
+  String get labelYourQueueIsEmpty => 'قائمة الانتظار الخاصة بك فارغة';
   @override
-  String get labelYourQueueIsEmptyDescription => 'Go home and search for something to download!';
+  String get labelYourQueueIsEmptyDescription =>
+      'اذهب إلى الرئيسية وابحث عن شيء لتنزيله!';
   @override
-  String get labelQueue => 'Queue';
+  String get labelQueue => 'قائمة الانتظار';
   @override
-  String get labelSearchDownloads => 'Search Downloads';
+  String get labelSearchDownloads => 'البحث في التنزيلات';
   @override
-  String get labelWatchHistory => 'Watch History';
+  String get labelWatchHistory => 'مشاهدة التاريخ';
   @override
-  String get labelWatchHistoryDescription => 'Look at which videos you have seen';
+  String get labelWatchHistoryDescription =>
+      'انظر إلى مقاطع الفيديو التي شاهدتها';
   @override
-  String get labelBackupAndRestore => 'Backup & Restore';
+  String get labelBackupAndRestore => 'استرجاع البيانات';
   @override
-  String get labelBackupAndRestoreDescription => 'Save or resture all of your local data';
+  String get labelBackupAndRestoreDescription =>
+      'احفظ أو استعد جميع بياناتك المحلية';
   @override
-  String get labelSongtubeLink => 'SongTube Link';
+  String get labelSongtubeLink => 'رابط SongTube';
   @override
-  String get labelSongtubeLinkDescription => 'Allow SongTube browser extension to detect this device, long press to learn more';
+  String get labelSongtubeLinkDescription =>
+      'Allow SongTube browser extension to detect this device, long press to learn more';
   @override
   String get labelSupportDevelopment => 'Support Development';
   @override
-  String get labelSocialLinks => 'Social Links';
+  String get labelSocialLinks => 'روابط اجتماعية';
   @override
-  String get labelSeeMore => 'See more';
+  String get labelSeeMore => 'شاهد المزيد';
   @override
-  String get labelMostPlayed => 'Most played';
+  String get labelMostPlayed => 'الأكثر مشاهدة';
   @override
-  String get labelNoPlaylistsYet => 'No Playlists Yet';
+  String get labelNoPlaylistsYet => 'لا توجد قوائم تشغيل حتى الآن';
   @override
-  String get labelNoPlaylistsYetDescription => 'You can create a playlist from your recents, music, albums or artists';
+  String get labelNoPlaylistsYetDescription =>
+      'يمكنك إنشاء قائمة تشغيل من أحدث الموسيقى أو الألبومات أو الفنانين';
   @override
-  String get labelNoSearchResults => 'No search results';
+  String get labelNoSearchResults => 'لا توجد نتائج للبحث';
   @override
-  String get labelSongResults => 'Song results';
+  String get labelSongResults => 'نتائج الأغنية';
   @override
-  String get labelAlbumResults => 'Album results';
+  String get labelAlbumResults => 'نتائج الألبوم';
   @override
-  String get labelArtistResults => 'Artist results';
+  String get labelArtistResults => 'نتائج الفنانين';
   @override
-  String get labelSearchAnything => 'Search anything';
+  String get labelSearchAnything => 'ابحث عن أي شيء';
   @override
-  String get labelRecents => 'Recents';
+  String get labelRecents => 'الأحدث';
   @override
-  String get labelFetchingSongs => 'Fetching Songs';
+  String get labelFetchingSongs => 'جلب الأغاني';
   @override
-  String get labelPleaseWaitAMoment => 'Please wait a moment';
+  String get labelPleaseWaitAMoment => 'فضلا انتظر لحظة';
   @override
-  String get labelWeAreDone => 'We are done';
+  String get labelWeAreDone => 'لقد إنتهينا';
   @override
-  String get labelEnjoyTheApp => 'Enjoy the\nApp';
+  String get labelEnjoyTheApp => 'إستمتع بالتطبيق !';
   @override
-  String get labelSongtubeIsBackDescription => 'SongTube is back with a cleaner look and set of features, have fun with your music!';
+  String get labelSongtubeIsBackDescription =>
+      'عاد SongTube بمظهر أنظف ومجموعة من الميزات ، استمتع بموسيقاك!';
   @override
-  String get labelLetsGo => 'Let\'s go';
+  String get labelLetsGo => 'لنبدأ';
   @override
-  String get labelPleaseWait => 'Please wait';
+  String get labelPleaseWait => 'انتظر من فضلك';
   @override
-  String get labelPoweredBy => 'Powered by';
+  String get labelPoweredBy => 'مدعوم من ';
   @override
-  String get labelGetStarted => 'Get Started';
+  String get labelGetStarted => 'البدء';
   @override
-  String get labelAllowUsToHave => 'Allow us to have';
+  String get labelAllowUsToHave => 'اسمح لنا بالحصول على';
   @override
-  String get labelStorageRead => 'Storage\nRead';
+  String get labelStorageRead => 'قراءة التخزين';
   @override
-  String get labelStorageReadDescription => 'This will scan your music, extract high quality artworks and allow you to personalize your music';
+  String get labelStorageReadDescription =>
+      'سيؤدي هذا إلى فحص موسيقاك  واستخراج عمل فني عالي الجودة ويسمح لك بتخصيص موسيقاك';
   @override
-  String get labelContinue => 'Continue';
+  String get labelContinue => 'إستمر';
   @override
-  String get labelAllowStorageRead => 'Allow Storage Read';
+  String get labelAllowStorageRead => 'السماح بقراءة التخزين';
   @override
-  String get labelSelectYourPreferred => 'Select your preferred';
+  String get labelSelectYourPreferred => 'حدد المفضل لديك';
   @override
   String get labelLight => 'Light';
   @override
   String get labelDark => 'Dark';
   @override
-  String get labelSimultaneousDownloads => 'Simultaneous Downloads';
+  String get labelSimultaneousDownloads => 'التنزيلات في وقت واحد';
   @override
-  String get labelSimultaneousDownloadsDescription => 'Define how many downloads can happen at the same time';
+  String get labelSimultaneousDownloadsDescription =>
+      'حدد عدد التنزيلات التي يمكن أن تحدث في نفس الوقت';
   @override
   String get labelItems => 'Items';
   @override
-  String get labelInstantDownloadFormat => 'Instant Download';
+  String get labelInstantDownloadFormat => 'تنزيل فوري';
   @override
-  String get labelInstantDownloadFormatDescription => 'Change the audio format for instant downloads';
+  String get labelInstantDownloadFormatDescription =>
+      'قم بتغيير تنسيق الصوت للتنزيل الفوري';
   @override
-  String get labelCurrent => 'Current';
+  String get labelCurrent => 'حالي';
   @override
   String get labelPauseWatchHistory => 'Pause Watch History';
   @override
-  String get labelPauseWatchHistoryDescription => 'While paused, videos are not saved into the watch history list';
+  String get labelPauseWatchHistoryDescription =>
+      'أثناء الإيقاف المؤقت ، لا يتم حفظ مقاطع الفيديو في قائمة محفوظات المشاهدة';
   @override
   String get labelLockNavigationBar => 'Lock Navigation Bar';
   @override
-  String get labelLockNavigationBarDescription => 'Locks the navigation bar from hiding and showing automatically on scroll';
+  String get labelLockNavigationBarDescription =>
+      'Locks the navigation bar from hiding and showing automatically on scroll';
   @override
   String get labelPictureInPicture => 'Picture in Picture';
   @override
-  String get labelPictureInPictureDescription => 'Automatically enters PiP mode upon tapping home button while watching a video';
+  String get labelPictureInPictureDescription =>
+      'Automatically enters PiP mode upon tapping home button while watching a video';
   @override
   String get labelBackgroundPlaybackAlpha => 'Background Playback (Alpha)';
   @override
-  String get labelBackgroundPlaybackAlphaDescription => 'Toggle background playback feature. Due to plugin limitations, only current video can be played in the background';
+  String get labelBackgroundPlaybackAlphaDescription =>
+      'Toggle background playback feature. Due to plugin limitations, only current video can be played in the background';
   @override
   String get labelBlurBackgroundDescription => 'Add blurred artwork background';
   @override
   String get labelBlurIntensity => 'Blur Intensity';
   @override
-  String get labelBlurIntensityDescription => 'Change the blur intensity of the artwork background';
+  String get labelBlurIntensityDescription =>
+      'Change the blur intensity of the artwork background';
   @override
   String get labelBackdropOpacity => 'Backdrop Opacity';
   @override
-  String get labelBackdropOpacityDescription => 'Change the colored backdrop opacity';
+  String get labelBackdropOpacityDescription =>
+      'Change the colored backdrop opacity';
   @override
   String get labelArtworkShadowOpacity => 'Artwork Shadow Opacity';
   @override
-  String get labelArtworkShadowOpacityDescription => 'Change the artwork shadow intensity of the music player';
+  String get labelArtworkShadowOpacityDescription =>
+      'Change the artwork shadow intensity of the music player';
   @override
   String get labelArtworkShadowRadius => 'Artwork Shadow Radius';
   @override
-  String get labelArtworkShadowRadiusDescription => 'Change the artwork shadow radius of the music player';
+  String get labelArtworkShadowRadiusDescription =>
+      'Change the artwork shadow radius of the music player';
   @override
   String get labelArtworkScaling => 'Artwork Scaling';
   @override
-  String get labelArtworkScalingDescription => 'Scale out the music player artwork & background images';
+  String get labelArtworkScalingDescription =>
+      'Scale out the music player artwork & background images';
   @override
   String get labelBackgroundParallax => 'Background Parallax';
   @override
-  String get labelBackgroundParallaxDescription =>  'Enable/Disable background image parallax effect';
+  String get labelBackgroundParallaxDescription =>
+      'Enable/Disable background image parallax effect';
   @override
   String get labelRestoreThumbnails => 'Restore Thumbnails';
   @override
-  String get labelRestoreThumbnailsDescription => 'Force thumbnails and artwork generation process';
+  String get labelRestoreThumbnailsDescription =>
+      'Force thumbnails and artwork generation process';
   @override
   String get labelRestoringArtworks => 'Restoring artworks';
   @override
@@ -533,27 +546,33 @@ class LanguageAr extends Languages {
   @override
   String get labelHomeScreen => 'Home Screen';
   @override
-  String get labelHomeScreenDescription => 'Change the default landing screen when you open the app';
+  String get labelHomeScreenDescription =>
+      'Change the default landing screen when you open the app';
   @override
   String get labelDefaultMusicPage => 'Default Music Page';
   @override
-  String get labelDefaultMusicPageDescription => 'Change the default page for the Music Page';
+  String get labelDefaultMusicPageDescription =>
+      'Change the default page for the Music Page';
   @override
   String get labelAbout => 'About';
   @override
   String get labelConversionRequired => 'Conversion Required';
   @override
-  String get labelConversionRequiredDescription =>  'This song format is incompatible with the ID3 Tags editor. The app will automatically convert this song to AAC (m4a) to sort out this issue.';
+  String get labelConversionRequiredDescription =>
+      'This song format is incompatible with the ID3 Tags editor. The app will automatically convert this song to AAC (m4a) to sort out this issue.';
   @override
   String get labelPermissionRequired => 'Permission Required';
   @override
-  String get labelPermissionRequiredDescription => 'All file access permission is required for SongTube to edit any song on your device';
+  String get labelPermissionRequiredDescription =>
+      'All file access permission is required for SongTube to edit any song on your device';
   @override
   String get labelApplying => 'Applying';
   @override
-  String get labelConvertingDescription => 'Re-encoding this song into AAC (m4a) format';
+  String get labelConvertingDescription =>
+      'Re-encoding this song into AAC (m4a) format';
   @override
-  String get labelWrittingTagsAndArtworkDescription => 'Applying new tags to this song';
+  String get labelWrittingTagsAndArtworkDescription =>
+      'Applying new tags to this song';
   @override
   String get labelApply => 'Apply';
   @override
@@ -569,7 +588,8 @@ class LanguageAr extends Languages {
   @override
   String get labelClearWatchHistory => 'Clear Watch History';
   @override
-  String get labelClearWatchHistoryDescription =>  'You\'re about to delete all your watch history videos, this action cannot be undone, proceed?';
+  String get labelClearWatchHistoryDescription =>
+      'You\'re about to delete all your watch history videos, this action cannot be undone, proceed?';
   @override
   String get labelDelete => 'Delete';
   @override
@@ -593,21 +613,26 @@ class LanguageAr extends Languages {
   @override
   String get labelEnableSegmentedDownload => 'Enable Segmented Download';
   @override
-  String get labelEnableSegmentedDownloadDescription => 'This will download the whole audio file and then split it into the various enabled segments (or audio tracks) from the list below';
+  String get labelEnableSegmentedDownloadDescription =>
+      'This will download the whole audio file and then split it into the various enabled segments (or audio tracks) from the list below';
   @override
   String get labelCreateMusicPlaylist => 'Create Music Playlist';
   @override
-  String get labelCreateMusicPlaylistDescription => 'Create music playlist from all downloaded and saved audio segments';
+  String get labelCreateMusicPlaylistDescription =>
+      'Create music playlist from all downloaded and saved audio segments';
   @override
   String get labelApplyTags => 'Apply Tags';
   @override
-  String get labelApplyTagsDescription => 'Extract tags from MusicBrainz for all segments';
+  String get labelApplyTagsDescription =>
+      'Extract tags from MusicBrainz for all segments';
   @override
   String get labelLoading => 'Loading';
   @override
-  String get labelMusicDownloadDescription => 'Select quality, convert and download audio only';
+  String get labelMusicDownloadDescription =>
+      'Select quality, convert and download audio only';
   @override
-  String get labelVideoDownloadDescription =>  'Choose a video quality from the list and download it';
+  String get labelVideoDownloadDescription =>
+      'Choose a video quality from the list and download it';
   @override
   String get labelInstantDescription => 'Instantly start downloading as music';
   @override
@@ -655,13 +680,15 @@ class LanguageAr extends Languages {
   @override
   String get labelAddVideoToPlaylist => 'Add video to playlist';
   @override
-  String get labelBackupDescription => 'Backup all of your local data into a single file that can be used to restore later';
+  String get labelBackupDescription =>
+      'Backup all of your local data into a single file that can be used to restore later';
   @override
   String get labelBackupCreated => 'Backup Created';
   @override
   String get labelBackupRestored => 'Backup Restored';
   @override
-  String get labelRestoreDescription => 'Restore all your data from a backup file';
+  String get labelRestoreDescription =>
+      'Restore all your data from a backup file';
   @override
   String get labelChannelSuggestions => 'Channel Suggestions';
   @override
@@ -675,7 +702,8 @@ class LanguageAr extends Languages {
   @override
   String get labelThisActionCannotBeUndone => 'This action cannot be undone';
   @override
-  String get labelAddVideoToPlaylistDescription => 'Add to existing or new video playlist';
+  String get labelAddVideoToPlaylistDescription =>
+      'Add to existing or new video playlist';
   @override
   String get labelAddToPlaylists => 'Add to playlists';
   @override
@@ -687,15 +715,18 @@ class LanguageAr extends Languages {
   @override
   String get labelRemoveFromFavorites => 'Remove from favorites';
   @override
-  String get labelRemoveFromFavoritesDescription => 'Remove this video from your favorites';
+  String get labelRemoveFromFavoritesDescription =>
+      'Remove this video from your favorites';
   @override
   String get labelSaveToFavorites => 'Save to favorites';
   @override
-  String get labelSaveToFavoritesDescription => 'Add video to your list of favorites';
+  String get labelSaveToFavoritesDescription =>
+      'Add video to your list of favorites';
   @override
   String get labelSharePlaylist => 'Share Playlist';
   @override
-  String get labelRemoveThisVideoFromThisList => 'Remove this video from this list';
+  String get labelRemoveThisVideoFromThisList =>
+      'Remove this video from this list';
   @override
   String get labelEqualizer => 'Equalizer';
   @override
@@ -715,7 +746,8 @@ class LanguageAr extends Languages {
   @override
   String get labelShareSong => 'Share Song';
   @override
-  String get labelShareSongDescription => 'Share with friends or other platforms';
+  String get labelShareSongDescription =>
+      'Share with friends or other platforms';
   @override
   String get labelEditTagsDescription => 'Open ID3 tags and artwork editor';
   @override

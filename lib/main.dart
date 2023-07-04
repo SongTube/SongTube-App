@@ -7,10 +7,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:receive_intent/receive_intent.dart' as intent;
-import 'package:songtube/providers/app_settings.dart';
 import 'package:songtube/internal/global.dart';
 import 'package:songtube/internal/models/song_item.dart';
 import 'package:songtube/languages/languages.dart';
+import 'package:songtube/providers/app_settings.dart';
 import 'package:songtube/providers/content_provider.dart';
 import 'package:songtube/providers/download_provider.dart';
 import 'package:songtube/providers/media_provider.dart';
@@ -58,7 +58,7 @@ void main() async {
   //   SystemChrome.setSystemUIOverlayStyle(
   //     const SystemUiOverlayStyle(
   //       systemNavigationBarColor: Colors.transparent,
-  //       statusBarColor: Colors.transparent 
+  //       statusBarColor: Colors.transparent
   //     )
   //   );
   // }
@@ -80,7 +80,6 @@ class SongTube extends StatefulWidget {
 }
 
 class _SongTubeState extends State<SongTube> {
-
   // Intent
   intent.Intent? get initIntent => widget.initIntent;
 
@@ -96,74 +95,70 @@ class _SongTubeState extends State<SongTube> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<UiProvider>(
-          create: (context) => UiProvider()
-        ),
+        ChangeNotifierProvider<UiProvider>(create: (context) => UiProvider()),
         ChangeNotifierProvider<MediaProvider>(
-          create: (context) => MediaProvider()
-        ),
+            create: (context) => MediaProvider()),
         ChangeNotifierProvider<PlaylistProvider>(
-          create: (context) => PlaylistProvider()
-        ),
+            create: (context) => PlaylistProvider()),
         ChangeNotifierProvider<ContentProvider>(
-          create: (context) => ContentProvider()
-        ),
+            create: (context) => ContentProvider()),
         ChangeNotifierProvider<DownloadProvider>(
-          create: (context) => DownloadProvider()
-        ),
-        ChangeNotifierProvider<AppSettings>(
-          create: (context) => AppSettings()
-        ),
+            create: (context) => DownloadProvider()),
+        ChangeNotifierProvider<AppSettings>(create: (context) => AppSettings()),
       ],
-      child: Builder(
-        builder: (context) {
-          return DynamicColorBuilder(
-            builder: (lightScheme, darkScheme) {
-              List<Locale> supportedLocales = [];
-              for (var element in supportedLanguages) {
-                supportedLocales.add(Locale(element.languageCode, ''));
-              }
+      child: Builder(builder: (context) {
+        return DynamicColorBuilder(builder: (lightScheme, darkScheme) {
+          List<Locale> supportedLocales = [];
+          for (var element in supportedLanguages) {
+            supportedLocales.add(Locale(element.languageCode, ''));
+          }
 
-              // Load Providers
-              UiProvider uiProvider = Provider.of(context);
-              ContentProvider contentProvider = Provider.of(context);
-              AppSettings appSettings = Provider.of(context);
+          // Load Providers
+          UiProvider uiProvider = Provider.of(context);
+          ContentProvider contentProvider = Provider.of(context);
+          AppSettings appSettings = Provider.of(context);
 
-              return MaterialApp(
-    
-                // Providing a restorationScopeId allows the Navigator built by the
-                // MaterialApp to restore the navigation stack when a user leaves and
-                // returns to the app after it has been killed while running in the
-                // background.
-                restorationScopeId: 'app',
-    
-                // Locale Related Stuff
-                locale: _locale,
-                supportedLocales: supportedLocales,
-                localizationsDelegates: [
-                  FallbackLocalizationDelegate(),
-                  const AppLocalizationsDelegate(),
-                  GlobalMaterialLocalizations.delegate,
-                  GlobalWidgetsLocalizations.delegate,
-                  GlobalCupertinoLocalizations.delegate,
-                ],
-                localeResolutionCallback: (locale, supportedLocales) {
-                  for (var supportedLocale in supportedLocales) {
-                    if (supportedLocale.languageCode == locale?.languageCode &&
-                        supportedLocale.countryCode == locale?.countryCode) {
-                      return supportedLocale;
-                    }
+          return MaterialApp(
+
+              // Providing a restorationScopeId allows the Navigator built by the
+              // MaterialApp to restore the navigation stack when a user leaves and
+              // returns to the app after it has been killed while running in the
+              // background.
+              restorationScopeId: 'app',
+
+              // Locale Related Stuff
+              locale: _locale,
+              supportedLocales: supportedLocales,
+              localizationsDelegates: [
+                FallbackLocalizationDelegate(),
+                const AppLocalizationsDelegate(),
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              localeResolutionCallback: (locale, supportedLocales) {
+                for (var supportedLocale in supportedLocales) {
+                  if (supportedLocale.languageCode == locale?.languageCode &&
+                      supportedLocale.countryCode == locale?.countryCode) {
+                    return supportedLocale;
                   }
-                  return supportedLocales.first;
-                },
-              
-                // Define a light and dark color theme. Then, read the user's
-                // preferred ThemeMode (light, dark, or system default) from the
-                // SettingsController to display the correct theme.
-                theme: appSettings.enableMaterialYou ? adaptiveTheme(lightScheme, Brightness.light) : lightTheme(),
-                darkTheme: appSettings.enableMaterialYou ? adaptiveTheme(darkScheme, Brightness.dark) : darkTheme(),
-                themeMode: appSettings.enableMaterialYou ? ThemeMode.system : uiProvider.themeMode,
-                home: StreamBuilder<MediaItem?>(
+                }
+                return supportedLocales.first;
+              },
+
+              // Define a light and dark color theme. Then, read the user's
+              // preferred ThemeMode (light, dark, or system default) from the
+              // SettingsController to display the correct theme.
+              theme: appSettings.enableMaterialYou
+                  ? adaptiveTheme(lightScheme, Brightness.light)
+                  : lightTheme(),
+              darkTheme: appSettings.enableMaterialYou
+                  ? adaptiveTheme(darkScheme, Brightness.dark)
+                  : darkTheme(),
+              themeMode: appSettings.enableMaterialYou
+                  ? ThemeMode.system
+                  : uiProvider.themeMode,
+              home: StreamBuilder<MediaItem?>(
                   stream: audioHandler.mediaItem,
                   builder: (context, media) {
                     return Scaffold(
@@ -189,33 +184,36 @@ class _SongTubeState extends State<SongTube> {
                                   widget = const IntroScreen();
                                   break;
                                 case 'home':
-                                  widget = HomeScreen(
-                                    initIntent: initIntent
-                                  );
+                                  widget = HomeScreen(initIntent: initIntent);
                                   break;
                                 default:
-                                  throw Exception('Invalid route: ${settings.name}');
+                                  throw Exception(
+                                      'Invalid route: ${settings.name}');
                               }
                               // You can also return a PageRouteBuilder and
                               // define custom transitions between pages
                               return PageRouteBuilder(
-                                settings: settings,
-                                barrierColor: Colors.transparent,
-                                transitionDuration: const Duration(milliseconds: 500),
-                                reverseTransitionDuration: const Duration(milliseconds: 500),
-                                transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                                  return SharedAxisTransition(
-                                    fillColor: Colors.transparent,
-                                    animation: animation,
-                                    secondaryAnimation: secondaryAnimation,
-                                    transitionType: SharedAxisTransitionType.scaled,
-                                    child: child,
-                                  );
-                                },
-                                pageBuilder: (context, animation, secondaryAnimation) {
-                                  return widget;
-                                }
-                              );
+                                  settings: settings,
+                                  barrierColor: Colors.transparent,
+                                  transitionDuration:
+                                      const Duration(milliseconds: 500),
+                                  reverseTransitionDuration:
+                                      const Duration(milliseconds: 500),
+                                  transitionsBuilder: (context, animation,
+                                      secondaryAnimation, child) {
+                                    return SharedAxisTransition(
+                                      fillColor: Colors.transparent,
+                                      animation: animation,
+                                      secondaryAnimation: secondaryAnimation,
+                                      transitionType:
+                                          SharedAxisTransitionType.scaled,
+                                      child: child,
+                                    );
+                                  },
+                                  pageBuilder:
+                                      (context, animation, secondaryAnimation) {
+                                    return widget;
+                                  });
                             },
                             initialRoute: initialRoute,
                           ),
@@ -223,38 +221,49 @@ class _SongTubeState extends State<SongTube> {
                         floatingWidgetConfig: FloatingWidgetConfig(
                           backdropColor: Colors.black,
                           backdropEnabled: true,
-                          onSlide: media.hasData && media.data != null && uiProvider.currentPlayer == CurrentPlayer.music
-                            ? (position) => onSlide(position, media.data!)
-                            : null,
+                          onSlide: media.hasData &&
+                                  media.data != null &&
+                                  uiProvider.currentPlayer ==
+                                      CurrentPlayer.music
+                              ? (position) => onSlide(position, media.data!)
+                              : null,
                         ),
                         floatingWidgetController: uiProvider.fwController,
-                        musicFloatingWidget: media.hasData && media.data != null ? const MusicPlayer() : null,
-                        videoFloatingWidget: contentProvider.playingContent != null ? const VideoPlayer() : null,
+                        musicFloatingWidget: media.hasData && media.data != null
+                            ? const MusicPlayer()
+                            : null,
+                        videoFloatingWidget:
+                            contentProvider.playingContent != null
+                                ? const VideoPlayer()
+                                : null,
                       ),
                     );
-                  }
-                )
-              );
-            }
-          );
-        }
-      ),
+                  }));
+        });
+      }),
     );
   }
 
   // Change appbar colors on music player slide
   void onSlide(double position, MediaItem mediaItem) {
-    AppSettings appSettings = Provider.of(internalNavigatorKey.currentContext!, listen: false);
+    AppSettings appSettings =
+        Provider.of(internalNavigatorKey.currentContext!, listen: false);
     final iconColor = Theme.of(internalNavigatorKey.currentContext!).brightness;
     final Color? textColor = SongItem.fromMediaItem(mediaItem).palette?.text;
     if (position > 0.95) {
       if (textColor != null) {
         SystemChrome.setSystemUIOverlayStyle(
           SystemUiOverlayStyle(
-            statusBarIconBrightness: appSettings.enableMusicPlayerBlur ? textColor == Colors.black
-              ? Brightness.dark : Brightness.light : iconColor,
-            systemNavigationBarIconBrightness: appSettings.enableMusicPlayerBlur ? textColor == Colors.black
-              ? Brightness.dark : Brightness.light : iconColor,
+            statusBarIconBrightness: appSettings.enableMusicPlayerBlur
+                ? textColor == Colors.black
+                    ? Brightness.dark
+                    : Brightness.light
+                : iconColor,
+            systemNavigationBarIconBrightness: appSettings.enableMusicPlayerBlur
+                ? textColor == Colors.black
+                    ? Brightness.dark
+                    : Brightness.light
+                : iconColor,
           ),
         );
       }
@@ -267,5 +276,4 @@ class _SongTubeState extends State<SongTube> {
       );
     }
   }
-
 }
