@@ -4,9 +4,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/internal/media_utils.dart';
 import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/app_settings.dart';
+import 'package:songtube/providers/media_provider.dart';
 import 'package:songtube/providers/ui_provider.dart';
+import 'package:songtube/ui/sheets/snack_bar.dart';
 import 'package:songtube/ui/text_styles.dart';
 import 'package:songtube/ui/tiles/setting_tile.dart';
 
@@ -57,6 +60,7 @@ class _GeneralSettingsState extends State<GeneralSettings> {
   @override
   Widget build(BuildContext context) {
     AppSettings settingsProvider = Provider.of(context);
+    MediaProvider mediaProvider = Provider.of(context);
     return ListView(
       physics: const BouncingScrollPhysics(),
       padding: const EdgeInsets.only(left: 12, right: 12, top: 12, bottom: (kToolbarHeight * 1.6)+12),
@@ -120,6 +124,22 @@ class _GeneralSettingsState extends State<GeneralSettings> {
             setState(() {});
           }
         ),
+        // Re-Scan music library in case there is something wrong
+        const SizedBox(height: 12),
+        SettingTile(
+          title: 'Re-Scan Music Library',
+          subtitle: 'Deletes all cached songs and performs a re-scan of your device music library',
+          leadingIcon: Iconsax.scan,
+          onTap: () {
+            MediaUtils.clearCachedSongs();
+            mediaProvider.songs = [];
+            mediaProvider.fetchMedia();
+            showSnackbar(
+              customSnackBar: const CustomSnackBar(
+                icon: Iconsax.scan,
+                title: 'Re-Scanning music library...'));
+          }
+        )
       ],
     );
   }

@@ -282,6 +282,10 @@ class MediaUtils {
     }
   }
 
+  static Future<void> clearCachedSongs() async {
+    await sharedPreferences.remove('deviceSongs');
+  }
+
   static List<MediaItem> fetchCachedSongsAsMediaItems() {
     final items = fetchCachedSongsAsSongItems();
     return List<MediaItem>.generate(items.length, (index) => items[index].mediaItem);
