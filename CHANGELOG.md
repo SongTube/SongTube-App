@@ -1,3 +1,16 @@
+# SongTube 7.1.2:
+
+- General:
+    * Fixed videos not playing
+    * SongTubeLink tile now shows current IP
+    * Optimized music list scrolling
+    * Added new option to re-scan library
+    * Added new menu option for downloads to open original video link
+
+- Languages:
+    * Fixed simplified Chinese
+    * Added Azerbaijani Language (Thanks to @HamidMusayev)
+
 # SongTube 7.1.0:
 
 - General:
