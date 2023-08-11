@@ -766,4 +766,6 @@ class LanguageAz extends Languages {
   String get labelEditTagsDescription => 'ID3 etiketlərini və iş banerini açın';
   @override
   String get labelContains => 'İçindən Keçir';
+  @override
+  String get labelPlaybackSpeed => 'Playback speed';
 }
