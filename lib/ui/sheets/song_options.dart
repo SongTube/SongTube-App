@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:songtube/internal/models/song_item.dart';
 import 'package:songtube/languages/languages.dart';
 import 'package:songtube/main.dart';
+import 'package:songtube/providers/content_provider.dart';
 import 'package:songtube/providers/download_provider.dart';
 import 'package:songtube/providers/media_provider.dart';
 import 'package:songtube/screens/id3_editor.dart';
@@ -23,6 +24,7 @@ class SongOptionsSheet extends StatelessWidget {
   final bool isDownload;
   @override
   Widget build(BuildContext context) {
+    ContentProvider contentProvider = Provider.of(context);
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
@@ -82,6 +84,16 @@ class SongOptionsSheet extends StatelessWidget {
                   Provider.of<MediaProvider>(internalNavigatorKey.currentContext!, listen: false).refreshSong(song.id);
                 }
               });
+            }
+          ),
+          if (song.videoId != null)
+          _optionTile(context,
+            title: 'Open Video Player',
+            subtitle: 'Opens the Youtube video player from where this song was downloaded',
+            icon: LineIcons.youtube,
+            onTap: () {
+              Navigator.pop(context);
+              contentProvider.loadVideoPlayer(song.videoId);
             }
           ),
         ],
