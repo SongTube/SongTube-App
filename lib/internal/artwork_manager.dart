@@ -21,9 +21,9 @@ String paletteId(String id) => '${MediaUtils.removeToxicSymbols((id.split('/').l
 class ArtworkManager {
 
   /// Setup the artwork for a given song file, this function also has the ability to embed the artwork to the song directly
-  static Future<void> writeArtwork(String filePath, {dynamic artwork, bool forceRefresh = false, bool embedToSong = false}) async {
+  static Future<File> writeArtwork(String filePath, {dynamic artwork, bool forceRefresh = false, bool embedToSong = false}) async {
     if ((await artworkFile(filePath).exists()) && !forceRefresh) {
-      return;
+      return artworkFile(filePath);
     }
     final Uint8List? image = artwork != null
       ? artwork is File
@@ -32,14 +32,16 @@ class ArtworkManager {
       : await AudioTagger.extractArtwork(filePath);
     if (image == null || image.isEmpty) {
       await writeDefaultThumbnail(filePath);
-      return;
+      return artworkFile(filePath);
     }
-    if ((await artworkFile(filePath).exists())) {
-      await artworkFile(filePath).delete();
-      await artworkFile(filePath).create();
-    } else {
-      await artworkFile(filePath).create();
-    }
+    try {
+      if ((await artworkFile(filePath).exists())) {
+        await artworkFile(filePath).delete();
+        await artworkFile(filePath).create();
+      } else {
+        await artworkFile(filePath).create();
+      }
+    } catch (_) {}
     await artworkFile(filePath).writeAsBytes(image);
     if (embedToSong) {
       await AudioTagger.writeArtwork(
@@ -47,12 +49,13 @@ class ArtworkManager {
         artworkPath: artworkFile(filePath).path
       );
     }
+    return artworkFile(filePath);
   }
 
   /// Setup the thumbnail for a given song file
-  static Future<void> writeThumbnail(String filePath, {dynamic artwork, bool forceRefresh = false}) async {
+  static Future<File> writeThumbnail(String filePath, {dynamic artwork, bool forceRefresh = false}) async {
     if ((await thumbnailFile(filePath).exists()) && !forceRefresh) {
-      return;
+      return thumbnailFile(filePath);
     }
     final Uint8List? image = artwork != null
       ? artwork is File
@@ -61,7 +64,7 @@ class ArtworkManager {
       : await AudioTagger.extractThumbnail(filePath);
     if (image == null || image.isEmpty) {
       await writeDefaultThumbnail(filePath);
-      return;
+      return thumbnailFile(filePath);
     }
     if ((await thumbnailFile(filePath).exists())) {
       await thumbnailFile(filePath).delete();
@@ -70,6 +73,7 @@ class ArtworkManager {
       await thumbnailFile(filePath).create();
     }
     await thumbnailFile(filePath).writeAsBytes(image);
+    return thumbnailFile(filePath);
   }
 
   // Writes the default SongTube thumbnail to any given song file
