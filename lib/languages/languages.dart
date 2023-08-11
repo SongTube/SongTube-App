@@ -69,7 +69,7 @@ final supportedLanguages = <LanguageData>[
   // French (FR)
   LanguageData("🇫🇷", "French", "fr"),
   // Chinese (CN)
-  LanguageData("cn", "Simplified Chinese", "zh"),
+  LanguageData("🇨🇳", "Simplified Chinese", "cn"),
   // Czech (CS)
   LanguageData("🇨🇿", "Čeština", "cs"),
   // Sorani (CKB)
