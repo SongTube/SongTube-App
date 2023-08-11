@@ -10,6 +10,7 @@ import 'package:songtube/main.dart';
 // Language Files
 // import 'translations/languageCa.dart';
 import 'translations/languageEn.dart';
+import 'translations/languageAz.dart';
 import 'translations/languageEs.dart';
 import 'translations/languagePt-BR.dart';
 import 'translations/languageIgbo-NG.dart';
@@ -31,13 +32,15 @@ import 'translations/languageCs.dart';
 /// created named: [language<Code>.dart], you can then copy the contents
 /// of any other already supported Language and adapt/translate it to your
 /// new one.
-/// 
+///
 /// To finish your new Language implementation you would only need to add
 /// a new [LanguageData] to the [_supportedLanguages] list bellow and a new
 /// switch case to your Language File in [_loadLocale] also bellow this.
 final supportedLanguages = <LanguageData>[
   // English (US)
   LanguageData("🇺🇸", "English", 'en'),
+  // Azerbaijani (AZ)
+  LanguageData("az", "Azerbaijani", 'az'),
   // Spanish (VE)
   LanguageData("ve", "Español", "es"),
   // Portuguese (BR)
@@ -84,6 +87,9 @@ Future<Languages> _loadLocale(Locale locale) async {
     // English (US)
     case 'en':
       return LanguageEn();
+    // Azerbaijani (AZ)
+    case 'az':
+      return LanguageAz();
     // Spanish (VE)
     case 'es':
       return LanguageEs();
@@ -153,24 +159,21 @@ Future<Languages> _loadLocale(Locale locale) async {
 // Language Data Class
 // -------------------
 class LanguageData {
-
   final String flag;
   final String name;
   final String languageCode;
 
   LanguageData(this.flag, this.name, this.languageCode);
-
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<Languages> {
-
   const AppLocalizationsDelegate();
 
   @override
   bool isSupported(Locale locale) {
     List<String> supportedLanguageCodes = [];
-    supportedLanguages.forEach((element) =>
-      supportedLanguageCodes.add(element.languageCode));
+    supportedLanguages
+        .forEach((element) => supportedLanguageCodes.add(element.languageCode));
     return supportedLanguageCodes.contains(locale.languageCode);
   }
 
@@ -179,20 +182,20 @@ class AppLocalizationsDelegate extends LocalizationsDelegate<Languages> {
 
   @override
   bool shouldReload(LocalizationsDelegate<Languages> old) => false;
-  
 }
 
-class FallbackLocalizationDelegate extends LocalizationsDelegate<MaterialLocalizations> {
+class FallbackLocalizationDelegate
+    extends LocalizationsDelegate<MaterialLocalizations> {
   @override
   bool isSupported(Locale locale) => true;
   @override
-  Future<MaterialLocalizations> load(Locale locale) async => DefaultMaterialLocalizations();
+  Future<MaterialLocalizations> load(Locale locale) async =>
+      DefaultMaterialLocalizations();
   @override
   bool shouldReload(_) => false;
 }
 
 abstract class Languages {
-  
   static Languages? of(BuildContext context) {
     return Localizations.of<Languages>(context, Languages);
   }
@@ -227,7 +230,7 @@ abstract class Languages {
   String get labelTrending;
   String get labelFavorites;
   String get labelWatchLater;
-  
+
   // Video Options Menu
   String get labelCopyLink;
   String get labelAddToFavorites;
@@ -576,7 +579,8 @@ Locale setLocale(String languageCode) {
 }
 
 Locale getLocale() {
-  String languageCode = sharedPreferences.getString(prefSelectedLanguageCode) ?? "en";
+  String languageCode =
+      sharedPreferences.getString(prefSelectedLanguageCode) ?? "en";
   return _locale(languageCode);
 }
 
