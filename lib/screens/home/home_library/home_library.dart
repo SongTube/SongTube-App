@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:network_info_plus/network_info_plus.dart';
 import 'package:songtube/internal/cache_utils.dart';
 import 'package:songtube/internal/http_server.dart';
 import 'package:songtube/languages/languages.dart';
@@ -115,19 +116,24 @@ class _HomeLibraryState extends State<HomeLibrary> {
                   color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(20)
                 ),
-                child: CheckboxListTile(
-                  title: Text(Languages.of(context)!.labelSongtubeLink, style: subtitleTextStyle(context, bold: true)),
-                  subtitle: Text(Languages.of(context)!.labelSongtubeLinkDescription, style: smallTextStyle(context, opacity: 0.8)),
-                  value: linkServer != null,
-                  activeColor: Theme.of(context).primaryColor,
-                  onChanged: (value) async {
-                    if (linkServer != null) {
-                      await LinkServer.close();
-                    } else {
-                      await LinkServer.initialize();
-                    }
-                    setState(() {});
-                  },
+                child: FutureBuilder(
+                  future: NetworkInfo().getWifiIP(),
+                  builder: (context, snapshot) {
+                    return CheckboxListTile(
+                      title: Text(Languages.of(context)!.labelSongtubeLink, style: subtitleTextStyle(context, bold: true)),
+                      subtitle: Text('${Languages.of(context)!.labelSongtubeLinkDescription}${linkServer != null ? '\n\nDevice IP: ${snapshot.data}' : ''}', style: smallTextStyle(context, opacity: 0.8)),
+                      value: linkServer != null,
+                      activeColor: Theme.of(context).primaryColor,
+                      onChanged: (value) async {
+                        if (linkServer != null) {
+                          await LinkServer.close();
+                        } else {
+                          await LinkServer.initialize();
+                        }
+                        setState(() {});
+                      },
+                    );
+                  }
                 ),
               ),
             ),

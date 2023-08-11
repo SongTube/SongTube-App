@@ -50,6 +50,7 @@ dependencies:
   flutter_widget_from_html_core: ^0.10.0
   parallax_sensors_bg: ^1.0.0
   external_video_player_launcher: ^0.0.3
+  network_info_plus: ^4.0.2
 
   # Dart advanced Streams
   rxdart: any
