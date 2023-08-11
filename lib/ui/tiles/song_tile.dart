@@ -36,6 +36,21 @@ class _SongTileState extends State<SongTile> {
 
   Color get dominantColor => widget.song.palette?.vibrant ?? widget.song.palette?.dominant ?? Theme.of(context).textTheme.bodyText1!.color!;
 
+  // Animate
+  bool animate = false;
+
+  @override
+  void initState() {
+    Future.delayed(const Duration(milliseconds: 200), () {
+      if (mounted) {
+        setState(() {
+          animate = true;
+        });
+      }
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<MediaItem?>(
@@ -99,7 +114,7 @@ class _SongTileState extends State<SongTile> {
                 )
               ],
             ), 
-            child: ClipRRect(
+            child: animate ? ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: FadeInImage(
                 fadeInDuration: const Duration(milliseconds: 200),
@@ -112,7 +127,7 @@ class _SongTileState extends State<SongTile> {
                   return Image.asset('assets/images/artworkPlaceholder_big.png', fit: BoxFit.cover);
                 },
               ),
-            ),
+            ) : const SizedBox(),
           ),
           if (widget.song.isVideo)
           Container(
