@@ -4,190 +4,190 @@ class LanguageEn extends Languages {
 
   // Introduction Screens
   @override
-  String get labelAppWelcome => "Welcome to";
+  String get labelAppWelcome => "Bine ați venit la";
   @override
-  String get labelStart => "Start";
+  String get labelStart => "Începe";
   @override
-  String get labelSkip => "Skip";
+  String get labelSkip => "Sări";
   @override
-  String get labelNext => "Next";
+  String get labelNext => "Următor";
   @override
   String get labelExternalAccessJustification =>
-    "Needs Access to your External Storage to save all " +
-    "your Videos and Music";
+    "Are nevoie de acces la stocarea externă pentru a salva toate " +
+    "videoclipurile și muzica dvs.";
   @override
-  String get labelAppCustomization => "Customization";
+  String get labelAppCustomization => "Personalizare";
   @override
-  String get labelSelectPreferred => "Select your Preferred";
+  String get labelSelectPreferred => "Selectați preferatul tău";
   @override
-  String get labelConfigReady => "Config Ready";
+  String get labelConfigReady => "Configurație pregătită";
   @override
-  String get labelIntroductionIsOver => "Introduction is over";
+  String get labelIntroductionIsOver => "Introducerea s-a terminat";
   @override
-  String get labelEnjoy => "Enjoy";
+  String get labelEnjoy => "Bucură-te";
   @override 
   String get labelGoHome => "Go Home";
 
   // Bottom Navigation Bar
   @override
-  String get labelHome => "Home";
+  String get labelHome => "Acasă";
   @override
-  String get labelDownloads => "Downloads";
+  String get labelDownloads => "Descărcări";
   @override
   String get labelMedia => "Media";
   @override
   String get labelYouTube => "YouTube";
   @override
-  String get labelMore => "More";
+  String get labelMore => "Mai mult";
 
   // Home Screen
   @override
-  String get labelQuickSearch => "Quick Search...";
+  String get labelQuickSearch => "Căutare rapidă...";
   @override
-  String get labelTagsEditor => "Tags Editor";
+  String get labelTagsEditor => "Tag-uri Editor";
   @override
   String get labelEditArtwork => "Edit\nArtwork";
   @override
-  String get labelDownloadAll => "Download All";
+  String get labelDownloadAll => "Descărcați toate";
   @override 
-  String get labelLoadingVideos => "Loading Videos...";
+  String get labelLoadingVideos => "Încărcarea videoclipurilor...";
   @override
-  String get labelHomePage => "Home Page";
+  String get labelHomePage => "Pagina de start";
   @override
-  String get labelTrending => "Trending";
+  String get labelTrending => "Tendințe";
   @override
-  String get labelFavorites => "Favorites";
+  String get labelFavorites => "Favorite";
   @override
-  String get labelWatchLater => "Watch Later";
+  String get labelWatchLater => "Urmăriți mai târziu";
 
   // Video Options Menu
   @override
-  String get labelCopyLink => "Copy Link";
+  String get labelCopyLink => "Copiați link-ul";
   @override
-  String get labelAddToFavorites => "Add to Favorites";
+  String get labelAddToFavorites => "Adăugați la favorite";
   @override
-  String get labelAddToWatchLater => "Add to Watch Later";
+  String get labelAddToWatchLater => "Adăugați la vizionare mai târziu";
   @override
-  String get labelAddToPlaylist => "Add to Playlist";
+  String get labelAddToPlaylist => "Adăugați la Playlist";
 
   // Downloads Screen
   @override
-  String get labelQueued => "Queued";
+  String get labelQueued => "Coadă de așteptare";
   @override
-  String get labelDownloading => "Downloading";
+  String get labelDownloading => "Descărcarea";
   @override
-  String get labelConverting => "Converting";
+  String get labelConverting => "Convertirea";
   @override
-  String get labelCancelled => "Cancelled";
+  String get labelCancelled => "Anulat";
   @override
-  String get labelCompleted => "Completed";
+  String get labelCompleted => "Finalizat";
 
   // Download Status/Error Messages
   @override
   String get labelDownloadQueued => "Download Queued";
   @override
-  String get labelDownloadAcesssDenied => "Access Denied";
+  String get labelDownloadAcesssDenied => "Acces refuzat";
   @override
-  String get labelClearingExistingMetadata => "Clearing Existing Metadata...";
+  String get labelClearingExistingMetadata => "Ștergerea metadatelor existente...";
   @override
   String get labelWrittingTagsAndArtwork => "Writting Tags & Artwork...";
   @override
-  String get labelSavingFile => "Saving File...";
+  String get labelSavingFile => "Salvarea fișierului...";
   @override
-  String get labelAndroid11FixNeeded => "Error, Android 11 Fix needed, check Settings";
+  String get labelAndroid11FixNeeded => "Eroare, Android 11 Fixare necesară, verificați Setări";
   @override
-  String get labelErrorSavingDownload => "Couldn't save your Download, check Permissions";
+  String get labelErrorSavingDownload => "Nu s-a putut salva descărcarea, verificați permisiunile";
   @override
-  String get labelDownloadingVideo => "Downloading Video...";
+  String get labelDownloadingVideo => "Descărcarea video...";
   @override
-  String get labelDownloadingAudio => "Downloading Audio...";
+  String get labelDownloadingAudio => "Descărcarea audio...";
   @override
-  String get labelGettingAudioStream => "Getting Audio Stream...";
+  String get labelGettingAudioStream => "Obținerea fluxului audio...";
   @override
-  String get labelAudioNoDataRecieved => "Couldn't get Audio Stream";
+  String get labelAudioNoDataRecieved => "Nu s-a putut obține fluxul audio";
   @override
-  String get labelDownloadStarting => "Download Starting...";
+  String get labelDownloadStarting => "Descărcare începând...";
   @override
-  String get labelDownloadCancelled => "Download Cancelled";
+  String get labelDownloadCancelled => "Descărcare anulată";
   @override
-  String get labelAnIssueOcurredConvertingAudio => "Converted Process Failed";
+  String get labelAnIssueOcurredConvertingAudio => "Procesul convertit a eșuat";
   @override
   String get labelPatchingAudio => "Patching Audio...";
 
   // Download Menu
   @override
-  String get labelEnableAudioConversion => "Enable Audio Conversion";
+  String get labelEnableAudioConversion => "Activează conversia audio";
   @override
   String get labelGainControls => "Gain Controls";
   @override
-  String get labelVolume => "Volume";
+  String get labelVolume => "Volum";
   @override
   String get labelBassGain => "Bass Gain";
   @override
   String get labelTrebleGain => "Treble Gain";
   @override
-  String get labelSelectVideo => "Select Video";
+  String get labelSelectVideo => "Selectați Video";
   @override
-  String get labelSelectAudio => "Select Audio";
+  String get labelSelectAudio => "Selectați Audio";
   @override
-  String get labelGlobalParameters => "Global parameters";
+  String get labelGlobalParameters => "Parametrii globali";
 
   // Media Screen
   @override
-  String get labelMusic => "Music";
+  String get labelMusic => "Muzică";
   @override
-  String get labelVideos => "Videos";
+  String get labelVideos => "Videouri";
   @override
-  String get labelNoMediaYet => "No Media Yet";
+  String get labelNoMediaYet => "Nu există media încă";
   @override
-  String get labelNoMediaYetJustification => "All your Media " +
-    "will be shown here";
+  String get labelNoMediaYetJustification => "Toate media dvs. " +
+    "vor fi afișate aici";
   @override
-  String get labelSearchMedia => "Search Media...";
+  String get labelSearchMedia => "Căutare Media...";
   @override
-  String get labelDeleteSong => "Delete Song";
+  String get labelDeleteSong => "Șterge melodia";
   @override
-  String get labelNoPermissionJustification => "View your Media by" + "\n" +
-    "Granting Storage Permission";
+  String get labelNoPermissionJustification => "Vizualizați media prin" + "\n" +
+    "acordarea permisiunii de stocare";
   @override
-  String get labelGettingYourMedia => "Getting your Media...";
+  String get labelGettingYourMedia => "Obținerea de media...";
   @override
-  String get labelEditTags => "Edit Tags";
+  String get labelEditTags => "Editare Tag-uri";
 
   // Navigate Screen
   @override
-  String get labelSearchYoutube => "Search YouTube...";
+  String get labelSearchYoutube => "Căutare YouTube...";
 
   // More Screen
   @override
-  String get labelSettings => "Settings";
+  String get labelSettings => "Setări";
   @override
-  String get labelDonate => "Donate";
+  String get labelDonate => "Donați";
   @override
-  String get labelLicenses => "Licenses";
+  String get labelLicenses => "Licențe";
   @override
-  String get labelChooseColor => "Choose Color";
+  String get labelChooseColor => "Alegeți culoarea";
   @override
-  String get labelTheme => "Theme";
+  String get labelTheme => "Tema";
   @override
-  String get labelUseSystemTheme => "Use System Theme";
+  String get labelUseSystemTheme => "Utilizați tema sistemului";
   @override
   String get labelUseSystemThemeJustification =>
-    "Enable/Disable automatic Theme";
+    "Activați/Dezactivați Tema automată";
   @override
-  String get labelEnableDarkTheme => "Enable Dark Theme";
+  String get labelEnableDarkTheme => "Activați tema întunecată";
   @override
   String get labelEnableDarkThemeJustification =>
-    "Use Dark Theme by default";
+    "Utilizați tema întunecată în mod implicit";
   @override
-  String get labelEnableBlackTheme => "Enable Black Theme";
+  String get labelEnableBlackTheme => "Activați tema neagră";
   @override
   String get labelEnableBlackThemeJustification =>
-    "Enable Pure Black Theme";
+    "Activați Tema Pur negru";
   @override
-  String get labelAccentColor => "Accent Color";
+  String get labelAccentColor => "Culoare accentuală";
   @override
-  String get labelAccentColorJustification => "Customize accent color";
+  String get labelAccentColorJustification => "Personalizați culoarea accentului";
   @override
   String get labelAudioFolder => "Audio Folder";
   @override
