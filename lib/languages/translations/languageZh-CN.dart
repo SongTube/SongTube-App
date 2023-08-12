@@ -211,7 +211,7 @@ class LanguageZhCN extends Languages {
   @override
   String get labelBackupJustification => "备份你的媒体库";
   @override
-  String get labelRestore => "回复";
+  String get labelRestore => "恢复";
   @override
   String get labelRestoreJustification => "恢复你的媒体库";
   @override
@@ -360,359 +360,359 @@ class LanguageZhCN extends Languages {
 
   // Other Translations
   @override
-  String get labelNoFavoriteVideos => 'No Favorite Videos';
+  String get labelNoFavoriteVideos => '没有已收藏的视频';
   @override
-  String get labelNoFavoriteVideosDescription => 'Search for videos and save them as favorites. They will appear here';
+  String get labelNoFavoriteVideosDescription => '这里将会出现已收藏的视频';
   @override
-  String get labelNoSubscriptions => 'No Subscriptions';
+  String get labelNoSubscriptions => '没有已订阅的内容';
   @override
-  String get labelNoSubscriptionsDescription => 'Tap the button above to show suggested Channels!';
+  String get labelNoSubscriptionsDescription => '点击上面的按钮显示推荐的频道！';
   @override
-  String get labelNoPlaylists => 'No Playlists';
+  String get labelNoPlaylists => '没有播放列表';
   @override
-  String get labelNoPlaylistsDescription => 'Search for videos or playlists and save them. They will appear here';
+  String get labelNoPlaylistsDescription => '这里将会出现已保存的视频或播放列表';
   @override
-  String get labelSearch => 'Search';
+  String get labelSearch => '搜索';
   @override
-  String get labelSubscriptions => 'Subscriptions';
+  String get labelSubscriptions => '订阅';
   @override
-  String get labelNoDownloadsCanceled => 'No Downloads Canceled';
+  String get labelNoDownloadsCanceled => '没有已取消的下载任务';
   @override
-  String get labelNoDownloadsCanceledDescription => 'Good news! But if you cancel or something goes wrong with the download, you can check from here';
+  String get labelNoDownloadsCanceledDescription => '好消息！如果您取消下载或下载时出现问题，您可以从这里查看';
   @override
-  String get labelNoDownloadsYet => 'No Downloads Yet';
+  String get labelNoDownloadsYet => '没有已下载的内容';
   @override
-  String get labelNoDownloadsYetDescription => 'Go home, search for something to download or wait for the queue!';
+  String get labelNoDownloadsYetDescription => '可以搜索一些你感兴趣的内容并下载，他们将会出现在此处';
   @override
-  String get labelYourQueueIsEmpty => 'Your queue is empty';
+  String get labelYourQueueIsEmpty => '你的队列为空';
   @override
-  String get labelYourQueueIsEmptyDescription => 'Go home and search for something to download!';
+  String get labelYourQueueIsEmptyDescription => '可以尝试搜索并下载您感兴趣的内容';
   @override
-  String get labelQueue => 'Queue';
+  String get labelQueue => '队列';
   @override
-  String get labelSearchDownloads => 'Search Downloads';
+  String get labelSearchDownloads => '搜索下载的内容';
   @override
-  String get labelWatchHistory => 'Watch History';
+  String get labelWatchHistory => '查看历史记录';
   @override
-  String get labelWatchHistoryDescription => 'Look at which videos you have seen';
+  String get labelWatchHistoryDescription => '查看你已经看过的视频';
   @override
-  String get labelBackupAndRestore => 'Backup & Restore';
+  String get labelBackupAndRestore => '备份与恢复';
   @override
-  String get labelBackupAndRestoreDescription => 'Save or resture all of your local data';
+  String get labelBackupAndRestoreDescription => '保存或恢复你的本地数据';
   @override
-  String get labelSongtubeLink => 'SongTube Link';
+  String get labelSongtubeLink => 'SongTube 链接';
   @override
-  String get labelSongtubeLinkDescription => 'Allow SongTube browser extension to detect this device, long press to learn more';
+  String get labelSongtubeLinkDescription => '允许SongTube浏览器扩展检测此设备，长按了解更多信息';
   @override
-  String get labelSupportDevelopment => 'Support Development';
+  String get labelSupportDevelopment => '开发与支持';
   @override
-  String get labelSocialLinks => 'Social Links';
+  String get labelSocialLinks => '社交账户链接';
   @override
-  String get labelSeeMore => 'See more';
+  String get labelSeeMore => '查看更多';
   @override
-  String get labelMostPlayed => 'Most played';
+  String get labelMostPlayed => '最多播放';
   @override
-  String get labelNoPlaylistsYet => 'No Playlists Yet';
+  String get labelNoPlaylistsYet => '还没有播放列表';
   @override
-  String get labelNoPlaylistsYetDescription => 'You can create a playlist from your recents, music, albums or artists';
+  String get labelNoPlaylistsYetDescription => '您可以根据最近的作品、音乐、专辑或艺术家创建播放列表';
   @override
-  String get labelNoSearchResults => 'No search results';
+  String get labelNoSearchResults => '没有搜索结果';
   @override
-  String get labelSongResults => 'Song results';
+  String get labelSongResults => '歌曲的搜索结果';
   @override
-  String get labelAlbumResults => 'Album results';
+  String get labelAlbumResults => '专辑的搜索结果';
   @override
-  String get labelArtistResults => 'Artist results';
+  String get labelArtistResults => '艺术家的搜索结果';
   @override
-  String get labelSearchAnything => 'Search anything';
+  String get labelSearchAnything => '搜索任何内容';
   @override
-  String get labelRecents => 'Recents';
+  String get labelRecents => '最近的';
   @override
-  String get labelFetchingSongs => 'Fetching Songs';
+  String get labelFetchingSongs => '正在扫描歌曲';
   @override
-  String get labelPleaseWaitAMoment => 'Please wait a moment';
+  String get labelPleaseWaitAMoment => '请稍等';
   @override
-  String get labelWeAreDone => 'We are done';
+  String get labelWeAreDone => '已完成';
   @override
-  String get labelEnjoyTheApp => 'Enjoy the\nApp';
+  String get labelEnjoyTheApp => '使用愉快';
   @override
-  String get labelSongtubeIsBackDescription => 'SongTube is back with a cleaner look and set of features, have fun with your music!';
+  String get labelSongtubeIsBackDescription => 'SongTube 已回归！更干净的外观和一系列功能，尽情享受音乐吧！';
   @override
-  String get labelLetsGo => 'Let\'s go';
+  String get labelLetsGo => '开始吧';
   @override
-  String get labelPleaseWait => 'Please wait';
+  String get labelPleaseWait => '请稍等';
   @override
   String get labelPoweredBy => 'Powered by';
   @override
-  String get labelGetStarted => 'Get Started';
+  String get labelGetStarted => '开始';
   @override
-  String get labelAllowUsToHave => 'Allow us to have';
+  String get labelAllowUsToHave => '允许我们获取';
   @override
-  String get labelStorageRead => 'Storage\nRead';
+  String get labelStorageRead => '访问\n存储';
   @override
-  String get labelStorageReadDescription => 'This will scan your music, extract high quality artworks and allow you to personalize your music';
+  String get labelStorageReadDescription => '这将扫描您的音乐，提取高质量的艺术品，并允许您个性化您的音乐';
   @override
-  String get labelContinue => 'Continue';
+  String get labelContinue => '继续';
   @override
-  String get labelAllowStorageRead => 'Allow Storage Read';
+  String get labelAllowStorageRead => '允许访问存储';
   @override
-  String get labelSelectYourPreferred => 'Select your preferred';
+  String get labelSelectYourPreferred => '选择您的首选';
   @override
-  String get labelLight => 'Light';
+  String get labelLight => '亮';
   @override
-  String get labelDark => 'Dark';
+  String get labelDark => '暗';
   @override
-  String get labelSimultaneousDownloads => 'Simultaneous Downloads';
+  String get labelSimultaneousDownloads => '多线程下载';
   @override
-  String get labelSimultaneousDownloadsDescription => 'Define how many downloads can happen at the same time';
+  String get labelSimultaneousDownloadsDescription => '设置同时允许下载的内容数量';
   @override
-  String get labelItems => 'Items';
+  String get labelItems => '项目';
   @override
-  String get labelInstantDownloadFormat => 'Instant Download';
+  String get labelInstantDownloadFormat => '即时下载';
   @override
-  String get labelInstantDownloadFormatDescription => 'Change the audio format for instant downloads';
+  String get labelInstantDownloadFormatDescription => '更改即时下载的音频格式';
   @override
-  String get labelCurrent => 'Current';
+  String get labelCurrent => '当前的';
   @override
-  String get labelPauseWatchHistory => 'Pause Watch History';
+  String get labelPauseWatchHistory => '暂停记录播放历史';
   @override
-  String get labelPauseWatchHistoryDescription => 'While paused, videos are not saved into the watch history list';
+  String get labelPauseWatchHistoryDescription => '暂停时，播放的历史记录不会保存到历史记录列表中';
   @override
-  String get labelLockNavigationBar => 'Lock Navigation Bar';
+  String get labelLockNavigationBar => '锁定导航栏';
   @override
-  String get labelLockNavigationBarDescription => 'Locks the navigation bar from hiding and showing automatically on scroll';
+  String get labelLockNavigationBarDescription => '锁定导航栏，使其不会在滚动时自动隐藏和显示';
   @override
-  String get labelPictureInPicture => 'Picture in Picture';
+  String get labelPictureInPicture => '画中画';
   @override
-  String get labelPictureInPictureDescription => 'Automatically enters PiP mode upon tapping home button while watching a video';
+  String get labelPictureInPictureDescription => '观看视频时点击主页按钮自动进入画中画模式';
   @override
-  String get labelBackgroundPlaybackAlpha => 'Background Playback (Alpha)';
+  String get labelBackgroundPlaybackAlpha => '背景播放（实验性）';
   @override
-  String get labelBackgroundPlaybackAlphaDescription => 'Toggle background playback feature. Due to plugin limitations, only current video can be played in the background';
+  String get labelBackgroundPlaybackAlphaDescription => '切换背景播放功能。由于插件的限制，只能在后台播放当前视频';
   @override
-  String get labelBlurBackgroundDescription => 'Add blurred artwork background';
+  String get labelBlurBackgroundDescription => '开启播放界面背景模糊';
   @override
-  String get labelBlurIntensity => 'Blur Intensity';
+  String get labelBlurIntensity => '模糊强度';
   @override
-  String get labelBlurIntensityDescription => 'Change the blur intensity of the artwork background';
+  String get labelBlurIntensityDescription => '调整播放界面背景模糊强度';
   @override
-  String get labelBackdropOpacity => 'Backdrop Opacity';
+  String get labelBackdropOpacity => '背景不透明度';
   @override
-  String get labelBackdropOpacityDescription => 'Change the colored backdrop opacity';
+  String get labelBackdropOpacityDescription => '更改背景不透明度';
   @override
-  String get labelArtworkShadowOpacity => 'Artwork Shadow Opacity';
+  String get labelArtworkShadowOpacity => '更改封面阴影不透明度';
   @override
-  String get labelArtworkShadowOpacityDescription => 'Change the artwork shadow intensity of the music player';
+  String get labelArtworkShadowOpacityDescription => '更改音乐播放器的封面阴影强度';
   @override
-  String get labelArtworkShadowRadius => 'Artwork Shadow Radius';
+  String get labelArtworkShadowRadius => '封面阴影半径';
   @override
-  String get labelArtworkShadowRadiusDescription => 'Change the artwork shadow radius of the music player';
+  String get labelArtworkShadowRadiusDescription => '更改音乐播放器的封面阴影半径';
   @override
-  String get labelArtworkScaling => 'Artwork Scaling';
+  String get labelArtworkScaling => '封面缩放';
   @override
-  String get labelArtworkScalingDescription => 'Scale out the music player artwork & background images';
+  String get labelArtworkScalingDescription => '调整音乐播放器的封面和背景图像的缩放';
   @override
-  String get labelBackgroundParallax => 'Background Parallax';
+  String get labelBackgroundParallax => '背景视差';
   @override
-  String get labelBackgroundParallaxDescription =>  'Enable/Disable background image parallax effect';
+  String get labelBackgroundParallaxDescription =>  '启用或禁用背景图像视差效果';
   @override
-  String get labelRestoreThumbnails => 'Restore Thumbnails';
+  String get labelRestoreThumbnails => '恢复缩略图';
   @override
-  String get labelRestoreThumbnailsDescription => 'Force thumbnails and artwork generation process';
+  String get labelRestoreThumbnailsDescription => '强制生成封面略缩图';
   @override
-  String get labelRestoringArtworks => 'Restoring artworks';
+  String get labelRestoringArtworks => '恢复封面';
   @override
-  String get labelRestoringArtworksDone => 'Restoring artworks done';
+  String get labelRestoringArtworksDone => '恢复封面完成';
   @override
-  String get labelHomeScreen => 'Home Screen';
+  String get labelHomeScreen => '主页';
   @override
-  String get labelHomeScreenDescription => 'Change the default landing screen when you open the app';
+  String get labelHomeScreenDescription => '打开App时更改默认显示的页面';
   @override
-  String get labelDefaultMusicPage => 'Default Music Page';
+  String get labelDefaultMusicPage => '进入音乐页面时默认显示的选项卡页面';
   @override
-  String get labelDefaultMusicPageDescription => 'Change the default page for the Music Page';
+  String get labelDefaultMusicPageDescription => '更改音乐页面的默认选项卡页面';
   @override
-  String get labelAbout => 'About';
+  String get labelAbout => '关于';
   @override
-  String get labelConversionRequired => 'Conversion Required';
+  String get labelConversionRequired => '需要转换';
   @override
-  String get labelConversionRequiredDescription =>  'This song format is incompatible with the ID3 Tags editor. The app will automatically convert this song to AAC (m4a) to sort out this issue.';
+  String get labelConversionRequiredDescription =>  '此歌曲格式与ID3标签编辑器不兼容。该应用程序将自动将此音乐文件转换为AAC（m4a）以解决此问题。';
   @override
-  String get labelPermissionRequired => 'Permission Required';
+  String get labelPermissionRequired => '需要权限';
   @override
-  String get labelPermissionRequiredDescription => 'All file access permission is required for SongTube to edit any song on your device';
+  String get labelPermissionRequiredDescription => 'SongTube 编辑设备上的任何歌曲都需要所有文件访问权限';
   @override
-  String get labelApplying => 'Applying';
+  String get labelApplying => '应用中';
   @override
-  String get labelConvertingDescription => 'Re-encoding this song into AAC (m4a) format';
+  String get labelConvertingDescription => '将这首歌重新编码为AAC（m4a）格式';
   @override
-  String get labelWrittingTagsAndArtworkDescription => 'Applying new tags to this song';
+  String get labelWrittingTagsAndArtworkDescription => '为此歌曲设置新标签';
   @override
-  String get labelApply => 'Apply';
+  String get labelApply => '应用';
   @override
-  String get labelSongs => 'Songs';
+  String get labelSongs => '歌曲';
   @override
-  String get labelPlayAll => 'Play All';
+  String get labelPlayAll => '播放所有';
   @override
-  String get labelPlaying => 'Playing';
+  String get labelPlaying => '播放中';
   @override
-  String get labelPages => 'Pages';
+  String get labelPages => '页面';
   @override
-  String get labelMusicPlayer => 'Music Player';
+  String get labelMusicPlayer => '音乐播放器';
   @override
-  String get labelClearWatchHistory => 'Clear Watch History';
+  String get labelClearWatchHistory => '清除播放历史记录';
   @override
-  String get labelClearWatchHistoryDescription =>  'You\'re about to delete all your watch history videos, this action cannot be undone, proceed?';
+  String get labelClearWatchHistoryDescription =>  '您即将删除所有观看播放记录视频，此操作无法撤消，是否继续？';
   @override
-  String get labelDelete => 'Delete';
+  String get labelDelete => '删除';
   @override
-  String get labelAppUpdate => 'App Update';
+  String get labelAppUpdate => 'App 更新';
   @override
-  String get labelWhatsNew => 'What\'s New';
+  String get labelWhatsNew => '新增功能';
   @override
-  String get labelLater => 'Later';
+  String get labelLater => '稍后';
   @override
-  String get labelUpdate => 'Update';
+  String get labelUpdate => '更新';
   @override
-  String get labelUnsubscribe => 'Unsubscribe';
+  String get labelUnsubscribe => '取消订阅';
   @override
-  String get labelAudioFeatures => 'Audio Features';
+  String get labelAudioFeatures => '音频功能';
   @override
-  String get labelVolumeBoost => 'Volume Boost';
+  String get labelVolumeBoost => '音量提升';
   @override
-  String get labelNormalizeAudio => 'Normalize Audio';
+  String get labelNormalizeAudio => '规格化音频';
   @override
-  String get labelSegmentedDownload => 'Segmented Download';
+  String get labelSegmentedDownload => '分段下载';
   @override
-  String get labelEnableSegmentedDownload => 'Enable Segmented Download';
+  String get labelEnableSegmentedDownload => '启用分段下载';
   @override
-  String get labelEnableSegmentedDownloadDescription => 'This will download the whole audio file and then split it into the various enabled segments (or audio tracks) from the list below';
+  String get labelEnableSegmentedDownloadDescription => '这将下载整个音频文件，然后从下面的列表中将其拆分为各种启用的片段（或音轨）';
   @override
-  String get labelCreateMusicPlaylist => 'Create Music Playlist';
+  String get labelCreateMusicPlaylist => '创建音乐播放列表';
   @override
-  String get labelCreateMusicPlaylistDescription => 'Create music playlist from all downloaded and saved audio segments';
+  String get labelCreateMusicPlaylistDescription => '从所有下载和保存的音频片段创建音乐播放列表';
   @override
-  String get labelApplyTags => 'Apply Tags';
+  String get labelApplyTags => '应用标签';
   @override
-  String get labelApplyTagsDescription => 'Extract tags from MusicBrainz for all segments';
+  String get labelApplyTagsDescription => '从MusicBrainz中提取所有片段的标签';
   @override
-  String get labelLoading => 'Loading';
+  String get labelLoading => '加载中';
   @override
-  String get labelMusicDownloadDescription => 'Select quality, convert and download audio only';
+  String get labelMusicDownloadDescription => '选择质量，转换并只下载音频';
   @override
-  String get labelVideoDownloadDescription =>  'Choose a video quality from the list and download it';
+  String get labelVideoDownloadDescription =>  '从列表中选择视频质量并下载';
   @override
-  String get labelInstantDescription => 'Instantly start downloading as music';
+  String get labelInstantDescription => '立即开始下载音乐';
   @override
-  String get labelInstant => 'Instant';
+  String get labelInstant => '即时';
   @override
-  String get labelCurrentQuality => 'Current Quality';
+  String get labelCurrentQuality => '当前质量';
   @override
-  String get labelFastStreamingOptions => 'Fast Streaming Options';
+  String get labelFastStreamingOptions => '快速流媒体选项';
   @override
-  String get labelStreamingOptions => 'Streaming Options';
+  String get labelStreamingOptions => '流选项';
   @override
-  String get labelComments => 'Comments';
+  String get labelComments => '评论';
   @override
-  String get labelPinned => 'Pinned';
+  String get labelPinned => '固定';
   @override
-  String get labelLikedByAuthor => 'Liked by Author';
+  String get labelLikedByAuthor => '作者喜欢的';
   @override
-  String get labelDescription => 'Description';
+  String get labelDescription => '描述';
   @override
-  String get labelViews => 'Views';
+  String get labelViews => '查看';
   @override
-  String get labelPlayingNextIn => 'Playing next in';
+  String get labelPlayingNextIn => '接下来播放';
   @override
-  String get labelPlayNow => 'Play Now';
+  String get labelPlayNow => '现在播放';
   @override
-  String get labelLoadingPlaylist => 'Loading Playlist';
+  String get labelLoadingPlaylist => '正在加载播放列表';
   @override
-  String get labelPlaylistReachedTheEnd => 'Playlist reached the end';
+  String get labelPlaylistReachedTheEnd => '播放列表已结束';
   @override
-  String get labelLiked => 'Liked';
+  String get labelLiked => '喜欢';
   @override
-  String get labelLike => 'Like';
+  String get labelLike => '喜欢';
   @override
-  String get labelVideoRemovedFromFavorites => 'Video removed from favorites';
+  String get labelVideoRemovedFromFavorites => '将视频从收藏夹中移除';
   @override
-  String get labelVideoAddedToFavorites => 'Video added to favorites';
+  String get labelVideoAddedToFavorites => '视频已添加至收藏夹';
   @override
-  String get labelPopupMode => 'Popup Mode';
+  String get labelPopupMode => '弹出模式';
   @override
-  String get labelDownloaded => 'Downloaded';
+  String get labelDownloaded => '已下载';
   @override
-  String get labelShowPlaylist => 'Show Playlist';
+  String get labelShowPlaylist => '显示播放列表';
   @override
-  String get labelCreatePlaylist => 'Create Playlist';
+  String get labelCreatePlaylist => '创建播放列表';
   @override
-  String get labelAddVideoToPlaylist => 'Add video to playlist';
+  String get labelAddVideoToPlaylist => '将视频添加到播放列表';
   @override
-  String get labelBackupDescription => 'Backup all of your local data into a single file that can be used to restore later';
+  String get labelBackupDescription => '将所有本地数据备份到一个文件中，以便以后进行恢复';
   @override
-  String get labelBackupCreated => 'Backup Created';
+  String get labelBackupCreated => '创建的备份';
   @override
-  String get labelBackupRestored => 'Backup Restored';
+  String get labelBackupRestored => '备份恢复';
   @override
-  String get labelRestoreDescription => 'Restore all your data from a backup file';
+  String get labelRestoreDescription => '从备份文件中恢复所有数据';
   @override
-  String get labelChannelSuggestions => 'Channel Suggestions';
+  String get labelChannelSuggestions => '推荐的频道';
   @override
-  String get labelFetchingChannels => 'Fetching Channels';
+  String get labelFetchingChannels => '加载频道';
   @override
-  String get labelShareVideo => 'Shared Video';
+  String get labelShareVideo => '分享视频';
   @override
-  String get labelShareDescription => 'Share with friends or other platforms';
+  String get labelShareDescription => '分享给朋友或分享至其他平台';
   @override
-  String get labelRemoveFromPlaylists => 'Remove from playlist';
+  String get labelRemoveFromPlaylists => '从播放列表移除';
   @override
-  String get labelThisActionCannotBeUndone => 'This action cannot be undone';
+  String get labelThisActionCannotBeUndone => '此操作不能撤消';
   @override
-  String get labelAddVideoToPlaylistDescription => 'Add to existing or new video playlist';
+  String get labelAddVideoToPlaylistDescription => '添加到现有或新的视频播放列表';
   @override
-  String get labelAddToPlaylists => 'Add to playlists';
+  String get labelAddToPlaylists => '添加到播放列表';
   @override
-  String get labelEditableOnceSaved => 'Editable once saved';
+  String get labelEditableOnceSaved => '保存后可编辑';
   @override
-  String get labelPlaylistRemoved => 'Playlist Removed';
+  String get labelPlaylistRemoved => '播放列表已删除';
   @override
-  String get labelPlaylistSaved => 'Playlist Saved';
+  String get labelPlaylistSaved => '播放列表已保存';
   @override
-  String get labelRemoveFromFavorites => 'Remove from favorites';
+  String get labelRemoveFromFavorites => '从收藏夹中删除';
   @override
-  String get labelRemoveFromFavoritesDescription => 'Remove this video from your favorites';
+  String get labelRemoveFromFavoritesDescription => '从收藏夹中移除此视频';
   @override
-  String get labelSaveToFavorites => 'Save to favorites';
+  String get labelSaveToFavorites => '保存到收藏夹';
   @override
-  String get labelSaveToFavoritesDescription => 'Add video to your list of favorites';
+  String get labelSaveToFavoritesDescription => '将视频添加到您的收藏列表中';
   @override
-  String get labelSharePlaylist => 'Share Playlist';
+  String get labelSharePlaylist => '分享播放列表';
   @override
-  String get labelRemoveThisVideoFromThisList => 'Remove this video from this list';
+  String get labelRemoveThisVideoFromThisList => '从这个列表中移除这个视频';
   @override
-  String get labelEqualizer => 'Equalizer';
+  String get labelEqualizer => '均衡器';
   @override
-  String get labelLoudnessEqualizationGain => 'Loudness Equalization Gain';
+  String get labelLoudnessEqualizationGain => '响度均衡增益';
   @override
-  String get labelSliders => 'Sliders';
+  String get labelSliders => '滑块';
   @override
-  String get labelSave => 'Save';
+  String get labelSave => '保存';
   @override
-  String get labelPlaylistName => 'PlaylistName';
+  String get labelPlaylistName => '播放列表名称';
   @override
-  String get labelCreateVideoPlaylist => 'Create Video Playlist';
+  String get labelCreateVideoPlaylist => '创建视频播放列表';
   @override
-  String get labelSearchFilters => 'Search Filters';
+  String get labelSearchFilters => '搜索过滤器';
   @override
-  String get labelAddToPlaylistDescription => 'Add to existing or new playlist';
+  String get labelAddToPlaylistDescription => '添加到现有或新播放列表';
   @override
-  String get labelShareSong => 'Share Song';
+  String get labelShareSong => '分享歌曲';
   @override
-  String get labelShareSongDescription => 'Share with friends or other platforms';
+  String get labelShareSongDescription => '将歌曲分享给朋友或分享至其他平台';
   @override
-  String get labelEditTagsDescription => 'Open ID3 tags and artwork editor';
+  String get labelEditTagsDescription => '打开ID3标签和封面编辑器';
   @override
-  String get labelContains => 'Contains';
+  String get labelContains => '包含';
   @override
-  String get labelPlaybackSpeed => 'Playback speed';
+  String get labelPlaybackSpeed => '回放速度';
 }
