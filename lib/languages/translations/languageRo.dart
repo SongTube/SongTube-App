@@ -585,139 +585,139 @@ class LanguageRo extends Languages {
   @override
   String get labelVolumeBoost => 'Creșterea volumului';
   @override
-  String get labelNormalizeAudio => 'Normalize Audio';
+  String get labelNormalizeAudio => 'Normalizare audio';
   @override
-  String get labelSegmentedDownload => 'Segmented Download';
+  String get labelSegmentedDownload => 'Descărcare segmentată';
   @override
-  String get labelEnableSegmentedDownload => 'Enable Segmented Download';
+  String get labelEnableSegmentedDownload => 'Activați descărcarea segmentată';
   @override
-  String get labelEnableSegmentedDownloadDescription => 'This will download the whole audio file and then split it into the various enabled segments (or audio tracks) from the list below';
+  String get labelEnableSegmentedDownloadDescription => 'Aceasta va descărca întregul fișier audio și apoi îl va împărți în diferite segmente activate (sau piste audio) din lista de mai jos';
   @override
-  String get labelCreateMusicPlaylist => 'Create Music Playlist';
+  String get labelCreateMusicPlaylist => 'Creați un playlist de muzică';
   @override
-  String get labelCreateMusicPlaylistDescription => 'Create music playlist from all downloaded and saved audio segments';
+  String get labelCreateMusicPlaylistDescription => 'Creați un playlist de muzică din toate segmentele audio descărcate și salvate';
   @override
-  String get labelApplyTags => 'Apply Tags';
+  String get labelApplyTags => 'Aplicați tag-uri';
   @override
-  String get labelApplyTagsDescription => 'Extract tags from MusicBrainz for all segments';
+  String get labelApplyTagsDescription => 'Extrage tag-uri din MusicBrainz pentru toate segmentele';
   @override
-  String get labelLoading => 'Loading';
+  String get labelLoading => 'Încărcare';
   @override
-  String get labelMusicDownloadDescription => 'Select quality, convert and download audio only';
+  String get labelMusicDownloadDescription => 'Selectați calitatea, convertiți și descărcați numai audio';
   @override
-  String get labelVideoDownloadDescription =>  'Choose a video quality from the list and download it';
+  String get labelVideoDownloadDescription =>  'Alegeți o calitate video din listă și descărcați-o';
   @override
-  String get labelInstantDescription => 'Instantly start downloading as music';
+  String get labelInstantDescription => 'Începeți instantaneu să descărcați ca muzică';
   @override
   String get labelInstant => 'Instant';
   @override
-  String get labelCurrentQuality => 'Current Quality';
+  String get labelCurrentQuality => 'Calitatea curentă';
   @override
-  String get labelFastStreamingOptions => 'Fast Streaming Options';
+  String get labelFastStreamingOptions => 'Opțiuni de streaming rapid';
   @override
-  String get labelStreamingOptions => 'Streaming Options';
+  String get labelStreamingOptions => 'Opțiuni de streaming';
   @override
-  String get labelComments => 'Comments';
+  String get labelComments => 'Comentarii';
   @override
-  String get labelPinned => 'Pinned';
+  String get labelPinned => 'Fixat';
   @override
-  String get labelLikedByAuthor => 'Liked by Author';
+  String get labelLikedByAuthor => 'Apreciat de autor';
   @override
-  String get labelDescription => 'Description';
+  String get labelDescription => 'Descriere';
   @override
-  String get labelViews => 'Views';
+  String get labelViews => 'Vizionări';
   @override
-  String get labelPlayingNextIn => 'Playing next in';
+  String get labelPlayingNextIn => 'Urmează să redă în';
   @override
-  String get labelPlayNow => 'Play Now';
+  String get labelPlayNow => 'Redă acum';
   @override
-  String get labelLoadingPlaylist => 'Loading Playlist';
+  String get labelLoadingPlaylist => 'Încărcare playlist';
   @override
-  String get labelPlaylistReachedTheEnd => 'Playlist reached the end';
+  String get labelPlaylistReachedTheEnd => 'Playlist ajuns la sfârșit';
   @override
-  String get labelLiked => 'Liked';
+  String get labelLiked => 'A apreciat';
   @override
-  String get labelLike => 'Like';
+  String get labelLike => 'Apreciez';
   @override
-  String get labelVideoRemovedFromFavorites => 'Video removed from favorites';
+  String get labelVideoRemovedFromFavorites => 'Video eliminat din favorite';
   @override
-  String get labelVideoAddedToFavorites => 'Video added to favorites';
+  String get labelVideoAddedToFavorites => 'Video adăugat la favorite';
   @override
-  String get labelPopupMode => 'Popup Mode';
+  String get labelPopupMode => 'Modul Popup';
   @override
-  String get labelDownloaded => 'Downloaded';
+  String get labelDownloaded => 'Descărcat';
   @override
-  String get labelShowPlaylist => 'Show Playlist';
+  String get labelShowPlaylist => 'Afișați playlistul';
   @override
-  String get labelCreatePlaylist => 'Create Playlist';
+  String get labelCreatePlaylist => 'Creați un playlist';
   @override
-  String get labelAddVideoToPlaylist => 'Add video to playlist';
+  String get labelAddVideoToPlaylist => 'Adăugați video la playlist';
   @override
-  String get labelBackupDescription => 'Backup all of your local data into a single file that can be used to restore later';
+  String get labelBackupDescription => 'Efectuați un backup al tuturor datelor locale într-un singur fișier care poate fi folosit pentru a fi restaurat ulterior';
   @override
-  String get labelBackupCreated => 'Backup Created';
+  String get labelBackupCreated => 'Backup creat';
   @override
-  String get labelBackupRestored => 'Backup Restored';
+  String get labelBackupRestored => 'Backup restaurat';
   @override
-  String get labelRestoreDescription => 'Restore all your data from a backup file';
+  String get labelRestoreDescription => 'Restaurați toate datele dintr-un fișier de backup';
   @override
-  String get labelChannelSuggestions => 'Channel Suggestions';
+  String get labelChannelSuggestions => 'Sugestii de canale';
   @override
-  String get labelFetchingChannels => 'Fetching Channels';
+  String get labelFetchingChannels => 'Canalele de preluare';
   @override
-  String get labelShareVideo => 'Shared Video';
+  String get labelShareVideo => 'Video partajat';
   @override
-  String get labelShareDescription => 'Share with friends or other platforms';
+  String get labelShareDescription => 'Partajați cu prietenii sau alte platforme';
   @override
-  String get labelRemoveFromPlaylists => 'Remove from playlist';
+  String get labelRemoveFromPlaylists => 'Eliminați din playlist ';
   @override
-  String get labelThisActionCannotBeUndone => 'This action cannot be undone';
+  String get labelThisActionCannotBeUndone => 'Această acțiune nu poate fi anulată';
   @override
-  String get labelAddVideoToPlaylistDescription => 'Add to existing or new video playlist';
+  String get labelAddVideoToPlaylistDescription => 'Adăugați la playlistul video existent sau nou';
   @override
-  String get labelAddToPlaylists => 'Add to playlists';
+  String get labelAddToPlaylists => 'Adăugați la playlisturi';
   @override
-  String get labelEditableOnceSaved => 'Editable once saved';
+  String get labelEditableOnceSaved => 'Editabil odată salvat';
   @override
-  String get labelPlaylistRemoved => 'Playlist Removed';
+  String get labelPlaylistRemoved => 'Playlist eliminat';
   @override
-  String get labelPlaylistSaved => 'Playlist Saved';
+  String get labelPlaylistSaved => 'Playlist salvat';
   @override
-  String get labelRemoveFromFavorites => 'Remove from favorites';
+  String get labelRemoveFromFavorites => 'Eliminați din favorite';
   @override
-  String get labelRemoveFromFavoritesDescription => 'Remove this video from your favorites';
+  String get labelRemoveFromFavoritesDescription => 'Eliminați acest videoclip din favoritele tale';
   @override
-  String get labelSaveToFavorites => 'Save to favorites';
+  String get labelSaveToFavorites => 'Salvați la favorite';
   @override
-  String get labelSaveToFavoritesDescription => 'Add video to your list of favorites';
+  String get labelSaveToFavoritesDescription => 'Adăugați video la lista de favorite';
   @override
-  String get labelSharePlaylist => 'Share Playlist';
+  String get labelSharePlaylist => 'Distribuie playlistul';
   @override
-  String get labelRemoveThisVideoFromThisList => 'Remove this video from this list';
+  String get labelRemoveThisVideoFromThisList => 'Eliminați acest videoclip din această listă';
   @override
-  String get labelEqualizer => 'Equalizer';
+  String get labelEqualizer => 'Egalizator';
   @override
-  String get labelLoudnessEqualizationGain => 'Loudness Equalization Gain';
+  String get labelLoudnessEqualizationGain => 'Creștere de egalizare a intensității sonore';
   @override
-  String get labelSliders => 'Sliders';
+  String get labelSliders => 'Glisoare';
   @override
-  String get labelSave => 'Save';
+  String get labelSave => 'Salvaţi';
   @override
-  String get labelPlaylistName => 'PlaylistName';
+  String get labelPlaylistName => 'Denumire playlist';
   @override
-  String get labelCreateVideoPlaylist => 'Create Video Playlist';
+  String get labelCreateVideoPlaylist => 'Creați un playlist video';
   @override
-  String get labelSearchFilters => 'Search Filters';
+  String get labelSearchFilters => 'Filtre de căutare';
   @override
-  String get labelAddToPlaylistDescription => 'Add to existing or new playlist';
+  String get labelAddToPlaylistDescription => 'Adăugați la un playlist existent sau nou';
   @override
-  String get labelShareSong => 'Share Song';
+  String get labelShareSong => 'Distribuie melodia';
   @override
-  String get labelShareSongDescription => 'Share with friends or other platforms';
+  String get labelShareSongDescription => 'Distribuie cu prieteni sau alte platforme';
   @override
-  String get labelEditTagsDescription => 'Open ID3 tags and artwork editor';
+  String get labelEditTagsDescription => 'Deschideți editorul de tag-uri ID3 și artwork';
   @override
-  String get labelContains => 'Contains';
+  String get labelContains => 'Conţine';
   @override
-  String get labelPlaybackSpeed => 'Playback speed';
+  String get labelPlaybackSpeed => 'Viteza de redare';
 }
