@@ -1,6 +1,6 @@
 import 'package:songtube/languages/languages.dart';
 
-class LanguageEn extends Languages {
+class LanguageRo extends Languages {
 
   // Introduction Screens
   @override
@@ -252,10 +252,10 @@ class LanguageEn extends Languages {
   @override
   String get labelAndroid11Detected => "Android 10 sau 11 detectat";
   @override
-  String get labelAndroid11DetectedJustification => "To ensure the correct " +
-    "functioning of this app Downloads, on Android 10 and 11, access to all " +
-    "Files permission might be needed, this will be temporal and not required " +
-    "on future updates. You can also apply this fix in Settings.";
+  String get labelAndroid11DetectedJustification => "Pentru asigura corecta " +
+    "Funcționarea descărcărilor acestei aplicații, pe Android 10 și 11, acces la toate " +
+    "Este posibil ca permisiunea fișierelor să fie necesară, aceasta va fi temporală și nu este necesară " +
+    "la actualizările viitoare. De asemenea, puteți aplica această soluție în setări.";
 
   // Music Player
   @override
@@ -525,65 +525,65 @@ class LanguageEn extends Languages {
   @override
   String get labelRestoreThumbnailsDescription => 'Forțați miniaturile și procesul de generare a artwork-ului';
   @override
-  String get labelRestoringArtworks => 'Restoring artworks';
+  String get labelRestoringArtworks => 'Restaurarea artwork-uri';
   @override
-  String get labelRestoringArtworksDone => 'Restoring artworks done';
+  String get labelRestoringArtworksDone => 'Restaurarea artwork-uri terminat';
   @override
-  String get labelHomeScreen => 'Home Screen';
+  String get labelHomeScreen => 'Ecranul de pornire';
   @override
-  String get labelHomeScreenDescription => 'Change the default landing screen when you open the app';
+  String get labelHomeScreenDescription => 'Schimbați ecranul de destinație implicit atunci când deschideți aplicația';
   @override
-  String get labelDefaultMusicPage => 'Default Music Page';
+  String get labelDefaultMusicPage => 'Pagina implicită de muzică';
   @override
-  String get labelDefaultMusicPageDescription => 'Change the default page for the Music Page';
+  String get labelDefaultMusicPageDescription => 'Schimbați pagina implicită pentru Pagina de muzică';
   @override
   String get labelAbout => 'Despre';
   @override
-  String get labelConversionRequired => 'Conversion Required';
+  String get labelConversionRequired => 'Conversie necesară';
   @override
-  String get labelConversionRequiredDescription =>  'This song format is incompatible with the ID3 Tags editor. The app will automatically convert this song to AAC (m4a) to sort out this issue.';
+  String get labelConversionRequiredDescription =>  'Acest format de melodie este incompatibil cu editorul de tag-uri ID3. Aplicația va converti automat această melodie în AAC (m4a) pentru a rezolva această problemă.';
   @override
-  String get labelPermissionRequired => 'Permission Required';
+  String get labelPermissionRequired => 'Permisiunea necesară';
   @override
-  String get labelPermissionRequiredDescription => 'All file access permission is required for SongTube to edit any song on your device';
+  String get labelPermissionRequiredDescription => 'Toate permisiunile de acces la fișiere sunt necesare pentru ca SongTube să editeze orice melodie de pe dispozitivul tău';
   @override
-  String get labelApplying => 'Applying';
+  String get labelApplying => 'Aplicarea';
   @override
-  String get labelConvertingDescription => 'Re-encoding this song into AAC (m4a) format';
+  String get labelConvertingDescription => 'Re-codificarea acestei melodii în format AAC (m4a)';
   @override
-  String get labelWrittingTagsAndArtworkDescription => 'Applying new tags to this song';
+  String get labelWrittingTagsAndArtworkDescription => 'Aplicarea de noi tag-uri pentru acest melodie';
   @override
-  String get labelApply => 'Apply';
+  String get labelApply => 'Aplică';
   @override
-  String get labelSongs => 'Songs';
+  String get labelSongs => 'Melodii';
   @override
-  String get labelPlayAll => 'Play All';
+  String get labelPlayAll => 'Redă toate';
   @override
-  String get labelPlaying => 'Playing';
+  String get labelPlaying => 'Redarea';
   @override
-  String get labelPages => 'Pages';
+  String get labelPages => 'Pagini';
   @override
-  String get labelMusicPlayer => 'Music Player';
+  String get labelMusicPlayer => 'Player de muzică';
   @override
-  String get labelClearWatchHistory => 'Clear Watch History';
+  String get labelClearWatchHistory => 'Ștergeți istoricul videoclipurilor vizionate"';
   @override
-  String get labelClearWatchHistoryDescription =>  'You\'re about to delete all your watch history videos, this action cannot be undone, proceed?';
+  String get labelClearWatchHistoryDescription =>  'Sunteți pe cale să ștergeți toate videoclipurile din istoricul de vizionare, această acțiune nu poate fi anulată, continuați?';
   @override
-  String get labelDelete => 'Delete';
+  String get labelDelete => 'Şterge';
   @override
-  String get labelAppUpdate => 'App Update';
+  String get labelAppUpdate => 'Actualizare aplicație';
   @override
-  String get labelWhatsNew => 'What\'s New';
+  String get labelWhatsNew => 'Noutăți';
   @override
-  String get labelLater => 'Later';
+  String get labelLater => 'Mai târziu';
   @override
-  String get labelUpdate => 'Update';
+  String get labelUpdate => 'Actualizare';
   @override
-  String get labelUnsubscribe => 'Unsubscribe';
+  String get labelUnsubscribe => 'Dezabonează-te';
   @override
-  String get labelAudioFeatures => 'Audio Features';
+  String get labelAudioFeatures => 'Funcții audio';
   @override
-  String get labelVolumeBoost => 'Volume Boost';
+  String get labelVolumeBoost => 'Creșterea volumului';
   @override
   String get labelNormalizeAudio => 'Normalize Audio';
   @override
