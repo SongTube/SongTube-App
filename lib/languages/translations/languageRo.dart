@@ -189,68 +189,68 @@ class LanguageEn extends Languages {
   @override
   String get labelAccentColorJustification => "Personalizați culoarea accentului";
   @override
-  String get labelAudioFolder => "Audio Folder";
+  String get labelAudioFolder => "Dosar audio";
   @override
-  String get labelAudioFolderJustification => "Choose a Folder for " +
-    "Audio downloads";
+  String get labelAudioFolderJustification => "Alegeți un dosar pentru " +
+    "descărcări audio";
   @override
-  String get labelVideoFolder => "Video Folder";
+  String get labelVideoFolder => "Dosar video";
   @override
-  String get labelVideoFolderJustification => "Choose a folder for " +
-    "Video downloads";
+  String get labelVideoFolderJustification => "Alegeţi un dosar pentru" +
+    "descărcări video";
   @override
-  String get labelAlbumFolder => "Album Folder";
+  String get labelAlbumFolder => "Dosar album";
   @override
-  String get labelAlbumFolderJustification => "Create a Folder for each Song Album";
+  String get labelAlbumFolderJustification => "Creați un dosar pentru fiecare album de melodii";
   @override
-  String get labelDeleteCache => "Delete Cache";
+  String get labelDeleteCache => "Ștergeți Cache";
   @override
-  String get labelDeleteCacheJustification => "Clear SongTube Cache";
+  String get labelDeleteCacheJustification => "Ștergeți cache-ul SongTube";
   @override
-  String get labelAndroid11Fix => "Android 11 Fix";
+  String get labelAndroid11Fix => "Android 11 Fixare";
   @override
-  String get labelAndroid11FixJustification => "Fixes Download issues on " +
+  String get labelAndroid11FixJustification => "Fixează problemele de descărcare pe " +
     "Android 10 & 11";
   @override
   String get labelBackup => "Backup";
   @override
-  String get labelBackupJustification => "Backup your media library";
+  String get labelBackupJustification => "Efectuați un backup al bibliotecii media";
   @override
-  String get labelRestore => "Restore";
+  String get labelRestore => "Restauraţi";
   @override
-  String get labelRestoreJustification => "Restore your media library";
+  String get labelRestoreJustification => "Restaurați biblioteca media";
   @override
-  String get labelBackupLibraryEmpty => "Your Library is empty";
+  String get labelBackupLibraryEmpty => "Biblioteca ta este goală";
   @override
-  String get labelBackupCompleted => "Backup Completed";
+  String get labelBackupCompleted => "Backup finalizat";
   @override
-  String get labelRestoreNotFound => "Restore Not Found";
+  String get labelRestoreNotFound => "Restaurarea nu este găsită";
   @override
-  String get labelRestoreCompleted => "Restore Completed";
+  String get labelRestoreCompleted => "Restaurare finalizată";
   @override
-  String get labelCacheIsEmpty => "Cache is Empty";
+  String get labelCacheIsEmpty => "Cache este gol";
   @override
-  String get labelYouAreAboutToClear => "You're about to clear";
+  String get labelYouAreAboutToClear => "Ești pe cale să-ți ștergi";
 
   // Tags Editor TextFields
   @override
-  String get labelEditorTitle => "Title";
+  String get labelEditorTitle => "Titlu";
   @override
   String get labelEditorArtist => "Artist";
   @override
-  String get labelEditorGenre => "Genre";
+  String get labelEditorGenre => "Gen";
   @override
   String get labelEditorDisc => "Disc";
   @override
-  String get labelEditorTrack => "Track";
+  String get labelEditorTrack => "Pistă";
   @override
-  String get labelEditorDate => "Date";
+  String get labelEditorDate => "Data";
   @override
   String get labelEditorAlbum => "Album";
 
   // Android 10 or 11 Detected Dialog
   @override
-  String get labelAndroid11Detected => "Android 10 or 11 Detected";
+  String get labelAndroid11Detected => "Android 10 sau 11 detectat";
   @override
   String get labelAndroid11DetectedJustification => "To ensure the correct " +
     "functioning of this app Downloads, on Android 10 and 11, access to all " +
@@ -259,271 +259,271 @@ class LanguageEn extends Languages {
 
   // Music Player
   @override
-  String get labelPlayerSettings => "Player Settings";
+  String get labelPlayerSettings => "Setări player";
   @override
-  String get labelExpandArtwork => "Expand Artwork";
+  String get labelExpandArtwork => " Extindeți artwork";
   @override
-  String get labelArtworkRoundedCorners => "Artwork Rounded Corners";
+  String get labelArtworkRoundedCorners => "Artwork Colțuri rotunjite";
   @override
-  String get labelPlayingFrom => "Playing From";
+  String get labelPlayingFrom => "Redarea de la";
   @override
-  String get labelBlurBackground => "Blur Background";
+  String get labelBlurBackground => "Estomparea fundalului";
 
   // Video Page
   @override
-  String get labelTags => "Tags";
+  String get labelTags => "Tag-uri";
   @override
-  String get labelRelated => "Related";
+  String get labelRelated => "În legătură cu";
   @override
-  String get labelAutoPlay => "AutoPlay";
+  String get labelAutoPlay => "Redare automată";
 
   // Tags Pages
   @override
   String get labelAudioFormatNotCompatible =>
-    "Audio format not Compatible";
+    "Formatul audio nu este compatibil";
   @override
-  String get labelNotSpecified => "Not Specified";
+  String get labelNotSpecified => "Nespecificat";
   @override
   String get labelPerformAutomaticTagging => 
-    "Perform Automatic Tagging";
+    "Efectuați Tagging automată";
   @override
   String get labelSelectTagsfromMusicBrainz => 
-    "Select Tags from MusicBrainz";
+    "Selectați tag-uri din MusicBrainz";
   @override
   String get labelSelectArtworkFromDevice =>
-    "Select Artwork from Device";
+    "Selectați artwork de pe dispozitiv";
 
   // Telegram Join Channel Dialog
   @override
-  String get labelJoinTelegramChannel => "Join Telegram Channel!";
+  String get labelJoinTelegramChannel => "Alăturați-vă canalului Telegram!";
   @override
   String get labelJoinTelegramJustification =>
-    "Do you like SongTube? Please join the Telegram Channel! You will find " +
-    "Updates, Information, Development, Group Link and other Social links." +
+    "Îți place SongTube? Vă rugăm să vă alăturați canalului Telegram! Veți găsi " +
+    "Actualizări, Informații, Dezvoltare, Link de grup și alte link-uri sociale." +
     "\n\n" +
-    "In case you have an issue or a great recommentation in your mind, " +
-    "please join the Group from the Channel and write it down! But take in mind " +
-    "you can only speak in English, thanks!";
+    "În cazul în care aveți o problemă sau o recomandare grozavă în minte, " +
+    "vă rugăm să vă alăturați Grupului din Canal și să o scrieți! Dar țineți cont de faptul " +
+    "că puteți vorbi doar în limba engleză, mulțumesc!";
   @override
-  String get labelRemindLater => "Remind Later";
+  String get labelRemindLater => "Reamintește mai târziu";
 
   // Common Words (One word labels)
   @override
-  String get labelExit => "Exit";
+  String get labelExit => "Ieşire";
   @override
-  String get labelSystem => "System";
+  String get labelSystem => "Sistem";
   @override
-  String get labelChannel => "Channel";
+  String get labelChannel => "Canal";
   @override
-  String get labelShare => "Share";
+  String get labelShare => "Distribuie";
   @override
   String get labelAudio => "Audio";
   @override
   String get labelVideo => "Video";
   @override
-  String get labelDownload => "Download";
+  String get labelDownload => "Descarcă";
   @override
-  String get labelBest => "Best";
+  String get labelBest => "Cel mai bun";
   @override
   String get labelPlaylist => "Playlist";
   @override
-  String get labelVersion => "Version";
+  String get labelVersion => "Versiunea";
   @override
-  String get labelLanguage => "Language";
+  String get labelLanguage => "Limbă";
   @override
-  String get labelGrant => "Grant";
+  String get labelGrant => "Acordă";
   @override
-  String get labelAllow => "Allow";
+  String get labelAllow => "Permite";
   @override
-  String get labelAccess => "Access";
+  String get labelAccess => "Acces";
   @override
-  String get labelEmpty => "Empty";
+  String get labelEmpty => "Gol";
   @override
-  String get labelCalculating => "Calculating";
+  String get labelCalculating => "Calcularea";
   @override
-  String get labelCleaning => "Cleaning";
+  String get labelCleaning => "Curăţare";
   @override
-  String get labelCancel => "Cancel";
+  String get labelCancel => "Anulare";
   @override
   String get labelGeneral => "General";
   @override
-  String get labelRemove => "Remove";
+  String get labelRemove => "Şterge";
   @override
-  String get labelJoin => "Join";
+  String get labelJoin => "Alăturați-vă";
   @override
-  String get labelNo => "No";
+  String get labelNo => "Nu";
   @override
-  String get labelLibrary => "Library";
+  String get labelLibrary => "Bibliotecă";
   @override
-  String get labelCreate => "Create";
+  String get labelCreate => "Creează";
   @override
-  String get labelPlaylists => "Playlists";
+  String get labelPlaylists => "Playlisturi";
   @override
-  String get labelQuality => "Quality";
+  String get labelQuality => "Calitate";
   @override
-  String get labelSubscribe => "Subscribe";
+  String get labelSubscribe => "Abonează-te";
 
   // Other Translations
   @override
-  String get labelNoFavoriteVideos => 'No Favorite Videos';
+  String get labelNoFavoriteVideos => 'Fără videoclipuri favorite';
   @override
-  String get labelNoFavoriteVideosDescription => 'Search for videos and save them as favorites. They will appear here';
+  String get labelNoFavoriteVideosDescription => 'Căutați videoclipuri și salvați-le ca favorite. Acestea vor apărea aici';
   @override
-  String get labelNoSubscriptions => 'No Subscriptions';
+  String get labelNoSubscriptions => 'Fără abonamente';
   @override
-  String get labelNoSubscriptionsDescription => 'Tap the button above to show suggested Channels!';
+  String get labelNoSubscriptionsDescription => 'Atingeți butonul de mai sus pentru a afișa canalele sugerate!';
   @override
-  String get labelNoPlaylists => 'No Playlists';
+  String get labelNoPlaylists => 'Fără playlisturi';
   @override
-  String get labelNoPlaylistsDescription => 'Search for videos or playlists and save them. They will appear here';
+  String get labelNoPlaylistsDescription => 'Căutați videoclipuri sau playlisturi și salvați-le. Acestea vor apărea aici';
   @override
-  String get labelSearch => 'Search';
+  String get labelSearch => 'Căutare';
   @override
-  String get labelSubscriptions => 'Subscriptions';
+  String get labelSubscriptions => 'Abonamente';
   @override
-  String get labelNoDownloadsCanceled => 'No Downloads Canceled';
+  String get labelNoDownloadsCanceled => 'Nu există descărcări anulate';
   @override
-  String get labelNoDownloadsCanceledDescription => 'Good news! But if you cancel or something goes wrong with the download, you can check from here';
+  String get labelNoDownloadsCanceledDescription => 'Vești bune! Dar dacă anulați sau ceva nu merge bine cu descărcarea, puteți verifica de aici';
   @override
-  String get labelNoDownloadsYet => 'No Downloads Yet';
+  String get labelNoDownloadsYet => 'Încă nu există descărcări';
   @override
-  String get labelNoDownloadsYetDescription => 'Go home, search for something to download or wait for the queue!';
+  String get labelNoDownloadsYetDescription => 'Mergeți acasă, căutați ceva de descărcat sau așteptați la coadă!';
   @override
-  String get labelYourQueueIsEmpty => 'Your queue is empty';
+  String get labelYourQueueIsEmpty => 'Coada ta este goală';
   @override
-  String get labelYourQueueIsEmptyDescription => 'Go home and search for something to download!';
+  String get labelYourQueueIsEmptyDescription => 'Mergeți acasă și căutați ceva de descărcat!';
   @override
-  String get labelQueue => 'Queue';
+  String get labelQueue => 'Coadă de așteptare';
   @override
-  String get labelSearchDownloads => 'Search Downloads';
+  String get labelSearchDownloads => 'Căutare Descărcări';
   @override
-  String get labelWatchHistory => 'Watch History';
+  String get labelWatchHistory => 'Istoricul videoclipurilor vizionate';
   @override
-  String get labelWatchHistoryDescription => 'Look at which videos you have seen';
+  String get labelWatchHistoryDescription => 'Privește la ce videoclipuri ai văzut';
   @override
-  String get labelBackupAndRestore => 'Backup & Restore';
+  String get labelBackupAndRestore => 'Backup & Restaurare';
   @override
-  String get labelBackupAndRestoreDescription => 'Save or resture all of your local data';
+  String get labelBackupAndRestoreDescription => 'Salvați sau restaurați toate datele locale';
   @override
   String get labelSongtubeLink => 'SongTube Link';
   @override
-  String get labelSongtubeLinkDescription => 'Allow SongTube browser extension to detect this device, long press to learn more';
+  String get labelSongtubeLinkDescription => 'Permiteți extensiei de browser SongTube să detecteze acest dispozitiv, apăsați lung pentru a afla mai multe';
   @override
-  String get labelSupportDevelopment => 'Support Development';
+  String get labelSupportDevelopment => 'Sprijină dezvoltarea';
   @override
-  String get labelSocialLinks => 'Social Links';
+  String get labelSocialLinks => 'Link-uri sociale';
   @override
-  String get labelSeeMore => 'See more';
+  String get labelSeeMore => 'Vezi mai mult';
   @override
-  String get labelMostPlayed => 'Most played';
+  String get labelMostPlayed => 'Cele mai redate';
   @override
-  String get labelNoPlaylistsYet => 'No Playlists Yet';
+  String get labelNoPlaylistsYet => 'Nu există playlisturi încă';
   @override
-  String get labelNoPlaylistsYetDescription => 'You can create a playlist from your recents, music, albums or artists';
+  String get labelNoPlaylistsYetDescription => 'Poţi crea un playlist din recentele tale, muzică, albume sau artişti.';
   @override
-  String get labelNoSearchResults => 'No search results';
+  String get labelNoSearchResults => 'Nu sunt rezultate de căutare';
   @override
-  String get labelSongResults => 'Song results';
+  String get labelSongResults => 'Rezultatele melodiilor';
   @override
-  String get labelAlbumResults => 'Album results';
+  String get labelAlbumResults => 'Rezultatele albumelor';
   @override
-  String get labelArtistResults => 'Artist results';
+  String get labelArtistResults => 'Rezultatele artiștilor';
   @override
-  String get labelSearchAnything => 'Search anything';
+  String get labelSearchAnything => 'Căutați orice';
   @override
-  String get labelRecents => 'Recents';
+  String get labelRecents => 'Recente';
   @override
-  String get labelFetchingSongs => 'Fetching Songs';
+  String get labelFetchingSongs => 'Preluare melodii';
   @override
-  String get labelPleaseWaitAMoment => 'Please wait a moment';
+  String get labelPleaseWaitAMoment => 'Vă rugăm să așteptați un moment ';
   @override
-  String get labelWeAreDone => 'We are done';
+  String get labelWeAreDone => 'Am terminat';
   @override
-  String get labelEnjoyTheApp => 'Enjoy the\nApp';
+  String get labelEnjoyTheApp => 'Bucură-te de\nApplicaţie';
   @override
-  String get labelSongtubeIsBackDescription => 'SongTube is back with a cleaner look and set of features, have fun with your music!';
+  String get labelSongtubeIsBackDescription => 'SongTube s-a întors cu un aspect mai curat și un set de caracteristici, distrează-te cu muzica ta!';
   @override
-  String get labelLetsGo => 'Let\'s go';
+  String get labelLetsGo => 'Să mergem';
   @override
-  String get labelPleaseWait => 'Please wait';
+  String get labelPleaseWait => 'Vă rugăm să așteptați';
   @override
   String get labelPoweredBy => 'Powered by';
   @override
-  String get labelGetStarted => 'Get Started';
+  String get labelGetStarted => 'Începeți';
   @override
-  String get labelAllowUsToHave => 'Allow us to have';
+  String get labelAllowUsToHave => 'Permiteți-ne să avem';
   @override
-  String get labelStorageRead => 'Storage\nRead';
+  String get labelStorageRead => 'Stocare\nRead';
   @override
-  String get labelStorageReadDescription => 'This will scan your music, extract high quality artworks and allow you to personalize your music';
+  String get labelStorageReadDescription => 'Îți va scana muzica, va extrage artwork-uri de calitate superioară și îți va permite să îți personalizezi muzica.';
   @override
-  String get labelContinue => 'Continue';
+  String get labelContinue => 'Continuă';
   @override
-  String get labelAllowStorageRead => 'Allow Storage Read';
+  String get labelAllowStorageRead => 'Permiteți citirea stocării';
   @override
-  String get labelSelectYourPreferred => 'Select your preferred';
+  String get labelSelectYourPreferred => 'Selectați preferatul tău';
   @override
-  String get labelLight => 'Light';
+  String get labelLight => 'Luminos';
   @override
-  String get labelDark => 'Dark';
+  String get labelDark => 'Întunecat';
   @override
-  String get labelSimultaneousDownloads => 'Simultaneous Downloads';
+  String get labelSimultaneousDownloads => 'Descărcări simultane';
   @override
-  String get labelSimultaneousDownloadsDescription => 'Define how many downloads can happen at the same time';
+  String get labelSimultaneousDownloadsDescription => 'Definiți câte descărcări pot avea loc în același timp';
   @override
-  String get labelItems => 'Items';
+  String get labelItems => 'Articole';
   @override
-  String get labelInstantDownloadFormat => 'Instant Download';
+  String get labelInstantDownloadFormat => 'Descărcare instantanee';
   @override
-  String get labelInstantDownloadFormatDescription => 'Change the audio format for instant downloads';
+  String get labelInstantDownloadFormatDescription => 'Schimbați formatul audio pentru descărcări instantanee';
   @override
-  String get labelCurrent => 'Current';
+  String get labelCurrent => 'Curent';
   @override
-  String get labelPauseWatchHistory => 'Pause Watch History';
+  String get labelPauseWatchHistory => 'Pauză Istoricul videoclipurilor';
   @override
-  String get labelPauseWatchHistoryDescription => 'While paused, videos are not saved into the watch history list';
+  String get labelPauseWatchHistoryDescription => 'În timp ce este în pauză, videoclipurile nu sunt salvate în lista istoricul videoclipurilor vizionate';
   @override
-  String get labelLockNavigationBar => 'Lock Navigation Bar';
+  String get labelLockNavigationBar => 'Blocarea barei de navigare';
   @override
-  String get labelLockNavigationBarDescription => 'Locks the navigation bar from hiding and showing automatically on scroll';
+  String get labelLockNavigationBarDescription => 'Blochează ascunderea și afișarea automată a barei de navigare la defilare';
   @override
   String get labelPictureInPicture => 'Picture in Picture';
   @override
-  String get labelPictureInPictureDescription => 'Automatically enters PiP mode upon tapping home button while watching a video';
+  String get labelPictureInPictureDescription => 'Intră automat în modul PiP la atingerea butonului Home în timpul vizionării unui videoclip';
   @override
-  String get labelBackgroundPlaybackAlpha => 'Background Playback (Alpha)';
+  String get labelBackgroundPlaybackAlpha => 'Redare în fundal (Alpha)';
   @override
-  String get labelBackgroundPlaybackAlphaDescription => 'Toggle background playback feature. Due to plugin limitations, only current video can be played in the background';
+  String get labelBackgroundPlaybackAlphaDescription => 'Comutați funcția de redare în fundal. Din cauza limitărilor plugin-ului, numai videoclipul curent poate fi redat în fundal.';
   @override
-  String get labelBlurBackgroundDescription => 'Add blurred artwork background';
+  String get labelBlurBackgroundDescription => 'Adăugați fundalul blurat artwork';
   @override
-  String get labelBlurIntensity => 'Blur Intensity';
+  String get labelBlurIntensity => 'Intensitatea blurului';
   @override
-  String get labelBlurIntensityDescription => 'Change the blur intensity of the artwork background';
+  String get labelBlurIntensityDescription => 'Modificați intensitatea de blurare a fundalului artwork-ului';
   @override
-  String get labelBackdropOpacity => 'Backdrop Opacity';
+  String get labelBackdropOpacity => 'Opacitatea fundalului';
   @override
-  String get labelBackdropOpacityDescription => 'Change the colored backdrop opacity';
+  String get labelBackdropOpacityDescription => 'Modificați opacitatea fundalului colorat';
   @override
-  String get labelArtworkShadowOpacity => 'Artwork Shadow Opacity';
+  String get labelArtworkShadowOpacity => 'Opacitatea umbrei artwork';
   @override
-  String get labelArtworkShadowOpacityDescription => 'Change the artwork shadow intensity of the music player';
+  String get labelArtworkShadowOpacityDescription => 'Schimbați intensitatea umbrei artwork a playerului muzical';
   @override
-  String get labelArtworkShadowRadius => 'Artwork Shadow Radius';
+  String get labelArtworkShadowRadius => 'Raza de umbră artwork';
   @override
-  String get labelArtworkShadowRadiusDescription => 'Change the artwork shadow radius of the music player';
+  String get labelArtworkShadowRadiusDescription => 'Modificarea razei de umbrire artwork a music player-ului';
   @override
-  String get labelArtworkScaling => 'Artwork Scaling';
+  String get labelArtworkScaling => 'Scalarea artwork-ului';
   @override
-  String get labelArtworkScalingDescription => 'Scale out the music player artwork & background images';
+  String get labelArtworkScalingDescription => 'Redimensionați artwork-ul playerului muzical și imaginile de fundal';
   @override
-  String get labelBackgroundParallax => 'Background Parallax';
+  String get labelBackgroundParallax => 'Paralax de fundal';
   @override
-  String get labelBackgroundParallaxDescription =>  'Enable/Disable background image parallax effect';
+  String get labelBackgroundParallaxDescription =>  'Activați/dezactivați efectul de paralaxare a imaginii de fundal';
   @override
-  String get labelRestoreThumbnails => 'Restore Thumbnails';
+  String get labelRestoreThumbnails => 'Restaurați miniaturi';
   @override
-  String get labelRestoreThumbnailsDescription => 'Force thumbnails and artwork generation process';
+  String get labelRestoreThumbnailsDescription => 'Forțați miniaturile și procesul de generare a artwork-ului';
   @override
   String get labelRestoringArtworks => 'Restoring artworks';
   @override
@@ -537,7 +537,7 @@ class LanguageEn extends Languages {
   @override
   String get labelDefaultMusicPageDescription => 'Change the default page for the Music Page';
   @override
-  String get labelAbout => 'About';
+  String get labelAbout => 'Despre';
   @override
   String get labelConversionRequired => 'Conversion Required';
   @override
