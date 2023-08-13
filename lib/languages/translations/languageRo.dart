@@ -26,7 +26,7 @@ class LanguageRo extends Languages {
   @override
   String get labelEnjoy => "Bucură-te";
   @override 
-  String get labelGoHome => "Go Home";
+  String get labelGoHome => "Mergeți Acasă";
 
   // Bottom Navigation Bar
   @override
@@ -84,7 +84,7 @@ class LanguageRo extends Languages {
 
   // Download Status/Error Messages
   @override
-  String get labelDownloadQueued => "Download Queued";
+  String get labelDownloadQueued => "Descărcare în coadă";
   @override
   String get labelDownloadAcesssDenied => "Acces refuzat";
   @override
@@ -118,7 +118,7 @@ class LanguageRo extends Languages {
   @override
   String get labelEnableAudioConversion => "Activează conversia audio";
   @override
-  String get labelGainControls => "Gain Controls";
+  String get labelGainControls => "Gain Controale";
   @override
   String get labelVolume => "Volum";
   @override
@@ -561,7 +561,7 @@ class LanguageRo extends Languages {
   @override
   String get labelPlaying => 'Redarea';
   @override
-  String get labelPages => 'Pagini';
+  String get labelPages => 'Paginii';
   @override
   String get labelMusicPlayer => 'Player de muzică';
   @override
