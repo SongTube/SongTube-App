@@ -86,15 +86,6 @@ Where for your new Language you have to add a new LanguageData(flag, name, langu
 - Español
 - Português (Thanks to [@RickyM7](https://github.com/RickyM7))
 - Igbo (Thanks to [@enweazudaniel](https://github.com/enweazudaniel))
-- Indonesian (Thanks to [@breakdowns](https://github.com/breakdowns))
-- Turkish (Thanks to Barış Kırmızı)
-- Russian (Thanks yxur_bruh)
-- Arabic (Thanks JOOD_TECH)
-- Somali (Thanks [@nadiration](https://github.com/nadiration))
-- German (Thanks [@Paduu29](https://github.com/Paduu29))
-- Bengali (Thanks [@pieas-asif](https://github.com/pieas-asif))
-- Ukrainian (Thanks [@redman-dev29](https://github.com/redman-dev29))
-- Japanese (Thanks to [@HiSubway](https://github.com/HiSubway))
-- Italian (Thanks to [@alpha4041](https://github.com/alpha4041))
+
 
 ---
