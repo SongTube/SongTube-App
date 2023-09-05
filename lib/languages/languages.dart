@@ -55,7 +55,7 @@ final supportedLanguages = <LanguageData>[
   // Turkish (TR)
   LanguageData("🇹🇷", "Turkey", "tr"),
   // Romanian (RO)
-  LanguageData("🇷🇴"), "Romanian", "ro",
+  LanguageData("🇷🇴", "Romanian", "ro"),
   // Russian (RU)
   LanguageData("ru", "Russian", "ru"),
   // Somali (SO, ET, DJI, KEN)
