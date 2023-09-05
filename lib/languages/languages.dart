@@ -13,6 +13,7 @@ import 'translations/languageEn.dart';
 import 'translations/languageAz.dart';
 import 'translations/languageEs.dart';
 import 'translations/languagePt-BR.dart';
+import 'translations/languageRo.dart';
 import 'translations/languageIgbo-NG.dart';
 import 'translations/languageId.dart';
 import 'translations/languageVi.dart';
@@ -53,6 +54,8 @@ final supportedLanguages = <LanguageData>[
   LanguageData("🇻🇳", "Vietnamese", "vi"),
   // Turkish (TR)
   LanguageData("🇹🇷", "Turkey", "tr"),
+  // Romanian (RO)
+  LanguageData("🇷🇴"), "Romanian", "ro",
   // Russian (RU)
   LanguageData("ru", "Russian", "ru"),
   // Somali (SO, ET, DJI, KEN)
@@ -108,6 +111,9 @@ Future<Languages> _loadLocale(Locale locale) async {
     // Turkish (TR)
     case 'tr':
       return LanguageTr();
+    // Romanian (RO)
+    case 'ro':
+      return LanguageRo();
     // Russian (RU)
     case 'ru':
       return LanguageRu();
