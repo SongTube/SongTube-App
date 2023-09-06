@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:newpipeextractor_dart/models/filters.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/internal/global.dart';
 import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/content_provider.dart';
 import 'package:songtube/ui/sheet_phill.dart';
@@ -71,10 +72,26 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
                   } else {
                     contentProvider.searchFilters.add(filter);
                   }
-                  contentProvider.setState();
+                  contentProvider.saveSearchFilters();
                 }
               );
             },
+          ),
+          const Divider(indent: 16, endIndent: 16),
+          CheckboxListTile(
+            contentPadding: const EdgeInsets.only(left: 24, right: 12),
+            activeColor: Theme.of(context).iconTheme.color,
+            checkColor: Theme.of(context).primaryColor,
+            title: Text(
+              'Persistent Filters',
+              style: subtitleTextStyle(context, bold: false)
+            ),
+            subtitle: Text('Search filters will be saved even on app restart', style: smallTextStyle(context, opacity: 0.6)),
+            value: sharedPreferences.getBool('enablePersistentVideoSearchFilters') ?? false,
+            onChanged: (value) {
+              sharedPreferences.setBool('enablePersistentVideoSearchFilters', value!);
+              contentProvider.setState();
+            }
           ),
         ],
       ),

@@ -44,7 +44,12 @@ class ContentProvider extends ChangeNotifier {
   }
 
   // Search Filters
-  List<String> searchFilters = [];
+  List<String> searchFilters = (sharedPreferences.getBool('enablePersistentVideoSearchFilters') ?? false)
+    ? (sharedPreferences.getStringList('videoSearchFilters') ?? []) : [];
+  void saveSearchFilters() {
+    sharedPreferences.setStringList('videoSearchFilters', searchFilters);
+    notifyListeners();
+  }
 
   // Search Videos
   YoutubeSearch? searchContent;
