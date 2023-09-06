@@ -38,7 +38,6 @@ class StAudioHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
     _notifyAudioHandlerAboutPlaybackEvents();
     _listenForDurationChanges();
     _listenForCurrentSongIndexChanges();
-    _listenForSequenceStateChanges();
   }
 
   // Video Player Background Playback stuff
@@ -119,33 +118,20 @@ class StAudioHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
   void _listenForDurationChanges() {
     _player.durationStream.listen((duration) {
       var index = _player.currentIndex;
-      final newQueue = queue.value;
-      if (index == null || newQueue.isEmpty) return;
-      if (_player.shuffleModeEnabled) {
-        index = _player.shuffleIndices![index];
+      if (index != null) {
+        final oldMediaItem = queue.value[index];
+        final newMediaItem = oldMediaItem.copyWith(duration: duration);
+        mediaItem.add(newMediaItem);
       }
-      final oldMediaItem = newQueue[index];
-      final newMediaItem = oldMediaItem.copyWith(duration: duration);
-      newQueue[index] = newMediaItem;
-      queue.add(newQueue);
-      mediaItem.add(newMediaItem);
     });
   }
 
   void _listenForCurrentSongIndexChanges() {
     _player.currentIndexStream.listen((index) {
-      final playlist = queue.value;
-      if (index == null || playlist.isEmpty) return;
-      mediaItem.add(playlist[index]);
-    });
-  }
-
-  void _listenForSequenceStateChanges() {
-    _player.sequenceStateStream.listen((SequenceState? sequenceState) {
-      final sequence = sequenceState?.effectiveSequence;
-      if (sequence == null || sequence.isEmpty) return;
-      final items = sequence.map((source) => source.tag as MediaItem);
-      queue.add(items.toList());
+      if (index == null || queue.value.isEmpty) {
+        return;
+      }
+      mediaItem.add(queue.value[index]);
     });
   }
 
@@ -187,9 +173,9 @@ class StAudioHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
     if (shuffleMode == AudioServiceShuffleMode.none) {
       _player.setShuffleModeEnabled(false);
     } else {
-      await _player.shuffle();
       _player.setShuffleModeEnabled(true);
     }
+    print('qlq');
   }
 
   @override
@@ -197,6 +183,7 @@ class StAudioHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
     final audioSource = newQueue.map(_createAudioSource);
     await _playlist.clear();
     await _playlist.addAll(audioSource.toList());
+    await _player.setAudioSource(_playlist);
     queue.add(newQueue);
     return super.updateQueue(newQueue);
   }
