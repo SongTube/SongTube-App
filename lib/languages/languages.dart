@@ -4,6 +4,7 @@ import 'package:songtube/languages/translations/languageAr.dart';
 import 'package:songtube/languages/translations/languageCa.dart';
 import 'package:songtube/languages/translations/languageCkb.dart';
 import 'package:songtube/languages/translations/languageKu.dart';
+import 'package:songtube/languages/translations/languagePl.dart';
 import 'package:songtube/languages/translations/languageRu.dart';
 import 'package:songtube/main.dart';
 
@@ -78,6 +79,8 @@ final supportedLanguages = <LanguageData>[
   LanguageData("🇨🇳", "Simplified Chinese", "cn"),
   // Czech (CS)
   LanguageData("🇨🇿", "Čeština", "cs"),
+  // Polish (PL)
+  LanguageData("🇵🇱", "Polish", "pl"),
   // Sorani (CKB)
   LanguageData("ckb", "Kurdish(CKB)", "ku"),
   // Kurmanji (KU)
@@ -150,6 +153,9 @@ Future<Languages> _loadLocale(Locale locale) async {
     // Chinses (CN)
     case 'cn':
       return LanguageZhCN();
+    // Polish (PL)
+    case 'pl':
+      return LanguagePl();
     // Czech (CS)
     case 'cs':
       return LanguageCs();
