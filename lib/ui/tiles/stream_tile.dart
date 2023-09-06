@@ -129,11 +129,14 @@ class StreamTileCollapsed extends StatelessWidget {
             ),
           ),
           if (isEditable)
-            IconButton(
-                onPressed: () {
-                  UiUtils.showInfoItemOptions(stream, onDelete: onDelete);
-                },
-                icon: Icon(Icons.more_vert, size: 20, color: Theme.of(context).iconTheme.color!.withOpacity(0.8))
+          Semantics(
+            label: Languages.of(context)!.labelMore,
+            child: IconButton(
+              onPressed: () {
+                UiUtils.showInfoItemOptions(stream, onDelete: onDelete);
+              },
+              icon: Icon(Icons.more_vert, size: 20, color: Theme.of(context).iconTheme.color!.withOpacity(0.8))
+            ),
           )
         ],
       ),
@@ -250,12 +253,15 @@ class StreamTileExpanded extends StatelessWidget {
             ),
           ),
         ),
-        IconButton(
-            onPressed: isEditable ? () {
-              UiUtils.showInfoItemOptions(stream, onDelete: onDelete);
-            } : null,
-            icon: Icon(Icons.more_vert,
-                size: 20, color: Theme.of(context).iconTheme.color!.withOpacity(0.8)))
+        Semantics(
+          label: Languages.of(context)!.labelMore,
+          child: IconButton(
+              onPressed: isEditable ? () {
+                UiUtils.showInfoItemOptions(stream, onDelete: onDelete);
+              } : null,
+              icon: Icon(Icons.more_vert,
+                  size: 20, color: Theme.of(context).iconTheme.color!.withOpacity(0.8))),
+        )
       ],
     );
   }

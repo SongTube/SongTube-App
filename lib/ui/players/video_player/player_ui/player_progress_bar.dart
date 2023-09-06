@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:newpipeextractor_dart/models/streamSegment.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/ui/text_styles.dart';
 
 class VideoPlayerProgressBar extends StatefulWidget {
@@ -167,28 +168,34 @@ class _VideoPlayerProgressBarState extends State<VideoPlayerProgressBar> with Ti
                     ),
                   ),
                   // Quality Button
-                  GestureDetector(
-                    onTap: widget.onPresetTap,
-                    child: Container(
-                      padding: const EdgeInsets.only(left: 12, bottom: 4, right: 8, top: 4),
-                      color: Colors.transparent,
-                      child: const Icon(
-                        Icons.video_settings_rounded,
-                        color: Colors.white,
-                        size: 22,
+                  Semantics(
+                    label: Languages.of(context)!.labelQuality,
+                    child: GestureDetector(
+                      onTap: widget.onPresetTap,
+                      child: Container(
+                        padding: const EdgeInsets.only(left: 12, bottom: 4, right: 8, top: 4),
+                        color: Colors.transparent,
+                        child: const Icon(
+                          Icons.video_settings_rounded,
+                          color: Colors.white,
+                          size: 22,
+                        ),
                       ),
                     ),
                   ),
                   // FullScreen Button
-                  GestureDetector(
-                    onTap: widget.onFullScreenTap,
-                    child: Container(
-                      padding: const EdgeInsets.only(left: 8, bottom: 4, right: 16, top: 4),
-                      color: Colors.transparent,
-                      child: Icon(
-                        MediaQuery.of(context).orientation == Orientation.portrait
-                          ? Icons.fullscreen_rounded : Icons.fullscreen_exit_rounded,
-                        color: Colors.white,
+                  Semantics(
+                    label: 'Fullscreen',
+                    child: GestureDetector(
+                      onTap: widget.onFullScreenTap,
+                      child: Container(
+                        padding: const EdgeInsets.only(left: 8, bottom: 4, right: 16, top: 4),
+                        color: Colors.transparent,
+                        child: Icon(
+                          MediaQuery.of(context).orientation == Orientation.portrait
+                            ? Icons.fullscreen_rounded : Icons.fullscreen_exit_rounded,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),

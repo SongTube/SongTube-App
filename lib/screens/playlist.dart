@@ -95,19 +95,25 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                       height: kToolbarHeight,
                       child: Row(
                         children: [
-                          IconButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            icon: Icon(Iconsax.arrow_left, color: Theme.of(context).iconTheme.color)
+                          Semantics(
+                            label: 'Go back',
+                            child: IconButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              icon: Icon(Iconsax.arrow_left, color: Theme.of(context).iconTheme.color)
+                            ),
                           ), 
                           const Spacer(),
                           if (mediaSet.id != null)
-                          IconButton(
-                            onPressed: () {
-                              setArtwork();
-                            },
-                            icon: Icon(Iconsax.image, color: Theme.of(context).iconTheme.color)
+                          Semantics(
+                            label: 'Edit playlist artwork',
+                            child: IconButton(
+                              onPressed: () {
+                                setArtwork();
+                              },
+                              icon: Icon(Iconsax.image, color: Theme.of(context).iconTheme.color)
+                            ),
                           ), 
                         ],
                       ),
@@ -161,31 +167,34 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                               //       child: Icon(Icons.star_rounded, color: Colors.orangeAccent, size: 18))
                               //   : const SizedBox()
                               if (mediaSet.id != null)
-                              IconButton(
-                                onPressed: () {
-                                  if (editingPlaylistName) {
-                                    setState(() {
-                                      editingPlaylistName = false;
-                                    });
-                                    if (nameController.text != mediaSet.name) {
-                                      // Update Playlist name
-                                      playlistProvider.updateGlobalPlaylist(mediaSet.id!, newName: nameController.text);
-                                      if (mediaProvider.currentPlaylistName == mediaSet.name) {
-                                        mediaProvider.currentPlaylistName = nameController.text;
-                                      }
+                              Semantics(
+                                label: 'Edit playlist name',
+                                child: IconButton(
+                                  onPressed: () {
+                                    if (editingPlaylistName) {
                                       setState(() {
-                                        mediaSet.name = nameController.text;
+                                        editingPlaylistName = false;
                                       });
+                                      if (nameController.text != mediaSet.name) {
+                                        // Update Playlist name
+                                        playlistProvider.updateGlobalPlaylist(mediaSet.id!, newName: nameController.text);
+                                        if (mediaProvider.currentPlaylistName == mediaSet.name) {
+                                          mediaProvider.currentPlaylistName = nameController.text;
+                                        }
+                                        setState(() {
+                                          mediaSet.name = nameController.text;
+                                        });
+                                      }
+                                    } else {
+                                      setState(() {
+                                        editingPlaylistName = true;
+                                      });
+                                      nameController.selection = TextSelection(baseOffset: 0, extentOffset: mediaSet.name.length);
+                                      focusNode.requestFocus();
                                     }
-                                  } else {
-                                    setState(() {
-                                      editingPlaylistName = true;
-                                    });
-                                    nameController.selection = TextSelection(baseOffset: 0, extentOffset: mediaSet.name.length);
-                                    focusNode.requestFocus();
-                                  }
-                                },
-                                icon: Icon(editingPlaylistName ? Icons.check_rounded : Icons.edit_rounded, size: 20)
+                                  },
+                                  icon: Icon(editingPlaylistName ? Icons.check_rounded : Icons.edit_rounded, size: 20)
+                                ),
                               )
                             ],
                           ),
@@ -394,9 +403,12 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
           children: [
             // Reorder Tab
             if (mediaSet.id != null)
-            Padding(
-              padding: const EdgeInsets.all(8.0).copyWith(left: 16, right: 0),
-              child: Icon(Icons.reorder_rounded, size: 18, color: Theme.of(context).iconTheme.color!.withOpacity(0.4)),
+            Semantics(
+              label: 'Reorder song in playlist',
+              child: Padding(
+                padding: const EdgeInsets.all(8.0).copyWith(left: 16, right: 0),
+                child: Icon(Icons.reorder_rounded, size: 18, color: Theme.of(context).iconTheme.color!.withOpacity(0.4)),
+              ),
             ),
             // Song
             Expanded(

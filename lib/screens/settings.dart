@@ -70,16 +70,19 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> with TickerPr
             child: Row(
               children: [
                 const SizedBox(width: 4),
-                IconButton(
-                  icon: Icon(Iconsax.arrow_left, color: Theme.of(context).iconTheme.color),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
+                Semantics(
+                  label: 'Go back',
+                  child: IconButton(
+                    icon: Icon(Iconsax.arrow_left, color: Theme.of(context).iconTheme.color),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
                 ),
                 const SizedBox(width: 4),
                 Expanded(
                   child: Text(
-                    "Settings",
+                    Languages.of(context)!.labelSettings,
                     style: textStyle(context)
                   ),
                 ),
@@ -104,39 +107,42 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> with TickerPr
   _createLanguageDropDown(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16).copyWith(top: 8),
-      child: DropdownButton<LanguageData>(
-        alignment: Alignment.centerRight,
-        iconSize: 26,
-        hint: Padding(
-          padding: const EdgeInsets.only(right: 8.0),
-          child: Text(
-            Localizations.localeOf(context).languageCode.toUpperCase(),
-            style: subtitleTextStyle(context).copyWith(fontWeight: FontWeight.w900)
-          ),
-        ),
-        icon: const SizedBox(),
-        onChanged: (LanguageData? language) {
-          if (language == null) return;
-          changeLanguage(context, language.languageCode);
-        },
-        underline: DropdownButtonHideUnderline(child: Container()),
-        items: supportedLanguages
-          .map<DropdownMenuItem<LanguageData>>(
-            (e) =>
-            DropdownMenuItem<LanguageData>(
-              value: e,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  Text(
-                    e.name,
-                    style: subtitleTextStyle(context)
-                  )
-                ],
-              ),
+      child: Semantics(
+        label: 'Change language',
+        child: DropdownButton<LanguageData>(
+          alignment: Alignment.centerRight,
+          iconSize: 26,
+          hint: Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: Text(
+              Localizations.localeOf(context).languageCode.toUpperCase(),
+              style: subtitleTextStyle(context).copyWith(fontWeight: FontWeight.w900)
             ),
-          )
-          .toList(),
+          ),
+          icon: const SizedBox(),
+          onChanged: (LanguageData? language) {
+            if (language == null) return;
+            changeLanguage(context, language.languageCode);
+          },
+          underline: DropdownButtonHideUnderline(child: Container()),
+          items: supportedLanguages
+            .map<DropdownMenuItem<LanguageData>>(
+              (e) =>
+              DropdownMenuItem<LanguageData>(
+                value: e,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    Text(
+                      e.name,
+                      style: subtitleTextStyle(context)
+                    )
+                  ],
+                ),
+              ),
+            )
+            .toList(),
+        ),
       ),
     );
   }

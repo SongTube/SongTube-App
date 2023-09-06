@@ -177,6 +177,7 @@ class _HomeDefaultState extends State<HomeDefault> with TickerProviderStateMixin
                                   return Padding(
                                     padding: const EdgeInsets.only(left: 12),
                                     child: CustomInkWell(
+                                      semanticsLabel: Languages.of(context)!.labelSearchFilters,
                                       onTap: () {
                                         contentProvider.loadVideoPlayer(snapshot.data);
                                       },

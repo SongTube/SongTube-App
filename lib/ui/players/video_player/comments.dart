@@ -175,9 +175,12 @@ class VideoPlayerCommentsExpanded extends StatelessWidget {
           Row(
             children: [
               const SizedBox(width: 4),
-              IconButton(
-                onPressed: onBack,
-                icon: const Icon(Iconsax.arrow_left)
+              Semantics(
+                label: 'Go back',
+                child: IconButton(
+                  onPressed: onBack,
+                  icon: const Icon(Iconsax.arrow_left)
+                ),
               ),
               const SizedBox(width: 4),
               Text(Languages.of(context)!.labelComments, style: subtitleTextStyle(context, bold: true).copyWith(fontSize: 16)),

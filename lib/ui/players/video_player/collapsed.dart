@@ -47,8 +47,8 @@ class _VideoPlayerCollapsedState extends State<VideoPlayerCollapsed> {
             ],
           ),
         ),
-        AnimatedSwitcher(
-          duration: const Duration(milliseconds: 400),
+        Semantics(
+          label: (playerController?.value.isPlaying ?? false) ? 'Pause' : 'Play',
           child: IconButton(
             icon: Icon((playerController?.value.isPlaying ?? false) ? Ionicons.pause_outline : Ionicons.play_outline, size: 20),
             onPressed: () async {

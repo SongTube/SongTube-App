@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/ui/text_styles.dart';
 
 class VideoPlayerAppBar extends StatelessWidget {
@@ -16,11 +17,14 @@ class VideoPlayerAppBar extends StatelessWidget {
       child: Row(
         children: [
           const SizedBox(width: 6),
-          IconButton(
-            onPressed: () {
-              onMinimize();
-            },
-            icon: const Icon(Icons.expand_more_rounded, size: 18, color: Colors.white)
+          Semantics(
+            label: 'Minimize player',
+            child: IconButton(
+              onPressed: () {
+                onMinimize();
+              },
+              icon: const Icon(Icons.expand_more_rounded, size: 18, color: Colors.white)
+            ),
           ),
           const SizedBox(width: 4),
           Expanded(

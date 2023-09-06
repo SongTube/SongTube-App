@@ -2,6 +2,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:songtube/internal/global.dart';
 import 'package:songtube/internal/models/song_item.dart';
+import 'package:songtube/languages/languages.dart';
 import 'package:songtube/main.dart';
 import 'package:songtube/providers/playlist_provider.dart';
 import 'package:songtube/ui/animations/mini_music_visualizer.dart';
@@ -161,21 +162,24 @@ class _SongTileState extends State<SongTile> {
                   return MiniMusicVisualizer(color: dominantColor, width: 2, height: 12, pause: isPaused);
                 }
               ))
-          : Bounce(
-              duration: const Duration(milliseconds: 150),
-              onPressed: () {
-                playlistProvider.addToFavorites(widget.song);
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(16.0).copyWith(right: 8),
-                child: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 300),
-                  child: Icon(
-                    isFavorite ? Ionicons.heart : Ionicons.heart_outline,
-                    key: ValueKey(widget.song.id+isFavorite.toString()),
-                    color: isFavorite ? Colors.red : Theme.of(context).iconTheme.color!.withOpacity(0.2), size: 18)),
+          : Semantics(
+            label: 'Like song',
+            child: Bounce(
+                duration: const Duration(milliseconds: 150),
+                onPressed: () {
+                  playlistProvider.addToFavorites(widget.song);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0).copyWith(right: 8),
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    child: Icon(
+                      isFavorite ? Ionicons.heart : Ionicons.heart_outline,
+                      key: ValueKey(widget.song.id+isFavorite.toString()),
+                      color: isFavorite ? Colors.red : Theme.of(context).iconTheme.color!.withOpacity(0.2), size: 18)),
+                ),
               ),
-            )
+          )
         : const SizedBox()
     );
   }

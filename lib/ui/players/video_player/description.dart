@@ -42,9 +42,12 @@ class _VideoPlayerDescriptionState extends State<VideoPlayerDescription> {
             Row(
               children: [
                 const SizedBox(width: 4),
-                IconButton(
-                  onPressed: widget.onBack,
-                  icon: const Icon(Iconsax.arrow_left)
+                Semantics(
+                  label: 'Go back',
+                  child: IconButton(
+                    onPressed: widget.onBack,
+                    icon: const Icon(Iconsax.arrow_left)
+                  ),
                 ),
                 const SizedBox(width: 4),
                 Expanded(

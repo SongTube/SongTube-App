@@ -124,15 +124,18 @@ class PlaylistTileCollapsed extends StatelessWidget {
             ),
           ),
           if (isEditable)
-          IconButton(
-            onPressed: () {
-              showModalBottomSheet(
-                context: internalNavigatorKey.currentContext!,
-                isScrollControlled: true,
-                backgroundColor: Colors.transparent,
-                builder: (context) => InfoItemOptions(infoItem: playlist));
-            },
-            icon: Icon(Icons.more_vert, size: 20, color: Theme.of(context).iconTheme.color!.withOpacity(0.8))
+          Semantics(
+            label: Languages.of(context)!.labelMore,
+            child: IconButton(
+              onPressed: () {
+                showModalBottomSheet(
+                  context: internalNavigatorKey.currentContext!,
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
+                  builder: (context) => InfoItemOptions(infoItem: playlist));
+              },
+              icon: Icon(Icons.more_vert, size: 20, color: Theme.of(context).iconTheme.color!.withOpacity(0.8))
+            ),
           )
         ],
       ),
@@ -258,15 +261,18 @@ class PlaylistTileExpanded extends StatelessWidget {
             ),
           ),
         ),
-        IconButton(
-          onPressed: () {
-            showModalBottomSheet(
-              context: internalNavigatorKey.currentContext!,
-              isScrollControlled: true,
-              backgroundColor: Colors.transparent,
-              builder: (context) => InfoItemOptions(infoItem: playlist));
-          },
-          icon: Icon(Icons.more_vert, size: 20, color: Theme.of(context).iconTheme.color!.withOpacity(0.8))
+        Semantics(
+          label: Languages.of(context)!.labelMore,
+          child: IconButton(
+            onPressed: () {
+              showModalBottomSheet(
+                context: internalNavigatorKey.currentContext!,
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent,
+                builder: (context) => InfoItemOptions(infoItem: playlist));
+            },
+            icon: Icon(Icons.more_vert, size: 20, color: Theme.of(context).iconTheme.color!.withOpacity(0.8))
+          ),
         )
       ],
     );

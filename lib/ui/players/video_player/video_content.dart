@@ -210,11 +210,14 @@ class _VideoPlayerContentState extends State<VideoPlayerContent> with TickerProv
                       ],
                     )
                   ),
-                  IconButton(
-                    onPressed: () {
-                      contentProvider.showDescription = true;
-                    },
-                    icon: Icon(Icons.expand_more, color: Theme.of(context).primaryColor)
+                  Semantics(
+                    label: Languages.of(context)!.labelMore,
+                    child: IconButton(
+                      onPressed: () {
+                        contentProvider.showDescription = true;
+                      },
+                      icon: Icon(Icons.expand_more, color: Theme.of(context).primaryColor)
+                    ),
                   ),
                 ],
               ),

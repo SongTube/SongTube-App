@@ -39,11 +39,14 @@ class _HomeLibraryState extends State<HomeLibrary> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
-          IconButton(
-            onPressed: () {
-              UiUtils.pushRouteAsync(context, const ConfigurationScreen());
-            },
-            icon: Icon(Iconsax.setting, color: Theme.of(context).primaryColor)
+          Semantics(
+            label: Languages.of(context)!.labelSettings,
+            child: IconButton(
+              onPressed: () {
+                UiUtils.pushRouteAsync(context, const ConfigurationScreen());
+              },
+              icon: Icon(Iconsax.setting, color: Theme.of(context).primaryColor)
+            ),
           )
         ],
       ),
@@ -184,21 +187,33 @@ class _HomeLibraryState extends State<HomeLibrary> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            GestureDetector(
-              onTap: () => launchUrl(Uri.parse("https://t.me/songtubechannel"), mode: LaunchMode.externalApplication),
-              child: Image.asset('assets/images/telegram.png')
+            Semantics(
+              label: 'Open telegram channel',
+              child: GestureDetector(
+                onTap: () => launchUrl(Uri.parse("https://t.me/songtubechannel"), mode: LaunchMode.externalApplication),
+                child: Image.asset('assets/images/telegram.png')
+              ),
             ),
-            GestureDetector(
-              onTap: () => launchUrl(Uri.parse("https://github.com/SongTube"), mode: LaunchMode.externalApplication),
-              child: Image.asset('assets/images/github.png')
+            Semantics(
+              label: 'Open github repository',
+              child: GestureDetector(
+                onTap: () => launchUrl(Uri.parse("https://github.com/SongTube"), mode: LaunchMode.externalApplication),
+                child: Image.asset('assets/images/github.png')
+              ),
             ),
-            GestureDetector(
-              onTap: () => launchUrl(Uri.parse("https://facebook.com/songtubeapp/"), mode: LaunchMode.externalApplication),
-              child: Image.asset('assets/images/facebook.png')
+            Semantics(
+              label: 'Open facebook page',
+              child: GestureDetector(
+                onTap: () => launchUrl(Uri.parse("https://facebook.com/songtubeapp/"), mode: LaunchMode.externalApplication),
+                child: Image.asset('assets/images/facebook.png')
+              ),
             ),
-            GestureDetector(
-              onTap: () => launchUrl(Uri.parse("https://instagram.com/songtubeapp"), mode: LaunchMode.externalApplication),
-              child: Image.asset('assets/images/instagram.png')
+            Semantics(
+              label: 'Open instagram page',
+              child: GestureDetector(
+                onTap: () => launchUrl(Uri.parse("https://instagram.com/songtubeapp"), mode: LaunchMode.externalApplication),
+                child: Image.asset('assets/images/instagram.png')
+              ),
             ),
           ],
         ),
