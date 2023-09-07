@@ -115,6 +115,10 @@ class MediaProvider extends ChangeNotifier {
     await audioHandler.skipToQueueItem(index);
   }
 
+  void updateState() {
+    notifyListeners();
+  }
+
   // -------------------
   // Downloader Section
   // -------------------

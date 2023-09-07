@@ -273,9 +273,13 @@ class MediaUtils {
     final songString = sharedPreferences.getString('deviceSongs');
     if (songString != null) {
       final List<dynamic> songsMap = jsonDecode(songString);
-      final songs = List<SongItem>.generate(songsMap.length, (index) {
-        return SongItem.fromMap(songsMap[index]);
-      });
+      final songs = <SongItem>[];
+      for (var map in songsMap) {
+        final song = SongItem.fromMap(map);
+        if (File(song.id).existsSync()) {
+          songs.add(song);
+        }
+      }
       return songs;
     } else {
       return [];

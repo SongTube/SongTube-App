@@ -27,6 +27,7 @@ class SongOptionsSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     ContentProvider contentProvider = Provider.of(context);
     DownloadProvider downloadProvider = Provider.of(context);
+    MediaProvider mediaProvider = Provider.of(context);
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
@@ -105,7 +106,9 @@ class SongOptionsSheet extends StatelessWidget {
                 );
               });
               if (result ?? false) {
-                await downloadProvider.deleteDownload(song); 
+                mediaProvider.songs.removeWhere((element) => element.id == song.id);
+                mediaProvider.updateState();
+                await downloadProvider.deleteDownload(song);
               }
               // ignore: use_build_context_synchronously
               Navigator.pop(context);
