@@ -47,13 +47,13 @@ class MediaUtils {
         if (userTags.artwork is File || (userTags.artwork is String && !isURL(userTags.artwork))) {
           final bytes = await tagger.AudioTagger.cropToSquare(userTags.artwork is File ? userTags.artwork : File(userTags.artwork));
           if (bytes != null) {
-            image.writeAsBytes(bytes.toList());
+            await image.writeAsBytes(bytes.toList());
           }
         } else if (userTags.artwork is Uint8List) {
-          image.writeAsBytes(userTags.artwork);
+          await image.writeAsBytes(userTags.artwork);
         } else if (userTags.artwork is String && isURL(userTags.artwork)) {
           final response = await get(Uri.parse(userTags.artwork));
-          image.writeAsBytes(response.bodyBytes);
+          await image.writeAsBytes(response.bodyBytes);
         }
         if (await image.exists()) {
           await ArtworkManager.writeArtwork(tmp.path, artwork: image, forceRefresh: true, embedToSong: true);
