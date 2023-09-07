@@ -118,7 +118,7 @@ class StAudioHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
   void _listenForDurationChanges() {
     _player.durationStream.listen((duration) {
       var index = _player.currentIndex;
-      if (index != null) {
+      if (index != null && _player.audioSource!.sequence.isNotEmpty) {
         final oldMediaItem = queue.value[index];
         final newMediaItem = oldMediaItem.copyWith(duration: duration);
         mediaItem.add(newMediaItem);
@@ -175,17 +175,16 @@ class StAudioHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
     } else {
       _player.setShuffleModeEnabled(true);
     }
-    print('qlq');
   }
 
   @override
   Future<void> updateQueue(List<MediaItem> newQueue) async {
+    queue.add(newQueue);
     final audioSource = newQueue.map(_createAudioSource);
     await _playlist.clear();
     await _playlist.addAll(audioSource.toList());
     await _player.setAudioSource(_playlist);
-    queue.add(newQueue);
-    return super.updateQueue(newQueue);
+    return await super.updateQueue(newQueue);
   }
 
   @override
