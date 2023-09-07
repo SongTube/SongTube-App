@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:songtube/languages/languages.dart';
 import 'package:songtube/ui/text_styles.dart';
 
 class VideoPlayerAppBar extends StatelessWidget {

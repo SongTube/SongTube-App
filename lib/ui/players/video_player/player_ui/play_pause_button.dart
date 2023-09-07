@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:songtube/languages/languages.dart';
 
 class VideoPlayerPlayPauseButton extends StatelessWidget {
   final bool isPlaying;
