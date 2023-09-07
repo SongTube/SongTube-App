@@ -1,3 +1,21 @@
+# SongTube 7.2.0:
+
+- General:
+    * Added missing semantic labels for accesibility
+    * Fixed music player shuffle mode
+    * Added new option to make video search filters persistent
+    * Added new option in settings to hide system appbar when video player is expanded
+    * Fixed buggy and inconsistent music tags editor
+    * Added new option in downloaded songs menu to delete it
+    * Downloads can now be accesed inmediately from any other video or music player
+
+- Languages:
+    * Updated simplified Chinese (Thanks to @Kurokitu)
+    * Added Romanian Language (Thanks to @UnifeGi)
+    * Added Polish Language (Thanks to @piotreknow02)
+    * Refreshed Ukrainian Language (Thanks to @odkate)
+
+
 # SongTube 7.1.2:
 
 - General:
