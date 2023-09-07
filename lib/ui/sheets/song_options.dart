@@ -9,6 +9,7 @@ import 'package:songtube/providers/media_provider.dart';
 import 'package:songtube/screens/id3_editor.dart';
 import 'package:songtube/ui/sheet_phill.dart';
 import 'package:songtube/ui/sheets/add_to_playlist.dart';
+import 'package:songtube/ui/sheets/common_sheet.dart';
 import 'package:songtube/ui/text_styles.dart';
 import 'package:songtube/ui/tiles/song_tile.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,7 @@ class SongOptionsSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ContentProvider contentProvider = Provider.of(context);
+    DownloadProvider downloadProvider = Provider.of(context);
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
@@ -86,6 +88,29 @@ class SongOptionsSheet extends StatelessWidget {
               });
             }
           ),
+          if (isDownload)
+          _optionTile(context,
+            title: Languages.of(context)!.labelDeleteSong,
+            subtitle: 'This action cannot be undone',
+            icon: LineIcons.trash,
+            onTap: () async {
+              final result = await showModalBottomSheet(context: internalNavigatorKey.currentContext!, backgroundColor: Colors.transparent, isScrollControlled: true, builder: (context) {
+                return CommonSheet(
+                  title: Languages.of(context)!.labelDeleteSong,
+                  body: Text('Are you sure? This action is irreversible!', style: subtitleTextStyle(context)),
+                  actions: [
+                    TextButton(onPressed: () => Navigator.pop(context, true), child: Text('Delete', style: smallTextStyle(context).copyWith(color: Colors.red))),
+                    TextButton(onPressed: () => Navigator.pop(context, false), child: Text('Cancel', style: smallTextStyle(context)))
+                  ],
+                );
+              });
+              if (result ?? false) {
+                await downloadProvider.deleteDownload(song); 
+              }
+              // ignore: use_build_context_synchronously
+              Navigator.pop(context);
+            }
+          ),
           if (song.videoId != null)
           _optionTile(context,
             title: 'Open Video Player',
@@ -111,7 +136,7 @@ class SongOptionsSheet extends StatelessWidget {
           children: [
             AspectRatio(
               aspectRatio: 1,
-              child: Icon(icon, color: icon == LineIcons.trash ? Colors.red : Theme.of(context).primaryColor),
+              child: Icon(icon, color: Theme.of(context).primaryColor),
             ),
             const SizedBox(width: 16),
             Expanded(

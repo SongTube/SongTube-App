@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:audio_tagger/audio_tagger.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:provider/provider.dart';
@@ -188,6 +189,20 @@ class DownloadProvider extends ChangeNotifier {
     });
     final json = jsonEncode(mapList);
     await sharedPreferences.setString('user-downloads', json);
+  }
+
+  // Delete a Download
+  Future<void> deleteDownload(SongItem item) async {
+    try {
+      await File(item.id).delete();
+      downloadedSongs.removeWhere((element) => element.id == item.id);
+      await saveDownloads(downloadedSongs);
+      notifyListeners();
+    } catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+    }
   }
 
 }
