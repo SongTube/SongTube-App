@@ -47,7 +47,21 @@ class _VideoPlayerState extends State<VideoPlayer> with TickerProviderStateMixin
   }
 
   // Fullscreen status
-  bool fullscreenEnabled = false;
+  bool _fullscreenEnabled = false;
+  bool get fullscreenEnabled => _fullscreenEnabled;
+  set fullscreenEnabled(bool value) {
+    _fullscreenEnabled = value;
+    if (value) {
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+    } else {
+      AppSettings appSettings = Provider.of(context, listen: false);
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: appSettings.hideSystemAppBarOnVideoPlayerExpanded
+        ? [ SystemUiOverlay.bottom ]
+        : SystemUiOverlay.values
+      );
+      ScreenBrightness().resetScreenBrightness();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,15 +87,11 @@ class _VideoPlayerState extends State<VideoPlayer> with TickerProviderStateMixin
 
     // Portrait UI
     Widget portrait() {
+      AppSettings appSettings = Provider.of(context);
       SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
       ]);
-      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [
-        SystemUiOverlay.bottom,
-        SystemUiOverlay.top,
-      ]);
-      ScreenBrightness().resetScreenBrightness();
       return PipWidget(
         onSuspending: () {
           if (!blockPipMode) {
@@ -136,33 +146,31 @@ class _VideoPlayerState extends State<VideoPlayer> with TickerProviderStateMixin
                             builder: (context) {
                               const initialHeight = kToolbarHeight * 1.3;
                               final initialWidth = initialHeight*aspectRatio;
-                              final finalWidth =  MediaQuery.of(context).size.width-24;
+                              final finalWidth =  MediaQuery.of(context).size.width-(24*(1-uiProvider.fwController.animationController.value));
                               final finalHeight = finalWidth/aspectRatio;
                               return AnimatedSize(
                                 duration: const Duration(milliseconds: 150),
                                 child: Container(
-                                  margin: const EdgeInsets.only(left: 11.5, right: 8).copyWith(
-                                    top: Tween<double>(begin: 9, end: MediaQuery.of(context).padding.top).animate(uiProvider.fwController.animationController).value,
-                                    bottom: Tween<double>(begin: 6, end: 0).animate(uiProvider.fwController.animationController).value
-                                  ),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                    color: Theme.of(context).scaffoldBackgroundColor,
-                                  ),
+                                  margin: EdgeInsets.only(
+                                    left: 11.5*(1-uiProvider.fwController.animationController.value),
+                                    right: 8*(1-uiProvider.fwController.animationController.value)).copyWith(
+                                      top: Tween<double>(begin: 9, end: appSettings.hideSystemAppBarOnVideoPlayerExpanded ? 0 : MediaQuery.of(context).padding.top).animate(uiProvider.fwController.animationController).value,
+                                      bottom: Tween<double>(begin: 6, end: 0).animate(uiProvider.fwController.animationController).value
+                                    ),
                                   constraints: BoxConstraintsTween(
                                     begin: BoxConstraints.tightFor(width: initialWidth, height: initialHeight),
                                     end: BoxConstraints.tightFor(width: finalWidth, height: finalHeight))
                                       .evaluate(uiProvider.fwController.animationController),
-                                  child: child
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(15*(1-uiProvider.fwController.animationController.value)),
+                                    child: child
+                                  )
                                 ),
                               );
                             }
                           );
                         },
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(15),
-                          child: player
-                        )
+                        child: player
                       ),
                       // Song Title and Artist
                       Expanded(
@@ -209,7 +217,6 @@ class _VideoPlayerState extends State<VideoPlayer> with TickerProviderStateMixin
         DeviceOrientation.landscapeLeft,
         DeviceOrientation.landscapeRight,
       ]);
-      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
       return player;
     }
 

@@ -58,6 +58,9 @@ const useSystemFontFamilyKey = 'useSystemFontFamilyKey';
 // Video suggestions view mode
 const videoSuggestionsViewModeKey = 'videoSuggestionsViewMode';
 
+// Hide appbar when video player is expanded
+const hideSystemAppBarOnVideoPlayerExpandedKey = 'hideSystemAppBarOnVideoPlayerExpanded';
+
 class AppSettings extends ChangeNotifier {
 
   // Initialize App Settings
@@ -235,6 +238,12 @@ class AppSettings extends ChangeNotifier {
   static String get videoSuggestionsViewMode => sharedPreferences.getString(videoSuggestionsViewModeKey) ?? 'collapsed';
   static set videoSuggestionsViewMode(String mode) {
     sharedPreferences.setString(videoSuggestionsViewModeKey, mode);
+  }
+
+  // Fullscreen portrait video player
+  bool get hideSystemAppBarOnVideoPlayerExpanded => sharedPreferences.getBool(hideSystemAppBarOnVideoPlayerExpandedKey) ?? false;
+  set hideSystemAppBarOnVideoPlayerExpanded(bool value) {
+    sharedPreferences.setBool(hideSystemAppBarOnVideoPlayerExpandedKey, value);
   }
 
 }

@@ -224,8 +224,8 @@ class _SongTubeState extends State<SongTube> {
                           backdropColor: Colors.black,
                           backdropEnabled: true,
                           onSlide: media.hasData && media.data != null && uiProvider.currentPlayer == CurrentPlayer.music
-                            ? (position) => onSlide(position, media.data!)
-                            : null,
+                            ? (position) => onSlideMusicPlayer(position, media.data!)
+                            : (position) => onSlideVideoPlayer(position),
                         ),
                         floatingWidgetController: uiProvider.fwController,
                         musicFloatingWidget: media.hasData && media.data != null ? const MusicPlayer() : null,
@@ -243,7 +243,7 @@ class _SongTubeState extends State<SongTube> {
   }
 
   // Change appbar colors on music player slide
-  void onSlide(double position, MediaItem mediaItem) {
+  void onSlideMusicPlayer(double position, MediaItem mediaItem) {
     AppSettings appSettings = Provider.of(internalNavigatorKey.currentContext!, listen: false);
     final iconColor = Theme.of(internalNavigatorKey.currentContext!).brightness;
     final Color? textColor = SongItem.fromMediaItem(mediaItem).palette?.text;
@@ -265,6 +265,20 @@ class _SongTubeState extends State<SongTube> {
           systemNavigationBarIconBrightness: iconColor,
         ),
       );
+    }
+  }
+
+  // Change appbar visibility on video player slide
+  void onSlideVideoPlayer(double position) {
+    AppSettings appSettings = Provider.of(internalNavigatorKey.currentContext!, listen: false);
+    if (position > 0.95) {
+      final overlays = [ SystemUiOverlay.bottom ];
+      if (!appSettings.hideSystemAppBarOnVideoPlayerExpanded) {
+        overlays.add(SystemUiOverlay.top);
+      }
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: overlays);
+    } else if (position < 0.95) {
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
     }
   }
 
