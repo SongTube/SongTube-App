@@ -145,6 +145,8 @@ class DownloadProvider extends ChangeNotifier {
     downloadedSongs.add(song);
     // Save song into sharedPreferences
     saveDownload(song);
+    // Update MediaStore
+    AudioTagger.updateMediaStore(song.id);
     // Save song into MediaProvider
     Provider.of<MediaProvider>(navigatorKey.currentState!.context, listen: false).insertSong(song);
   }

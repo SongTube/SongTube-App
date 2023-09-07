@@ -633,6 +633,7 @@ class _ID3EditorState extends State<ID3Editor> {
                 );
               });
               await MediaUtils.writeMetadata(widget.song.id, tags);
+              tagger.AudioTagger.updateMediaStore(widget.song.id);
               // ignore: use_build_context_synchronously
               Navigator.pop(context);
               // ignore: use_build_context_synchronously
