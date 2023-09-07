@@ -18,23 +18,27 @@ class AppUpdateManger {
       BehaviorSubject.seeded(.0);
 
   static double appVersion = 0;
+  static int appSubversion = 0;
 
   /// Checks for app update. Doesn't run in debug builds
   static void inAppUpdater() async {
     packageInfo = await PackageInfo.fromPlatform();
     appVersion = double.parse(packageInfo.version.replaceRange(3, 5, ""));
+    appSubversion = int.parse(packageInfo.version.replaceRange(0, 4, ""));
     final latestRelease = await _getLatestRelease();
-    if (!kDebugMode &&
-        latestRelease != null &&
-        appVersion < latestRelease.versionDouble) {
-      showDialog(
-          barrierDismissible: false,
-          context: internalNavigatorKey.currentContext!,
-          builder: (context) {
-            return AppUpdateDialog(
-              details: latestRelease,
-            );
-          });
+    if (latestRelease != null) {
+      final versionDouble = latestRelease.versionDouble;
+      final subversionDouble = int.parse(latestRelease.version.split('+').first.replaceAll('${versionDouble.toString()}.', '').trim());
+      if ((appVersion < latestRelease.versionDouble) || (appVersion == versionDouble && appSubversion < subversionDouble)) {
+        showDialog(
+            barrierDismissible: false,
+            context: internalNavigatorKey.currentContext!,
+            builder: (context) {
+              return AppUpdateDialog(
+                details: latestRelease,
+              );
+            });
+      }
     }
   }
 
