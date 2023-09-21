@@ -26,11 +26,11 @@ class LanguageTr extends Languages {
   @override
   String get labelEnjoy => "Tadını çıkarın";
   @override 
-  String get labelGoHome => "Ana sayfaya git";
+  String get labelGoHome => "Ana Sayfaya git";
 
   // Bottom Navigation Bar
   @override
-  String get labelHome => "Ana sayfa";
+  String get labelHome => "Ana Sayfa";
   @override
   String get labelDownloads => "İndirilenler";
   @override
@@ -52,7 +52,7 @@ class LanguageTr extends Languages {
   @override 
   String get labelLoadingVideos => "Videolar yükleniyor...";
   @override
-  String get labelHomePage => "Ana sayfa";
+  String get labelHomePage => "Ana Sayfa";
   @override
   String get labelTrending => "Trendler";
   @override
@@ -94,7 +94,7 @@ class LanguageTr extends Languages {
   @override
   String get labelSavingFile => "Dosya kaydediliyor...";
   @override
-  String get labelAndroid11FixNeeded => "Hata, Android 11 düzeltmesi gerekli, Ayarları kontrol edin";
+  String get labelAndroid11FixNeeded => "Hata, Android 11 için ek düzeltme gerekli, Ayarları kontrol edin";
   @override
   String get labelErrorSavingDownload => "Dosya kaydedilemedi, uygulama izinlerini kontrol edin";
   @override
@@ -102,9 +102,9 @@ class LanguageTr extends Languages {
   @override
   String get labelDownloadingAudio => "Ses indiriliyor...";
   @override
-  String get labelGettingAudioStream => "Ses yayını indiriliyor...";
+  String get labelGettingAudioStream => "Ses akışı indiriliyor...";
   @override
-  String get labelAudioNoDataRecieved => "Ses yayını alınamadı";
+  String get labelAudioNoDataRecieved => "Ses akışı alınamadı";
   @override
   String get labelDownloadStarting => "İndirme başlatılıyor...";
   @override
@@ -118,7 +118,7 @@ class LanguageTr extends Languages {
   @override
   String get labelEnableAudioConversion => "Ses dönüşümünü etkinleştir";
   @override
-  String get labelGainControls => "Kazanç kontrolleri";
+  String get labelGainControls => "Frekans kontrolleri";
   @override
   String get labelVolume => "Ses";
   @override
@@ -130,11 +130,11 @@ class LanguageTr extends Languages {
   @override
   String get labelSelectAudio => "Ses seç";
   @override
-  String get labelGlobalParameters => "Genel parametreler";
+  String get labelGlobalParameters => "Genel Ayarlamalar";
 
   // Media Screen
   @override
-  String get labelMusic => "Muzik";
+  String get labelMusic => "Müzik";
   @override
   String get labelVideos => "Videolar";
   @override
@@ -143,7 +143,7 @@ class LanguageTr extends Languages {
   String get labelNoMediaYetJustification => "Tüm medya dosyalarınız " +
     "burada gösterilir";
   @override
-  String get labelSearchMedia => "Medya ara...";
+  String get labelSearchMedia => "Medyalarda ara...";
   @override
   String get labelDeleteSong => "Şarkıyı sil";
   @override
@@ -207,7 +207,7 @@ class LanguageTr extends Languages {
   @override
   String get labelDeleteCacheJustification => "SongTube önbelleğini temizle";
   @override
-  String get labelAndroid11Fix => "Android 11 düzeltmesi";
+  String get labelAndroid11Fix => "Android 11 ek düzeltmesi";
   @override
   String get labelAndroid11FixJustification => "Android 10 & 11 versiyonları için indirme " +
     "sorunlarını düzeltir";
@@ -230,19 +230,19 @@ class LanguageTr extends Languages {
   @override
   String get labelCacheIsEmpty => "Önbellek boş";
   @override
-  String get labelYouAreAboutToClear => "Dikkat! Temizlemek üzeresin";
+  String get labelYouAreAboutToClear => "Dikkat! Temizleme işlemini başlatmak üzeresin";
 
   // Tags Editor TextFields
   @override
   String get labelEditorTitle => "Ad";
   @override
-  String get labelEditorArtist => "Yapımcı";
+  String get labelEditorArtist => "Sanatçı";
   @override
   String get labelEditorGenre => "Tür";
   @override
   String get labelEditorDisc => "Disk";
   @override
-  String get labelEditorTrack => "Track";
+  String get labelEditorTrack => "Parça";
   @override
   String get labelEditorDate => "Tarih";
   @override
@@ -254,8 +254,8 @@ class LanguageTr extends Languages {
   @override
   String get labelAndroid11DetectedJustification => "Bu uygulamada indirme işleminin doğru çalışması için " +
     "Android 10 ve 11'de Dosya Erişim iznine gereksinim duyar, " +
-    "bu geçici bir çözüm ve gelecek güncellemelerde gerekli olmayacak. " +
-    "Bu düzeltmeyi Ayarlar'dan da uygulayabilirsiniz.";
+    "bu geçici bir çözümdür ve gelecek güncellemelerde bu tür bir izne gerek olmayacak. " +
+    "Bu ek düzeltmeyi Ayarlar'dan da uygulayabilirsiniz.";
 
   // Music Player
   @override
@@ -263,7 +263,7 @@ class LanguageTr extends Languages {
   @override
   String get labelExpandArtwork => "Görseli genişlet";
   @override
-  String get labelArtworkRoundedCorners => "Kenerları yuvarlanmış görsel";
+  String get labelArtworkRoundedCorners => "Kenarları yumuşatılmış kapak resmi";
   @override
   String get labelPlayingFrom => "Şuradan oynat";
   @override
@@ -273,7 +273,7 @@ class LanguageTr extends Languages {
   @override
   String get labelTags => "Etiketler";
   @override
-  String get labelRelated => "Alaka";
+  String get labelRelated => "Alakalı";
   @override
   String get labelAutoPlay => "Otomatik oynatma";
 
@@ -301,7 +301,7 @@ class LanguageTr extends Languages {
     "SongTube'u sevdiniz mi? Telegram Kanalımıza katılabilirsiniz! " +
     "Güncellemeler, bilgi, geliştirme, grup bağlantısı veya diğer sosyal medya bağlantılarını bulabilirsiniz." +
     "\n\n" +
-    "Aklınıza takılan bir sorun veya harika bir öneriniz varsa lütfen kanaldaki grub bağlantısını " +
+    "Aklınıza takılan bir sorun veya harika bir öneriniz varsa lütfen kanaldaki grup bağlantısını " +
     "kullanarak grubumuza katılın ve yazın! Ancak yalnızca İngilizce konuşmanız gerektiğini unutmayın, " +
     "Şimdiden herşey için teşekkürler!";
   @override
@@ -357,7 +357,7 @@ class LanguageTr extends Languages {
   @override
   String get labelCreate => "Oluştur";
   @override
-  String get labelPlaylists => "Çalma listeleri";
+  String get labelPlaylists => "Oynatma Listeleri";
   @override
   String get labelQuality => "Kalite";
   @override
@@ -365,359 +365,357 @@ class LanguageTr extends Languages {
 
   // Other Translations
   @override
-  String get labelNoFavoriteVideos => 'No Favorite Videos';
+  String get labelNoFavoriteVideos => 'Favorilerde Video Yok';
   @override
-  String get labelNoFavoriteVideosDescription => 'Search for videos and save them as favorites. They will appear here';
+  String get labelNoFavoriteVideosDescription => 'Videoları aratın ve favorilere kaydedin. Burada gözükeceklerdir';
   @override
-  String get labelNoSubscriptions => 'No Subscriptions';
+  String get labelNoSubscriptions => 'Abonelik Yok';
   @override
-  String get labelNoSubscriptionsDescription => 'Tap the button above to show suggested Channels!';
+  String get labelNoSubscriptionsDescription => 'Önerilen kanalları göstermek için aşağıda ki butona tıklayın!';
   @override
-  String get labelNoPlaylists => 'No Playlists';
+  String get labelNoPlaylists => 'Oynatma Listesi Yok';
   @override
-  String get labelNoPlaylistsDescription => 'Search for videos or playlists and save them. They will appear here';
+  String get labelNoPlaylistsDescription => 'Oynatma listesi ya da videoları aratın ve kaydedin. Burada gözükeceklerdir';
   @override
-  String get labelSearch => 'Search';
+  String get labelSearch => 'Ara';
   @override
-  String get labelSubscriptions => 'Subscriptions';
+  String get labelSubscriptions => 'Abonelikler';
   @override
-  String get labelNoDownloadsCanceled => 'No Downloads Canceled';
+  String get labelNoDownloadsCanceled => 'Hiç Bir İndirme İptal Edilmedi';
   @override
-  String get labelNoDownloadsCanceledDescription => 'Good news! But if you cancel or something goes wrong with the download, you can check from here';
+  String get labelNoDownloadsCanceledDescription => 'Bu iyi haber demek! Herhangi bir İndrimeyi iptal ederseniz ya da bir şeyler yanlış giderse buradan kontrol edebilirsiniz';
   @override
-  String get labelNoDownloadsYet => 'No Downloads Yet';
+  - [x] String get labelNoDownloadsYet => 'Herhangi Bir İndirme İşlemi Yok';
   @override
-  String get labelNoDownloadsYetDescription => 'Go home, search for something to download or wait for the queue!';
+  String get labelNoDownloadsYetDescription => 'Ana Sayfaya gidin, ve indrimek için bir şeyler arayın ya da indirmelerin bitmesini bekleyin!';
   @override
-  String get labelYourQueueIsEmpty => 'Your queue is empty';
+  String get labelYourQueueIsEmpty => 'İndirme sıranız boş';
   @override
-  String get labelYourQueueIsEmptyDescription => 'Go home and search for something to download!';
+  String get labelYourQueueIsEmptyDescription => 'Ana sayfaya gidin ve indirmek için bir şeyler arayın!';
   @override
-  String get labelQueue => 'Queue';
+  String get labelQueue => 'İndrime Sırası';
   @override
-  String get labelSearchDownloads => 'Search Downloads';
+  String get labelSearchDownloads => 'İndirilenleri Ara';
   @override
-  String get labelWatchHistory => 'Watch History';
+  String get labelWatchHistory => 'İzleme Geçmişi';
   @override
-  String get labelWatchHistoryDescription => 'Look at which videos you have seen';
+  String get labelWatchHistoryDescription => 'Hangi videoları gördüğünüze bakın';
   @override
-  String get labelBackupAndRestore => 'Backup & Restore';
+  String get labelBackupAndRestore => 'Yedekle & Geri Yükle';
   @override
-  String get labelBackupAndRestoreDescription => 'Save or resture all of your local data';
+  String get labelBackupAndRestoreDescription => 'Cihazda ki verilerinizi yedekleyin ya da geri yükleyin';
   @override
-  String get labelSongtubeLink => 'SongTube Link';
+  String get labelSongtubeLink => "SongTube'un Linki";
   @override
-  String get labelSongtubeLinkDescription => 'Allow SongTube browser extension to detect this device, long press to learn more';
+  String get labelSongtubeLinkDescription => 'SongTube tarayıcı eklentisinin bu cihazı görmesine izin verin, basılı tutarak ne olduğunu öğrenebilirsiniz';
   @override
-  String get labelSupportDevelopment => 'Support Development';
+  String get labelSupportDevelopment => 'Uygulamayı Destekle';
   @override
-  String get labelSocialLinks => 'Social Links';
+  String get labelSocialLinks => 'Sosyal Bağlantılar';
   @override
-  String get labelSeeMore => 'See more';
+  String get labelSeeMore => 'Daha fazla';
   @override
-  String get labelMostPlayed => 'Most played';
+  String get labelMostPlayed => 'En Çok Oynatılan';
   @override
-  String get labelNoPlaylistsYet => 'No Playlists Yet';
+  String get labelNoPlaylistsYet => 'Oynatma Listesi Yok';
   @override
-  String get labelNoPlaylistsYetDescription => 'You can create a playlist from your recents, music, albums or artists';
+  String get labelNoPlaylistsYetDescription => 'Son İzlediklerinizden, Müziklerden, Albümlerden ya da Sanatçılardan oynatma listeleri oluşturabilirsiniz';
   @override
-  String get labelNoSearchResults => 'No search results';
+  String get labelNoSearchResults => 'Aramanız için sonuç yok';
   @override
-  String get labelSongResults => 'Song results';
+  String get labelSongResults => 'Şarkı Sonuçları';
   @override
-  String get labelAlbumResults => 'Album results';
+  String get labelAlbumResults => 'Albüm Sonuçları';
   @override
-  String get labelArtistResults => 'Artist results';
+  String get labelArtistResults => 'Sanatçı Sonuçları';
   @override
-  String get labelSearchAnything => 'Search anything';
+  String get labelSearchAnything => 'Herhangi bir şey arayın';
   @override
-  String get labelRecents => 'Recents';
+  String get labelRecents => 'En Son Oynatılanlar';
   @override
-  String get labelFetchingSongs => 'Fetching Songs';
+  String get labelFetchingSongs => 'Şarkı Eşleniyor';
   @override
-  String get labelPleaseWaitAMoment => 'Please wait a moment';
+  String get labelPleaseWaitAMoment => 'Lütfen bir süre bekleyin';
   @override
-  String get labelWeAreDone => 'We are done';
+  String get labelWeAreDone => 'Tamamdır';
   @override
-  String get labelEnjoyTheApp => 'Enjoy the\nApp';
+  String get labelEnjoyTheApp => 'Uygulamanın\nKeyfine Bakın';
   @override
-  String get labelSongtubeIsBackDescription => 'SongTube is back with a cleaner look and set of features, have fun with your music!';
+  String get labelSongtubeIsBackDescription => 'SongTube güzel bir görünümle ve fiyakalı özelliklerle donatılmıştır, müziğinizin keyfini çıkarın!';
   @override
-  String get labelLetsGo => 'Let\'s go';
+  String get labelLetsGo => 'Hadi\ başlayalım';
   @override
-  String get labelPleaseWait => 'Please wait';
+  String get labelPleaseWait => 'Lütfen bekleyin';
   @override
-  String get labelPoweredBy => 'Powered by';
+  String get labelPoweredBy => 'Altyapısıyla Desteklenir:';
   @override
-  String get labelGetStarted => 'Get Started';
+  String get labelGetStarted => 'Hadi Başlayalım';
   @override
-  String get labelAllowUsToHave => 'Allow us to have';
+  String get labelAllowUsToHave => 'İzinleri sağlayın;';
   @override
-  String get labelStorageRead => 'Storage\nRead';
+  String get labelStorageRead => 'Depolamaya\nErişim';
   @override
-  String get labelStorageReadDescription => 'This will scan your music, extract high quality artworks and allow you to personalize your music';
+  String get labelStorageReadDescription => 'Bu izinle müziklerinizi tarayacağız, yüksek kaliteli kapak fotoğraflarını önünüze sereceğiz ve size özel kişiselleştirilmiş bir müzik deneyimi sunacağız';
   @override
-  String get labelContinue => 'Continue';
+  String get labelContinue => 'Devam et';
   @override
-  String get labelAllowStorageRead => 'Allow Storage Read';
+  String get labelAllowStorageRead => 'Depolamaya Erişime İzin Ver';
   @override
-  String get labelSelectYourPreferred => 'Select your preferred';
+  String get labelSelectYourPreferred => 'Tercihini seç';
   @override
-  String get labelLight => 'Light';
+  String get labelLight => 'Açık';
   @override
-  String get labelDark => 'Dark';
+  String get labelDark => 'Koyu';
   @override
-  String get labelSimultaneousDownloads => 'Simultaneous Downloads';
+  String get labelSimultaneousDownloads => 'Eşzamanlı İndirme';
   @override
-  String get labelSimultaneousDownloadsDescription => 'Define how many downloads can happen at the same time';
+  String get labelSimultaneousDownloadsDescription => 'Aynı anda ne kadar indirme olacağını belirleyin';
   @override
-  String get labelItems => 'Items';
+  String get labelItems => 'Nesneler';
   @override
-  String get labelInstantDownloadFormat => 'Instant Download';
+  String get labelInstantDownloadFormat => 'Anında İndirme';
   @override
-  String get labelInstantDownloadFormatDescription => 'Change the audio format for instant downloads';
+  String get labelInstantDownloadFormatDescription => 'Anında indirmeler için ses formatını değiştirin';
   @override
-  String get labelCurrent => 'Current';
+  String get labelCurrent => 'Şu anda';
   @override
-  String get labelPauseWatchHistory => 'Pause Watch History';
+  String get labelPauseWatchHistory => 'İzleme Geçmişini Durdur';
   @override
-  String get labelPauseWatchHistoryDescription => 'While paused, videos are not saved into the watch history list';
+  String get labelPauseWatchHistoryDescription => 'Aktif olduğunda videolar izleme geçmişine kaydedilmez';
   @override
-  String get labelLockNavigationBar => 'Lock Navigation Bar';
+  String get labelLockNavigationBar => 'Navigasyon Çubuğunu Kilitle';
   @override
-  String get labelLockNavigationBarDescription => 'Locks the navigation bar from hiding and showing automatically on scroll';
+  String get labelLockNavigationBarDescription => 'Kaydırmaya bağlı olarak otomatik olarak gizlenen ve gösterilen navigasyon çubuğunu sabitler';
   @override
-  String get labelPictureInPicture => 'Picture in Picture';
+  String get labelPictureInPicture => 'Resim içinde Resim';
   @override
-  String get labelPictureInPictureDescription => 'Automatically enters PiP mode upon tapping home button while watching a video';
+  String get labelPictureInPictureDescription => 'Bir videoyu izlerken Ana Butona tıklarsanız otomatik olarak RiR (Resim içinde Resim) moduna girer';
   @override
-  String get labelBackgroundPlaybackAlpha => 'Background Playback (Alpha)';
+  String get labelBackgroundPlaybackAlpha => 'Arkaplanda Oynatma (Deneysel)';
   @override
-  String get labelBackgroundPlaybackAlphaDescription => 'Toggle background playback feature. Due to plugin limitations, only current video can be played in the background';
+  String get labelBackgroundPlaybackAlphaDescription => 'Arkaplanda Oynatmayı etkinleştirir. Bazı kısıtlamalardan dolayı sadece şu an oynatılan video arkaplanda oynatılabilir';
   @override
-  String get labelBlurBackgroundDescription => 'Add blurred artwork background';
+  String get labelBlurBackgroundDescription => 'Arkaplana kapağın bulanıklaştırılmış halini ekle';
   @override
-  String get labelBlurIntensity => 'Blur Intensity';
+  String get labelBlurIntensity => 'Bulanıklaştırma Yoğunluğu';
   @override
-  String get labelBlurIntensityDescription => 'Change the blur intensity of the artwork background';
+  String get labelBlurIntensityDescription => 'Arkaplan kapağının bulanıklaştırma yoğunluğunu değiştir';
   @override
-  String get labelBackdropOpacity => 'Backdrop Opacity';
+  String get labelBackdropOpacity => 'Arkaplan Saydamlığı';
   @override
-  String get labelBackdropOpacityDescription => 'Change the colored backdrop opacity';
+  String get labelBackdropOpacityDescription => 'Renklendirilmiş arkaplan saydamlığını değiştirin';
   @override
-  String get labelArtworkShadowOpacity => 'Artwork Shadow Opacity';
+  String get labelArtworkShadowOpacity => 'Kapak Fotoğrafının Gölgesinin Saydamlığı';
   @override
-  String get labelArtworkShadowOpacityDescription => 'Change the artwork shadow intensity of the music player';
+  String get labelArtworkShadowOpacityDescription => 'Müzik oynatıcının kapak fotoğrafı gösterme modülünün gölge eklentisinin yoğunluğunu değiştirin';
   @override
-  String get labelArtworkShadowRadius => 'Artwork Shadow Radius';
+  String get labelArtworkShadowRadius => 'Kapak Fotoğrafının Gölgesinin Yarıçapı';
   @override
-  String get labelArtworkShadowRadiusDescription => 'Change the artwork shadow radius of the music player';
+  String get labelArtworkShadowRadiusDescription => 'Müzik oynatıcının kapak fotoğrafı gösterme modülünün gölge eklentisinin yarıçapını değiştirin';
   @override
-  String get labelArtworkScaling => 'Artwork Scaling';
+  String get labelArtworkScaling => 'Kapak Fotoğrafının Ölçeklendirmesi';
   @override
-  String get labelArtworkScalingDescription => 'Scale out the music player artwork & background images';
+  String get labelArtworkScalingDescription => 'Müzik oynatıcının kapak fotoğrafı ve arkaplan modülünün ölçeklemesini değiştirin';
   @override
-  String get labelBackgroundParallax => 'Background Parallax';
+  String get labelBackgroundParallax => 'Arkaplan Paralaksı';
   @override
-  String get labelBackgroundParallaxDescription =>  'Enable/Disable background image parallax effect';
+  String get labelBackgroundParallaxDescription =>  'Arkaplan resmindeki paralaks efektini Etkinleştir/Devre Dışı bırak';
   @override
-  String get labelRestoreThumbnails => 'Restore Thumbnails';
+  String get labelRestoreThumbnails => 'Küçük Resimleri Yenile';
   @override
-  String get labelRestoreThumbnailsDescription => 'Force thumbnails and artwork generation process';
+  String get labelRestoreThumbnailsDescription => 'Küçük resimleri ve kapak resimlerini yenilemeye zorlar';
   @override
-  String get labelRestoringArtworks => 'Restoring artworks';
+  String get labelRestoringArtworks => 'Kapak resimleri yenileniyor';
   @override
-  String get labelRestoringArtworksDone => 'Restoring artworks done';
+  String get labelRestoringArtworksDone => 'Kapak resimleri yenilendi';
   @override
-  String get labelHomeScreen => 'Home Screen';
+  String get labelHomeScreen => 'Ana Ekran';
   @override
-  String get labelHomeScreenDescription => 'Change the default landing screen when you open the app';
+  String get labelHomeScreenDescription => 'Uygulamayı açtığınızda varsayılan açılış sayfasını değiştirin';
   @override
-  String get labelDefaultMusicPage => 'Default Music Page';
+  String get labelDefaultMusicPage => 'Varsayılan Müzik Sayfası';
   @override
-  String get labelDefaultMusicPageDescription => 'Change the default page for the Music Page';
+  String get labelDefaultMusicPageDescription => 'Müzik Sayfası için varsayılan sayfayı değiştirin';
   @override
-  String get labelAbout => 'About';
+  String get labelAbout => 'Hakkında';
   @override
-  String get labelConversionRequired => 'Conversion Required';
+  String get labelConversionRequired => 'Dönüştürme İşlemi Gerekli';
   @override
-  String get labelConversionRequiredDescription =>  'This song format is incompatible with the ID3 Tags editor. The app will automatically convert this song to AAC (m4a) to sort out this issue.';
+  String get labelConversionRequiredDescription =>  'Bu şarkının formatı ID3 etiket editörü ile uyumsuz. Uyumsuzluk sorununu gidermek maksadıyla bu şarkının formatını AAC (m4a) olarak formatlayacağız.';
   @override
-  String get labelPermissionRequired => 'Permission Required';
+  String get labelPermissionRequired => 'İzin Gerekli';
   @override
-  String get labelPermissionRequiredDescription => 'All file access permission is required for SongTube to edit any song on your device';
+  String get labelPermissionRequiredDescription => "SongTube'un cihazınızda ki tüm şarkılara erişebilmesi ve düzenleyebilmesi için 'Tüm dosyalara erişim' izni gereklidir";
   @override
-  String get labelApplying => 'Applying';
+  String get labelApplying => 'Uygulanıyor';
   @override
-  String get labelConvertingDescription => 'Re-encoding this song into AAC (m4a) format';
+  String get labelConvertingDescription => 'Şarkı AAC (m4a) olarak yeniden formatlanıyor';
   @override
-  String get labelWrittingTagsAndArtworkDescription => 'Applying new tags to this song';
+  String get labelWrittingTagsAndArtworkDescription => 'Şarkıya yeni etiketler atanıyor';
   @override
-  String get labelApply => 'Apply';
+  String get labelApply => 'Tamamla';
   @override
-  String get labelSongs => 'Songs';
+  String get labelSongs => 'Şarkılar';
   @override
-  String get labelPlayAll => 'Play All';
+  String get labelPlayAll => 'Hepsini Oynat';
   @override
-  String get labelPlaying => 'Playing';
+  String get labelPlaying => 'Oynatılıyor';
   @override
-  String get labelPages => 'Pages';
+  String get labelPages => 'Sayfalar';
   @override
-  String get labelMusicPlayer => 'Music Player';
+  String get labelMusicPlayer => 'Müzik Oynatıcı';
   @override
-  String get labelClearWatchHistory => 'Clear Watch History';
+  String get labelClearWatchHistory => 'İzleme Geçmişini Temizle';
   @override
-  String get labelClearWatchHistoryDescription =>  'You\'re about to delete all your watch history videos, this action cannot be undone, proceed?';
+  String get labelClearWatchHistoryDescription =>  'İzleme\ Geçmişinin tamamını silmek üzeresiniz, bu işlem geri alınamaz. Devam etmek istiyor musunuz?';
   @override
-  String get labelDelete => 'Delete';
+  String get labelDelete => 'Sil';
   @override
-  String get labelAppUpdate => 'App Update';
+  String get labelAppUpdate => 'Uygulama Güncellemesi';
   @override
-  String get labelWhatsNew => 'What\'s New';
+  String get labelWhatsNew => 'Neler\ Yeni';
   @override
-  String get labelLater => 'Later';
+  String get labelLater => 'Daha Sonra';
   @override
-  String get labelUpdate => 'Update';
+  String get labelUpdate => 'Güncelle';
   @override
-  String get labelUnsubscribe => 'Unsubscribe';
+  String get labelUnsubscribe => 'Abonelikten çık';
   @override
-  String get labelAudioFeatures => 'Audio Features';
+  String get labelAudioFeatures => 'Ses Özellikleri';
   @override
-  String get labelVolumeBoost => 'Volume Boost';
+  String get labelVolumeBoost => 'Sesi Aşırt';
   @override
-  String get labelNormalizeAudio => 'Normalize Audio';
+  String get labelNormalizeAudio => 'Sesi Normalleştir';
   @override
-  String get labelSegmentedDownload => 'Segmented Download';
+  String get labelSegmentedDownload => 'Parçacıklı İndirme';
   @override
-  String get labelEnableSegmentedDownload => 'Enable Segmented Download';
+  String get labelEnableSegmentedDownload => 'Parçacıklı İndirmeyi Aktifleştir';
   @override
-  String get labelEnableSegmentedDownloadDescription => 'This will download the whole audio file and then split it into the various enabled segments (or audio tracks) from the list below';
+  String get labelEnableSegmentedDownloadDescription => 'Bu işlev bir önizleme olarak şarkının bütününü indirir, daha sonra bunu rehber olarak kullanarak belli parçacıklara (ya da ses parçalarına) aşağıda ki listeyi kullanarak böler';
   @override
-  String get labelCreateMusicPlaylist => 'Create Music Playlist';
+  String get labelCreateMusicPlaylist => 'Müzik Çalma Listesi Oluştur';
   @override
-  String get labelCreateMusicPlaylistDescription => 'Create music playlist from all downloaded and saved audio segments';
+  String get labelCreateMusicPlaylistDescription => 'İndirilen ve kaydedilen tüm ses parçalarından bir müzik çalma listesi oluşturun';
   @override
-  String get labelApplyTags => 'Apply Tags';
+  String get labelApplyTags => 'Etiketleri Onayla';
   @override
-  String get labelApplyTagsDescription => 'Extract tags from MusicBrainz for all segments';
+  String get labelApplyTagsDescription => 'MusicBrainz kullanarak tüm parçalar için etiketleri getir';
   @override
-  String get labelLoading => 'Loading';
+  String get labelLoading => 'Yükleniyor;
   @override
-  String get labelMusicDownloadDescription => 'Select quality, convert and download audio only';
+  String get labelMusicDownloadDescription => 'Kaliteyi seç, ve dönüştürüp sadece ses olarak indir';
   @override
-  String get labelVideoDownloadDescription =>  'Choose a video quality from the list and download it';
+  String get labelVideoDownloadDescription =>  'Aşağıda ki listeden kaliteyi seç ve indir';
   @override
-  String get labelInstantDescription => 'Instantly start downloading as music';
+  String get labelInstantDescription => 'İndirimeyi müzik varsayarak anında başlat';
   @override
-  String get labelInstant => 'Instant';
+  String get labelInstant => 'Anında';
   @override
-  String get labelCurrentQuality => 'Current Quality';
+  String get labelCurrentQuality => 'Seçili Kalite';
   @override
-  String get labelFastStreamingOptions => 'Fast Streaming Options';
+  String get labelFastStreamingOptions => 'Hızlı Akış Seçenekleri';
   @override
-  String get labelStreamingOptions => 'Streaming Options';
+  String get labelStreamingOptions => 'Akış Seçenekleri';
   @override
-  String get labelComments => 'Comments';
+  String get labelComments => 'Yorumlar';
   @override
-  String get labelPinned => 'Pinned';
+  String get labelPinned => 'Sabitlenmiş';
   @override
-  String get labelLikedByAuthor => 'Liked by Author';
+  String get labelLikedByAuthor => 'Kanal Sahibi Tarafından Beğenilmiş';
   @override
-  String get labelDescription => 'Description';
+  String get labelDescription => 'Açıklama';
   @override
-  String get labelViews => 'Views';
+  String get labelViews => 'İzlenmeler';
   @override
-  String get labelPlayingNextIn => 'Playing next in';
+  String get labelPlayingNextIn => 'Bir sonraki oynatılacak:';
   @override
-  String get labelPlayNow => 'Play Now';
+  String get labelPlayNow => 'Şimdi Oynat';
   @override
-  String get labelLoadingPlaylist => 'Loading Playlist';
+  String get labelLoadingPlaylist => 'Oynatma Listesi Yükleniyor';
   @override
-  String get labelPlaylistReachedTheEnd => 'Playlist reached the end';
+  String get labelPlaylistReachedTheEnd => 'Oynatma Listesinin sonu';
   @override
-  String get labelLiked => 'Liked';
+  String get labelLiked => 'Beğenildi';
   @override
-  String get labelLike => 'Like';
+  String get labelLike => 'Beğen';
   @override
-  String get labelVideoRemovedFromFavorites => 'Video removed from favorites';
+  String get labelVideoRemovedFromFavorites => 'Video favorilerden kaldırıldı';
   @override
-  String get labelVideoAddedToFavorites => 'Video added to favorites';
+  String get labelVideoAddedToFavorites => 'Video favorilere eklendi';
   @override
-  String get labelPopupMode => 'Popup Mode';
+  String get labelPopupMode => 'Açılır Pencere Modu';
   @override
-  String get labelDownloaded => 'Downloaded';
+  String get labelDownloaded => 'İndirildi';
   @override
-  String get labelShowPlaylist => 'Show Playlist';
+  String get labelShowPlaylist => 'Oynatma Listesini Göster';
   @override
-  String get labelCreatePlaylist => 'Create Playlist';
+  String get labelCreatePlaylist => 'Oynatma Listesi Oluştur';
   @override
-  String get labelAddVideoToPlaylist => 'Add video to playlist';
+  String get labelAddVideoToPlaylist => 'Oynatma Listesine video ekle';
   @override
-  String get labelBackupDescription => 'Backup all of your local data into a single file that can be used to restore later';
+  String get labelBackupDescription => 'Tüm uygulama verilerini tek bir dosyaya sonradan geri yüklemek maksadıyla yedekle';
   @override
-  String get labelBackupCreated => 'Backup Created';
+  String get labelBackupCreated => 'Yedek Oluşturuldu';
   @override
-  String get labelBackupRestored => 'Backup Restored';
+  String get labelBackupRestored => 'Yedek Geri Yüklendi';
   @override
-  String get labelRestoreDescription => 'Restore all your data from a backup file';
+  String get labelRestoreDescription => 'Bir yedek dosyasından tüm verilerini geri yükle';
   @override
-  String get labelChannelSuggestions => 'Channel Suggestions';
+  String get labelChannelSuggestions => 'Kanal Önerileri';
   @override
-  String get labelFetchingChannels => 'Fetching Channels';
+  String get labelFetchingChannels => 'Kanallar Yükleniyor';
   @override
-  String get labelShareVideo => 'Shared Video';
+  String get labelShareVideo => 'Paylaşılan Video';
   @override
-  String get labelShareDescription => 'Share with friends or other platforms';
+  String get labelShareDescription => 'Arkadaşlarınla ya da diğer platformlarda paylaş';
   @override
-  String get labelRemoveFromPlaylists => 'Remove from playlist';
+  String get labelRemoveFromPlaylists => 'Oynatma listesinden kaldır';
   @override
-  String get labelThisActionCannotBeUndone => 'This action cannot be undone';
+  String get labelThisActionCannotBeUndone => 'Bu işlem geri alınamaz';
   @override
-  String get labelAddVideoToPlaylistDescription => 'Add to existing or new video playlist';
+  String get labelAddVideoToPlaylistDescription => 'Zaten olan ya da yeni oluşturacağın oynatma listesine ekle';
   @override
-  String get labelAddToPlaylists => 'Add to playlists';
+  String get labelAddToPlaylists => 'Oynatma listesine ekle';
   @override
-  String get labelEditableOnceSaved => 'Editable once saved';
+  String get labelEditableOnceSaved => 'Kaydettikten sonra düzenleyebilirsiniz';
   @override
-  String get labelPlaylistRemoved => 'Playlist Removed';
+  String get labelPlaylistRemoved => 'Oynatma Listesi Silindi';
   @override
-  String get labelPlaylistSaved => 'Playlist Saved';
+  String get labelPlaylistSaved => 'Oynatma Listesi Kaydedildi';
   @override
-  String get labelRemoveFromFavorites => 'Remove from favorites';
+  String get labelRemoveFromFavorites => 'Favorilerden kaldır';
   @override
-  String get labelRemoveFromFavoritesDescription => 'Remove this video from your favorites';
+  String get labelRemoveFromFavoritesDescription => 'Bu videoyu favorilerden kaldırın';
   @override
-  String get labelSaveToFavorites => 'Save to favorites';
+  String get labelSaveToFavorites => 'Favorilere kaydet';
   @override
-  String get labelSaveToFavoritesDescription => 'Add video to your list of favorites';
+  String get labelSaveToFavoritesDescription => 'Favoriler listenize video ekleyin';
   @override
-  String get labelSharePlaylist => 'Share Playlist';
+  String get labelSharePlaylist => 'Oynatma Listesini Paylaş';
   @override
-  String get labelRemoveThisVideoFromThisList => 'Remove this video from this list';
+  String get labelRemoveThisVideoFromThisList => 'Videoyu listeden kaldır';
   @override
-  String get labelEqualizer => 'Equalizer';
+  String get labelEqualizer => 'Frekans Düzenleyici';
   @override
-  String get labelLoudnessEqualizationGain => 'Loudness Equalization Gain';
+  String get labelLoudnessEqualizationGain => 'Ses Yüksekliğindeki Frekansları Eşitle';
   @override
-  String get labelSliders => 'Sliders';
+  String get labelSliders => 'Kaydırma Kontrolleri';
   @override
-  String get labelSave => 'Save';
+  String get labelSave => 'Kaydet';
   @override
-  String get labelPlaylistName => 'PlaylistName';
+  String get labelPlaylistName => 'Oynatma Listesi İsmi';
   @override
-  String get labelCreateVideoPlaylist => 'Create Video Playlist';
+  String get labelCreateVideoPlaylist => 'Video Oynatma Listesi Oluştur';
   @override
-  String get labelSearchFilters => 'Search Filters';
+  String get labelSearchFilters => 'Arama Filtreleri';
   @override
-  String get labelAddToPlaylistDescription => 'Add to existing or new playlist';
+  String get labelAddToPlaylistDescription => 'Zaten olan ya da yeni oluşturacağınız oynatma listesine ekleyin';
   @override
-  String get labelShareSong => 'Share Song';
+  String get labelShareSong => 'Şarkıyı Paylaş';
   @override
-  String get labelShareSongDescription => 'Share with friends or other platforms';
+  String get labelShareSongDescription => 'Arkadaşlarınızla ya da diğer platformlarda paylaşın';
   @override
-  String get labelEditTagsDescription => 'Open ID3 tags and artwork editor';
+  String get labelEditTagsDescription => 'ID3 etiketi ve kapak fotoğrafı düzenleyicisini açın';
   @override
-  String get labelContains => 'Contains';
-  @override
-  String get labelPlaybackSpeed => 'Playback speed';
+  String get labelContains => 'İçerir';
 }
