@@ -601,7 +601,7 @@ class LanguageTr extends Languages {
   @override
   String get labelApplyTagsDescription => 'MusicBrainz kullanarak tüm parçalar için etiketleri getir';
   @override
-  String get labelLoading => 'Yükleniyor;
+  String get labelLoading => 'Yükleniyor';
   @override
   String get labelMusicDownloadDescription => 'Kaliteyi seç, ve dönüştürüp sadece ses olarak indir';
   @override
@@ -718,4 +718,6 @@ class LanguageTr extends Languages {
   String get labelEditTagsDescription => 'ID3 etiketi ve kapak fotoğrafı düzenleyicisini açın';
   @override
   String get labelContains => 'İçerir';
+  @override
+  String get labelPlaybackSpeed => 'Oynatma hızı'
 }
