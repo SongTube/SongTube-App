@@ -385,7 +385,7 @@ class LanguageTr extends Languages {
   @override
   String get labelNoDownloadsCanceledDescription => 'Bu iyi haber demek! Herhangi bir İndrimeyi iptal ederseniz ya da bir şeyler yanlış giderse buradan kontrol edebilirsiniz';
   @override
-  - [x] String get labelNoDownloadsYet => 'Herhangi Bir İndirme İşlemi Yok';
+  String get labelNoDownloadsYet => 'Herhangi Bir İndirme İşlemi Yok';
   @override
   String get labelNoDownloadsYetDescription => 'Ana Sayfaya gidin, ve indrimek için bir şeyler arayın ya da indirmelerin bitmesini bekleyin!';
   @override
@@ -719,5 +719,5 @@ class LanguageTr extends Languages {
   @override
   String get labelContains => 'İçerir';
   @override
-  String get labelPlaybackSpeed => 'Oynatma hızı'
+  String get labelPlaybackSpeed => 'Oynatma hızı';
 }
