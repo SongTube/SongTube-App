@@ -1,3 +1,4 @@
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:newpipeextractor_dart/models/streamSegment.dart';
 import 'package:provider/provider.dart';
@@ -179,8 +180,8 @@ class _VideoPlayerProgressBarState extends State<VideoPlayerProgressBar> with Ti
                         padding: const EdgeInsets.only(left: 12, bottom: 4, right: 8, top: 4),
                         color: Colors.transparent,
                         child: const Icon(
-                          Icons.video_settings_rounded,
-                          size: 22,
+                          EvaIcons.settingsOutline,
+                          size: 20,
                         ),
                       ),
                     ),
