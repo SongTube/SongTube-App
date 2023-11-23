@@ -54,7 +54,7 @@ final supportedLanguages = <LanguageData>[
   // Vietnamese (VI)
   LanguageData("🇻🇳", "Vietnamese", "vi"),
   // Turkish (TR)
-  LanguageData("🇹🇷", "Turkey", "tr"),
+  LanguageData("🇹🇷", "Turkish", "tr"),
   // Romanian (RO)
   LanguageData("🇷🇴", "Romanian", "ro"),
   // Russian (RU)
