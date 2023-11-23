@@ -57,7 +57,7 @@ final supportedLanguages = <LanguageData>[
   // Arabic (AR)
   LanguageData("ar", "Arabic", "ar"),
   // German (DE)
-  LanguageData("de", "Germin", "de"),
+  LanguageData("de", "German", "de"),
   // Bengali (BD)
   LanguageData("bd", "Bangla", "bn"),
   // Ukrainian (UA)
