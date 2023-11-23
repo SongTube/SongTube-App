@@ -28,8 +28,6 @@ class CustomScrollBehavior extends ScrollBehavior {
             child: child,
           );
         }
-    continue glow;
-    glow:
     case TargetPlatform.fuchsia:
       return GlowingOverscrollIndicator(
         axisDirection: details.direction,

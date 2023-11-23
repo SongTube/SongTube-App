@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:songtube/internal/models/colors_palette.dart';
 import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/app_settings.dart';
 import 'package:songtube/internal/artwork_manager.dart';
@@ -59,15 +58,13 @@ class _MusicPlayerState extends State<MusicPlayer> with TickerProviderStateMixin
         if (uiProvider.fwController.isPanelOpen && event != null) {
           final iconColor = Theme.of(context).brightness == Brightness.light
             ? Brightness.light : Brightness.dark;
-          final Color? textColor = Provider.of<MediaProvider>(context, listen: false).currentColors?.text;
-          if (textColor != null) {
-            SystemChrome.setSystemUIOverlayStyle(
-              SystemUiOverlayStyle(
-                statusBarIconBrightness: AppSettings().enableMusicPlayerBlur ? textColor == Colors.black
-                  ? Brightness.dark : Brightness.light : iconColor,
-              ),
-            );
-          }
+          final Color textColor = Provider.of<MediaProvider>(context, listen: false).currentColors.text;
+          SystemChrome.setSystemUIOverlayStyle(
+            SystemUiOverlayStyle(
+              statusBarIconBrightness: AppSettings().enableMusicPlayerBlur ? textColor == Colors.black
+                ? Brightness.dark : Brightness.light : iconColor,
+            ),
+          );
         }
       }
     });

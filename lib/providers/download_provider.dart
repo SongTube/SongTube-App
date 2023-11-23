@@ -3,13 +3,10 @@ import 'dart:io';
 
 import 'package:audio_tagger/audio_tagger.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:palette_generator/palette_generator.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/providers/app_settings.dart';
 import 'package:songtube/internal/artwork_manager.dart';
 import 'package:songtube/internal/global.dart';
-import 'package:songtube/internal/models/colors_palette.dart';
 import 'package:songtube/internal/models/download/download_info.dart';
 import 'package:songtube/internal/models/download/download_item.dart';
 import 'package:songtube/internal/models/song_item.dart';

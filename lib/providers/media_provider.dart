@@ -3,8 +3,6 @@ import 'dart:io';
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_tagger/audio_tagger.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:palette_generator/palette_generator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:songtube/internal/artwork_manager.dart';
 import 'package:songtube/internal/cache_utils.dart';

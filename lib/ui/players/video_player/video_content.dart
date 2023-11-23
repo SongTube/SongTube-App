@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pip/models/pip_ratio.dart';
 import 'package:flutter_pip/platform_channel/channel.dart';
@@ -11,28 +12,27 @@ import 'package:newpipeextractor_dart/models/videoInfo.dart';
 import 'package:newpipeextractor_dart/newpipeextractor_dart.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:timeago/timeago.dart' as timeago;
+
 import 'package:songtube/internal/models/content_wrapper.dart';
 import 'package:songtube/languages/languages.dart';
 import 'package:songtube/main.dart';
 import 'package:songtube/providers/content_provider.dart';
 import 'package:songtube/providers/download_provider.dart';
-import 'package:songtube/providers/ui_provider.dart';
 import 'package:songtube/screens/channel.dart';
 import 'package:songtube/ui/animations/animated_icon.dart';
 import 'package:songtube/ui/components/custom_inkwell.dart';
 import 'package:songtube/ui/components/shimmer_container.dart';
 import 'package:songtube/ui/components/subscribe_text.dart';
 import 'package:songtube/ui/components/text_icon_button.dart';
+import 'package:songtube/ui/menus/download_content_menu.dart';
 import 'package:songtube/ui/players/video_player/comments.dart';
 import 'package:songtube/ui/players/video_player/description.dart';
 import 'package:songtube/ui/players/video_player/suggestions.dart';
-import 'package:songtube/ui/menus/download_content_menu.dart';
 import 'package:songtube/ui/sheets/add_to_stream_playlist.dart';
 import 'package:songtube/ui/sheets/snack_bar.dart';
 import 'package:songtube/ui/text_styles.dart';
-import 'package:collection/collection.dart';
 import 'package:songtube/ui/ui_utils.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 class VideoPlayerContent extends StatefulWidget {
   const VideoPlayerContent({

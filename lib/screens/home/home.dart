@@ -5,7 +5,6 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:ionicons/ionicons.dart';
 import 'package:newpipeextractor_dart/utils/url.dart';
 import 'package:provider/provider.dart';
 import 'package:receive_intent/receive_intent.dart' as intent;
@@ -158,6 +157,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         if (kDebugMode) {
           print('App detached');
         }
+        break;
+      case AppLifecycleState.hidden:
+        // TODO: Handle this case.
         break;
     }
   }

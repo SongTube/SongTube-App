@@ -6,9 +6,7 @@ import 'package:songtube/internal/global.dart';
 import 'package:songtube/internal/models/song_item.dart';
 import 'package:songtube/main.dart';
 import 'package:songtube/providers/media_provider.dart';
-import 'package:songtube/ui/animations/animated_icon.dart';
 import 'package:songtube/ui/animations/mini_music_visualizer.dart';
-import 'package:songtube/ui/components/palette_loader.dart';
 import 'package:songtube/ui/sheets/song_options.dart';
 import 'package:songtube/ui/text_styles.dart';
 import 'package:flutter/material.dart';
@@ -137,7 +135,7 @@ class _SongCardTileState extends State<SongCardTile> {
                                   builder: (context, provider, _) {
                                     return SizedBox(
                                       height: 20, width: 20,
-                                      child: MiniMusicVisualizer(color: provider.currentColors?.vibrant, width: 2, height: 12));
+                                      child: MiniMusicVisualizer(color: provider.currentColors.vibrant, width: 2, height: 12));
                                   }
                               )
                               : const Icon(Ionicons.play, size: 16))

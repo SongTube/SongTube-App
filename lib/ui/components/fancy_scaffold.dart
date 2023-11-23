@@ -11,7 +11,6 @@ import 'package:songtube/internal/global.dart';
 import 'package:songtube/providers/app_settings.dart';
 import 'package:songtube/providers/content_provider.dart';
 import 'package:songtube/providers/ui_provider.dart';
-import 'package:songtube/ui/animations/animated_icon.dart';
 import 'package:songtube/ui/animations/show_up.dart';
 import 'package:uuid/uuid.dart';
 

@@ -260,7 +260,7 @@ class _SongTubeState extends State<SongTube> {
   void onSlideMusicPlayer(double position, MediaItem mediaItem) {
     AppSettings appSettings = Provider.of(internalNavigatorKey.currentContext!, listen: false);
     final iconColor = Theme.of(internalNavigatorKey.currentContext!).brightness;
-    final Color? textColor = Provider.of<MediaProvider>(internalNavigatorKey.currentContext!, listen: false).currentColors?.text;
+    final Color? textColor = Provider.of<MediaProvider>(internalNavigatorKey.currentContext!, listen: false).currentColors.text;
     if (position > 0.95) {
       if (textColor != null) {
         SystemChrome.setSystemUIOverlayStyle(

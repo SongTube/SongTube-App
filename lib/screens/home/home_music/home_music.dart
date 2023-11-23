@@ -17,7 +17,6 @@ import 'package:songtube/screens/home/home_music/pages/playlists_page.dart';
 import 'package:songtube/screens/home/home_music/pages/search_page.dart';
 import 'package:songtube/ui/animations/animated_icon.dart';
 import 'package:songtube/ui/components/custom_inkwell.dart';
-import 'package:songtube/ui/rounded_tab_indicator.dart';
 import 'package:songtube/ui/text_styles.dart';
 
 class HomeMusic extends StatefulWidget {

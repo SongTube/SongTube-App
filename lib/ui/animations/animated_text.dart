@@ -32,8 +32,8 @@ class AnimatedText extends StatelessWidget {
             child: Text(
               text,
               textAlign: textAlign,
-              key: ValueKey('$text-${provider.currentColors?.vibrant ?? style.color?.value}'),
-              style: style.copyWith(letterSpacing: letterSpacing, color: (provider.currentColors?.vibrant ?? style.color)?.withOpacity(opacity ?? 1)),
+              key: ValueKey('$text-${provider.currentColors.vibrant ?? style.color?.value}'),
+              style: style.copyWith(letterSpacing: letterSpacing, color: (provider.currentColors.vibrant ?? style.color)?.withOpacity(opacity ?? 1)),
             ),
           );
         }

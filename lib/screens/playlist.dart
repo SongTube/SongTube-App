@@ -16,7 +16,6 @@ import 'package:songtube/providers/media_provider.dart';
 import 'package:songtube/providers/playlist_provider.dart';
 import 'package:songtube/providers/ui_provider.dart';
 import 'package:songtube/ui/animations/mini_music_visualizer.dart';
-import 'package:songtube/ui/components/palette_loader.dart';
 import 'package:songtube/ui/playlist_artwork.dart';
 import 'package:songtube/ui/text_styles.dart';
 import 'package:songtube/ui/tiles/song_tile.dart';
@@ -297,7 +296,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                     builder: (context, provider, _) {
                       return Container(
                         decoration: BoxDecoration( 
-                          color: provider.currentColors?.vibrant,
+                          color: provider.currentColors.vibrant,
                           borderRadius: BorderRadius.circular(100),
                           boxShadow: [
                             BoxShadow(

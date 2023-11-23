@@ -1,10 +1,7 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:songtube/internal/models/media_playlist.dart';
 import 'package:songtube/languages/languages.dart';
-import 'package:songtube/ui/animations/animated_icon.dart';
-import 'package:songtube/ui/components/palette_loader.dart';
 import 'package:songtube/ui/playlist_artwork.dart';
 import 'package:songtube/ui/text_styles.dart';
 

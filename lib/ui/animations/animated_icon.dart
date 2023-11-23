@@ -33,8 +33,8 @@ class AppAnimatedIcon extends StatelessWidget {
               return FadeTransition(opacity: animation, child: child);
             },
             child: Icon(icon,
-              key: ValueKey('animatedIcon${provider.currentColors?.vibrant}'),
-              color: (provider.currentColors?.vibrant ?? Theme.of(context).iconTheme.color)?.withOpacity(opacity ?? 1), size: size)
+              key: ValueKey('animatedIcon${provider.currentColors.vibrant}'),
+              color: (provider.currentColors.vibrant ?? Theme.of(context).iconTheme.color)?.withOpacity(opacity ?? 1), size: size)
           );
         }
       );

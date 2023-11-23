@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:songtube/ui/text_styles.dart';
 
 class SongTubeNavigation extends StatefulWidget {
   final List<NavigationDestination> destinations;

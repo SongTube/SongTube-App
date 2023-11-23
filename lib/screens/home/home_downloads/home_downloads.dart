@@ -10,7 +10,6 @@ import 'package:songtube/screens/home/home_downloads/pages/completed.dart';
 import 'package:songtube/screens/home/home_downloads/pages/queue.dart';
 import 'package:songtube/ui/animations/animated_icon.dart';
 import 'package:songtube/ui/components/custom_inkwell.dart';
-import 'package:songtube/ui/rounded_tab_indicator.dart';
 import 'package:songtube/ui/text_styles.dart';
 
 class HomeDownloads extends StatefulWidget {

@@ -7,7 +7,6 @@ import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/content_provider.dart';
 import 'package:songtube/providers/ui_provider.dart';
 import 'package:songtube/screens/channel.dart';
-import 'package:songtube/ui/animations/animated_icon.dart';
 import 'package:songtube/ui/components/channel_image.dart';
 import 'package:songtube/ui/components/custom_inkwell.dart';
 import 'package:songtube/ui/components/shimmer_container.dart';
