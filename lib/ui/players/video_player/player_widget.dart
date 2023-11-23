@@ -60,6 +60,7 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   int tapId = 0;
   VideoPlaybackQuality? currentQuality;
   bool lockPlayer = true;
+  bool interfaceLocked = false;
 
   // Reverse and Forward Animation
   bool showReverse = false;
@@ -129,8 +130,11 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
         showControls = true;
         showBackdrop = true;
       });
-      if (controller?.value.isPlaying ?? false) {
+      if ((controller?.value.isPlaying ?? false) && !interfaceLocked) {
         Future.delayed(const Duration(seconds: 5), () {
+          if (interfaceLocked) {
+            return;
+          }
           if (!(controller?.value.isPlaying ?? true)) {
             return;
           }
@@ -568,9 +572,18 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                 Align(
                   alignment: Alignment.topLeft,
                   child: VideoPlayerAppBar(
+                    interfaceLocked: interfaceLocked,
                     videoTitle: widget.content.videoDetails?.videoInfo.name ?? '',
                     onMinimize: () {
                       Provider.of<UiProvider>(context, listen: false).fwController.close();
+                    },
+                    onLockInterface: () {
+                      setState(() {
+                        interfaceLocked = !interfaceLocked;
+                        if (!interfaceLocked) {
+                          showControlsHandler();
+                        }
+                      });
                     },
                   ),
                 ),
