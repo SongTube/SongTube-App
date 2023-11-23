@@ -6,6 +6,23 @@ TextStyle defaultFontStyle = AppSettings.useSystemFontFamiliy
   ? const TextStyle()
   : GoogleFonts.poppins();
 
+TextStyle tabBarTextStyle(BuildContext context, {double opacity = 0.7, bool bold = true, Color? color}) {
+  return defaultFontStyle.copyWith(
+    fontSize: 13,
+    color: color ?? Theme.of(context).textTheme.bodyText1!.color!.withOpacity(opacity),
+    fontWeight: bold ? FontWeight.w600 : FontWeight.normal,
+    letterSpacing: 0.6
+  );
+}
+
+TextStyle headerTextStyle(BuildContext context, {double opacity = 1, bool bold = true}) {
+  return defaultFontStyle.copyWith(
+    fontSize: 18,
+    color: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(opacity),
+    fontWeight: bold ? FontWeight.w600 : FontWeight.normal
+  );
+}
+
 TextStyle bigTextStyle(BuildContext context, {double opacity = 1, bool bold = true}) {
   return defaultFontStyle.copyWith(
     fontSize: 30,
@@ -34,7 +51,7 @@ TextStyle smallTextStyle(BuildContext context, {double opacity = 1, bool bold = 
   return defaultFontStyle.copyWith(
     fontSize: 13,
     color: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(opacity),
-    fontWeight: bold ? FontWeight.w600 : FontWeight.normal
+    fontWeight: FontWeight.normal
   );
 }
 

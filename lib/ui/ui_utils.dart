@@ -17,6 +17,13 @@ class UiUtils {
   static Future<dynamic> pushRouteAsync(BuildContext context, Widget widget, {BuildContext? providerContext}) async {
     // Media Provider, which contains the controller for the FancyScaffold
     final uiProvider = Provider.of<UiProvider>(providerContext ?? context, listen: false);
+    late final bool needsReopen;
+    if (uiProvider.fwController.isPanelOpen) {
+      uiProvider.fwController.close();
+      needsReopen = true;
+    } else {
+      needsReopen = false;
+    }
     // Previous values for the FancyScaffold position variables
     final navbarAnimationValue = uiProvider.fwController.navbarAnimationController.value;
     final navbarScrollStatus = uiProvider.fwController.navbarScrolledDown;
@@ -37,6 +44,9 @@ class UiUtils {
     uiProvider.fwController.navbarAnimationController.animateTo(navbarAnimationValue, curve: Curves.ease);
     uiProvider.fwController.lockNotificationListener = false;
     uiProvider.onAltRoute = false;
+    if (needsReopen) {
+      uiProvider.fwController.open();
+    }
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       systemNavigationBarIconBrightness: Theme.of(context).brightness,
       statusBarIconBrightness: Theme.of(context).brightness,

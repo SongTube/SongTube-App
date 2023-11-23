@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:songtube/internal/global.dart';
 
 class ColorsPalette {
 
@@ -9,7 +10,22 @@ class ColorsPalette {
   ColorsPalette({
     required this.dominant,
     required this.vibrant,
-  });
+  }) {
+    int factor = 60;
+    int redDiff = ((dominant?.red ?? 0) - (vibrant?.red ?? 0)).abs();
+    int greenDiff = ((dominant?.green ?? 0) - (vibrant?.green ?? 0)).abs();
+    int blueDiff = ((dominant?.blue ?? 0) - (vibrant?.blue ?? 0)).abs();
+    if ((redDiff + greenDiff + blueDiff) < factor) {
+      vibrant = text;
+    }
+    if (vibrant != null && vibrant!.computeLuminance() < 0.3) {
+      vibrant = HSLColor.fromColor(vibrant!).withLightness(0.6).toColor();
+    }
+    if (vibrant == Colors.white) {
+      vibrant = accentColor;
+    }
+    vibrant ??= accentColor;
+  }
 
   Color get text => dominant!.computeLuminance() > 0.2 ? Colors.black : Colors.white;
 

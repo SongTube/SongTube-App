@@ -6,6 +6,7 @@ import 'package:songtube/internal/global.dart';
 import 'package:songtube/languages/languages.dart';
 import 'package:songtube/main.dart';
 import 'package:songtube/providers/content_provider.dart';
+import 'package:songtube/ui/animations/animated_icon.dart';
 import 'package:songtube/ui/info_item_renderer.dart';
 import 'package:songtube/ui/sheets/channel_suggestions.dart';
 import 'package:songtube/ui/text_styles.dart';
@@ -47,7 +48,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
 
   Widget _body() {
     return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
+      
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,7 +59,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
             height: 52,
             child: ListView.builder(
               clipBehavior: Clip.none,
-              physics: const BouncingScrollPhysics(),
+              
               padding: const EdgeInsets.only(left: 12),
               scrollDirection: Axis.horizontal,
               itemCount: contentProvider.channelSubscriptions.length+1,
@@ -99,7 +100,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
             itemBuilder: (context, index) {
               final item = contentProvider.channelsFeedList[index];
               return Padding(
-                padding: const EdgeInsets.only(bottom: 24),
+                padding: const EdgeInsets.only(bottom: 16),
                 child: InfoItemRenderer(
                   infoItem: item,
                   expandItem: true,
@@ -127,7 +128,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
             onPressed: () {
               openSuggestions();
             },
-            icon: Icon(Ionicons.add, size: 52, color: Theme.of(context).primaryColor)),
+            icon: const AppAnimatedIcon(Ionicons.add, size: 52)),
         ),
         const SizedBox(height: 8),
         Text(Languages.of(context)!.labelNoSubscriptions, style: textStyle(context)),

@@ -9,6 +9,7 @@ import 'package:songtube/languages/languages.dart';
 import 'package:songtube/main.dart';
 import 'package:songtube/providers/content_provider.dart';
 import 'package:songtube/providers/ui_provider.dart';
+import 'package:songtube/ui/animations/animated_icon.dart';
 import 'package:songtube/ui/components/custom_inkwell.dart';
 import 'package:songtube/ui/components/shimmer_container.dart';
 import 'package:songtube/ui/sheets/info_item_options.dart';
@@ -97,7 +98,7 @@ class PlaylistTileCollapsed extends StatelessWidget {
                     top: 4, bottom: 0),
                   child: Text(
                     playlist.name ?? '',
-                    style: smallTextStyle(context).copyWith(fontWeight: FontWeight.normal),
+                    style: smallTextStyle(context, bold: true),
                     overflow: TextOverflow.clip,
                     maxLines: 2,
                   ),
@@ -106,7 +107,7 @@ class PlaylistTileCollapsed extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 8),
                   child: Text(
                     "${playlist.uploaderName}",
-                    style: tinyTextStyle(context, opacity: 0.8).copyWith(fontWeight: FontWeight.w500),
+                    style: smallTextStyle(context, opacity: 0.6).copyWith(fontSize: 12),
                     overflow: TextOverflow.clip,
                     maxLines: 1,
                   ),
@@ -115,7 +116,7 @@ class PlaylistTileCollapsed extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 8),
                   child: Text(
                     playlist.streamCount.isNegative ? ' ' : "${playlist.streamCount} ${Languages.of(context)!.labelVideos}",
-                    style: tinyTextStyle(context, opacity: 0.6).copyWith(fontWeight: FontWeight.w500),
+                    style: smallTextStyle(context, opacity: 0.6).copyWith(fontSize: 12),
                     overflow: TextOverflow.clip,
                     maxLines: 1,
                   ),
@@ -134,7 +135,7 @@ class PlaylistTileCollapsed extends StatelessWidget {
                   backgroundColor: Colors.transparent,
                   builder: (context) => InfoItemOptions(infoItem: playlist));
               },
-              icon: Icon(Icons.more_vert, size: 20, color: Theme.of(context).iconTheme.color!.withOpacity(0.8))
+              icon: const Icon(Icons.more_vert, size: 20)
             ),
           )
         ],
@@ -197,13 +198,16 @@ class PlaylistTileExpanded extends StatelessWidget {
       fit: StackFit.expand,
       alignment: Alignment.bottomCenter,
       children: [
-        ImageFade(
-          fadeDuration: const Duration(milliseconds: 300),
-          placeholder: Container(color: Theme.of(context).cardColor.withOpacity(0.6)),
-          image: NetworkImage(playlist.thumbnailUrl ?? ''),
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) =>
-            Container(color: Theme.of(context).cardColor),
+        ImageFiltered(
+          imageFilter: ImageFilter.blur(sigmaX: 1.5, sigmaY: 1.5),
+          child: ImageFade(
+            fadeDuration: const Duration(milliseconds: 300),
+            placeholder: Container(color: Theme.of(context).cardColor.withOpacity(0.6)),
+            image: NetworkImage(playlist.thumbnailUrl ?? ''),
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) =>
+              Container(color: Theme.of(context).cardColor),
+          ),
         ),
         Align(
           alignment: Alignment.bottomCenter,
@@ -238,7 +242,7 @@ class PlaylistTileExpanded extends StatelessWidget {
               )
             ],
           ),
-          child: Icon(Ionicons.list, size: 20, color: Theme.of(context).iconTheme.color),
+          child: const AppAnimatedIcon(Ionicons.list, size: 20),
         ),
         const SizedBox(width: 12),
         Expanded(
@@ -251,11 +255,11 @@ class PlaylistTileExpanded extends StatelessWidget {
                 Text(
                   "${playlist.name}",
                   maxLines: 2,
-                  style: smallTextStyle(context).copyWith(fontWeight: FontWeight.normal),
+                  style: smallTextStyle(context, bold: true),
                 ),
                 Text(
                   "${Languages.of(context)!.labelContains} ${playlist.streamCount} ${Languages.of(context)!.labelVideos}",
-                  style: tinyTextStyle(context, opacity: 0.8).copyWith(fontWeight: FontWeight.w500),
+                  style: smallTextStyle(context, opacity: 0.6).copyWith(fontSize: 12),
                 )
               ],
             ),
@@ -271,7 +275,7 @@ class PlaylistTileExpanded extends StatelessWidget {
                 backgroundColor: Colors.transparent,
                 builder: (context) => InfoItemOptions(infoItem: playlist));
             },
-            icon: Icon(Icons.more_vert, size: 20, color: Theme.of(context).iconTheme.color!.withOpacity(0.8))
+            icon: const Icon(Icons.more_vert, size: 20)
           ),
         )
       ],

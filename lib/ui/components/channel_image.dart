@@ -15,6 +15,7 @@ class ChannelImage extends StatelessWidget {
     this.highQuality = false,
     this.onTap,
     this.size,
+    this.borderRadius = 100,
     super.key});
   final String? channelUrl;
   final String heroId;
@@ -22,6 +23,7 @@ class ChannelImage extends StatelessWidget {
   final bool expand;
   final double? size;
   final bool highQuality;
+  final double borderRadius;
   final Function()? onTap;
   @override
   Widget build(BuildContext context) {
@@ -35,18 +37,10 @@ class ChannelImage extends StatelessWidget {
               onTap: onTap,
               child: Container(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(100),
-                  border: Border.all(color: Theme.of(context).dividerColor.withOpacity(0.08), width: 1.5),
-                  boxShadow: [
-                    BoxShadow(
-                      blurRadius: 6,
-                      offset: const Offset(0,0),
-                      color: Theme.of(context).shadowColor.withOpacity(0.1)
-                    )
-                  ],
+                  borderRadius: BorderRadius.circular(borderRadius),
                 ),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(100),
+                  borderRadius: BorderRadius.circular(borderRadius),
                   child: FadeInImage(
                     fadeInDuration: const Duration(milliseconds: 300),
                     placeholder: MemoryImage(kTransparentImage),
@@ -66,7 +60,7 @@ class ChannelImage extends StatelessWidget {
           return ShimmerContainer(
             height: size ?? (expand ? 80 : 50),
             width: size ?? (expand ? 80 : 50),
-            borderRadius: BorderRadius.circular(100),
+            borderRadius: BorderRadius.circular(borderRadius),
           );
         }
       },

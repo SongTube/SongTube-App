@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:newpipeextractor_dart/newpipeextractor_dart.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/internal/global.dart';
+import 'package:songtube/languages/languages.dart';
+import 'package:songtube/main.dart';
 import 'package:songtube/providers/content_provider.dart';
+import 'package:songtube/ui/animations/animated_icon.dart';
 import 'package:songtube/ui/info_item_renderer.dart';
+import 'package:songtube/ui/sheets/channel_suggestions.dart';
+import 'package:songtube/ui/text_styles.dart';
 import 'package:songtube/ui/tiles/channel_tile.dart';
 import 'package:songtube/ui/tiles/shimmer_tile.dart';
 
@@ -23,25 +30,52 @@ class TrendingPage extends StatelessWidget {
   Widget _trendingList(context) {
     ContentProvider contentProvider = Provider.of(context);
     return CustomScrollView(
-      physics: const BouncingScrollPhysics(),
       slivers: [
-        const SliverToBoxAdapter(child: SizedBox(height: 16)),
         SliverToBoxAdapter(
           child: SizedBox(
-            height: 52,
+            height: 80,
             child: ListView.builder(
               clipBehavior: Clip.none,
-              physics: const BouncingScrollPhysics(),
               padding: const EdgeInsets.only(left: 12),
               scrollDirection: Axis.horizontal,
-              itemCount: contentProvider.channelSuggestions.length,
+              itemCount: contentProvider.channelSuggestions.length+1,
               itemBuilder: (context, index) {
-                final channel = contentProvider.channelSuggestions[index];
-                return ChannelTile(
-                  channel: ChannelInfoItem(channel.url, channel.name, '', '', null, -1),
-                  size: ChannelTileSize.small,
-                  forceHighQuality: true,
-                );
+                if (index == 0) {
+                  return Bounce(
+                    duration: kAnimationShortDuration,
+                    onPressed: () {
+                      showModalBottomSheet(
+                        context: internalNavigatorKey.currentContext!,
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        builder: (context) => const ChannelSuggestions());
+                    },
+                    child: Container(
+                      height: 80,
+                      width: 80,
+                      margin: const EdgeInsets.only(right: 12),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).cardColor,
+                        borderRadius: BorderRadius.circular(15)
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const AppAnimatedIcon(Icons.add),
+                          Text(Languages.of(context)!.labelMore, style: tinyTextStyle(context).copyWith(letterSpacing: 0.2)),
+                        ],
+                      ),
+                    ),
+                  );
+                } else {
+                  final channel = contentProvider.channelSuggestions[index-1];
+                  return ChannelTile(
+                    channel: ChannelInfoItem(channel.url, channel.name, '', '', null, -1),
+                    size: ChannelTileSize.small,
+                    forceHighQuality: true,
+                  );
+                }
               },
             ),
           ),
@@ -51,7 +85,7 @@ class TrendingPage extends StatelessWidget {
           delegate: SliverChildBuilderDelegate((context, index) {
             final video = contentProvider.trendingVideos![index];
             return Padding(
-              padding: const EdgeInsets.only(bottom: 24),
+              padding: const EdgeInsets.only(bottom: 16),
               child: InfoItemRenderer(
                 infoItem: video,
                 expandItem: true,
@@ -65,7 +99,7 @@ class TrendingPage extends StatelessWidget {
 
   Widget _shimmerList() {
     return ListView.builder(
-      physics: const BouncingScrollPhysics(),
+      
       itemCount: 20,
       padding: const EdgeInsets.only(top: 12),
       itemBuilder: (context, index) {

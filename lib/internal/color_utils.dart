@@ -20,4 +20,10 @@ class ColorUtils {
     return hslLight.toColor();
   }
 
+  static String toHex(Color color) =>
+      '${color.red.toRadixString(16).padLeft(2, '0')}'
+      '${color.green.toRadixString(16).padLeft(2, '0')}'
+      '${color.blue.toRadixString(16).padLeft(2, '0')}'
+      '${color.alpha.toRadixString(16).padLeft(2, '0')}';
+
 }

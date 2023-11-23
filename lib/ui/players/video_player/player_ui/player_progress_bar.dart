@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:newpipeextractor_dart/models/streamSegment.dart';
+import 'package:provider/provider.dart';
 import 'package:songtube/languages/languages.dart';
+import 'package:songtube/providers/media_provider.dart';
 import 'package:songtube/ui/text_styles.dart';
 
 class VideoPlayerProgressBar extends StatefulWidget {
@@ -56,6 +58,7 @@ class _VideoPlayerProgressBarState extends State<VideoPlayerProgressBar> with Ti
 
   @override
   Widget build(BuildContext context) {
+    MediaProvider mediaProvider = Provider.of(context);
     return Container(
       padding: EdgeInsets.only(top: 0, left: 16, bottom: MediaQuery.of(context).orientation == Orientation.landscape ? 32 : 0),
       child: Column(
@@ -75,7 +78,7 @@ class _VideoPlayerProgressBarState extends State<VideoPlayerProgressBar> with Ti
                         width: 40,
                         child: Text(
                           " ${duration.inMinutes.toString().padLeft(2, '0')}:${duration.inSeconds.remainder(60).toString().padLeft(2, '0')}",
-                          style: tinyTextStyle(context, bold: true).copyWith(color: Colors.white, letterSpacing: 0.4)
+                          style: tinyTextStyle(context).copyWith(letterSpacing: 0.6)
                         ),
                       );
                     }
@@ -98,7 +101,7 @@ class _VideoPlayerProgressBarState extends State<VideoPlayerProgressBar> with Ti
                                 key: ValueKey(currentSegmentText),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: tinyTextStyle(context).copyWith(color: Colors.white),
+                                style: tinyTextStyle(context).copyWith(),
                               ),
                             ),
                           ),
@@ -123,9 +126,9 @@ class _VideoPlayerProgressBarState extends State<VideoPlayerProgressBar> with Ti
                           overlayShape: SliderComponentShape.noOverlay
                         ),
                         child: Slider(
-                          activeColor: Colors.white,
-                          inactiveColor: Colors.white.withOpacity(0.2),
-                          thumbColor: Colors.white,
+                          activeColor: mediaProvider.currentColors.vibrant,
+                          inactiveColor: mediaProvider.currentColors.vibrant?.withOpacity(0.2),
+                          thumbColor: mediaProvider.currentColors.vibrant,
                           label: '${Duration(seconds: widget.position.inSeconds).inMinutes.toString().padLeft(2, '0')}:${Duration(seconds: widget.position.inSeconds).inSeconds.remainder(60).toString().padLeft(2, '0')}',
                           value: isDragging ? seekValue : widget.position.inSeconds.toDouble(),
                           onChangeEnd: (newPosition) {
@@ -177,7 +180,6 @@ class _VideoPlayerProgressBarState extends State<VideoPlayerProgressBar> with Ti
                         color: Colors.transparent,
                         child: const Icon(
                           Icons.video_settings_rounded,
-                          color: Colors.white,
                           size: 22,
                         ),
                       ),
@@ -194,7 +196,6 @@ class _VideoPlayerProgressBarState extends State<VideoPlayerProgressBar> with Ti
                         child: Icon(
                           MediaQuery.of(context).orientation == Orientation.portrait
                             ? Icons.fullscreen_rounded : Icons.fullscreen_exit_rounded,
-                          color: Colors.white,
                         ),
                       ),
                     ),

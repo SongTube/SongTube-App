@@ -61,22 +61,6 @@ class SongItem {
   /// Thumbnail Uri for MediaPlayer
   Uri? get thumbnailUri => thumbnailPath != null ? Uri.parse(thumbnailPath!.path) : null;
 
-  /// Colors Palette getter/setter for MediaPlayer
-  ColorsPalette? get palette {
-    final data = sharedPreferences.getString(paletteId(id));
-    if (data != null) {
-      return ColorsPalette.fromJson(data);
-    } else {
-      return null;
-    }
-  }
-  set palette(ColorsPalette? colors) {
-    if (colors != null) {
-      final json = colors.toJson();
-      sharedPreferences.setString(paletteId(id), json);
-    }
-  }
-
   // Is Video Check
   bool get isVideo {
     final format = id.split('/').last.split('.').last;
@@ -103,7 +87,6 @@ class SongItem {
     extras: {
       'artwork': artworkPath?.path,
       'modelId': modelId,
-      'palette': palette?.toMap(),
     }
   );
 
@@ -206,7 +189,6 @@ class SongItem {
       'displaySubtitle': displaySubtitle,
       'displayDescription': displayDescription,
       'lastModified': lastModified.toString(),
-      'palette': palette?.toMap(),
       'videoId': videoId,
     };
   }
@@ -239,7 +221,7 @@ class SongItem {
 
   @override
   String toString() {
-    return 'SongItem(id: $id, modelId: $modelId, title: $title, album: $album, artist: $artist, genre: $genre, duration: $duration, artworkPath: $artworkPath, artworkUrl: $artworkUrl, thumbnailPath: $thumbnailPath, playable: $playable, displayTitle: $displayTitle, displaySubtitle: $displaySubtitle, displayDescription: $displayDescription, lastModified: $lastModified, palette: $palette, videoId: $videoId)';
+    return 'SongItem(id: $id, modelId: $modelId, title: $title, album: $album, artist: $artist, genre: $genre, duration: $duration, artworkPath: $artworkPath, artworkUrl: $artworkUrl, thumbnailPath: $thumbnailPath, playable: $playable, displayTitle: $displayTitle, displaySubtitle: $displaySubtitle, displayDescription: $displayDescription, lastModified: $lastModified, videoId: $videoId)';
   }
 
   @override
@@ -262,7 +244,6 @@ class SongItem {
       other.displaySubtitle == displaySubtitle &&
       other.displayDescription == displayDescription &&
       other.lastModified == lastModified &&
-      other.palette == palette &&
       other.videoId == videoId;
   }
 
@@ -283,7 +264,6 @@ class SongItem {
       displaySubtitle.hashCode ^
       displayDescription.hashCode ^
       lastModified.hashCode ^
-      palette.hashCode ^
       videoId.hashCode;
   }
 }

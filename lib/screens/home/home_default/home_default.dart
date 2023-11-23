@@ -1,3 +1,4 @@
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:iconsax/iconsax.dart';
@@ -6,12 +7,14 @@ import 'package:provider/provider.dart';
 import 'package:songtube/languages/languages.dart';
 import 'package:songtube/main.dart';
 import 'package:songtube/providers/content_provider.dart';
+import 'package:songtube/providers/media_provider.dart';
 import 'package:songtube/providers/ui_provider.dart';
 import 'package:songtube/screens/home/home_default/pages/favorites_page.dart';
 import 'package:songtube/screens/home/home_default/pages/search_page.dart';
 import 'package:songtube/screens/home/home_default/pages/subscriptions_page.dart';
 import 'package:songtube/screens/home/home_default/pages/trending_page.dart';
 import 'package:songtube/screens/home/home_default/pages/video_playlists_page.dart';
+import 'package:songtube/ui/animations/animated_icon.dart';
 import 'package:songtube/ui/animations/show_up.dart';
 import 'package:songtube/ui/components/custom_inkwell.dart';
 import 'package:songtube/ui/rounded_tab_indicator.dart';
@@ -72,10 +75,9 @@ class _HomeDefaultState extends State<HomeDefault> with TickerProviderStateMixin
         children: [
           SizedBox(height: MediaQuery.of(context).padding.top+8),
           SizedBox(
-            height: kToolbarHeight-8,
+            height: kToolbarHeight,
             child: _appBar()),
           _tabs(),
-          Divider(height: 1.5, color: Theme.of(context).dividerColor.withOpacity(0.08), thickness: 1.5),
           Expanded(
             child: Stack(
               children: [
@@ -112,29 +114,18 @@ class _HomeDefaultState extends State<HomeDefault> with TickerProviderStateMixin
         Expanded(
           child: Container(
             margin: const EdgeInsets.only(left: 12),
-            height: kToolbarHeight,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(100),
-              color: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.05),
+              borderRadius: BorderRadius.circular(15),
+              color: Theme.of(context).cardColor
             ),
             child: CustomInkWell(
-              borderRadius: BorderRadius.circular(100),
+              borderRadius: BorderRadius.circular(15),
               onTap: () {
                 uiProvider.homeSearchNode.requestFocus();
               },
               child: Row(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(6.0),
-                    child: Image.asset(
-                      DateTime.now().month == 12
-                        ? 'assets/images/logo_christmas.png'
-                        : 'assets/images/ic_launcher.png',
-                      fit: BoxFit.cover,
-                      filterQuality: FilterQuality.high,
-                    ),
-                  ),
-                  const SizedBox(width: 6),
+                  const SizedBox(width: 16),
                   Expanded(
                     child: Container(
                       padding: const EdgeInsets.only(right: 16),
@@ -143,16 +134,16 @@ class _HomeDefaultState extends State<HomeDefault> with TickerProviderStateMixin
                         alignment: Alignment.centerLeft,
                         child: Row(
                           children: [
-                            const Icon(Iconsax.search_normal, size: 18),
+                            const AppAnimatedIcon(EvaIcons.searchOutline, size: 20),
                             const SizedBox(width: 12),
                             Expanded(
                               child: TextField(
                                 enabled: true,
                                 focusNode: uiProvider.homeSearchNode,
                                 controller: searchController,
-                                style: smallTextStyle(context).copyWith(fontWeight: FontWeight.w500),
+                                style: smallTextStyle(context).copyWith(),
                                 decoration: InputDecoration.collapsed(
-                                  hintStyle: smallTextStyle(context, opacity: 0.4).copyWith(fontWeight: FontWeight.w500),
+                                  hintStyle: smallTextStyle(context, opacity: 0.6).copyWith(fontWeight: FontWeight.w500),
                                   hintText: Languages.of(context)!.labelSearchYoutube),
                                 onSubmitted: (query) {
                                   FocusScope.of(context).unfocus();
@@ -168,7 +159,7 @@ class _HomeDefaultState extends State<HomeDefault> with TickerProviderStateMixin
                                 uiProvider.homeSearchNode.requestFocus();
                                 setState(() {});
                               },
-                              child: Icon(Icons.clear, color: Theme.of(context).iconTheme.color, size: 18),
+                              child: const AppAnimatedIcon(Icons.clear, size: 18),
                             ),
                             FutureBuilder<String?>(
                               future: clipboardLink(),
@@ -181,7 +172,7 @@ class _HomeDefaultState extends State<HomeDefault> with TickerProviderStateMixin
                                       onTap: () {
                                         contentProvider.loadVideoPlayer(snapshot.data);
                                       },
-                                      child: Icon(Icons.link_rounded, color: Theme.of(context).primaryColor, size: 18),
+                                      child: const AppAnimatedIcon(Icons.link_rounded, size: 18),
                                     ),
                                   );
                                 } else {
@@ -207,7 +198,7 @@ class _HomeDefaultState extends State<HomeDefault> with TickerProviderStateMixin
               backgroundColor: Colors.transparent,
               builder: (context) => SearchFiltersSheet());
           },
-          icon: Icon(Iconsax.filter_edit, size: 18, color: contentProvider.searchFilters.isNotEmpty ? Theme.of(context).primaryColor : null)),
+          icon: const AppAnimatedIcon(EvaIcons.gridOutline, size: 20)),
         const SizedBox(width: 4),
       ],
     );
@@ -225,13 +216,12 @@ class _HomeDefaultState extends State<HomeDefault> with TickerProviderStateMixin
         padding: const EdgeInsets.only(left: 8),
         controller: tabController,
         isScrollable: true,
-        labelColor: Theme.of(context).textTheme.bodyText1!.color,
-        unselectedLabelColor: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.8),
-        labelStyle: smallTextStyle(context).copyWith(fontWeight: FontWeight.w800, letterSpacing: 0.4),
-        unselectedLabelStyle: smallTextStyle(context).copyWith(fontWeight: FontWeight.normal, letterSpacing: 0.4),
-        physics: const BouncingScrollPhysics(),
+        labelColor: Provider.of<MediaProvider>(context).currentColors.vibrant,
+        unselectedLabelColor: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.6),
+        labelStyle: tabBarTextStyle(context, opacity: 1),
+        unselectedLabelStyle: tabBarTextStyle(context, bold: false),
         indicatorSize: TabBarIndicatorSize.label,
-        indicator: RoundedTabIndicator(color: Theme.of(context).primaryColor, height: 3, radius: 100, bottomMargin: 0),
+        indicatorColor: Colors.transparent,
         tabs: [
           if (contentProvider.searchContent != null || contentProvider.searchingContent)
           Tab(child: Text(Languages.of(context)!.labelSearch)),
@@ -254,7 +244,6 @@ class _HomeDefaultState extends State<HomeDefault> with TickerProviderStateMixin
       duration: const Duration(milliseconds: 300),
       child: TabBarView(
         key: ValueKey((contentProvider.searchContent != null || contentProvider.searchingContent) ? 'tabBar5' : 'tabBar4'),
-        physics: const BouncingScrollPhysics(),
         controller: tabController,
         children: [
           if (contentProvider.searchContent != null || contentProvider.searchingContent)

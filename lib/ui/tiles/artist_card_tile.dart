@@ -57,12 +57,12 @@ class _ArtistCardTileState extends State<ArtistCardTile> {
                 ],
               ),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(15),
                 child: FutureBuilder<String?>(
                   future: MusicBrainzAPI.getArtistImage(widget.artist.artistName.trim()),
                   builder: (context, snapshot) {
                     return ImageFade(
-                      placeholder: Image.asset('assets/images/artworkPlaceholder_big.png', fit: BoxFit.cover),
+                      placeholder: Image.memory(kTransparentImage, fit: BoxFit.cover),
                       image: snapshot.hasData && snapshot.data != null
                         ? NetworkImage(snapshot.data!)
                         : MemoryImage(kTransparentImage) as ImageProvider,
@@ -81,15 +81,15 @@ class _ArtistCardTileState extends State<ArtistCardTile> {
               child: Align(
                 alignment: Alignment.bottomCenter,
                 child: Container(
-                  margin: const EdgeInsets.only(left: 8, bottom: 8, right: 8),
+                  margin: const EdgeInsets.only(left: 12, bottom: 12, right: 12),
                   width: double.infinity,
                   height: kToolbarHeight,
                   decoration: BoxDecoration(
                     color: Theme.of(context).cardColor.withOpacity(0.9),
-                    borderRadius: BorderRadius.circular(20)
+                    borderRadius: BorderRadius.circular(15)
                   ),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(15),
                     child: Padding(
                       padding: const EdgeInsets.only(left: 16, right: 16),
                       child: Row(

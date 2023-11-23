@@ -105,7 +105,7 @@ class _WatchHistoryPageState extends State<WatchHistoryPage> {
             child: AnimatedList(
               key: listKey,
               padding: const EdgeInsets.only(top: 12),
-              physics: const BouncingScrollPhysics(),
+              
               initialItemCount: CacheUtils.watchHistory.length,
               itemBuilder: (context, index, animation) {
                 final item = CacheUtils.watchHistory[index];

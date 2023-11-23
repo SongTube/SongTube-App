@@ -20,6 +20,8 @@ import 'package:songtube/screens/home/home.dart';
 import 'package:songtube/screens/intro/intro.dart';
 import 'package:songtube/ui/components/fancy_scaffold.dart';
 import 'package:songtube/ui/components/nested_will_pop_scope.dart';
+import 'package:songtube/ui/components/palette_loader.dart';
+import 'package:songtube/ui/components/scroll_behaviour.dart';
 import 'package:songtube/ui/players/music_player.dart';
 import 'package:songtube/ui/players/video_player.dart';
 import 'package:songtube/ui/themes/adaptive.dart';
@@ -163,73 +165,85 @@ class _SongTubeState extends State<SongTube> {
                 theme: appSettings.enableMaterialYou ? adaptiveTheme(lightScheme, Brightness.light) : lightTheme(),
                 darkTheme: appSettings.enableMaterialYou ? adaptiveTheme(darkScheme, Brightness.dark) : darkTheme(),
                 themeMode: appSettings.enableMaterialYou ? ThemeMode.system : uiProvider.themeMode,
+                scrollBehavior: CustomScrollBehavior(androidSdkVersion: deviceInfo.version.sdkInt??0),
                 home: StreamBuilder<MediaItem?>(
                   stream: audioHandler.mediaItem,
                   builder: (context, media) {
                     return Scaffold(
+                      resizeToAvoidBottomInset: false,
                       key: snackbarKey,
-                      body: FancyScaffold(
-                        resizeToAvoidBottomInset: false,
-                        key: internalNavigatorKey,
-                        body: NestedWillPopScope(
-                          onWillPop: () async {
-                            if (navigatorKey.currentState?.canPop() ?? false) {
-                              navigatorKey.currentState?.maybePop();
-                              return false;
-                            }
-                            return true;
-                          },
-                          child: Navigator(
-                            key: navigatorKey,
-                            onGenerateRoute: (settings) {
-                              Widget widget;
-                              // Manage your route names here
-                              switch (settings.name) {
-                                case 'intro':
-                                  widget = const IntroScreen();
-                                  break;
-                                case 'home':
-                                  widget = HomeScreen(
-                                    initIntent: initIntent
-                                  );
-                                  break;
-                                default:
-                                  throw Exception('Invalid route: ${settings.name}');
-                              }
-                              // You can also return a PageRouteBuilder and
-                              // define custom transitions between pages
-                              return PageRouteBuilder(
-                                settings: settings,
-                                barrierColor: Colors.transparent,
-                                transitionDuration: const Duration(milliseconds: 500),
-                                reverseTransitionDuration: const Duration(milliseconds: 500),
-                                transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                                  return SharedAxisTransition(
-                                    fillColor: Colors.transparent,
-                                    animation: animation,
-                                    secondaryAnimation: secondaryAnimation,
-                                    transitionType: SharedAxisTransitionType.scaled,
-                                    child: child,
+                      body: PaletteLoader(
+                        controller: uiProvider.paletteLoaderController,
+                        song: media.data != null ? SongItem.fromMediaItem(media.data!) : null,
+                        video: contentProvider.playingContent?.videoDetails,
+                        builder: (context, colors) {
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            Provider.of<MediaProvider>(context, listen: false).currentColors = colors;
+                          });
+                          return FancyScaffold(
+                            resizeToAvoidBottomInset: false,
+                            key: internalNavigatorKey,
+                            body: NestedWillPopScope(
+                              onWillPop: () async {
+                                if (navigatorKey.currentState?.canPop() ?? false) {
+                                  navigatorKey.currentState?.maybePop();
+                                  return false;
+                                }
+                                return true;
+                              },
+                              child: Navigator(
+                                key: navigatorKey,
+                                onGenerateRoute: (settings) {
+                                  Widget widget;
+                                  // Manage your route names here
+                                  switch (settings.name) {
+                                    case 'intro':
+                                      widget = const IntroScreen();
+                                      break;
+                                    case 'home':
+                                      widget = HomeScreen(
+                                        initIntent: initIntent
+                                      );
+                                      break;
+                                    default:
+                                      throw Exception('Invalid route: ${settings.name}');
+                                  }
+                                  // You can also return a PageRouteBuilder and
+                                  // define custom transitions between pages
+                                  return PageRouteBuilder(
+                                    settings: settings,
+                                    barrierColor: Colors.transparent,
+                                    transitionDuration: const Duration(milliseconds: 500),
+                                    reverseTransitionDuration: const Duration(milliseconds: 500),
+                                    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                      return SharedAxisTransition(
+                                        fillColor: Colors.transparent,
+                                        animation: animation,
+                                        secondaryAnimation: secondaryAnimation,
+                                        transitionType: SharedAxisTransitionType.scaled,
+                                        child: child,
+                                      );
+                                    },
+                                    pageBuilder: (context, animation, secondaryAnimation) {
+                                      return widget;
+                                    }
                                   );
                                 },
-                                pageBuilder: (context, animation, secondaryAnimation) {
-                                  return widget;
-                                }
-                              );
-                            },
-                            initialRoute: initialRoute,
-                          ),
-                        ),
-                        floatingWidgetConfig: FloatingWidgetConfig(
-                          backdropColor: Colors.black,
-                          backdropEnabled: true,
-                          onSlide: media.hasData && media.data != null && uiProvider.currentPlayer == CurrentPlayer.music
-                            ? (position) => onSlideMusicPlayer(position, media.data!)
-                            : (position) => onSlideVideoPlayer(position),
-                        ),
-                        floatingWidgetController: uiProvider.fwController,
-                        musicFloatingWidget: media.hasData && media.data != null ? const MusicPlayer() : null,
-                        videoFloatingWidget: contentProvider.playingContent != null ? const VideoPlayer() : null,
+                                initialRoute: initialRoute,
+                              ),
+                            ),
+                            floatingWidgetConfig: FloatingWidgetConfig(
+                              backdropColor: Colors.black,
+                              backdropEnabled: true,
+                              onSlide: media.hasData && media.data != null && uiProvider.currentPlayer == CurrentPlayer.music
+                                ? (position) => onSlideMusicPlayer(position, media.data!)
+                                : (position) => onSlideVideoPlayer(position),
+                            ),
+                            floatingWidgetController: uiProvider.fwController,
+                            musicFloatingWidget: media.hasData && media.data != null ? const MusicPlayer() : null,
+                            videoFloatingWidget: contentProvider.playingContent != null ? const VideoPlayer() : null,
+                          );
+                        }
                       ),
                     );
                   }
@@ -246,7 +260,7 @@ class _SongTubeState extends State<SongTube> {
   void onSlideMusicPlayer(double position, MediaItem mediaItem) {
     AppSettings appSettings = Provider.of(internalNavigatorKey.currentContext!, listen: false);
     final iconColor = Theme.of(internalNavigatorKey.currentContext!).brightness;
-    final Color? textColor = SongItem.fromMediaItem(mediaItem).palette?.text;
+    final Color? textColor = Provider.of<MediaProvider>(internalNavigatorKey.currentContext!, listen: false).currentColors?.text;
     if (position > 0.95) {
       if (textColor != null) {
         SystemChrome.setSystemUIOverlayStyle(

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:animations/animations.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,6 +20,7 @@ import 'package:songtube/screens/home/home_default/home_default.dart';
 import 'package:songtube/screens/home/home_downloads/home_downloads.dart';
 import 'package:songtube/screens/home/home_library/home_library.dart';
 import 'package:songtube/screens/home/home_music/home_music.dart';
+import 'package:songtube/ui/animations/animated_icon.dart';
 import 'package:songtube/ui/components/bottom_navigation_bar.dart';
 import 'package:songtube/ui/components/fancy_scaffold.dart';
 import 'package:songtube/ui/components/nested_will_pop_scope.dart';
@@ -226,7 +228,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           child: screens[bottomNavigationBarIndex]
         ),
         bottomNavigationBar: SongTubeNavigation(
-          labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
           selectedIndex: bottomNavigationBarIndex,
           backgroundColor: Theme.of(context).cardColor,
           onItemTap: (int tappedIndex) {
@@ -236,23 +237,23 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           },
           destinations: [
             NavigationDestination(
-              icon: const Icon(Ionicons.home_outline),
-              selectedIcon: const Icon(Ionicons.home, color: Colors.white),
+              icon: Icon(EvaIcons.homeOutline, color: Theme.of(context).iconTheme.color!.withOpacity(0.4)),
+              selectedIcon: const AppAnimatedIcon(EvaIcons.homeOutline),
               label: Languages.of(context)!.labelHome,
             ),
             NavigationDestination(
-              icon: const Icon(Ionicons.musical_note_outline),
-              selectedIcon: const Icon(Ionicons.musical_note, color: Colors.white),
+              icon: Icon(EvaIcons.musicOutline, color: Theme.of(context).iconTheme.color!.withOpacity(0.4)),
+              selectedIcon: const AppAnimatedIcon(EvaIcons.musicOutline),
               label: Languages.of(context)!.labelMusic,
             ),
             NavigationDestination(
-              icon: const Icon(Ionicons.cloud_download_outline),
-              selectedIcon: const Icon(Ionicons.cloud_download, color: Colors.white),
+              icon: Icon(EvaIcons.downloadOutline, color: Theme.of(context).iconTheme.color!.withOpacity(0.4)),
+              selectedIcon: const AppAnimatedIcon(EvaIcons.downloadOutline),
               label: Languages.of(context)!.labelDownloads,
             ),
             NavigationDestination(
-              icon: const Icon(Ionicons.library_outline),
-              selectedIcon: const Icon(Ionicons.library, color: Colors.white),
+              icon: Icon(EvaIcons.bookOpenOutline, color: Theme.of(context).iconTheme.color!.withOpacity(0.4)),
+              selectedIcon: const AppAnimatedIcon(EvaIcons.bookOpenOutline),
               label: Languages.of(context)!.labelLibrary,
             ),
           ],

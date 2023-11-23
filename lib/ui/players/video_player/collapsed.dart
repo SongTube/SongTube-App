@@ -4,6 +4,7 @@ import 'package:newpipeextractor_dart/models/infoItems/video.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/models/content_wrapper.dart';
 import 'package:songtube/providers/content_provider.dart';
+import 'package:songtube/ui/animations/animated_icon.dart';
 import 'package:songtube/ui/text_styles.dart';
 
 class VideoPlayerCollapsed extends StatefulWidget {
@@ -47,10 +48,14 @@ class _VideoPlayerCollapsedState extends State<VideoPlayerCollapsed> {
             ],
           ),
         ),
+        const SizedBox(width: 4),
         Semantics(
           label: (playerController?.value.isPlaying ?? false) ? 'Pause' : 'Play',
           child: IconButton(
-            icon: Icon((playerController?.value.isPlaying ?? false) ? Ionicons.pause_outline : Ionicons.play_outline, size: 20),
+            splashColor: Colors.transparent,
+            icon: playerController?.value.isPlaying ?? false
+              ? const AppAnimatedIcon(Icons.pause_rounded, size: 20, key: Key('vpause'))
+              : const AppAnimatedIcon(Icons.play_arrow_rounded, size: 20, key: Key('vplay')),
             onPressed: () async {
               if ((playerController?.value.isPlaying ?? false)) {
                 await playerController?.pause();
@@ -61,7 +66,7 @@ class _VideoPlayerCollapsedState extends State<VideoPlayerCollapsed> {
             }
           ),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: 4),
       ],
     );
   }

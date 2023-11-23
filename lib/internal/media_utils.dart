@@ -9,6 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_audio_query/flutter_audio_query.dart';
 import 'package:http/http.dart';
+import 'package:newpipeextractor_dart/newpipeextractor_dart.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:songtube/internal/artwork_manager.dart';
@@ -213,15 +214,8 @@ class MediaUtils {
       seconds: info.duration
     );
     FileStat stats = await FileStat.stat(path);
-    PaletteGenerator? palette;
     if (info.downloadType == DownloadType.audio) { 
-    await ArtworkManager.writeThumbnail(path);
-      try {
-        palette = await PaletteGenerator.fromImageProvider(FileImage(thumbnailFile(path)));
-      } catch (e) {
-        await ArtworkManager.writeDefaultThumbnail(path);
-        palette = await PaletteGenerator.fromImageProvider(FileImage(thumbnailFile(path)));
-      }
+      await ArtworkManager.writeThumbnail(path);
     }
     final song = SongItem(
       id: path,
@@ -237,10 +231,6 @@ class MediaUtils {
       lastModified: stats.changed,
       videoId: info.url,
     );
-    song.palette = palette != null ? ColorsPalette(
-      dominant: palette.dominantColor?.color,
-      vibrant: palette.vibrantColor?.color,
-    ) : null;
     return song;
   }
 
@@ -258,11 +248,34 @@ class MediaUtils {
           print('Palette: ${paletteId(song.id)} took ${paletteStopwatch.elapsed.inMilliseconds}ms');
         }
         final colors = ColorsPalette(dominant: result.dominantColor?.color, vibrant: result.vibrantColor?.color);
-        song.palette = colors;
         return colors;
       } catch (_) {
         if (kDebugMode) {
           print('Palette: ${paletteId(song.id)} failed');
+        }
+        return null;
+      }
+    }
+  }
+
+  // Generate Colors Palette from any given video id (if it doesnt exist)
+  static Future<ColorsPalette?> generateVideoColorsPalette(YoutubeVideo video) async {
+    final palette = sharedPreferences.getString(paletteId(video.videoInfo.id!));
+    if (palette != null) {
+      return ColorsPalette.fromJson(palette);
+    } else {
+      try {
+        Stopwatch paletteStopwatch = Stopwatch()..start();
+        final result = await PaletteGenerator.fromImageProvider(NetworkImage(video.videoInfo.thumbnailUrl!));
+        paletteStopwatch.stop();
+        if (kDebugMode) {
+          print('Palette: ${paletteId(video.videoInfo.id!)} took ${paletteStopwatch.elapsed.inMilliseconds}ms');
+        }
+        final colors = ColorsPalette(dominant: result.dominantColor?.color, vibrant: result.vibrantColor?.color);
+        return colors;
+      } catch (_) {
+        if (kDebugMode) {
+          print('Palette: ${paletteId(video.videoInfo.id!)} failed');
         }
         return null;
       }

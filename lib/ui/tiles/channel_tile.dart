@@ -17,11 +17,15 @@ class ChannelTile extends StatefulWidget {
     required this.size,
     this.forceHighQuality = false,
     this.disablePaddings = false,
+    this.margin,
+    this.padding,
     super.key});
   final ChannelInfoItem channel;
   final ChannelTileSize size;
   final bool forceHighQuality;
   final bool disablePaddings;
+  final EdgeInsetsGeometry? padding;
+  final EdgeInsetsGeometry? margin;
   @override
   State<ChannelTile> createState() => _ChannelTileState();
 }
@@ -50,8 +54,8 @@ class _ChannelTileState extends State<ChannelTile> {
 
   Widget _big() {
     return Container(
-      padding: widget.disablePaddings ? null : const EdgeInsets.all(12),
-      margin: widget.disablePaddings ? null : const EdgeInsets.all(12),
+      padding: widget.disablePaddings ? null : widget.padding ?? const EdgeInsets.all(12),
+      margin: widget.disablePaddings ? null : widget.margin ?? const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(20)
@@ -74,12 +78,12 @@ class _ChannelTileState extends State<ChannelTile> {
               children: [
                 Text(
                   widget.channel.name ?? '',
-                  style: subtitleTextStyle(context, bold: true),
+                  style: smallTextStyle(context),
                   maxLines: 2,
                 ),
                 Text(
-                  widget.channel.subscriberCount != -1 ? "${NumberFormat().format(widget.channel.subscriberCount)} Subs • " : '' '${widget.channel.streamCount} ${Languages.of(context)!.labelVideos}',
-                  style: smallTextStyle(context, opacity: 0.8)
+                  widget.channel.subscriberCount != -1 && widget.channel.subscriberCount != null ? "${NumberFormat().format(widget.channel.subscriberCount)} Subs • " : '' '${widget.channel.streamCount} ${Languages.of(context)!.labelVideos}',
+                  style: smallTextStyle(context, opacity: 0.6).copyWith(fontSize: 12)
                 ),
               ],
             ),
@@ -94,10 +98,10 @@ class _ChannelTileState extends State<ChannelTile> {
   Widget _medium() {
     return Container(
       margin: const EdgeInsets.only(right: 12),
-      padding: const EdgeInsets.only(left: 6, right: 12),
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(100),
+        borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
             blurRadius: 6,
@@ -113,12 +117,21 @@ class _ChannelTileState extends State<ChannelTile> {
             channelUrl: widget.channel.url,
             heroId: widget.channel.name??'',
             channelName: widget.channel.name??'',
-            size: 40,
+            size: 68,
             onTap: openChannel,
             highQuality: widget.forceHighQuality,
+            borderRadius: 100,
+          ),
+          const SizedBox(width: 12),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(widget.channel.name??'', style: smallTextStyle(context).copyWith(), maxLines: 1, textAlign: TextAlign.center),
+              Text(widget.channel.subscriberCount?.toString()??'Unknown Subs', style: smallTextStyle(context, opacity: 0.6).copyWith(fontSize: 12), maxLines: 1, textAlign: TextAlign.center),
+            ],
           ),
           const SizedBox(width: 8),
-          Text(widget.channel.name??'', style: tinyTextStyle(context).copyWith(fontWeight: FontWeight.w600), maxLines: 1, textAlign: TextAlign.center),
         ],
       ),
     );

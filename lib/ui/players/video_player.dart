@@ -110,18 +110,11 @@ class _VideoPlayerState extends State<VideoPlayer> with TickerProviderStateMixin
             );
           },
           child: Container(
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(30),
-                topRight: Radius.circular(30)
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(15),
+                topRight: Radius.circular(15)
               ),
-              boxShadow: uiProvider.fwController.lockNotificationListener
-                ? [BoxShadow(
-                    blurRadius: 12,
-                    offset: const Offset(0,0),
-                    color: Theme.of(context).shadowColor.withOpacity(0.2)
-                  )]
-                : null,
             ),
             child: GestureDetector(
               onTap: () {
@@ -153,7 +146,7 @@ class _VideoPlayerState extends State<VideoPlayer> with TickerProviderStateMixin
                                 child: Container(
                                   margin: EdgeInsets.only(
                                     left: 11.5*(1-uiProvider.fwController.animationController.value),
-                                    right: 8*(1-uiProvider.fwController.animationController.value)).copyWith(
+                                    right: 12*(1-uiProvider.fwController.animationController.value)).copyWith(
                                       top: Tween<double>(begin: 9, end: appSettings.hideSystemAppBarOnVideoPlayerExpanded ? 0 : MediaQuery.of(context).padding.top).animate(uiProvider.fwController.animationController).value,
                                       bottom: Tween<double>(begin: 6, end: 0).animate(uiProvider.fwController.animationController).value
                                     ),

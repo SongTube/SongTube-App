@@ -3,6 +3,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:songtube/internal/global.dart';
 import 'package:songtube/internal/models/song_item.dart';
 import 'package:songtube/main.dart';
+import 'package:songtube/providers/media_provider.dart';
 import 'package:songtube/providers/playlist_provider.dart';
 import 'package:songtube/ui/animations/mini_music_visualizer.dart';
 import 'package:songtube/ui/sheets/song_options.dart';
@@ -34,7 +35,10 @@ class SongTile extends StatefulWidget {
 
 class _SongTileState extends State<SongTile> {
 
-  Color get dominantColor => widget.song.palette?.vibrant ?? widget.song.palette?.dominant ?? Theme.of(context).textTheme.bodyText1!.color!;
+  // Provider
+  MediaProvider get mediaProvider => Provider.of<MediaProvider>(context, listen: false);
+
+  Color get dominantColor => mediaProvider.currentColors.vibrant ?? mediaProvider.currentColors.dominant ?? Theme.of(context).textTheme.bodyText1!.color!;
 
   // Animate
   bool animate = false;
@@ -57,38 +61,51 @@ class _SongTileState extends State<SongTile> {
       stream: audioHandler.mediaItem,
       builder: (context, media) {
         bool isPlaying = media.data?.id == widget.song.id;
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 4, left: 8, right: 8),
+        return GestureDetector(
+          onTap: widget.onPlay,
+          onLongPress: () {
+            if (widget.onPlay != null && !widget.song.isVideo) {
+              showModalBottomSheet(
+                context: internalNavigatorKey.currentContext!,
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent,
+                builder: (context) => SongOptionsSheet(song: widget.song, isDownload: widget.isDownload));
+            }
+          },
           child: AnimatedContainer(
+            margin: const EdgeInsets.only(left: 12, right: 12, top: 4, bottom: 4),
             duration: const Duration(milliseconds: 300),
             decoration: BoxDecoration(
-              color: widget.disablePlayingBackground ? Colors.transparent : isPlaying ? dominantColor.withOpacity(0.1) : Colors.transparent,
-              borderRadius: BorderRadius.circular(20)
+              color: widget.disablePlayingBackground ? Colors.transparent : isPlaying ? dominantColor.withOpacity(0.05) : Colors.transparent,
+              borderRadius: BorderRadius.circular(15)
             ),
-            child: ListTile(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-              onTap: widget.onPlay,
-              onLongPress: widget.disableLongPress ? null : () {
-                if (widget.onPlay != null && !widget.song.isVideo) {
-                  showModalBottomSheet(
-                    context: internalNavigatorKey.currentContext!,
-                    isScrollControlled: true,
-                    backgroundColor: Colors.transparent,
-                    builder: (context) => SongOptionsSheet(song: widget.song, isDownload: widget.isDownload));
-                }
-              },
-              leading: _leading(),
-              title: Text(
-                widget.song.title,
-                style: smallTextStyle(context).copyWith(fontWeight: FontWeight.normal),
-                maxLines: 1,
-              ),
-              subtitle: Text(
-                widget.song.artist ?? 'Unknown',
-                style: tinyTextStyle(context, opacity: 0.6).copyWith(fontWeight: FontWeight.w500),
-                maxLines: 1,
-              ),
-              trailing: _trailing(media)
+            padding: const EdgeInsets.all(4),
+            height: kToolbarHeight+12,
+            child: Row(
+              children: [
+                _leading(),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.song.title,
+                        style: smallTextStyle(context),
+                        maxLines: 1,
+                      ),
+                      Text(
+                        widget.song.artist ?? 'Unknown',
+                        style: tinyTextStyle(context, opacity: 0.6),
+                        maxLines: 1,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 12),
+                _trailing(media)
+              ],
             ),
           ),
         );
@@ -105,7 +122,7 @@ class _SongTileState extends State<SongTile> {
         children: [
           Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(15),
               boxShadow: [
                 BoxShadow(
                   blurRadius: 12,
@@ -115,7 +132,7 @@ class _SongTileState extends State<SongTile> {
               ],
             ), 
             child: animate ? ClipRRect(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(15),
               child: FadeInImage(
                 fadeInDuration: const Duration(milliseconds: 200),
                 image: widget.song.isVideo && widget.song.artworkUrl != null

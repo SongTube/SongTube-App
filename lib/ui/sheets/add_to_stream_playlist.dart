@@ -61,7 +61,7 @@ class AddToStreamPlaylist extends StatelessWidget {
           ),
           ListView.builder(
             shrinkWrap: true,
-            physics: const BouncingScrollPhysics(),
+            
             itemCount: playlists.length,
             itemBuilder: (context, index) {
               final playlist = playlists[index];

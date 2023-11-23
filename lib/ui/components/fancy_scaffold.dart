@@ -11,6 +11,7 @@ import 'package:songtube/internal/global.dart';
 import 'package:songtube/providers/app_settings.dart';
 import 'package:songtube/providers/content_provider.dart';
 import 'package:songtube/providers/ui_provider.dart';
+import 'package:songtube/ui/animations/animated_icon.dart';
 import 'package:songtube/ui/animations/show_up.dart';
 import 'package:uuid/uuid.dart';
 
@@ -211,14 +212,8 @@ class FancyScaffoldState extends State<FancyScaffold> with TickerProviderStateMi
                           Builder(
                             builder: (context) {
                               return Padding(
-                                padding: EdgeInsets.only(bottom: (82 * navigationBarAnimationController.value) + (systemBottomPadding * (1 - floatingWidgetAnimationController.value))),
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: (1 -floatingWidgetAnimationController.value) * widget.floatingWidgetConfig.padding.horizontal,
-                                    vertical: (1 - floatingWidgetAnimationController.value) * widget.floatingWidgetConfig.padding.vertical,
-                                  ),
-                                  child: _actualSlidingPanel(),
-                                ),
+                                padding: EdgeInsets.only(bottom: (78 * navigationBarAnimationController.value) + (systemBottomPadding * (1 - floatingWidgetAnimationController.value))),
+                                child: _actualSlidingPanel(),
                               );
                             }
                           )
@@ -300,105 +295,106 @@ class FancyScaffoldState extends State<FancyScaffold> with TickerProviderStateMi
     UiProvider uiProvider = Provider.of(context);
     ContentProvider contentProvider = Provider.of(context);
     if (widget.floatingWidgetConfig.isPanelVisible) {
-      return Row(
-        children: [
-          Expanded(
-            child: AnimatedSize(
-              duration: const Duration(milliseconds: 300),
-              child: _gestureHandler(
-                child: AnimatedBuilder(
-                  animation: floatingWidgetAnimationController,
-                  builder: (context, child) {
-                    return Dismissible(
-                      key: dismissKey,
-                      onDismissed: (direction) async {
-                        if (uiProvider.currentPlayer == CurrentPlayer.video) {
-                          // Dismiss Video Player
-                          uiProvider.currentPlayer = CurrentPlayer.music;
-                          contentProvider.endVideoPlayer();
-                          setState(() {
-                            dismissKey = ValueKey(const Uuid().v4());
-                          });
-                        } else {
-                          // Dismiss Music Player
-                          await audioHandler.stop();
-                          uiProvider.currentPlayer = CurrentPlayer.video;
-                          setState(() {
-                            dismissKey = ValueKey(const Uuid().v4());
-                          });
-                        }
-                      },
-                      direction: widget.floatingWidgetController!.isPanelClosed || widget.floatingWidgetController!.isPanelAnimating ? DismissDirection.horizontal : DismissDirection.none,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: ColorTween(end: Theme.of(context).scaffoldBackgroundColor, begin: Theme.of(context).cardColor).animate(floatingWidgetAnimationController).value,
-                          borderRadius: floatingWidgetAnimationController.value == 1
-                            ? BorderRadius.zero
-                            : BorderRadius.circular(30),
+      return Container(
+        color: Theme.of(context).cardColor,
+        child: Row(
+          children: [
+            Expanded(
+              child: AnimatedSize(
+                duration: const Duration(milliseconds: 300),
+                child: _gestureHandler(
+                  child: AnimatedBuilder(
+                    animation: floatingWidgetAnimationController,
+                    builder: (context, child) {
+                      return Dismissible(
+                        key: dismissKey,
+                        onDismissed: (direction) async {
+                          if (uiProvider.currentPlayer == CurrentPlayer.video) {
+                            // Dismiss Video Player
+                            uiProvider.switchPlayers();
+                            contentProvider.endVideoPlayer();
+                            setState(() {
+                              dismissKey = ValueKey(const Uuid().v4());
+                            });
+                            // Restore default is the other player is not active
+                            if (widget.musicFloatingWidget == null) {
+                              uiProvider.paletteLoaderController.switchToDefaultColors();
+                            }
+                          } else {
+                            // Dismiss Music Player
+                            uiProvider.switchPlayers();
+                            await audioHandler.stop();
+                            setState(() {
+                              dismissKey = ValueKey(const Uuid().v4());
+                            });
+                            // Restore default is the other player is not active
+                            if (widget.videoFloatingWidget == null) {
+                              uiProvider.paletteLoaderController.switchToDefaultColors();
+                            }
+                          }
+                        },
+                        direction: widget.floatingWidgetController!.isPanelClosed || widget.floatingWidgetController!.isPanelAnimating ? DismissDirection.horizontal : DismissDirection.none,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: ColorTween(end: Theme.of(context).scaffoldBackgroundColor, begin: Theme.of(context).cardColor).animate(floatingWidgetAnimationController).value,
+                          ),
+                          child: child
                         ),
-                        child: child
-                      ),
-                    );
-                  },
-                  child: Stack(
-                    children: [
-                      ShowUpTransition(
-                        delay: const Duration(milliseconds: 250),
-                        forward: uiProvider.currentPlayer == CurrentPlayer.video && widget.videoFloatingWidget != null,
-                        child: widget.videoFloatingWidget != null ? _videoSlidingPanel() : const SizedBox(),
-                      ),
-                      ShowUpTransition(
-                        delay: const Duration(milliseconds: 250),
-                        forward: uiProvider.currentPlayer == CurrentPlayer.music && widget.musicFloatingWidget != null,
-                        child: widget.musicFloatingWidget != null ? _musicSlidingPanel() : const SizedBox(),
-                      ),
-                    ],
+                      );
+                    },
+                    child: Stack(
+                      children: [
+                        ShowUpTransition(
+                          delay: const Duration(milliseconds: 250),
+                          forward: uiProvider.currentPlayer == CurrentPlayer.video && widget.videoFloatingWidget != null,
+                          child: widget.videoFloatingWidget != null ? _videoSlidingPanel() : const SizedBox(),
+                        ),
+                        ShowUpTransition(
+                          delay: const Duration(milliseconds: 250),
+                          forward: uiProvider.currentPlayer == CurrentPlayer.music && widget.musicFloatingWidget != null,
+                          child: widget.musicFloatingWidget != null ? _musicSlidingPanel() : const SizedBox(),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          if (widget.videoFloatingWidget != null && widget.musicFloatingWidget != null)
-          AnimatedBuilder(
-            animation: floatingWidgetAnimationController,
-            builder: (context, snapshot) {
-              return ShowUpTransition(
-                slideSide: SlideFromSlide.right,
-                child: SizedBox(
-                  width: Tween<double>(begin: 48+12, end: 0).animate(floatingWidgetAnimationController).value,
-                  height: Tween<double>(begin: 48, end: 0).animate(floatingWidgetAnimationController).value,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 12),
-                    child: Opacity(
-                      opacity: Tween<double>(begin: 1, end: 0).animate(floatingWidgetAnimationController).value,
-                      child: Material(
-                        color: Colors.transparent,
-                        child: Bounce(
-                          onPressed: () => uiProvider.switchPlayers(),
-                          duration: const Duration(milliseconds: 150),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).cardColor,
-                              borderRadius: BorderRadius.circular(100)
-                            ),
-                            child: AnimatedSwitcher(
-                              duration: const Duration(milliseconds: 300),
-                              child: uiProvider.currentPlayer == CurrentPlayer.video
-                                ? Icon(Ionicons.musical_note, color: Theme.of(context).iconTheme.color,
-                                    size: Tween<double>(begin: 18, end: 0).animate(floatingWidgetAnimationController).value)
-                                : Icon(Ionicons.logo_youtube, color: Theme.of(context).iconTheme.color,
-                                    size: Tween<double>(begin: 18, end: 0).animate(floatingWidgetAnimationController).value)
-                            ),
-                          ),
+            if (widget.videoFloatingWidget != null && widget.musicFloatingWidget != null)
+            AnimatedBuilder(
+              animation: floatingWidgetAnimationController,
+              builder: (context, snapshot) {
+                return Opacity(
+                  opacity: 1*(1-(floatingWidgetAnimationController.value*4).clamp(0, 1)),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: Bounce(
+                      onPressed: () => uiProvider.switchPlayers(),
+                      duration: const Duration(milliseconds: 150),
+                      child: Container(
+                        height: 48*(1-(floatingWidgetAnimationController.value*4).clamp(0, 1)),
+                        width: 48*(1-(floatingWidgetAnimationController.value*4).clamp(0, 1)),
+                        margin: EdgeInsets.only(right: 12*(1-(floatingWidgetAnimationController.value*4).clamp(0, 1))),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                          borderRadius: BorderRadius.circular(100)
+                        ),
+                        child: AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 300),
+                          child: uiProvider.currentPlayer == CurrentPlayer.video
+                            ? Icon(Ionicons.musical_note,
+                                size: Tween<double>(begin: 18, end: 0).animate(floatingWidgetAnimationController).value)
+                            : Icon(Ionicons.logo_youtube,
+                                size: Tween<double>(begin: 18, end: 0).animate(floatingWidgetAnimationController).value)
                         ),
                       ),
                     ),
                   ),
-                ),
-              );
-            }
-          )
-        ],
+                );
+              }
+            )
+          ],
+        ),
       );
     } else {
       return const SizedBox();
@@ -417,9 +413,9 @@ class FancyScaffoldState extends State<FancyScaffold> with TickerProviderStateMi
           //to the body when the panel is closed, otherwise,
           //if a color exists, then touch events won't go through
           color: floatingWidgetAnimationController.value == 0.0 ? null
-            : widget.floatingWidgetConfig.backdropColor.withOpacity(
+            : Theme.of(context).cardColor.withOpacity(
                 widget.floatingWidgetConfig.backdropOpacity *
-                floatingWidgetAnimationController.value),
+                (floatingWidgetAnimationController.value*2)),
         );
       }
     );

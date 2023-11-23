@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:songtube/main.dart';
+import 'package:songtube/ui/animations/animated_icon.dart';
+import 'package:songtube/ui/sheet_phill.dart';
 import 'package:songtube/ui/text_styles.dart';
 
 void showSnackbar({required CustomSnackBar customSnackBar}) {
@@ -28,12 +30,21 @@ class CustomSnackBar extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
       ),
-      padding: const EdgeInsets.all(8).copyWith(left: 8, right: 8),
-      child: ListTile(
-        contentPadding: const EdgeInsets.only(bottom: 0, left: 12, right: 12, top: 6),
-        leading: leading ?? (icon != null ? Icon(icon, color: Theme.of(context).primaryColor) : null),
-        title: Text(title, style: textStyle(context, bold: true).copyWith(fontSize: 16)),
-        trailing: trailing,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const SizedBox(height: 8),
+          const BottomSheetPhill(),
+          ListTile(
+            contentPadding: const EdgeInsets.only(bottom: 0, left: 12, right: 12, top: 0),
+            leading: Padding(
+              padding: const EdgeInsets.only(left: 12),
+              child: leading ?? (icon != null ? AppAnimatedIcon(icon!) : null),
+            ),
+            title: Text(title, style: textStyle(context, bold: true).copyWith(fontSize: 16)),
+            trailing: trailing,
+          ),
+        ],
       ),
     );
   }

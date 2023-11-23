@@ -86,7 +86,7 @@ class _ChannelSuggestionsState extends State<ChannelSuggestions> {
     return ListView.builder(
       padding: const EdgeInsets.only(top: 16),
       shrinkWrap: true,
-      physics: const BouncingScrollPhysics(),
+      
       itemCount: channels.length,
       itemBuilder: (context, index) {
         YoutubeChannel channel = channels[index];

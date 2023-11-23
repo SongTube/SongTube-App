@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:songtube/internal/models/download/download_item.dart';
+import 'package:songtube/ui/animations/animated_text.dart';
 import 'package:songtube/ui/text_styles.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:validators/validators.dart';
@@ -25,7 +26,7 @@ class _DownloadQueueTileState extends State<DownloadQueueTile> {
       margin: const EdgeInsets.only(left: 12, right: 12),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(30)
+        borderRadius: BorderRadius.circular(15)
       ),
       height: kToolbarHeight*2.4,
       child: Row(
@@ -47,7 +48,7 @@ class _DownloadQueueTileState extends State<DownloadQueueTile> {
                       padding: const EdgeInsets.all(8).copyWith(left: 16, right: 16),
                       decoration: BoxDecoration(
                         color: Theme.of(context).scaffoldBackgroundColor,
-                        borderRadius: BorderRadius.circular(30)
+                        borderRadius: BorderRadius.circular(15)
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -58,7 +59,7 @@ class _DownloadQueueTileState extends State<DownloadQueueTile> {
                             stream: widget.item.downloadStatus.stream,
                             builder: (context, snapshot) {
                               final status = snapshot.data;
-                              return Text(status ?? '', style: tinyTextStyle(context, opacity: 0.8).copyWith(letterSpacing: 0.4));
+                              return AnimatedText(status ?? '', style: tinyTextStyle(context, opacity: 0.8).copyWith(letterSpacing: 0.4), auto: true);
                             },
                           ),
                           const SizedBox(width: 4),
@@ -68,7 +69,7 @@ class _DownloadQueueTileState extends State<DownloadQueueTile> {
                               final progress = snapshot.data;
                               return SizedBox(
                                 width: progress != null ? 30 : 0,
-                                child: Text(progress != null ? '${(progress*100).round()}%' : '', style: tinyTextStyle(context, opacity: 0.8).copyWith(letterSpacing: 0.4, color: Theme.of(context).primaryColor), textAlign: TextAlign.end));
+                                child: AnimatedText(progress != null ? '${(progress*100).round()}%' : '', style: tinyTextStyle(context, opacity: 0.8).copyWith(letterSpacing: 0.4), textAlign: TextAlign.end, auto: true));
                             },
                           ),
                         ],
@@ -87,15 +88,15 @@ class _DownloadQueueTileState extends State<DownloadQueueTile> {
   Widget _title() {
     return Text(
       widget.item.downloadInfo.tags.titleController.text,
-      style: smallTextStyle(context).copyWith(fontWeight: FontWeight.bold),
-      maxLines: 1,
+      style: smallTextStyle(context),
+      maxLines: 2,
     );
   }
 
   Widget _subtitle() {
     return Text(
       widget.item.downloadInfo.tags.artistController.text,
-      style: smallTextStyle(context, opacity: 0.6).copyWith(letterSpacing: 0.4, fontWeight: FontWeight.w500),
+      style: smallTextStyle(context, opacity: 0.6).copyWith(fontSize: 12),
       maxLines: 1,
     );
   }
@@ -105,7 +106,7 @@ class _DownloadQueueTileState extends State<DownloadQueueTile> {
       aspectRatio: 1,
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(15),
           boxShadow: [
             BoxShadow(
               blurRadius: 12,
@@ -115,7 +116,7 @@ class _DownloadQueueTileState extends State<DownloadQueueTile> {
           ],
         ), 
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(15),
           child: FadeInImage(
             fadeInDuration: const Duration(milliseconds: 200),
             image: widget.item.downloadInfo.tags.artwork is String

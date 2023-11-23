@@ -1,8 +1,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:provider/provider.dart';
 import 'package:songtube/internal/global.dart';
 import 'package:songtube/languages/languages.dart';
+import 'package:songtube/providers/media_provider.dart';
 import 'package:songtube/ui/sheet_phill.dart';
 import 'package:songtube/ui/text_styles.dart';
 
@@ -12,11 +14,9 @@ class MusicEqualizerSheet extends StatefulWidget {
   const MusicEqualizerSheet({
     required this.equalizerMap,
     required this.loudnessMap,
-    required this.songColor,
     Key? key }) : super(key: key);
   final dynamic equalizerMap;
   final dynamic loudnessMap;
-  final Color songColor;
   @override
   _MusicEqualizerSheetState createState() => _MusicEqualizerSheetState();
 }
@@ -34,16 +34,16 @@ class _MusicEqualizerSheetState extends State<MusicEqualizerSheet> {
     audioHandler.customAction('updateLoudnessGain', loudnessEqualization.toMap());
   }
 
-  SliderThemeData sliderTheme() {
+  SliderThemeData sliderTheme(MediaProvider mediaProvider) {
     return SliderThemeData(
-      thumbColor: widget.songColor,
-      activeTrackColor: widget.songColor,
-      trackHeight: 5,
+      thumbColor: mediaProvider.currentColors.vibrant,
+      activeTrackColor: mediaProvider.currentColors.vibrant,
+      trackHeight: 3,
       thumbShape: const RoundSliderThumbShape(
-        disabledThumbRadius: 6,
-        enabledThumbRadius: 6
+        disabledThumbRadius: 5,
+        enabledThumbRadius: 5
       ),
-      inactiveTrackColor: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.6)
+      inactiveTrackColor: Theme.of(context).scaffoldBackgroundColor
     );
   }
 
@@ -51,10 +51,10 @@ class _MusicEqualizerSheetState extends State<MusicEqualizerSheet> {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.all(12),
-      padding: const EdgeInsets.only(top: 16, bottom: 16),
+      padding: const EdgeInsets.only(top: 12, bottom: 12),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(20)
+        borderRadius: BorderRadius.circular(15)
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -93,11 +93,13 @@ class _MusicEqualizerSheetState extends State<MusicEqualizerSheet> {
   }
 
   Widget _loudnessEqualizationWidget() {
+    MediaProvider mediaProvider = Provider.of(context);
     return Column(
       children: [
         CheckboxListTile(
-          activeColor: Theme.of(context).iconTheme.color,
-          checkColor: widget.songColor,
+          activeColor: Colors.transparent,
+          checkColor: mediaProvider.currentColors.vibrant,
+          checkboxShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
           title: Text(Languages.of(context)!.labelLoudnessEqualizationGain,
             style: subtitleTextStyle(context)),
           value: loudnessEqualization.enabled,
@@ -107,7 +109,7 @@ class _MusicEqualizerSheetState extends State<MusicEqualizerSheet> {
           }
         ),
         SliderTheme(
-          data: sliderTheme(),
+          data: sliderTheme(mediaProvider),
           child: Slider(
             min: -1,
             max: 1,
@@ -123,11 +125,13 @@ class _MusicEqualizerSheetState extends State<MusicEqualizerSheet> {
   }
 
   Widget _equalizerWidget() {
+    MediaProvider mediaProvider = Provider.of(context);
     return Column(
       children: [
         CheckboxListTile(
-          activeColor: Theme.of(context).iconTheme.color,
-          checkColor: widget.songColor,
+          activeColor: Colors.transparent,
+          checkColor: mediaProvider.currentColors.vibrant,
+          checkboxShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
           title: Text(Languages.of(context)!.labelSliders,
             style: subtitleTextStyle(context)),
           value: equalizer.enabled,
@@ -148,13 +152,14 @@ class _MusicEqualizerSheetState extends State<MusicEqualizerSheet> {
   }
 
   Widget _bandSlider(int bandIndex) {
+    MediaProvider mediaProvider = Provider.of(context);
     final band = equalizer.bands[bandIndex];
     return Column(
       children: [
         RotatedBox(
           quarterTurns: 3,
           child: SliderTheme(
-            data: sliderTheme(),
+            data: sliderTheme(mediaProvider),
             child: Slider(
               min: band.minFreq,
               max: band.maxFreq,
@@ -166,7 +171,7 @@ class _MusicEqualizerSheetState extends State<MusicEqualizerSheet> {
             ),
           ),
         ),
-        Text('${band.centerFrequency.round()}Hz', style: tinyTextStyle(context)),
+        Text('${band.centerFrequency.round()}Hz', style: tinyTextStyle(context).copyWith(letterSpacing: 0.6)),
       ],
     );
   }

@@ -24,9 +24,8 @@ class _MusicPageState extends State<MusicPage> with AutomaticKeepAliveClientMixi
     MediaProvider mediaProvider = Provider.of(context);
     UiProvider uiProvider = Provider.of(context);
     return CustomScrollView(
-      physics: const BouncingScrollPhysics(),
+      
       slivers: [
-        const SliverToBoxAdapter(child: SizedBox(height: 8)),
         SliverList(
           delegate: SliverChildBuilderDelegate((context, index) {
             final song = mediaProvider.songs[index];

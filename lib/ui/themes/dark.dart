@@ -4,9 +4,13 @@ import 'package:songtube/internal/global.dart';
 ThemeData darkTheme() {
   HSVColor color = HSVColor.fromColor(accentColor);
   HSVColor desaturated = HSVColor.fromAHSV(color.alpha, color.hue, 0.8, color.value);
+  accentColor = desaturated.toColor();
   return ThemeData.dark().copyWith(
+    shadowColor: ThemeData.dark().shadowColor.withOpacity(0.1),
     brightness: Brightness.light,
-    primaryColor: desaturated.toColor(),
+    
+    primaryColor: accentColor,
+    primaryColorDark: Colors.white,
     iconTheme: const IconThemeData(
       color: Colors.white
     ),
@@ -24,23 +28,22 @@ ThemeData darkTheme() {
         color: Colors.white
       ),
     ),
-    scaffoldBackgroundColor: const Color.fromARGB(255, 20, 20, 20),
-    toggleableActiveColor: desaturated.toColor(),
-    cardColor: const Color.fromARGB(255, 30, 30, 30),
+    scaffoldBackgroundColor: const Color.fromARGB(255, 35, 35, 35),
+    toggleableActiveColor: accentColor,
+    cardColor: const Color(0xFF282828),
     inputDecorationTheme: InputDecorationTheme(
       labelStyle: TextStyle(
-        color: desaturated.toColor(),
+        color: accentColor,
       ),
     ),
     tabBarTheme: const TabBarTheme(
       labelColor: Colors.black12
     ),
     textSelectionTheme: TextSelectionThemeData(
-      selectionHandleColor: desaturated.toColor()
+      selectionHandleColor: accentColor
     ),
-    shadowColor: Colors.black.withOpacity(0.2),
     navigationBarTheme: NavigationBarThemeData(
-      indicatorColor: desaturated.toColor(),
+      indicatorColor: accentColor,
     )
   );
 }
@@ -48,6 +51,7 @@ ThemeData darkTheme() {
 ThemeData blackTheme() {
   HSVColor color = HSVColor.fromColor(accentColor);
   HSVColor desaturated = HSVColor.fromAHSV(color.alpha, color.hue, 0.8, color.value);
+  accentColor = desaturated.toColor();
   return ThemeData.dark().copyWith(
     canvasColor: Colors.black,
     iconTheme: const IconThemeData(
@@ -67,25 +71,25 @@ ThemeData blackTheme() {
         color: Colors.white
       ),
     ),
-    toggleableActiveColor: desaturated.toColor(),
+    toggleableActiveColor: accentColor,
     scaffoldBackgroundColor: Colors.black,
     cardColor: Colors.black,
-    primaryColor: desaturated.toColor(),
+    primaryColor: accentColor,
     primaryColorLight: Colors.black,
     inputDecorationTheme: InputDecorationTheme(
       fillColor: Colors.black26,
       labelStyle: TextStyle(
-        color: desaturated.toColor(),
+        color: accentColor,
       ),
     ),
     tabBarTheme: const TabBarTheme(
       labelColor: Color.fromARGB(255, 20, 20, 20),
     ),
     textSelectionTheme: TextSelectionThemeData(
-      selectionHandleColor: desaturated.toColor()
+      selectionHandleColor: accentColor
     ),
     navigationBarTheme: NavigationBarThemeData(
-      indicatorColor: desaturated.toColor()
+      indicatorColor: accentColor
     )
   );
 }

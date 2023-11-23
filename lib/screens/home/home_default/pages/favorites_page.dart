@@ -25,7 +25,6 @@ class FavoritesPage extends StatelessWidget {
     final favorites = contentProvider.favoriteVideos;
     return ListView.builder(
       padding: const EdgeInsets.only(top: 12),
-      physics: const BouncingScrollPhysics(),
       itemCount: favorites.length,
       itemBuilder: (context, index) {
         return Padding(

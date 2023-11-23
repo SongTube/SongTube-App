@@ -33,27 +33,21 @@ class _SongTubeNavigationState extends State<SongTubeNavigation> {
 
   @override
   Widget build(BuildContext context) {
-    return NavigationBarTheme(
-      data: NavigationBarThemeData(
-        labelTextStyle: MaterialStateTextStyle.resolveWith((states) {
-          return tinyTextStyle(context).copyWith(letterSpacing: 0.4);
-        }),
-        indicatorColor: Theme.of(context).primaryColor
-      ),
-      child: NavigationBar(
-        elevation: 0,
-        labelBehavior: widget.labelBehavior,
-        backgroundColor: widget.backgroundColor,
-        selectedIndex: _selectedIndex,
-        onDestinationSelected: (int tappedIndex) {
-          setState(() {
-            _selectedIndex = tappedIndex;
-          });
+    return NavigationBar(
+      labelBehavior: widget.labelBehavior,
+      selectedIndex: _selectedIndex,
+      surfaceTintColor: Colors.transparent,
+      elevation: 0,
+      backgroundColor: widget.backgroundColor,
+      indicatorColor: Theme.of(context).scaffoldBackgroundColor,
+      onDestinationSelected: (int tappedIndex) {
+        setState(() {
+          _selectedIndex = tappedIndex;
+        });
     
-          widget.onItemTap(tappedIndex);
-        },
-        destinations: widget.destinations,
-      ),
+        widget.onItemTap(tappedIndex);
+      },
+      destinations: widget.destinations,
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:songtube/ui/animations/animated_icon.dart';
 
 class VideoPlayerPlayPauseButton extends StatelessWidget {
   final bool isPlaying;
@@ -16,7 +17,7 @@ class VideoPlayerPlayPauseButton extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(100),
-          color: Colors.black.withOpacity(0.2)
+          color: Theme.of(context).cardColor.withOpacity(0.7)
         ),
         padding: const EdgeInsets.all(16.0),
         child: AnimatedSwitcher(
@@ -26,19 +27,17 @@ class VideoPlayerPlayPauseButton extends StatelessWidget {
           child: isPlaying
             ? Semantics(
               label: 'Pause',
-              child: const Icon(
+              child: const AppAnimatedIcon(
                   Icons.pause,
                   size: 26,
-                  color: Colors.white,
                   key: ValueKey('playerPauseButton'),
                 ),
             )
             : Semantics(
               label: 'Play',
-              child: const Icon(
+              child: const AppAnimatedIcon(
                   Icons.play_arrow,
                   size: 26,
-                  color: Colors.white,
                   key: ValueKey('playerPlayButton'),
                 ),
             ),

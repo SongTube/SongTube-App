@@ -36,19 +36,18 @@ class MusicSearchPage extends StatelessWidget {
         duration: const Duration(milliseconds: 200),
         curve: Curves.ease,
         child: SingleChildScrollView(
-          padding: const EdgeInsets.only(top: 12),
-          physics: const BouncingScrollPhysics(),
+          padding: const EdgeInsets.only(top: 0),
           child: Column(
             children: [
               // Artists
               if (artists.isNotEmpty)
               Padding(
-                padding: const EdgeInsets.only(left: 24),
+                padding: const EdgeInsets.only(left: 12),
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 12, top: 4),
                   child: Row(
                     children: [
-                      Text(Languages.of(context)!.labelArtistResults, style: smallTextStyle(context).copyWith(fontWeight: FontWeight.w800, letterSpacing: 0.4)),
+                      Text(Languages.of(context)!.labelArtistResults, style: headerTextStyle(context).copyWith(letterSpacing: 0.2)),
                     ],
                   ),
                 ),
@@ -60,8 +59,7 @@ class MusicSearchPage extends StatelessWidget {
                   builder: (context) {
                     return ListView.builder(
                       clipBehavior: Clip.none,
-                      physics: const BouncingScrollPhysics(),
-                      padding: const EdgeInsets.only(left: 16),
+                      padding: const EdgeInsets.only(left: 4),
                       scrollDirection: Axis.horizontal,
                       itemCount: artists.length.clamp(0, 10),
                       itemBuilder: (context, index) {
@@ -83,12 +81,12 @@ class MusicSearchPage extends StatelessWidget {
               // Albums
               if (albums.isNotEmpty)
               Padding(
-                padding: const EdgeInsets.only(left: 24),
+                padding: const EdgeInsets.only(left: 12),
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 12, top: 4),
                   child: Row(
                     children: [
-                      Text(Languages.of(context)!.labelAlbumResults, style: smallTextStyle(context).copyWith(fontWeight: FontWeight.w800, letterSpacing: 0.4)),
+                      Text(Languages.of(context)!.labelAlbumResults, style: headerTextStyle(context).copyWith(letterSpacing: 0.2)),
                     ],
                   ),
                 ),
@@ -100,8 +98,8 @@ class MusicSearchPage extends StatelessWidget {
                   builder: (context) {
                     return ListView.builder(
                       clipBehavior: Clip.none,
-                      physics: const BouncingScrollPhysics(),
-                      padding: const EdgeInsets.only(left: 16),
+                      
+                      padding: const EdgeInsets.only(left: 4),
                       scrollDirection: Axis.horizontal,
                       itemCount: albums.length.clamp(0, 10),
                       itemBuilder: (context, index) {
@@ -122,12 +120,12 @@ class MusicSearchPage extends StatelessWidget {
               ),
               if (songs.isNotEmpty)
               Padding(
-                padding: const EdgeInsets.only(left: 24),
+                padding: const EdgeInsets.only(left: 12),
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 4, top: 4),
                   child: Row(
                     children: [
-                      Text(Languages.of(context)!.labelSongResults, style: smallTextStyle(context).copyWith(fontWeight: FontWeight.w800, letterSpacing: 0.4)),
+                      Text(Languages.of(context)!.labelSongResults, style: headerTextStyle(context).copyWith(letterSpacing: 0.2)),
                     ],
                   ),
                 ),

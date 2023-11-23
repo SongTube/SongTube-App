@@ -27,7 +27,7 @@ class VideoPlaylistPage extends StatelessWidget {
     final playlists = contentProvider.streamPlaylists;
     return ListView.builder(
       padding: const EdgeInsets.only(top: 12),
-      physics: const BouncingScrollPhysics(),
+      
       itemCount: playlists.length,
       itemBuilder: (context, index) {
         return Padding(

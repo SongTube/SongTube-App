@@ -40,7 +40,7 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> with TickerPr
         unselectedLabelColor: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.8),
         labelStyle: smallTextStyle(context).copyWith(fontWeight: FontWeight.w800, letterSpacing: 0.4),
         unselectedLabelStyle: smallTextStyle(context).copyWith(fontWeight: FontWeight.normal, letterSpacing: 0.4),
-        physics: const BouncingScrollPhysics(),
+        
         indicatorSize: TabBarIndicatorSize.label,
         indicator: RoundedTabIndicator(color: Theme.of(context).primaryColor, height: 3, radius: 100, bottomMargin: 0),
         tabs: [
@@ -94,7 +94,7 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> with TickerPr
           Divider(height: 1, color: Theme.of(context).dividerColor),
           Expanded(
             child: TabBarView(
-              physics: const BouncingScrollPhysics(),
+              
               controller: tabController,
               children: pages
             ),

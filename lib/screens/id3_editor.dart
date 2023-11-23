@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:image_fade/image_fade.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import 'package:songtube/internal/artwork_manager.dart';
 import 'package:songtube/internal/ffmpeg/converter.dart';
 import 'package:songtube/internal/global.dart';
@@ -17,7 +18,9 @@ import 'package:songtube/internal/models/audio_tags.dart';
 import 'package:songtube/internal/models/music_brainz_record.dart';
 import 'package:songtube/languages/languages.dart';
 import 'package:songtube/main.dart';
+import 'package:songtube/providers/media_provider.dart';
 import 'package:songtube/services/music_brainz_service.dart';
+import 'package:songtube/ui/animations/animated_icon.dart';
 import 'package:songtube/ui/components/slideable_panel.dart';
 import 'package:songtube/ui/sheet_phill.dart';
 import 'package:songtube/ui/sheets/common_sheet.dart';
@@ -55,7 +58,7 @@ class _ID3EditorState extends State<ID3Editor> {
   AudioTags originalTags = AudioTags();
 
   // MusicBrainz Search
-  late SlidablePanelController panelController;
+  SlidablePanelController? panelController;
   late TextEditingController searchController = TextEditingController()..text = widget.song.title;
   List<MusicBrainzRecord> searchResults = [];
   void searchForRecords() async {
@@ -67,16 +70,20 @@ class _ID3EditorState extends State<ID3Editor> {
     setState(() {});
   }
   Future<String?> _getArtworkLink(MusicBrainzRecord record, int index) async {
+    String? url = sharedPreferences.getString('${record.id}artwork');
+    if (url != null) {
+      return url;
+    }
     await Future.delayed(Duration(seconds: index));
     Map<String, String>? map = await MusicBrainzAPI
       .getThumbnails(record.id);
     if (map == null) return null;
-    String url;
     if (map.containsKey("1200x1200")) {
       url = map["1200x1200"]!;
     } else {
       url = map["500x500"]!;
     }
+    await sharedPreferences.setString('${record.id}artwork', url);
     return url;
   }
 
@@ -207,9 +214,9 @@ class _ID3EditorState extends State<ID3Editor> {
         statusBarBrightness: Brightness.light,
       ),
     );
-    final double minFloatingPanelSize = MediaQuery.of(context).size.height*0.3;
+    const minFloatingPanelSize = kToolbarHeight*1.7;
     return Material(
-      color: Theme.of(context).cardColor,
+      color: Theme.of(context).scaffoldBackgroundColor,
       child: Stack(
         children: [
           // Tags Editor Body
@@ -218,23 +225,26 @@ class _ID3EditorState extends State<ID3Editor> {
               Expanded(
                 child: _body()
               ),
-              SizedBox(height: minFloatingPanelSize),
+              const SizedBox(height: minFloatingPanelSize),
             ],
           ),
           // MusicBrainz Results
-          SlidablePanel(
-            onControllerCreate: (controller) {
-              panelController = controller;
-            },
-            enableBackdrop: false,
-            collapsedColor: Theme.of(context).scaffoldBackgroundColor,
-            borderRadius: BorderRadius.circular(20),
-            backdropColor: Theme.of(context).scaffoldBackgroundColor,
-            backdropOpacity: 1,
-            color: Theme.of(context).scaffoldBackgroundColor,
-            maxHeight: MediaQuery.of(context).size.height-kToolbarHeight,
-            minHeight: minFloatingPanelSize,
-            child: _musicBrainz()
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: SlidablePanel(
+              onControllerCreate: (controller) {
+                panelController = controller;
+              },
+              enableBackdrop: false,
+              collapsedColor: Theme.of(context).cardColor,
+              borderRadius: BorderRadius.circular(0),
+              backdropOpacity: 1,
+              color: Theme.of(context).cardColor,
+              maxHeight: MediaQuery.of(context).size.height-MediaQuery.of(context).padding.top,
+              minHeight: minFloatingPanelSize,
+              padding: 0,
+              child: panelController == null ? const SizedBox() : _musicBrainz(),
+            ),
           ),
         ],
       ),
@@ -245,7 +255,7 @@ class _ID3EditorState extends State<ID3Editor> {
   Widget _body() {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Theme.of(context).cardColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Column(
         children: [
           AspectRatio(
@@ -297,7 +307,7 @@ class _ID3EditorState extends State<ID3Editor> {
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                color: Theme.of(context).cardColor,
+                color: Theme.of(context).scaffoldBackgroundColor,
               ),
               child: _textfields(),
             ),
@@ -318,21 +328,33 @@ class _ID3EditorState extends State<ID3Editor> {
       children: [
         const SizedBox(height: 12),
         const BottomSheetPhill(),
-        const SizedBox(height: 12),
+        const SizedBox(height: 9),
         // Search Bar
         Row(
           children: [
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(left: 24),
+                padding: const EdgeInsets.only(left: 4),
                 child: TextFormField(
                   controller: searchController,
-                  style: subtitleTextStyle(context),
-                  decoration: const InputDecoration(
-                    enabledBorder: InputBorder.none
-                  ),
+                    decoration: InputDecoration(
+                      prefixIcon: const AppAnimatedIcon(EvaIcons.textOutline,
+                        size: 20,
+                      ),
+                      filled: true,
+                      fillColor: Theme.of(context).cardColor,
+                      border: const UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          width: 0,
+                          style: BorderStyle.none,
+                        ),
+                      ),
+                      labelText: Languages.of(context)!.labelSelectTagsfromMusicBrainz,
+                      labelStyle: smallTextStyle(context, opacity: 0.7)
+                    ),
+                    style: smallTextStyle(context),
                   onTap: () {
-                    panelController.open();
+                    panelController!.open();
                   },
                   onFieldSubmitted: (searchQuery) {
                     setState(() => searchController.text = searchQuery);
@@ -342,8 +364,8 @@ class _ID3EditorState extends State<ID3Editor> {
               ),
             ),
             IconButton(
-              padding: const EdgeInsets.only(right: 24, left: 12),
-              icon: const Icon(EvaIcons.searchOutline, size: 22),
+              padding: const EdgeInsets.only(right: 16, left: 12),
+              icon: const AppAnimatedIcon(EvaIcons.arrowIosForward, size: 20),
               onPressed: () {
                 FocusManager.instance.primaryFocus?.unfocus();
                 searchForRecords();
@@ -352,21 +374,25 @@ class _ID3EditorState extends State<ID3Editor> {
           ],
         ),
         const SizedBox(height: 12),
-        Divider(height: 1, color: Theme.of(context).dividerColor,),
         Expanded(
-          child: ListView.builder(
-            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-            addAutomaticKeepAlives: true,
-            physics: const BouncingScrollPhysics(),
-            cacheExtent: 9999999,
-            itemCount: searchResults.length,
-            itemBuilder: (context, index) {
-              var record = searchResults[index];
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: _resultTile(record, index),
+          child: AnimatedBuilder(
+            animation: panelController!.animationController,
+            builder: (context, _) {
+              return Opacity(
+                opacity: Tween<double>(begin: 0, end: 1).animate(panelController!.animationController).value,
+                child: ListView.builder(
+                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12).copyWith(top: 0),
+                  itemCount: searchResults.length,
+                  itemBuilder: (context, index) {
+                    var record = searchResults[index];
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 4),
+                      child: _resultTile(record, index),
+                    );
+                  },
+                ),
               );
-            },
+            }
           ),
         ),
       ],
@@ -380,11 +406,11 @@ class _ID3EditorState extends State<ID3Editor> {
         return GestureDetector(
           onTap: () async {
             tags = AudioTags.withMusicBrainzRecord(record)..artwork = image.data;
-            panelController.close();
+            panelController!.close();
             setState(() {});
           },
           child: SizedBox(
-            height: 80,
+            height: kToolbarHeight*1.6,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -394,7 +420,7 @@ class _ID3EditorState extends State<ID3Editor> {
                 ),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 16, right: 8),
+                    padding: const EdgeInsets.only(left: 12, right: 8),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -403,19 +429,19 @@ class _ID3EditorState extends State<ID3Editor> {
                         Text(
                           record.title,
                           maxLines: 1,
-                          style: subtitleTextStyle(context, bold: true)
+                          style: smallTextStyle(context)
                         ),
                         // Album
                         Text(
                           record.album,
                           maxLines: 1,
-                          style: smallTextStyle(context, opacity: 0.8)
+                          style: smallTextStyle(context, opacity: 0.6).copyWith(fontSize: 12)
                         ),
                         // Artist
                         Text(
                           "By ${record.artist}",
                           maxLines: 1,
-                          style: smallTextStyle(context, opacity: 0.8)
+                          style: smallTextStyle(context, opacity: 0.6).copyWith(fontSize: 12)
                         ),
                       ],
                     ),
@@ -434,16 +460,17 @@ class _ID3EditorState extends State<ID3Editor> {
       aspectRatio: 1,
       child: AnimatedSwitcher(
         duration: const Duration(milliseconds: 250),
+        switchInCurve: kAnimationCurve,
         child: image.hasData
           ? Hero(
               tag: "artwork$index",
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
-                    topLeft: const Radius.circular(10),
-                    topRight: const Radius.circular(10),
-                    bottomLeft: fullRound ? const Radius.circular(10) : Radius.zero,
-                    bottomRight: fullRound ? const Radius.circular(10) : Radius.zero,
+                    topLeft: const Radius.circular(15),
+                    topRight: const Radius.circular(15),
+                    bottomLeft: fullRound ? const Radius.circular(15) : Radius.zero,
+                    bottomRight: fullRound ? const Radius.circular(15) : Radius.zero,
                   ),
                   image: DecorationImage(
                     fit: BoxFit.cover,
@@ -453,21 +480,44 @@ class _ID3EditorState extends State<ID3Editor> {
               ),
             )
           : image.connectionState == ConnectionState.done && !image.hasData
-            ? Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  image: const DecorationImage(
-                    image: AssetImage('assets/images/artworkPlaceholder_big.png')
-                  )
-                ),
-              )
-            : Center(
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation(
-                    Theme.of(context).primaryColor
+            ? Opacity(
+              opacity: 0.6,
+              child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    image: const DecorationImage(
+                      image: AssetImage('assets/images/artworkPlaceholder_big.png')
+                    )
                   ),
                 ),
-              )
+            )
+            : Consumer<MediaProvider>(
+              builder: (context, provider, _) {
+                return Container(
+                  height: kToolbarHeight*1.6,
+                  width: kToolbarHeight*1.6,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    borderRadius: BorderRadius.circular(15)
+                  ),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation(
+                            provider.currentColors.vibrant
+                          ),
+                          strokeWidth: 2,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
+            )
       ),
     );
   }
@@ -489,7 +539,7 @@ class _ID3EditorState extends State<ID3Editor> {
             fit: BoxFit.cover,
           ),
           Container(
-            color: Colors.black.withOpacity(0.5),
+            color: Theme.of(context).cardColor.withOpacity(0.7)
           )
         ],
       ),
@@ -497,10 +547,10 @@ class _ID3EditorState extends State<ID3Editor> {
   }
 
   Widget _textfields() {
-    final fillColor = Theme.of(context).cardColor;
+    final fillColor = Theme.of(context).scaffoldBackgroundColor;
     return ListView(
-      physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.all(16).copyWith(top: 12, bottom: 12),
+      
+      padding: const EdgeInsets.all(12).copyWith(top: 12, bottom: 12),
       children: [
         // Title TextField
         TextFieldTile(
@@ -508,7 +558,8 @@ class _ID3EditorState extends State<ID3Editor> {
           textController: tags.titleController,
           inputType: TextInputType.text,
           labelText: Languages.of(context)!.labelEditorTitle,
-          icon: Iconsax.text,
+          icon: EvaIcons.textOutline,
+          bottomLine: true,
         ),
         const SizedBox(height: 16),
         // Album & Artist TextField Row
@@ -517,7 +568,8 @@ class _ID3EditorState extends State<ID3Editor> {
           textController: tags.albumController,
           inputType: TextInputType.text,
           labelText: Languages.of(context)!.labelEditorAlbum,
-          icon: Iconsax.book,
+          icon: EvaIcons.bookOutline,
+          bottomLine: true,
         ),
         const SizedBox(height: 16),
         // Artist TextField
@@ -526,7 +578,8 @@ class _ID3EditorState extends State<ID3Editor> {
           textController: tags.artistController,
           inputType: TextInputType.text,
           labelText: Languages.of(context)!.labelEditorArtist,
-          icon: Iconsax.user,
+          icon: EvaIcons.personOutline,
+          bottomLine: true,
         ),
         const SizedBox(height: 16),
         // Gender & Date TextField Row
@@ -535,7 +588,8 @@ class _ID3EditorState extends State<ID3Editor> {
           textController: tags.genreController,
           inputType: TextInputType.text,
           labelText: Languages.of(context)!.labelEditorGenre,
-          icon: Iconsax.musicnote,
+          icon: EvaIcons.musicOutline,
+          bottomLine: true,
         ),
         const SizedBox(height: 16),
         // Date TextField
@@ -544,7 +598,8 @@ class _ID3EditorState extends State<ID3Editor> {
           textController: tags.dateController,
           inputType: TextInputType.datetime,
           labelText: Languages.of(context)!.labelEditorDate,
-          icon: Iconsax.calendar,
+          icon: EvaIcons.calendarOutline,
+          bottomLine: true,
         ),
         const SizedBox(height: 16),
         // Disk & Track TextField Row
@@ -553,7 +608,8 @@ class _ID3EditorState extends State<ID3Editor> {
           textController: tags.discController,
           inputType: TextInputType.number,
           labelText: Languages.of(context)!.labelEditorDisc,
-          icon: Iconsax.happyemoji4
+          icon: EvaIcons.radioButtonOffOutline,
+          bottomLine: true,
         ),
         const SizedBox(height: 16),
         // Track TextField
@@ -562,7 +618,8 @@ class _ID3EditorState extends State<ID3Editor> {
           textController: tags.trackController,
           inputType: TextInputType.number,
           labelText: Languages.of(context)!.labelEditorTrack,
-          icon: Iconsax.sound4,
+          icon: EvaIcons.hashOutline,
+          bottomLine: true,
         ),
         const Divider(color: Colors.transparent),
       ],
@@ -578,29 +635,26 @@ class _ID3EditorState extends State<ID3Editor> {
           // Restore song to default values
           FloatingActionButton(
             heroTag: 'fabSearch',
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            foregroundColor: Theme.of(context).iconTheme.color,
-            child: const Icon(Iconsax.undo),
+            backgroundColor: Theme.of(context).cardColor,
+            child: const AppAnimatedIcon(EvaIcons.undoOutline, size: 22),
             onPressed: () {
               setState(() {
                 tags = originalTags;
               });
             },
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: 12),
           // Save Audio Information
           FloatingActionButton.extended(
             heroTag: 'fabSave',
-            backgroundColor: Theme.of(context).primaryColor,
-            foregroundColor: Colors.white,
+            backgroundColor: Theme.of(context).cardColor,
             label: Row(
               children: [
-                const Icon(Iconsax.save_2,
-                  color: Colors.white),
+                const AppAnimatedIcon(EvaIcons.edit2Outline),
                 const SizedBox(width: 12),
                 Text(
                   processingTags ? '${Languages.of(context)!.labelApplying}...' : Languages.of(context)!.labelApply,
-                  style: subtitleTextStyle(context, bold: true).copyWith(color: Colors.white)
+                  style: subtitleTextStyle(context, bold: true).copyWith()
                 )
               ],
             ),

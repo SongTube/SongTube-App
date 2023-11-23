@@ -9,6 +9,7 @@ import 'package:newpipeextractor_dart/newpipeextractor_dart.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:screen_brightness/screen_brightness.dart';
+import 'package:songtube/internal/global.dart';
 import 'package:songtube/internal/models/content_wrapper.dart';
 import 'package:songtube/internal/models/playback_quality.dart';
 import 'package:songtube/languages/languages.dart';
@@ -16,6 +17,7 @@ import 'package:songtube/main.dart';
 import 'package:songtube/providers/app_settings.dart';
 import 'package:songtube/providers/content_provider.dart';
 import 'package:songtube/providers/ui_provider.dart';
+import 'package:songtube/ui/animations/animated_text.dart';
 import 'package:songtube/ui/components/shimmer_container.dart';
 import 'package:songtube/ui/players/video_player/pages/quality_selection.dart';
 import 'package:songtube/ui/players/video_player/player_ui/play_pause_button.dart';
@@ -374,18 +376,15 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
     return Stack(
       fit: StackFit.expand,
       children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(15),
-          child: Opacity(
-            opacity: 0.6,
-            child: ImageFade(
-              fadeDuration: const Duration(milliseconds: 300),
-              placeholder: const ShimmerContainer(height: null, width: null),
-              fit: BoxFit.cover,
-              image: NetworkImage(widget.content.infoItem is StreamInfoItem
-                ? widget.content.infoItem.thumbnails!.hqdefault
-                : widget.content.infoItem.thumbnailUrl),
-            ),
+        Opacity(
+          opacity: 0.6,
+          child: ImageFade(
+            fadeDuration: const Duration(milliseconds: 300),
+            placeholder: const ShimmerContainer(height: null, width: null),
+            fit: BoxFit.cover,
+            image: NetworkImage(widget.content.infoItem is StreamInfoItem
+              ? widget.content.infoItem.thumbnails!.hqdefault
+              : widget.content.infoItem.thumbnailUrl),
           ),
         ),
         Center(
@@ -427,11 +426,12 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                   ? (update) { handleBrightnessGesture(update.primaryDelta ?? 0); } : null,
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
+                  curve: kAnimationCurve,
                   width: double.infinity,
                   height: double.infinity,
                   color: !showBackdrop
                     ? Colors.transparent
-                    : Colors.black.withOpacity(0.3),
+                    : Theme.of(context).cardColor.withOpacity(0.8),
                   child: Center(
                     child: AnimatedSwitcher(
                       duration: const Duration(milliseconds: 300),
@@ -477,11 +477,12 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                   ? (update) { handleVolumeGesture(update.primaryDelta ?? 0); } : null,
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
+                  curve: kAnimationCurve,
                   width: double.infinity,
                   height: double.infinity,
                   color: !showBackdrop
                     ? Colors.transparent
-                    : Colors.black.withOpacity(0.3),
+                    : Theme.of(context).cardColor.withOpacity(0.8),
                   child: Center(
                     child: AnimatedSwitcher(
                       duration: const Duration(milliseconds: 300),
@@ -672,7 +673,7 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
     return Stack(
       fit: StackFit.expand,
       children: [
-        Container(color: Colors.black.withOpacity(0.7)),
+        Container(color: Theme.of(context).cardColor.withOpacity(0.9)),
         if (nextStream != null)
         Padding(
           padding: const EdgeInsets.only(left: 12, right: 12),
@@ -681,34 +682,39 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // Next Video Details
-              Row(
+              Flex(
+                direction: Axis.horizontal,
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(
-                    height: 80,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: AspectRatio(
-                        aspectRatio: 16/9,
-                        child: Image.network(
-                          nextStream is StreamInfoItem
-                            ? nextStream.thumbnails!.hqdefault
-                            : (nextStream as PlaylistInfoItem).thumbnailUrl!,
-                          fit: BoxFit.cover,
-                        ),
-                      )
+                  Flexible(
+                    flex: 1,
+                    child: SizedBox(
+                      height: 100,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                        child: AspectRatio(
+                          aspectRatio: 16/9,
+                          child: Image.network(
+                            nextStream is StreamInfoItem
+                              ? nextStream.thumbnails!.hqdefault
+                              : (nextStream as PlaylistInfoItem).thumbnailUrl!,
+                            fit: BoxFit.cover,
+                          ),
+                        )
+                      ),
                     ),
                   ),
                   const SizedBox(width: 12),
-                  Expanded(
+                  Flexible(
+                    flex: 1,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('${Languages.of(context)!.labelPlayingNextIn} $autoplayCurrent', style: subtitleTextStyle(context, bold: true).copyWith(color: Colors.white)),
-                        Text('${nextStream.name}', style: smallTextStyle(context).copyWith(color: Colors.white), maxLines: 1),
-                        Text('by ${nextStream.uploaderName}', style: smallTextStyle(context).copyWith(color: Colors.white), maxLines: 1),
+                        AnimatedText('${Languages.of(context)!.labelPlayingNextIn} $autoplayCurrent', style: subtitleTextStyle(context, bold: true), auto: true),
+                        Text('${nextStream.name}', style: smallTextStyle(context).copyWith(), maxLines: 2),
+                        Text('by ${nextStream.uploaderName}', style: smallTextStyle(context, opacity: 0.6).copyWith(fontSize: 12), maxLines: 1),
                       ],
                     ),
                   )
@@ -729,13 +735,13 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                     child: Container(
                       padding: const EdgeInsets.only(left: 24, right: 24, top: 6, bottom: 6),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.4),
-                        borderRadius: BorderRadius.circular(100)
+                        color: Theme.of(context).cardColor,
+                        borderRadius: BorderRadius.circular(15)
                       ),
-                      child: Text(Languages.of(context)!.labelCancel, style: subtitleTextStyle(context, bold: true).copyWith(color: Colors.white)),
+                      child: AnimatedText(Languages.of(context)!.labelCancel, style: subtitleTextStyle(context, bold: true), auto: false),
                     ),
                   ),
-                  const SizedBox(width: 24),
+                  const SizedBox(width: 12),
                   // Play Now
                   GestureDetector(
                     onTap: () {
@@ -744,10 +750,10 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                     child: Container(
                       padding: const EdgeInsets.only(left: 24, right: 24, top: 6, bottom: 6),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.4),
-                        borderRadius: BorderRadius.circular(100)
+                        color: Theme.of(context).cardColor,
+                        borderRadius: BorderRadius.circular(15)
                       ),
-                      child: Text(Languages.of(context)!.labelPlayNow, style: subtitleTextStyle(context, bold: true).copyWith(color: Colors.white)),
+                      child: AnimatedText(Languages.of(context)!.labelPlayNow, style: subtitleTextStyle(context, bold: true), auto: true),
                     ),
                   ),
                 ],

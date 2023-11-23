@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:songtube/internal/global.dart';
 import 'package:songtube/ui/components/fancy_scaffold.dart';
+import 'package:songtube/ui/components/palette_loader.dart';
 
 enum CurrentPlayer { music, video }
 
@@ -37,6 +38,9 @@ class UiProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Palette Loader Controller
+  PaletteLoaderController paletteLoaderController = PaletteLoaderController();
+
   // Determines the current player so we allow the user to switch
   // between the MusicPlayer of the VideoPlayer
   CurrentPlayer _currentPlayer = CurrentPlayer.video;
@@ -50,8 +54,10 @@ class UiProvider extends ChangeNotifier {
   void switchPlayers() {
     if (_currentPlayer == CurrentPlayer.video) {
       currentPlayer = CurrentPlayer.music;
+      paletteLoaderController.switchToSongColors();
     } else {
       currentPlayer = CurrentPlayer.video;
+      paletteLoaderController.switchToVideoColors();
     }
   }
 

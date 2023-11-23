@@ -7,6 +7,7 @@ import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/media_provider.dart';
 import 'package:songtube/providers/ui_provider.dart';
 import 'package:songtube/screens/playlist.dart';
+import 'package:songtube/ui/animations/animated_text.dart';
 import 'package:songtube/ui/components/custom_inkwell.dart';
 import 'package:songtube/ui/text_styles.dart';
 import 'package:songtube/ui/tiles/album_card_tile.dart';
@@ -40,17 +41,14 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
       builder: (context) {
         if (sortedSongs.isNotEmpty) {
           return CustomScrollView(
-            physics: const BouncingScrollPhysics(),
             slivers: [
-              const SliverToBoxAdapter(child: SizedBox(height: 16)),
               // Recent Songs Cards
               SliverToBoxAdapter(
                 child: SizedBox(
-                  height: 200,
+                  height: 180,
                   child: ListView.builder(
                     clipBehavior: Clip.none,
-                    physics: const BouncingScrollPhysics(),
-                    padding: const EdgeInsets.only(left: 16),
+                    padding: const EdgeInsets.only(left: 4),
                     scrollDirection: Axis.horizontal,
                     itemCount: sortedSongs.length.clamp(0, 10),
                     itemBuilder: (context, index) {
@@ -72,12 +70,12 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
               ),
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 24),
+                  padding: const EdgeInsets.only(left: 12),
                   child: Padding(
-                    padding: const EdgeInsets.only(bottom: 12, top: 12),
+                    padding: const EdgeInsets.only(bottom: 12),
                     child: Row(
                       children: [
-                        Text(Languages.of(context)!.labelEditorAlbum, style: smallTextStyle(context).copyWith(fontWeight: FontWeight.w800, letterSpacing: 0.4)),
+                        Text(Languages.of(context)!.labelEditorAlbum, style: headerTextStyle(context).copyWith(letterSpacing: 0.2)),
                         Padding(
                           padding: const EdgeInsets.all(4.0),
                           child: CustomInkWell(
@@ -85,7 +83,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                               // Switch to Albums tab
                               widget.onSwitchIndex(3);
                             },
-                            child: Text('  •  ${Languages.of(context)!.labelSeeMore}', style: tinyTextStyle(context).copyWith(fontWeight: FontWeight.normal, color: Theme.of(context).primaryColor))
+                            child: AnimatedText('  •  ${Languages.of(context)!.labelSeeMore}', style: tinyTextStyle(context).copyWith(fontWeight: FontWeight.normal), auto: true)
                           ),
                         ),
                       ],
@@ -101,20 +99,17 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                       final albums = MediaItemAlbum.fetchAlbums(mediaProvider.songs);
                       return ListView.builder(
                         clipBehavior: Clip.none,
-                        physics: const BouncingScrollPhysics(),
-                        padding: const EdgeInsets.only(left: 16),
+                        
+                        padding: const EdgeInsets.only(left: 4),
                         scrollDirection: Axis.horizontal,
                         itemCount: albums.length.clamp(0, 10),
                         itemBuilder: (context, index) {
                           final album = albums[index];
-                          return Padding(
-                            padding: EdgeInsets.only(left: index == 0 ? 0 : 8),
-                            child: AlbumCardTile(
-                              album: album,
-                              onTap: (album) {
-                                UiUtils.pushRouteAsync(context, PlaylistScreen(mediaSet: album.toMediaSet()));
-                              },
-                            ),
+                          return AlbumCardTile(
+                            album: album,
+                            onTap: (album) {
+                              UiUtils.pushRouteAsync(context, PlaylistScreen(mediaSet: album.toMediaSet()));
+                            },
                           );
                         },
                       );
@@ -124,13 +119,13 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
               ),
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 24),
+                  padding: const EdgeInsets.only(left: 12),
                   child: Padding(
-                    padding: const EdgeInsets.only(bottom: 12, top: 12),
+                    padding: const EdgeInsets.only(bottom: 4, top: 2),
                     child: Row(
                       children: [
-                        Text(Languages.of(context)!.labelMostPlayed, style: smallTextStyle(context).copyWith(fontWeight: FontWeight.w800, letterSpacing: 0.4)),
-                        Text('  •  ${Languages.of(context)!.labelSeeMore}', style: tinyTextStyle(context).copyWith(fontWeight: FontWeight.normal, color: Theme.of(context).primaryColor))
+                        Text(Languages.of(context)!.labelMostPlayed, style: headerTextStyle(context).copyWith(letterSpacing: 0.2)),
+                        AnimatedText('  •  ${Languages.of(context)!.labelSeeMore}', style: tinyTextStyle(context).copyWith(fontWeight: FontWeight.normal), auto: true)
                       ],
                     ),
                   ),

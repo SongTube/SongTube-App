@@ -1,12 +1,12 @@
 import 'dart:math';
 
 import 'package:audio_service/audio_service.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:songtube/internal/models/colors_palette.dart';
 import 'package:songtube/providers/app_settings.dart';
 import 'package:songtube/internal/global.dart';
 import 'package:songtube/internal/models/song_item.dart';
@@ -14,7 +14,7 @@ import 'package:songtube/providers/download_provider.dart';
 import 'package:songtube/providers/media_provider.dart';
 import 'package:songtube/providers/playlist_provider.dart';
 import 'package:songtube/providers/ui_provider.dart';
-import 'package:songtube/ui/components/palette_loader.dart';
+import 'package:songtube/ui/animations/animated_icon.dart';
 import 'package:songtube/ui/players/music_player/artwork_carousel.dart';
 import 'package:songtube/ui/players/music_player/marquee_widget.dart';
 import 'package:songtube/ui/text_styles.dart';
@@ -43,28 +43,31 @@ class _ExpandedPlayerBodyState extends State<ExpandedPlayerBody> {
   SongItem get song => SongItem.fromMediaItem(audioHandler.mediaItem.value!);
 
   // Player Colors
-  Color textColor(ColorsPalette? palette) {
+  Color textColor(MediaProvider provider) {
+    final palette = provider.currentColors;
     final defaultColor = Theme.of(context).textTheme.bodyText1!.color!;
     if (AppSettings().enableMusicPlayerBlur) {
-      if ((palette?.dominant ?? Colors.black).computeLuminance() < 0.2) {
-        return palette?.text ?? defaultColor;
+      if ((palette.dominant ?? Colors.black).computeLuminance() < 0.2) {
+        return palette.text;
       } else {
-        return palette?.text ?? defaultColor;
+        return palette.text;
       }
     } else {
       return defaultColor;
     }
   }
-  Color dominantColor(ColorsPalette? palette) {
+  
+  Color dominantColor(MediaProvider provider) {
+    final palette = provider.currentColors;
     final defaultColor = Theme.of(context).textTheme.bodyText1!.color!;
     if (AppSettings().enableMusicPlayerBlur) {
-      if ((palette?.dominant ?? Colors.black).computeLuminance() < 0.2) {
-        return palette?.text ?? defaultColor;
+      if ((palette.dominant ?? Colors.black).computeLuminance() < 0.2) {
+        return palette.text;
       } else {
-        return palette?.text ?? defaultColor;
+        return palette.text;
       }
     } else {
-      return palette?.vibrant ?? palette?.dominant ?? defaultColor;
+      return palette.vibrant ?? palette.dominant ?? defaultColor;
     }
   }
 
@@ -88,98 +91,123 @@ class _ExpandedPlayerBodyState extends State<ExpandedPlayerBody> {
 
   @override
   Widget build(BuildContext context) {
-    return PaletteLoader(
-      song: song,
-      builder: (context, palette) {
-        return AnimatedBuilder(
-          animation: uiProvider.fwController.animationController,
-          builder: (context, child) {
-            return SizedBox(
-              height: Tween<double>(begin: kToolbarHeight * 1.6, end: MediaQuery.of(context).size.height-38-kToolbarHeight-(kToolbarHeight*0.7)).animate(uiProvider.fwController.animationController).value,
-              child: child,
-            );
-          },
-          child: GestureDetector(
-            onTap: () {
-              if (uiProvider.fwController.animationController.value == 0) {
-                uiProvider.fwController.animationController
-                  .animateTo(1, curve: Curves.fastLinearToSlowEaseIn, duration: const Duration(seconds: 1));
-              }
-            },
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    return AnimatedBuilder(
+      animation: uiProvider.fwController.animationController,
+      builder: (context, child) {
+        return SizedBox(
+          height: Tween<double>(begin: kToolbarHeight * 1.6, end: MediaQuery.of(context).size.height-38-kToolbarHeight-(kToolbarHeight*0.7)).animate(uiProvider.fwController.animationController).value,
+          child: child,
+        );
+      },
+      child: GestureDetector(
+        onTap: () {
+          if (uiProvider.fwController.animationController.value == 0) {
+            uiProvider.fwController.animationController
+              .animateTo(1, curve: Curves.fastLinearToSlowEaseIn, duration: const Duration(seconds: 1));
+          }
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Column(
               children: [
-                Column(
+                Row(
                   children: [
-                    Row(
-                      children: [
-                        // Artwork Carousel
-                        AnimatedBuilder( 
-                          animation: uiProvider.fwController.animationController,
-                          builder: (context, child) {
-                            return Container(
-                              constraints: BoxConstraintsTween(
-                                begin: const BoxConstraints.tightFor(width: (kToolbarHeight * 1.6), height: (kToolbarHeight * 1.6)),
-                                end: BoxConstraints.tightFor(width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.width))
-                                  .evaluate(uiProvider.fwController.animationController),
-                              child: child
-                            );
-                          },
-                          child: AspectRatio(
-                            aspectRatio: 1,
-                            child: ArtworkCarousel(
-                              song: song,
-                              animationController: uiProvider.fwController.animationController,
-                              onSwitchSong: (index) async {
-                                if (uiProvider.fwController.isPanelClosed) {
-                                  return;
-                                }
-                                if (audioHandler.mediaItem.value!.id != audioHandler.queue.value[index].id) {
-                                  mediaProvider.playSong(audioHandler.queue.value, index);
-                                }
-                              }
-                            ),
-                          ),
+                    // Artwork Carousel
+                    AnimatedBuilder( 
+                      animation: uiProvider.fwController.animationController,
+                      builder: (context, child) {
+                        return Container(
+                          constraints: BoxConstraintsTween(
+                            begin: const BoxConstraints.tightFor(width: (kToolbarHeight * 1.6), height: (kToolbarHeight * 1.6)),
+                            end: BoxConstraints.tightFor(width: MediaQuery.of(context).size.width, height: MediaQuery.of(context).size.width))
+                              .evaluate(uiProvider.fwController.animationController),
+                          child: child
+                        );
+                      },
+                      child: AspectRatio(
+                        aspectRatio: 1,
+                        child: ArtworkCarousel(
+                          song: song,
+                          animationController: uiProvider.fwController.animationController,
+                          onSwitchSong: (index) async {
+                            if (uiProvider.fwController.isPanelClosed) {
+                              return;
+                            }
+                            if (audioHandler.mediaItem.value!.id != audioHandler.queue.value[index].id) {
+                              mediaProvider.playSong(audioHandler.queue.value, index);
+                            }
+                          }
                         ),
-                        // Song Title and Artist
-                        Expanded(
-                          child: AnimatedBuilder(
-                            animation: uiProvider.fwController.animationController,
-                            builder: (context, child) {
-                              return Opacity(
-                                opacity: (1 - (2 * uiProvider.fwController.animationController.value)) > 0
-                                  ? (1 - (2 * uiProvider.fwController.animationController.value)) : 0,
-                                child: child
-                              );
-                            },
-                            child: Row(
+                      ),
+                    ),
+                    // Song Title and Artist
+                    Expanded(
+                      child: AnimatedBuilder(
+                        animation: uiProvider.fwController.animationController,
+                        builder: (context, child) {
+                          return Opacity(
+                            opacity: (1 - (2 * uiProvider.fwController.animationController.value)) > 0
+                              ? (1 - (2 * uiProvider.fwController.animationController.value)) : 0,
+                            child: child
+                          );
+                        },
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: StreamBuilder<MediaItem?>(
+                                stream: audioHandler.mediaItem,
+                                builder: (context, snapshot) {
+                                  return Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        snapshot.data?.title ?? '',
+                                        style: smallTextStyle(context).copyWith(fontWeight: FontWeight.bold),
+                                        overflow: TextOverflow.fade,
+                                        softWrap: false,
+                                        maxLines: 1,
+                                      ),
+                                      Text(
+                                        snapshot.data?.artist ?? '',
+                                        style: tinyTextStyle(context, opacity: 0.6),
+                                        overflow: TextOverflow.fade,
+                                        softWrap: false,
+                                        maxLines: 1,
+                                      ),
+                                    ],
+                                  );
+                                }
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            Stack(
+                              alignment: Alignment.center,
                               children: [
-                                Expanded(
-                                  child: StreamBuilder<MediaItem?>(
-                                    stream: audioHandler.mediaItem,
-                                    builder: (context, snapshot) {
-                                      return Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            snapshot.data?.title ?? '',
-                                            style: smallTextStyle(context).copyWith(fontWeight: FontWeight.bold),
-                                            overflow: TextOverflow.fade,
-                                            softWrap: false,
-                                            maxLines: 1,
-                                          ),
-                                          Text(
-                                            snapshot.data?.artist ?? '',
-                                            style: tinyTextStyle(context, opacity: 0.6),
-                                            overflow: TextOverflow.fade,
-                                            softWrap: false,
-                                            maxLines: 1,
-                                          ),
-                                        ],
-                                      );
-                                    }
-                                  ),
+                                StreamBuilder(
+                                  stream: Rx.combineLatest2<double, double, double>(
+                                    _dragPositionSubject.stream,
+                                    Stream.periodic(const Duration(milliseconds: 1000), (_) => 0),
+                                    (dragPosition, _) => dragPosition),
+                                  builder: (context, snapshot) {
+                                    Duration position = audioHandler.playbackState.value.position;
+                                    Duration duration = audioHandler.mediaItem.value?.duration ?? Duration.zero;
+                                    return SizedBox(
+                                      height: 40,
+                                      width: 40,
+                                      child: Consumer<MediaProvider>(
+                                        builder: (context, mediaProvider, _) {
+                                          return CircularProgressIndicator(
+                                            strokeWidth: 3,
+                                            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                                            valueColor: AlwaysStoppedAnimation(mediaProvider.currentColors.vibrant),
+                                            value: duration == Duration.zero ? 0 : (position.inMilliseconds/duration.inMilliseconds),
+                                          );
+                                        }
+                                      ),
+                                    );
+                                  }
                                 ),
                                 StreamBuilder<PlaybackState>(
                                   stream: audioHandler.playbackState,
@@ -188,8 +216,8 @@ class _ExpandedPlayerBodyState extends State<ExpandedPlayerBody> {
                                       duration: const Duration(milliseconds: 400),
                                       child: IconButton(
                                         icon: snapshot.data?.playing ?? false
-                                          ? const Icon(Ionicons.pause_outline, size: 22, key: Key('pause'))
-                                          : const Icon(Ionicons.play_outline, size: 22, key: Key('play')),
+                                          ? const AppAnimatedIcon(Icons.pause_rounded, size: 20, key: Key('pause'))
+                                          : const AppAnimatedIcon(Icons.play_arrow_rounded, size: 20, key: Key('play')),
                                         onPressed: snapshot.data?.playing ?? false
                                           ? () => audioHandler.pause()
                                           : () => audioHandler.play()
@@ -197,54 +225,63 @@ class _ExpandedPlayerBodyState extends State<ExpandedPlayerBody> {
                                     );
                                   }
                                 ),
-                                const SizedBox(width: 12),
                               ],
                             ),
-                          ),
+                            GestureDetector(
+                              onTap: () {
+                                audioHandler.skipToNext();
+                              },
+                              child: const Padding(
+                                padding: EdgeInsets.only(top: 8, bottom: 8, right: 12, left: 8),
+                                child: AppAnimatedIcon(EvaIcons.chevronRight),
+                              )
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ],
                 ),
-                Flexible(
-                  child: AnimatedBuilder(
-                    animation: uiProvider.fwController.animationController,
-                    builder: (context, child) {
-                      return Opacity(
-                        opacity: (uiProvider.fwController.animationController.value - (1 - uiProvider.fwController.animationController.value)) > 0
-                          ? (uiProvider.fwController.animationController.value - (1 - uiProvider.fwController.animationController.value)) : 0,
-                        child: Transform.translate(
-                          offset: Offset(0, Tween<double>(begin: 180, end: 0).animate(uiProvider.fwController.animationController).value),
-                          child: child)
-                      );
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 8, right: 8),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          // Song Data
-                          _songTitle(palette),
-                          const SizedBox(height: 16),
-                          // Playback Controls
-                          _playbackControls(palette),
-                          const SizedBox(height: 16),
-                          // Progress Bar
-                          _progressIndicator(palette),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
               ],
             ),
-          ),
-        );
-      }
+            Flexible(
+              child: AnimatedBuilder(
+                animation: uiProvider.fwController.animationController,
+                builder: (context, child) {
+                  return Opacity(
+                    opacity: (uiProvider.fwController.animationController.value - (1 - uiProvider.fwController.animationController.value)) > 0
+                      ? (uiProvider.fwController.animationController.value - (1 - uiProvider.fwController.animationController.value)) : 0,
+                    child: Transform.translate(
+                      offset: Offset(0, Tween<double>(begin: 180, end: 0).animate(uiProvider.fwController.animationController).value),
+                      child: child)
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8, right: 8),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // Song Data
+                      _songTitle(),
+                      const SizedBox(height: 20),
+                      // Playback Controls
+                      _playbackControls(),
+                      const SizedBox(height: 20),
+                      // Progress Bar
+                      _progressIndicator(),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
-  Widget _playbackControls(ColorsPalette? palette) {
+  Widget _playbackControls() {
+    MediaProvider provider = Provider.of(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -254,14 +291,14 @@ class _ExpandedPlayerBodyState extends State<ExpandedPlayerBody> {
           duration: const Duration(milliseconds: 300),
           curve: Curves.ease,
           decoration: BoxDecoration(
-            color: onRepeat ? dominantColor(palette).withOpacity(0.2) : null,
+            color: onRepeat ? dominantColor(provider).withOpacity(0.2) : null,
             borderRadius: BorderRadius.circular(100)
           ),
           child: IconButton(
             icon: Icon(
-              Ionicons.repeat_outline,
+              EvaIcons.repeatOutline,
               size: 16,
-              color: textColor(palette).withOpacity(0.6)
+              color: textColor(provider).withOpacity(0.6)
             ),
             onPressed: () {
               setState(() {
@@ -275,9 +312,9 @@ class _ExpandedPlayerBodyState extends State<ExpandedPlayerBody> {
         // Previous button
         IconButton(
           icon: Icon(
-            Icons.arrow_back_ios,
-            size: 16,
-            color: textColor(palette).withOpacity(0.6)
+            EvaIcons.arrowIosBackOutline,
+            size: 20,
+            color: textColor(provider).withOpacity(0.6)
           ),
           onPressed: () => audioHandler.skipToPrevious()
         ),
@@ -297,11 +334,11 @@ class _ExpandedPlayerBodyState extends State<ExpandedPlayerBody> {
                 height: 60,
                 width: 60,
                 child: playing
-                  ? Icon(Ionicons.pause, size: 32, 
-                      color: dominantColor(palette)
+                  ? Icon(Icons.pause_rounded, size: 42, 
+                      color: dominantColor(provider)
                     )
-                  : Icon(Ionicons.play, size: 32,
-                      color: dominantColor(palette)
+                  : Icon(Icons.play_arrow_rounded, size: 42,
+                      color: dominantColor(provider)
                     )
               ),
             );
@@ -312,9 +349,9 @@ class _ExpandedPlayerBodyState extends State<ExpandedPlayerBody> {
         // Next button
         IconButton(
           icon: Icon(
-            Icons.arrow_forward_ios,
-            size: 16,
-            color: textColor(palette).withOpacity(0.6)
+            EvaIcons.arrowIosForwardOutline,
+            size: 20,
+            color: textColor(provider).withOpacity(0.6)
           ),
           onPressed: () => audioHandler.skipToNext()
         ),
@@ -324,14 +361,14 @@ class _ExpandedPlayerBodyState extends State<ExpandedPlayerBody> {
           duration: const Duration(milliseconds: 300),
           curve: Curves.ease,
           decoration: BoxDecoration(
-            color: onShuffle ? dominantColor(palette).withOpacity(0.2) : null,
+            color: onShuffle ? dominantColor(provider).withOpacity(0.2) : null,
             borderRadius: BorderRadius.circular(100)
           ),
           child: IconButton(
             icon: Icon(
-              Ionicons.shuffle_outline,
+              EvaIcons.shuffle2Outline,
               size: 16,
-              color: textColor(palette).withOpacity(0.6)
+              color: textColor(provider).withOpacity(0.6)
             ),
             onPressed: () {
               setState(() {
@@ -346,7 +383,8 @@ class _ExpandedPlayerBodyState extends State<ExpandedPlayerBody> {
     );
   }
 
-  Widget _songTitle(ColorsPalette? palette) {
+  Widget _songTitle() {
+    MediaProvider provider = Provider.of(context);
     PlaylistProvider playlistProvider = Provider.of(context);
     bool isFavorite = playlistProvider.favorites.songs.any((element) => element.id == song.id);
     return SizedBox(
@@ -367,7 +405,7 @@ class _ExpandedPlayerBodyState extends State<ExpandedPlayerBody> {
                       stream: audioHandler.mediaItem,
                       builder: (context, snapshot) {
                         return MarqueeWidget(
-                          textColor: textColor(palette),
+                          textColor: textColor(provider),
                           currentSong: snapshot.data,
                           animationDuration: const Duration(seconds: 10),
                           backDuration: const Duration(seconds: 5),
@@ -376,7 +414,7 @@ class _ExpandedPlayerBodyState extends State<ExpandedPlayerBody> {
                           child: Text(
                             '${snapshot.data?.title ?? ''}    ',
                             key: ValueKey(snapshot.data?.title),
-                            style: bigTextStyle(context).copyWith(fontWeight: FontWeight.w900).copyWith(color: textColor(palette)),
+                            style: bigTextStyle(context).copyWith(fontWeight: FontWeight.w900).copyWith(color: textColor(provider)),
                             maxLines: 1,
                             softWrap: false,
                             overflow: TextOverflow.fade,
@@ -396,7 +434,7 @@ class _ExpandedPlayerBodyState extends State<ExpandedPlayerBody> {
                         return Text(
                           snapshot.data?.artist ?? '',
                           key: ValueKey(snapshot.data?.artist),
-                          style: subtitleTextStyle(context, opacity: 0.7).copyWith(color: textColor(palette).withOpacity(0.7)),
+                          style: subtitleTextStyle(context, opacity: 0.7).copyWith(color: textColor(provider).withOpacity(0.7)),
                           maxLines: 1,
                           softWrap: false,
                           overflow: TextOverflow.fade,
@@ -417,10 +455,10 @@ class _ExpandedPlayerBodyState extends State<ExpandedPlayerBody> {
               padding: const EdgeInsets.all(8.0),
               child: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 300),
-                child: Icon(
+                child: AppAnimatedIcon(
                   isFavorite ? Ionicons.heart : Ionicons.heart_outline,
                   key: ValueKey(song.id+isFavorite.toString()),
-                  color: isFavorite ? Colors.red : textColor(palette),
+                  color: isFavorite ? null : textColor(provider).withOpacity(0.6),
                 ),
               ),
             )
@@ -431,7 +469,8 @@ class _ExpandedPlayerBodyState extends State<ExpandedPlayerBody> {
     );
   }
 
-  Widget _progressIndicator(ColorsPalette? palette) {
+  Widget _progressIndicator() {
+    MediaProvider provider = Provider.of(context);
     return StreamBuilder(
       stream: Rx.combineLatest2<double, double, double>(
         _dragPositionSubject.stream,
@@ -448,14 +487,14 @@ class _ExpandedPlayerBodyState extends State<ExpandedPlayerBody> {
                 data: SliderTheme.of(context).copyWith(
                   thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6),
                   overlayShape: const RoundSliderOverlayShape(overlayRadius: 10),
-                  valueIndicatorTextStyle: const TextStyle(
+                  valueIndicatorTextStyle: TextStyle(
                     color: accentColor,
                   ),
                   trackHeight: 2,
                 ),
                 child: Slider(
-                  activeColor: dominantColor(palette),
-                  inactiveColor: textColor(palette).withOpacity(0.06),
+                  activeColor: dominantColor(provider),
+                  inactiveColor: textColor(provider).withOpacity(0.06),
                   min: 0.0,
                   max: duration.inMilliseconds.toDouble(),
                   value: duration == Duration.zero ? 0 : max(0.0, min(
@@ -486,12 +525,12 @@ class _ExpandedPlayerBodyState extends State<ExpandedPlayerBody> {
                 children: <Widget>[
                   Text(
                     "${position.inMinutes}:${(position.inSeconds.remainder(60).toString().padLeft(2, '0'))}",
-                    style: tinyTextStyle(context, opacity: 0.6).copyWith(color: textColor(palette)),
+                    style: tinyTextStyle(context, opacity: 0.6).copyWith(color: textColor(provider)),
                   ),
                   const Spacer(),
                   Text(
                     "${duration.inMinutes}:${(duration.inSeconds.remainder(60).toString().padLeft(2, '0'))}",
-                    style: tinyTextStyle(context, opacity: 0.6).copyWith(color: textColor(palette)),
+                    style: tinyTextStyle(context, opacity: 0.6).copyWith(color: textColor(provider)),
                   )
                 ],
               ),

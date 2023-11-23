@@ -62,7 +62,7 @@ class _GeneralSettingsState extends State<GeneralSettings> {
     AppSettings settingsProvider = Provider.of(context);
     MediaProvider mediaProvider = Provider.of(context);
     return ListView(
-      physics: const BouncingScrollPhysics(),
+      
       padding: const EdgeInsets.only(left: 12, right: 12, top: 12, bottom: (kToolbarHeight * 1.6)+12),
       children: [
         // Use System Theme

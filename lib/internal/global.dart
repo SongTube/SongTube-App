@@ -35,7 +35,7 @@ Future<void> initGlobals() async {
 }
 
 // App Custom Accent Color
-const accentColor = Color.fromARGB(255, 229, 12, 73);
+Color accentColor = const Color.fromARGB(255, 229, 12, 73);
 
 // Platform Details
 late AndroidDeviceInfo deviceInfo;
@@ -64,3 +64,9 @@ bool get appFirstRun => sharedPreferences.getBool('appFirstRun') ?? true;
 
 // Block for Picture in Picture mode
 bool blockPipMode = false;
+
+// Animation default values
+const Duration kAnimationShortDuration = Duration(milliseconds: 150);
+const Duration kAnimationDuration = Duration(milliseconds: 300);
+const Duration kAnimationLongDuration = Duration(milliseconds: 500);
+const Curve kAnimationCurve = Curves.ease;

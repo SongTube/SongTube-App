@@ -23,7 +23,7 @@ ThemeData lightTheme() {
     scaffoldBackgroundColor: const Color.fromARGB(255, 247, 247, 247),
     cardColor: const Color.fromARGB(255, 255, 255, 255),
     inputDecorationTheme: InputDecorationTheme(
-      labelStyle: const TextStyle(
+      labelStyle: TextStyle(
         color: accentColor,
       ),
       fillColor: Colors.grey[100]
@@ -31,7 +31,7 @@ ThemeData lightTheme() {
     tabBarTheme: TabBarTheme(
       labelColor: Colors.grey[200],
     ),
-    textSelectionTheme: const TextSelectionThemeData(
+    textSelectionTheme: TextSelectionThemeData(
       selectionHandleColor: accentColor
     ),
     shadowColor: Colors.black.withOpacity(0.08),

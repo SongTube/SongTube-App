@@ -14,8 +14,8 @@ class AlbumsPage extends StatelessWidget {
     MediaProvider mediaProvider = Provider.of(context);
     final albums = MediaItemAlbum.fetchAlbums(mediaProvider.songs);
     return GridView.builder(
-      physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.only(left: 4, right: 4, top: 12, bottom: (kToolbarHeight*1.5)+16),
+      
+      padding: const EdgeInsets.only(left: 4, right: 4, bottom: (kToolbarHeight*1.5)+16),
       itemCount: albums.length,
       clipBehavior: Clip.none,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, childAspectRatio: 1),

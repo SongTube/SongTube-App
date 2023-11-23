@@ -1,10 +1,12 @@
 import 'dart:convert';
 
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/providers/content_provider.dart';
+import 'package:songtube/ui/animations/animated_icon.dart';
 import 'package:songtube/ui/text_styles.dart';
 
 class SearchSuggestions extends StatefulWidget {
@@ -57,7 +59,7 @@ class _SearchSuggestionsState extends State<SearchSuggestions> {
         }
         finalList = suggestionsList + searchHistory;
         return Container(
-          color: Theme.of(context).scaffoldBackgroundColor,
+          color: Theme.of(context).cardColor,
           child: ListView.builder(
             padding: const EdgeInsets.only(top: 0),
             itemExtent: 40,
@@ -65,9 +67,10 @@ class _SearchSuggestionsState extends State<SearchSuggestions> {
             itemBuilder: (context, index) {
               String item = finalList[index];
               return ListTile(
+                contentPadding: const EdgeInsets.all(8).copyWith(right: 4, top: 0),
                 title: Text(
                   item,
-                  style: smallTextStyle(context),
+                  style: smallTextStyle(context, opacity: 0.8),
                   maxLines: 1,
                   overflow: TextOverflow.fade,
                   softWrap: false,
@@ -75,16 +78,15 @@ class _SearchSuggestionsState extends State<SearchSuggestions> {
                 leading: SizedBox(
                   width: 40,
                   height: 40,
-                  child: Icon(
+                  child: AppAnimatedIcon(
                     suggestionsList.contains(item)
                       ? Ionicons.search_outline
-                      : Ionicons.hourglass_outline,
-                    size: 18,
-                    color: Theme.of(context).iconTheme.color
+                      : EvaIcons.clockOutline,
+                    size: 20,
                   ),
                 ),
                 trailing: !suggestionsList.contains(item) ? IconButton(
-                  icon: Icon(Icons.clear, size: 18, color: Theme.of(context).iconTheme.color),
+                  icon: const AppAnimatedIcon(Icons.clear, size: 18, opacity: 0.6,),
                   onPressed: () {
                     contentProvider.removeStringfromSearchHistory(index);
                   },

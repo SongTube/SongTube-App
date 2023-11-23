@@ -7,11 +7,17 @@ import 'package:intl/intl.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:newpipeextractor_dart/models/comment.dart';
+import 'package:provider/provider.dart';
+import 'package:songtube/internal/color_utils.dart';
 import 'package:songtube/languages/languages.dart';
+import 'package:songtube/providers/media_provider.dart';
+import 'package:songtube/ui/animations/animated_icon.dart';
+import 'package:songtube/ui/animations/animated_text.dart';
 import 'package:songtube/ui/animations/show_up.dart';
 import 'package:songtube/ui/components/shimmer_container.dart';
 import 'package:songtube/ui/text_styles.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:html/parser.dart';
 
 class VideoPlayerCommentsCollapsed extends StatefulWidget {
   const VideoPlayerCommentsCollapsed({
@@ -31,9 +37,9 @@ class _VideoPlayerCommentsCollapsedState extends State<VideoPlayerCommentsCollap
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 300),
       child: Container(
-        margin: EdgeInsets.only(top: widget.commentsAvailable ? 12 : 0),
+        margin: EdgeInsets.only(top: widget.commentsAvailable ? 16 : 0),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(15),
           color: widget.commentsAvailable ? Theme.of(context).cardColor : Colors.transparent,
         ),
         padding: const EdgeInsets.all(8).copyWith(left: 16, right: 16, top: widget.commentsAvailable ? 8 : 0, bottom: widget.commentsAvailable ? 8 : 0),
@@ -57,11 +63,12 @@ class _VideoPlayerCommentsCollapsedState extends State<VideoPlayerCommentsCollap
                             children: [
                               Text(
                                 Languages.of(context)!.labelComments,
-                                style: smallTextStyle(context).copyWith(fontWeight: FontWeight.bold)
+                                style: subtitleTextStyle(context).copyWith(fontWeight: FontWeight.bold, letterSpacing: 0.2)
                               ),
-                              Text(
+                              AnimatedText(
                                 "  •  ${Languages.of(context)!.labelSeeMore}",
-                                style: tinyTextStyle(context).copyWith(fontWeight: FontWeight.normal, color: Theme.of(context).primaryColor)
+                                style: tinyTextStyle(context).copyWith(fontWeight: FontWeight.normal),
+                                auto: true,
                               ),
                             ],
                           ),
@@ -111,16 +118,16 @@ class _VideoPlayerCommentsCollapsedState extends State<VideoPlayerCommentsCollap
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             text: TextSpan(
-              style: tinyTextStyle(context, opacity: 0.8),
+              style: smallTextStyle(context),
               children: [
                 // Author name
                 TextSpan(
                   text: '${widget.comments.first.author}  ',
-                  style: smallTextStyle(context)
+                  style: smallTextStyle(context, opacity: 0.6).copyWith(fontSize: 12),
                 ),
                 // Author message
                 TextSpan(
-                  text: widget.comments.first.commentText,
+                  text: parse(parse(widget.comments.first.commentText).body?.text).documentElement?.text ?? ' ',
                 )
               ]
             )
@@ -164,38 +171,37 @@ class VideoPlayerCommentsExpanded extends StatelessWidget {
   Widget build(BuildContext context) {
     final pinnedComment = comments.firstWhereOrNull((element) => element.pinned ?? false);
     return Container(
-      margin: const EdgeInsets.only(top: 4, bottom: 12, left: 4, right: 4),
+      margin: const EdgeInsets.only(top: 4, left: 0, right: 4),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: Theme.of(context).scaffoldBackgroundColor,
       ),
-      padding: const EdgeInsets.all(8).copyWith(top: 2, bottom: 8),
+      padding: const EdgeInsets.all(8).copyWith(top: 2, left: 0, bottom: 0),
       child: Column(
         children: [
           Row(
             children: [
-              const SizedBox(width: 4),
               Semantics(
                 label: 'Go back',
                 child: IconButton(
                   onPressed: onBack,
-                  icon: const Icon(Iconsax.arrow_left)
+                  icon: const AppAnimatedIcon(Iconsax.arrow_left, size: 20)
                 ),
               ),
               const SizedBox(width: 4),
-              Text(Languages.of(context)!.labelComments, style: subtitleTextStyle(context, bold: true).copyWith(fontSize: 16)),
+              Text(Languages.of(context)!.labelComments, style: subtitleTextStyle(context)),
               const Spacer(),
             ],
           ),
           const SizedBox(height: 4),
-          Divider(color: Theme.of(context).dividerColor.withOpacity(0.08), height: 1),
+          Divider(color: Theme.of(context).dividerColor.withOpacity(0.08), height: 1, indent: 8),
           Expanded(
             child: ShowUpTransition(
               slideSide: SlideFromSlide.bottom,
               delay: const Duration(milliseconds: 100),
               child: ListView(
-                physics: const BouncingScrollPhysics(),
-                padding: const EdgeInsets.only(top: 16, left: 8, right: 8),
+                
+                padding: const EdgeInsets.only(top: 12, left: 4, right: 8, bottom: 16),
                 children: [
                   if (pinnedComment != null)
                   Container(
@@ -242,7 +248,7 @@ class VideoPlayerCommentsExpanded extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: 12),
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -250,30 +256,40 @@ class VideoPlayerCommentsExpanded extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Text(comment.author ?? 'Unknown', style: smallTextStyle(context, bold: false)),
+                    Text(comment.author?.replaceRange(0, 1, '') ?? 'Unknown', style: smallTextStyle(context, opacity: 0.6)),
                     const SizedBox(width: 12),
                     if (comment.pinned ?? false)
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(Languages.of(context)!.labelPinned, style: tinyTextStyle(context, bold: true).copyWith(color: Theme.of(context).primaryColor)),
+                        AnimatedText(Languages.of(context)!.labelPinned, style: tinyTextStyle(context, bold: true), auto: true),
                       ],
                     )
                   ],
                 ),
                 const SizedBox(height: 2),
-                HtmlWidget(
-                  comment.commentText!,
-                  textStyle: smallTextStyle(context, opacity: 0.8),
-                  onTapUrl: (url) {
-                    if (url.contains('&t=')) {
-                      final seconds = url.split('&t=').last;
-                      onSeek(Duration(seconds: int.parse(seconds)));
-                    } else {
-                      launchUrlString(url, mode: LaunchMode.externalApplication);
-                    }
-                    return true;
-                  },
+                Consumer<MediaProvider>(
+                  builder: (context, provider, _) {
+                    return HtmlWidget(
+                      comment.commentText!,
+                      textStyle: smallTextStyle(context).copyWith(),
+                      onTapUrl: (url) {
+                        if (url.contains('&t=')) {
+                          final seconds = url.split('&t=').last;
+                          onSeek(Duration(seconds: int.parse(seconds)));
+                        } else {
+                          launchUrlString(url, mode: LaunchMode.externalApplication);
+                        }
+                        return true;
+                      },
+                      customStylesBuilder: (element) {
+                        if (element.localName?.contains('a') ?? false) {
+                          return {'color': '#${ColorUtils.toHex(provider.currentColors.vibrant!)}'};
+                        }
+                        return null;
+                      },
+                    );
+                  }
                 ),
                 const SizedBox(height: 8),
                 // Like count
@@ -286,15 +302,15 @@ class VideoPlayerCommentsExpanded extends StatelessWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(LineIcons.thumbsUp, color: Theme.of(context).iconTheme.color, size: 18),
+                      const AppAnimatedIcon(LineIcons.thumbsUp, size: 18),
                       const SizedBox(width: 6),
-                      Text((comment.likeCount == -1 ? "" : "${NumberFormat.compact().format(comment.likeCount)} Likes"), style: tinyTextStyle(context, opacity: 0.8)),
+                      Text((comment.likeCount == -1 ? "" : "${NumberFormat.compact().format(comment.likeCount)} Likes"), style: tinyTextStyle(context, opacity: 0.6)),
                       if (comment.hearted ?? false)
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           const SizedBox(width: 12),
-                          const Icon(Ionicons.heart, color: Colors.red, size: 18),
+                          const AppAnimatedIcon(Ionicons.heart, size: 18),
                           const SizedBox(width: 6),
                           Text(Languages.of(context)!.labelLikedByAuthor, style: tinyTextStyle(context, opacity: 0.8)),
                         ],

@@ -4,13 +4,17 @@ import 'package:flutter/services.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:network_info_plus/network_info_plus.dart';
+import 'package:provider/provider.dart';
 import 'package:songtube/internal/cache_utils.dart';
+import 'package:songtube/internal/global.dart';
 import 'package:songtube/internal/http_server.dart';
 import 'package:songtube/languages/languages.dart';
 import 'package:songtube/main.dart';
+import 'package:songtube/providers/media_provider.dart';
 import 'package:songtube/screens/about.dart';
 import 'package:songtube/screens/settings.dart';
 import 'package:songtube/screens/watch_history.dart';
+import 'package:songtube/ui/animations/animated_icon.dart';
 import 'package:songtube/ui/info_item_renderer.dart';
 import 'package:songtube/ui/sheets/backup_restore.dart';
 import 'package:songtube/ui/text_styles.dart';
@@ -34,7 +38,7 @@ class _HomeLibraryState extends State<HomeLibrary> {
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle(statusBarIconBrightness: Theme.of(context).brightness),
-        title: Text(Languages.of(context)!.labelLibrary, style: bigTextStyle(context).copyWith(fontSize: 24)),
+        title: Text(Languages.of(context)!.labelLibrary, style: bigTextStyle(context).copyWith(fontSize: 24, letterSpacing: 0.2)),
         shadowColor: Colors.transparent,
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -45,13 +49,12 @@ class _HomeLibraryState extends State<HomeLibrary> {
               onPressed: () {
                 UiUtils.pushRouteAsync(context, const ConfigurationScreen());
               },
-              icon: Icon(Iconsax.setting, color: Theme.of(context).primaryColor)
+              icon: const AppAnimatedIcon(EvaIcons.settingsOutline)
             ),
           )
         ],
       ),
       body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
             if (CacheUtils.watchHistory.isNotEmpty)
@@ -60,7 +63,6 @@ class _HomeLibraryState extends State<HomeLibrary> {
               child: ListView.builder(
                 padding: const EdgeInsets.only(left: 4),
                 itemCount: CacheUtils.watchHistory.length.clamp(0, 10),
-                physics: const BouncingScrollPhysics(),
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
                   final video = CacheUtils.watchHistory[index];
@@ -77,15 +79,14 @@ class _HomeLibraryState extends State<HomeLibrary> {
             if (CacheUtils.watchHistory.isNotEmpty)
             const SizedBox(height: 12),
             if (CacheUtils.watchHistory.isNotEmpty)
-            Divider(height: 1, thickness: 1.5, color: Theme.of(context).dividerColor.withOpacity(0.08)),
+            Divider(height: 12, thickness: 8, color: Theme.of(context).dividerColor.withOpacity(0.04)),
             Padding(
               padding: const EdgeInsets.only(left: 12),
               child: ListTile(
-                leading: SizedBox(
-                  height: double.infinity,
-                  child: Icon(LineIcons.history, color: Theme.of(context).primaryColor)),
-                title: Text(Languages.of(context)!.labelWatchHistory, style: subtitleTextStyle(context, bold: true)),
-                subtitle: Text(Languages.of(context)!.labelWatchHistoryDescription, style: smallTextStyle(context, opacity: 0.8)),
+                leading: const AppAnimatedIcon(EvaIcons.clockOutline, size: 20),
+                visualDensity: const VisualDensity(vertical: -4, horizontal: -4),
+                title: Text(Languages.of(context)!.labelWatchHistory, style: smallTextStyle(context, bold: true)),
+                subtitle: Text(Languages.of(context)!.labelWatchHistoryDescription, style: smallTextStyle(context, opacity: 0.6).copyWith(fontSize: 12)),
                 onTap: () async {
                   await UiUtils.pushRouteAsync(context, const WatchHistoryPage());
                   setState(() {});
@@ -95,11 +96,10 @@ class _HomeLibraryState extends State<HomeLibrary> {
             Padding(
               padding: const EdgeInsets.only(left: 12),
               child: ListTile(
-                leading: SizedBox(
-                  height: double.infinity,
-                  child: Icon(Iconsax.save_2, color: Theme.of(context).primaryColor)),
-                title: Text(Languages.of(context)!.labelBackupAndRestore, style: subtitleTextStyle(context, bold: true)),
-                subtitle: Text(Languages.of(context)!.labelBackupAndRestoreDescription, style: smallTextStyle(context, opacity: 0.8)),
+                leading: const AppAnimatedIcon(EvaIcons.archiveOutline, size: 20),
+                visualDensity: const VisualDensity(vertical: -4, horizontal: -4),
+                title: Text(Languages.of(context)!.labelBackupAndRestore, style: smallTextStyle(context, bold: true)),
+                subtitle: Text(Languages.of(context)!.labelBackupAndRestoreDescription, style: smallTextStyle(context, opacity: 0.6).copyWith(fontSize: 12)),
                 onTap: () async {
                   await showModalBottomSheet(context: internalNavigatorKey.currentContext!, backgroundColor: Colors.transparent, isScrollControlled: true, builder: (context) {
                     return const BackupRestoreSheet();
@@ -108,13 +108,36 @@ class _HomeLibraryState extends State<HomeLibrary> {
                 },
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.only(left: 12),
+              child: ListTile(
+                onTap: () {
+                  launchUrl(Uri.parse("https://paypal.me/artixo"), mode: LaunchMode.externalApplication);
+                },
+                visualDensity: const VisualDensity(vertical: -4, horizontal: -4),
+                leading: const AppAnimatedIcon(
+                  EvaIcons.heartOutline,
+                  size: 20,
+                ),
+                title: Text(
+                  Languages.of(context)!.labelDonate,
+                  textAlign: TextAlign.start,
+                  style: smallTextStyle(context, bold: true)
+                ),
+                subtitle: Text(
+                  Languages.of(context)!.labelSupportDevelopment,
+                  style: smallTextStyle(context, opacity: 0.6).copyWith(fontSize: 12)
+                ),
+              ),
+            ),
+            _about(),
             GestureDetector(
               onLongPress: () {
                 launchUrl(Uri.parse("https://github.com/SongTube/songtube_link_extension"), mode: LaunchMode.externalApplication);
               },
               child: Container(
                 margin: const EdgeInsets.all(12),
-                padding: const EdgeInsets.all(6),
+                padding: const EdgeInsets.only(top: 12, bottom: 12),
                 decoration: BoxDecoration(
                   color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(20)
@@ -122,50 +145,55 @@ class _HomeLibraryState extends State<HomeLibrary> {
                 child: FutureBuilder(
                   future: NetworkInfo().getWifiIP(),
                   builder: (context, snapshot) {
-                    return CheckboxListTile(
-                      title: Text(Languages.of(context)!.labelSongtubeLink, style: subtitleTextStyle(context, bold: true)),
-                      subtitle: Text('${Languages.of(context)!.labelSongtubeLinkDescription}${linkServer != null ? '\n\nDevice IP: ${snapshot.data}' : ''}', style: smallTextStyle(context, opacity: 0.8)),
-                      value: linkServer != null,
-                      activeColor: Theme.of(context).primaryColor,
-                      onChanged: (value) async {
-                        if (linkServer != null) {
-                          await LinkServer.close();
-                        } else {
-                          await LinkServer.initialize();
-                        }
-                        setState(() {});
-                      },
+                    return Consumer<MediaProvider>(
+                      builder: (context, provider, _) {
+                        return CheckboxListTile(
+                          title: Padding(
+                            padding: const EdgeInsets.only(bottom: 12),
+                            child: Row(
+                              children: [
+                                SizedBox(
+                                  height: 24, width: 24,
+                                  child: Image.asset('assets/images/logo.png')),
+                                const SizedBox(width: 12),
+                                Text(Languages.of(context)!.labelSongtubeLink, style: subtitleTextStyle(context, bold: true)),
+                              ],
+                            ),
+                          ),
+                          subtitle: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(Languages.of(context)!.labelSongtubeLinkDescription, style: subtitleTextStyle(context, opacity: 0.6).copyWith(fontSize: 13)),
+                              AnimatedSize(
+                                duration: kAnimationDuration,
+                                curve: kAnimationCurve,
+                                child: Container(
+                                  height: linkServer != null ? null : 0,
+                                  alignment: Alignment.topLeft,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(top: 12),
+                                    child: Text('Device IP: ${snapshot.data}', style: subtitleTextStyle(context, opacity: 1).copyWith(fontSize: 13)),
+                                  )),
+                              ),
+                            ],
+                          ),
+                          value: linkServer != null,
+                          activeColor: provider.currentColors.vibrant,
+                          onChanged: (value) async {
+                            if (linkServer != null) {
+                              await LinkServer.close();
+                            } else {
+                              await LinkServer.initialize();
+                            }
+                            setState(() {});
+                          },
+                        );
+                      }
                     );
                   }
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 12),
-              child: ListTile(
-                onTap: () {
-                  launchUrl(Uri.parse("https://paypal.me/artixo"), mode: LaunchMode.externalApplication);
-                },
-                leading: const SizedBox(
-                  height: double.infinity,
-                  child: Icon(
-                    EvaIcons.heart,
-                    color: Colors.red,
-                    size: 24,
-                  ),
-                ),
-                title: Text(
-                  Languages.of(context)!.labelDonate,
-                  textAlign: TextAlign.start,
-                  style: subtitleTextStyle(context, bold: true)
-                ),
-                subtitle: Text(
-                  Languages.of(context)!.labelSupportDevelopment,
-                  style: smallTextStyle(context, opacity: 0.8)
-                ),
-              ),
-            ),
-            _about(),
             _socialIcons(),
             const SizedBox(height: (kToolbarHeight*1.5)+16)
           ],
@@ -178,14 +206,19 @@ class _HomeLibraryState extends State<HomeLibrary> {
     return ListTile(
       title: Padding(
         padding: const EdgeInsets.only(left: 12),
-        child: Text(Languages.of(context)!.labelSocialLinks, style: subtitleTextStyle(context, bold: true)),
+        child: Text(Languages.of(context)!.labelSocialLinks, style: headerTextStyle(context).copyWith(letterSpacing: 0.2)),
       ),
       contentPadding: EdgeInsets.zero,
       subtitle: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardColor,
+          borderRadius: BorderRadius.circular(15)
+        ),
+        padding: const EdgeInsets.all(12),
         margin: const EdgeInsets.only(left: 12, right: 12, top: 16),
-        height: 50,
+        height: 80,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Semantics(
               label: 'Open telegram channel',
@@ -228,22 +261,19 @@ class _HomeLibraryState extends State<HomeLibrary> {
         onTap: () {
           UiUtils.pushRouteAsync(internalNavigatorKey.currentContext!, AboutPage());
         },
-        leading: const SizedBox(
-          height: double.infinity,
-          child: Icon(
-            EvaIcons.questionMarkCircle,
-            color: Colors.orangeAccent,
-            size: 24,
-          ),
+        visualDensity: const VisualDensity(vertical: -4, horizontal: -4),
+        leading: const AppAnimatedIcon(
+          EvaIcons.questionMarkCircleOutline,
+          size: 20,
         ),
         title: Text(
           Languages.of(context)!.labelAbout,
           textAlign: TextAlign.start,
-          style: subtitleTextStyle(context, bold: true)
+          style: smallTextStyle(context, bold: true)
         ),
         subtitle: Text(
           "Licenses, Contact Info and more",
-          style: smallTextStyle(context, opacity: 0.8)
+          style: smallTextStyle(context, opacity: 0.6).copyWith(fontSize: 12)
         ),
       ),
     );

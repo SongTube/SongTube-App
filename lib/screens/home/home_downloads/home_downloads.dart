@@ -4,9 +4,11 @@ import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/download_provider.dart';
+import 'package:songtube/providers/media_provider.dart';
 import 'package:songtube/screens/home/home_downloads/pages/canceled.dart';
 import 'package:songtube/screens/home/home_downloads/pages/completed.dart';
 import 'package:songtube/screens/home/home_downloads/pages/queue.dart';
+import 'package:songtube/ui/animations/animated_icon.dart';
 import 'package:songtube/ui/components/custom_inkwell.dart';
 import 'package:songtube/ui/rounded_tab_indicator.dart';
 import 'package:songtube/ui/text_styles.dart';
@@ -48,10 +50,9 @@ class _HomeDownloadsState extends State<HomeDownloads> with TickerProviderStateM
         children: [
           SizedBox(height: MediaQuery.of(context).padding.top+8),
           SizedBox(
-            height: kToolbarHeight-8,
+            height: kToolbarHeight,
             child: _appBar()),
           _tabs(),
-          Divider(height: 1, color: Theme.of(context).dividerColor),
           Expanded(child: _body()),
         ],
       ),
@@ -64,19 +65,18 @@ class _HomeDownloadsState extends State<HomeDownloads> with TickerProviderStateM
         node.requestFocus();
       },
       child: Container(
-        margin: const EdgeInsets.only(left: 20, right: 20),
-        padding: const EdgeInsets.only(left: 16),
-        height: kToolbarHeight,
+        margin: const EdgeInsets.only(left: 12, right: 12),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(100),
-          color: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.05),
+          borderRadius: BorderRadius.circular(15),
+          color: Theme.of(context).cardColor
         ),
         child: Align(
           alignment: Alignment.centerLeft,
           child: Row(
             children: [
-              const Icon(Iconsax.search_normal, size: 18),
               const SizedBox(width: 16),
+              const AppAnimatedIcon(Iconsax.search_normal, size: 18, opacity: 0.8),
+              const SizedBox(width: 12),
               Expanded(
                 child: TextField(
                   controller: searchController,
@@ -115,13 +115,12 @@ class _HomeDownloadsState extends State<HomeDownloads> with TickerProviderStateM
         padding: const EdgeInsets.only(left: 8),
         controller: tabController,
         isScrollable: true,
-        labelColor: Theme.of(context).textTheme.bodyText1!.color,
-        unselectedLabelColor: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.8),
-        labelStyle: smallTextStyle(context).copyWith(fontWeight: FontWeight.w800, letterSpacing: 0.4),
-        unselectedLabelStyle: smallTextStyle(context).copyWith(fontWeight: FontWeight.normal, letterSpacing: 0.4),
-        physics: const BouncingScrollPhysics(),
+        labelColor: Provider.of<MediaProvider>(context).currentColors.vibrant,
+        unselectedLabelColor: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.4),
+        labelStyle: tabBarTextStyle(context, opacity: 1),
+        unselectedLabelStyle: tabBarTextStyle(context, bold: false),
         indicatorSize: TabBarIndicatorSize.label,
-        indicator: RoundedTabIndicator(color: Theme.of(context).primaryColor, height: 3, radius: 100, bottomMargin: 0),
+        indicatorColor: Colors.transparent,
         tabs: [
           // Queue
           Tab(child: Text(Languages.of(context)!.labelQueue)),
@@ -138,7 +137,6 @@ class _HomeDownloadsState extends State<HomeDownloads> with TickerProviderStateM
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 300),
       child: TabBarView(
-        physics: const BouncingScrollPhysics(),
         controller: tabController,
         children: [
           // Queue

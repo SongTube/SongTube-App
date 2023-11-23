@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:songtube/internal/models/channel_subscription.dart';
 import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/content_provider.dart';
+import 'package:songtube/ui/animations/animated_text.dart';
 import 'package:songtube/ui/text_styles.dart';
 
 class ChannelSubscribeText extends StatefulWidget {
@@ -54,12 +55,11 @@ class _ChannelSubscribeTextState extends State<ChannelSubscribeText> with Ticker
           borderRadius: BorderRadius.circular(10),
           child: Ink(
             color: Colors.transparent,
-            child: Text(
+            child: AnimatedText(
               isSubscribed ? Languages.of(context)!.labelUnsubscribe : Languages.of(context)!.labelSubscribe,
-              style: smallTextStyle(context).copyWith(fontWeight: FontWeight.w900, letterSpacing: 1, color: isSubscribed
-                ? Theme.of(context).iconTheme.color!
-                    .withOpacity(0.6)
-                : Theme.of(context).primaryColor),
+              style: tabBarTextStyle(context, opacity: 1).copyWith(color: isSubscribed ? Colors.grey : null),
+              opacity: isSubscribed ? 0.6 : 1,
+              auto: !isSubscribed,
             ),
           ),
         ),

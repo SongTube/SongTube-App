@@ -21,6 +21,25 @@ class MediaProvider extends ChangeNotifier {
     fetchMedia();
   }
 
+  // Current Colors Palette
+  ColorsPalette _currentColors = ColorsPalette(dominant: accentColor, vibrant: accentColor);
+  ColorsPalette get currentColors => _currentColors;
+  set currentColors(ColorsPalette colors) {
+    if (colors != _currentColors) {
+      _currentColors = colors;
+      notifyListeners();
+    }
+  }
+  // Current Background Image
+  File? _currentBackgroundImage;
+  File? get currentBackgroundImage => _currentBackgroundImage;
+  set currentBackgroundImage(File? image) {
+    if (image != _currentBackgroundImage) {
+      _currentBackgroundImage = image;
+      notifyListeners();
+    }
+  }
+
   // Status for Storage Permission
   PermissionStatus? permissionStatus;
 
@@ -35,7 +54,6 @@ class MediaProvider extends ChangeNotifier {
     }
     final metadata = await AudioTagger.extractAllTags(id);
     if (metadata != null) {
-      final palette = await PaletteGenerator.fromImageProvider(FileImage(thumbnailFile(id))); 
       final stats = await FileStat.stat(id);
       final SongItem oldSong = songs[index];
       final SongItem newSong = SongItem(
@@ -48,10 +66,7 @@ class MediaProvider extends ChangeNotifier {
         id: id,
         modelId: metadata.title,
         title: metadata.title,
-        lastModified: stats.changed);
-      newSong.palette = ColorsPalette(
-        dominant: palette.dominantColor?.color,
-        vibrant: palette.vibrantColor?.color,
+        lastModified: stats.changed
       );
       _songs.removeAt(index);
       _songs.insert(index, newSong);

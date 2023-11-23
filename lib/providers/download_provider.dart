@@ -44,7 +44,6 @@ class DownloadProvider extends ChangeNotifier {
     }
     final metadata = await AudioTagger.extractAllTags(id);
     if (metadata != null) {
-      final palette = await PaletteGenerator.fromImageProvider(FileImage(thumbnailFile(id))); 
       final stats = await FileStat.stat(id);
       final SongItem oldSong = downloadedSongs[index];
       final SongItem newSong = SongItem(
@@ -59,10 +58,6 @@ class DownloadProvider extends ChangeNotifier {
         modelId: metadata.title,
         title: metadata.title,
         lastModified: stats.changed);
-      newSong.palette = ColorsPalette(
-        dominant: palette.dominantColor?.color,
-        vibrant: palette.vibrantColor?.color,
-      );
       downloadedSongs.removeAt(index);
       downloadedSongs.insert(index, newSong);
       // Save to cache

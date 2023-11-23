@@ -48,7 +48,7 @@ class AboutPage extends StatelessWidget {
           Expanded(
             child: ListView(
               padding: const EdgeInsets.only(bottom: 32),
-              physics: const BouncingScrollPhysics(),
+              
               children: [
                 const SizedBox(height: 12),
                 Row(

@@ -52,7 +52,7 @@ class _PlaylistArtworkState extends State<PlaylistArtwork> {
           child: AnimatedSwitcher(
             duration: const Duration(milliseconds: 300),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(15),
               child: Stack(
                 fit: StackFit.expand,
                 children: [

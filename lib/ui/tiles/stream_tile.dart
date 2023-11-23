@@ -7,6 +7,7 @@ import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/content_provider.dart';
 import 'package:songtube/providers/ui_provider.dart';
 import 'package:songtube/screens/channel.dart';
+import 'package:songtube/ui/animations/animated_icon.dart';
 import 'package:songtube/ui/components/channel_image.dart';
 import 'package:songtube/ui/components/custom_inkwell.dart';
 import 'package:songtube/ui/components/shimmer_container.dart';
@@ -73,17 +74,16 @@ class StreamTileCollapsed extends StatelessWidget {
                 Align(
                   alignment: Alignment.bottomRight,
                   child: Container(
-                    margin: const EdgeInsets.only(bottom: 6, right: 6),
-                    padding:
-                        const EdgeInsets.all(3).copyWith(left: 8, right: 8),
-                    decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.6),
-                        borderRadius: BorderRadius.circular(100)),
-                    child: Text(UiUtils.timeFormatter(stream.duration!),
-                        style: tinyTextStyle(context, bold: false)
-                            .copyWith(color: Colors.white, letterSpacing: 0.4, fontSize: 10)),
+                      margin: const EdgeInsets.only(right: 6, bottom: 6),
+                      padding: const EdgeInsets.all(3).copyWith(left: 8, right: 8),
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).cardColor.withOpacity(0.6),
+                          borderRadius: BorderRadius.circular(100)),
+                      child: Text(UiUtils.timeFormatter(stream.duration!),
+                          style: tinyTextStyle(context, bold: true).copyWith(color: Colors.white, letterSpacing: 0.6, fontSize: 11)
+                      )
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -97,7 +97,7 @@ class StreamTileCollapsed extends StatelessWidget {
                       left: 8, right: 8, top: 4, bottom: 0),
                   child: Text(
                     stream.name ?? '',
-                    style: smallTextStyle(context).copyWith(fontWeight: FontWeight.normal),
+                    style: smallTextStyle(context, bold: true),
                     overflow: TextOverflow.clip,
                     maxLines: 2,
                   ),
@@ -106,7 +106,7 @@ class StreamTileCollapsed extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 8),
                   child: Text(
                     "${showChannelName ? '${stream.uploaderName}  •  ' : ''}${NumberFormat.compact().format(stream.viewCount) != '-1' ? '${NumberFormat.compact().format(stream.viewCount)} ${Languages.of(context)!.labelViews}' : ''}",
-                    style: tinyTextStyle(context, opacity: 0.8).copyWith(fontWeight: FontWeight.w500),
+                    style: smallTextStyle(context, bold: false, opacity: 0.6).copyWith(fontSize: 12),
                     overflow: TextOverflow.clip,
                     maxLines: 1,
                   ),
@@ -118,7 +118,7 @@ class StreamTileCollapsed extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 8),
                     child: Text(
                       date != null ? timeago.format(date, locale: 'en') : '',
-                      style: tinyTextStyle(context, opacity: 0.8).copyWith(fontWeight: FontWeight.w500),
+                      style: smallTextStyle(context, bold: false, opacity: 0.6).copyWith(fontSize: 12),
                       overflow: TextOverflow.clip,
                       maxLines: 1,
                     ),
@@ -135,7 +135,7 @@ class StreamTileCollapsed extends StatelessWidget {
               onPressed: () {
                 UiUtils.showInfoItemOptions(stream, onDelete: onDelete);
               },
-              icon: Icon(Icons.more_vert, size: 20, color: Theme.of(context).iconTheme.color!.withOpacity(0.8))
+              icon: const Icon(Icons.more_vert, size: 20)
             ),
           )
         ],
@@ -206,10 +206,10 @@ class StreamTileExpanded extends StatelessWidget {
               margin: const EdgeInsets.only(right: 6, bottom: 6),
               padding: const EdgeInsets.all(3).copyWith(left: 8, right: 8),
               decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.6),
+                  color: Theme.of(context).cardColor.withOpacity(0.6),
                   borderRadius: BorderRadius.circular(100)),
               child: Text(UiUtils.timeFormatter(stream.duration!),
-                  style: tinyTextStyle(context, bold: false).copyWith(color: Colors.white, letterSpacing: 0.4, fontSize: 10)
+                  style: tinyTextStyle(context, bold: true).copyWith(color: Colors.white, letterSpacing: 0.6, fontSize: 11)
               )
           ),
         ),
@@ -220,7 +220,7 @@ class StreamTileExpanded extends StatelessWidget {
   Widget _details(context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         ChannelImage(channelUrl: stream.uploaderUrl, heroId: stream.id!, channelName: stream.uploaderName ?? '', highQuality: true, onTap: () {
           UiUtils.pushRouteAsync(context, ChannelPage(infoItem: ChannelInfoItem(
@@ -231,26 +231,24 @@ class StreamTileExpanded extends StatelessWidget {
         }),
         const SizedBox(width: 12),
         Expanded(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 2),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "${stream.name}",
-                  maxLines: 2,
-                  style: smallTextStyle(context).copyWith(fontWeight: FontWeight.w500),
-                ),
-                Text(
-                  "${stream.uploaderName}  •  ${stream.viewCount != -1 ? "${NumberFormat.compact().format(stream.viewCount)} ${Languages.of(context)!.labelViews}" : ""}"
-                      " ${stream.uploadDate == null ? "" : " ${stream.uploadDate!}"}",
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: tinyTextStyle(context, opacity: 0.8).copyWith(fontWeight: FontWeight.w500),
-                )
-              ],
-            ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "${stream.name}",
+                maxLines: 2,
+                style: smallTextStyle(context, bold: true),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                "${stream.uploaderName}  •  ${stream.viewCount != -1 ? "${NumberFormat.compact().format(stream.viewCount)} ${Languages.of(context)!.labelViews}" : ""}"
+                    " ${stream.uploadDate == null ? "" : " ${stream.uploadDate!}"}",
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: smallTextStyle(context, opacity: 0.6).copyWith(fontSize: 12),
+              )
+            ],
           ),
         ),
         Semantics(
@@ -259,8 +257,8 @@ class StreamTileExpanded extends StatelessWidget {
               onPressed: isEditable ? () {
                 UiUtils.showInfoItemOptions(stream, onDelete: onDelete);
               } : null,
-              icon: Icon(Icons.more_vert,
-                  size: 20, color: Theme.of(context).iconTheme.color!.withOpacity(0.8))),
+              icon: const Icon(Icons.more_vert,
+                  size: 18)),
         )
       ],
     );

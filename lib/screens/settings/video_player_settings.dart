@@ -17,7 +17,7 @@ class _VideoPlayerSettingsState extends State<VideoPlayerSettings> {
   Widget build(BuildContext context) {
     AppSettings appSettings = Provider.of(context);
     return ListView(
-      physics: const BouncingScrollPhysics(),
+      
       padding: const EdgeInsets.only(left: 12, right: 12, top: 12, bottom: (kToolbarHeight * 1.6)+12),
       children: [
         // Change view mode on video player suggestions

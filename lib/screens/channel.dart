@@ -15,8 +15,10 @@ import 'package:songtube/ui/tiles/stream_tile.dart';
 class ChannelPage extends StatefulWidget {
   const ChannelPage({
     required this.infoItem,
+    this.channel,
     super.key});
   final ChannelInfoItem infoItem;
+  final YoutubeChannel? channel;
 
   @override
   State<ChannelPage> createState() => _ChannelPageState();
@@ -37,7 +39,11 @@ class _ChannelPageState extends State<ChannelPage> with TickerProviderStateMixin
   bool fetchingNextPage = false;
 
   Future<void> loadChannel() async {
-    channel = await widget.infoItem.getChannel;
+    if (widget.channel == null) {
+      channel = await widget.infoItem.getChannel;
+    } else {
+      channel = widget.channel;
+    }
     setState(() {});
   }
 
@@ -77,7 +83,7 @@ class _ChannelPageState extends State<ChannelPage> with TickerProviderStateMixin
         unselectedLabelColor: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.8),
         labelStyle: smallTextStyle(context).copyWith(fontWeight: FontWeight.w800, letterSpacing: 0.4),
         unselectedLabelStyle: smallTextStyle(context).copyWith(fontWeight: FontWeight.normal, letterSpacing: 0.4),
-        physics: const BouncingScrollPhysics(),
+        
         indicatorSize: TabBarIndicatorSize.label,
         indicator: RoundedTabIndicator(color: Theme.of(context).primaryColor, height: 3, radius: 100, bottomMargin: 0),
         tabs: [
@@ -95,7 +101,7 @@ class _ChannelPageState extends State<ChannelPage> with TickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).cardColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Column(
         children: [
           AspectRatio(
@@ -124,7 +130,7 @@ class _ChannelPageState extends State<ChannelPage> with TickerProviderStateMixin
                 // Backdrop
                 Container(
                   decoration: BoxDecoration(
-                    color: Theme.of(context).cardColor.withOpacity(0.8),
+                    color: Theme.of(context).cardColor.withOpacity(0.7),
                     borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(20),
                       bottomRight: Radius.circular(20)
@@ -199,7 +205,7 @@ class _ChannelPageState extends State<ChannelPage> with TickerProviderStateMixin
         loadChannelNextPage();
       },
       child: ListView.builder(
-        physics: const BouncingScrollPhysics(),
+        
         padding: const EdgeInsets.all(12),
         itemCount: channelUploads.length,
         itemBuilder: (context, index) {

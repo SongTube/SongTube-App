@@ -129,7 +129,7 @@ class _PlaybackQualitySheetState extends State<PlaybackQualitySheet> {
         padding: const EdgeInsets.all(0),
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
-        physics: const BouncingScrollPhysics(),
+        
         itemCount: videoList.length,
         itemBuilder: (context, index) {
           return optionTile(videoList[index]);
@@ -145,7 +145,7 @@ class _PlaybackQualitySheetState extends State<PlaybackQualitySheet> {
         padding: const EdgeInsets.all(0),
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
-        physics: const BouncingScrollPhysics(),
+        
         itemCount: videoOnlyList.length,
         itemBuilder: (context, index) {
           return optionTile(videoOnlyList[index]);

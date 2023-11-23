@@ -21,7 +21,7 @@ class _DownloadSettingsState extends State<DownloadSettings> {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      physics: const BouncingScrollPhysics(),
+      
       padding: const EdgeInsets.only(left: 12, right: 12, top: 12, bottom: (kToolbarHeight * 1.6)+12),
       children: [
         // Simultaneous download count

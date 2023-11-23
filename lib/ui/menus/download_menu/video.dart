@@ -157,7 +157,7 @@ class _VideoDownloadMenuState extends State<VideoDownloadMenu> {
                 future: ExtractorHttpClient.getContentLength(widget.video.audioWithHighestQuality!.url!),
                 builder: (context, audioStreamData) {
                   return GroupedListView<VideoOnlyStream, String>(
-                    physics: const BouncingScrollPhysics(),
+                    
                     stickyHeaderBackgroundColor: Theme.of(context)
                       .scaffoldBackgroundColor,
                     elements: widget.video.videoOnlyStreams!,

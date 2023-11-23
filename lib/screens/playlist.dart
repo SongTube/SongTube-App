@@ -212,21 +212,8 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
               stream: audioHandler.mediaItem,
               builder: (context, snapshot) {
                 final playerOpened = snapshot.data != null;
-                return ListView(
-                  padding: const EdgeInsets.all(0),
-                  physics: const BouncingScrollPhysics(),
-                  children: [
-                    const SizedBox(height: 12),
-                    mediaSet.id == null
-                      ? _commonList() : _reorderableList(),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 16)
-                        .copyWith(bottom: playerOpened
-                          ? (kToolbarHeight * 1.6)+(kToolbarHeight)+34
-                          : (kToolbarHeight * 1.6)),
-                    )
-                  ],
-                );
+                return mediaSet.id == null
+                  ? _commonList(playerOpened) : _reorderableList(playerOpened);
               }
             ),
           )
@@ -298,20 +285,19 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                     child: Icon(Ionicons.shuffle_outline, color: Theme.of(context).iconTheme.color),
                   ),
                 ),
-                PaletteLoader(
-                  song: mediaSet.songs.first,
-                  builder: (context, palette) {
-                    return InkWell(
-                      onTap: () {
-                        mediaProvider.currentPlaylistName = mediaSet.name;
-                        final queue = List<MediaItem>.generate(mediaSet.songs.length, (index) {
-                          return mediaSet.songs[index].mediaItem;
-                        });
-                        mediaProvider.playSong(queue, 0);
-                      },
-                      child: Container(
+                InkWell(
+                  onTap: () {
+                    mediaProvider.currentPlaylistName = mediaSet.name;
+                    final queue = List<MediaItem>.generate(mediaSet.songs.length, (index) {
+                      return mediaSet.songs[index].mediaItem;
+                    });
+                    mediaProvider.playSong(queue, 0);
+                  },
+                  child: Consumer<MediaProvider>(
+                    builder: (context, provider, _) {
+                      return Container(
                         decoration: BoxDecoration( 
-                          color: palette?.vibrant,
+                          color: provider.currentColors?.vibrant,
                           borderRadius: BorderRadius.circular(100),
                           boxShadow: [
                             BoxShadow(
@@ -351,9 +337,9 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                                 )
                           ),
                         ),
-                      ),
-                    );
-                  }
+                      );
+                    }
+                  ),
                 ),
               ],
             ),
@@ -363,13 +349,14 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
     );
   }
 
-  Widget _commonList() {
+  Widget _commonList(bool playerOpened) {
     MediaProvider mediaProvider = Provider.of(context);
     UiProvider uiProvider = Provider.of(context);
     return ListView.builder(
-      padding: EdgeInsets.zero,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
+      padding: const EdgeInsets.only(top: 12)
+        .copyWith(bottom: playerOpened
+          ? (kToolbarHeight * 1.6)+(kToolbarHeight)+34
+          : (kToolbarHeight * 1.6)),
       itemBuilder: (context, index) {
         final song = mediaSet.songs[index];
         return SongTile(
@@ -388,14 +375,15 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
     );
   }
 
-  Widget _reorderableList() {
+  Widget _reorderableList(bool playerOpened) {
     MediaProvider mediaProvider = Provider.of(context);
     PlaylistProvider playlistProvider = Provider.of(context);
     UiProvider uiProvider = Provider.of(context);
     return ReorderableListView.builder(
-      shrinkWrap: true,
-      padding: EdgeInsets.zero,
-      physics: const NeverScrollableScrollPhysics(),
+      padding: const EdgeInsets.only(top: 12)
+        .copyWith(bottom: playerOpened
+          ? (kToolbarHeight * 1.6)+(kToolbarHeight)+34
+          : (kToolbarHeight * 1.6)),
       itemBuilder: (context, index) {
         final song = mediaSet.songs[index];
         return Row(
