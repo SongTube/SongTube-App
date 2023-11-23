@@ -3,7 +3,7 @@ class UpdateDetails {
   double versionDouble;
   String publishDate;
   String updateDetails;
-  Uri armeabi;
+  Uri arm;
   Uri arm64;
   Uri general;
   Uri x86;
@@ -14,7 +14,7 @@ class UpdateDetails {
       required this.publishDate,
       required this.updateDetails,
       required this.arm64,
-      required this.armeabi,
+      required this.arm,
       required this.general,
       required this.x86});
 
@@ -25,14 +25,14 @@ class UpdateDetails {
         publishDate: map["published_at"].split("T").first,
         updateDetails: map["body"],
         arm64: _getPlatformType(SupportedAbi.arm64, assets: map["assets"]),
-        armeabi: _getPlatformType(SupportedAbi.armeabi, assets: map["assets"]),
+        arm: _getPlatformType(SupportedAbi.arm, assets: map["assets"]),
         general: _getPlatformType(SupportedAbi.general, assets: map["assets"]),
         x86: _getPlatformType(SupportedAbi.x86, assets: map["assets"]));
   }
   @override
   String toString() {
     return "{Version: $version, publishDate: $publishDate,"
-        "\narm: $armeabi,\narm64: $arm64,\n"
+        "\narm: $arm,\narm64: $arm64,\n"
         "updateDetails: $updateDetails}";
   }
 }
@@ -40,7 +40,7 @@ class UpdateDetails {
 /// Common android abi
 enum SupportedAbi {
   arm64, //arm64-v8a
-  armeabi, //armeabi-v7a
+  arm, //armeabi-v7a
   general,
   x86,
 }
@@ -56,7 +56,7 @@ Uri _getPlatformType(SupportedAbi abi, {required List<dynamic> assets}) {
       String? abiUrl = assets[i]["browser_download_url"];
       if (!(abiUrl!.contains(SupportedAbi.x86.name) |
           abiUrl.contains(SupportedAbi.arm64.name) |
-          abiUrl.contains(SupportedAbi.armeabi.name))) {
+          abiUrl.contains("${SupportedAbi.arm.name}-"))) {
         url = abiUrl;
         return Uri.parse(url);
       }

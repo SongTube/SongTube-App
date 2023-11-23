@@ -25,10 +25,16 @@ class AppUpdateManger {
     appVersion = double.parse(packageInfo.version.replaceRange(3, 5, ""));
     appSubversion = int.parse(packageInfo.version.replaceRange(0, 4, ""));
     final latestRelease = await _getLatestRelease();
+
     if (latestRelease != null) {
       final versionDouble = latestRelease.versionDouble;
-      final subversionDouble = int.parse(latestRelease.version.split('+').first.replaceAll('${versionDouble.toString()}.', '').trim());
-      if ((appVersion < latestRelease.versionDouble) || (appVersion == versionDouble && appSubversion < subversionDouble)) {
+      final subversionDouble = int.parse(latestRelease.version
+          .split('+')
+          .first
+          .replaceAll('${versionDouble.toString()}.', '')
+          .trim());
+      if ((appVersion < versionDouble) ||
+          (appVersion == versionDouble && appSubversion < subversionDouble)) {
         showDialog(
             barrierDismissible: false,
             context: internalNavigatorKey.currentContext!,
@@ -47,7 +53,8 @@ class AppUpdateManger {
     //print("Downloading: $downloadUrl");
     var client = http.Client();
     int downloadedLength = 0;
-    final saveName = await _fileName(downloadUrl.toString());
+    final saveName = await _fileName(Uri.decodeFull(downloadUrl.toString()));
+
     final ioSink = saveName.openWrite(mode: FileMode.writeOnly);
 
     final download = await client.send(http.Request("GET", downloadUrl));
@@ -99,9 +106,9 @@ class AppUpdateManger {
   static Uri _abiToDownload(UpdateDetails details) {
     late Uri abi;
     for (var element in deviceInfo.supportedAbis) {
-      if (element!.contains(SupportedAbi.armeabi.name)) {
-        abi = details.armeabi;
-      } else if (element.contains(SupportedAbi.arm64.name)) {
+      if (element!.contains(SupportedAbi.arm64.name)) {
+        abi = details.arm64;
+      } else if (element.contains(SupportedAbi.arm.name)) {
         abi = details.arm64;
       } else if (element.contains(SupportedAbi.x86.name)) {
         abi = details.x86;
