@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:newpipeextractor_dart/models/infoItems/channel.dart';
 import 'package:provider/provider.dart';
@@ -53,31 +54,38 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 16),
           // Channels
           SizedBox(
-            height: 52,
+            height: 80,
             child: ListView.builder(
               clipBehavior: Clip.none,
-              
               padding: const EdgeInsets.only(left: 12),
               scrollDirection: Axis.horizontal,
               itemCount: contentProvider.channelSubscriptions.length+1,
               itemBuilder: (context, ind) {
                 if (ind == 0) {
-                  return Container(
-                    height: 52, width: 52,
-                    margin: const EdgeInsets.only(right: 12),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).cardColor,
-                      border: Border.all(width: 1.5, color: Theme.of(context).dividerColor.withOpacity(0.08)),
-                      borderRadius: BorderRadius.circular(100)
+                  return Bounce(
+                    duration: kAnimationShortDuration,
+                    onPressed: () {
+                      openSuggestions();
+                    },
+                    child: Container(
+                      height: 80,
+                      width: 80,
+                      margin: const EdgeInsets.only(right: 12),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).cardColor,
+                        borderRadius: BorderRadius.circular(15)
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const AppAnimatedIcon(Icons.add),
+                          Text(Languages.of(context)!.labelMore, style: tinyTextStyle(context).copyWith(letterSpacing: 0.2)),
+                        ],
+                      ),
                     ),
-                    child: IconButton(
-                      onPressed: () {
-                        openSuggestions();
-                      },
-                      icon: Icon(Ionicons.add, size: 24, color: Theme.of(context).primaryColor)),
                   );
                 } else {
                   final index = ind-1;
