@@ -25,6 +25,7 @@ import 'package:songtube/ui/components/fancy_scaffold.dart';
 import 'package:songtube/ui/components/nested_will_pop_scope.dart';
 import 'package:songtube/ui/sheets/disclaimer.dart';
 import 'package:songtube/ui/sheets/join_telegram.dart';
+import 'package:songtube/ui/ui_utils.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -63,17 +64,13 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       // Check first run
       if (appFirstRun) {
         // Show Disclaimer
-        await showModalBottomSheet(
+        await UiUtils.showModal(
           context: internalNavigatorKey.currentContext!,
-          isScrollControlled: true,
-          backgroundColor: Colors.transparent,
-          builder: (context) => const DisclaimerSheet());
+          modal: const DisclaimerSheet());
         // Show join telegram
-        await showModalBottomSheet(
+        await UiUtils.showModal(
           context: internalNavigatorKey.currentContext!,
-          isScrollControlled: true,
-          backgroundColor: Colors.transparent,
-          builder: (context) => const JoinTelegramSheet());
+          modal: const JoinTelegramSheet());
         await sharedPreferences.setBool('appFirstRun', false);
       }
       processIntent(widget.initIntent);

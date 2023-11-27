@@ -1,11 +1,12 @@
 
 import 'package:flutter/material.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/global.dart';
 import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/media_provider.dart';
-import 'package:songtube/ui/sheet_phill.dart';
+import 'package:songtube/ui/animations/animated_icon.dart';
+import 'package:songtube/ui/sheets/common_sheet.dart';
 import 'package:songtube/ui/text_styles.dart';
 
 
@@ -49,46 +50,36 @@ class _MusicEqualizerSheetState extends State<MusicEqualizerSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.all(12),
-      padding: const EdgeInsets.only(top: 12, bottom: 12),
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(15)
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Align(
-            alignment: Alignment.center,
-            child: BottomSheetPhill()),
-          const SizedBox(height: 6),
-          Padding(
-            padding: const EdgeInsets.only(left: 12),
-            child: Row(
-              children: [
-                InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.only(right: 8),
-                    child: Icon(Ionicons.arrow_back_outline),
-                  )
-                ),
-                Expanded(child: Text(Languages.of(context)!.labelEqualizer, style: textStyle(context))),
-              ],
-            ),
+    return CommonSheet(
+      useCustomScroll: false,
+      builder: (context, scrollController) {
+        return Padding(
+          padding: const EdgeInsets.all(12).copyWith(top: 0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                children: [
+                  InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: const AppAnimatedIcon(Iconsax.arrow_left, size: 22)
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(child: Text(Languages.of(context)!.labelEqualizer, style: textStyle(context, bold: false))),
+                ],
+              ),
+              const SizedBox(height: 12),
+              // Loudness Equalization Slider
+              _loudnessEqualizationWidget(),
+              const SizedBox(height: 12),
+              // Equalizer Sliders
+              _equalizerWidget(),
+            ],
           ),
-          const SizedBox(height: 8),
-          // Loudness Equalization Slider
-          _loudnessEqualizationWidget(),
-          // Equalizer Sliders
-          _equalizerWidget(),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -106,7 +97,8 @@ class _MusicEqualizerSheetState extends State<MusicEqualizerSheet> {
           onChanged: (value) {
             setState(() => loudnessEqualization.enabled = value ?? false);
             sendLoudnessGain();
-          }
+          },
+          visualDensity: const VisualDensity(vertical: -2, horizontal: -2),
         ),
         SliderTheme(
           data: sliderTheme(mediaProvider),
@@ -138,7 +130,8 @@ class _MusicEqualizerSheetState extends State<MusicEqualizerSheet> {
           onChanged: (value) {
             setState(() => equalizer.enabled = value ?? false);
             sendEqualizer();
-          }
+          },
+          visualDensity: const VisualDensity(vertical: -2, horizontal: -2),
         ),
         Row(
           mainAxisSize: MainAxisSize.max,
@@ -147,6 +140,7 @@ class _MusicEqualizerSheetState extends State<MusicEqualizerSheet> {
             return _bandSlider(index);
           })
         ),
+        const SizedBox(height: 12)
       ],
     );
   }

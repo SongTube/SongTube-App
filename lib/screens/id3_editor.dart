@@ -21,11 +21,13 @@ import 'package:songtube/main.dart';
 import 'package:songtube/providers/media_provider.dart';
 import 'package:songtube/services/music_brainz_service.dart';
 import 'package:songtube/ui/animations/animated_icon.dart';
+import 'package:songtube/ui/components/common_sheet_widget.dart';
 import 'package:songtube/ui/components/slideable_panel.dart';
 import 'package:songtube/ui/sheet_phill.dart';
 import 'package:songtube/ui/sheets/common_sheet.dart';
 import 'package:songtube/ui/text_styles.dart';
 import 'package:songtube/ui/tiles/text_field_tile.dart';
+import 'package:songtube/ui/ui_utils.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:validators/validators.dart';
 
@@ -110,40 +112,45 @@ class _ID3EditorState extends State<ID3Editor> {
     final result = await FFmpegConverter.getMediaFormat(widget.song.id);
     if (result != 'm4a') {
       // Promt the user if he agrees that his songs needs to be converted to apply tags
-      final result = await showModalBottomSheet(context: internalNavigatorKey.currentContext!, backgroundColor: Colors.transparent, isScrollControlled: true, builder: (context) {
-        return CommonSheet(
-          title: Languages.of(context)!.labelConversionRequired,
-          body: Text(Languages.of(context)!.labelConversionRequiredDescription, style: subtitleTextStyle(context, opacity: 0.8)),
-          actions: [
-            // Cancel Button
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context, false);
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(left: 12, right: 12),
-                child: Text(Languages.of(context)!.labelCancel, style: smallTextStyle(context)),
-              )
-            ),
-            // Delete button
-            Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-                borderRadius: BorderRadius.circular(100)
-              ),
-              child: TextButton(
-                onPressed: () async {
-                  Navigator.pop(context, true);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 12, right: 12),
-                  child: Text(Languages.of(context)!.labelContinue, style: smallTextStyle(context).copyWith(color: Colors.white)),
-                )
-              ),
-            ),
-          ],
-        );
-      });
+      final result = await UiUtils.showModal(
+        context: internalNavigatorKey.currentContext!,
+        modal: CommonSheet(
+          builder: (context, scrollController) {
+            return CommonSheetWidget(
+              title: Languages.of(context)!.labelConversionRequired,
+              body: Text(Languages.of(context)!.labelConversionRequiredDescription, style: subtitleTextStyle(context, opacity: 0.8)),
+              actions: [
+                // Cancel Button
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context, false);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 12, right: 12),
+                    child: Text(Languages.of(context)!.labelCancel, style: smallTextStyle(context)),
+                  )
+                ),
+                // Delete button
+                Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                    borderRadius: BorderRadius.circular(100)
+                  ),
+                  child: TextButton(
+                    onPressed: () async {
+                      Navigator.pop(context, true);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 12, right: 12),
+                      child: Text(Languages.of(context)!.labelContinue, style: smallTextStyle(context).copyWith(color: Colors.white)),
+                    )
+                  ),
+                ),
+              ],
+            );
+          },
+        )
+      );
       if (result ?? false) {
         setState(() {
           requiresConversion = true;
@@ -163,45 +170,50 @@ class _ID3EditorState extends State<ID3Editor> {
       final status = await Permission.manageExternalStorage.status;
       if (status.isDenied || status.isPermanentlyDenied) {
         // Show Bottom Sheet
-        showModalBottomSheet(context: internalNavigatorKey.currentContext!, backgroundColor: Colors.transparent, isScrollControlled: true, builder: (context) {
-          return CommonSheet(
-            title: Languages.of(context)!.labelPermissionRequired,
-            body: Text(Languages.of(context)!.labelPermissionRequiredDescription, style: subtitleTextStyle(context, opacity: 0.8)),
-            actions: [
-              // Cancel Button
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 12, right: 12),
-                  child: Text(Languages.of(context)!.labelCancel, style: smallTextStyle(context)),
-                )
-              ),
-              // Delete button
-              Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  borderRadius: BorderRadius.circular(100)
-                ),
-                child: TextButton(
-                  onPressed: () async {
-                    Navigator.pop(context);
-                    final result = await Permission.manageExternalStorage.request();
-                    if (result.isDenied || result.isPermanentlyDenied) {
+        UiUtils.showModal(
+          context: internalNavigatorKey.currentContext!,
+          modal: CommonSheet(
+            builder: (context, scrollController) {
+              return CommonSheetWidget(
+                title: Languages.of(context)!.labelPermissionRequired,
+                body: Text(Languages.of(context)!.labelPermissionRequiredDescription, style: subtitleTextStyle(context, opacity: 0.8)),
+                actions: [
+                  // Cancel Button
+                  TextButton(
+                    onPressed: () {
                       Navigator.pop(context);
-                    }
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 12, right: 12),
-                    child: Text(Languages.of(context)!.labelGrant, style: smallTextStyle(context).copyWith(color: Colors.white)),
-                  )
-                ),
-              ),
-            ],
-          );
-        });
+                      Navigator.pop(context);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 12, right: 12),
+                      child: Text(Languages.of(context)!.labelCancel, style: smallTextStyle(context)),
+                    )
+                  ),
+                  // Delete button
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor,
+                      borderRadius: BorderRadius.circular(100)
+                    ),
+                    child: TextButton(
+                      onPressed: () async {
+                        Navigator.pop(context);
+                        final result = await Permission.manageExternalStorage.request();
+                        if (result.isDenied || result.isPermanentlyDenied) {
+                          Navigator.pop(context);
+                        }
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 12, right: 12),
+                        child: Text(Languages.of(context)!.labelGrant, style: smallTextStyle(context).copyWith(color: Colors.white)),
+                      )
+                    ),
+                  ),
+                ],
+              );
+            },
+          )
+        );
       }
     }
   }
@@ -665,12 +677,17 @@ class _ID3EditorState extends State<ID3Editor> {
               // Convert song if needed
               if (requiresConversion) {
                 File song = File(widget.song.id);
-                showModalBottomSheet(context: internalNavigatorKey.currentContext!, isDismissible: false, backgroundColor: Colors.transparent, isScrollControlled: true, builder: (context) {
-                  return CommonSheet(
-                    title: Languages.of(context)!.labelConverting,
-                    body: Text(Languages.of(context)!.labelConvertingDescription, style: subtitleTextStyle(context, opacity: 0.8)),
-                  );
-                });
+                UiUtils.showModal(
+                  context: internalNavigatorKey.currentContext!,
+                  modal: CommonSheet(
+                    builder: (context, scrollController) {
+                      return CommonSheetWidget(
+                        title: Languages.of(context)!.labelConverting,
+                        body: Text(Languages.of(context)!.labelConvertingDescription, style: subtitleTextStyle(context, opacity: 0.8)),
+                      );
+                    },
+                  )
+                );
                 final result = await FFmpegConverter.convertAudio(audioFile: song.path, task: FFmpegTask.convertToAAC, checkFormat: false);
                 if (await result.exists()) {
                   final cleanedFiled = await FFmpegConverter.clearFileMetadata(result.path);
@@ -680,12 +697,17 @@ class _ID3EditorState extends State<ID3Editor> {
                 // ignore: use_build_context_synchronously
                 Navigator.pop(context);
               }
-              showModalBottomSheet(context: internalNavigatorKey.currentContext!, isDismissible: false, backgroundColor: Colors.transparent, isScrollControlled: true, builder: (context) {
-                return CommonSheet(
-                  title: Languages.of(context)!.labelWrittingTagsAndArtwork,
-                  body: Text(Languages.of(context)!.labelWrittingTagsAndArtworkDescription, style: subtitleTextStyle(context, opacity: 0.8)),
-                );
-              });
+              UiUtils.showModal(
+                context: internalNavigatorKey.currentContext!,
+                modal: CommonSheet(
+                  builder: (context, scrollController) {
+                    return CommonSheetWidget(
+                      title: Languages.of(context)!.labelWrittingTagsAndArtwork,
+                      body: Text(Languages.of(context)!.labelWrittingTagsAndArtworkDescription, style: subtitleTextStyle(context, opacity: 0.8)),
+                    );
+                  },
+                )
+              );
               await MediaUtils.writeMetadata(widget.song.id, tags);
               tagger.AudioTagger.updateMediaStore(widget.song.id);
               // ignore: use_build_context_synchronously

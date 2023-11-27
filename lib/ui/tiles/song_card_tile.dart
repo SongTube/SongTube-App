@@ -12,6 +12,7 @@ import 'package:songtube/ui/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:image_fade/image_fade.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:songtube/ui/ui_utils.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class SongCardTile extends StatefulWidget {
@@ -44,11 +45,10 @@ class _SongCardTileState extends State<SongCardTile> {
     return GestureDetector(
       onLongPress: () {
         if (!widget.song.isVideo) {
-          showModalBottomSheet(
+          UiUtils.showModal(
             context: internalNavigatorKey.currentContext!,
-            isScrollControlled: true,
-            backgroundColor: Colors.transparent,
-            builder: (context) => SongOptionsSheet(song: widget.song, isDownload: false));
+            modal: SongOptionsSheet(song: widget.song, isDownload: false)
+          );
         }
       },
       onTap: widget.onPlay,

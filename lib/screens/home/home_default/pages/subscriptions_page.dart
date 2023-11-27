@@ -12,6 +12,7 @@ import 'package:songtube/ui/info_item_renderer.dart';
 import 'package:songtube/ui/sheets/channel_suggestions.dart';
 import 'package:songtube/ui/text_styles.dart';
 import 'package:songtube/ui/tiles/channel_tile.dart';
+import 'package:songtube/ui/ui_utils.dart';
 
 class SubscriptionsPage extends StatefulWidget {
   const SubscriptionsPage({super.key});
@@ -30,11 +31,9 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
 
   // Open Channel Suggestions Sheet
   void openSuggestions() {
-    showModalBottomSheet(
+    UiUtils.showModal(
       context: internalNavigatorKey.currentContext!,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => const ChannelSuggestions());
+      modal: const ChannelSuggestions());
   }
 
   @override

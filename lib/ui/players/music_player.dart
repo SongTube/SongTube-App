@@ -236,11 +236,9 @@ class _MusicPlayerState extends State<MusicPlayer> with TickerProviderStateMixin
             onPressed: () async {
               final equalizerMap = await audioHandler.customAction('retrieveEqualizer');
               final loudnessMap = await audioHandler.customAction('retrieveLoudnessGain');
-              showModalBottomSheet(
+              UiUtils.showModal(
                 context: internalNavigatorKey.currentContext!,
-                isScrollControlled: true,
-                backgroundColor: Colors.transparent,
-                builder: (context) => MusicEqualizerSheet(equalizerMap: equalizerMap, loudnessMap: loudnessMap));
+                modal: MusicEqualizerSheet(equalizerMap: equalizerMap, loudnessMap: loudnessMap));
             },
             icon: const AppAnimatedIcon(Icons.graphic_eq_outlined)
           ),

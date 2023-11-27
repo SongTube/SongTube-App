@@ -356,9 +356,10 @@ class _VideoPlayerContentState extends State<VideoPlayerContent> with TickerProv
             icon: const AppAnimatedIcon(Ionicons.add_outline, size: 18),
             text: Languages.of(context)!.labelPlaylist,
             onTap: () {
-              showModalBottomSheet(context: internalNavigatorKey.currentContext!, backgroundColor: Colors.transparent, isScrollControlled: true, builder: (context) {
-                return AddToStreamPlaylist(stream: widget.content.videoDetails!.toStreamInfoItem());
-              });
+              UiUtils.showModal(
+                context: internalNavigatorKey.currentContext!,
+                modal: AddToStreamPlaylist(stream: widget.content.videoDetails!.toStreamInfoItem()),
+              );
             },
           ),
           // Popup Player Button
@@ -399,11 +400,9 @@ class _VideoPlayerContentState extends State<VideoPlayerContent> with TickerProv
                     text: downloading ? '${Languages.of(context)!.labelDownloading}... ${currentProgress.isNotEmpty ? '$currentProgress%' : ''}' : downloaded ? Languages.of(context)!.labelDownloaded : Languages.of(context)!.labelDownload,
                     applyColor: downloaded,
                     onTap: () {
-                      showModalBottomSheet(
+                      UiUtils.showModal(
                         context: internalNavigatorKey.currentContext!,
-                        isScrollControlled: true,
-                        backgroundColor: Colors.transparent,
-                        builder: (context) => DownloadContentMenu(content: widget.content));
+                        modal: DownloadContentMenu(content: widget.content));
                     },
                   );
                 }

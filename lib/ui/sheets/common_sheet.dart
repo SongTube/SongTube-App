@@ -1,75 +1,85 @@
-import 'package:songtube/ui/sheet_phill.dart';
-import 'package:songtube/ui/text_styles.dart';
 import 'package:flutter/material.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:songtube/internal/global.dart';
+import 'package:songtube/ui/sheet_phill.dart';
 
-class CommonSheet extends StatefulWidget {
+class CommonSheet extends StatelessWidget {
   const CommonSheet({
-    required this.title,
-    required this.body,
-    this.actions = const [],
+    required this.builder,
+    this.bottomWidget,
+    this.useCustomScroll = true,
+    this.useInitChildSize = false,
     Key? key}) : super(key: key);
-  final String title;
-  final Widget body;
-  final List<Widget> actions;
-  @override
-  State<CommonSheet> createState() => _CommonSheetState();
-}
-
-class _CommonSheetState extends State<CommonSheet> {
-
+  final Widget Function(BuildContext context, ScrollController? scrollController) builder;
+  final Widget? bottomWidget;
+  final bool useCustomScroll;
+  final bool useInitChildSize;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(20)
-      ),
-      margin: const EdgeInsets.all(12).copyWith(bottom: MediaQuery.of(context).viewInsets.bottom+12),
-      padding: const EdgeInsets.all(16).copyWith(left: 16, right: 12),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Align(
-            alignment: Alignment.center,
-            child: BottomSheetPhill()),
-          const SizedBox(height: 12),
-          Padding(
-            padding: const EdgeInsets.only(left: 8),
-            child: Row(
-              children: [
-                InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: Icon(Ionicons.arrow_back_outline, color: Theme.of(context).primaryColor),
-                  )
-                ),
-                Expanded(child: Text(widget.title, style: textStyle(context))),
-              ],
-            ),
-          ),
-          const SizedBox(height: 8),
-          Divider(indent: 12, endIndent: 12, color: Theme.of(context).dividerColor),
-          const SizedBox(height: 8),
-          widget.body,
-          if (widget.actions.isNotEmpty)
-          const SizedBox(height: 8),
-          if (widget.actions.isNotEmpty)
-          Align(
-            alignment: Alignment.centerRight,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: widget.actions,
-            ),
-          ),
-        ],
+    return GestureDetector(
+      onTap: () => Navigator.of(context).pop(),
+      child: Container(
+        color: const Color.fromRGBO(0, 0, 0, 0.001),
+        padding: const EdgeInsets.all(12).copyWith(bottom: MediaQuery.of(context).padding.bottom+MediaQuery.of(context).viewInsets.bottom+12, top: kToolbarHeight),
+        child: GestureDetector(
+          onTap: () {},
+          child: useCustomScroll ? DraggableScrollableSheet(
+            snap: true,
+            shouldCloseOnMinExtent: false,
+            initialChildSize: useInitChildSize ? 0.6 : 0.4,
+            minChildSize: 0.4,
+            maxChildSize: 0.85,
+            builder: (context, controller) {
+              return content(context, controller);
+            },
+          ) : content(context, null),
+        ),
       ),
     );
   }
+
+  Widget content(BuildContext context, ScrollController? controller) {
+    return Flex(
+      direction: Axis.vertical,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Flexible(
+          child: Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).cardColor,
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Flex(
+              mainAxisSize: MainAxisSize.min,
+              direction: Axis.vertical,
+              children: [
+                const SizedBox(height: 16),
+                BottomSheetPhill(color: Colors.grey.withOpacity(0.4)),
+                const SizedBox(height: 8),
+                Flexible(
+                  child: Container(
+                    child: builder(context, controller))
+                ),
+              ],
+            ),
+          ),
+        ),
+        AnimatedSize(
+          duration: kAnimationDuration,
+          curve: kAnimationCurve,
+          child: AnimatedContainer(
+            duration: kAnimationDuration,
+            curve: kAnimationCurve,
+            margin: EdgeInsets.only(top: bottomWidget != null ? 12 : 0),
+            height: bottomWidget != null ? kToolbarHeight*1.4 : 0,
+            decoration: BoxDecoration(
+              color: Theme.of(context).cardColor,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: bottomWidget,
+          ),
+        )
+      ],
+    );
+  }
+
 }

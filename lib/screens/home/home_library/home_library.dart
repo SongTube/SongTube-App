@@ -80,7 +80,7 @@ class _HomeLibraryState extends State<HomeLibrary> {
               padding: const EdgeInsets.only(left: 12),
               child: ListTile(
                 leading: const AppAnimatedIcon(EvaIcons.clockOutline, size: 20),
-                visualDensity: const VisualDensity(vertical: -4, horizontal: -4),
+                visualDensity: const VisualDensity(vertical: -3, horizontal: -3),
                 title: Text(Languages.of(context)!.labelWatchHistory, style: smallTextStyle(context, bold: true)),
                 subtitle: Text(Languages.of(context)!.labelWatchHistoryDescription, style: smallTextStyle(context, opacity: 0.6).copyWith(fontSize: 12)),
                 onTap: () async {
@@ -93,13 +93,14 @@ class _HomeLibraryState extends State<HomeLibrary> {
               padding: const EdgeInsets.only(left: 12),
               child: ListTile(
                 leading: const AppAnimatedIcon(EvaIcons.archiveOutline, size: 20),
-                visualDensity: const VisualDensity(vertical: -4, horizontal: -4),
+                visualDensity: const VisualDensity(vertical: -3, horizontal: -3),
                 title: Text(Languages.of(context)!.labelBackupAndRestore, style: smallTextStyle(context, bold: true)),
                 subtitle: Text(Languages.of(context)!.labelBackupAndRestoreDescription, style: smallTextStyle(context, opacity: 0.6).copyWith(fontSize: 12)),
                 onTap: () async {
-                  await showModalBottomSheet(context: internalNavigatorKey.currentContext!, backgroundColor: Colors.transparent, isScrollControlled: true, builder: (context) {
-                    return const BackupRestoreSheet();
-                  });
+                  await UiUtils.showModal(
+                    context: internalNavigatorKey.currentContext!,
+                    modal: const BackupRestoreSheet(),
+                  );
                   setState(() {});
                 },
               ),
@@ -110,7 +111,7 @@ class _HomeLibraryState extends State<HomeLibrary> {
                 onTap: () {
                   launchUrl(Uri.parse("https://paypal.me/artixo"), mode: LaunchMode.externalApplication);
                 },
-                visualDensity: const VisualDensity(vertical: -4, horizontal: -4),
+                visualDensity: const VisualDensity(vertical: -3, horizontal: -3),
                 leading: const AppAnimatedIcon(
                   EvaIcons.heartOutline,
                   size: 20,
@@ -257,7 +258,7 @@ class _HomeLibraryState extends State<HomeLibrary> {
         onTap: () {
           UiUtils.pushRouteAsync(internalNavigatorKey.currentContext!, AboutPage());
         },
-        visualDensity: const VisualDensity(vertical: -4, horizontal: -4),
+        visualDensity: const VisualDensity(vertical: -3, horizontal: -3),
         leading: const AppAnimatedIcon(
           EvaIcons.questionMarkCircleOutline,
           size: 20,

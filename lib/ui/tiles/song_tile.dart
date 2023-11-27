@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/ui/ui_utils.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class SongTile extends StatefulWidget {
@@ -22,6 +23,7 @@ class SongTile extends StatefulWidget {
     this.disablePlayingVisualizer = false,
     this.isDownload = false,
     this.disableLongPress = false,
+    this.padding,
     Key? key }) : super(key: key);
   final SongItem song;
   final Function()? onPlay;
@@ -29,6 +31,7 @@ class SongTile extends StatefulWidget {
   final bool disablePlayingVisualizer;
   final bool isDownload;
   final bool disableLongPress;
+  final EdgeInsetsGeometry? padding;
   @override
   State<SongTile> createState() => _SongTileState();
 }
@@ -65,15 +68,14 @@ class _SongTileState extends State<SongTile> {
           onTap: widget.onPlay,
           onLongPress: () {
             if (widget.onPlay != null && !widget.song.isVideo) {
-              showModalBottomSheet(
+              UiUtils.showModal(
                 context: internalNavigatorKey.currentContext!,
-                isScrollControlled: true,
-                backgroundColor: Colors.transparent,
-                builder: (context) => SongOptionsSheet(song: widget.song, isDownload: widget.isDownload));
+                modal: SongOptionsSheet(song: widget.song, isDownload: widget.isDownload)
+              );
             }
           },
           child: AnimatedContainer(
-            margin: const EdgeInsets.only(left: 12, right: 12, top: 4, bottom: 4),
+            margin: widget.padding ?? const EdgeInsets.only(left: 12, right: 12, top: 4, bottom: 4),
             duration: const Duration(milliseconds: 300),
             decoration: BoxDecoration(
               color: widget.disablePlayingBackground ? Colors.transparent : isPlaying ? dominantColor.withOpacity(0.05) : Colors.transparent,

@@ -24,6 +24,7 @@ import 'package:songtube/ui/players/video_player/player_ui/play_pause_button.dar
 import 'package:songtube/ui/players/video_player/player_ui/player_app_bar.dart';
 import 'package:songtube/ui/players/video_player/player_ui/player_progress_bar.dart';
 import 'package:songtube/ui/text_styles.dart';
+import 'package:songtube/ui/ui_utils.dart';
 import 'package:video_player/video_player.dart';
 import 'package:volume_controller/volume_controller.dart';
 import 'package:wakelock/wakelock.dart';
@@ -619,11 +620,9 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                         builder: (context, snapshot) {
                           return VideoPlayerProgressBar(
                             onPresetTap: () {
-                              showModalBottomSheet(
+                              UiUtils.showModal(
                                 context: internalNavigatorKey.currentContext!,
-                                isScrollControlled: true,
-                                backgroundColor: Colors.transparent,
-                                builder: (context) => PlaybackQualitySheet(
+                                modal: PlaybackQualitySheet(
                                   content: widget.content,
                                   currentPlaybackSpeed: controller?.value.playbackSpeed ?? 1.00,
                                   onPlaybackSpeedChange: (speed) {

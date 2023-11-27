@@ -14,6 +14,7 @@ import 'package:songtube/ui/components/custom_inkwell.dart';
 import 'package:songtube/ui/components/shimmer_container.dart';
 import 'package:songtube/ui/sheets/info_item_options.dart';
 import 'package:songtube/ui/text_styles.dart';
+import 'package:songtube/ui/ui_utils.dart';
 
 class PlaylistTileCollapsed extends StatelessWidget {
   const PlaylistTileCollapsed({
@@ -33,11 +34,9 @@ class PlaylistTileCollapsed extends StatelessWidget {
         uiProvider.fwController.open();
       } : () {},
       onLongPress: () {
-        showModalBottomSheet(
+        UiUtils.showModal(
           context: internalNavigatorKey.currentContext!,
-          isScrollControlled: true,
-          backgroundColor: Colors.transparent,
-          builder: (context) => InfoItemOptions(infoItem: playlist));
+          modal: InfoItemOptions(infoItem: playlist));
       },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -129,11 +128,9 @@ class PlaylistTileCollapsed extends StatelessWidget {
             label: Languages.of(context)!.labelMore,
             child: IconButton(
               onPressed: () {
-                showModalBottomSheet(
+                UiUtils.showModal(
                   context: internalNavigatorKey.currentContext!,
-                  isScrollControlled: true,
-                  backgroundColor: Colors.transparent,
-                  builder: (context) => InfoItemOptions(infoItem: playlist));
+                  modal: InfoItemOptions(infoItem: playlist));
               },
               icon: const Icon(Icons.more_vert, size: 20)
             ),
@@ -164,11 +161,9 @@ class PlaylistTileExpanded extends StatelessWidget {
         uiProvider.fwController.open();
       },
       onLongPress: () {
-        showModalBottomSheet(
+        UiUtils.showModal(
           context: internalNavigatorKey.currentContext!,
-          isScrollControlled: true,
-          backgroundColor: Colors.transparent,
-          builder: (context) => InfoItemOptions(infoItem: playlist));
+          modal: InfoItemOptions(infoItem: playlist));
       },
       child: Column(
         children: [
@@ -269,11 +264,9 @@ class PlaylistTileExpanded extends StatelessWidget {
           label: Languages.of(context)!.labelMore,
           child: IconButton(
             onPressed: () {
-              showModalBottomSheet(
+              UiUtils.showModal(
                 context: internalNavigatorKey.currentContext!,
-                isScrollControlled: true,
-                backgroundColor: Colors.transparent,
-                builder: (context) => InfoItemOptions(infoItem: playlist));
+                modal: InfoItemOptions(infoItem: playlist));
             },
             icon: const Icon(Icons.more_vert, size: 20)
           ),

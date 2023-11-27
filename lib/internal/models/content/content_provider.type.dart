@@ -1,0 +1,1 @@
+enum ContentProviderType { trending, suggestions, subscriptions, channel, custom }

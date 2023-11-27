@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:newpipeextractor_dart/extractors/channels.dart';
 import 'package:newpipeextractor_dart/extractors/trending.dart';
 import 'package:newpipeextractor_dart/extractors/videos.dart';
@@ -9,7 +9,11 @@ import 'package:provider/provider.dart';
 import 'package:songtube/internal/cache_utils.dart';
 import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/content_provider.dart';
+import 'package:songtube/providers/media_provider.dart';
+import 'package:songtube/ui/animations/animated_icon.dart';
+import 'package:songtube/ui/animations/fade_in.dart';
 import 'package:songtube/ui/sheet_phill.dart';
+import 'package:songtube/ui/sheets/common_sheet.dart';
 import 'package:songtube/ui/text_styles.dart';
 import 'package:songtube/ui/tiles/channel_tile.dart';
 
@@ -36,63 +40,50 @@ class _ChannelSuggestionsState extends State<ChannelSuggestions> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(20)
-      ),
-      margin: const EdgeInsets.all(12).copyWith(bottom: MediaQuery.of(context).viewInsets.bottom+12, top: kBottomNavigationBarHeight),
-      padding: const EdgeInsets.all(16).copyWith(left: 16, right: 16),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Align(
-            alignment: Alignment.center,
-            child: BottomSheetPhill()),
-          const SizedBox(height: 12),
-          Padding(
-            padding: const EdgeInsets.only(left: 8),
-            child: Row(
-              children: [
-                InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: Icon(Ionicons.arrow_back_outline, color: Theme.of(context).primaryColor),
-                  )
-                ),
-                Expanded(child: Text(Languages.of(context)!.labelChannelSuggestions, style: textStyle(context))),
-              ],
-            ),
+    return CommonSheet(
+      useCustomScroll: channels.isNotEmpty,
+      builder: (context, scrollController) {
+        return Padding(
+          padding: const EdgeInsets.all(12.0).copyWith(bottom: 0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                children: [
+                  InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: const AppAnimatedIcon(Iconsax.arrow_left, size: 22)
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(child: Text(Languages.of(context)!.labelChannelSuggestions, style: textStyle(context, bold: false))),
+                ],
+              ),
+              const SizedBox(height: 12),
+              channels.isNotEmpty ? Expanded(
+                child: _channelList(scrollController!),
+              ) : Padding(
+                padding: const EdgeInsets.only(top: 32, bottom: 32),
+                child: _loadingIndicator(),
+              )
+            ],
           ),
-          const SizedBox(height: 8),
-          Divider(indent: 12, endIndent: 12, color: Theme.of(context).dividerColor, height: 1),
-          channels.isNotEmpty ? Expanded(
-            child: _channelList(),
-          ) : Padding(
-            padding: const EdgeInsets.only(top: 32, bottom: 16),
-            child: _loadingIndicator(),
-          )
-        ],
-      ),
+        );
+      },
     );
   }
 
-  Widget _channelList() {
+  Widget _channelList(ScrollController controller) {
     return ListView.builder(
-      padding: const EdgeInsets.only(top: 16),
-      shrinkWrap: true,
-      
+      controller: controller,
+      padding: const EdgeInsets.only(top: 4),
       itemCount: channels.length,
       itemBuilder: (context, index) {
         YoutubeChannel channel = channels[index];
         return Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: ChannelTile(channel: channel.toChannelInfoItem(), size: ChannelTileSize.big, disablePaddings: true),
+          child: FadeInTransition(child: ChannelTile(channel: channel.toChannelInfoItem(), size: ChannelTileSize.big, disablePaddings: true)),
         );
       },
     );
@@ -103,14 +94,18 @@ class _ChannelSuggestionsState extends State<ChannelSuggestions> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(
-            height: 25, width: 25,
-            child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(Theme.of(context).primaryColor))
+          Consumer<MediaProvider>(
+            builder: (context, provider, _) {
+              return SizedBox(
+                height: 25, width: 25,
+                child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(provider.currentColors.vibrant))
+              );
+            }
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 12),
           Text(
             Languages.of(context)!.labelFetchingChannels,
-            style: smallTextStyle(context)
+            style: smallTextStyle(context, opacity: 0.6)
           )
         ],
       ),

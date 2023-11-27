@@ -19,6 +19,7 @@ import 'package:songtube/ui/components/custom_inkwell.dart';
 import 'package:songtube/ui/search_suggestions.dart';
 import 'package:songtube/ui/sheets/search_filters.dart';
 import 'package:songtube/ui/text_styles.dart';
+import 'package:songtube/ui/ui_utils.dart';
 
 class HomeDefault extends StatefulWidget {
   const HomeDefault({Key? key}) : super(key: key);
@@ -190,11 +191,9 @@ class _HomeDefaultState extends State<HomeDefault> with TickerProviderStateMixin
         ),
         IconButton(
           onPressed: () {
-            showModalBottomSheet(
+            UiUtils.showModal(
               context: internalNavigatorKey.currentContext!,
-              isScrollControlled: true,
-              backgroundColor: Colors.transparent,
-              builder: (context) => SearchFiltersSheet());
+              modal: SearchFiltersSheet());
           },
           icon: const AppAnimatedIcon(EvaIcons.gridOutline, size: 20)),
         const SizedBox(width: 4),

@@ -48,10 +48,23 @@ class UiUtils {
       uiProvider.fwController.open();
     }
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      // ignore: use_build_context_synchronously
       systemNavigationBarIconBrightness: Theme.of(context).brightness,
+      // ignore: use_build_context_synchronously
       statusBarIconBrightness: Theme.of(context).brightness,
     ));
     return result;
+  }
+
+  static Future<dynamic> showModal({required BuildContext context, required Widget modal, bool isScrollControlled = true, bool isDismissible = true}) async {
+    return await showModalBottomSheet(
+      context: context,
+      isDismissible: isDismissible,
+      backgroundColor: Colors.transparent,
+      barrierColor: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.8),
+      isScrollControlled: isScrollControlled,
+      builder: ((context) => modal)
+    );
   }
 
   static Color desaturateColor(Color color, {double desaturateValue = 0.8}) {
@@ -121,11 +134,9 @@ class UiUtils {
 
   // Show options for any info item
   static void showInfoItemOptions(dynamic infoItem, {Function()? onDelete}) {
-    showModalBottomSheet(
+    UiUtils.showModal(
       context: internalNavigatorKey.currentContext!,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => InfoItemOptions(infoItem: infoItem, onDelete: onDelete));
+      modal: InfoItemOptions(infoItem: infoItem, onDelete: onDelete));
   }
 
   // Format to HH:MM:SS

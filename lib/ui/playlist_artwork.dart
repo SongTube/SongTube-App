@@ -40,7 +40,7 @@ class _PlaylistArtworkState extends State<PlaylistArtwork> {
         imageFilter: ImageFilter.blur(sigmaX: widget.enableBlur ? 15 : 0, sigmaY: widget.enableBlur ? 15 : 0),
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(15),
             boxShadow: [
               BoxShadow(
                 blurRadius: widget.shadowSpread,

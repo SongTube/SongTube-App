@@ -5,9 +5,11 @@ import 'package:songtube/internal/global.dart';
 import 'package:songtube/languages/languages.dart';
 import 'package:songtube/main.dart';
 import 'package:songtube/providers/content_provider.dart';
+import 'package:songtube/ui/components/common_sheet_widget.dart';
 import 'package:songtube/ui/info_item_renderer.dart';
 import 'package:songtube/ui/sheets/common_sheet.dart';
 import 'package:songtube/ui/text_styles.dart';
+import 'package:songtube/ui/ui_utils.dart';
 
 class WatchHistoryPage extends StatefulWidget {
   const WatchHistoryPage({
@@ -56,44 +58,49 @@ class _WatchHistoryPageState extends State<WatchHistoryPage> {
                 ),
                 IconButton(
                   onPressed: () {
-                    showModalBottomSheet(context: internalNavigatorKey.currentContext!, backgroundColor: Colors.transparent, isScrollControlled: true, builder: (context) {
-                      return CommonSheet(
-                        title: Languages.of(context)!.labelClearWatchHistory,
-                        body: Text(Languages.of(context)!.labelClearWatchHistoryDescription, style: subtitleTextStyle(context, opacity: 0.8)),
-                        actions: [
-                          // Cancel Button
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 12, right: 12),
-                              child: Text(Languages.of(context)!.labelCancel, style: smallTextStyle(context)),
-                            )
-                          ),
-                          // Delete button
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColor,
-                              borderRadius: BorderRadius.circular(100)
-                            ),
-                            child: TextButton(
-                              onPressed: () {
-                                sharedPreferences.remove('watchHistory');
-                                setState(() {
-                                  listKey = GlobalKey<AnimatedListState>();
-                                });
-                                Navigator.pop(context);
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 12, right: 12),
-                                child: Text(Languages.of(context)!.labelDelete, style: smallTextStyle(context).copyWith(color: Colors.white)),
-                              )
-                            ),
-                          ),
-                        ],
-                      );
-                    });
+                    UiUtils.showModal(
+                      context: internalNavigatorKey.currentContext!,
+                      modal: CommonSheet(
+                        builder:(context, scrollController) {
+                          return CommonSheetWidget(
+                            title: Languages.of(context)!.labelClearWatchHistory,
+                            body: Text(Languages.of(context)!.labelClearWatchHistoryDescription, style: subtitleTextStyle(context, opacity: 0.8)),
+                            actions: [
+                              // Cancel Button
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 12, right: 12),
+                                  child: Text(Languages.of(context)!.labelCancel, style: smallTextStyle(context)),
+                                )
+                              ),
+                              // Delete button
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).primaryColor,
+                                  borderRadius: BorderRadius.circular(100)
+                                ),
+                                child: TextButton(
+                                  onPressed: () {
+                                    sharedPreferences.remove('watchHistory');
+                                    setState(() {
+                                      listKey = GlobalKey<AnimatedListState>();
+                                    });
+                                    Navigator.pop(context);
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 12, right: 12),
+                                    child: Text(Languages.of(context)!.labelDelete, style: smallTextStyle(context).copyWith(color: Colors.white)),
+                                  )
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      )
+                    );
                   },
                   icon: const Icon(Iconsax.video_remove),
                 )

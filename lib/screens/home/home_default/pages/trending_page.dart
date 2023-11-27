@@ -12,6 +12,7 @@ import 'package:songtube/ui/sheets/channel_suggestions.dart';
 import 'package:songtube/ui/text_styles.dart';
 import 'package:songtube/ui/tiles/channel_tile.dart';
 import 'package:songtube/ui/tiles/shimmer_tile.dart';
+import 'package:songtube/ui/ui_utils.dart';
 
 class TrendingPage extends StatelessWidget {
   const TrendingPage({super.key});
@@ -44,11 +45,9 @@ class TrendingPage extends StatelessWidget {
                   return Bounce(
                     duration: kAnimationShortDuration,
                     onPressed: () {
-                      showModalBottomSheet(
+                      UiUtils.showModal(
                         context: internalNavigatorKey.currentContext!,
-                        isScrollControlled: true,
-                        backgroundColor: Colors.transparent,
-                        builder: (context) => const ChannelSuggestions());
+                        modal: const ChannelSuggestions());
                     },
                     child: Container(
                       height: 80,

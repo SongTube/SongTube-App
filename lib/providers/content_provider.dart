@@ -15,6 +15,7 @@ import 'package:songtube/main.dart';
 import 'package:songtube/providers/ui_provider.dart';
 import 'package:songtube/services/content_service.dart';
 import 'package:songtube/ui/sheets/video_preview_sheet.dart';
+import 'package:songtube/ui/ui_utils.dart';
 
 class ContentProvider extends ChangeNotifier {
 
@@ -143,12 +144,10 @@ class ContentProvider extends ChangeNotifier {
         saveToHistory(infoItem);
       }
     } else if (infoItem is String) {
-      showModalBottomSheet(
+      UiUtils.showModal(
         context: internalNavigatorKey.currentContext!,
-        isScrollControlled: true,
-        backgroundColor: Colors.transparent,
         isDismissible: false,
-        builder: (context) => VideoPreviewSheet(url: infoItem));
+        modal: VideoPreviewSheet(url: infoItem));
       final item = await ContentService.fetchInfoItemFromUrl(infoItem);
       Navigator.pop(internalNavigatorKey.currentContext!);
       if (item is YoutubeVideo) {
