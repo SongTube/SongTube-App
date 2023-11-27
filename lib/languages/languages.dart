@@ -28,6 +28,7 @@ import 'translations/languageJa.dart';
 import 'translations/languageFr.dart';
 import 'translations/languageZh-CN.dart';
 import 'translations/languageCs.dart';
+import 'translations/languageBg.dart';
 
 /// Multi-Language Support for SongTube, for new Languages to be supported
 /// a new [File] in this project [languages/translations] folder needs to be
@@ -87,6 +88,8 @@ final supportedLanguages = <LanguageData>[
   LanguageData("ku", "Kurdish(KU)", "ku"),
   // Catalan (CA)
   LanguageData("ca", "Català", "ca"),
+  // Bulgarian (BG)
+  LanguageData("bg", "Bulgarian", "bg"),
 ];
 Future<Languages> _loadLocale(Locale locale) async {
   switch (locale.languageCode) {
@@ -161,6 +164,8 @@ Future<Languages> _loadLocale(Locale locale) async {
       return LanguageCs();
     case 'ca':
       return LanguageCa();
+    case 'bg':
+      return LanguageBg();
     // Default Language (English)
     default:
       return LanguageEn();
