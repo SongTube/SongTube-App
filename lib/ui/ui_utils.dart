@@ -29,6 +29,7 @@ class UiUtils {
     final navbarScrollStatus = uiProvider.fwController.navbarScrolledDown;
     uiProvider.fwController.lockNotificationListener = true;
     uiProvider.onAltRoute = true;
+    uiProvider.setState();
     // Set FancyScaffold position variables so that the MediaPlayer
     // removes the bottom padding with animation
     uiProvider.fwController.navbarAnimationController.animateTo(0, curve: Curves.ease);
@@ -44,6 +45,7 @@ class UiUtils {
     uiProvider.fwController.navbarAnimationController.animateTo(navbarAnimationValue, curve: Curves.ease);
     uiProvider.fwController.lockNotificationListener = false;
     uiProvider.onAltRoute = false;
+    uiProvider.setState();
     if (needsReopen) {
       uiProvider.fwController.open();
     }

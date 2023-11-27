@@ -39,7 +39,7 @@ class _MusicPlayerState extends State<MusicPlayer> with TickerProviderStateMixin
   // DownloadProvider
   DownloadProvider get downloadProvider => Provider.of<DownloadProvider>(context, listen: false);
   // UiProvider
-  UiProvider get uiProvider => Provider.of(context, listen: false);
+  UiProvider get uiProvider => Provider.of(context);
 
   // Current Song
   SongItem get song => SongItem.fromMediaItem(audioHandler.mediaItem.value!);
@@ -55,7 +55,7 @@ class _MusicPlayerState extends State<MusicPlayer> with TickerProviderStateMixin
     audioHandler.mediaItem.listen((event) {
       if (mounted) {
         setState(() {});
-        if (uiProvider.fwController.isPanelOpen && event != null) {
+        if (Provider.of(context, listen: false).fwController.isPanelOpen && event != null) {
           final iconColor = Theme.of(context).brightness == Brightness.light
             ? Brightness.light : Brightness.dark;
           final Color textColor = Provider.of<MediaProvider>(context, listen: false).currentColors.text;
