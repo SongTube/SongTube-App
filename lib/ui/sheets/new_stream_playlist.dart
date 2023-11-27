@@ -5,12 +5,10 @@ import 'package:songtube/main.dart';
 import 'package:songtube/providers/content_provider.dart';
 import 'package:songtube/ui/animations/animated_icon.dart';
 import 'package:songtube/ui/animations/animated_text.dart';
-import 'package:songtube/ui/sheet_phill.dart';
 import 'package:songtube/ui/sheets/add_to_stream_playlist.dart';
 import 'package:songtube/ui/sheets/common_sheet.dart';
 import 'package:songtube/ui/text_styles.dart';
 import 'package:flutter/material.dart';
-import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/ui/ui_utils.dart';
 

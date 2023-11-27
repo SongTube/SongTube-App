@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:ionicons/ionicons.dart';
 import 'package:newpipeextractor_dart/models/filters.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/global.dart';
@@ -8,7 +7,6 @@ import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/content_provider.dart';
 import 'package:songtube/providers/media_provider.dart';
 import 'package:songtube/ui/animations/animated_icon.dart';
-import 'package:songtube/ui/sheet_phill.dart';
 import 'package:songtube/ui/sheets/common_sheet.dart';
 import 'package:songtube/ui/text_styles.dart';
 

@@ -12,7 +12,6 @@ import 'package:songtube/providers/content_provider.dart';
 import 'package:songtube/providers/media_provider.dart';
 import 'package:songtube/ui/animations/animated_icon.dart';
 import 'package:songtube/ui/animations/fade_in.dart';
-import 'package:songtube/ui/sheet_phill.dart';
 import 'package:songtube/ui/sheets/common_sheet.dart';
 import 'package:songtube/ui/text_styles.dart';
 import 'package:songtube/ui/tiles/channel_tile.dart';
