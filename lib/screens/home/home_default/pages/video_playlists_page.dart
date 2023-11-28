@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/internal/global.dart';
 import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/content_provider.dart';
 import 'package:songtube/providers/ui_provider.dart';
@@ -26,8 +27,7 @@ class VideoPlaylistPage extends StatelessWidget {
     UiProvider uiProvider = Provider.of(context);
     final playlists = contentProvider.streamPlaylists;
     return ListView.builder(
-      padding: const EdgeInsets.only(top: 12),
-      
+      padding: EdgeInsets.only(top: appBarSize(context)+6),
       itemCount: playlists.length,
       itemBuilder: (context, index) {
         return Padding(
@@ -47,6 +47,7 @@ class VideoPlaylistPage extends StatelessWidget {
     return Center(child: Column(
       mainAxisSize: MainAxisSize.min,
       children: [
+        SizedBox(height: appBarSize(context)),
         const Icon(Ionicons.list, size: 64),
         const SizedBox(height: 8),
         Text(Languages.of(context)!.labelNoPlaylists, style: textStyle(context)),

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -77,17 +79,27 @@ class _HomeMusicState extends State<HomeMusic> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: Column(
+      body: Stack(
         children: [
-          SizedBox(height: MediaQuery.of(context).padding.top+8),
-          SizedBox(
-            height: kToolbarHeight,
-            child: _appBar()),
-          AnimatedSize(
-            duration: const Duration(milliseconds: 200),
-            child: searching ? Container(padding: const EdgeInsets.only(top: 12)) : _tabs(),
+          _body(),
+          ClipRRect(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
+              child: Container(
+                color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.97),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(height: MediaQuery.of(context).padding.top+8),
+                    SizedBox(
+                      height: kToolbarHeight,
+                      child: _appBar()),
+                    _tabs(),
+                  ],
+                ),
+              ),
+            ),
           ),
-          Expanded(child: _body()),
         ],
       ),
     );
@@ -178,6 +190,7 @@ class _HomeMusicState extends State<HomeMusic> with TickerProviderStateMixin {
         ? Center(child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              SizedBox(height: appBarSize(context)),
               CircularProgressIndicator.adaptive(valueColor: AlwaysStoppedAnimation(Theme.of(context).primaryColor)),
               const SizedBox(height: 8),
               Text(Languages.of(context)!.labelFetchingSongs, style: textStyle(context)),

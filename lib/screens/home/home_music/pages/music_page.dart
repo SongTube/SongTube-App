@@ -1,6 +1,7 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/internal/global.dart';
 import 'package:songtube/providers/media_provider.dart';
 import 'package:songtube/providers/ui_provider.dart';
 import 'package:songtube/ui/tiles/song_tile.dart';
@@ -24,8 +25,8 @@ class _MusicPageState extends State<MusicPage> with AutomaticKeepAliveClientMixi
     MediaProvider mediaProvider = Provider.of(context);
     UiProvider uiProvider = Provider.of(context);
     return CustomScrollView(
-      
       slivers: [
+        SliverToBoxAdapter(child: SizedBox(height: appBarSize(context))),
         SliverList(
           delegate: SliverChildBuilderDelegate((context, index) {
             final song = mediaProvider.songs[index];

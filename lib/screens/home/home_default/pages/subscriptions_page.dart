@@ -48,11 +48,11 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
 
   Widget _body() {
     return SingleChildScrollView(
-      
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          SizedBox(height: appBarSize(context)),
           // Channels
           SizedBox(
             height: 80,
@@ -124,6 +124,7 @@ class _SubscriptionsPageState extends State<SubscriptionsPage> {
     return Center(child: Column(
       mainAxisSize: MainAxisSize.min,
       children: [
+        SizedBox(height: appBarSize(context)),
         Container(
           height: 86, width: 86,
           decoration: BoxDecoration(

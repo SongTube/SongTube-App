@@ -2,6 +2,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/internal/global.dart';
 import 'package:songtube/internal/models/media_item_models.dart';
 import 'package:songtube/internal/models/song_item.dart';
 import 'package:songtube/languages/languages.dart';
@@ -39,6 +40,7 @@ class MusicSearchPage extends StatelessWidget {
           padding: const EdgeInsets.only(top: 0),
           child: Column(
             children: [
+              SizedBox(height: appBarSize(context)),
               // Artists
               if (artists.isNotEmpty)
               Padding(
@@ -163,6 +165,7 @@ class MusicSearchPage extends StatelessWidget {
     return Center(child: Column(
       mainAxisSize: MainAxisSize.min,
       children: [
+        SizedBox(height: appBarSize(context)),
         const Icon(Iconsax.music_square_search, size: 64),
         const SizedBox(height: 8),
         Text(Languages.of(context)!.labelNoSearchResults, style: textStyle(context)),

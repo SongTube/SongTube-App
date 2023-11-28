@@ -32,6 +32,7 @@ class TrendingPage extends StatelessWidget {
     ContentProvider contentProvider = Provider.of(context);
     return CustomScrollView(
       slivers: [
+        SliverToBoxAdapter(child: SizedBox(height: appBarSize(context))),
         SliverToBoxAdapter(
           child: SizedBox(
             height: 80,

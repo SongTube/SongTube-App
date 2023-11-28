@@ -1,6 +1,7 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/internal/global.dart';
 import 'package:songtube/internal/models/media_item_models.dart';
 import 'package:songtube/internal/models/song_item.dart';
 import 'package:songtube/languages/languages.dart';
@@ -42,6 +43,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
         if (sortedSongs.isNotEmpty) {
           return CustomScrollView(
             slivers: [
+              SliverToBoxAdapter(child: SizedBox(height: appBarSize(context))),
               // Recent Songs Cards
               SliverToBoxAdapter(
                 child: SizedBox(

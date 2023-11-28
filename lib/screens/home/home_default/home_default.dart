@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -70,36 +72,47 @@ class _HomeDefaultState extends State<HomeDefault> with TickerProviderStateMixin
     }
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: Column(
+      body: Stack(
         children: [
-          SizedBox(height: MediaQuery.of(context).padding.top+8),
-          SizedBox(
-            height: kToolbarHeight,
-            child: _appBar()),
-          _tabs(),
-          Expanded(
-            child: Stack(
-              children: [
-                // HomeScreen Body
-                _body(),
-                // Search Body, which goes on top to show search history and suggestions
-                // when the search bar is focused
-                ShowUpTransition(
-                  forward: uiProvider.homeSearchNode.hasFocus,
-                  child: SearchSuggestions(
-                    searchQuery: searchController.text,
-                    onSearch: (suggestion) {
-                      FocusScope.of(context).unfocus();
-                      setState(() {
-                        searchController.text = suggestion;
-                      });
-                      contentProvider.searchContentFor(suggestion);
-                    },
-                  ),
-                )
-              ],
-            )
+          Stack(
+            children: [
+              // HomeScreen Body
+              _body(),
+              // Search Body, which goes on top to show search history and suggestions
+              // when the search bar is focused
+              ShowUpTransition(
+                forward: uiProvider.homeSearchNode.hasFocus,
+                child: SearchSuggestions(
+                  searchQuery: searchController.text,
+                  onSearch: (suggestion) {
+                    FocusScope.of(context).unfocus();
+                    setState(() {
+                      searchController.text = suggestion;
+                    });
+                    contentProvider.searchContentFor(suggestion);
+                  },
+                ),
+              )
+            ],
           ),
+          ClipRRect(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
+              child: Container(
+                color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.97),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(height: MediaQuery.of(context).padding.top+8),
+                    SizedBox(
+                      height: kToolbarHeight,
+                      child: _appBar()),
+                    _tabs(),
+                  ],
+                ),
+              ),
+            ),
+          )
         ],
       ),
     );
@@ -115,7 +128,7 @@ class _HomeDefaultState extends State<HomeDefault> with TickerProviderStateMixin
             margin: const EdgeInsets.only(left: 12),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
-              color: Theme.of(context).cardColor
+              color: Theme.of(context).cardColor.withOpacity(1)
             ),
             child: CustomInkWell(
               borderRadius: BorderRadius.circular(15),

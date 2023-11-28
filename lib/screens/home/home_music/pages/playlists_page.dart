@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/internal/global.dart';
 import 'package:songtube/internal/models/media_playlist.dart';
 import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/playlist_provider.dart';
@@ -28,8 +29,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 300),
       child: globalPlaylists.isNotEmpty ? GridView.builder(
-        
-        padding: const EdgeInsets.only(left: 4, right: 4, bottom: (kToolbarHeight*1.5)+16),
+        padding: EdgeInsets.only(left: 4, right: 4, bottom: (kToolbarHeight*1.5)+16, top: appBarSize(context)),
         itemCount: globalPlaylists.length,
         clipBehavior: Clip.none,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, childAspectRatio: 1),
@@ -54,6 +54,7 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
     return Center(child: Column(
       mainAxisSize: MainAxisSize.min,
       children: [
+        SizedBox(height: appBarSize(context)),
         const Icon(Iconsax.music_playlist, size: 64),
         const SizedBox(height: 8),
         Text(Languages.of(context)!.labelNoPlaylistsYet, style: textStyle(context)),
