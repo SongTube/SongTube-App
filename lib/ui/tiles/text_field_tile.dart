@@ -44,7 +44,7 @@ class TextFieldTile extends StatelessWidget {
               style: BorderStyle.solid,
               color: Theme.of(context).dividerColor.withOpacity(0.1),
             ),
-            borderRadius: BorderRadius.circular(100)
+            borderRadius: BorderRadius.circular(15)
           ),
           focusedBorder: UnderlineInputBorder(
             borderSide: BorderSide(

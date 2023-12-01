@@ -8,11 +8,13 @@ class CommonSheet extends StatelessWidget {
     this.bottomWidget,
     this.useCustomScroll = true,
     this.useInitChildSize = false,
+    this.useMaxSize = false,
     Key? key}) : super(key: key);
   final Widget Function(BuildContext context, ScrollController? scrollController) builder;
   final Widget? bottomWidget;
   final bool useCustomScroll;
   final bool useInitChildSize;
+  final bool useMaxSize;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -25,8 +27,8 @@ class CommonSheet extends StatelessWidget {
           child: useCustomScroll ? DraggableScrollableSheet(
             snap: true,
             shouldCloseOnMinExtent: false,
-            initialChildSize: useInitChildSize ? 0.6 : 0.4,
-            minChildSize: 0.4,
+            initialChildSize: useMaxSize ? 0.85 : useInitChildSize ? 0.6 : 0.4,
+            minChildSize: useMaxSize ? 0.85 : 0.4,
             maxChildSize: 0.85,
             builder: (context, controller) {
               return content(context, controller);

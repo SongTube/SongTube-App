@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:songtube/ui/text_styles.dart';
 
 class FlexiblePopupItem {
 
@@ -47,11 +48,7 @@ class FlexiblePopupMenu extends StatelessWidget {
             return PopupMenuItem<String>(
               value: e.value,
               child: Text(
-                e.title, style: TextStyle(
-                  color: Theme.of(context)
-                    .textTheme.bodyText1!.color,
-                  fontSize: 14
-                ),
+                e.title, style: smallTextStyle(context)
               ),
             );
           }).toList()

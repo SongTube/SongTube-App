@@ -5,8 +5,14 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:provider/provider.dart';
+import 'package:songtube/internal/global.dart';
 import 'package:songtube/internal/models/music_brainz_record.dart';
+import 'package:songtube/languages/languages.dart';
+import 'package:songtube/providers/media_provider.dart';
 import 'package:songtube/services/music_brainz_service.dart';
+import 'package:songtube/ui/animations/animated_icon.dart';
+import 'package:songtube/ui/animations/animated_text.dart';
 import 'package:songtube/ui/animations/blue_page_route.dart';
 import 'package:songtube/ui/text_styles.dart';
 
@@ -51,13 +57,10 @@ class _TagsResultsPageState extends State<MusicBrainzSearch> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          "MusicBrainz",
-          style: textStyle(context)
-        ),
+        title: Text('MusicBrainz Search', style: textStyle(context).copyWith(color: Colors.white)),
         titleSpacing: 0,
         leading: IconButton(
-          icon: Icon(Iconsax.arrow_left, color: Theme.of(context).iconTheme.color),
+          icon: const AppAnimatedIcon(Iconsax.arrow_left, size: 22),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -65,7 +68,7 @@ class _TagsResultsPageState extends State<MusicBrainzSearch> {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
         bottom: PreferredSize(
-          preferredSize: const Size(double.infinity, 45),
+          preferredSize: const Size(double.infinity, kToolbarHeight),
           child: Container(
             margin: const EdgeInsets.only(top: 4, left: 16, right: 16),
             decoration: BoxDecoration(
@@ -75,37 +78,44 @@ class _TagsResultsPageState extends State<MusicBrainzSearch> {
             child: Row(
               children: [
                 Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 16),
-                    child: TextFormField(
-                      controller: searchController,
-                      style: subtitleTextStyle(context),
-                      decoration: const InputDecoration(
-                        enabledBorder: InputBorder.none
+                  child: TextFormField(
+                    controller: searchController,
+                      decoration: InputDecoration(
+                        prefixIcon: const AppAnimatedIcon(EvaIcons.textOutline,
+                          size: 20,
+                        ),
+                        fillColor: Theme.of(context).cardColor,
+                        border: const UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            width: 0,
+                            style: BorderStyle.none,
+                          ),
+                        ),
+                        labelText: Languages.of(context)!.labelSelectTagsfromMusicBrainz,
+                        labelStyle: smallTextStyle(context, opacity: 0.7)
                       ),
-                      onFieldSubmitted: (searchQuery) {
-                        setState(() => searchController.text = searchQuery);
-                        searchForRecords();
-                      },
-                    ),
+                      style: smallTextStyle(context),
+                    onFieldSubmitted: (searchQuery) {
+                      setState(() => searchController.text = searchQuery);
+                      searchForRecords();
+                    },
                   ),
                 ),
                 IconButton(
-                  padding: const EdgeInsets.only(right: 20, left: 12),
-                  icon: const Icon(EvaIcons.searchOutline),
+                  padding: const EdgeInsets.only(right: 16, left: 12),
+                  icon: const AppAnimatedIcon(EvaIcons.arrowIosForward, size: 20),
                   onPressed: () {
+                    FocusManager.instance.primaryFocus?.unfocus();
                     searchForRecords();
                   }
-                )
+                ),
               ],
             ),
           ),
         ),
       ),
       body: ListView.builder(
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-        addAutomaticKeepAlives: true,
-        cacheExtent: 9999999,
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
         itemCount: searchResults.length,
         itemBuilder: (context, index) {
           var record = searchResults[index];
@@ -126,7 +136,9 @@ class _TagsResultsPageState extends State<MusicBrainzSearch> {
           onTap: () async {
             var result = await Navigator.of(context).push(
               BlurPageRoute(
-                backdropColor: Colors.black.withOpacity(0.4),
+                blurStrength: 10,
+                useCardExit: true,
+                backdropColor: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.8),
                 builder: (BuildContext context) {
                   return _DataItem(record: record, image: image, index: index);
                 }
@@ -137,17 +149,17 @@ class _TagsResultsPageState extends State<MusicBrainzSearch> {
             Navigator.pop(context, result);
           },
           child: SizedBox(
-            height: 100,
+            height: kToolbarHeight*1.6,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: _artworkWidget(image, index, true),
+                  child: _musicBrainzArtwork(image, index, true),
                 ),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 16, right: 8, top: 8),
+                    padding: const EdgeInsets.only(left: 12, right: 8),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -156,21 +168,19 @@ class _TagsResultsPageState extends State<MusicBrainzSearch> {
                         Text(
                           record.title,
                           maxLines: 1,
-                          style: textStyle(context)
+                          style: smallTextStyle(context)
                         ),
-                        const SizedBox(height: 4),
                         // Album
                         Text(
                           record.album,
                           maxLines: 1,
-                          style: subtitleTextStyle(context)
+                          style: smallTextStyle(context, opacity: 0.6).copyWith(fontSize: 12)
                         ),
-                        const SizedBox(height: 4),
                         // Artist
                         Text(
                           "By ${record.artist}",
                           maxLines: 1,
-                          style: subtitleTextStyle(context)
+                          style: smallTextStyle(context, opacity: 0.6).copyWith(fontSize: 12)
                         ),
                       ],
                     ),
@@ -184,21 +194,22 @@ class _TagsResultsPageState extends State<MusicBrainzSearch> {
     );
   }
 
-  Widget _artworkWidget(AsyncSnapshot image, int index, bool fullRound) {
+  Widget _musicBrainzArtwork(AsyncSnapshot image, int index, bool fullRound) {
     return AspectRatio(
       aspectRatio: 1,
       child: AnimatedSwitcher(
         duration: const Duration(milliseconds: 250),
+        switchInCurve: kAnimationCurve,
         child: image.hasData
           ? Hero(
               tag: "artwork$index",
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
-                    topLeft: const Radius.circular(10),
-                    topRight: const Radius.circular(10),
-                    bottomLeft: fullRound ? const Radius.circular(10) : Radius.zero,
-                    bottomRight: fullRound ? const Radius.circular(10) : Radius.zero,
+                    topLeft: const Radius.circular(15),
+                    topRight: const Radius.circular(15),
+                    bottomLeft: fullRound ? const Radius.circular(15) : Radius.zero,
+                    bottomRight: fullRound ? const Radius.circular(15) : Radius.zero,
                   ),
                   image: DecorationImage(
                     fit: BoxFit.cover,
@@ -208,21 +219,44 @@ class _TagsResultsPageState extends State<MusicBrainzSearch> {
               ),
             )
           : image.connectionState == ConnectionState.done && !image.hasData
-            ? Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  image: const DecorationImage(
-                    image: AssetImage('assets/images/artworkPlaceholder_big.png')
-                  )
-                ),
-              )
-            : Center(
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation(
-                    Theme.of(context).primaryColor
+            ? Opacity(
+              opacity: 0.6,
+              child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    image: const DecorationImage(
+                      image: AssetImage('assets/images/artworkPlaceholder_big.png')
+                    )
                   ),
                 ),
-              )
+            )
+            : Consumer<MediaProvider>(
+              builder: (context, provider, _) {
+                return Container(
+                  height: kToolbarHeight*1.6,
+                  width: kToolbarHeight*1.6,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    borderRadius: BorderRadius.circular(15)
+                  ),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation(
+                            provider.currentColors.vibrant
+                          ),
+                          strokeWidth: 2,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
+            )
       ),
     );
   }
@@ -285,20 +319,23 @@ class __DataItemState extends State<_DataItem> {
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: const Radius.circular(10),
-                        topRight: const Radius.circular(10),
-                        bottomLeft: fullRound ? const Radius.circular(10) : Radius.zero,
-                        bottomRight: fullRound ? const Radius.circular(10) : Radius.zero,
+                  Hero(
+                    tag: "artwork$index",
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: const Radius.circular(15),
+                          topRight: const Radius.circular(15),
+                          bottomLeft: fullRound ? const Radius.circular(15) : Radius.zero,
+                          bottomRight: fullRound ? const Radius.circular(15) : Radius.zero,
+                        ),
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: artwork == null
+                            ? NetworkImage(image.data) as ImageProvider
+                            : FileImage(File(artwork!))
+                        )
                       ),
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: artwork == null
-                          ? NetworkImage(image.data) as ImageProvider
-                          : FileImage(File(artwork!))
-                      )
                     ),
                   ),
                   Padding(
@@ -313,7 +350,7 @@ class __DataItemState extends State<_DataItem> {
                           decoration: BoxDecoration(
                             color: Colors.black.withOpacity(0.4)
                           ),
-                          child: const Icon(EvaIcons.brushOutline,
+                          child: const Icon(EvaIcons.editOutline,
                             color: Colors.white),
                         ),
                       ),
@@ -344,6 +381,7 @@ class __DataItemState extends State<_DataItem> {
 
   @override
   Widget build(BuildContext context) {
+    MediaProvider mediaProvider = Provider.of(context);
     return Center(
       child: Container(
         margin: const EdgeInsets.all(20),
@@ -352,14 +390,14 @@ class __DataItemState extends State<_DataItem> {
           children: [
             _artworkWidget(widget.image, widget.index, false),
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(12),
               width: double.infinity,
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(10),
-                  bottomRight: Radius.circular(10)
+                  bottomLeft: Radius.circular(15),
+                  bottomRight: Radius.circular(15)
                 ),
-                color: Theme.of(context).scaffoldBackgroundColor
+                color: Theme.of(context).cardColor
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -374,7 +412,7 @@ class __DataItemState extends State<_DataItem> {
                         ),
                         TextSpan(
                           text: widget.record.title,
-                          style: subtitleTextStyle(context, opacity: 0.7)
+                          style: subtitleTextStyle(context, opacity: 0.6)
                         ),
                       ]
                     ),
@@ -388,7 +426,7 @@ class __DataItemState extends State<_DataItem> {
                         ),
                         TextSpan(
                           text: widget.record.artist,
-                          style: subtitleTextStyle(context, opacity: 0.7)
+                          style: subtitleTextStyle(context, opacity: 0.6)
                         ),
                       ]
                     ),
@@ -402,7 +440,7 @@ class __DataItemState extends State<_DataItem> {
                         ),
                         TextSpan(
                           text: widget.record.album,
-                          style: subtitleTextStyle(context, opacity: 0.7)
+                          style: subtitleTextStyle(context, opacity: 0.6)
                         ),
                       ]
                     ),
@@ -416,7 +454,7 @@ class __DataItemState extends State<_DataItem> {
                         ),
                         TextSpan(
                           text: widget.record.date,
-                          style: subtitleTextStyle(context, opacity: 0.7)
+                          style: subtitleTextStyle(context, opacity: 0.6)
                         ),
                       ]
                     ),
@@ -430,38 +468,32 @@ class __DataItemState extends State<_DataItem> {
                         ),
                         TextSpan(
                           text: widget.record.genre,
-                          style: subtitleTextStyle(context, opacity: 0.7)
+                          style: subtitleTextStyle(context, opacity: 0.6)
                         ),
                       ]
                     ),
                   ),
-                  Material(
-                    color: Colors.transparent,
-                    child: GestureDetector(
-                      onTap: widget.image.connectionState == ConnectionState.done ? () {
-                        Navigator.pop(context, widget.record..artwork = artwork ?? widget.image.data);
-                      } : null,
-                      child: Container(
-                        color: Colors.transparent,
-                        padding: const EdgeInsets.all(8),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Spacer(),
-                            Text(
-                              widget.image.connectionState == ConnectionState.done
-                                ? "Apply"
-                                : "Loading",
-                              style: subtitleTextStyle(context)
-                            ),
-                            const SizedBox(width: 8),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Material(
+                      color: Colors.transparent,
+                      child: GestureDetector(
+                        onTap: widget.image.connectionState == ConnectionState.done ? () {
+                          Navigator.pop(context, widget.record..artwork = artwork ?? widget.image.data);
+                        } : null,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: mediaProvider.currentColors.vibrant?.withOpacity(0.07),
+                            borderRadius: BorderRadius.circular(15)
+                          ),
+                          padding: const EdgeInsets.all(12),
+                          child: AnimatedText(
                             widget.image.connectionState == ConnectionState.done
-                              ? Icon(EvaIcons.checkmark,
-                                  color: Theme.of(context).primaryColor)
-                              : SizedBox(
-                                  width: 20, height: 20,
-                                  child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(Theme.of(context).primaryColor))),
-                          ],
+                              ? "Apply"
+                              : "Loading",
+                            style: subtitleTextStyle(context),
+                            auto: true,
+                          ),
                         ),
                       ),
                     ),
