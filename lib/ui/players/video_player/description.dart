@@ -55,35 +55,40 @@ class _VideoPlayerDescriptionState extends State<VideoPlayerDescription> {
                 ),
                 const SizedBox(width: 4),
                 Expanded(
-                  child: TabBar(
-                    padding: const EdgeInsets.only(left: 8),
-                    labelColor: Theme.of(context).textTheme.bodyText1!.color,
-                    unselectedLabelColor: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.8),
-                    labelStyle: subtitleTextStyle(context, bold: true),
-                    unselectedLabelStyle: subtitleTextStyle(context),
-                    
-                    indicator: RoundedTabIndicator(color: Theme.of(context).primaryColor, height: 3, radius: 100, bottomMargin: 0),
-                    tabs: [
-                      Tab(text: Languages.of(context)!.labelDescription),
-                      const Tab(text: 'Chapters'),
-                    ],
+                  child: Consumer<MediaProvider>(
+                    builder: (context, provider, _) {
+                      return TabBar(
+                        padding: const EdgeInsets.only(left: 8),
+                        labelColor: provider.currentColors.vibrant,
+                        unselectedLabelColor: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.6),
+                        labelStyle: tabBarTextStyle(context, opacity: 1),
+                        unselectedLabelStyle: tabBarTextStyle(context, bold: false),
+                        indicatorSize: TabBarIndicatorSize.label,
+                        indicatorColor: provider.currentColors.vibrant,
+                        tabs: [
+                          Tab(text: Languages.of(context)!.labelDescription),
+                          const Tab(text: 'Chapters'),
+                        ],
+                      );
+                    }
                   ),
                 ),
               ],
             ),
-            Divider(height: 1.5, color: Theme.of(context).dividerColor.withOpacity(0.08), thickness: 1.5),
+            Divider(color: Theme.of(context).dividerColor.withOpacity(0.08), height: 1, indent: 8),
             Expanded(
               child: Container(
-                margin: const EdgeInsets.only(top: 4, left: 4, right: 4),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
                   color: Theme.of(context).scaffoldBackgroundColor,
                 ),
-                padding: const EdgeInsets.all(8).copyWith(top: 2),
                 child: TabBarView(
                   children: [
                     _description(),
-                    _segments(),
+                    Padding(
+                      padding: const EdgeInsets.all(12.0).copyWith(top: 0),
+                      child: _segments(),
+                    ),
                   ],
                 ),
               ),
@@ -98,7 +103,7 @@ class _VideoPlayerDescriptionState extends State<VideoPlayerDescription> {
     final segments = widget.segments;
     return ListView.builder(
       itemCount: segments.length,
-      padding: const EdgeInsets.only(top: 8),
+      padding: const EdgeInsets.only(top: 12),
       
       itemBuilder: (context, index) {
         final segment = segments[index];
@@ -109,7 +114,8 @@ class _VideoPlayerDescriptionState extends State<VideoPlayerDescription> {
             child: Container(
               color: Colors.transparent,
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
                     height: 80,
@@ -126,20 +132,20 @@ class _VideoPlayerDescriptionState extends State<VideoPlayerDescription> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  const SizedBox(width: 12),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const SizedBox(height: 8),
                         Text(
                           segment.title ?? 'Unknown',
-                          style: smallTextStyle(context, opacity: 1, bold: true),
+                          style: smallTextStyle(context),
                           maxLines: 2,
                         ),
                         Text(
                           "${Duration(seconds: segment.startTimeSeconds).inMinutes.toString().padLeft(2, '0')}:${Duration(seconds: segment.startTimeSeconds).inSeconds.remainder(60).toString().padLeft(2, '0')}",
-                          style: smallTextStyle(context, opacity: 0.8)
+                          style: smallTextStyle(context, opacity: 0.6).copyWith(fontSize: 12)
                         ),
                       ],
                     ),
