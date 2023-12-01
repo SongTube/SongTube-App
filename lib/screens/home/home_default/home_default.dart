@@ -97,9 +97,9 @@ class _HomeDefaultState extends State<HomeDefault> with TickerProviderStateMixin
           ),
           ClipRRect(
             child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
+              filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
               child: Container(
-                color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.97),
+                color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.95),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -128,7 +128,7 @@ class _HomeDefaultState extends State<HomeDefault> with TickerProviderStateMixin
             margin: const EdgeInsets.only(left: 12),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
-              color: Theme.of(context).cardColor.withOpacity(1)
+              color: Theme.of(context).cardColor.withOpacity(0.95)
             ),
             child: CustomInkWell(
               borderRadius: BorderRadius.circular(15),

@@ -84,9 +84,9 @@ class _HomeMusicState extends State<HomeMusic> with TickerProviderStateMixin {
           _body(),
           ClipRRect(
             child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
+              filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
               child: Container(
-                color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.97),
+                color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.95),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
