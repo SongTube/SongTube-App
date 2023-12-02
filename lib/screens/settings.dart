@@ -8,7 +8,6 @@ import 'package:songtube/screens/settings/general_settings.dart';
 import 'package:songtube/screens/settings/music_player_settings.dart';
 import 'package:songtube/screens/settings/pages_settings.dart';
 import 'package:songtube/screens/settings/video_player_settings.dart';
-import 'package:songtube/ui/rounded_tab_indicator.dart';
 import 'package:songtube/ui/text_styles.dart';
 
 class ConfigurationScreen extends StatefulWidget {

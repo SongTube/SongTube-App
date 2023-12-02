@@ -44,6 +44,35 @@ class _MusicPlayerState extends State<MusicPlayer> with TickerProviderStateMixin
   // Current Song
   SongItem get song => SongItem.fromMediaItem(audioHandler.mediaItem.value!);
 
+  // Player Colors
+  Color textColor(MediaProvider provider) {
+    final palette = provider.currentColors;
+    final defaultColor = Theme.of(context).textTheme.bodyText1!.color!;
+    if (AppSettings().enableMusicPlayerBlur) {
+      if ((palette.dominant ?? Colors.black).computeLuminance() < 0.2) {
+        return palette.text;
+      } else {
+        return palette.text;
+      }
+    } else {
+      return defaultColor;
+    }
+  }
+  
+  Color dominantColor(MediaProvider provider) {
+    final palette = provider.currentColors;
+    final defaultColor = Theme.of(context).textTheme.bodyText1!.color!;
+    if (AppSettings().enableMusicPlayerBlur) {
+      if ((palette.dominant ?? Colors.black).computeLuminance() < 0.2) {
+        return palette.text;
+      } else {
+        return palette.text;
+      }
+    } else {
+      return palette.vibrant ?? palette.dominant ?? defaultColor;
+    }
+  }
+
   // Image Getter
   Future<File> getAlbumImage() async {
     await ArtworkManager.writeArtwork(song.id);
@@ -192,59 +221,63 @@ class _MusicPlayerState extends State<MusicPlayer> with TickerProviderStateMixin
   }
 
   Widget _nowPlaying() {
-    return AnimatedBuilder(
-      animation: uiProvider.fwController.animationController,
-      builder: (context, child) {
-        return SizedBox(
-          height: Tween<double>(begin: 0, end: kToolbarHeight).animate(uiProvider.fwController.animationController).value,
-          child: Opacity(
-            opacity: (uiProvider.fwController.animationController.value - (1 - uiProvider.fwController.animationController.value)) > 0
-              ? (uiProvider.fwController.animationController.value - (1 - uiProvider.fwController.animationController.value)) : 0,
-            child: Transform.translate(
-              offset: Offset(0, Tween<double>(begin: -64, end: 0).animate(uiProvider.fwController.animationController).value),
-              child: child
-            ),
-          ),
-        );
-      },
-      child: Row(
-        children: [
-          const SizedBox(width: 16),
-          // Hide Player Button
-          IconButton(
-            onPressed: () {
-              uiProvider.fwController.close();
-            },
-            icon: const AppAnimatedIcon(Icons.expand_more_rounded)
-          ),
-          // Now Playing Text
-          Expanded(
-            child: Center(
-              child: Container(
-                padding: const EdgeInsets.only(top: 8, bottom: 8, left: 32, right: 32),
-                child: AnimatedText(
-                  mediaProvider.currentPlaylistName ?? 'Unknown Playlist',
-                  maxLines: 1,
-                  textAlign: TextAlign.center,
-                  style: subtitleTextStyle(context, bold: true).copyWith(letterSpacing: 1),
+    return Consumer<MediaProvider>(
+      builder: (context, provider, _) {
+        return AnimatedBuilder(
+          animation: uiProvider.fwController.animationController,
+          builder: (context, child) {
+            return SizedBox(
+              height: Tween<double>(begin: 0, end: kToolbarHeight).animate(uiProvider.fwController.animationController).value,
+              child: Opacity(
+                opacity: (uiProvider.fwController.animationController.value - (1 - uiProvider.fwController.animationController.value)) > 0
+                  ? (uiProvider.fwController.animationController.value - (1 - uiProvider.fwController.animationController.value)) : 0,
+                child: Transform.translate(
+                  offset: Offset(0, Tween<double>(begin: -64, end: 0).animate(uiProvider.fwController.animationController).value),
+                  child: child
                 ),
               ),
-            ),
+            );
+          },
+          child: Row(
+            children: [
+              const SizedBox(width: 16),
+              // Hide Player Button
+              IconButton(
+                onPressed: () {
+                  uiProvider.fwController.close();
+                },
+                icon: AppAnimatedIcon(Icons.expand_more_rounded, color: dominantColor(provider))
+              ),
+              // Now Playing Text
+              Expanded(
+                child: Center(
+                  child: Container(
+                    padding: const EdgeInsets.only(top: 8, bottom: 8, left: 32, right: 32),
+                    child: AnimatedText(
+                      mediaProvider.currentPlaylistName ?? 'Unknown Playlist',
+                      maxLines: 1,
+                      textAlign: TextAlign.center,
+                      style: subtitleTextStyle(context, bold: true).copyWith(letterSpacing: 1).copyWith(color: textColor(provider)),
+                    ),
+                  ),
+                ),
+              ),
+              // Show Equalizer
+              IconButton(
+                onPressed: () async {
+                  final equalizerMap = await audioHandler.customAction('retrieveEqualizer');
+                  final loudnessMap = await audioHandler.customAction('retrieveLoudnessGain');
+                  UiUtils.showModal(
+                    context: internalNavigatorKey.currentContext!,
+                    modal: MusicEqualizerSheet(equalizerMap: equalizerMap, loudnessMap: loudnessMap));
+                },
+                icon: AppAnimatedIcon(Icons.graphic_eq_outlined, color: dominantColor(provider))
+              ),
+              const SizedBox(width: 16)
+            ],
           ),
-          // Show Equalizer
-          IconButton(
-            onPressed: () async {
-              final equalizerMap = await audioHandler.customAction('retrieveEqualizer');
-              final loudnessMap = await audioHandler.customAction('retrieveLoudnessGain');
-              UiUtils.showModal(
-                context: internalNavigatorKey.currentContext!,
-                modal: MusicEqualizerSheet(equalizerMap: equalizerMap, loudnessMap: loudnessMap));
-            },
-            icon: const AppAnimatedIcon(Icons.graphic_eq_outlined)
-          ),
-          const SizedBox(width: 16)
-        ],
-      ),
+        );
+      }
     );
   }
 
