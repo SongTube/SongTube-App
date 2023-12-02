@@ -22,7 +22,7 @@ class _DownloadSettingsState extends State<DownloadSettings> {
   Widget build(BuildContext context) {
     return ListView(
       
-      padding: const EdgeInsets.only(left: 12, right: 12, top: 12, bottom: (kToolbarHeight * 1.6)+12),
+      padding: const EdgeInsets.only(left: 12, right: 12, bottom: (kToolbarHeight * 1.6)+12),
       children: [
         // Simultaneous download count
         SettingTileSlider(

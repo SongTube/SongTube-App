@@ -24,7 +24,7 @@ class _MusicPlayerSettingsState extends State<MusicPlayerSettings> {
     AppSettings appSettings = Provider.of(context);
     return ListView(
       
-      padding: const EdgeInsets.only(left: 12, right: 12, top: 12, bottom: (kToolbarHeight * 1.6)+12),
+      padding: const EdgeInsets.only(left: 12, right: 12, bottom: (kToolbarHeight * 1.6)+12),
       children: [
         // Music Player blur background
         SettingTileCheckbox(

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:provider/provider.dart';
 import 'package:songtube/languages/languages.dart';
+import 'package:songtube/providers/media_provider.dart';
 import 'package:songtube/screens/settings/download_settings.dart';
 import 'package:songtube/screens/settings/general_settings.dart';
 import 'package:songtube/screens/settings/music_player_settings.dart';
@@ -36,13 +38,12 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> with TickerPr
         padding: const EdgeInsets.only(left: 8),
         controller: tabController,
         isScrollable: true,
-        labelColor: Theme.of(context).textTheme.bodyText1!.color,
-        unselectedLabelColor: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.8),
-        labelStyle: smallTextStyle(context).copyWith(fontWeight: FontWeight.w800, letterSpacing: 0.4),
-        unselectedLabelStyle: smallTextStyle(context).copyWith(fontWeight: FontWeight.normal, letterSpacing: 0.4),
-        
+        labelColor: Provider.of<MediaProvider>(context).currentColors.vibrant,
+        unselectedLabelColor: Theme.of(context).textTheme.bodyText1!.color!.withOpacity(0.6),
+        labelStyle: tabBarTextStyle(context, opacity: 1),
+        unselectedLabelStyle: tabBarTextStyle(context, bold: false),
         indicatorSize: TabBarIndicatorSize.label,
-        indicator: RoundedTabIndicator(color: Theme.of(context).primaryColor, height: 3, radius: 100, bottomMargin: 0),
+        indicatorColor: Colors.transparent,
         tabs: [
           // General Settings
           Tab(child: Text(Languages.of(context)!.labelGeneral)),
@@ -91,10 +92,8 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> with TickerPr
             ),
           ),
           _tabs(),
-          Divider(height: 1, color: Theme.of(context).dividerColor),
           Expanded(
             child: TabBarView(
-              
               controller: tabController,
               children: pages
             ),

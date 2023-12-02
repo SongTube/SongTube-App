@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:songtube/providers/media_provider.dart';
+import 'package:songtube/ui/animations/animated_icon.dart';
 import 'package:songtube/ui/components/circular_check_box.dart';
 import 'package:songtube/ui/text_styles.dart';
 
@@ -22,10 +25,10 @@ class SettingTile extends StatelessWidget {
       onTap: () => onTap(),
       leading: SizedBox(
         height: double.infinity,
-        child: Icon(leadingIcon, color: enabled ? Theme.of(context).primaryColor : Colors.grey.withOpacity(0.6)),
+        child: AppAnimatedIcon(leadingIcon, color: enabled ? null : Colors.grey.withOpacity(0.6)),
       ),
-      title: Text(title, style: subtitleTextStyle(context, bold: true).copyWith(color: enabled ? null : Colors.grey.withOpacity(0.6))),
-      subtitle: Text(subtitle, style: tinyTextStyle(context, opacity: 0.7).copyWith(color: enabled ? null : Colors.grey.withOpacity(0.6))),
+      title: Text(title, style: smallTextStyle(context).copyWith(color: enabled ? null : Colors.grey.withOpacity(0.6))),
+      subtitle: Text(subtitle, style: smallTextStyle(context, opacity: 0.6).copyWith(color: enabled ? null : Colors.grey.withOpacity(0.6), fontSize: 12)),
     );
   }
 }
@@ -52,10 +55,10 @@ class SettingTileCheckbox extends StatelessWidget {
       onTap: () => onChange(!value),
       leading: SizedBox(
         height: double.infinity,
-        child: Icon(leadingIcon, color: enabled ? Theme.of(context).primaryColor : Colors.grey.withOpacity(0.6)),
+        child: AppAnimatedIcon(leadingIcon, color: enabled ? null : Colors.grey.withOpacity(0.6)),
       ),
-      title: Text(title, style: subtitleTextStyle(context, bold: true).copyWith(color: enabled ? null : Colors.grey.withOpacity(0.6))),
-      subtitle: Text(subtitle, style: tinyTextStyle(context, opacity: 0.7).copyWith(color: enabled ? null : Colors.grey.withOpacity(0.6))),
+      title: Text(title, style: smallTextStyle(context).copyWith(color: enabled ? null : Colors.grey.withOpacity(0.6))),
+      subtitle: Text(subtitle, style: smallTextStyle(context, opacity: 0.6).copyWith(color: enabled ? null : Colors.grey.withOpacity(0.6), fontSize: 12)),
       trailing: CircularCheckbox(
         value: value,
         onChange: enabled ? onChange : null
@@ -100,10 +103,10 @@ class _SettingTileSliderState extends State<SettingTileSlider> {
         ListTile(
           leading: SizedBox(
             height: double.infinity,
-            child: Icon(widget.leadingIcon, color: Theme.of(context).primaryColor),
+            child: AppAnimatedIcon(widget.leadingIcon),
           ),
-          title: Text(widget.title, style: subtitleTextStyle(context, bold: true)),
-          subtitle: Text(widget.subtitle, style: tinyTextStyle(context, opacity: 0.7)),
+          title: Text(widget.title, style: smallTextStyle(context)),
+          subtitle: Text(widget.subtitle, style: smallTextStyle(context, opacity: 0.6).copyWith(fontSize: 12)),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -114,23 +117,24 @@ class _SettingTileSliderState extends State<SettingTileSlider> {
   }
 
   Widget _slider() {
+    MediaProvider mediaProvider = Provider.of(context);
     return SliderTheme(
       data: SliderTheme.of(context).copyWith(
-        thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6),
+        thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 5),
         overlayShape: const RoundSliderOverlayShape(overlayRadius: 10),
         valueIndicatorTextStyle: TextStyle(
-          color: Theme.of(context).primaryColor,
+          color: mediaProvider.currentColors.vibrant,
         ),
         trackHeight: 2,
       ),
       child: Row(
         children: [
-          Text((dragValue ?? widget.value).round().toString()+widget.valueTrailingString, style: tinyTextStyle(context, opacity: 0.7)),
+          Text((dragValue ?? widget.value).round().toString()+widget.valueTrailingString, style: tinyTextStyle(context, opacity: 0.6).copyWith(letterSpacing: 1)),
           const SizedBox(width: 4),
           Expanded(
             child: Slider(
-              activeColor: Theme.of(context).primaryColor,
-              inactiveColor: Theme.of(context).cardColor.withOpacity(0.06),
+              activeColor: mediaProvider.currentColors.vibrant,
+              inactiveColor: Theme.of(context).cardColor,
               min: widget.min,
               max: widget.max,
               value: dragValue ?? widget.value,
@@ -146,7 +150,7 @@ class _SettingTileSliderState extends State<SettingTileSlider> {
             ),
           ),
           const SizedBox(width: 4),
-          Text(widget.max.round().toString()+widget.valueTrailingString, style: tinyTextStyle(context, opacity: 0.7)),
+          Text(widget.max.round().toString()+widget.valueTrailingString, style: tinyTextStyle(context, opacity: 0.6).copyWith(letterSpacing: 1)),
         ],
       )
     );
@@ -177,10 +181,10 @@ class SettingTileDropdown extends StatelessWidget {
           child: ListTile(
             leading: SizedBox(
               height: double.infinity,
-              child: Icon(leadingIcon, color: Theme.of(context).primaryColor),
+              child: AppAnimatedIcon(leadingIcon),
             ),
-            title: Text(title, style: subtitleTextStyle(context, bold: true)),
-            subtitle: Text(subtitle, style: tinyTextStyle(context, opacity: 0.7)),
+            title: Text(title, style: smallTextStyle(context)),
+            subtitle: Text(subtitle, style: smallTextStyle(context, opacity: 0.6).copyWith(fontSize: 12)),
           ),
         ),
         Padding(
@@ -192,19 +196,16 @@ class SettingTileDropdown extends StatelessWidget {
   }
 
   Widget _dropdown(context) {
+    MediaProvider mediaProvider = Provider.of(context);
     return SizedBox(
       height: 30,
       child: DropdownButton<String>(
         value: currentValue,
         iconSize: 18,
+        elevation: 0,
         borderRadius: BorderRadius.circular(20),
-        iconEnabledColor: Theme.of(context).primaryColor,
-        style: TextStyle(
-          color: Theme.of(context).textTheme.bodyText1!.color,
-          fontFamily: 'Product Sans',
-          fontWeight: FontWeight.w600,
-          fontSize: 12
-        ),
+        iconEnabledColor: mediaProvider.currentColors.vibrant,
+        style: smallTextStyle(context),
         underline: Container(),
         items: items,
         onChanged: onChange

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:roundcheckbox/roundcheckbox.dart';
+import 'package:songtube/providers/media_provider.dart';
 
 class CircularCheckbox extends StatelessWidget {
   const CircularCheckbox({
@@ -10,10 +12,11 @@ class CircularCheckbox extends StatelessWidget {
   final Function(bool)? onChange;
   @override
   Widget build(BuildContext context) {
+    MediaProvider mediaProvider = Provider.of(context);
     return RoundCheckBox(
       size: 24,
       isRound: true,
-      checkedColor: Theme.of(context).primaryColor,
+      checkedColor: mediaProvider.currentColors.vibrant,
       checkedWidget: const Icon(Icons.check, size: 14, color: Colors.white),
       borderColor: Theme.of(context).dividerColor,
       border: Border.all(width: 0.5, color: Theme.of(context).dividerColor),
