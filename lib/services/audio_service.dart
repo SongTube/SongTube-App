@@ -1,9 +1,12 @@
+import 'dart:io';
+import 'dart:math';
+
 import 'package:audio_service/audio_service.dart';
-import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:newpipeextractor_dart/extractors/videos.dart';
 import 'package:newpipeextractor_dart/models/videoInfo.dart';
 import 'package:newpipeextractor_dart/newpipeextractor_dart.dart';
+import 'package:songtube/internal/artwork_manager.dart';
 
 MediaControl playControl = const MediaControl(
   androidIcon: 'drawable/ic_play_arrow',
@@ -34,33 +37,29 @@ MediaControl stopControl = const MediaControl(
 class StAudioHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
 
   StAudioHandler() {
-    _loadEmptyPlaylist();
     _notifyAudioHandlerAboutPlaybackEvents();
-    _listenForDurationChanges();
-    _listenForCurrentSongIndexChanges();
+    _handlePlaybackCompleted();
   }
 
   // Video Player Background Playback stuff
   bool backgroundPlaybackEnabled = false;
 
+  // Current Index
+  int? _index;
+  bool get hasNext => _index != null && (_index! + 1 < queue.value.length);
+  bool get hasPrevious => _index != null && (_index! > 0);
+
+  // Enable Repeat & Random
+  bool enableRepeat = false;
+  bool enableRandom = false;
+
   late final _player = AudioPlayer(audioPipeline: AudioPipeline(
     androidAudioEffects: [ equalizer, loudnessEnhancer ]));
-  final _playlist = ConcatenatingAudioSource(children: []);
   final VideoExtractor extractor = VideoExtractor();
 
   // Equalizer
   AndroidEqualizer equalizer = AndroidEqualizer();
   AndroidLoudnessEnhancer loudnessEnhancer = AndroidLoudnessEnhancer();
-
-  Future<void> _loadEmptyPlaylist() async {
-    try {
-      await _player.setAudioSource(_playlist);
-    } catch (e) {
-      if (kDebugMode) {
-        print("Error: $e");
-      }
-    }
-  }
 
   void _notifyAudioHandlerAboutPlaybackEvents() {
     _player.playbackEventStream.listen((PlaybackEvent event) {
@@ -90,48 +89,37 @@ class StAudioHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
         updatePosition: _player.position,
         bufferedPosition: _player.bufferedPosition,
         speed: _player.speed,
-        queueIndex: event.currentIndex,
+        queueIndex: _index,
       ));
     });
   }
 
-  UriAudioSource _createAudioSource(MediaItem mediaItem) {
-    return AudioSource.uri(
-      !backgroundPlaybackEnabled
-        ? Uri(path: mediaItem.id)
-        : Uri.parse(mediaItem.id),
-      tag: MediaItem(
-        id: mediaItem.id,
-        title: mediaItem.title,
-        artist: mediaItem.artist,
-        album: mediaItem.album,
-        genre: mediaItem.genre,
-        duration: mediaItem.duration,
-        artUri: !backgroundPlaybackEnabled
-          ? Uri.parse('file://${mediaItem.artUri.toString()}')
-          : mediaItem.artUri,
-        extras: mediaItem.extras,
-      )
-    );
+  Future<UriAudioSource> _createAudioSource(MediaItem mediaItem) async {
+    File? artwork;
+    try {
+      artwork = await ArtworkManager.writeArtwork(mediaItem.id);
+    } catch (_) {}
+    final item = mediaItem.copyWith(artUri: artwork != null && !backgroundPlaybackEnabled ? Uri.parse('file://${artwork.path}') : mediaItem.artUri);
+    return AudioSource.file(mediaItem.id, tag: item);
   }
 
-  void _listenForDurationChanges() {
-    _player.durationStream.listen((duration) {
-      var index = _player.currentIndex;
-      if (index != null && _player.audioSource!.sequence.isNotEmpty) {
-        final oldMediaItem = queue.value[index];
-        final newMediaItem = oldMediaItem.copyWith(duration: duration);
-        mediaItem.add(newMediaItem);
+  void _handlePlaybackCompleted() {
+    _player.processingStateStream.listen((event) async {
+      if (event == ProcessingState.completed) {
+        if (enableRandom || enableRepeat) {
+          if (enableRepeat) {
+            await _player.seek(Duration.zero);
+            await play();
+            return;
+          }
+          if (enableRandom) {
+            final randomIndex = Random().nextInt(queue.value.length-1);
+            skipToQueueItem(randomIndex);
+          }
+        } else {
+          skipToNext();
+        }
       }
-    });
-  }
-
-  void _listenForCurrentSongIndexChanges() {
-    _player.currentIndexStream.listen((index) {
-      if (index == null || queue.value.isEmpty) {
-        return;
-      }
-      mediaItem.add(queue.value[index]);
     });
   }
 
@@ -143,8 +131,8 @@ class StAudioHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
 
   @override
   Future<void> stop() async {
-    await _player.stop();
     mediaItem.add(null);
+    await _player.stop();
     return super.stop();
   }
 
@@ -153,37 +141,55 @@ class StAudioHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
 
   @override
   Future<void> skipToNext() async {
-    _player.seekToNext();
+    if (hasNext) {
+      skip(_index!+1);
+    }
   }
 
   @override
   Future<void> skipToPrevious() async {
-    _player.seekToPrevious();
+    if (hasPrevious) {
+      skip(_index!-1);
+    }
+  }
+
+  Future<void> skip(int index) async {
+    try {    // Load next item
+      _index = index;
+      final audioSource = await _createAudioSource(queue.value[_index!]);
+      mediaItem.add(audioSource.tag);
+      await _player.setAudioSource(audioSource);
+      await play();
+    } catch (_) {}
   }
 
   @override
   Future<void> skipToQueueItem(int index) async {
-    if (index < 0 || index >= queue.value.length) return;
-    _player.seek(Duration.zero, index: index);
-    play();
+    try {
+      if (index < 0 || index >= queue.value.length) return;
+      // Load next item
+      _index = index;
+      final audioSource = await _createAudioSource(queue.value[_index!]);
+      mediaItem.add(audioSource.tag);
+      await _player.setAudioSource(audioSource);
+      await play();
+    } catch (_) {}
   }
 
   @override
   Future<void> setShuffleMode(AudioServiceShuffleMode shuffleMode) async {
     if (shuffleMode == AudioServiceShuffleMode.none) {
-      _player.setShuffleModeEnabled(false);
+      enableRandom = false;
     } else {
-      _player.setShuffleModeEnabled(true);
+      enableRandom = true;
     }
   }
 
   @override
   Future<void> updateQueue(List<MediaItem> newQueue) async {
-    queue.add(newQueue);
-    final audioSource = newQueue.map(_createAudioSource);
-    await _playlist.clear();
-    await _playlist.addAll(audioSource.toList());
-    await _player.setAudioSource(_playlist);
+    try {
+      queue.add(newQueue);
+    } catch (_) {}
     return await super.updateQueue(newQueue);
   }
 
@@ -265,7 +271,7 @@ class StAudioHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
       );
       // Resume Playback
       await stop();
-      await _player.setAudioSource(_createAudioSource(audioSource), initialPosition: position, preload: false);
+      await _player.setAudioSource(await _createAudioSource(audioSource), initialPosition: position, preload: false);
       mediaItem.add(audioSource);
       play();
     }

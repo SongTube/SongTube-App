@@ -55,7 +55,7 @@ class _MusicPlayerState extends State<MusicPlayer> with TickerProviderStateMixin
     audioHandler.mediaItem.listen((event) {
       if (mounted) {
         setState(() {});
-        if (Provider.of(context, listen: false).fwController.isPanelOpen && event != null) {
+        if (Provider.of<UiProvider>(context, listen: false).fwController.isPanelOpen && event != null) {
           final iconColor = Theme.of(context).brightness == Brightness.light
             ? Brightness.light : Brightness.dark;
           final Color textColor = Provider.of<MediaProvider>(context, listen: false).currentColors.text;

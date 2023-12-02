@@ -109,17 +109,19 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           print('App resumed');
           if (AppSettings.enableBackgroundPlayback) {
             ContentProvider contentProvider = Provider.of(context, listen: false);
-            audioHandler.customAction('stopBackgroundPlayback').then((data) {
-              final controller = contentProvider.playingContent!.videoPlayerController.videoPlayerController!;
-              final position = Duration(seconds: data['position']);
-              if (position == controller.value.position) {
-                controller.play();
-              } else {
-                controller.seekTo(position).then((_) {
-                  controller.play();
-                });
-              }}
-            );
+            if (contentProvider.playingContent?.videoPlayerController.videoPlayerController != null) {
+              audioHandler.customAction('stopBackgroundPlayback').then((data) {
+                final controller = contentProvider.playingContent?.videoPlayerController.videoPlayerController;
+                final position = Duration(seconds: data['position']);
+                if (position == controller?.value.position) {
+                  controller?.play();
+                } else {
+                  controller?.seekTo(position).then((_) {
+                    controller.play();
+                  });
+                }}
+              );
+            }
           }
         }
         ContentProvider contentProvider = Provider.of(context, listen: false);

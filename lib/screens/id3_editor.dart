@@ -680,6 +680,7 @@ class _ID3EditorState extends State<ID3Editor> {
                 UiUtils.showModal(
                   context: internalNavigatorKey.currentContext!,
                   modal: CommonSheet(
+                    useCustomScroll: false,
                     builder: (context, scrollController) {
                       return CommonSheetWidget(
                         title: Languages.of(context)!.labelConverting,
@@ -700,6 +701,7 @@ class _ID3EditorState extends State<ID3Editor> {
               UiUtils.showModal(
                 context: internalNavigatorKey.currentContext!,
                 modal: CommonSheet(
+                  useCustomScroll: false,
                   builder: (context, scrollController) {
                     return CommonSheetWidget(
                       title: Languages.of(context)!.labelWrittingTagsAndArtwork,

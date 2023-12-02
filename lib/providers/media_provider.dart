@@ -122,7 +122,8 @@ class MediaProvider extends ChangeNotifier {
   }
 
   Future<void> playSong(List<MediaItem> queue, int index) async {
-    if (listEquals(queue, audioHandler.queue.value) == false) {
+    final equals = listEquals(queue, audioHandler.queue.value);
+    if (equals == false) {
       await audioHandler.updateQueue(queue);
     }
     await audioHandler.skipToQueueItem(index);

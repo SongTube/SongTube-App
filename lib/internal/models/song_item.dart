@@ -58,9 +58,6 @@ class SongItem {
   /// Video Id
   final String? videoId;
 
-  /// Thumbnail Uri for MediaPlayer
-  Uri? get thumbnailUri => thumbnailPath != null ? Uri.parse(thumbnailPath!.path) : null;
-
   // Is Video Check
   bool get isVideo {
     final format = id.split('/').last.split('.').last;
@@ -79,13 +76,13 @@ class SongItem {
     artist: artist,
     genre: genre,
     duration: duration,
-    artUri: thumbnailUri,
+    artUri: Uri.parse('file://${thumbnailFile(id).path}'),
     playable: playable,
     displayTitle: displayTitle,
     displaySubtitle: displaySubtitle,
     displayDescription: displayDescription,
     extras: {
-      'artwork': artworkPath?.path,
+      'artwork': artworkFile(id).path,
       'modelId': modelId,
     }
   );

@@ -78,12 +78,14 @@ class ArtworkManager {
 
   // Writes the default SongTube thumbnail to any given song file
   static Future<void> writeDefaultThumbnail(String filePath) async {
-    if ((await thumbnailFile(filePath).exists())) {
-      await thumbnailFile(filePath).delete();
-      await thumbnailFile(filePath).create();
-    } else {
-      await thumbnailFile(filePath).create();
-    }
+    try {
+      if ((await thumbnailFile(filePath).exists())) {
+        await thumbnailFile(filePath).delete();
+        await thumbnailFile(filePath).create();
+      } else {
+        await thumbnailFile(filePath).create();
+      }
+    } catch (_) {}
     final data = await rootBundle.load('assets/images/artworkPlaceholder_big.png');
     final bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
     await thumbnailFile(filePath).writeAsBytes(bytes);
