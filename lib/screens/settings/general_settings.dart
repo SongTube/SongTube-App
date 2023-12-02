@@ -1,3 +1,4 @@
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -72,15 +73,28 @@ class _GeneralSettingsState extends State<GeneralSettings> {
           onChange: (_) => updateThemeMode(system: true),
           value: uiProvider.themeMode == ThemeMode.system,
         ),
+        if (uiProvider.themeMode != ThemeMode.system)
         const SizedBox(height: 12),
         // Dark mode
         SettingTileCheckbox(
+          show: uiProvider.themeMode != ThemeMode.system,
           leadingIcon: LineIcons.moon,
           title: Languages.of(context)!.labelEnableDarkTheme,
           subtitle: Languages.of(context)!.labelEnableDarkThemeJustification,
           onChange: (_) => updateThemeMode(),
           value: uiProvider.themeMode == ThemeMode.dark,
           enabled: uiProvider.themeMode != ThemeMode.system,
+        ),
+        const SizedBox(height: 12),
+        SettingTileCheckbox(
+          leadingIcon: EvaIcons.colorPaletteOutline,
+          title: 'Dynamic Colors',
+          subtitle: 'Enable or disable accent color based on video or song colors palette',
+          onChange: (_) {
+            AppSettings.enableDynamicColors = !AppSettings.enableDynamicColors;
+            mediaProvider.updateState();
+          },
+          value: AppSettings.enableDynamicColors,
         ),
         const SizedBox(height: 12),
         // App's font family

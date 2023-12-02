@@ -10,6 +10,7 @@ import 'package:songtube/internal/global.dart';
 import 'package:songtube/internal/media_utils.dart';
 import 'package:songtube/internal/models/colors_palette.dart';
 import 'package:songtube/internal/models/song_item.dart';
+import 'package:songtube/providers/app_settings.dart';
 
 class MediaProvider extends ChangeNotifier {
 
@@ -20,8 +21,9 @@ class MediaProvider extends ChangeNotifier {
   }
 
   // Current Colors Palette
+  ColorsPalette defaultColors = ColorsPalette(dominant: accentColor, vibrant: accentColor);
   ColorsPalette _currentColors = ColorsPalette(dominant: accentColor, vibrant: accentColor);
-  ColorsPalette get currentColors => _currentColors;
+  ColorsPalette get currentColors => AppSettings.enableDynamicColors ? _currentColors : defaultColors;
   set currentColors(ColorsPalette colors) {
     if (colors != _currentColors) {
       _currentColors = colors;

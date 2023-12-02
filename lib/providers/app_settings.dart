@@ -61,6 +61,9 @@ const videoSuggestionsViewModeKey = 'videoSuggestionsViewMode';
 // Hide appbar when video player is expanded
 const hideSystemAppBarOnVideoPlayerExpandedKey = 'hideSystemAppBarOnVideoPlayerExpanded';
 
+// Dynamic Colors
+const enableDynamicColorsKey = 'enableDynamicColorsKey';
+
 class AppSettings extends ChangeNotifier {
 
   // Initialize App Settings
@@ -76,6 +79,12 @@ class AppSettings extends ChangeNotifier {
       final defaultVideoDirectory = await AndroidPathProvider.moviesPath;
       await sharedPreferences.setString(videoDirectoryKey, defaultVideoDirectory);
     }
+  }
+
+  // Dynamic Colors
+  static bool get enableDynamicColors => sharedPreferences.getBool(enableDynamicColorsKey) ?? true;
+  static set enableDynamicColors(bool value) {
+    sharedPreferences.setBool(enableDynamicColorsKey, value);
   }
 
   // Home Screen Settings

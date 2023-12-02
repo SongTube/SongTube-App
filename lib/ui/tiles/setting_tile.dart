@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/internal/global.dart';
 import 'package:songtube/providers/media_provider.dart';
 import 'package:songtube/ui/animations/animated_icon.dart';
 import 'package:songtube/ui/components/circular_check_box.dart';
@@ -41,6 +42,7 @@ class SettingTileCheckbox extends StatelessWidget {
     required this.value,
     required this.onChange,
     this.enabled = true,
+    this.show = true,
     super.key});
   final String title;
   final String subtitle;
@@ -48,20 +50,33 @@ class SettingTileCheckbox extends StatelessWidget {
   final bool value;
   final Function(bool) onChange;
   final bool enabled;
+  final bool show;
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      enabled: enabled,
-      onTap: () => onChange(!value),
-      leading: SizedBox(
-        height: double.infinity,
-        child: AppAnimatedIcon(leadingIcon, color: enabled ? null : Colors.grey.withOpacity(0.6)),
-      ),
-      title: Text(title, style: smallTextStyle(context).copyWith(color: enabled ? null : Colors.grey.withOpacity(0.6))),
-      subtitle: Text(subtitle, style: smallTextStyle(context, opacity: 0.6).copyWith(color: enabled ? null : Colors.grey.withOpacity(0.6), fontSize: 12)),
-      trailing: CircularCheckbox(
-        value: value,
-        onChange: enabled ? onChange : null
+    return AnimatedSize(
+      duration: kAnimationDuration,
+      curve: kAnimationCurve,
+      child: SizedBox(
+        height: show ? null : 0,
+        child: AnimatedOpacity(
+          opacity: show ? 1 : 0,
+          duration: kAnimationShortDuration,
+          curve: kAnimationCurve,
+          child: ListTile(
+            enabled: enabled,
+            onTap: () => onChange(!value),
+            leading: SizedBox(
+              height: double.infinity,
+              child: AppAnimatedIcon(leadingIcon, color: enabled ? null : Colors.grey.withOpacity(0.6)),
+            ),
+            title: Text(title, style: smallTextStyle(context).copyWith(color: enabled ? null : Colors.grey.withOpacity(0.6))),
+            subtitle: Text(subtitle, style: smallTextStyle(context, opacity: 0.6).copyWith(color: enabled ? null : Colors.grey.withOpacity(0.6), fontSize: 12)),
+            trailing: CircularCheckbox(
+              value: value,
+              onChange: enabled ? onChange : null
+            ),
+          ),
+        ),
       ),
     );
   }
