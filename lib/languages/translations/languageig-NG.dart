@@ -365,359 +365,359 @@ class LanguageIgbo extends Languages {
 
   // Other Translations
   @override
-  String get labelNoFavoriteVideos => 'No Favorite Videos';
+  String get labelNoFavoriteVideos => 'Enweghị vidiyo m kasị amasị';
   @override
-  String get labelNoFavoriteVideosDescription => 'Search for videos and save them as favorites. They will appear here';
+  String get labelNoFavoriteVideosDescription => 'I Chọọ vidiyo wee chekwaa ha ka ọkacha mmasị. Ha ga-apụta ebe a';
   @override
-  String get labelNoSubscriptions => 'No Subscriptions';
+  String get labelNoSubscriptions => 'Enweghị ndebanye aha';
   @override
-  String get labelNoSubscriptionsDescription => 'Tap the button above to show suggested Channels!';
+  String get labelNoSubscriptionsDescription => 'Kpa bọtịnụ dị elu iji gosi ọwa atụ aro!';
   @override
-  String get labelNoPlaylists => 'No Playlists';
+  String get labelNoPlaylists => 'Enweghị ndetu egwu';
   @override
-  String get labelNoPlaylistsDescription => 'Search for videos or playlists and save them. They will appear here';
+  String get labelNoPlaylistsDescription => 'I Chọọ vidiyo ma ọ bụ ndetu egwu egwu wee chekwaa ha. Ha ga-apụta ebe a';
   @override
-  String get labelSearch => 'Search';
+  String get labelSearch => 'Chọ';
   @override
-  String get labelSubscriptions => 'Subscriptions';
+  String get labelSubscriptions => 'Ndebanye aha';
   @override
-  String get labelNoDownloadsCanceled => 'No Downloads Canceled';
+  String get labelNoDownloadsCanceled => 'Enweghị nbudata ọ bụla akagburu';
   @override
-  String get labelNoDownloadsCanceledDescription => 'Good news! But if you cancel or something goes wrong with the download, you can check from here';
+  String get labelNoDownloadsCanceledDescription => ' Ozi ọma! Mana ọ bụrụ na ịkagbu ma ọ bụ ihe na-aga nke ọma na nbudata ahụ, ị nwere ike ịlele ebe a';
   @override
-  String get labelNoDownloadsYet => 'No Downloads Yet';
+  String get labelNoDownloadsYet => 'Enweghị nbudata ma';
   @override
-  String get labelNoDownloadsYetDescription => 'Go home, search for something to download or wait for the queue!';
+  String get labelNoDownloadsYetDescription => 'Gaa ụlọ, chọọ ihe ị ga-ebudata ma ọ bụ chere ahịrị!';
   @override
-  String get labelYourQueueIsEmpty => 'Your queue is empty';
+  String get labelYourQueueIsEmpty => 'Ọrụ gị adighi elu ahịrị ọzọ';
   @override
-  String get labelYourQueueIsEmptyDescription => 'Go home and search for something to download!';
+  String get labelYourQueueIsEmptyDescription => 'Ga ụlọ chọọ ihe ị ga-ebudata!';
   @override
-  String get labelQueue => 'Queue';
+  String get labelQueue => 'kwụ ahịrị';
   @override
-  String get labelSearchDownloads => 'Search Downloads';
+  String get labelSearchDownloads => 'Chọ nbudata';
   @override
-  String get labelWatchHistory => 'Watch History';
+  String get labelWatchHistory => 'Lelee akụkọ ihe mere eme';
   @override
-  String get labelWatchHistoryDescription => 'Look at which videos you have seen';
+  String get labelWatchHistoryDescription => 'Lee vidiyo ndị ị hụrụ';
   @override
-  String get labelBackupAndRestore => 'Backup & Restore';
+  String get labelBackupAndRestore => 'Ndabere & weghachite';
   @override
-  String get labelBackupAndRestoreDescription => 'Save or resture all of your local data';
+  String get labelBackupAndRestoreDescription => 'Chekwaa ma ọ bụ weghachite data mpaghara gị niile';
   @override
-  String get labelSongtubeLink => 'SongTube Link';
+  String get labelSongtubeLink => 'Njikọ SongTube';
   @override
-  String get labelSongtubeLinkDescription => 'Allow SongTube browser extension to detect this device, long press to learn more';
+  String get labelSongtubeLinkDescription => 'Kwe ka ndọtị ihe nchọgharị SongTube chọpụta ngwaọrụ a, pịa ogologo ka ịmụtakwu';
   @override
-  String get labelSupportDevelopment => 'Support Development';
+  String get labelSupportDevelopment => 'Nkwado Mmepe';
   @override
-  String get labelSocialLinks => 'Social Links';
+  String get labelSocialLinks => 'njikọ mmekọrịta';
   @override
-  String get labelSeeMore => 'See more';
+  String get labelSeeMore => 'Lee ihe ọzọ';
   @override
-  String get labelMostPlayed => 'Most played';
+  String get labelMostPlayed => 'Egwu kacha egwu';
   @override
-  String get labelNoPlaylistsYet => 'No Playlists Yet';
+  String get labelNoPlaylistsYet => 'Enweghị listi ọkpụkpọ';
   @override
-  String get labelNoPlaylistsYetDescription => 'You can create a playlist from your recents, music, albums or artists';
+  String get labelNoPlaylistsYetDescription => 'Ị nwere ike ịmepụta listi ọkpụkpọ site na nso nso a, egwu, ọba ma ọ bụ ndị na-ese ihe';
   @override
-  String get labelNoSearchResults => 'No search results';
+  String get labelNoSearchResults => 'Ọnweghị rịzọlt ọchụchọ';
   @override
-  String get labelSongResults => 'Song results';
+  String get labelSongResults => 'Nsonaazụ egwu';
   @override
-  String get labelAlbumResults => 'Album results';
+  String get labelAlbumResults => 'Nsonaazụ album';
   @override
-  String get labelArtistResults => 'Artist results';
+  String get labelArtistResults => 'Rịzọlt ndị nka';
   @override
-  String get labelSearchAnything => 'Search anything';
+  String get labelSearchAnything => 'Chọọ ihe ọ bụla';
   @override
-  String get labelRecents => 'Recents';
+  String get labelRecents => 'Oge na-adịbeghị anya';
   @override
-  String get labelFetchingSongs => 'Fetching Songs';
+  String get labelFetchingSongs => 'Egwu Egwu';
   @override
-  String get labelPleaseWaitAMoment => 'Please wait a moment';
+  String get labelPleaseWaitAMoment => 'Biko chere obere oge';
   @override
-  String get labelWeAreDone => 'We are done';
+  String get labelWeAreDone => 'Biko chere obere oge';
   @override
-  String get labelEnjoyTheApp => 'Enjoy the\nApp';
+  String get labelEnjoyTheApp => 'Nwee anụrị\n Ngwa';
   @override
-  String get labelSongtubeIsBackDescription => 'SongTube is back with a cleaner look and set of features, have fun with your music!';
+  String get labelSongtubeIsBackDescription => 'SongTube alọtala ọdịdị dị ọcha na njiri mara ya, were egwu gị kporie ndụ';
   @override
-  String get labelLetsGo => 'Let\'s go';
+  String get labelLetsGo => 'Ka anyị gaa';
   @override
-  String get labelPleaseWait => 'Please wait';
+  String get labelPleaseWait => 'Biko chere';
   @override
-  String get labelPoweredBy => 'Powered by';
+  String get labelPoweredBy => 'Akwanyere ya';
   @override
-  String get labelGetStarted => 'Get Started';
+  String get labelGetStarted => 'Malite';
   @override
-  String get labelAllowUsToHave => 'Allow us to have';
+  String get labelAllowUsToHave => 'Kwe ka anyị nwee';
   @override
-  String get labelStorageRead => 'Storage\nRead';
+  String get labelStorageRead => 'Nchekwa\nGụọ';
   @override
-  String get labelStorageReadDescription => 'This will scan your music, extract high quality artworks and allow you to personalize your music';
+  String get labelStorageReadDescription => 'Nke a ga-enyocha egwu gị, wepụta artworks dị elu wee nye gị ohere hazie egwu gị';
   @override
-  String get labelContinue => 'Continue';
+  String get labelContinue => 'Gaa ihu';
   @override
-  String get labelAllowStorageRead => 'Allow Storage Read';
+  String get labelAllowStorageRead => 'Kwe ka agụọ ebe nchekwa';
   @override
-  String get labelSelectYourPreferred => 'Select your preferred';
+  String get labelSelectYourPreferred => 'Họrọ mmasị gị';
   @override
-  String get labelLight => 'Light';
+  String get labelLight => 'Ìhè';
   @override
-  String get labelDark => 'Dark';
+  String get labelDark => 'Ọchichiri';
   @override
-  String get labelSimultaneousDownloads => 'Simultaneous Downloads';
+  String get labelSimultaneousDownloads => 'Nbudata otu oge';
   @override
-  String get labelSimultaneousDownloadsDescription => 'Define how many downloads can happen at the same time';
+  String get labelSimultaneousDownloadsDescription => 'Kwapụta ọtụtụ nbudata nwere ike ime otu oge';
   @override
-  String get labelItems => 'Items';
+  String get labelItems => 'Ihe';
   @override
-  String get labelInstantDownloadFormat => 'Instant Download';
+  String get labelInstantDownloadFormat => 'Nbudata ngwa ngwa';
   @override
-  String get labelInstantDownloadFormatDescription => 'Change the audio format for instant downloads';
+  String get labelInstantDownloadFormatDescription => 'Gbagharịa usoro ọdịyo maka nbudata ngwa ngwa';
   @override
-  String get labelCurrent => 'Current';
+  String get labelCurrent => 'Ugbu a';
   @override
-  String get labelPauseWatchHistory => 'Pause Watch History';
+  String get labelPauseWatchHistory => 'kwụsịtụ akụkọ ihe mere eme';
   @override
-  String get labelPauseWatchHistoryDescription => 'While paused, videos are not saved into the watch history list';
+  String get labelPauseWatchHistoryDescription => 'Mgbe kwụsịtụrụ, a naghị echekwa vidiyo ime ndepụta akụkọ nlele';
   @override
-  String get labelLockNavigationBar => 'Lock Navigation Bar';
+  String get labelLockNavigationBar => 'Ogwe igodo nsorochi';
   @override
-  String get labelLockNavigationBarDescription => 'Locks the navigation bar from hiding and showing automatically on scroll';
+  String get labelLockNavigationBarDescription => 'Echichi ụzọ igodo ka ọ ghara izobe ma gosi na akpaghị aka na mpịakọta';
   @override
-  String get labelPictureInPicture => 'Picture in Picture';
+  String get labelPictureInPicture => 'Foto dị na foto';
   @override
-  String get labelPictureInPictureDescription => 'Automatically enters PiP mode upon tapping home button while watching a video';
+  String get labelPictureInPictureDescription => 'Na-abanye na ọnọdụ PiP na-akpaghị aka ka ọ na-akụ bọtịnụ ụlọ ka ọ na-ekiri vidiyo';
   @override
-  String get labelBackgroundPlaybackAlpha => 'Background Playback (Alpha)';
+  String get labelBackgroundPlaybackAlpha => 'Ọkụkụ azụ azụ Alfa';
   @override
-  String get labelBackgroundPlaybackAlphaDescription => 'Toggle background playback feature. Due to plugin limitations, only current video can be played in the background';
+  String get labelBackgroundPlaybackAlphaDescription => 'Tụgharịa atụmatụ ịkpọghachi azụ. ihi njedebe ngwa mgbakwunye, naanị vidiyo dị ugbu a nwere ike ịkpọ na ndabere';
   @override
-  String get labelBlurBackgroundDescription => 'Add blurred artwork background';
+  String get labelBlurBackgroundDescription => 'Tinye na azụ ihe osise na-adịghị ahụkebe';
   @override
-  String get labelBlurIntensity => 'Blur Intensity';
+  String get labelBlurIntensity => 'Mkpịsị ike na-agbaji';
   @override
-  String get labelBlurIntensityDescription => 'Change the blur intensity of the artwork background';
+  String get labelBlurIntensityDescription => 'Gbanwee nhụsianya nke ndabere ihe osise';
   @override
   String get labelBackdropOpacity => 'Backdrop Opacity';
   @override
-  String get labelBackdropOpacityDescription => 'Change the colored backdrop opacity';
+  String get labelBackdropOpacityDescription => 'Gbagharịa opacity backdrop nwere agba';
   @override
-  String get labelArtworkShadowOpacity => 'Artwork Shadow Opacity';
+  String get labelArtworkShadowOpacity => 'Arụmọrụ Onyunyo Opacity';
   @override
-  String get labelArtworkShadowOpacityDescription => 'Change the artwork shadow intensity of the music player';
+  String get labelArtworkShadowOpacityDescription => 'Gbagharịa onyinyo nka nke ọkpọ egwu';
   @override
-  String get labelArtworkShadowRadius => 'Artwork Shadow Radius';
+  String get labelArtworkShadowRadius => 'Arụmọrụ Shadow Radius';
   @override
-  String get labelArtworkShadowRadiusDescription => 'Change the artwork shadow radius of the music player';
+  String get labelArtworkShadowRadiusDescription => 'Gbagharịa radius nke onye egwu egwu';
   @override
-  String get labelArtworkScaling => 'Artwork Scaling';
+  String get labelArtworkScaling => 'Nhazi nka nka';
   @override
-  String get labelArtworkScalingDescription => 'Scale out the music player artwork & background images';
+  String get labelArtworkScalingDescription => 'Kpepee ihe osise ihe ọkpụkpọ egwu na onyonyo ndabere';
   @override
   String get labelBackgroundParallax => 'Background Parallax';
   @override
-  String get labelBackgroundParallaxDescription =>  'Enable/Disable background image parallax effect';
+  String get labelBackgroundParallaxDescription =>  'Kwado/gbanyụọ mmetụta parallax oyiyi ndabere';
   @override
-  String get labelRestoreThumbnails => 'Restore Thumbnails';
+  String get labelRestoreThumbnails => 'Weghachite mkpịsị aka mkpịsị aka';
   @override
-  String get labelRestoreThumbnailsDescription => 'Force thumbnails and artwork generation process';
+  String get labelRestoreThumbnailsDescription => 'Manye obere mkpịsị aka na usoro ọgbọ nka';
   @override
-  String get labelRestoringArtworks => 'Restoring artworks';
+  String get labelRestoringArtworks => 'Iweghachite ọrụ nka';
   @override
-  String get labelRestoringArtworksDone => 'Restoring artworks done';
+  String get labelRestoringArtworksDone => 'Iweghachite ọrụ nka emechara';
   @override
-  String get labelHomeScreen => 'Home Screen';
+  String get labelHomeScreen => 'Ihuenyo ụlọ';
   @override
-  String get labelHomeScreenDescription => 'Change the default landing screen when you open the app';
+  String get labelHomeScreenDescription => 'Gbagharịa ihuenyo ọdịda ndabara mgbe imepere ngwa';
   @override
-  String get labelDefaultMusicPage => 'Default Music Page';
+  String get labelDefaultMusicPage => 'Ibe Egwu Dapụtara';
   @override
-  String get labelDefaultMusicPageDescription => 'Change the default page for the Music Page';
+  String get labelDefaultMusicPageDescription => 'Gbagharịa ihu akwụkwọ ndabara maka ibe egwu';
   @override
-  String get labelAbout => 'About';
+  String get labelAbout => 'Banyere';
   @override
-  String get labelConversionRequired => 'Conversion Required';
+  String get labelConversionRequired => 'Achọrọ ntụgharị';
   @override
-  String get labelConversionRequiredDescription =>  'This song format is incompatible with the ID3 Tags editor. The app will automatically convert this song to AAC (m4a) to sort out this issue.';
+  String get labelConversionRequiredDescription =>  'Ụdị egwu a adabaghị na nchịkọta akụkọ ID3 Tags. Ngwa ahụ ga-agbanwe egwu a na-akpaghị aka ka ọ bụrụ AAC (m4a) iji dozie nsogbu a.';
   @override
-  String get labelPermissionRequired => 'Permission Required';
+  String get labelPermissionRequired => 'Ikike achọrọ';
   @override
-  String get labelPermissionRequiredDescription => 'All file access permission is required for SongTube to edit any song on your device';
+  String get labelPermissionRequiredDescription => 'A chọrọ ikike ịnweta faịlụ niile maka SongTube iji dezie egwu ọ bụla na ngwaọrụ gị';
   @override
-  String get labelApplying => 'Applying';
+  String get labelApplying => 'itinye';
   @override
-  String get labelConvertingDescription => 'Re-encoding this song into AAC (m4a) format';
+  String get labelConvertingDescription => 'Idoghari egwu a ka ọ bụrụ usoro AAC (m4a)';
   @override
-  String get labelWrittingTagsAndArtworkDescription => 'Applying new tags to this song';
+  String get labelWrittingTagsAndArtworkDescription => 'Itinye mkpado ọhụrụ na egwu a';
   @override
-  String get labelApply => 'Apply';
+  String get labelApply => 'Tinye';
   @override
-  String get labelSongs => 'Songs';
+  String get labelSongs => 'Egwu';
   @override
-  String get labelPlayAll => 'Play All';
+  String get labelPlayAll => 'Kpọọ ihe niile';
   @override
-  String get labelPlaying => 'Playing';
+  String get labelPlaying => 'Egwuregwu';
   @override
-  String get labelPages => 'Pages';
+  String get labelPages => 'Ibe';
   @override
-  String get labelMusicPlayer => 'Music Player';
+  String get labelMusicPlayer => 'Egwu Egwu';
   @override
-  String get labelClearWatchHistory => 'Clear Watch History';
+  String get labelClearWatchHistory => 'Kpochapụ akụkọ ihe mere eme';
   @override
-  String get labelClearWatchHistoryDescription =>  'You\'re about to delete all your watch history videos, this action cannot be undone, proceed?';
+  String get labelClearWatchHistoryDescription =>  'Ị na-achọ ihichapụ vidiyo akụkọ ihe mere eme gị niile, enweghị ike ịmegharị ihe a, gaba ihu?';
   @override
-  String get labelDelete => 'Delete';
+  String get labelDelete => 'Hichapụ';
   @override
-  String get labelAppUpdate => 'App Update';
+  String get labelAppUpdate => 'Nwelite ngwa';
   @override
-  String get labelWhatsNew => 'What\'s New';
+  String get labelWhatsNew => 'Gịnị dị ọhụrụ';
   @override
-  String get labelLater => 'Later';
+  String get labelLater => 'E mechaa';
   @override
-  String get labelUpdate => 'Update';
+  String get labelUpdate => 'Melite';
   @override
-  String get labelUnsubscribe => 'Unsubscribe';
+  String get labelUnsubscribe => 'Wepụ aha aha';
   @override
-  String get labelAudioFeatures => 'Audio Features';
+  String get labelAudioFeatures => 'Ụdị ọdịyo';
   @override
-  String get labelVolumeBoost => 'Volume Boost';
+  String get labelVolumeBoost => 'Mkwalite olu';
   @override
-  String get labelNormalizeAudio => 'Normalize Audio';
+  String get labelNormalizeAudio => 'Hazie ọdịyo';
   @override
-  String get labelSegmentedDownload => 'Segmented Download';
+  String get labelSegmentedDownload => 'Nbudata nkebi';
   @override
-  String get labelEnableSegmentedDownload => 'Enable Segmented Download';
+  String get labelEnableSegmentedDownload => 'Kwado nbudata nkebi';
   @override
-  String get labelEnableSegmentedDownloadDescription => 'This will download the whole audio file and then split it into the various enabled segments (or audio tracks) from the list below';
+  String get labelEnableSegmentedDownloadDescription => 'Nke a ga-ebudata faịlụ ọdịyo niile wee kewaa ya akụkụ dị iche iche enyere aka (ma ọ bụ egwu ọdịyo) na listi dị okpuru';
   @override
-  String get labelCreateMusicPlaylist => 'Create Music Playlist';
+  String get labelCreateMusicPlaylist => 'Mepụta egwu egwu';
   @override
-  String get labelCreateMusicPlaylistDescription => 'Create music playlist from all downloaded and saved audio segments';
+  String get labelCreateMusicPlaylistDescription => 'Mepụta egwu egwu akụkụ niile ebudatara na nke echekwara';
   @override
-  String get labelApplyTags => 'Apply Tags';
+  String get labelApplyTags => 'Tụnye Tags';
   @override
-  String get labelApplyTagsDescription => 'Extract tags from MusicBrainz for all segments';
+  String get labelApplyTagsDescription => 'Wepụ mkpado na MusicBrainz maka akụkụ niile';
   @override
-  String get labelLoading => 'Loading';
+  String get labelLoading => 'Na-ebunye';
   @override
-  String get labelMusicDownloadDescription => 'Select quality, convert and download audio only';
+  String get labelMusicDownloadDescription => 'Họrọ àgwà, tụgharịa na budata naanị audio';
   @override
-  String get labelVideoDownloadDescription =>  'Choose a video quality from the list and download it';
+  String get labelVideoDownloadDescription =>  'Họrọ àgwà vidiyo na listi wee budata ya';
   @override
-  String get labelInstantDescription => 'Instantly start downloading as music';
+  String get labelInstantDescription => 'Bido nbudata dị ka egwu ozugbo';
   @override
-  String get labelInstant => 'Instant';
+  String get labelInstant => 'Ozugbo';
   @override
-  String get labelCurrentQuality => 'Current Quality';
+  String get labelCurrentQuality => 'Ọdịmma dị ugbu a';
   @override
-  String get labelFastStreamingOptions => 'Fast Streaming Options';
+  String get labelFastStreamingOptions => 'Nhọrọ gụgharia ngwa ngwa';
   @override
-  String get labelStreamingOptions => 'Streaming Options';
+  String get labelStreamingOptions => 'Nhọrọ iyi';
   @override
-  String get labelComments => 'Comments';
+  String get labelComments => 'Okwu';
   @override
-  String get labelPinned => 'Pinned';
+  String get labelPinned => 'Akọnyere';
   @override
-  String get labelLikedByAuthor => 'Liked by Author';
+  String get labelLikedByAuthor => 'Onye ode akwụkwọ masịrị ya';
   @override
-  String get labelDescription => 'Description';
+  String get labelDescription => 'Nkọwa';
   @override
-  String get labelViews => 'Views';
+  String get labelViews => 'Nlele';
   @override
-  String get labelPlayingNextIn => 'Playing next in';
+  String get labelPlayingNextIn => 'Egwuregwu na-esote';
   @override
-  String get labelPlayNow => 'Play Now';
+  String get labelPlayNow => 'Kpọọ ugbu a';
   @override
-  String get labelLoadingPlaylist => 'Loading Playlist';
+  String get labelLoadingPlaylist => 'Na-ebuli ndepụta ọkpụkpọ';
   @override
-  String get labelPlaylistReachedTheEnd => 'Playlist reached the end';
+  String get labelPlaylistReachedTheEnd => 'Listi ọkpụkpọ ruru ọgwụgwụ';
   @override
-  String get labelLiked => 'Liked';
+  String get labelLiked => 'Masịrị';
   @override
-  String get labelLike => 'Like';
+  String get labelLike => 'Ọ masịrị';
   @override
-  String get labelVideoRemovedFromFavorites => 'Video removed from favorites';
+  String get labelVideoRemovedFromFavorites => 'Ewepụrụ vidiyo na ọkacha mmasị';
   @override
-  String get labelVideoAddedToFavorites => 'Video added to favorites';
+  String get labelVideoAddedToFavorites => 'Agbakwunyere vidiyo na ọkacha mmasị';
   @override
-  String get labelPopupMode => 'Popup Mode';
+  String get labelPopupMode => 'Ụdị mpụta';
   @override
-  String get labelDownloaded => 'Downloaded';
+  String get labelDownloaded => 'Ebudata';
   @override
-  String get labelShowPlaylist => 'Show Playlist';
+  String get labelShowPlaylist => 'Gosi ndepụta ọkpụkpọ';
   @override
-  String get labelCreatePlaylist => 'Create Playlist';
+  String get labelCreatePlaylist => 'Mepụta ndepụta ọkpụkpọ';
   @override
-  String get labelAddVideoToPlaylist => 'Add video to playlist';
+  String get labelAddVideoToPlaylist => 'Tinye vidiyo na ndetu egwu egwu';
   @override
-  String get labelBackupDescription => 'Backup all of your local data into a single file that can be used to restore later';
+  String get labelBackupDescription => 'Ndokwa data mpaghara gị niile otu faịlụ nke enwere ike iweghachite ma emechaa';
   @override
-  String get labelBackupCreated => 'Backup Created';
+  String get labelBackupCreated => 'Ekepụtara ndabere';
   @override
-  String get labelBackupRestored => 'Backup Restored';
+  String get labelBackupRestored => 'Eweghachitere ndabere';
   @override
-  String get labelRestoreDescription => 'Restore all your data from a backup file';
+  String get labelRestoreDescription => 'Weghachite gị niile';
   @override
-  String get labelChannelSuggestions => 'Channel Suggestions';
+  String get labelChannelSuggestions => 'Aro ọwa';
   @override
-  String get labelFetchingChannels => 'Fetching Channels';
+  String get labelFetchingChannels => 'Ịnweta ọwa';
   @override
-  String get labelShareVideo => 'Shared Video';
+  String get labelShareVideo => 'Vidio ekekọrịtara';
   @override
-  String get labelShareDescription => 'Share with friends or other platforms';
+  String get labelShareDescription => 'Kekọrịta ndị enyi ma ọ bụ nyiwe ndị ọzọ';
   @override
-  String get labelRemoveFromPlaylists => 'Remove from playlist';
+  String get labelRemoveFromPlaylists => 'Wepụ na listi ọkpụkpọ';
   @override
-  String get labelThisActionCannotBeUndone => 'This action cannot be undone';
+  String get labelThisActionCannotBeUndone => 'A gaghị emezi omume a';
   @override
-  String get labelAddVideoToPlaylistDescription => 'Add to existing or new video playlist';
+  String get labelAddVideoToPlaylistDescription => 'Tinye na listi ọkpụkpọ vidiyo dị ugbu a ma ọ bụ nke ọhụrụ';
   @override
-  String get labelAddToPlaylists => 'Add to playlists';
+  String get labelAddToPlaylists => 'Tinye na listi ọkpụkpọ';
   @override
-  String get labelEditableOnceSaved => 'Editable once saved';
+  String get labelEditableOnceSaved => 'A na-edozi ya ozugbo echekwara';
   @override
-  String get labelPlaylistRemoved => 'Playlist Removed';
+  String get labelPlaylistRemoved => 'E wepụrụ ndepụta ọkpụkpọ';
   @override
-  String get labelPlaylistSaved => 'Playlist Saved';
+  String get labelPlaylistSaved => 'Echekwaa listi ọkpụkpọ';
   @override
-  String get labelRemoveFromFavorites => 'Remove from favorites';
+  String get labelRemoveFromFavorites => 'Wepụ na ọkacha mmasị';
   @override
-  String get labelRemoveFromFavoritesDescription => 'Remove this video from your favorites';
+  String get labelRemoveFromFavoritesDescription => 'Wepu vidiyo a na ọkacha mmasị gị';
   @override
-  String get labelSaveToFavorites => 'Save to favorites';
+  String get labelSaveToFavorites => 'Chekwaa na ọkacha mmasị';
   @override
-  String get labelSaveToFavoritesDescription => 'Add video to your list of favorites';
+  String get labelSaveToFavoritesDescription => 'Tinye vidiyo na ndepụta ọkacha mmasị gị';
   @override
-  String get labelSharePlaylist => 'Share Playlist';
+  String get labelSharePlaylist => 'Kekọrịta ndepụta ọkpụkpọ';
   @override
-  String get labelRemoveThisVideoFromThisList => 'Remove this video from this list';
+  String get labelRemoveThisVideoFromThisList => 'Wepu vidiyo a na ndetu a';
   @override
   String get labelEqualizer => 'Equalizer';
   @override
-  String get labelLoudnessEqualizationGain => 'Loudness Equalization Gain';
+  String get labelLoudnessEqualizationGain => 'Erite nha nha ụda olu';
   @override
   String get labelSliders => 'Sliders';
   @override
-  String get labelSave => 'Save';
+  String get labelSave => 'Chekwa';
   @override
-  String get labelPlaylistName => 'PlaylistName';
+  String get labelPlaylistName => 'Aha egwu egwu';
   @override
-  String get labelCreateVideoPlaylist => 'Create Video Playlist';
+  String get labelCreateVideoPlaylist => 'Mepụta egwu egwu vidiyo';
   @override
   String get labelSearchFilters => 'Search Filters';
   @override
-  String get labelAddToPlaylistDescription => 'Add to existing or new playlist';
+  String get labelAddToPlaylistDescription => 'Tinye na listi ọkpụkpọ dị ugbu a ma ọ bụ nke ọhụrụ';
   @override
-  String get labelShareSong => 'Share Song';
+  String get labelShareSong => 'Kekọrịta egwu';
   @override
-  String get labelShareSongDescription => 'Share with friends or other platforms';
+  String get labelShareSongDescription => 'Kekọrịta ndị enyi ma ọ bụ nyiwe ndị ọzọ';
   @override
-  String get labelEditTagsDescription => 'Open ID3 tags and artwork editor';
+  String get labelEditTagsDescription => 'Mepee mkpado ID3 na onye ndezi ihe osise';
   @override
-  String get labelContains => 'Contains';
+  String get labelContains => 'Enwere';
   @override
-  String get labelPlaybackSpeed => 'Playback speed';
+  String get labelPlaybackSpeed => 'Ọsọ kpọghachi';
 }
