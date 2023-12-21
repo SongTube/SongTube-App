@@ -3,6 +3,7 @@ import 'package:songtube/internal/global.dart';
 import 'package:songtube/languages/translations/languageAr.dart';
 import 'package:songtube/languages/translations/languageCa.dart';
 import 'package:songtube/languages/translations/languageCkb.dart';
+import 'package:songtube/languages/translations/languageHi.dart';
 import 'package:songtube/languages/translations/languageKu.dart';
 import 'package:songtube/languages/translations/languagePl.dart';
 import 'package:songtube/languages/translations/languageRu.dart';
@@ -90,6 +91,8 @@ final supportedLanguages = <LanguageData>[
   LanguageData("ca", "Català", "ca"),
   // Bulgarian (BG)
   LanguageData("bg", "Bulgarian", "bg"),
+  // Hindi (HI)
+  LanguageData("🇮🇳", "Hindi", "hi")
 ];
 Future<Languages> _loadLocale(Locale locale) async {
   switch (locale.languageCode) {
@@ -166,6 +169,9 @@ Future<Languages> _loadLocale(Locale locale) async {
       return LanguageCa();
     case 'bg':
       return LanguageBg();
+    // Hindi (HI)
+    case 'hi':
+      return LanguageHi();
     // Default Language (English)
     default:
       return LanguageEn();
