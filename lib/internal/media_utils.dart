@@ -309,21 +309,8 @@ class MediaUtils {
   }
 
   static String removeToxicSymbols(String string) {
-    return string
-      .replaceAll('Container.', '')
-      .replaceAll(r'\', '')
-      .replaceAll('/', '')
-      .replaceAll('*', '')
-      .replaceAll('?', '')
-      .replaceAll('"', '')
-      .replaceAll('<', '')
-      .replaceAll('>', '')
-      .replaceAll('|', '')
-      .replaceAll(':', '')
-      .replaceAll('!', '')
-      .replaceAll('[', '')
-      .replaceAll(']', '')
-      .replaceAll('¡', '');
+    final const toxicSymbolsRegex = RegExp(r'Container.|\/|\\|\*|\?|\"|\<|\>|\:|\!|\[|\]|\¡');
+    return string.replaceAll(toxicSymbolsRegex, '');
   }
 
   static const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
