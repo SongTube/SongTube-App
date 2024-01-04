@@ -58,8 +58,8 @@ class SongOptionsSheet extends StatelessWidget {
                 ],
               ),
               _optionTile(context,
-                title: Languages.of(context)!.labelAddToPlaylist,
-                subtitle: Languages.of(context)!.labelAddToPlaylistDescription,
+                title: 'Add/Remove from Playlists',
+                subtitle: 'Add or remove this song from any playlist',
                 icon: LineIcons.list,
                 onTap: () {
                   Navigator.pop(context);
