@@ -149,9 +149,20 @@ class _HomeLibraryState extends State<HomeLibrary> {
                             padding: const EdgeInsets.only(bottom: 12),
                             child: Row(
                               children: [
-                                SizedBox(
-                                  height: 24, width: 24,
-                                  child: Image.asset('assets/images/logo.png')),
+                                Consumer<MediaProvider>(
+                                  builder: (context, provider, _) {
+                                    final greyscale = provider.currentColors.vibrant != accentColor;
+                                    return Opacity(
+                                      opacity: greyscale ? 0.8 : 1,
+                                      child: Image.asset(
+                                          greyscale
+                                          ? 'assets/images/logo_bw.png'
+                                          : 'assets/images/logo.png',
+                                        height: 30, width: 30
+                                      ),
+                                    );
+                                  }
+                                ),
                                 const SizedBox(width: 12),
                                 Text(Languages.of(context)!.labelSongtubeLink, style: subtitleTextStyle(context, bold: true)),
                               ],
