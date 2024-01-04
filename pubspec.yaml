@@ -51,6 +51,7 @@ dependencies:
   parallax_sensors_bg: ^1.0.0
   external_video_player_launcher: ^0.0.3
   network_info_plus: ^4.0.2
+  flutter_slidable: ^3.0.1
 
   # Dart advanced Streams
   rxdart: any
