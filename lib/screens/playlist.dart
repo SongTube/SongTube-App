@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:path_provider/path_provider.dart';
@@ -15,6 +17,7 @@ import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/media_provider.dart';
 import 'package:songtube/providers/playlist_provider.dart';
 import 'package:songtube/providers/ui_provider.dart';
+import 'package:songtube/ui/animations/animated_icon.dart';
 import 'package:songtube/ui/animations/mini_music_visualizer.dart';
 import 'package:songtube/ui/playlist_artwork.dart';
 import 'package:songtube/ui/text_styles.dart';
@@ -385,33 +388,52 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
           : (kToolbarHeight * 1.6)),
       itemBuilder: (context, index) {
         final song = mediaSet.songs[index];
-        return Row(
-          key: ValueKey('${mediaSet.id}$index'),
-          children: [
-            // Reorder Tab
-            if (mediaSet.id != null)
-            Semantics(
-              label: 'Reorder song in playlist',
-              child: Padding(
-                padding: const EdgeInsets.all(8.0).copyWith(left: 16, right: 0),
-                child: Icon(Icons.reorder_rounded, size: 18, color: Theme.of(context).iconTheme.color!.withOpacity(0.4)),
+        return Slidable(
+          key: ValueKey('slidablePlaylistSong$index'),
+          endActionPane: ActionPane(
+            extentRatio: 0.2,
+            motion: const ScrollMotion(),
+            children: [
+              SlidableAction(
+                onPressed: (_) {
+                  mediaSet.songs.removeWhere((element) => element.id == song.id);
+                  playlistProvider.addToGlobalPlaylist(widget.mediaSet.id!, song: song);
+                },
+                icon: EvaIcons.trashOutline,
+                label: Languages.of(context)!.labelDelete,
+                foregroundColor: Colors.red,
+                backgroundColor: Colors.transparent,
+              )
+            ]
+          ),
+          child: Row(
+            key: ValueKey('${mediaSet.id}$index'),
+            children: [
+              // Reorder Tab
+              if (mediaSet.id != null)
+              Semantics(
+                label: 'Reorder song in playlist',
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0).copyWith(left: 16, right: 0),
+                  child: Icon(Icons.reorder_rounded, size: 18, color: Theme.of(context).iconTheme.color!.withOpacity(0.4)),
+                ),
               ),
-            ),
-            // Song
-            Expanded(
-              child: SongTile(
-                song: song,
-                onPlay: () async {
-                  mediaProvider.currentPlaylistName = mediaSet.name;
-                  final queue = List<MediaItem>.generate(mediaSet.songs.length, (index) {
-                    return mediaSet.songs[index].mediaItem;
-                  });
-                  uiProvider.currentPlayer = CurrentPlayer.music;
-                  mediaProvider.playSong(queue, index);
-                }
+              // Song
+              Expanded(
+                child: SongTile(
+                  song: song,
+                  onPlay: () async {
+                    mediaProvider.currentPlaylistName = mediaSet.name;
+                    final queue = List<MediaItem>.generate(mediaSet.songs.length, (index) {
+                      return mediaSet.songs[index].mediaItem;
+                    });
+                    uiProvider.currentPlayer = CurrentPlayer.music;
+                    mediaProvider.playSong(queue, index);
+                  }
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         );
       },
       itemCount: mediaSet.songs.length,
