@@ -15,7 +15,7 @@ import 'translations/languageAz.dart';
 import 'translations/languageEs.dart';
 import 'translations/languagePt-BR.dart';
 import 'translations/languageRo.dart';
-import 'translations/languageIgbo-NG.dart';
+import 'translations/languageig-NG.dart';
 import 'translations/languageId.dart';
 import 'translations/languageVi.dart';
 import 'translations/languageTr.dart';
