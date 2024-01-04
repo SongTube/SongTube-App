@@ -12,6 +12,7 @@ import 'package:newpipeextractor_dart/models/videoInfo.dart';
 import 'package:newpipeextractor_dart/newpipeextractor_dart.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:songtube/internal/global.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import 'package:songtube/internal/models/content_wrapper.dart';
@@ -341,7 +342,7 @@ class _VideoPlayerContentState extends State<VideoPlayerContent> with TickerProv
               );
             }
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 8),
           // Share Button
           TextIconSlimButton(
             icon: const AppAnimatedIcon(LineIcons.share, size: 18),
@@ -350,7 +351,52 @@ class _VideoPlayerContentState extends State<VideoPlayerContent> with TickerProv
               Share.share(videoInfo!.url!);
             },
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 8),
+          // Download Button
+          Consumer<ContentProvider>(
+            builder: (context, provider, _) {
+              final downloading = downloadProvider.queue.any((element) => element.downloadInfo.url == videoInfo?.url);
+              final downloadItem = downloadProvider.queue.firstWhereOrNull((element) => element.downloadInfo.url == videoInfo?.url);
+              final downloaded = downloadProvider.downloadedSongs.any((element) => element.videoId == videoInfo?.url);
+              final videoReady = provider.playingContent?.videoDetails != null;
+              return AnimatedOpacity(
+                duration: kAnimationDuration,
+                curve: kAnimationCurve,
+                opacity: videoReady ? 1 : 0.6,
+                child: StreamBuilder<double?>(
+                  stream: downloadItem?.downloadProgress,
+                  builder: (context, snapshot) {
+                    final progress = snapshot.data;
+                    final currentProgress = progress != null ? (progress*100).round().toString() : '';
+                    return TextIconSlimButton(
+                      icon: AnimatedSwitcher(
+                        duration: kAnimationDuration,
+                        child: videoReady
+                          ? const AppAnimatedIcon(LineIcons.alternateCloudDownload, size: 18)
+                          : SizedBox(
+                              height: 18, width: 18,
+                              child: CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation(Theme.of(context).primaryColor),
+                                strokeWidth: 2,
+                              ),
+                            )
+                      ),
+                      text: downloading ? '${Languages.of(context)!.labelDownloading}... ${currentProgress.isNotEmpty ? '$currentProgress%' : ''}' : downloaded ? Languages.of(context)!.labelDownloaded : Languages.of(context)!.labelDownload,
+                      applyColor: downloaded,
+                      onTap: () {
+                        if (videoReady) {
+                          UiUtils.showModal(
+                            context: internalNavigatorKey.currentContext!,
+                            modal: DownloadContentMenu(content: widget.content));
+                        }
+                      },
+                    );
+                  }
+                ),
+              );
+            }
+          ),
+          const SizedBox(width: 8),
           // Add to Playlist Button
           TextIconSlimButton(
             icon: const AppAnimatedIcon(Ionicons.add_outline, size: 18),
@@ -368,7 +414,7 @@ class _VideoPlayerContentState extends State<VideoPlayerContent> with TickerProv
             builder: (context, snapshot) {
               if (snapshot.data ?? false) {
                 return Padding(
-                  padding: const EdgeInsets.only(left: 12),
+                  padding: const EdgeInsets.only(left: 8),
                   child: TextIconSlimButton(
                     icon: const AppAnimatedIcon(LineIcons.video, size: 18),
                     text: Languages.of(context)!.labelPopupMode,
@@ -381,32 +427,6 @@ class _VideoPlayerContentState extends State<VideoPlayerContent> with TickerProv
               } else {
                 return const SizedBox();
               }
-            }
-          ),
-          const SizedBox(width: 12),
-          // Download Button
-          Builder(
-            builder: (context) {
-              final downloading = downloadProvider.queue.any((element) => element.downloadInfo.url == videoInfo?.url);
-              final downloadItem = downloadProvider.queue.firstWhereOrNull((element) => element.downloadInfo.url == videoInfo?.url);
-              final downloaded = downloadProvider.downloadedSongs.any((element) => element.videoId == videoInfo?.url);
-              return StreamBuilder<double?>(
-                stream: downloadItem?.downloadProgress,
-                builder: (context, snapshot) {
-                  final progress = snapshot.data;
-                  final currentProgress = progress != null ? (progress*100).round().toString() : '';
-                  return TextIconSlimButton(
-                    icon: const AppAnimatedIcon(LineIcons.alternateCloudDownload, size: 18),
-                    text: downloading ? '${Languages.of(context)!.labelDownloading}... ${currentProgress.isNotEmpty ? '$currentProgress%' : ''}' : downloaded ? Languages.of(context)!.labelDownloaded : Languages.of(context)!.labelDownload,
-                    applyColor: downloaded,
-                    onTap: () {
-                      UiUtils.showModal(
-                        context: internalNavigatorKey.currentContext!,
-                        modal: DownloadContentMenu(content: widget.content));
-                    },
-                  );
-                }
-              );
             }
           ),
         ],

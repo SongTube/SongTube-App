@@ -60,13 +60,13 @@ class TextIconSlimButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomInkWell(
-      borderRadius: BorderRadius.circular(15),
+      borderRadius: BorderRadius.circular(100),
       onTap: onTap,
       child: AnimatedContainer(
         padding: const EdgeInsets.only(left: 16, right: 16),
         duration: const Duration(milliseconds: 300),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: BorderRadius.circular(100),
           color: backgroundColor ?? Theme.of(context).cardColor,
         ),
         child: Row(
