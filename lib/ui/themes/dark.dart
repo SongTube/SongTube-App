@@ -5,7 +5,7 @@ ThemeData darkTheme() {
   HSVColor color = HSVColor.fromColor(accentColor);
   HSVColor desaturated = HSVColor.fromAHSV(color.alpha, color.hue, 0.8, color.value);
   accentColor = desaturated.toColor();
-  return ThemeData.dark().copyWith(
+  return ThemeData.dark(useMaterial3: false).copyWith(
     shadowColor: ThemeData.dark().shadowColor.withOpacity(0.1),
     brightness: Brightness.light,
     
@@ -52,7 +52,7 @@ ThemeData blackTheme() {
   HSVColor color = HSVColor.fromColor(accentColor);
   HSVColor desaturated = HSVColor.fromAHSV(color.alpha, color.hue, 0.8, color.value);
   accentColor = desaturated.toColor();
-  return ThemeData.dark().copyWith(
+  return ThemeData.dark(useMaterial3: false).copyWith(
     canvasColor: Colors.black,
     iconTheme: const IconThemeData(
       color: Colors.white

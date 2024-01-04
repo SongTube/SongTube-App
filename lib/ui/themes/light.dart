@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:songtube/internal/global.dart';
 
 ThemeData lightTheme() {
-  return ThemeData.light().copyWith(
+  return ThemeData.light(useMaterial3: false).copyWith(
     toggleableActiveColor: accentColor,
     primaryColor: accentColor,
     brightness: Brightness.dark,
