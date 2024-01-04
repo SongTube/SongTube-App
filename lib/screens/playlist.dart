@@ -17,11 +17,13 @@ import 'package:songtube/languages/languages.dart';
 import 'package:songtube/providers/media_provider.dart';
 import 'package:songtube/providers/playlist_provider.dart';
 import 'package:songtube/providers/ui_provider.dart';
-import 'package:songtube/ui/animations/animated_icon.dart';
 import 'package:songtube/ui/animations/mini_music_visualizer.dart';
+import 'package:songtube/ui/components/common_sheet_widget.dart';
 import 'package:songtube/ui/playlist_artwork.dart';
+import 'package:songtube/ui/sheets/common_sheet.dart';
 import 'package:songtube/ui/text_styles.dart';
 import 'package:songtube/ui/tiles/song_tile.dart';
+import 'package:songtube/ui/ui_utils.dart';
 
 class PlaylistScreen extends StatefulWidget {
   const PlaylistScreen({
@@ -115,6 +117,43 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                                 setArtwork();
                               },
                               icon: Icon(Iconsax.image, color: Theme.of(context).iconTheme.color)
+                            ),
+                          ), 
+                          if (mediaSet.id != null)
+                          Semantics(
+                            label: 'Delete playlist',
+                            child: IconButton(
+                              onPressed: () {
+                                UiUtils.showModal(context: context, modal: CommonSheet(
+                                  useCustomScroll: false,
+                                  builder: (context, scrollController) {
+                                    return CommonSheetWidget(
+                                      title: Languages.of(context)!.labelDelete,
+                                      body: Text(Languages.of(context)!.labelThisActionCannotBeUndone, style: subtitleTextStyle(context, opacity: 0.6).copyWith(fontSize: 14)),
+                                      actions: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.red,
+                                            borderRadius: BorderRadius.circular(15)
+                                          ),
+                                          child: TextButton(
+                                            onPressed: () async {
+                                              Navigator.pop(context);
+                                              Navigator.pop(context);
+                                              playlistProvider.removeGlobalPlaylist(widget.mediaSet.id!);
+                                            },
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(left: 12, right: 12),
+                                              child: Text(Languages.of(context)!.labelRemove, style: subtitleTextStyle(context).copyWith(color: Colors.white)),
+                                            )
+                                          ),
+                                        )
+                                      ],
+                                    );
+                                  },
+                                ));
+                              },
+                              icon: const Icon(EvaIcons.trashOutline, color: Colors.red)
                             ),
                           ), 
                         ],
