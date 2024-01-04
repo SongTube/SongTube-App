@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
@@ -58,7 +57,6 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   bool showBrightnessUI = false;
   String? currentVolumePercentage;
   String? currentBrightnessPercentage;
-  int tapId = 0;
   VideoPlaybackQuality? currentQuality;
   bool lockPlayer = true;
   bool interfaceLocked = false;
@@ -66,6 +64,8 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   // Reverse and Forward Animation
   bool showReverse = false;
   bool showForward = false;
+
+  Timer? overlayDismissTimer;
 
   YoutubeVideo? _youtubeVideo;
   YoutubeVideo? get youtubeVideo => _youtubeVideo;
@@ -125,8 +125,6 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
 
   void showControlsHandler() {
     if (!showControls) {
-      tapId = Random().nextInt(10);
-      int currentId = tapId;
       setState(() {
         showControls = true;
         showBackdrop = true;
@@ -139,7 +137,7 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
           if (!(controller?.value.isPlaying ?? true)) {
             return;
           }
-          if (currentId == tapId && mounted && showControls == true && !isSeeking) {
+          if (mounted && showControls == true && !isSeeking) {
             setState(() {
               showControls = false;
               showBackdrop = false;
@@ -156,19 +154,33 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   }
 
   Future<void> handleVolumeGesture(double primaryDelta) async {
-    tapId = Random().nextInt(10);
-    int currentId = tapId;
-    double maxVolume = 1;
+    double sensitivity = 1 / 15;
+    bool isDraggingUp = primaryDelta < 0;
+
     double currentVolume = await VolumeController().getVolume();
-    double newVolume = (currentVolume +
-      primaryDelta * 0.2 *
-      (-1));
-    currentVolumePercentage = newVolume > maxVolume
-      ? "100" : newVolume < 0 ? "0" : "${((newVolume/maxVolume) * 100).round()}";
-    setState(() {});
-    VolumeController().setVolume(newVolume > maxVolume ? maxVolume : newVolume,
-      showSystemUI: false);
-    if (!showVolumeUI) {
+
+    // volume is maximum or minimum
+    if ((currentVolume >= 1 && isDraggingUp) ||
+        (currentVolume <= 0 && !isDraggingUp) ||
+        primaryDelta == 0) {
+      setState(() {
+        showControls = false;
+        showVolumeUI = true;
+        showBackdrop = true;
+        showBrightnessUI = false;
+      });
+      return;
+    }
+
+    double newVolume = isDraggingUp
+        ? currentVolume + sensitivity
+        : currentVolume - sensitivity;
+    currentVolumePercentage = "${(newVolume * 100).round()}";
+    VolumeController().setVolume(newVolume, showSystemUI: false);
+
+    if (showVolumeUI) {
+      setState(() {});
+    } else {
       setState(() {
         showControls     = false;
         showVolumeUI     = true;
@@ -176,44 +188,57 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
         showBrightnessUI = false;
       });
     }
-    Future.delayed(const Duration(seconds: 3), () {
-      if (currentId == tapId && mounted) {
-        setState(() {
-          showControls     = false;
-          showVolumeUI     = false;
-          showBackdrop     = false;
-          showBrightnessUI = false;
-        });
-      }
-    });
+
+    rescheduleOverlayHideTimer();
   }
 
   void handleBrightnessGesture(double primaryDelta) async {
-    tapId = Random().nextInt(10);
-    int currentId = tapId;
+    double sensitivity = 0.01;
+    bool isDraggingUp = primaryDelta < 0;
+
     double currentBrightness = await ScreenBrightness().current;
-    double newBrightness =
-      currentBrightness + ((primaryDelta*-1)*0.01);
-    currentBrightnessPercentage = newBrightness > 1 ? "100" :
-      newBrightness < 0 ? "0" : "${((newBrightness/1)*100).round()}";
-    setState(() {});
-    ScreenBrightness().setScreenBrightness(
-      newBrightness > 1 ? 1 : newBrightness < 0 ? 0 : newBrightness
-    );
-    if (!showVolumeUI) {
+
+    // brightness is maximum or minimum
+    if ((currentBrightness >= 0.99 && isDraggingUp) ||
+        (currentBrightness <= 0.01 && !isDraggingUp) ||
+        primaryDelta == 0) {
       setState(() {
-        showControls     = false;
-        showVolumeUI     = false;
-        showBackdrop     = true;
+        showControls = false;
+        showVolumeUI = false;
+        showBackdrop = true;
+        showBrightnessUI = true;
+      });
+      return;
+    }
+
+    double newBrightness = isDraggingUp
+        ? currentBrightness + sensitivity
+        : currentBrightness - sensitivity;
+    currentBrightnessPercentage = "${(newBrightness * 100).round()}";
+    ScreenBrightness().setScreenBrightness(newBrightness);
+
+    if (showBrightnessUI) {
+      setState(() {});
+    } else {
+      setState(() {
+        showControls = false;
+        showVolumeUI = false;
+        showBackdrop = true;
         showBrightnessUI = true;
       });
     }
-    Future.delayed(const Duration(seconds: 3), () {
-      if (currentId == tapId && mounted) {
+
+    rescheduleOverlayHideTimer();
+  }
+
+  void rescheduleOverlayHideTimer() {
+    overlayDismissTimer?.cancel();
+    overlayDismissTimer = Timer(const Duration(seconds: 3), () {
+      if (mounted) {
         setState(() {
-          showControls     = false;
-          showVolumeUI     = false;
-          showBackdrop     = false;
+          showControls = false;
+          showVolumeUI = false;
+          showBackdrop = false;
           showBrightnessUI = false;
         });
       }
