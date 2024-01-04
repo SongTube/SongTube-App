@@ -48,7 +48,7 @@ class _SongTileState extends State<SongTile> {
 
   @override
   void initState() {
-    Future.delayed(const Duration(milliseconds: 200), () {
+    Future.delayed(const Duration(milliseconds: 40), () {
       if (mounted) {
         setState(() {
           animate = true;
