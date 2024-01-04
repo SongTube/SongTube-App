@@ -115,6 +115,7 @@ class _ID3EditorState extends State<ID3Editor> {
       final result = await UiUtils.showModal(
         context: internalNavigatorKey.currentContext!,
         modal: CommonSheet(
+          useCustomScroll: false,
           builder: (context, scrollController) {
             return CommonSheetWidget(
               title: Languages.of(context)!.labelConversionRequired,
@@ -173,6 +174,7 @@ class _ID3EditorState extends State<ID3Editor> {
         UiUtils.showModal(
           context: internalNavigatorKey.currentContext!,
           modal: CommonSheet(
+            useCustomScroll: false,
             builder: (context, scrollController) {
               return CommonSheetWidget(
                 title: Languages.of(context)!.labelPermissionRequired,
