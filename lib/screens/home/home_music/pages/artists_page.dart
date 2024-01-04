@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:songtube/internal/global.dart';
 import 'package:songtube/internal/models/media_item_models.dart';
 import 'package:songtube/providers/media_provider.dart';
 import 'package:songtube/screens/playlist.dart';
@@ -15,7 +14,7 @@ class ArtistsPage extends StatelessWidget {
     MediaProvider mediaProvider = Provider.of(context);
     final artists = MediaItemArtist.fetchArtists(mediaProvider.songs);
     return GridView.builder(
-      padding: EdgeInsets.only(left: 4, right: 4, bottom: (kToolbarHeight*1.5)+16, top: appBarSize(context)),
+      padding: const EdgeInsets.only(left: 4, right: 4, bottom: (kToolbarHeight*1.5)+16),
       itemCount: artists.length,
       clipBehavior: Clip.none,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, childAspectRatio: 1),

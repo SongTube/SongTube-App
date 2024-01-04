@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
-import 'package:songtube/internal/global.dart';
 import 'package:songtube/providers/content_provider.dart';
 import 'package:songtube/ui/animations/animated_icon.dart';
 import 'package:songtube/ui/text_styles.dart';
@@ -60,7 +59,6 @@ class _SearchSuggestionsState extends State<SearchSuggestions> {
         }
         finalList = suggestionsList + searchHistory;
         return Container(
-          margin: EdgeInsets.only(top: appBarSize(context)),
           color: Theme.of(context).cardColor,
           child: ListView.builder(
             padding: const EdgeInsets.only(top: 0),

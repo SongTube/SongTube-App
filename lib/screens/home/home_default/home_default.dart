@@ -72,47 +72,41 @@ class _HomeDefaultState extends State<HomeDefault> with TickerProviderStateMixin
     }
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: Stack(
+      body: Column(
         children: [
-          Stack(
+          Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              // HomeScreen Body
-              _body(),
-              // Search Body, which goes on top to show search history and suggestions
-              // when the search bar is focused
-              ShowUpTransition(
-                forward: uiProvider.homeSearchNode.hasFocus,
-                child: SearchSuggestions(
-                  searchQuery: searchController.text,
-                  onSearch: (suggestion) {
-                    FocusScope.of(context).unfocus();
-                    setState(() {
-                      searchController.text = suggestion;
-                    });
-                    contentProvider.searchContentFor(suggestion);
-                  },
-                ),
-              )
+              SizedBox(height: MediaQuery.of(context).padding.top+8),
+              SizedBox(
+                height: kToolbarHeight,
+                child: _appBar()),
+              _tabs(),
             ],
           ),
-          ClipRRect(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-              child: Container(
-                color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.95),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SizedBox(height: MediaQuery.of(context).padding.top+8),
-                    SizedBox(
-                      height: kToolbarHeight,
-                      child: _appBar()),
-                    _tabs(),
-                  ],
-                ),
-              ),
+          Expanded(
+            child: Stack(
+              children: [
+                // HomeScreen Body
+                _body(),
+                // Search Body, which goes on top to show search history and suggestions
+                // when the search bar is focused
+                ShowUpTransition(
+                  forward: uiProvider.homeSearchNode.hasFocus,
+                  child: SearchSuggestions(
+                    searchQuery: searchController.text,
+                    onSearch: (suggestion) {
+                      FocusScope.of(context).unfocus();
+                      setState(() {
+                        searchController.text = suggestion;
+                      });
+                      contentProvider.searchContentFor(suggestion);
+                    },
+                  ),
+                )
+              ],
             ),
-          )
+          ),
         ],
       ),
     );

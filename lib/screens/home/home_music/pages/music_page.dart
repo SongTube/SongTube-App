@@ -1,7 +1,6 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:songtube/internal/global.dart';
 import 'package:songtube/providers/media_provider.dart';
 import 'package:songtube/providers/ui_provider.dart';
 import 'package:songtube/ui/components/custom_scrollbar.dart';
@@ -39,9 +38,9 @@ class _MusicPageState extends State<MusicPage> {
         key: const PageStorageKey('homeMusicPage'),
         itemExtent: 72,
         controller: controller,
-        padding: EdgeInsets.only(
-          top: appBarSize(context)-8,
+        padding: const EdgeInsets.only(
           bottom: 16+(kToolbarHeight*1.5),
+          top: 0
         ),
         itemCount: mediaProvider.songs.length,
         itemBuilder: (context, index) {

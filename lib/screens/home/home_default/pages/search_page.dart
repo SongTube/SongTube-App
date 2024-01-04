@@ -30,7 +30,6 @@ class SearchPage extends StatelessWidget {
       },
       child: CustomScrollView(
         slivers: [
-          SliverToBoxAdapter(child: SizedBox(height: appBarSize(context))),
           if (contentProvider.searchContent!.searchChannels?.isNotEmpty ?? false)
           SliverList(
             delegate: SliverChildBuilderDelegate((context, index) {

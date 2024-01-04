@@ -79,27 +79,19 @@ class _HomeMusicState extends State<HomeMusic> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: Stack(
+      body: Column(
         children: [
-          _body(),
-          ClipRRect(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-              child: Container(
-                color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.95),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SizedBox(height: MediaQuery.of(context).padding.top+8),
-                    SizedBox(
-                      height: kToolbarHeight,
-                      child: _appBar()),
-                    _tabs(),
-                  ],
-                ),
-              ),
-            ),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(height: MediaQuery.of(context).padding.top+8),
+              SizedBox(
+                height: kToolbarHeight,
+                child: _appBar()),
+              _tabs(),
+            ],
           ),
+          Expanded(child: _body()),
         ],
       ),
     );
@@ -190,7 +182,6 @@ class _HomeMusicState extends State<HomeMusic> with TickerProviderStateMixin {
         ? Center(child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              SizedBox(height: appBarSize(context)),
               CircularProgressIndicator.adaptive(valueColor: AlwaysStoppedAnimation(Theme.of(context).primaryColor)),
               const SizedBox(height: 8),
               Text(Languages.of(context)!.labelFetchingSongs, style: textStyle(context)),
