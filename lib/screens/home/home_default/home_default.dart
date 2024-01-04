@@ -1,10 +1,8 @@
-import 'dart:ui';
-
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:newpipeextractor_dart/utils/url.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/internal/global.dart';
 import 'package:songtube/languages/languages.dart';
 import 'package:songtube/main.dart';
 import 'package:songtube/providers/content_provider.dart';
@@ -121,11 +119,11 @@ class _HomeDefaultState extends State<HomeDefault> with TickerProviderStateMixin
           child: Container(
             margin: const EdgeInsets.only(left: 12),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              color: Theme.of(context).cardColor.withOpacity(0.95)
+              borderRadius: BorderRadius.circular(100),
+              color: Theme.of(context).cardColor,
             ),
             child: CustomInkWell(
-              borderRadius: BorderRadius.circular(15),
+              borderRadius: BorderRadius.circular(100),
               onTap: () {
                 uiProvider.homeSearchNode.requestFocus();
               },
@@ -135,21 +133,34 @@ class _HomeDefaultState extends State<HomeDefault> with TickerProviderStateMixin
                   Expanded(
                     child: Container(
                       padding: const EdgeInsets.only(right: 16),
-                      height: kToolbarHeight,
+                      height: 56,
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Row(
                           children: [
-                            const AppAnimatedIcon(EvaIcons.searchOutline, size: 20),
+                            Consumer<MediaProvider>(
+                              builder: (context, provider, _) {
+                                final greyscale = provider.currentColors.vibrant != accentColor;
+                                return Opacity(
+                                  opacity: greyscale ? 0.8 : 1,
+                                  child: Image.asset(
+                                      greyscale
+                                      ? 'assets/images/logo_bw.png'
+                                      : 'assets/images/logo.png',
+                                    height: 30, width: 30
+                                  ),
+                                );
+                              }
+                            ),
                             const SizedBox(width: 12),
                             Expanded(
                               child: TextField(
                                 enabled: true,
                                 focusNode: uiProvider.homeSearchNode,
                                 controller: searchController,
-                                style: smallTextStyle(context).copyWith(),
+                                style: subtitleTextStyle(context).copyWith(),
                                 decoration: InputDecoration.collapsed(
-                                  hintStyle: smallTextStyle(context, opacity: 0.6).copyWith(fontWeight: FontWeight.w500),
+                                  hintStyle: subtitleTextStyle(context, opacity: 0.4).copyWith(fontWeight: FontWeight.w500),
                                   hintText: Languages.of(context)!.labelSearchYoutube),
                                 onSubmitted: (query) {
                                   FocusScope.of(context).unfocus();
@@ -185,7 +196,8 @@ class _HomeDefaultState extends State<HomeDefault> with TickerProviderStateMixin
                                   return const SizedBox();
                                 }
                               },
-                            )
+                            ),
+                            //const AppAnimatedIcon(Icons.search)
                           ],
                         ),
                       ),
@@ -202,7 +214,7 @@ class _HomeDefaultState extends State<HomeDefault> with TickerProviderStateMixin
               context: internalNavigatorKey.currentContext!,
               modal: SearchFiltersSheet());
           },
-          icon: const AppAnimatedIcon(EvaIcons.gridOutline, size: 20)),
+          icon: const AppAnimatedIcon(Icons.manage_search_outlined, size: 24)),
         const SizedBox(width: 4),
       ],
     );

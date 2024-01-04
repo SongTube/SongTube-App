@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/global.dart';
 import 'package:songtube/internal/models/song_item.dart';
@@ -35,7 +34,7 @@ class _HomeMusicState extends State<HomeMusic> with TickerProviderStateMixin {
 
   MediaItem? latestEvent;
 
-  UiProvider get uiProvider => Provider.of(context);
+  UiProvider get uiProvider => Provider.of(context, listen: false);
 
   // Search Query
   bool get searching => uiProvider.musicSearchController.text.trim().isNotEmpty;
@@ -101,7 +100,7 @@ class _HomeMusicState extends State<HomeMusic> with TickerProviderStateMixin {
     return Container(
       margin: const EdgeInsets.only(left: 12, right: 12),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(100),
         color: Theme.of(context).cardColor
       ),
       child: Align(
@@ -109,16 +108,16 @@ class _HomeMusicState extends State<HomeMusic> with TickerProviderStateMixin {
         child: Row(
           children: [
             const SizedBox(width: 16),
-            const AppAnimatedIcon(Iconsax.search_normal, size: 18, opacity: 0.8),
+            const AppAnimatedIcon(Icons.search, size: 24, opacity: 0.8),
             const SizedBox(width: 12),
             Expanded(
               child: TextField(
                 enabled: true,
                 focusNode: uiProvider.musicSearchNode,
                 controller: uiProvider.musicSearchController,
-                style: smallTextStyle(context).copyWith(fontWeight: FontWeight.w500),
+                style: subtitleTextStyle(context).copyWith(fontWeight: FontWeight.w500),
                 decoration: InputDecoration.collapsed(
-                  hintStyle: smallTextStyle(context, opacity: 0.4).copyWith(fontWeight: FontWeight.w500),
+                  hintStyle: subtitleTextStyle(context, opacity: 0.4).copyWith(fontWeight: FontWeight.w500),
                   hintText: Languages.of(context)!.labelSearchAnything),
                 onChanged: (_) {
                   setState(() {});

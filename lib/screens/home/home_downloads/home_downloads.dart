@@ -66,7 +66,7 @@ class _HomeDownloadsState extends State<HomeDownloads> with TickerProviderStateM
       child: Container(
         margin: const EdgeInsets.only(left: 12, right: 12),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: BorderRadius.circular(100),
           color: Theme.of(context).cardColor
         ),
         child: Align(
@@ -74,7 +74,7 @@ class _HomeDownloadsState extends State<HomeDownloads> with TickerProviderStateM
           child: Row(
             children: [
               const SizedBox(width: 16),
-              const AppAnimatedIcon(Iconsax.search_normal, size: 18, opacity: 0.8),
+              const AppAnimatedIcon(Icons.search, size: 24, opacity: 0.8),
               const SizedBox(width: 12),
               Expanded(
                 child: TextField(
@@ -82,7 +82,7 @@ class _HomeDownloadsState extends State<HomeDownloads> with TickerProviderStateM
                   focusNode: node,
                   style: subtitleTextStyle(context).copyWith(fontWeight: FontWeight.w500),
                   decoration: InputDecoration.collapsed(
-                    hintStyle: smallTextStyle(context, opacity: 0.4).copyWith(fontWeight: FontWeight.w500),
+                    hintStyle: subtitleTextStyle(context, opacity: 0.4).copyWith(fontWeight: FontWeight.w500),
                     hintText: Languages.of(context)!.labelSearchDownloads),
                   onChanged: (_) {
                     setState(() {});
