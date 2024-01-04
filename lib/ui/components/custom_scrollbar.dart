@@ -1,5 +1,7 @@
 import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:songtube/providers/media_provider.dart';
 import 'package:songtube/ui/animations/fade_in.dart';
 
 class CustomScrollbar extends StatefulWidget {
@@ -40,12 +42,13 @@ class _CustomScrollbarState extends State<CustomScrollbar> {
 
   @override
   Widget build(BuildContext context) {
+    MediaProvider mediaProvider = Provider.of(context);
     return DraggableScrollbar(
       padding: EdgeInsets.only(bottom: widget.bottomPadding),
       scrollbarTimeToFade: const Duration(seconds: 2),
       heightScrollThumb: 72,
       controller: scrollController,
-      backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.6),
+      backgroundColor: (mediaProvider.currentColors.vibrant ?? Theme.of(context).primaryColor).withOpacity(0.6),
       scrollThumbBuilder: (backgroundColor, thumbAnimation, labelAnimation, height, {labelConstraints, labelText}) {
         return FadeTransition(
           opacity: thumbAnimation,
@@ -57,7 +60,7 @@ class _CustomScrollbarState extends State<CustomScrollbar> {
                 child: Container(
                   height: 56, width: 56,
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
+                    color: mediaProvider.currentColors.vibrant ?? Theme.of(context).primaryColor,
                     borderRadius: BorderRadius.circular(16)
                   ),
                   child: Center(child: labelText)
