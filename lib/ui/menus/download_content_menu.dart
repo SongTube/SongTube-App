@@ -39,7 +39,7 @@ class _DownloadContentMenuState extends State<DownloadContentMenu> {
 
   @override
   void initState() {
-    video = video;
+    video = widget.videoDetails;
     if (video == null) {
       getVideo();
     }
