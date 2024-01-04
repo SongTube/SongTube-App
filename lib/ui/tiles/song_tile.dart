@@ -75,18 +75,16 @@ class _SongTileState extends State<SongTile> {
             }
           },
           child: AnimatedContainer(
-            margin: widget.padding ?? const EdgeInsets.only(left: 12, right: 12, top: 4, bottom: 4),
             duration: const Duration(milliseconds: 300),
             decoration: BoxDecoration(
               color: widget.disablePlayingBackground ? Colors.transparent : isPlaying ? dominantColor.withOpacity(0.05) : Colors.transparent,
-              borderRadius: BorderRadius.circular(15)
             ),
-            padding: const EdgeInsets.all(4),
-            height: kToolbarHeight+12,
+            padding: const EdgeInsets.all(16).copyWith(top: 8, bottom: 8),
+            height: 72,
             child: Row(
               children: [
                 _leading(),
-                const SizedBox(width: 12),
+                const SizedBox(width: 16),
                 Expanded(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,

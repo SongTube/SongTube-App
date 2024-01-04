@@ -309,7 +309,7 @@ class MediaUtils {
   }
 
   static String removeToxicSymbols(String string) {
-    final const toxicSymbolsRegex = RegExp(r'Container.|\/|\\|\*|\?|\"|\<|\>|\:|\!|\[|\]|\¡');
+    final toxicSymbolsRegex = RegExp(r'Container.|\/|\\|\*|\?|\"|\<|\>|\:|\!|\[|\]|\¡');
     return string.replaceAll(toxicSymbolsRegex, '');
   }
 
