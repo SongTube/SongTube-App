@@ -387,7 +387,7 @@ class _VideoPlayerContentState extends State<VideoPlayerContent> with TickerProv
                         if (videoReady) {
                           UiUtils.showModal(
                             context: internalNavigatorKey.currentContext!,
-                            modal: DownloadContentMenu(content: widget.content));
+                            modal: DownloadContentMenu(videoDetails: widget.content.videoDetails));
                         }
                       },
                     );

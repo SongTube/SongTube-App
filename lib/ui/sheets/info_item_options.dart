@@ -9,6 +9,7 @@ import 'package:songtube/providers/content_provider.dart';
 import 'package:songtube/services/content_service.dart';
 import 'package:songtube/ui/animations/animated_icon.dart';
 import 'package:songtube/ui/info_item_renderer.dart';
+import 'package:songtube/ui/menus/download_content_menu.dart';
 import 'package:songtube/ui/sheets/add_to_stream_playlist.dart';
 import 'package:songtube/ui/sheets/common_sheet.dart';
 import 'package:songtube/ui/sheets/snack_bar.dart';
@@ -103,6 +104,18 @@ class InfoItemOptions extends StatelessWidget {
                       }
                     }
                   );
+                }
+              ),
+              if (infoItem is StreamInfoItem)
+              _optionTile(context,
+                title: Languages.of(context)!.labelDownload,
+                subtitle: Languages.of(context)!.labelVideoDownloadDescription,
+                icon: LineIcons.download,
+                onTap: () {
+                  Navigator.pop(context);
+                  UiUtils.showModal(
+                    context: internalNavigatorKey.currentContext!,
+                    modal: DownloadContentMenu(url: infoItem.url, videoDetails: null,));
                 }
               ),
               _optionTile(context,
