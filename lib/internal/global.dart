@@ -69,7 +69,7 @@ bool blockPipMode = false;
 const Duration kAnimationShortDuration = Duration(milliseconds: 150);
 const Duration kAnimationDuration = Duration(milliseconds: 300);
 const Duration kAnimationLongDuration = Duration(milliseconds: 500);
-const Curve kAnimationCurve = Curves.ease;
+const Curve kAnimationCurve = Easing.standard;
 
 // AppBars Size
 double appBarSize(BuildContext context) => MediaQuery.of(context).padding.top+8+(kToolbarHeight*2);
