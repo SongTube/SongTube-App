@@ -673,6 +673,10 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                                     value: 'MP3',
                                     child: Text('MP3', style: smallTextStyle(context, bold: true)),
                                   ),
+                                  DropdownMenuItem<String>(
+                                    value: 'WAV',
+                                    child: Text('WAV', style: smallTextStyle(context, bold: true)),
+                                  ),
                                 ],
                                 onChanged: (String? value) {
                                   FFmpegTask task;
@@ -680,6 +684,8 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                                     task = FFmpegTask.convertToAAC;
                                   } else if (value == 'OGG') {
                                     task = FFmpegTask.convertToOGG;
+                                  } else if (value == 'WAV') {
+                                    task = FFmpegTask.convertToWav;
                                   } else {
                                     task = FFmpegTask.convertToMP3;
                                   }

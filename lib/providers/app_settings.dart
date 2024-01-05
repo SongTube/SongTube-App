@@ -121,6 +121,8 @@ class AppSettings extends ChangeNotifier {
         return FFmpegTask.convertToMP3;
       } else if (task == 'ogg') {
         return FFmpegTask.convertToOGG;
+      } else if (task == 'wav') {
+        return FFmpegTask.convertToWav;
       } else {
         return FFmpegTask.convertToAAC;
       }
