@@ -85,24 +85,6 @@ class MediaUtils {
         userSongs.removeWhere((element) => element.filePath == item.id);
       }
     });
-    // Build Thumbnails
-    Stopwatch thumbnailStopwatch = Stopwatch();
-    int thumbnailsDuration = 0;
-    for (final song in userSongs) {
-      try {
-        thumbnailStopwatch.reset();
-        thumbnailStopwatch.start();
-        await ArtworkManager.writeThumbnail(song.filePath!);
-        if (kDebugMode) {
-          thumbnailStopwatch.stop();
-          thumbnailsDuration += thumbnailStopwatch.elapsed.inMilliseconds;
-          print('Thumbnail took: ${thumbnailStopwatch.elapsed.inMilliseconds}ms');
-        }
-      } catch (_) {}
-    }
-    if (kDebugMode) {
-      print('Thumbnails spent a total of ${thumbnailsDuration/1000}s');
-    }
     final List<SongItem> songs = [];
     for (final element in userSongs) {
       final song = MediaUtils.convertToSongItem(element);

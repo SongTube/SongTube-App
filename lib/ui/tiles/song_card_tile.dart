@@ -1,19 +1,15 @@
-import 'dart:io';
-
 import 'package:provider/provider.dart';
-import 'package:songtube/internal/artwork_manager.dart';
 import 'package:songtube/internal/global.dart';
 import 'package:songtube/internal/models/song_item.dart';
 import 'package:songtube/main.dart';
 import 'package:songtube/providers/media_provider.dart';
 import 'package:songtube/ui/animations/mini_music_visualizer.dart';
+import 'package:songtube/ui/components/song_thumbnail.dart';
 import 'package:songtube/ui/sheets/song_options.dart';
 import 'package:songtube/ui/text_styles.dart';
 import 'package:flutter/material.dart';
-import 'package:image_fade/image_fade.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:songtube/ui/ui_utils.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class SongCardTile extends StatefulWidget {
   const SongCardTile({
@@ -32,12 +28,6 @@ class SongCardTile extends StatefulWidget {
 }
 
 class _SongCardTileState extends State<SongCardTile> {
-
-  // Image Getter
-  Future<File> getArtwork() async {
-    await ArtworkManager.writeArtwork(widget.song.id, forceRefresh: true);
-    return artworkFile(widget.song.id);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,21 +55,7 @@ class _SongCardTileState extends State<SongCardTile> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
               ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(15),
-                child: FutureBuilder<File>(
-                  future: getArtwork(),
-                  builder: (context, snapshot) {
-                    return ImageFade(
-                      placeholder: Image.memory(kTransparentImage, fit: BoxFit.cover),
-                      image: snapshot.hasData
-                        ? FileImage(snapshot.data!)
-                        : MemoryImage(kTransparentImage) as ImageProvider,
-                      fit: BoxFit.cover,
-                    );
-                  }
-                ),
-              ),
+              child: SongThumbnail(uri: widget.song.id, highRes: true),
             ),
             // Album Details
             Padding(

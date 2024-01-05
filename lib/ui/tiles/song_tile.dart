@@ -6,6 +6,7 @@ import 'package:songtube/main.dart';
 import 'package:songtube/providers/media_provider.dart';
 import 'package:songtube/providers/playlist_provider.dart';
 import 'package:songtube/ui/animations/mini_music_visualizer.dart';
+import 'package:songtube/ui/components/song_thumbnail.dart';
 import 'package:songtube/ui/sheets/song_options.dart';
 import 'package:songtube/ui/text_styles.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,6 @@ import 'package:flutter_bounce/flutter_bounce.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/ui/ui_utils.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class SongTile extends StatefulWidget {
   const SongTile({
@@ -42,21 +42,6 @@ class _SongTileState extends State<SongTile> {
   MediaProvider get mediaProvider => Provider.of<MediaProvider>(context, listen: false);
 
   Color get dominantColor => mediaProvider.currentColors.vibrant ?? mediaProvider.currentColors.dominant ?? Theme.of(context).textTheme.bodyText1!.color!;
-
-  // Animate
-  bool animate = false;
-
-  @override
-  void initState() {
-    Future.delayed(const Duration(milliseconds: 40), () {
-      if (mounted) {
-        setState(() {
-          animate = true;
-        });
-      }
-    });
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -120,32 +105,7 @@ class _SongTileState extends State<SongTile> {
         fit: StackFit.expand,
         alignment: Alignment.center,
         children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: [
-                BoxShadow(
-                  blurRadius: 12,
-                  offset: const Offset(0,0),
-                  color: Theme.of(context).shadowColor.withOpacity(0.1)
-                )
-              ],
-            ), 
-            child: animate ? ClipRRect(
-              borderRadius: BorderRadius.circular(15),
-              child: FadeInImage(
-                fadeInDuration: const Duration(milliseconds: 200),
-                image: widget.song.isVideo && widget.song.artworkUrl != null
-                  ? NetworkImage(widget.song.artworkUrl.toString()) as ImageProvider
-                  : FileImage(widget.song.thumbnailPath!),
-                placeholder: MemoryImage(kTransparentImage),
-                fit: BoxFit.cover,
-                imageErrorBuilder: (context, error, stackTrace) {
-                  return Image.asset('assets/images/artworkPlaceholder_big.png', fit: BoxFit.cover);
-                },
-              ),
-            ) : const SizedBox(),
-          ),
+          SongThumbnail(uri: widget.song.id),
           if (widget.song.isVideo)
           Container(
             padding: const EdgeInsets.all(8),
