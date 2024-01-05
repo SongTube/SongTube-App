@@ -163,30 +163,10 @@ class MediaUtils {
 
   // Convert any List<SongFile> to a List<MediaItem>
   static SongItem? convertToSongItem(SongInfo element) {
-    int hours = 0;
-    int minutes = 0;
-    int? micros;
-    List<String> parts = element.duration?.split(':') ?? [];
-    try {
-      if (parts.length > 2) {
-        hours = int.parse(parts[parts.length - 3]);
-      }
-      if (parts.length > 1) {
-        minutes = int.parse(parts[parts.length - 2]);
-      }
-      micros = (double.parse(parts[parts.length - 1]) * 1000000).round();
-    } catch (e) {
-      if (kDebugMode) {
-        print(e.toString());
-      }
-      return null;
-    }
     Duration duration = Duration(
-      milliseconds: Duration(
-        hours: hours, 
-        minutes: minutes,
-        microseconds: micros
-      ).inMilliseconds
+      milliseconds: element.duration != null
+        ? int.parse(element.duration!)
+        : 0,
     );
     FileStat? stats;
     try {
