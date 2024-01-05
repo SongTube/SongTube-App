@@ -14,6 +14,7 @@ enum FFmpegTask {
   convertToOGG,
   convertToOGGVorbis,
   convertToMP3,
+  convertToWav,
   appendAudioOnVideo,
   none
 }
@@ -46,6 +47,7 @@ class FFmpegConverter {
     codec = "${streamsInfoArray['streams'][0]['codec_name']}";
     final info = "${streamsInfoArray['format']['format_name']}";
     if (codec == "aac") return "m4a";
+    if (codec == "wav") return "wav";
     if (codec == "opus") return "ogg";
     if (codec == "mp3") return "mp3";
     if (info == "matroska,webm") return "webm";
@@ -131,6 +133,14 @@ class FFmpegConverter {
       ];
       output = File("${output.path}.m4a");
     }
+    if (task == FFmpegTask.convertToWav) {
+      argsList = [
+        "-y", "-i",
+        audioFile,
+        "${output.path}.wav",
+      ];
+      output = File("${output.path}.wav");
+    }
     if (task == FFmpegTask.convertToOGG) {
       argsList = [
         "-y", "-i", audioFile, "-c:a", "libopus",
@@ -210,6 +220,8 @@ class FFmpegConverter {
       return format == "m4a" ? false : true;
     } else if (task == FFmpegTask.convertToOGGVorbis) {
       return format == "ogg" ? false : true;
+    } else if (task == FFmpegTask.convertToWav) {
+      return format == 'wav' ? false : true;
     } else if (task == FFmpegTask.none) {
       return false;
     } else {

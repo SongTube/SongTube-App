@@ -405,8 +405,48 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                     child: child,
                   );
                 },
-                child: _playbackControlsOverlay(),
+                child: audioOnly ? _audioOnlyOverlay() : _playbackControlsOverlay(),
               ),
+        )
+      ],
+    );
+  }
+
+  Widget _audioOnlyOverlay() {
+    return Column(
+      children: [
+        // Play/Pause Button
+        Expanded(
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            child: !buffering ? VideoPlayerPlayPauseButton(
+              isPlaying: isPlaying,
+              onPlayPause: () async {
+                if (controller?.value.isPlaying ?? false) {
+                  await controller?.pause();
+                  isPlaying = false;
+                } else {
+                  await controller?.play();
+                  isPlaying = true;
+                  showControlsHandler();
+                }
+                setState(() {});
+              },
+            ) : const SizedBox(),
+          ),
+        ),
+        // Progress Indicator
+        Container(
+          height: kToolbarHeight+16,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.transparent, Colors.black.withOpacity(0.2), Colors.black.withOpacity(0.4), Colors.black.withOpacity(0.6), Colors.black.withOpacity(0.8)],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              tileMode: TileMode.clamp
+            ),
+          ),
+          child: _progressBar(),
         )
       ],
     );
@@ -422,10 +462,7 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
             fadeDuration: const Duration(milliseconds: 300),
             placeholder: const ShimmerContainer(height: null, width: null),
             fit: BoxFit.cover,
-            image: NetworkImage(widget.content.infoItem is StreamInfoItem
-              ? (widget.content.infoItem as StreamInfoItem).thumbnails!.maxresdefault
-              : widget.content.infoItem.thumbnailUrl),
-          ),
+            image: NetworkImage(widget.content.videoDetails?.videoInfo.thumbnailUrl ?? '')),
         ),
         if (!audioOnly)
         Center(
@@ -642,61 +679,7 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                     },
                   ) : const SizedBox(),
                 ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Builder(
-                    builder: (context) {
-                      return StreamBuilder<Object>(
-                        stream: Rx.combineLatest2<double, double, double>(
-                          _dragPositionSubject.stream,
-                          Stream.periodic(const Duration(milliseconds: 1000), ((computationCount) {
-                            return computationCount.toDouble();
-                          })),
-                          (dragPosition, _) => dragPosition),
-                        builder: (context, snapshot) {
-                          return VideoPlayerProgressBar(
-                            onPresetTap: () {
-                              UiUtils.showModal(
-                                context: internalNavigatorKey.currentContext!,
-                                modal: PlaybackQualitySheet(
-                                  content: widget.content,
-                                  currentPlaybackSpeed: controller?.value.playbackSpeed ?? 1.00,
-                                  onPlaybackSpeedChange: (speed) {
-                                    controller?.setPlaybackSpeed(speed);
-                                  },
-                                  currentQuality: currentQuality!,
-                                  onChangeQuality: (quality) async {
-                                    final position = controller?.value.position;
-                                    controller?.removeListener(() { });
-                                    await controller?.dispose();
-                                    AppSettings.lastVideoQuality = quality.resolution;
-                                    setState(() { controller = null; currentQuality = quality; });
-                                    loadVideo(position: position);
-                              }));
-                            },
-                            audioOnly: false,
-                            segments: widget.content.videoDetails?.segments,
-                            onShowSegments: () {
-                              widget.onOpenChapters();
-                            },
-                            position: controller?.value.position ?? const Duration(seconds: 0),
-                            duration: controller?.value.duration ?? const Duration(seconds: 1),
-                            onSeek: (double newPosition) {
-                              handleSeek(Duration(seconds: newPosition.round()));
-                              setState(() => isSeeking = false);
-                            },
-                            onFullScreenTap: () {
-                              widget.onFullscreen();
-                            },
-                            onSeekStart: () {
-                              setState(() => isSeeking = true);
-                            },
-                          );
-                        }
-                      );
-                    }
-                  ),
-                )
+                _progressBar()
               ],
             ),
           ) : Container()
@@ -710,6 +693,64 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
             : Container()
         )
       ],
+    );
+  }
+
+  Widget _progressBar() {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Builder(
+        builder: (context) {
+          return StreamBuilder<Object>(
+            stream: Rx.combineLatest2<double, double, double>(
+              _dragPositionSubject.stream,
+              Stream.periodic(const Duration(milliseconds: 1000), ((computationCount) {
+                return computationCount.toDouble();
+              })),
+              (dragPosition, _) => dragPosition),
+            builder: (context, snapshot) {
+              return VideoPlayerProgressBar(
+                onPresetTap: () {
+                  UiUtils.showModal(
+                    context: internalNavigatorKey.currentContext!,
+                    modal: PlaybackQualitySheet(
+                      content: widget.content,
+                      currentPlaybackSpeed: controller?.value.playbackSpeed ?? 1.00,
+                      onPlaybackSpeedChange: (speed) {
+                        controller?.setPlaybackSpeed(speed);
+                      },
+                      currentQuality: currentQuality!,
+                      onChangeQuality: (quality) async {
+                        final position = controller?.value.position;
+                        controller?.removeListener(() { });
+                        await controller?.dispose();
+                        AppSettings.lastVideoQuality = quality.resolution;
+                        setState(() { controller = null; currentQuality = quality; });
+                        loadVideo(position: position);
+                  }));
+                },
+                audioOnly: false,
+                segments: widget.content.videoDetails?.segments,
+                onShowSegments: () {
+                  widget.onOpenChapters();
+                },
+                position: controller?.value.position ?? const Duration(seconds: 0),
+                duration: controller?.value.duration ?? const Duration(seconds: 1),
+                onSeek: (double newPosition) {
+                  handleSeek(Duration(seconds: newPosition.round()));
+                  setState(() => isSeeking = false);
+                },
+                onFullScreenTap: () {
+                  widget.onFullscreen();
+                },
+                onSeekStart: () {
+                  setState(() => isSeeking = true);
+                },
+              );
+            }
+          );
+        }
+      ),
     );
   }
 
