@@ -60,6 +60,7 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   VideoPlaybackQuality? currentQuality;
   bool lockPlayer = true;
   bool interfaceLocked = false;
+  bool audioOnly = false;
 
   // Reverse and Forward Animation
   bool showReverse = false;
@@ -271,6 +272,12 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
     currentQuality ??= widget.content.videoOptions!.firstWhere((element) => element.resolution.contains(AppSettings.lastVideoQuality), orElse: () {
       return widget.content.videoOptions!.last;
     });
+    if (currentQuality!.resolution == 'Audio Only') {
+      audioOnly = true;
+    } else {
+      audioOnly = false;
+    }
+    setState(() {});
     controller = VideoPlayerController.network(
       videoDataSource: currentQuality!.videoUrl,
       audioDataSource: currentQuality!.audioUrl
@@ -379,9 +386,12 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
     return Stack(
       alignment: Alignment.center,
       children: [
-        AspectRatio(
-          aspectRatio: controller?.value.aspectRatio ?? 16/9,
-          child: VideoPlayer(controller!)),
+        AnimatedSwitcher(
+          duration: kAnimationDuration,
+          child: audioOnly ? _thumbnail() : AspectRatio(
+            aspectRatio: controller?.value.aspectRatio ?? 16/9,
+            child: VideoPlayer(controller!)),
+        ),
         AnimatedSwitcher(
           duration: const Duration(milliseconds: 300),
           child: showAutoplay
@@ -407,16 +417,17 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
       fit: StackFit.expand,
       children: [
         Opacity(
-          opacity: 0.6,
+          opacity: audioOnly ? 1 : 0.6,
           child: ImageFade(
             fadeDuration: const Duration(milliseconds: 300),
             placeholder: const ShimmerContainer(height: null, width: null),
             fit: BoxFit.cover,
             image: NetworkImage(widget.content.infoItem is StreamInfoItem
-              ? widget.content.infoItem.thumbnails!.hqdefault
+              ? (widget.content.infoItem as StreamInfoItem).thumbnails!.maxresdefault
               : widget.content.infoItem.thumbnailUrl),
           ),
         ),
+        if (!audioOnly)
         Center(
           child: CircularProgressIndicator(
             valueColor: AlwaysStoppedAnimation(Theme.of(context).primaryColor),

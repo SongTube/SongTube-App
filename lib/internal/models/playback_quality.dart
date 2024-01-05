@@ -40,7 +40,7 @@ class VideoPlaybackQuality {
       final res = fullres.first;
       final frames = fullres.last.isNotEmpty ? double.parse(stream.resolution!.split('p').last) : 30.0;
       return VideoPlaybackQuality(resolution: res, framerate: frames.toDouble(), format: stream.formatSuffix!, videoUrl: stream.url);
-    });
+    })..add(VideoPlaybackQuality(resolution: 'Audio Only', format: '.ogg', framerate: 30, audioUrl: video.audioWithBestOggQuality?.url));
   }
 
   VideoPlaybackQuality copyWith({

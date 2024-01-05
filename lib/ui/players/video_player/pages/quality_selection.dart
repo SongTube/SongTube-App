@@ -143,7 +143,7 @@ class _PlaybackQualitySheetState extends State<PlaybackQualitySheet> {
                 Padding(
                   padding: const EdgeInsets.only(top: 12, bottom: 16),
                   child: videoOnlyOptions(),
-                )
+                ),
               ],
             ),
           ],
@@ -161,7 +161,7 @@ class _PlaybackQualitySheetState extends State<PlaybackQualitySheet> {
         scrollDirection: Axis.horizontal,
         itemCount: videoList.length,
         itemBuilder: (context, index) {
-          return optionTile(videoList[index]);
+          return optionTile(videoList[index], customLabel: videoList[index].resolution == 'Audio Only' ? 'Audio Only' : null);
         },
       ),
     );
@@ -182,7 +182,7 @@ class _PlaybackQualitySheetState extends State<PlaybackQualitySheet> {
     );
   }
 
-  Widget optionTile(VideoPlaybackQuality quality) {
+  Widget optionTile(VideoPlaybackQuality quality, {String? customLabel}) {
     MediaProvider mediaProvider = Provider.of(context);
     final selected = widget.currentQuality == quality;
     return GestureDetector(
@@ -199,8 +199,8 @@ class _PlaybackQualitySheetState extends State<PlaybackQualitySheet> {
         ),
         child: Row(
           children: [
-            AnimatedText('${quality.resolution}p', style: subtitleTextStyle(context, opacity: 0.6).copyWith(fontSize: 14), auto: selected, opacity: selected ? 1 : 0.6),
-            if (quality.framerate > 30)
+            AnimatedText(customLabel ?? '${quality.resolution}p', style: subtitleTextStyle(context, opacity: 0.6).copyWith(fontSize: 14), auto: selected, opacity: selected ? 1 : 0.6),
+            if (quality.framerate > 30 && customLabel == null)
             AnimatedText(' ${quality.framerate.round()}FPS', style: smallTextStyle(context).copyWith(fontSize: 14), auto: true)
           ],
         ),
