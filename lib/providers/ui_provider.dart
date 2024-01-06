@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:songtube/internal/global.dart';
+import 'package:songtube/providers/app_settings.dart';
 import 'package:songtube/ui/components/fancy_scaffold.dart';
 import 'package:songtube/ui/components/palette_loader.dart';
 
 enum CurrentPlayer { music, video }
 
 class UiProvider extends ChangeNotifier {
+
+  // Bottom Navigation Bar Current Index
+  int _bottomNavigationBarIndex = AppSettings.defaultLandingPage;
+  int get bottomNavigationBarIndex => _bottomNavigationBarIndex;
+  set bottomNavigationBarIndex(int value) {
+    _bottomNavigationBarIndex = value;
+    notifyListeners();
+  }
 
   /// Loads the User's preferred ThemeMode from local or remote storage.
   ThemeMode get themeMode {

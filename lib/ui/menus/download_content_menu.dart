@@ -16,6 +16,8 @@ import 'package:songtube/ui/animations/animated_icon.dart';
 import 'package:songtube/ui/menus/download_menu/music.dart';
 import 'package:songtube/ui/menus/download_menu/video.dart';
 import 'package:songtube/ui/sheets/common_sheet.dart';
+import 'package:songtube/ui/sheets/downloading_snackbar.dart';
+import 'package:songtube/ui/sheets/snack_bar.dart';
 import 'package:songtube/ui/text_styles.dart';
 import 'package:songtube/ui/ui_utils.dart';
 
@@ -162,6 +164,7 @@ class _DownloadContentMenuState extends State<DownloadContentMenu> {
                           );
                           final downloadProvider = Provider.of<DownloadProvider>(context, listen: false);
                           downloadProvider.handleDownloadItem(info: downloadInfo);
+                          showSnackbar(customSnackBar: DownloadingSnackbar(name: downloadInfo.name));
                           Navigator.pop(context);
                         }
                       ),

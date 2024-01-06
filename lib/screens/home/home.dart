@@ -38,9 +38,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
-  // Bottom Navigation Bar Current Index
-  int bottomNavigationBarIndex = AppSettings.defaultLandingPage;
-
   // Intent Listener
   StreamSubscription? _sub;
 
@@ -184,7 +181,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           if (uiProvider.onAltRoute) {
             return Future.value(true);
           } else {
-            if (bottomNavigationBarIndex == 0) {
+            if (uiProvider.bottomNavigationBarIndex == 0) {
               if (uiProvider.homeSearchNode.hasFocus) {
                 uiProvider.homeSearchNode.unfocus();
                 contentProvider.setState();
@@ -195,7 +192,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 return Future.value(false);
               }
             }
-            if (bottomNavigationBarIndex == 1) {
+            if (uiProvider.bottomNavigationBarIndex == 1) {
               if (uiProvider.musicSearchNode.hasFocus) {
                 uiProvider.musicSearchNode.unfocus();
                 contentProvider.setState();
@@ -226,14 +223,14 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             );
           },
           duration: const Duration(milliseconds: 300),
-          child: screens[bottomNavigationBarIndex]
+          child: screens[uiProvider.bottomNavigationBarIndex]
         ),
         bottomNavigationBar: SongTubeNavigation(
-          selectedIndex: bottomNavigationBarIndex,
+          selectedIndex: uiProvider.bottomNavigationBarIndex,
           backgroundColor: Theme.of(context).cardColor,
           onItemTap: (int tappedIndex) {
             setState(() {
-              bottomNavigationBarIndex = tappedIndex;
+              uiProvider.bottomNavigationBarIndex = tappedIndex;
             });
           },
           destinations: [

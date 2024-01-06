@@ -17,6 +17,8 @@ import 'package:songtube/providers/media_provider.dart';
 import 'package:songtube/ui/animations/animated_icon.dart';
 import 'package:songtube/ui/animations/animated_text.dart';
 import 'package:songtube/ui/sheets/common_sheet.dart';
+import 'package:songtube/ui/sheets/downloading_snackbar.dart';
+import 'package:songtube/ui/sheets/snack_bar.dart';
 import 'package:songtube/ui/text_styles.dart';
 
 class VideoDownloadMenu extends StatefulWidget {
@@ -44,7 +46,8 @@ class _VideoDownloadMenuState extends State<VideoDownloadMenu> {
     );
     final downloadProvider = Provider.of<DownloadProvider>(context, listen: false);
     downloadProvider.handleDownloadItem(info: downloadInfo);
-    Navigator.pop(context);
+    showSnackbar(customSnackBar: DownloadingSnackbar(name: downloadInfo.name));
+    Navigator.pop(context, true);
   }
 
   // Selected Video Stream

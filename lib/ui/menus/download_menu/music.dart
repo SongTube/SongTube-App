@@ -30,6 +30,8 @@ import 'package:songtube/ui/animations/animated_text.dart';
 import 'package:songtube/ui/animations/fade_in.dart';
 import 'package:songtube/ui/components/flexible_popup_menu.dart';
 import 'package:songtube/ui/sheets/common_sheet.dart';
+import 'package:songtube/ui/sheets/downloading_snackbar.dart';
+import 'package:songtube/ui/sheets/snack_bar.dart';
 import 'package:songtube/ui/text_styles.dart';
 import 'package:songtube/ui/tiles/text_field_tile.dart';
 import 'package:songtube/ui/ui_utils.dart';
@@ -107,6 +109,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
     )..filters = filters;
     final downloadProvider = Provider.of<DownloadProvider>(context, listen: false);
     downloadProvider.handleDownloadItem(info: downloadInfo);
+    showSnackbar(customSnackBar: DownloadingSnackbar(name: downloadInfo.name));
     Navigator.pop(context);
   }
 
