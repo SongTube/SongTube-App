@@ -47,13 +47,12 @@ class _DownloadsCompletedPageState extends State<DownloadsCompletedPage> {
     DownloadProvider downloadProvider = Provider.of<DownloadProvider>(context);
     MediaProvider mediaProvider = Provider.of<MediaProvider>(context);
     UiProvider uiProvider = Provider.of(context);
-    List<SongItem> downloads = downloadProvider.downloadedSongs;
+    List<SongItem> downloads = downloadProvider.downloadedSongs.reversed.toList();
     if (widget.searchQuery.isNotEmpty) {
       downloads = downloadProvider.downloadedSongs.where((element) => element.title.toLowerCase().contains(widget.searchQuery.trim().toLowerCase())).toList();
     }
     return ListView.builder(
       padding: const EdgeInsets.only(top: 0).copyWith(bottom: (kToolbarHeight*1.5)+16),
-      
       itemCount: downloads.length,
       itemBuilder: (context, index) {
         final song = downloads[index];
