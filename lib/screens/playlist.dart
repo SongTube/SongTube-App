@@ -127,28 +127,31 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                                 UiUtils.showModal(context: context, modal: CommonSheet(
                                   useCustomScroll: false,
                                   builder: (context, scrollController) {
-                                    return CommonSheetWidget(
-                                      title: Languages.of(context)!.labelDelete,
-                                      body: Text(Languages.of(context)!.labelThisActionCannotBeUndone, style: subtitleTextStyle(context, opacity: 0.6).copyWith(fontSize: 14)),
-                                      actions: [
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            color: Colors.red,
-                                            borderRadius: BorderRadius.circular(15)
-                                          ),
-                                          child: TextButton(
-                                            onPressed: () async {
-                                              Navigator.pop(context);
-                                              Navigator.pop(context);
-                                              playlistProvider.removeGlobalPlaylist(widget.mediaSet.id!);
-                                            },
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(left: 12, right: 12),
-                                              child: Text(Languages.of(context)!.labelRemove, style: subtitleTextStyle(context).copyWith(color: Colors.white)),
-                                            )
-                                          ),
-                                        )
-                                      ],
+                                    return Padding(
+                                      padding: EdgeInsets.only(bottom: audioHandler.mediaItem.value != null ? (kToolbarHeight*1.6) : 0),
+                                      child: CommonSheetWidget(
+                                        title: Languages.of(context)!.labelDelete,
+                                        body: Text(Languages.of(context)!.labelThisActionCannotBeUndone, style: subtitleTextStyle(context, opacity: 0.6).copyWith(fontSize: 14)),
+                                        actions: [
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.red,
+                                              borderRadius: BorderRadius.circular(15)
+                                            ),
+                                            child: TextButton(
+                                              onPressed: () async {
+                                                Navigator.pop(context);
+                                                Navigator.pop(context);
+                                                playlistProvider.removeGlobalPlaylist(widget.mediaSet.id!);
+                                              },
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(left: 12, right: 12),
+                                                child: Text(Languages.of(context)!.labelRemove, style: subtitleTextStyle(context).copyWith(color: Colors.white)),
+                                              )
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     );
                                   },
                                 ));
