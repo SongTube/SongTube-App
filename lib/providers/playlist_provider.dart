@@ -1,9 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 import 'package:songtube/internal/global.dart';
 import 'package:songtube/internal/models/media_playlist.dart';
 import 'package:songtube/internal/models/song_item.dart';
+import 'package:songtube/main.dart';
+import 'package:songtube/providers/media_provider.dart';
 import 'package:uuid/uuid.dart';
 
 const allPlaylistKey = 'allPlaylistKey';
@@ -61,6 +64,11 @@ class PlaylistProvider extends ChangeNotifier {
   }
   void removeGlobalPlaylist(String id) {
     final global = List<MediaPlaylist>.from(globalPlaylists);
+    final playlist = global.firstWhere((element) => element.id == id);
+    // Check if the music player is playing from this and kill it
+    if (Provider.of<MediaProvider>(internalNavigatorKey.currentContext!, listen: false).currentPlaylistName == playlist.name) {
+      audioHandler.stop();
+    }
     global.removeWhere((element) => element.id == id);
     globalPlaylists = global;
   }
