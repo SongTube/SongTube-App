@@ -86,6 +86,7 @@ class _IntroPageState extends State<IntroPage> {
                   : 'assets/images/logo.png'
               )
             ),
+            const SizedBox(height: 16),
             RichText(
               textAlign: TextAlign.center,
               text: TextSpan(
@@ -97,7 +98,7 @@ class _IntroPageState extends State<IntroPage> {
                   TextSpan(
                     text: "SongTube",
                     style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w700,
                       fontSize: 36,
                       letterSpacing: 2,
                       color: Colors.white

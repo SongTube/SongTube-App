@@ -23,6 +23,7 @@ import 'package:songtube/ui/animations/animated_icon.dart';
 import 'package:songtube/ui/components/bottom_navigation_bar.dart';
 import 'package:songtube/ui/components/fancy_scaffold.dart';
 import 'package:songtube/ui/components/nested_will_pop_scope.dart';
+import 'package:songtube/ui/sheets/auto_update_notice.dart';
 import 'package:songtube/ui/sheets/disclaimer.dart';
 import 'package:songtube/ui/sheets/join_telegram.dart';
 import 'package:songtube/ui/ui_utils.dart';
@@ -69,6 +70,13 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           context: internalNavigatorKey.currentContext!,
           modal: const JoinTelegramSheet());
         await sharedPreferences.setBool('appFirstRun', false);
+      }
+      // Show auto-update sheet
+      if (autoUpdateNotice && mounted) {
+        await UiUtils.showModal(
+          context: context,
+          modal: const AutoUpdateNoticeSheet());
+        await sharedPreferences.setBool('autoUpdateNotice', false);
       }
       processIntent(widget.initIntent);
     });

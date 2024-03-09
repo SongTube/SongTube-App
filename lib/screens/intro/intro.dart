@@ -27,9 +27,7 @@ class _IntroScreenState extends State<IntroScreen> {
   void switchNext() {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
-        systemNavigationBarColor: pageIndex == 0
-          ? accentColor
-          : Colors.transparent,
+        systemNavigationBarColor: Theme.of(context).cardColor,
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: pageIndex == 0
           ? Brightness.light
@@ -55,9 +53,7 @@ class _IntroScreenState extends State<IntroScreen> {
     final mediaProvider = Provider.of<MediaProvider>(context);
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
-        systemNavigationBarColor: pageIndex == 0
-          ? accentColor
-          : Colors.transparent,
+        systemNavigationBarColor: Theme.of(context).cardColor,
         systemNavigationBarIconBrightness: pageIndex == 0
           ? Brightness.light
           : Theme.of(context).brightness,
@@ -99,9 +95,7 @@ class _IntroScreenState extends State<IntroScreen> {
         width: double.infinity,
         height: double.infinity,
         duration: const Duration(milliseconds: 400),
-        color: pageIndex == 0
-          ? accentColor
-          : Theme.of(context).cardColor,
+        color: Theme.of(context).cardColor,
         child: DefaultTabController(
           initialIndex: pageIndex,
           length: 4,

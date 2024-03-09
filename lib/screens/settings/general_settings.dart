@@ -152,6 +152,19 @@ class _GeneralSettingsState extends State<GeneralSettings> {
                 icon: Iconsax.scan,
                 title: 'Re-Scanning music library...'));
           }
+        ),
+        // In-App Updates
+        const SizedBox(height: 12),
+        SettingTileCheckbox(
+          value: AppSettings.enableInAppUpdates,
+          title: 'In-App Updates',
+          subtitle: 'Allow songtube to check for updates in the background',
+          leadingIcon: LineIcons.checkCircle,
+          onChange: (value) {
+            setState(() {
+              AppSettings.enableInAppUpdates = value;
+            });
+          },
         )
       ],
     );

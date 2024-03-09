@@ -64,6 +64,9 @@ const hideSystemAppBarOnVideoPlayerExpandedKey = 'hideSystemAppBarOnVideoPlayerE
 // Dynamic Colors
 const enableDynamicColorsKey = 'enableDynamicColorsKey';
 
+// In-app updates
+const enableInAppUpdatesKey = 'enableInAppUpdatesKey';
+
 class AppSettings extends ChangeNotifier {
 
   // Initialize App Settings
@@ -255,6 +258,11 @@ class AppSettings extends ChangeNotifier {
   bool get hideSystemAppBarOnVideoPlayerExpanded => sharedPreferences.getBool(hideSystemAppBarOnVideoPlayerExpandedKey) ?? false;
   set hideSystemAppBarOnVideoPlayerExpanded(bool value) {
     sharedPreferences.setBool(hideSystemAppBarOnVideoPlayerExpandedKey, value);
+  }
+
+  static bool get enableInAppUpdates => sharedPreferences.getBool(enableInAppUpdatesKey) ?? true;
+  static set enableInAppUpdates(bool value) {
+    sharedPreferences.setBool(enableInAppUpdatesKey, value);
   }
 
 }

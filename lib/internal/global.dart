@@ -9,6 +9,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:songtube/internal/artwork_manager.dart';
 import 'package:songtube/internal/models/update/update_manger.dart';
+import 'package:songtube/providers/app_settings.dart';
 
 import '../services/audio_service.dart';
 
@@ -31,7 +32,10 @@ Future<void> initGlobals() async {
   isPictureInPictureSupported =
       await FlutterPip.isPictureInPictureSupported() ?? false;
   packageInfo = await PackageInfo.fromPlatform();
-  AppUpdateManger.inAppUpdater();
+  bool autoUpdateEnabled = sharedPreferences.getBool(enableInAppUpdatesKey) ?? true;
+  if (autoUpdateEnabled) {
+    AppUpdateManger.inAppUpdater();
+  }
 }
 
 // App Custom Accent Color
@@ -61,6 +65,9 @@ late PackageInfo packageInfo;
 
 // First run
 bool get appFirstRun => sharedPreferences.getBool('appFirstRun') ?? true;
+
+// Auto-update notice
+bool get autoUpdateNotice => sharedPreferences.getBool('autoUpdateNotice') ?? true;
 
 // Block for Picture in Picture mode
 bool blockPipMode = false;
