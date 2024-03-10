@@ -20,6 +20,7 @@ import 'package:songtube/ui/search_suggestions.dart';
 import 'package:songtube/ui/sheets/search_filters.dart';
 import 'package:songtube/ui/text_styles.dart';
 import 'package:songtube/ui/ui_utils.dart';
+import 'package:validators/validators.dart';
 
 class HomeDefault extends StatefulWidget {
   const HomeDefault({Key? key}) : super(key: key);
@@ -41,15 +42,11 @@ class _HomeDefaultState extends State<HomeDefault> with TickerProviderStateMixin
   // Youtube Link Check
   Future<String?> clipboardLink() async {
     final link = (await Clipboard.getData(Clipboard.kTextPlain))?.text;
-    if (link != null) {
-      if (link.isNotEmpty) {
-        final video = await YoutubeId.getIdFromStreamUrl(link);
-        final playlist = await YoutubeId.getIdFromPlaylistUrl(link);
-        if (video != null || playlist != null) {
-          return link;
-        } else {
-          return null;
-        }
+    if (link != null && isURL(link)) {
+      final video = await YoutubeId.getIdFromStreamUrl(link);
+      final playlist = await YoutubeId.getIdFromPlaylistUrl(link);
+      if (video != null || playlist != null) {
+        return link;
       } else {
         return null;
       }
