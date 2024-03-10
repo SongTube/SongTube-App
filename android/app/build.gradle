@@ -33,7 +33,7 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     
-    compileSdkVersion 33
+    compileSdkVersion 34
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -48,7 +48,7 @@ android {
         applicationId "com.artxdev.songtube"
         minSdkVersion 22
         resValue "string", "app_name", "SongTube"
-        targetSdkVersion 32
+        targetSdkVersion 34
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         // Enabling multidex support.
