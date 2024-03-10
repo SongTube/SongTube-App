@@ -26,7 +26,6 @@ class ArtworkCarousel extends StatefulWidget {
 class _ArtworkCarouselState extends State<ArtworkCarousel> {
   bool _isLeftDoubleTapped = false;
   bool _isRightDoubleTapped = false;
-  double tapPosition = 0;
 
   // Image Getter
   Future<File> getAlbumImage() async {
@@ -69,10 +68,8 @@ class _ArtworkCarouselState extends State<ArtworkCarousel> {
                     _animatedOpacity(_isLeftDoubleTapped, false),
                 ],
               ),
-              onTapDown: (details) {
-                tapPosition = details.globalPosition.dx;
-              },
-              onDoubleTap: () {
+              onDoubleTapDown: (details) {
+                final tapPosition = details.globalPosition.dx;
                 if (tapPosition < screenWidth / 2) {
                   _isLeftDoubleTapped = true;
                   audioHandler.rewind();
