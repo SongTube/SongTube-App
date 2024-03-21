@@ -78,21 +78,14 @@ class MediaProvider extends ChangeNotifier {
 
   // Fetch Songs for this Provider
   Future<void> fetchMedia() async {
-    permissionStatus = await Permission.storage.status;
+    permissionStatus = await (androidSdk >= 33 ? Permission.audio.status : Permission.storage.status);
     if (permissionStatus == PermissionStatus.granted) {
-      if (kDebugMode) {
-        print('Fetching device Media...');
-      }
+      print('Fetching device Media...');
       fetchMediaRunning = true;
       notifyListeners();
-      Timer timer = Timer.periodic(const Duration(seconds: 5), (_) {
-        notifyListeners();
-      });
-      await MediaUtils.fetchDeviceSongs((newSong) {
-        songs.add(newSong);
-      });
+      final items = await MediaUtils.fetchDeviceSongs();
+      songs = items;
       fetchMediaRunning = false;
-      timer.cancel();
       notifyListeners();
     }
   }

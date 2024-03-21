@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:songtube/internal/global.dart';
 import 'package:songtube/languages/languages.dart';
 import 'package:songtube/ui/animations/show_up.dart';
 
@@ -27,7 +28,7 @@ class _PermissionIntroPageState extends State<PermissionIntroPage> {
 
   @override
   void initState() {
-    Permission.storage.status.then((status) {
+    (androidSdk >= 33 ? Permission.audio.status : Permission.storage.status).then((status) {
       if (status != PermissionStatus.granted) {
         if (mounted) {
           setState(() {
@@ -47,7 +48,7 @@ class _PermissionIntroPageState extends State<PermissionIntroPage> {
   }
 
   void requestPermissions() async {
-    final status = await Permission.storage.request();
+    final status = await (androidSdk >= 33 ? Permission.audio.request() : Permission.storage.request());
     if (status == PermissionStatus.granted) {
       if (mounted) {
         setState(() {

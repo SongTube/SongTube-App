@@ -7,9 +7,9 @@ import 'package:audio_tagger/audio_tagger.dart' as tagger;
 import 'package:audio_tagger/audio_tags.dart' as tags;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_audio_query/flutter_audio_query.dart';
 import 'package:http/http.dart';
 import 'package:newpipeextractor_dart/newpipeextractor_dart.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:songtube/internal/artwork_manager.dart';
@@ -72,28 +72,18 @@ class MediaUtils {
     return null;
   }
 
-  static Future<void> fetchDeviceSongs(Function(SongItem) onUpdateTrigger) async {
-    // New songs found on device
-    List<SongInfo> userSongs = await FlutterAudioQuery()
-      .getSongs(sortType: SongSortType.DISPLAY_NAME);
-    // Cached Songs
-    List<MediaItem> cachedSongs = fetchCachedSongsAsMediaItems();
-    // Filter out non needed songs from this process
-    // ignore: avoid_function_literals_in_foreach_calls
-    cachedSongs.forEach((item) {
-      if (userSongs.any((element) => element.filePath == item.id)) {
-        userSongs.removeWhere((element) => element.filePath == item.id);
-      }
-    });
-    final List<SongItem> songs = [];
-    for (final element in userSongs) {
-      final song = MediaUtils.convertToSongItem(element);
-      if (song != null) {
-        songs.add(song);
-        onUpdateTrigger(song);
-      }
-    }
-    CacheUtils.cacheSongs = fetchCachedSongsAsSongItems()..addAll(songs);
+  static Future<List<SongItem>> fetchDeviceSongs() async {
+    // Scan media stores
+    await OnAudioQuery().scanMedia('/storage/emulated/0/Music');
+    await OnAudioQuery().scanMedia('/storage/emulated/0/Download');
+    // Get all songs from device storage
+    List<SongModel> userSongs = await OnAudioQuery().querySongs(
+      sortType: SongSortType.DISPLAY_NAME,
+      ignoreCase: true,
+    );
+    final songs = MediaUtils.convertToSongItem(userSongs);
+    CacheUtils.cacheSongs = songs;
+    return songs;
   }
 
   static MediaItem fromMap(Map<String, dynamic> map) {
@@ -144,31 +134,28 @@ class MediaUtils {
   }
 
   // Convert any List<SongFile> to a List<MediaItem>
-  static SongItem? convertToSongItem(SongInfo element) {
-    Duration duration = Duration(
-      milliseconds: element.duration != null
-        ? int.parse(element.duration!)
-        : 0,
-    );
-    FileStat? stats;
-    try {
-      stats = FileStat.statSync(element.filePath!);
-    } catch (e) {
-      if (kDebugMode) {
-        print(e.toString());
-      }
+  static List<SongItem> convertToSongItem(List<SongModel> songList) {
+    List<SongItem> list = [];
+    for (var element in songList) {
+      try {
+        Duration duration = Duration(milliseconds: element.duration!);
+        FileStat stats = FileStat.statSync(element.data);
+        list.add(
+          SongItem(
+            id: element.data,
+            modelId: element.displayName,
+            title: element.title,
+            album: element.album,
+            artist: element.artist,
+            duration: duration,
+            lastModified: stats.changed,
+            artworkPath: artworkFile(element.data),
+            thumbnailPath: thumbnailFile(element.data),
+          )
+        );
+      } catch (_) {}
     }
-    return SongItem(
-      id: element.filePath!,
-      modelId: element.id,
-      title: element.title!,
-      album: element.album,
-      artist: element.artist,
-      artworkPath: artworkFile(element.filePath!),
-      thumbnailPath: thumbnailFile(element.filePath!),
-      duration: duration,
-      lastModified: stats?.changed ?? DateTime.now(),
-    );
+    return list;
   }
 
   static Future<SongItem> downloadToSongItem(DownloadInfo info, String path) async {

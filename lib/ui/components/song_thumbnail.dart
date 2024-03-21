@@ -50,8 +50,8 @@ class _SongThumbnailState extends State<SongThumbnail> {
         borderRadius: widget.borderRadius ?? BorderRadius.circular(15),
         child: ImageFade(
           fadeDuration: const Duration(milliseconds: 300),
-          image: widget.artwork != null ? Image.file(widget.artwork!, cacheHeight: 150, cacheWidth: 150).image
-            : artwork != null ? Image.file(artwork!, cacheHeight: 150, cacheWidth: 150).image : Image.memory(kTransparentImage).image,
+          image: widget.artwork != null ? Image.file(widget.artwork!).image
+            : artwork != null ? Image.file(artwork!).image : Image.memory(kTransparentImage).image,
           placeholder: Image.memory(kTransparentImage),
           fit: BoxFit.cover,
           errorBuilder: (context, child, exception) {

@@ -23,6 +23,7 @@ Future<void> initGlobals() async {
   }
   songThumbnailPath = (await getApplicationDocumentsDirectory());
   deviceInfo = await DeviceInfoPlugin().androidInfo;
+  androidSdk = deviceInfo.version.sdkInt!;
   audioHandler = await AudioService.init(
       builder: () => StAudioHandler(),
       config: const AudioServiceConfig(
@@ -43,6 +44,9 @@ Color accentColor = const Color.fromARGB(255, 229, 12, 73);
 
 // Platform Details
 late AndroidDeviceInfo deviceInfo;
+
+// Device SDK
+late int androidSdk;
 
 // Shared Preferences for user settings and app caching and stuff
 late SharedPreferences sharedPreferences;

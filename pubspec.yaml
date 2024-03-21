@@ -78,10 +78,7 @@ dependencies:
       ref: master
 
   # Audio Query, Extract Music from device
-  flutter_audio_query: 
-    git: 
-      url: https://github.com/harshmandan/flutter_audio_query
-      ref: master
+  on_audio_query: ^2.9.0
 
   # Shared Preferences, Save user settings and cache things
   shared_preferences: ^2.0.11
