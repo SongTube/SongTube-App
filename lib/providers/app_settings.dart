@@ -74,11 +74,12 @@ class AppSettings extends ChangeNotifier {
     final musicPath = sharedPreferences.getString(musicDirectoryKey);
     final videoPath = sharedPreferences.getString(videoDirectoryKey);
     // Check for our media directories, if they're null we have to set a default path
-    if (musicPath == null) {
+    // We will also apply this default path to android sdk equal or greather than 33
+    if (musicPath == null || androidSdk >= 31) {
       final defaultMusicDirectory = await AndroidPathProvider.musicPath;
       await sharedPreferences.setString(musicDirectoryKey, defaultMusicDirectory);
     }
-    if (videoPath == null) {
+    if (videoPath == null || androidSdk >= 31) {
       final defaultVideoDirectory = await AndroidPathProvider.moviesPath;
       await sharedPreferences.setString(videoDirectoryKey, defaultVideoDirectory);
     }

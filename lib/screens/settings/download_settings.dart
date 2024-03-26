@@ -66,6 +66,7 @@ class _DownloadSettingsState extends State<DownloadSettings> {
           },
         ),
         // Download Audio Path
+        if (androidSdk < 31)
         SettingTile(
           title: Languages.of(context)!.labelAudioFolder,
           subtitle: '${Languages.of(context)!.labelCurrent}: ${AppSettings.musicDirectory.path}',
@@ -79,6 +80,7 @@ class _DownloadSettingsState extends State<DownloadSettings> {
           }
         ),
         // Download Video Path
+        if (androidSdk < 31)
         SettingTile(
           title: Languages.of(context)!.labelVideoFolder,
           subtitle: '${Languages.of(context)!.labelCurrent}: ${AppSettings.videoDirectory.path}',

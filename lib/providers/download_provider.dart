@@ -3,7 +3,9 @@ import 'dart:io';
 
 import 'package:audio_tagger/audio_tagger.dart';
 import 'package:flutter/foundation.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:songtube/internal/enums/download_type.dart';
 import 'package:songtube/providers/app_settings.dart';
 import 'package:songtube/internal/artwork_manager.dart';
 import 'package:songtube/internal/global.dart';
@@ -68,6 +70,12 @@ class DownloadProvider extends ChangeNotifier {
 
   // Handle Single Video Download
   Future<void> handleDownloadItem({required DownloadInfo info}) async {
+    if (info.downloadType == DownloadType.audio) {
+      await (androidSdk >= 33 ? Permission.audio.request() : Permission.storage.request());
+    }
+    if (info.downloadType == DownloadType.video) {
+      await (androidSdk >= 33 ? Permission.videos.request() : Permission.storage.request());
+    }
     queue.add(await DownloadItem.buildData(info: info)
       ..onDownloadCancelled = (id) {
         moveToCancelled(id);
