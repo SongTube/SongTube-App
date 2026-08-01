@@ -9,6 +9,7 @@ import 'package:newpipeextractor_dart/newpipeextractor_dart.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:validators/validators.dart';
 import 'package:http/http.dart' as http;
+import 'package:songtube/internal/media_utils.dart';
 
 class ContentService {
 
@@ -73,15 +74,22 @@ class ContentService {
   // If this image does not exist, download and save it, next time, we
   // load from local, by default this retrieves the low quality image,
   // but if the high quality already exist, we trieve that one instead.
-  static Future<File> channelAvatarPictureFile(String channelUrl) async {
+  /// Returns null when the channel has no avatar. The only caller is a
+  /// FutureBuilder that keys off `snapshot.hasData`, so a null degrades to the
+  /// same shimmer the previous throwing version produced -- without the
+  /// exception.
+  static Future<File?> channelAvatarPictureFile(String channelUrl) async {
     final cacheDirectory = await getTemporaryDirectory();
     final file = File('${cacheDirectory.path}/${channelUrl.split('channel/').last}');
     if (await file.exists()) {
       return file;
     } else {
       final channel = await ChannelExtractor.channelInfo(channelUrl);
-      final avatarUrl = channel.avatars?.first;
-      final data = await http.get(Uri.parse(avatarUrl!));
+      final avatarUrl = channel.avatars.lowestResOrNull;
+      if (avatarUrl == null) {
+        return null;
+      }
+      final data = await http.get(Uri.parse(avatarUrl));
       final bytes = data.bodyBytes;
       file.writeAsBytes(bytes);
       return file;

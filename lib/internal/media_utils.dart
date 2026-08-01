@@ -219,9 +219,13 @@ class MediaUtils {
     if (palette != null) {
       return ColorsPalette.fromJson(palette);
     } else {
+      final thumbnail = video.videoInfo.thumbnails.lowestResOrNull;
+      if (thumbnail == null) {
+        return ColorsPalette(dominant: null, vibrant: null);
+      }
       try {
         Stopwatch paletteStopwatch = Stopwatch()..start();
-        final result = await PaletteGenerator.fromImageProvider(NetworkImage(video.videoInfo.thumbnails!.first));
+        final result = await PaletteGenerator.fromImageProvider(NetworkImage(thumbnail));
         paletteStopwatch.stop();
         if (kDebugMode) {
           print('Palette: ${paletteId(video.videoInfo.id!)} took ${paletteStopwatch.elapsed.inMilliseconds}ms');
@@ -306,3 +310,33 @@ extension Unique<E, Id> on List<E> {
     return list;
   }
 }
+
+/// Safe access to the image URL lists newpipeextractor_dart exposes
+/// (`thumbnails`, `uploaderAvatars`, `avatars`, `banners`).
+///
+/// Those fields are built by `Parse.imageList`, which returns an *empty list*
+/// rather than null when the data is missing or malformed. That makes a `!`
+/// null-assertion pass while `.first` / `.last` still throw
+/// "Bad state: No element". `thumbnails?.last ?? ''` has the same problem: the
+/// `.last` is evaluated before the `??` can supply a fallback.
+///
+/// Use these instead of indexing those lists directly.
+extension ImageUrlList on List<String>? {
+  /// Highest-resolution URL, or null when there is none.
+  String? get highestResOrNull {
+    final list = this;
+    return (list == null || list.isEmpty) ? null : list.last;
+  }
+
+  /// Lowest-resolution URL, or null when there is none.
+  String? get lowestResOrNull {
+    final list = this;
+    return (list == null || list.isEmpty) ? null : list.first;
+  }
+}
+
+/// Convenience for the common "show this remote image, or nothing" case.
+/// Returns null when [url] is null or empty, which every ImageFade/Image
+/// call site here already treats as "use the placeholder".
+ImageProvider? networkImageOrNull(String? url) =>
+    (url == null || url.isEmpty) ? null : NetworkImage(url);

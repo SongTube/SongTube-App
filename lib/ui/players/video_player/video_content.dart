@@ -1,7 +1,5 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_pip/models/pip_ratio.dart';
-import 'package:flutter_pip/platform_channel/channel.dart';
 import 'package:image_fade/image_fade.dart';
 import 'package:intl/intl.dart';
 import 'package:ionicons/ionicons.dart';
@@ -34,6 +32,7 @@ import 'package:songtube/ui/sheets/add_to_stream_playlist.dart';
 import 'package:songtube/ui/sheets/snack_bar.dart';
 import 'package:songtube/ui/text_styles.dart';
 import 'package:songtube/ui/ui_utils.dart';
+import 'package:songtube/internal/media_utils.dart';
 
 class VideoPlayerContent extends StatefulWidget {
   const VideoPlayerContent({
@@ -171,7 +170,7 @@ class _VideoPlayerContentState extends State<VideoPlayerContent> with TickerProv
             child: Padding(
               padding: const EdgeInsets.only(left: 12, right: 12),
               child: VideoPlayerCommentsCollapsed(
-                comments: comments..sort((a, b) => b.likeCount!.compareTo(a.likeCount!)),
+                comments: comments..sort((a, b) => (b.likeCount??0).compareTo((a.likeCount??0))),
                 commentsAvailable: commentsAvailable,
               ),
             ),
@@ -257,7 +256,7 @@ class _VideoPlayerContentState extends State<VideoPlayerContent> with TickerProv
                                   child: ImageFade(
                                     fadeDuration: const Duration(milliseconds: 300),
                                     placeholder: ShimmerContainer(height: 40, width: 40, borderRadius: BorderRadius.circular(100)),
-                                    image: NetworkImage(videoInfo.uploaderAvatars!.first),
+                                    image: networkImageOrNull(videoInfo.uploaderAvatars.lowestResOrNull),
                                     fit: BoxFit.cover,
                                   ),
                                 ),
@@ -348,7 +347,7 @@ class _VideoPlayerContentState extends State<VideoPlayerContent> with TickerProv
             icon: const AppAnimatedIcon(LineIcons.share, size: 18),
             text: Languages.of(context)!.labelShare,
             onTap: () {
-              Share.share(videoInfo!.url!);
+              SharePlus.instance.share(ShareParams(text: videoInfo!.url!));
             },
           ),
           const SizedBox(width: 8),
@@ -407,27 +406,6 @@ class _VideoPlayerContentState extends State<VideoPlayerContent> with TickerProv
                 modal: AddToStreamPlaylist(stream: widget.content.videoDetails!.toStreamInfoItem()),
               );
             },
-          ),
-          // Popup Player Button
-          FutureBuilder<bool?>(
-            future: FlutterPip.isPictureInPictureSupported(),
-            builder: (context, snapshot) {
-              if (snapshot.data ?? false) {
-                return Padding(
-                  padding: const EdgeInsets.only(left: 8),
-                  child: TextIconSlimButton(
-                    icon: const AppAnimatedIcon(LineIcons.video, size: 18),
-                    text: Languages.of(context)!.labelPopupMode,
-                    onTap: () {
-                      final size = Provider.of<ContentProvider>(context, listen: false).playingContent?.videoPlayerController.videoPlayerController?.value.size;
-                      FlutterPip.enterPictureInPictureMode(pipRatio: size != null ? PipRatio(width: size.width.round(), height: size.height.round()) : null);
-                    },
-                  ),
-                );
-              } else {
-                return const SizedBox();
-              }
-            }
           ),
         ],
       ),

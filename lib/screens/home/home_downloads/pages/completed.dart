@@ -1,5 +1,6 @@
 import 'package:audio_service/audio_service.dart';
-import 'package:external_video_player_launcher/external_video_player_launcher.dart';
+import 'package:android_intent_plus/android_intent.dart';
+import 'package:android_intent_plus/flag.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
@@ -63,7 +64,18 @@ class _DownloadsCompletedPageState extends State<DownloadsCompletedPage> {
           onPlay: () async {
             if (song.isVideo) {
               // Open video player
-              ExternalVideoPlayerLauncher.launchOtherPlayer(song.id, MIME.applicationMpeg, null);
+              // Was ExternalVideoPlayerLauncher.launchOtherPlayer(...). That package is
+              // abandoned and pinned android_intent_plus below AGP 8 support, so the
+              // (identical) intent is built directly here instead.
+              AndroidIntent(
+                action: 'action_view',
+                type: 'application/mpeg*',
+                data: Uri.parse(song.id).toString(),
+                flags: <int>[
+                  Flag.FLAG_ACTIVITY_NEW_TASK,
+                  Flag.FLAG_GRANT_PERSISTABLE_URI_PERMISSION,
+                ],
+              ).launch();
             } else {
               mediaProvider.currentPlaylistName = 'Downloads';
               final queue = List<MediaItem>.generate(downloads.length, (index) {

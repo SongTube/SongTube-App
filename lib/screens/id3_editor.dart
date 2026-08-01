@@ -167,7 +167,7 @@ class _ID3EditorState extends State<ID3Editor> {
   // Check for all file access permissions
   Future<void> checkPermissions() async {
     final deviceInfo = await DeviceInfoPlugin().androidInfo;
-    if ((deviceInfo.version.sdkInt ?? 29) >= 30) {
+    if (deviceInfo.version.sdkInt >= 30) {
       final status = await Permission.manageExternalStorage.status;
       if (status.isDenied || status.isPermanentlyDenied) {
         // Show Bottom Sheet
@@ -300,7 +300,7 @@ class _ID3EditorState extends State<ID3Editor> {
                           const Spacer(),
                           IconButton(
                             onPressed: () async {
-                              final image = await FilePicker.platform.pickFiles(
+                              final image = await FilePicker.pickFiles(
                                 type: FileType.image,
                               );
                               if (image != null && image.files.isNotEmpty) {

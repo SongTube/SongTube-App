@@ -45,14 +45,6 @@ class _VideoPlayerSettingsState extends State<VideoPlayerSettings> {
           value: appSettings.hideSystemAppBarOnVideoPlayerExpanded,
         ),
         // Automatic Picture-in-Picture mode
-        const SizedBox(height: 12),
-        SettingTileCheckbox(
-          leadingIcon: Icons.picture_in_picture_alt_outlined,
-          title: Languages.of(context)!.labelPictureInPicture,
-          subtitle: Languages.of(context)!.labelPictureInPictureDescription,
-          onChange: (value) => setState(() => AppSettings.enableAutoPictureInPictureMode = value),
-          value: AppSettings.enableAutoPictureInPictureMode,
-        ),
         // Background Playback (Alpha)
         const SizedBox(height: 12),
         SettingTileCheckbox(

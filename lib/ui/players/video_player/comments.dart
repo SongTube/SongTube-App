@@ -18,6 +18,7 @@ import 'package:songtube/ui/components/shimmer_container.dart';
 import 'package:songtube/ui/text_styles.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:html/parser.dart';
+import 'package:songtube/internal/media_utils.dart';
 
 class VideoPlayerCommentsCollapsed extends StatefulWidget {
   const VideoPlayerCommentsCollapsed({
@@ -107,7 +108,7 @@ class _VideoPlayerCommentsCollapsedState extends State<VideoPlayerCommentsCollap
             child: ImageFade(
               fadeDuration: const Duration(milliseconds: 300),
               placeholder: const ShimmerContainer(width: 34, height: 34),
-              image: NetworkImage(widget.comments.first.uploaderAvatars!.first),
+              image: networkImageOrNull(widget.comments.first.uploaderAvatars.lowestResOrNull),
               fit: BoxFit.cover,
             ),
           ),
@@ -243,7 +244,7 @@ class VideoPlayerCommentsExpanded extends StatelessWidget {
               child: ImageFade(
                 fadeDuration: const Duration(milliseconds: 300),
                 placeholder: ShimmerContainer(width: 34, height: 34, color: Theme.of(context).cardColor),
-                image: NetworkImage(comment.uploaderAvatars!.first),
+                image: networkImageOrNull(comment.uploaderAvatars.lowestResOrNull),
                 fit: BoxFit.cover,
               ),
             ),

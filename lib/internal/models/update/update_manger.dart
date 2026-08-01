@@ -106,7 +106,7 @@ class AppUpdateManger {
   static Uri _abiToDownload(UpdateDetails details) {
     late Uri abi;
     for (var element in deviceInfo.supportedAbis) {
-      if (element!.contains(SupportedAbi.arm64.name)) {
+      if (element.contains(SupportedAbi.arm64.name)) {
         abi = details.arm64;
       } else if (element.contains(SupportedAbi.arm.name)) {
         abi = details.arm64;

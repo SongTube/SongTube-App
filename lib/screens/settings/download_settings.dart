@@ -72,7 +72,7 @@ class _DownloadSettingsState extends State<DownloadSettings> {
           subtitle: '${Languages.of(context)!.labelCurrent}: ${AppSettings.musicDirectory.path}',
           leadingIcon: Iconsax.folder,
           onTap: () async {
-            final result = await FilePicker.platform.getDirectoryPath();
+            final result = await FilePicker.getDirectoryPath();
             if (result != null && result != '/') {
               AppSettings.musicDirectory = Directory(result);
               setState(() {});
@@ -86,7 +86,7 @@ class _DownloadSettingsState extends State<DownloadSettings> {
           subtitle: '${Languages.of(context)!.labelCurrent}: ${AppSettings.videoDirectory.path}',
           leadingIcon: Iconsax.folder,
           onTap: () async {
-            final result = await FilePicker.platform.getDirectoryPath();
+            final result = await FilePicker.getDirectoryPath();
             if (result != null && result != '/') {
               AppSettings.videoDirectory = Directory(result);
               setState(() {});

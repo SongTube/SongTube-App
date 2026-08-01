@@ -3,9 +3,9 @@ import 'dart:async';
 import 'dart:io';
 
 // Packages
-import 'package:ffmpeg_kit_flutter_audio/ffmpeg_kit.dart';
-import 'package:ffmpeg_kit_flutter_audio/ffmpeg_session.dart';
-import 'package:ffmpeg_kit_flutter_audio/ffprobe_kit.dart';
+import 'package:ffmpeg_kit_flutter_new_audio/ffmpeg_kit.dart';
+import 'package:ffmpeg_kit_flutter_new_audio/ffmpeg_session.dart';
+import 'package:ffmpeg_kit_flutter_new_audio/ffprobe_kit.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:songtube/internal/ffmpeg/filters.dart';
 import 'package:songtube/internal/media_utils.dart';

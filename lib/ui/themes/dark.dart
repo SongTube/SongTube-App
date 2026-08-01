@@ -21,7 +21,7 @@ ThemeData darkTheme() {
         color: accentColor,
       ),
     ),
-    tabBarTheme: const TabBarTheme(
+    tabBarTheme: const TabBarThemeData(
       labelColor: Colors.black12
     ),
     textSelectionTheme: TextSelectionThemeData(
@@ -52,7 +52,7 @@ ThemeData blackTheme() {
         color: accentColor,
       ),
     ),
-    tabBarTheme: const TabBarTheme(
+    tabBarTheme: const TabBarThemeData(
       labelColor: Color.fromARGB(255, 20, 20, 20),
     ),
     textSelectionTheme: TextSelectionThemeData(

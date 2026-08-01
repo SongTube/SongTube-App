@@ -151,7 +151,7 @@ class FancyScaffoldState extends State<FancyScaffold> with TickerProviderStateMi
   @override
   Widget build(BuildContext context) {
     widget.floatingWidgetController?._addState(this);
-    final systemBottomPadding = ((deviceInfo.version.sdkInt ?? 28) >= 29 ? MediaQuery.of(context).padding.bottom : 0);
+    final systemBottomPadding = (deviceInfo.version.sdkInt >= 29 ? MediaQuery.of(context).padding.bottom : 0);
     return AnimatedBuilder(
       animation: floatingWidgetAnimationController,
       builder: (context, mainChild) {

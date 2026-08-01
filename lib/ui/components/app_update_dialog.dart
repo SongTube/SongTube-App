@@ -1,6 +1,6 @@
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:songtube/languages/languages.dart';
 import 'package:songtube/ui/text_styles.dart';
 
@@ -30,10 +30,13 @@ class _AppUpdateDialogState extends State<AppUpdateDialog> {
                 width: 80,
                 child: AvatarGlow(
                   repeat: true,
-                  endRadius: 45,
-                  showTwoGlows: false,
+                  // avatar_glow 3.x: endRadius (absolute) became glowRadiusFactor,
+                  // relative to the child's radius. Child is 70px (r=35), previous
+                  // endRadius was 45 -> (45 - 35) / 35 ~= 0.29.
+                  glowRadiusFactor: 0.29,
+                  // showTwoGlows: false is now glowCount: 1
+                  glowCount: 1,
                   glowColor: Theme.of(context).primaryColor,
-                  repeatPauseDuration: const Duration(milliseconds: 50),
                   child: Image.asset(
                     'assets/images/ic_launcher.png',
                     width: 70,

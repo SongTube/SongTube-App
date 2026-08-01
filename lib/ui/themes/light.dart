@@ -13,7 +13,7 @@ ThemeData lightTheme() {
       ),
       fillColor: Colors.grey[100]
     ),
-    tabBarTheme: TabBarTheme(
+    tabBarTheme: TabBarThemeData(
       labelColor: Colors.grey[200],
     ),
     textSelectionTheme: TextSelectionThemeData(

@@ -1,4 +1,4 @@
-import 'package:flutter_share/flutter_share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:songtube/internal/models/song_item.dart';
 import 'package:songtube/languages/languages.dart';
@@ -74,13 +74,12 @@ class SongOptionsSheet extends StatelessWidget {
                 subtitle: Languages.of(context)!.labelShareSongDescription,
                 icon: LineIcons.share,
                 onTap: () {
-                  FlutterShare.shareFile(
+                  SharePlus.instance.share(ShareParams(
                     title: song.title,
                     text: '${song.title} - ${song.artist}\n\n'
                           'Shared from SongTube\nsongtube.github.io',
-                    fileType: 'audio/*',
-                    filePath: song.id
-                  );
+                    files: [XFile(song.id, mimeType: 'audio/*')],
+                  ));
                 }
               ),
               _optionTile(context,

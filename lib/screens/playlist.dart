@@ -47,7 +47,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
   // Save artwork for this playlist
   Future<void> setArtwork() async {
     final artwork = File('${(await getApplicationDocumentsDirectory()).path}/${MediaUtils.getRandomString(10)}');
-    final image = await FilePicker.platform.pickFiles(
+    final image = await FilePicker.pickFiles(
       type: FileType.image,
     );
     if (image != null && image.files.isNotEmpty) {

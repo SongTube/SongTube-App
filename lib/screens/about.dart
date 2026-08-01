@@ -31,7 +31,7 @@ class AboutPage extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(MdiIcons.license,
+                  icon: Icon(MdiIcons.license,
                     color: Colors.green),
                   onPressed: () {
                     showLicensePage(

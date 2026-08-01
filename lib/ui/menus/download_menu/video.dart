@@ -20,6 +20,7 @@ import 'package:songtube/ui/sheets/common_sheet.dart';
 import 'package:songtube/ui/sheets/downloading_snackbar.dart';
 import 'package:songtube/ui/sheets/snack_bar.dart';
 import 'package:songtube/ui/text_styles.dart';
+import 'package:songtube/internal/media_utils.dart';
 
 class VideoDownloadMenu extends StatefulWidget {
   final YoutubeVideo video;
@@ -106,7 +107,7 @@ class _VideoDownloadMenuState extends State<VideoDownloadMenu> {
                               child: ImageFade(
                                 fadeDuration: const Duration(milliseconds: 300),
                                 placeholder: Container(color: Theme.of(context).cardColor),
-                                image: NetworkImage(widget.video.videoInfo.thumbnails!.last),
+                                image: networkImageOrNull(widget.video.videoInfo.thumbnails.highestResOrNull),
                                 fit: BoxFit.cover,
                               ),
                             ),

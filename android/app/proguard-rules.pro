@@ -4,7 +4,9 @@
 -keep class org.mozilla.javascript.** { *; }
 
 -keep class org.mozilla.classfile.ClassFileWriter
--keep class com.google.android.exoplayer2.** { *; }
+# media3 (androidx.media3) ships its own consumer proguard rules; the old
+# com.google.android.exoplayer2 keep is dead now that the video_player fork
+# has been ported off ExoPlayer2.
 
 -dontwarn org.mozilla.javascript.tools.**
 -dontwarn android.arch.util.paging.CountedDataSource
@@ -26,15 +28,15 @@
 
 # -keep class com.google.firebase.** { *; } // uncomment this if you are using firebase in the project
 
--keep class com.arthenica.mobileffmpeg.Config {
-    native <methods>;
-    void log(long, int, byte[]);
-    void statistics(long, int, float, float, long , int, double, double);
-}
+# ffmpeg_kit_flutter_new_audio ships its own consumer-rules.pro covering
+# com.arthenica.ffmpegkit.**, so no manual keep rules are needed here. The old
+# com.arthenica.mobileffmpeg.* rules were for the retired ffmpeg-kit package and
+# referenced classes that no longer exist.
 
--keep class com.arthenica.mobileffmpeg.AbiDetect {
-    native <methods>;
-}
+# Flutter references Play Core's deferred-component APIs, but this app does not
+# bundle Play Core. Under AGP 8 / R8 those missing references are errors rather
+# than warnings, which fails minifyReleaseWithR8.
+-dontwarn com.google.android.play.core.**
 
 # Rules for OkHttp. Copy paste from https://github.com/square/okhttp
 -dontwarn okhttp3.**

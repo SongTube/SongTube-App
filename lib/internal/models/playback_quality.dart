@@ -21,13 +21,19 @@ class VideoPlaybackQuality {
 
   // Fetch a list of video only qualities from a YoutubeVideo
   static List<VideoPlaybackQuality> fetchAllVideoOnlyQuality(YoutubeVideo video) {
-    final streams = video.videoOnlyStreams!.where((element) => element.formatSuffix!.contains('webm')).toList();
+    // Video only streams need an audio track to go along with them, without one
+    // there's nothing to pair them with
+    final audio = video.audioWithHighestQuality;
+    if (audio == null) {
+      return [];
+    }
+    final streams = video.videoOnlyStreams?.where((element) => element.formatSuffix?.contains('webm') ?? false).toList() ?? [];
     return List.generate(streams.length, (index) {
       final stream = streams[index];
       final fullres = stream.resolution!.split('p');
       final res = fullres.first;
       final frames = fullres.last.isNotEmpty ? double.parse(stream.resolution!.split('p').last) : 30.0;
-      return VideoPlaybackQuality(resolution: res, framerate: frames.toDouble(), format: stream.formatSuffix!, videoUrl: stream.url, audioUrl: video.audioWithHighestQuality!.url);
+      return VideoPlaybackQuality(resolution: res, framerate: frames.toDouble(), format: stream.formatSuffix!, videoUrl: stream.url, audioUrl: audio.url);
     });
   }
 

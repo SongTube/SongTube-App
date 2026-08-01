@@ -47,7 +47,7 @@ class _IntroPageState extends State<IntroPage> {
                       children: [
                         Container(
                           margin: const EdgeInsets.only(right: 8),
-                          child: const Icon(
+                          child: Icon(
                             MdiIcons.youtube,
                             size: 40,
                             color: Colors.white

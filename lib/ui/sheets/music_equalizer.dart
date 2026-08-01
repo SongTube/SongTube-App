@@ -103,8 +103,14 @@ class _MusicEqualizerSheetState extends State<MusicEqualizerSheet> {
         SliderTheme(
           data: sliderTheme(mediaProvider),
           child: Slider(
-            min: -1,
-            max: 1,
+            // just_audio 0.10 fixed setTargetGain to treat this value as deciBel
+            // (x100 -> milliBel); it previously multiplied by 1000. The old -1..1
+            // range therefore meant +/-10 dB and now means +/-1 dB, which is
+            // inaudible. -10..10 reproduces the previous audible range exactly.
+            // The value is session-only (read back from the plugin, never
+            // persisted), so widening the range needs no settings migration.
+            min: -10,
+            max: 10,
             value: loudnessEqualization.gain,
             onChanged: (gain) {
               setState(() => loudnessEqualization.gain = gain);

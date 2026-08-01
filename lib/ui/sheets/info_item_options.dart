@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_share/flutter_share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:newpipeextractor_dart/newpipeextractor_dart.dart';
 import 'package:provider/provider.dart';
@@ -15,6 +15,7 @@ import 'package:songtube/ui/sheets/common_sheet.dart';
 import 'package:songtube/ui/sheets/snack_bar.dart';
 import 'package:songtube/ui/text_styles.dart';
 import 'package:songtube/ui/ui_utils.dart';
+import 'package:songtube/internal/media_utils.dart';
 
 class InfoItemOptions extends StatelessWidget {
   const InfoItemOptions({
@@ -67,7 +68,7 @@ class InfoItemOptions extends StatelessWidget {
                       } else {
                         final details = await ContentService.fetchPlaylistFromInfoItem(infoItem);
                         await details!.getStreams();
-                        contentProvider.streamPlaylistCreate(infoItem.name, infoItem.uploaderName!, details.streams!, thumbnail: details.thumbnails!.last);
+                        contentProvider.streamPlaylistCreate(infoItem.name, infoItem.uploaderName!, details.streams!, thumbnail: details.thumbnails.highestResOrNull);
                       }
                     }
                   );
@@ -123,10 +124,10 @@ class InfoItemOptions extends StatelessWidget {
                 subtitle: Languages.of(context)!.labelShareDescription,
                 icon: LineIcons.share,
                 onTap: () {
-                  FlutterShare.share(
+                  SharePlus.instance.share(ShareParams(
                     title: infoItem.name!,
                     text: '${infoItem.url}'
-                  );
+                  ));
                 }
               ),
               if (onDelete != null)

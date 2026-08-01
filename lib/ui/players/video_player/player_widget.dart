@@ -26,7 +26,8 @@ import 'package:songtube/ui/text_styles.dart';
 import 'package:songtube/ui/ui_utils.dart';
 import 'package:video_player/video_player.dart';
 import 'package:volume_controller/volume_controller.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
+import 'package:songtube/internal/media_utils.dart';
 
 class VideoPlayerWidget extends StatefulWidget {
   const VideoPlayerWidget({
@@ -158,7 +159,7 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
     double sensitivity = 1 / 15;
     bool isDraggingUp = primaryDelta < 0;
 
-    double currentVolume = await VolumeController().getVolume();
+    double currentVolume = await VolumeController.instance.getVolume();
 
     // volume is maximum or minimum
     if ((currentVolume >= 1 && isDraggingUp) ||
@@ -177,7 +178,7 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
         ? currentVolume + sensitivity
         : currentVolume - sensitivity;
     currentVolumePercentage = "${(newVolume * 100).round()}";
-    VolumeController().setVolume(newVolume, showSystemUI: false);
+    VolumeController.instance.setVolume(newVolume);
 
     if (showVolumeUI) {
       setState(() {});
@@ -197,7 +198,7 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
     double sensitivity = 0.01;
     bool isDraggingUp = primaryDelta < 0;
 
-    double currentBrightness = await ScreenBrightness().current;
+    double currentBrightness = await ScreenBrightness.instance.application;
 
     // brightness is maximum or minimum
     if ((currentBrightness >= 0.99 && isDraggingUp) ||
@@ -216,7 +217,7 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
         ? currentBrightness + sensitivity
         : currentBrightness - sensitivity;
     currentBrightnessPercentage = "${(newBrightness * 100).round()}";
-    ScreenBrightness().setScreenBrightness(newBrightness);
+    ScreenBrightness.instance.setApplicationScreenBrightness(newBrightness);
 
     if (showBrightnessUI) {
       setState(() {});
@@ -254,8 +255,42 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
 
   @override
   void initState() {
-    Wakelock.enable();
+    WakelockPlus.enable();
+    // volume_controller 3.x moved showSystemUI from a setVolume() argument to an
+    // instance field, and it defaults to true. We draw our own volume overlay.
+    VolumeController.instance.showSystemUI = false;
     super.initState();
+  }
+
+  // Every quality the player can start on, sorted from highest to lowest
+  // resolution. Video only streams take priority since they reach 720p and
+  // above and are paired with the best audio available, muxed streams only
+  // fill in the resolutions those don't provide
+  List<VideoPlaybackQuality> get _playableQualities {
+    final qualities = <String, VideoPlaybackQuality>{};
+    for (final quality in [...?widget.content.videoOnlyOptions, ...?widget.content.videoOptions]) {
+      if (quality.videoUrl == null) continue;
+      qualities.putIfAbsent(quality.resolution, () => quality);
+    }
+    return qualities.values.toList()
+      ..sort((a, b) => (int.tryParse(b.resolution) ?? 0).compareTo(int.tryParse(a.resolution) ?? 0));
+  }
+
+  // Quality to start playback on, the closest one at or below the last quality
+  // used by the user (720p when there's no preference stored yet)
+  VideoPlaybackQuality _defaultQuality() {
+    final options = widget.content.videoOptions!;
+    // Audio only is never picked automatically, only when the user chose it
+    if (AppSettings.lastVideoQuality == 'Audio Only') {
+      return options.firstWhere((element) => element.resolution == 'Audio Only', orElse: () => options.last);
+    }
+    final qualities = _playableQualities;
+    if (qualities.isEmpty) {
+      return options.last;
+    }
+    final preferred = int.tryParse(AppSettings.lastVideoQuality) ?? 720;
+    return qualities.firstWhere((element) => (int.tryParse(element.resolution) ?? 0) <= preferred,
+      orElse: () => qualities.last);
   }
 
   void loadVideo({Duration? position}) async {
@@ -269,9 +304,7 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
       controller!.removeListener(() { });
     }
     // Choose video quality
-    currentQuality ??= widget.content.videoOptions!.firstWhere((element) => element.resolution.contains(AppSettings.lastVideoQuality), orElse: () {
-      return widget.content.videoOptions!.last;
-    });
+    currentQuality ??= _defaultQuality();
     if (currentQuality!.resolution == 'Audio Only') {
       audioOnly = true;
     } else {
@@ -363,7 +396,7 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   @override
   void dispose() {
     controller?.dispose();
-    Wakelock.disable();
+    WakelockPlus.disable();
     super.dispose();
   }
 
@@ -462,7 +495,7 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
             fadeDuration: const Duration(milliseconds: 300),
             placeholder: const ShimmerContainer(height: null, width: null),
             fit: BoxFit.cover,
-            image: NetworkImage(widget.content.videoDetails?.videoInfo.thumbnails?.last ?? '')),
+            image: networkImageOrNull(widget.content.videoDetails?.videoInfo.thumbnails.highestResOrNull)),
         ),
         if (!audioOnly)
         Center(
@@ -784,11 +817,19 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                         borderRadius: BorderRadius.circular(15),
                         child: AspectRatio(
                           aspectRatio: 16/9,
-                          child: Image.network(
-                            nextStream is StreamInfoItem
-                              ? nextStream.thumbnails!.hqdefault
-                              : (nextStream as PlaylistInfoItem).thumbnails!.last,
-                            fit: BoxFit.cover,
+                          child: Builder(
+                            builder: (context) {
+                              // PlaylistInfoItem.thumbnails is a List<String>
+                              // that can come back empty; StreamInfoItem's is a
+                              // StreamThumbnail, which is always derivable.
+                              final thumbnail = nextStream is StreamInfoItem
+                                ? nextStream.thumbnails?.hqdefault
+                                : (nextStream as PlaylistInfoItem).thumbnails.highestResOrNull;
+                              if (thumbnail == null) {
+                                return const ShimmerContainer(height: null, width: null);
+                              }
+                              return Image.network(thumbnail, fit: BoxFit.cover);
+                            },
                           ),
                         )
                       ),

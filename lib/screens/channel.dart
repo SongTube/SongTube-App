@@ -11,6 +11,7 @@ import 'package:songtube/ui/components/subscribe_text.dart';
 import 'package:songtube/ui/rounded_tab_indicator.dart';
 import 'package:songtube/ui/text_styles.dart';
 import 'package:songtube/ui/tiles/stream_tile.dart';
+import 'package:songtube/internal/media_utils.dart';
 
 class ChannelPage extends StatefulWidget {
   const ChannelPage({
@@ -119,8 +120,7 @@ class _ChannelPageState extends State<ChannelPage> with TickerProviderStateMixin
                     fadeDuration: const Duration(milliseconds: 300),
                     fadeCurve: Curves.ease,
                     fit: BoxFit.cover,
-                    image: channel != null
-                      ? NetworkImage(channel!.banners!.first) : null,
+                    image: networkImageOrNull(channel?.banners.lowestResOrNull),
                     placeholder: Container(color: Theme.of(context).scaffoldBackgroundColor),
                     errorBuilder:(context, child, exception) {
                       return Container(color: Theme.of(context).scaffoldBackgroundColor);

@@ -7,6 +7,7 @@ import 'package:newpipeextractor_dart/extractors/videos.dart';
 import 'package:newpipeextractor_dart/models/videoInfo.dart';
 import 'package:newpipeextractor_dart/newpipeextractor_dart.dart';
 import 'package:songtube/internal/artwork_manager.dart';
+import 'package:songtube/internal/media_utils.dart';
 
 MediaControl playControl = const MediaControl(
   androidIcon: 'drawable/ic_play_arrow',
@@ -267,7 +268,7 @@ class StAudioHandler extends BaseAudioHandler with QueueHandler, SeekHandler {
         id: audioUrl,
         title: youtubeVideo.videoInfo.name!,
         duration: Duration(milliseconds: youtubeVideo.videoInfo.length!),
-        artUri: Uri.parse(youtubeVideo.videoInfo.thumbnails!.first)
+        artUri: Uri.tryParse(youtubeVideo.videoInfo.thumbnails.lowestResOrNull ?? '')
       );
       // Resume Playback
       await stop();

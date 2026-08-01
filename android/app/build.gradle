@@ -1,29 +1,9 @@
-def localProperties = new Properties()
-def localPropertiesFile = rootProject.file('local.properties')
-if (localPropertiesFile.exists()) {
-    localPropertiesFile.withReader('UTF-8') { reader ->
-        localProperties.load(reader)
-    }
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
+    id "dev.flutter.flutter-gradle-plugin"
 }
-
-def flutterRoot = localProperties.getProperty('flutter.sdk')
-if (flutterRoot == null) {
-    throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
-}
-
-def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
-if (flutterVersionCode == null) {
-    flutterVersionCode = '1'
-}
-
-def flutterVersionName = localProperties.getProperty('flutter.versionName')
-if (flutterVersionName == null) {
-    flutterVersionName = '1.0'
-}
-
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 def keystoreProperties = new Properties()
 def keystorePropertiesFile = rootProject.file('key.properties')
@@ -32,25 +12,37 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    
-    compileSdkVersion 34
+    namespace "com.artxdev.songtube"
+    compileSdk flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
     compileOptions {
         // Flag to enable support for the new language APIs
         coreLibraryDesugaringEnabled true
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.artxdev.songtube"
-        minSdkVersion 22
+        // Was 22. Flutter 3.41 requires a minimum of 24, so Android 5.1 / 6.0 are
+        // no longer supported targets.
+        minSdk flutter.minSdkVersion
         resValue "string", "app_name", "SongTube"
-        targetSdkVersion 34
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
+        // Deliberately pinned to the previous value rather than
+        // flutter.targetSdkVersion (36). Raising targetSdk opts the app into
+        // Android 15/16 runtime behaviour -- most visibly forced edge-to-edge,
+        // which this app's layouts are not written for. Bump it as its own
+        // change, with UI work, not as a side effect of upgrading packages.
+        // Note: Google Play raises its required targetSdk annually, so this
+        // cannot stay at 34 indefinitely.
+        targetSdk 34
+        versionCode flutter.versionCode
+        versionName flutter.versionName
         // Enabling multidex support.
         multiDexEnabled true
     }
@@ -59,7 +51,7 @@ android {
         release {
             keyAlias keystoreProperties['keyAlias']
             keyPassword keystoreProperties['keyPassword']
-            storeFile file(keystoreProperties['storeFile'])
+            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
             storePassword keystoreProperties['storePassword']
         }
     }
@@ -69,11 +61,11 @@ android {
             signingConfig signingConfigs.release
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            //ndk {
+            // ndk {
             //    abiFilters 'armeabi-v7a', 'arm64-v8a'
-            //}
+            // }
         }
-        debug{
+        debug {
             applicationIdSuffix ".dev"
             resValue "string", "app_name", "SongDebug"
         }
@@ -84,14 +76,9 @@ flutter {
     source '../..'
 }
 
-repositories {
-    // ...
-    maven { url "https://jitpack.io" }
-    mavenCentral()
-}
-
 dependencies {
     implementation 'androidx.window:window:1.0.0'
     implementation 'androidx.window:window-java:1.0.0'
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
+    // 2.x is required by AGP 8 / compileSdk 36 toolchains.
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
 }

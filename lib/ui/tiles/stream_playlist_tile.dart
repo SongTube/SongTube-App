@@ -15,6 +15,7 @@ import 'package:songtube/ui/components/shimmer_container.dart';
 import 'package:songtube/ui/sheets/info_item_options.dart';
 import 'package:songtube/ui/text_styles.dart';
 import 'package:songtube/ui/ui_utils.dart';
+import 'package:songtube/internal/media_utils.dart';
 
 class PlaylistTileCollapsed extends StatelessWidget {
   const PlaylistTileCollapsed({
@@ -59,7 +60,7 @@ class PlaylistTileCollapsed extends StatelessWidget {
                       child: playlist.thumbnails != null ? ImageFade(
                         fadeDuration: const Duration(milliseconds: 300),
                         placeholder: const ShimmerContainer(height: null, width: null),
-                        image: NetworkImage(playlist.thumbnails!.last),
+                        image: networkImageOrNull(playlist.thumbnails.highestResOrNull),
                         fit: BoxFit.fitWidth,
                       ) : Container(color: Theme.of(context).scaffoldBackgroundColor),
                     ),
@@ -196,7 +197,7 @@ class PlaylistTileExpanded extends StatelessWidget {
         ImageFade(
           fadeDuration: const Duration(milliseconds: 300),
           placeholder: Container(color: Theme.of(context).cardColor.withOpacity(0.6)),
-          image: NetworkImage(playlist.thumbnails?.last ?? ''),
+          image: networkImageOrNull(playlist.thumbnails.highestResOrNull),
           fit: BoxFit.cover,
           errorBuilder: (context, error, stackTrace) =>
             Container(color: Theme.of(context).cardColor),

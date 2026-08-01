@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:audio_service/audio_service.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_pip/platform_channel/channel.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,15 +22,13 @@ Future<void> initGlobals() async {
   }
   songThumbnailPath = (await getApplicationDocumentsDirectory());
   deviceInfo = await DeviceInfoPlugin().androidInfo;
-  androidSdk = deviceInfo.version.sdkInt!;
+  androidSdk = deviceInfo.version.sdkInt;
   audioHandler = await AudioService.init(
       builder: () => StAudioHandler(),
       config: const AudioServiceConfig(
         androidNotificationChannelId: 'com.artxdev.songtube',
         androidNotificationChannelName: 'SongTube',
       ));
-  isPictureInPictureSupported =
-      await FlutterPip.isPictureInPictureSupported() ?? false;
   packageInfo = await PackageInfo.fromPlatform();
   bool autoUpdateEnabled = sharedPreferences.getBool(enableInAppUpdatesKey) ?? true;
   if (autoUpdateEnabled) {
@@ -61,9 +58,6 @@ set initialRoute(String route) {
 // Audio Handler Singleton
 late AudioHandler audioHandler;
 
-// Support for PictureInPicture
-late bool isPictureInPictureSupported;
-
 // App Info
 late PackageInfo packageInfo;
 
@@ -74,7 +68,6 @@ bool get appFirstRun => sharedPreferences.getBool('appFirstRun') ?? true;
 bool get autoUpdateNotice => sharedPreferences.getBool('autoUpdateNotice') ?? true;
 
 // Block for Picture in Picture mode
-bool blockPipMode = false;
 
 // Animation default values
 const Duration kAnimationShortDuration = Duration(milliseconds: 150);

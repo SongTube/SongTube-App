@@ -1,7 +1,6 @@
 // Flutter
 import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 // Packages
@@ -10,7 +9,6 @@ import 'package:iconsax/iconsax.dart';
 import 'package:image_fade/image_fade.dart';
 import 'package:newpipeextractor_dart/newpipeextractor_dart.dart';
 import 'package:provider/provider.dart';
-import 'package:songtube/internal/global.dart';
 import 'package:songtube/internal/media_utils.dart';
 import 'package:songtube/providers/app_settings.dart';
 import 'package:songtube/internal/enums/download_type.dart';
@@ -141,9 +139,7 @@ class _AudioDownloadMenuState extends State<AudioDownloadMenu> with TickerProvid
                 const SizedBox(height: 12),
                 GestureDetector(
                   onTap: () async {
-                    blockPipMode = true;
                     final image = await MediaUtils.pickImage();
-                    blockPipMode = false;
                     if (image != null) {
                       mainTags.artwork = image.path;
                       setState(() {});

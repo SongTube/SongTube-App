@@ -15,10 +15,10 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 7.3.2+5200
+version: 7.3.3+5300
 
 environment:
-  sdk: ">=2.17.6 <3.0.0"
+  sdk: ">=3.10.0 <4.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -33,32 +33,35 @@ dependencies:
     sdk: flutter
 
   # Tools
-  url_launcher: ^6.1.5
-  http: ^1.0.0
-  intl: ^0.19.0
+  url_launcher: ^6.3.2
+  http: ^1.6.0
+  intl: ^0.20.2
   validators: ^3.0.0
-  share_plus: ^4.1.0
-  device_info_plus: ^4.1.2
-  volume_controller: ^2.0.4
-  screen_brightness: ^0.2.1
-  flutter_keyboard_visibility: ^5.3.0
-  file_picker: ^5.2.0
-  flutter_share: ^2.0.0
-  wakelock: ^0.6.2
+  # NOTE: the *_plus family is held one major back by win32. Their latest majors
+  # (share_plus 13, device_info_plus 13, package_info_plus 10.1, network_info_plus 8)
+  # all require win32 ^6, while file_picker 11.x (newest stable) still pins win32 ^5.9.0.
+  # Bump these together once file_picker ships a stable release on win32 ^6.
+  share_plus: ^12.0.2
+  device_info_plus: ^12.4.0
+  volume_controller: ^3.5.0
+  screen_brightness: ^2.1.11
+  flutter_keyboard_visibility: ^6.0.0
+  file_picker: ^11.0.3
+  wakelock_plus: ^1.3.4
   pick_or_save: ^2.2.4
-  receive_intent: ^0.2.3
-  flutter_widget_from_html_core: ^0.10.0
-  parallax_sensors_bg: ^1.0.0
-  external_video_player_launcher: ^0.0.3
-  network_info_plus: ^4.0.2
-  flutter_slidable: ^3.0.1
-  image_picker: ^1.0.7
+  receive_intent: ^0.2.7
+  flutter_widget_from_html_core: ^0.17.2
+  parallax_sensors_bg: ^1.0.1
+  android_intent_plus: ^6.1.0
+  network_info_plus: ^7.0.0 # see win32 note above
+  flutter_slidable: ^4.0.3
+  image_picker: ^1.2.3
 
   # Dart advanced Streams
-  rxdart: any
+  rxdart: ^0.28.0
 
   # Google Fonts
-  google_fonts: ^5.1.0
+  google_fonts: ^8.2.1
 
   # Custom VideoPlayer with support for Muxed Streams
   video_player:
@@ -82,61 +85,51 @@ dependencies:
   on_audio_query: ^2.9.0
 
   # Shared Preferences, Save user settings and cache things
-  shared_preferences: ^2.0.11
-
-  # Particles Animation, for decoration
-  particles_flutter: ^0.1.1
+  shared_preferences: ^2.5.5
 
   # Permisisons Managing
-  permission_handler: ^10.2.0
+  # 13.x pulls permission_handler_android 14, which requires AGP 9.0.1 / Kotlin 2.3.20 /
+  # compileSdk 37 -- ahead of Flutter 3.41 stable. Bump once the app moves to AGP 9.
+  permission_handler: ^12.0.3
 
   # App Paths Provider
-  path_provider: ^2.0.8
-  android_path_provider: ^0.3.0
+  path_provider: ^2.1.6
+  android_path_provider: ^0.3.2
 
   # Provider Package
-  provider: any
+  provider: ^6.1.5
 
   # Audio Service, for playing music on background
-  audio_service: ^0.18.10
+  audio_service: ^0.18.19
 
   # Just Audio, to actually play and handle Music
-  just_audio: ^0.9.18
+  just_audio: ^0.10.6
 
   # Some Fancy Icons
-  eva_icons_flutter: ^3.0.2
-  font_awesome_flutter: ^10.1.0
-  line_icons: ^2.0.0
-  ionicons: ^0.2.1
+  eva_icons_flutter: ^4.0.0
+  line_icons: ^2.0.3
+  ionicons: ^0.2.2
   iconsax: ^0.0.8
-  material_design_icons_flutter: ^5.0.6996
+  material_design_icons_flutter: ^7.0.7296
 
   # Transparent Image as ByteArray
-  transparent_image: ^2.0.0
+  transparent_image: ^2.0.1
 
   # Extract primary colors from Images
-  palette_generator: ^0.3.3
+  palette_generator: ^0.3.3+7
 
   # Animation Packages
   flutter_bounce: ^1.1.0
-  animations: ^2.0.3
+  animations: ^2.2.0
 
   # ID Generator
-  uuid: ^3.0.6
-
-  # Picture in Picture
-  flutter_pip:
-    git:
-      url: https://github.com/SongTube/flutter_pip
-      ref: main
+  uuid: ^4.6.0
 
   # Aditional UI Stuff I'm too lazy to do myself
-  roundcheckbox: ^2.0.4+1
-  auto_animated: ^3.0.1
-  grouped_list: ^5.1.2
-  timeago: ^3.3.0
-  dynamic_color: ^1.6.8
-  flutter_reorderable_list: ^1.3.1
+  roundcheckbox: ^2.0.5
+  grouped_list: ^6.0.0
+  timeago: ^3.7.1
+  dynamic_color: ^1.8.1
   #animated_theme_switcher: ^2.0.7
   draggable_scrollbar: ^0.1.0
 
@@ -153,17 +146,13 @@ dependencies:
       ref: main
 
   # For InApp update
-  package_info_plus: ^4.0.2
-  flutter_markdown: ^0.6.14
-  avatar_glow: ^2.0.2
+  package_info_plus: ^9.0.1 # see win32 note above
+  flutter_markdown_plus: ^1.0.12
+  avatar_glow: ^3.0.1
 
   # FFmpeg
-  ffmpeg_kit_flutter_audio: 6.0.3-LTS
-  collection: ^1.17.2
-
-dependency_overrides:
-  win32: ^4.0.0
-  http: ^1.0.0
+  ffmpeg_kit_flutter_new_audio: ^2.5.2
+  collection: ^1.19.1
 
 dev_dependencies:
   flutter_test:
@@ -174,7 +163,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^2.0.0
+  flutter_lints: ^6.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -219,3 +208,9 @@ flutter:
               weight: 400
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+dependency_overrides:
+  # parallax_sensors_bg 1.0.1 (abandoned) pins sensors_plus ^2.0.1, whose Kotlin
+  # no longer compiles under Kotlin 2.2. 5.0.1 still exposes the deprecated
+  # accelerometerEvents/gyroscopeEvents streams that parallax_sensors_bg uses.
+  sensors_plus: ^5.0.1

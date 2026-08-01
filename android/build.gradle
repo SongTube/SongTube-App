@@ -1,31 +1,92 @@
-buildscript {
-    ext.kotlin_version = '1.9.23'
-    repositories {
-        google()
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath 'com.android.tools.build:gradle:7.3.1'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
-}
-
 allprojects {
     repositories {
         google()
         mavenCentral()
+        maven { url "https://jitpack.io" }
     }
 }
 
-rootProject.buildDir = '../build'
+// Keep the shared output at <project>/build, as before. `buildDir` is deprecated
+// in Gradle 8.x, so this uses the layout.buildDirectory equivalent.
+def newBuildDir = rootProject.layout.buildDirectory.dir("../../build").get()
+rootProject.layout.buildDirectory.value(newBuildDir)
+
 subprojects {
-    project.buildDir = "${rootProject.buildDir}/${project.name}"
+    project.layout.buildDirectory.value(newBuildDir.dir(project.name))
 }
+
+// ---------------------------------------------------------------------------
+// AGP 8 compatibility shim for legacy plugin modules.
+//
+// Some plugin modules predate AGP 8: they declare their package in
+// AndroidManifest.xml, never set `namespace`, and pin an old compileSdk -- all
+// of which AGP 8 rejects. This block backfills `namespace` from the manifest's
+// package attribute and raises compileSdk/Java level for any module that still
+// needs it.
+//
+// As of now it only fires for two unmaintained pub.dev packages:
+//   on_audio_query_android 1.1.0  (last released 2023)
+//   pick_or_save 2.2.4            (last released 2022)
+// Neither is ours to fix, so this block has to stay until those are replaced
+// or updated upstream. Run `./gradlew :app:assembleRelease --dry-run` and grep
+// for "agp8-shim" to see the current list.
+//
+// The SongTube git dependencies used to need this too; they now set a
+// namespace themselves (video_player 2.3.0, apk_installer 0.0.3,
+// audio_tagger 0.0.2, newpipeextractor_dart master a9260df).
+//
+// NOTE: must run before the evaluationDependsOn(":app") block below, which
+// forces evaluation and would make afterEvaluate too late to register.
+// ---------------------------------------------------------------------------
 subprojects {
-    project.evaluationDependsOn(':app')
+    afterEvaluate { project ->
+        if (!project.hasProperty("android")) {
+            return
+        }
+        def androidExt = project.android
+
+        // Only touch modules that are actually pre-AGP-8. A module that already
+        // declares a namespace is modern enough to leave alone -- in particular,
+        // do NOT force its Java level, or Kotlin modules end up with
+        // compileJavaWithJavac at 17 and compileKotlin at 1.8.
+        if (androidExt.namespace != null) {
+            return
+        }
+
+        def manifestFile = androidExt.sourceSets.main.manifest.srcFile
+        if (manifestFile.exists()) {
+            def pkg = new groovy.xml.XmlSlurper().parse(manifestFile).@package.text()
+            if (pkg) {
+                androidExt.namespace = pkg
+                logger.lifecycle("[agp8-shim] ${project.name}: namespace = ${pkg}")
+            }
+        }
+
+        def compileSdk = androidExt.compileSdkVersion?.replaceAll(/[^0-9]/, "")
+        if (!compileSdk || compileSdk.toInteger() < 34) {
+            androidExt.compileSdkVersion 36
+            logger.lifecycle("[agp8-shim] ${project.name}: compileSdk -> 36")
+        }
+
+        // These modules declare no Java/Kotlin level at all, so the two default
+        // independently (Java 1.8 vs Kotlin 17) and Gradle rejects the mismatch.
+        // Pin both to 17 together -- setting only one reintroduces the error.
+        androidExt.compileOptions {
+            sourceCompatibility JavaVersion.VERSION_17
+            targetCompatibility JavaVersion.VERSION_17
+        }
+        if (androidExt.hasProperty("kotlinOptions")) {
+            androidExt.kotlinOptions {
+                jvmTarget = JavaVersion.VERSION_17.toString()
+            }
+        }
+    }
+}
+
+subprojects {
+    project.evaluationDependsOn(":app")
 }
 
 tasks.register("clean", Delete) {
-    delete rootProject.buildDir
+    delete rootProject.layout.buildDirectory
 }

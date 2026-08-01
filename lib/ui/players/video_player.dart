@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_pip/flutter_pip.dart';
-import 'package:flutter_pip/models/pip_ratio.dart';
-import 'package:flutter_pip/platform_channel/channel.dart';
 import 'package:provider/provider.dart';
 import 'package:screen_brightness/screen_brightness.dart';
-import 'package:songtube/internal/global.dart';
 import 'package:songtube/internal/models/content_wrapper.dart';
 import 'package:songtube/providers/app_settings.dart';
 import 'package:songtube/providers/content_provider.dart';
@@ -40,12 +36,6 @@ class _VideoPlayerState extends State<VideoPlayer> with TickerProviderStateMixin
   // State Key for video player
   final playerKey = const GlobalObjectKey<State>('videoPlayerKey');
 
-  // Function to enter PiP mode
-  void enterPipMode() {
-    final size = Provider.of<ContentProvider>(context, listen: false).playingContent?.videoPlayerController.videoPlayerController?.value.size;
-    FlutterPip.enterPictureInPictureMode(pipRatio: size != null ? PipRatio(width: size.width.round(), height: size.height.round()) : null);
-  }
-
   // Fullscreen status
   bool _fullscreenEnabled = false;
   bool get fullscreenEnabled => _fullscreenEnabled;
@@ -59,7 +49,7 @@ class _VideoPlayerState extends State<VideoPlayer> with TickerProviderStateMixin
         ? [ SystemUiOverlay.bottom ]
         : SystemUiOverlay.values
       );
-      ScreenBrightness().resetScreenBrightness();
+      ScreenBrightness.instance.resetApplicationScreenBrightness();
     }
   }
 
@@ -92,16 +82,7 @@ class _VideoPlayerState extends State<VideoPlayer> with TickerProviderStateMixin
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
       ]);
-      return PipWidget(
-        onSuspending: () {
-          if (!blockPipMode) {
-            if (AppSettings.enableAutoPictureInPictureMode && !AppSettings.enableBackgroundPlayback && Provider.of<UiProvider>(context, listen: false).fwController.isPanelOpen) {
-              enterPipMode();
-            }
-          }
-        },
-        pictureInPictureChild: player,
-        child: AnimatedBuilder(
+      return AnimatedBuilder(
           animation: uiProvider.fwController.animationController,
           builder: (context, child) {
             return SizedBox(
@@ -200,8 +181,7 @@ class _VideoPlayerState extends State<VideoPlayer> with TickerProviderStateMixin
               ),
             ),
           ),
-        ),
-      );
+        );
     }
 
     // Fullscreen UI

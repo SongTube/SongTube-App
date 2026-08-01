@@ -304,7 +304,7 @@ class __DataItemState extends State<_DataItem> {
           ? GestureDetector(
               onTap: () async {
                 try {
-                  final data = await FilePicker.platform.pickFiles(type: FileType.image);
+                  final data = await FilePicker.pickFiles(type: FileType.image);
                   File? image = data?.paths[0] != null
                     ? File(data!.paths[0]!) : null;
                   if (image == null) return;

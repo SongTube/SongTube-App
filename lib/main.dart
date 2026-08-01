@@ -165,7 +165,7 @@ class _SongTubeState extends State<SongTube> {
                 theme: appSettings.enableMaterialYou ? adaptiveTheme(lightScheme, Brightness.light) : lightTheme(),
                 darkTheme: appSettings.enableMaterialYou ? adaptiveTheme(darkScheme, Brightness.dark) : darkTheme(),
                 themeMode: appSettings.enableMaterialYou ? ThemeMode.system : uiProvider.themeMode,
-                scrollBehavior: CustomScrollBehavior(androidSdkVersion: deviceInfo.version.sdkInt??0),
+                scrollBehavior: CustomScrollBehavior(androidSdkVersion: deviceInfo.version.sdkInt),
                 home: StreamBuilder<MediaItem?>(
                   stream: audioHandler.mediaItem,
                   builder: (context, media) {
