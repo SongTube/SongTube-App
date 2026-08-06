@@ -26,6 +26,7 @@ import 'translations/languageUa.dart';
 import 'translations/languageIt.dart';
 import 'translations/languageJa.dart';
 import 'translations/languageFr.dart';
+import 'translations/languageFa.dart';
 import 'translations/languageZh-CN.dart';
 import 'translations/languageCs.dart';
 import 'translations/languageBg.dart';
@@ -76,6 +77,8 @@ final supportedLanguages = <LanguageData>[
   LanguageData("🇯🇵", "Japanese", "ja"),
   // French (FR)
   LanguageData("🇫🇷", "French", "fr"),
+  // Persian (IR)
+  LanguageData("🇮🇷", "Persian", "fa"),
   // Chinese (CN)
   LanguageData("🇨🇳", "Simplified Chinese", "cn"),
   // Czech (CS)
@@ -147,6 +150,9 @@ Future<Languages> _loadLocale(Locale locale) async {
     // French (FR)
     case 'fr':
       return LanguageFr();
+    // Persian (IR)
+    case 'fa':
+      return LanguageFa();
     // Kurdish (CKB) (CKB)
     case 'ckb':
       return LanguageCkb();
